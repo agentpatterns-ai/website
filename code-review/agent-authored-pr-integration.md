@@ -1,6 +1,6 @@
 ---
 title: "Agent-Authored PR Integration: Collaboration Signals That Determine Merge Success"
-description: "Reviewer engagement — not code correctness or iteration count — is the strongest predictor of whether an agent-authored PR gets merged."
+description: "Reviewer engagement, not code correctness or iteration count, is the strongest predictor of whether an agent-authored PR gets merged."
 term: "Agent-Authored PR Integration"
 tags:
   - human-factors
@@ -18,17 +18,17 @@ maturity: established
 
 ## The finding
 
-[arXiv:2602.19441](https://arxiv.org/abs/2602.19441) — "When AI Teammates Meet Code Review: Collaboration Signals Shaping the Integration of Agent-Authored Pull Requests" (Nachuma & Zibran, MSR 2026) — analyzes 33,596 agent-authored PRs across 2,807 repositories with logistic regression. It covers five agents: Claude Code, OpenAI Codex, Devin, GitHub Copilot, and Cursor. The overall merge rate is 71.5% (95% CI: [0.710, 0.720]). Merge rates vary by agent from 43.0% (Copilot) to 82.6% (OpenAI Codex), with Devin at 53.8%.
+[arXiv:2602.19441](https://arxiv.org/abs/2602.19441) — "When AI Teammates Meet Code Review: Collaboration Signals Shaping the Integration of Agent-Authored Pull Requests" (Nachuma & Zibran, MSR 2026) — analyzes 33,596 agent-authored PRs across 2,807 repositories with logistic regression. It covers 5 agents: Claude Code, OpenAI Codex, Devin, GitHub Copilot, and Cursor. The overall merge rate is 71.5% (95% CI: [0.710, 0.720]). Merge rates vary by agent from 43.0% (Copilot) to 82.6% (OpenAI Codex), with Devin at 53.8%.
 
 The study uses repository-clustered standard errors. Functional correctness is necessary but not enough for merge. Once a change is viable, collaboration dynamics determine the outcome.
 
 ## Collaboration signals
 
-Reviewer engagement is the strongest positive predictor. At least one substantive review strongly increases the chance of merge. The paper frames this as selective investment: "reviewers selectively invest effort in changes perceived as viable." Engagement is both an outcome signal and a cause — reviewed PRs converge on reviewer expectations. Of 32 PRs with review loops, 30 were merged.
+Reviewer engagement is the strongest positive predictor. At least one substantive review strongly increases the chance of merge. The paper frames this as selective investment: "reviewers selectively invest effort in changes perceived as viable." Engagement is both an outcome signal and a cause. Reviewed PRs converge on reviewer expectations. Of 32 PRs with review loops, 30 were merged.
 
-Force pushes are the strongest negative predictor. Rewriting history mid-review breaks shared understanding. Each force push invalidates prior review context and forces reviewers to re-orient, which signals instability and breaks incremental convergence.
+Force pushes are the strongest negative predictor. Rewriting history mid-review breaks shared understanding. Each force push invalidates prior review context and forces reviewers to re-orient.
 
-Larger change sizes reduce the chance of merge. Larger diffs lower merge likelihood on their own. This compounds with cognitive load: large changesets reduce the chance of [initial reviewer engagement](agent-pr-volume-vs-value.md).
+Larger diffs reduce the chance of merge on their own. This compounds with cognitive load: large changesets also reduce the chance of [initial reviewer engagement](agent-pr-volume-vs-value.md).
 
 Iteration intensity has limited standalone value. More commits, revisions, or tests do not increase merge likelihood once collaboration signals are in the model. Optimizing for iteration volume yields less than optimizing for review alignment.
 
@@ -36,7 +36,7 @@ Time-to-first-review correlates positively with merge rates. Reviewers choose th
 
 ## Failure modes
 
-Qualitative analysis of 60 PRs (30 merged, 30 unmerged) identifies five failure categories:
+Qualitative analysis of 60 PRs (30 merged, 30 unmerged) identifies 5 failure categories:
 
 | Failure mode | Cases |
 |---|---|
@@ -50,10 +50,10 @@ Design disagreements are the dominant failure mode. The agent's architecture div
 
 ## Actionable review loop
 
-The actionable review loop is the dominant success mechanism: specific feedback, targeted changes, convergence toward reviewer expectations:
+Specific feedback, a targeted response, and convergence toward what reviewers expect make up the dominant success pattern in the qualitative sample. To design for it:
 
 - scope PRs so reviewers can form a complete opinion on a design in one pass
-- make agent responses to review comments targeted and atomic — one commit per coherent change set, not a rebase
+- make agent responses to review comments targeted and atomic (one commit per coherent change set, not a rebase)
 - batch reviewer feedback into single review rounds rather than iterating comment by comment
 
 ## Structural constraints as a design reference
@@ -64,9 +64,9 @@ GitHub Copilot's coding agent cannot force push by design. Branch restrictions a
 
 ## When this backfires
 
-Optimizing for reviewer engagement assumes reviewers are available and their expectations are sound. Five conditions undermine the pattern:
+Optimizing for reviewer engagement assumes reviewers are available and their expectations are sound. 5 conditions undermine the pattern:
 
-- chronic reviewer scarcity: engagement correlates with merge success because those PRs captured a scarce resource, not because you can manufacture engagement. High-volume agents compete for the same reviewer bandwidth.
+- chronic reviewer scarcity: engagement correlates with merge success because those PRs captured a scarce resource. You cannot manufacture that resource by producing more engagement. High-volume agents compete for the same reviewer bandwidth.
 - design disagreement without recourse: the dominant failure mode (10 of 30 failed PRs) is architectural divergence. If an agent cannot propose an alternative design, no review loop resolves the disagreement.
 - reviewer abandonment after queueing: a long time-to-first-review helps only when reviewers eventually engage. If they abandon a queued PR, wait time becomes noise. Large diffs compound this risk, which [agent-driven PR slicing](agent-driven-pr-slicing.md) is meant to reduce.
 - CRA-only review: the pattern assumes human reviewers with discretionary merge authority. Repositories reviewed only by automated agents show much lower merge rates (45% against 68%).
@@ -74,7 +74,7 @@ Optimizing for reviewer engagement assumes reviewers are available and their exp
 
 ## Example
 
-An agent opens a 200-line PR adding a new webhook handler. The reviewer comments: "This should use the existing `EventBus` abstraction rather than calling handlers directly." The agent replies in a single follow-up commit that reroutes through `EventBus` and updates the test fixture — no rebase, no force push. The reviewer approves in the next pass. This is the actionable review loop: specific feedback, targeted atomic response, convergence. Contrast a failed pattern: the agent reads the same feedback as a signal to rewrite the entire event handling layer, force pushes 600 lines, and the reviewer abandons the thread — losing shared context and triggering the strongest negative predictor.
+An agent opens a 200-line PR adding a new webhook handler. The reviewer comments: "This should use the existing `EventBus` abstraction rather than calling handlers directly." The agent replies in a single follow-up commit that reroutes through `EventBus` and updates the test fixture, with no rebase and no force push. The reviewer approves in the next pass. This is the actionable review loop: the feedback was specific, the response was targeted, and the PR converged in one round. Contrast a failed pattern: the agent reads the same feedback as a signal to rewrite the entire event handling layer, force pushes 600 lines, and the reviewer abandons the thread.
 
 ## Key Takeaways
 

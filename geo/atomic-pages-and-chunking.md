@@ -31,7 +31,7 @@ RAG systems ingest documents in three steps:
 2. Embed — convert each passage to a vector representation through an embedding model.
 3. Score — at query time, rank passages by cosine similarity to the query embedding.
 
-AI engines cite the returned passage. When a passage spans several unrelated topics, its embedding becomes a blended average, less similar to any single query than a focused passage. [NVIDIA research (2024)](https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/) found page-level chunking scored highest of the strategies tested on their internal retrieval-accuracy metric. The benchmark doesn't name the metric's unit or scale, so treat the ranking as directional rather than the raw score as a comparable figure. It also found that 256–512 token chunks perform best for factoid queries, which is the actionable finding.
+AI engines cite the returned passage. When a passage spans several unrelated topics, its embedding becomes a blended average, less similar to any single query than a focused passage. [NVIDIA research (2024)](https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/) found page-level chunking scored highest of the strategies tested on their internal retrieval-accuracy metric. The benchmark does not name the metric's unit or scale, so treat the ranking as directional rather than the raw score as a comparable figure. It also found that 256–512 token chunks perform best for factoid queries, which is the actionable finding.
 
 ## The atomic page principle
 
@@ -57,7 +57,7 @@ Every H2 section should answer one question on its own. If a section needs anoth
 
 ## Descriptive headings as topic anchors
 
-H1, H2, and H3 headings are the strongest semantic signals in a document. They define the semantic outline LLMs use to map topic boundaries and concept relationships, and they mark chunk boundaries when chunking by title.
+H1, H2, and H3 headings are the strongest semantic signals in a document. They define the semantic outline LLMs use to map topic boundaries and concept relationships. They also mark chunk boundaries when chunking by title.
 
 [Search Engine Journal (2024)](https://www.searchenginejournal.com/how-llms-interpret-content-structure-information-for-ai-search/544308/) found flat heading structures reduce retrieval precision. Logical nesting (H1 to H2 to H3) shows concept hierarchy to LLMs and embedding models.
 
@@ -118,21 +118,21 @@ docs/auth/rotate-api-keys.md   (~250 words) — rotating keys without downtime
 docs/auth/auth-errors.md       (~300 words) — diagnosing and fixing auth failures
 ```
 
-Each page produces a tight, focused embedding. A query for "how to rotate API keys" now matches `rotate-api-keys.md` with high cosine similarity, and the retrieved passage contains exactly the steps needed for an accurate citation.
+Each page produces a tight, focused embedding. A query for "how to rotate API keys" now matches `rotate-api-keys.md` with high cosine similarity. The retrieved passage contains exactly the steps needed for an accurate citation.
 
 ## FAQ
 
 **How does RAG chunking actually work?**
 
-RAG systems process documents in three steps: chunking into passages of roughly 200-400 words, embedding each passage into a vector, and scoring passages by cosine similarity against the query at retrieval time. AI answer engines cite whichever passage that scoring step returns, not the full page, which is why passage-level structure decides what gets retrieved and cited, per [NVIDIA research (2024)](https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/).
+RAG systems process documents in three steps. They chunk documents into passages of roughly 200-400 words, embed each passage into a vector, and score passages by cosine similarity against the query at retrieval time. AI answer engines cite whichever passage that scoring step returns, not the full page. Passage-level structure decides what gets retrieved and cited, per [NVIDIA research (2024)](https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/).
 
 **Why do multi-concept pages underperform in AI retrieval?**
 
-A page covering several techniques produces one blended embedding averaged across all of them, so it scores lower similarity to any single query than a dedicated page would. Chunk boundaries can also split an explanation mid-argument, stripping context an answer engine needs to cite it accurately, and off-topic surrounding content dilutes a passage's embedding the same way it dilutes a whole page's.
+A page covering several techniques produces one blended embedding averaged across all of them. It scores lower similarity to any single query than a dedicated page would. Chunk boundaries can also split an explanation mid-argument, stripping context an answer engine needs to cite it accurately. Off-topic surrounding content dilutes a passage's embedding the same way it dilutes a whole page's.
 
 **When can splitting content into more pages hurt retrieval?**
 
-Over-atomization has real costs. Breaking a multi-step workflow across separate pages can mean retrieval surfaces only one step, leaving the LLM without the setup context needed for a complete answer. Pages under roughly 200 words fall below the token range that performs best, and concepts that only make sense in contrast, like authentication versus authorization, lose that distinction when split apart, forcing the LLM to guess at the relationship.
+Over-atomization has real costs. Breaking a multi-step workflow across separate pages can mean retrieval surfaces only one step. The LLM then lacks the setup context needed for a complete answer. Pages under roughly 200 words fall below the token range that performs best. Concepts that only make sense in contrast, like authentication versus authorization, lose that distinction when split apart. The LLM then has to guess at the relationship.
 
 ## Related
 

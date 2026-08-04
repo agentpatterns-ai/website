@@ -99,6 +99,7 @@ Two narrow agents with shared scaffold patterns beat one general agent with a un
 
 ## Related
 
+- [Applying Coding Agents to Non-Code Tasks](coding-agents-for-non-code-tasks.md)
 - [Delegation Decision](delegation-decision.md)
 - [Task-Specific vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)

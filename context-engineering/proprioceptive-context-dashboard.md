@@ -36,11 +36,11 @@ The agent acts on these through an archive-and-recover tool: it moves a block to
 
 ## Why it works
 
-Context management is a meta-tool decision under partial observability: the model must choose what to retain without seeing the runtime state that decision depends on. The dashboard turns that hidden state (size, age, access, budget) into observable input, so the model's already-latent judgment finally has the signals it needs. The paper's ablation isolates this as the causal component: on the million-token LOCA-Bench, removing only the dashboard dropped performance 13.4 points (50.7% to 37.3%), a larger fall than removing recovery alone (5.4 points, to 45.3%), the only other ablation the paper scores numerically (it shows archive removal also degrades performance but reports no isolated figure for it). The visibility of metadata, not the archive plumbing, carries the effect ([Xu et al. 2026](https://arxiv.org/abs/2606.30005)). Pairing perception with lossless recovery is what lets the agent act on it safely: a wrong decision costs a recovery step, not the evidence.
+Context management is a meta-tool decision under partial observability: the model must choose what to retain without seeing the runtime state that decision depends on. The dashboard turns that hidden state (size, age, access, budget) into observable input, so the model's already-latent judgment finally has the signals it needs. The paper's ablation isolates this as the causal component: on the million-token LOCA-Bench, removing only the dashboard dropped performance 13.4 points (50.7% to 37.3%), a larger fall than removing recovery alone (5.4 points, to 45.3%), the only other ablation the paper scores numerically (it shows archive removal also degrades performance but reports no isolated figure for it). Metadata visibility carries the effect. The archive plumbing does not ([Xu et al. 2026](https://arxiv.org/abs/2606.30005)). Pairing perception with lossless recovery lets the agent act safely: a wrong decision costs a recovery step, and the evidence survives.
 
 ## When this backfires
 
-The technique is conditional, not universal. It adds cost or fails to help when:
+The technique is conditional: it adds cost or fails to help when:
 
 - Context is not under pressure. The paper's own results show the methods staying close at low context pressure, with the gap opening only as distractor volume grows; below real budget pressure the dashboard's extra tokens and per-turn reasoning buy nothing ([Xu et al. 2026](https://arxiv.org/abs/2606.30005)).
 - The model's management skill is weak. Because the dashboard elicits latent ability rather than teaching it, models with little of that ability gain least — GLM-5 showed the smallest lift across the tested backbones.
@@ -65,10 +65,10 @@ Reading its own state, the agent archives the stale, oversized `B17` — `archiv
 
 ## Key Takeaways
 
-- Agents are proprioceptively blind: they cannot see the size, age, or usage of their own context from the prompt text, so they compress blindly.
+- Agents cannot see their own context's size, age, or usage from the prompt text, so do not trust their self-reported budget estimates — expose the dashboard signals instead.
 - Exposing per-block metadata to the agent, paired with lossless archive-and-recover, lets it self-manage context with no retraining.
-- The metadata visibility, not the archival plumbing, is the load-bearing part: the dashboard ablation was the largest single drop.
-- The payoff scales with context pressure and model capability, and the archive path is an unguarded surface for indirect injection — apply it to long-horizon agents, not short tasks.
+- Metadata visibility carries more of the result than the archival plumbing does: the dashboard ablation produced the largest single drop.
+- The payoff scales with context pressure and model capability, and the archive path is an unguarded surface for indirect injection: apply it to long-horizon agents and skip it for short-lived ones.
 
 ## Related
 

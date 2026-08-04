@@ -24,7 +24,7 @@ Related lesson: [Every Token Has a Cost](https://learn.agentpatterns.ai/context-
 
 ## Why schema alone is insufficient
 
-Schema is necessary but not sufficient. Tables that look similar may differ in critical ways that only the pipeline code producing them clarifies — for example, whether a table includes first-party-only traffic or all traffic.
+Schema is necessary but not sufficient. Tables that look similar may differ in critical ways that only the pipeline code producing them clarifies, for example, whether a table includes first-party-only traffic or all traffic.
 
 [OpenAI's data agent](https://openai.com/index/inside-our-in-house-data-agent/) demonstrates this. For a corpus of 70,000 datasets, schema metadata alone could not distinguish tables with similar names but different inclusion criteria. The difference lived in the transformation code.
 
@@ -60,7 +60,7 @@ No single layer is complete. Types express intent but not rationale; git history
 
 ## Offline pipeline, runtime RAG
 
-Loading all six layers per request is impractical — volume exceeds any context window. The architecture separates concerns:
+Loading all six layers per request is impractical. Volume exceeds any context window. The architecture separates concerns:
 
 - Offline: aggregate all layers into normalized embeddings, refreshed on a schedule
 - Runtime: retrieve the most relevant subset for the query via retrieval-augmented generation (RAG)
@@ -114,7 +114,14 @@ async function buildContext(symbolName: string): Promise<string[]> {
 }
 ```
 
-Each `chunks.push` call adds a layer. The type signature tells the agent what the function accepts; the git log tells it what recently changed and why; the ADR captures the design rationale; the memory entry surfaces a correction that isn't recorded anywhere else. No single layer would be sufficient — the type signature says nothing about the rationale, and the ADR says nothing about the current signature.
+Each `chunks.push` call adds a layer:
+
+- The type signature tells the agent what the function accepts.
+- The git log tells it what recently changed and why.
+- The ADR captures the design rationale.
+- The memory entry surfaces a correction that isn't recorded anywhere else.
+
+No single layer would be sufficient. The type signature says nothing about the rationale, and the ADR says nothing about the current signature.
 
 ## When this backfires
 
@@ -135,7 +142,7 @@ No. An [analysis of RAG as noisy in-context learning](https://arxiv.org/abs/2506
 
 **When is the six-layer model overkill?**
 
-When the corpus is small or the data infrastructure is not already in place. A codebase that fits in a context window gains nothing from RAG latency — loading it directly is simpler and faster. Aggregation pipelines, embedding refresh, and vector stores add operational surface, and a two-layer approach of schema plus [live queries](retrieval-augmented-agent-workflows.md) suffices for many agents.
+When the corpus is small or the data infrastructure is not already in place. A codebase that fits in a context window gains nothing from RAG latency. Loading it directly is simpler and faster. Aggregation pipelines, embedding refresh, and vector stores add operational surface, and a two-layer approach of schema plus [live queries](retrieval-augmented-agent-workflows.md) suffices for many agents.
 
 **What degrades as the number of layers grows?**
 
@@ -143,8 +150,8 @@ Two things. Layers go stale: when offline pipelines and live queries diverge —
 
 ## Key Takeaways
 
-- Schema or file structure alone cannot ground an agent in the meaning of a dataset or codebase.
-- Six context layers — usage/lineage, annotations, code enrichment, institutional knowledge, persistent memory, live queries — provide coverage no single source can match.
+- When tables or files with similar names or shapes behave differently, check the code that produces them; schema or file structure alone will not reveal the difference.
+- Six context layers — usage/lineage, annotations, code enrichment, institutional knowledge, persistent memory, live queries — cover different blind spots; add one only after it closes a real production error, not a hypothetical gap.
 - Use an offline aggregation pipeline and runtime RAG to keep latency predictable across large corpora.
 - Define explicit priority when layers conflict; human annotations typically override inferred context.
 
@@ -158,3 +165,4 @@ Two things. Layers go stale: when offline pipelines and live queries diverge —
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md)
+- [Organizational Context Layer for Agents](organizational-context-layer.md)

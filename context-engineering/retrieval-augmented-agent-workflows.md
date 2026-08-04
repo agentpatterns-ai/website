@@ -30,9 +30,9 @@ Retrieval-augmented agent workflows structure context in two layers: a small sta
 
 ## The problem with preloading
 
-Every token loaded at startup consumes budget that cannot be used for reasoning, intermediate outputs, or tool results. An agent researching five documentation sites does not need all five loaded before the first message — it needs to know they exist and how to access them.
+Every token loaded at startup consumes budget that cannot be used for reasoning, intermediate outputs, or tool results. An agent researching five documentation sites needs to know the sites exist and how to access them, not to have all five loaded before the first message.
 
-Loading context speculatively "just in case" produces two failure modes: the agent runs out of context mid-task, or the [U-shaped attention curve](lost-in-the-middle.md) leaves the preloaded material in the middle of the window, where [models attend less reliably than they do to content near the start or end](https://arxiv.org/abs/2307.03172).
+Loading context speculatively "just in case" produces two failure modes: the agent can run out of context mid-task, or the preloaded material can land in the middle of the window. There, the [U-shaped attention curve](lost-in-the-middle.md) means [models attend less reliably than they do to content near the start or end](https://arxiv.org/abs/2307.03172).
 
 ## On-demand retrieval pattern
 
@@ -59,7 +59,7 @@ Sub-agents provide isolated context windows for retrieval-heavy tasks. A coordin
 
 ## Trade-offs
 
-On-demand retrieval adds latency. Multi-step retrieval chains (search → read → search again) can slow throughput. Preloading eliminates that latency at the cost of [context budget](context-budget-allocation.md).
+On-demand retrieval adds latency. Multi-step retrieval chains (search, then read, then search again) can slow throughput. Preloading eliminates that latency at the cost of [context budget](context-budget-allocation.md).
 
 Latency is not the only downside. Retrieval quality is a second failure mode: when the retriever surfaces irrelevant chunks, accuracy drops rather than improves — one study saw accuracy fall [from 75% to below 40% as a corpus grew from 54 to 1,128 documents](https://arxiv.org/abs/2606.11350) because dense similarity search returned semantically similar but contextually wrong results. On-demand retrieval only preserves budget for reasoning when what it returns is correct; a noisy retriever spends budget on distractors and degrades the very reasoning it was meant to protect.
 
@@ -108,7 +108,7 @@ Tool call: brave_search("stripe webhook signature verification 2024")
 → Returns: top 3 results (now in context)
 ```
 
-A task requiring only one of five documentation sections consumes context for that section alone. A task requiring none consumes zero documentation tokens. The startup prompt stays under 2 KB regardless of how large the documentation corpus grows.
+A task requiring only one of five documentation sections consumes context for that section alone, while one requiring none consumes zero documentation tokens. The startup prompt stays under 2 KB regardless of how large the documentation corpus grows.
 
 ## FAQ
 
@@ -118,7 +118,7 @@ Preload when a document is accessed repeatedly throughout a task, since re-fetch
 
 **Why can on-demand retrieval hurt accuracy instead of improving it?**
 
-Retrieval quality is a separate failure mode from latency: when a retriever surfaces irrelevant chunks, accuracy drops rather than improves. One study found accuracy fell [from 75% to below 40% as a corpus grew from 54 to 1,128 documents](https://arxiv.org/abs/2606.11350), because dense similarity search returned semantically similar but contextually wrong results. On-demand retrieval only helps when what it returns is actually correct.
+Retrieval quality is a separate failure mode from latency: when a retriever surfaces irrelevant chunks, accuracy drops rather than improves. One study found accuracy fell [from 75% to below 40% as a corpus grew from 54 to 1,128 documents](https://arxiv.org/abs/2606.11350), because dense similarity search returned semantically similar but contextually wrong results. On-demand retrieval only helps when what it returns is correct.
 
 **Why does preloading large amounts of context hurt reasoning quality?**
 
@@ -126,14 +126,14 @@ Preloaded material often lands in the middle of the context window, where the [U
 
 **How does MCP support on-demand retrieval?**
 
-MCP servers expose external data sources, such as documentation, files, and search, as tools the agent receives descriptions for at startup. Nothing enters the prompt until the agent calls the tool; a `docs` server, for example, returns file contents only when the agent issues a `read_file` call for a specific page it currently needs, keeping the startup prompt near 2 KB.
+MCP servers expose external data sources, such as documentation, files, and search, as tools the agent receives descriptions for at startup. Nothing enters the prompt until the agent calls the tool. A `docs` server, for example, returns file contents only when the agent issues a `read_file` call for a specific page it currently needs. The startup prompt stays near 2 KB.
 
 ## Key Takeaways
 
 - Start lean: preload instructions and tool descriptions, not reference content.
 - Use tool calls (MCP, web fetch, file search) to pull content when a task step needs it.
-- On-demand retrieval preserves context budget for reasoning but adds per-call latency.
-- Sub-agents provide isolated context windows for retrieval-heavy subtasks, returning compressed summaries to the coordinator.
+- On-demand retrieval only pays off when the retriever returns relevant results — check retrieval quality before trusting it to save budget over preloading.
+- Delegate a retrieval-heavy subtask to a sub-agent so raw results stay in an isolated window; require it to return a condensed summary, not the raw fetch, to the coordinator.
 
 ## Related
 

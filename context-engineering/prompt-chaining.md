@@ -1,7 +1,7 @@
 ---
 title: "Prompt Chaining: Sequential LLM Calls for Agent Workflows"
 term: "Prompt Chaining"
-description: "Decompose a complex task into a sequence of LLM calls where each step processes the output of the previous one, enabling verification and gate-checking at each stage."
+description: "A prompt chain breaks a task into sequential LLM calls, each processing the previous call's output, with a gate check between stages."
 aliases:
   - sequential prompting
   - prompt pipeline
@@ -17,7 +17,7 @@ maturity: established
 
 # Prompt Chaining: Sequential LLM Calls for Agent Workflows
 
-> Decompose a complex task into a sequence of LLM calls where each step processes the previous output, enabling verification and gate-checking between stages.
+> A prompt chain breaks a task into sequential LLM calls, each processing the last step's output, with a gate check between stages.
 
 Related lesson: [Assembling the Prompt](https://learn.agentpatterns.ai/context-engineering/assembling-the-prompt/) covers this concept in a hands-on lesson with quizzes.
 
@@ -94,11 +94,11 @@ Understanding chaining is a prerequisite for these patterns because they all rel
 
 ## Key Takeaways
 
-- Each LLM call in the chain has a single responsibility; combined calls defeat the purpose of chaining
-- Gates between steps are mandatory — they intercept errors at the point of origin, not at final output
+- A call combining two jobs skips the gate between them — split it so each phase gets checked separately
+- Skipping a gate does not remove the error, it just moves the failure downstream to where it is harder to trace back to its source
 - Chaining trades latency for accuracy and traceability; use it when accuracy is the priority
-- Do not chain independent steps — parallelization is more efficient when steps have no interdependencies
-- More complex patterns (orchestrator-worker, evaluator-optimizer) are specializations of the basic chain
+- Two independent steps add latency with no accuracy payoff — run them in parallel instead
+- Learn gate-check discipline on a plain chain before reaching for orchestrator-worker or evaluator-optimizer — the same mechanics carry over
 
 ## Example
 

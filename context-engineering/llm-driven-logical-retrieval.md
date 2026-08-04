@@ -45,7 +45,7 @@ graph LR
     A -->|next query or answer| O[Answer or Refine]
 ```
 
-Retrieval runs in two phases. Boolean logic picks the eligible document set, then BM25 ranks within it. The interface exposes `AND`, `OR`, `NOT`, quoted phrases for exact matching, and field-targeting like `title:entity_name` ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)). The agent then iterates: it reads intermediate results, refines the query, and re-issues. The backend has no notion of semantic similarity. It only executes what the LLM authors.
+Retrieval runs in two phases. Boolean logic picks the eligible document set, then BM25 ranks within it. The interface exposes `AND`, `OR`, `NOT`, quoted phrases for exact matching, and field-targeting like `title:entity_name` ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)). The agent then iterates: it reads intermediate results, refines the query, and re-issues. The backend executes only what the LLM authors, with no notion of semantic similarity.
 
 ## Reported results
 
@@ -121,11 +121,11 @@ The "after" configuration trades about 2 accuracy points (only at medium scale; 
 
 ## Key Takeaways
 
-- LogicalRAG moves retrieval precision from the index to the query author: a frontier LLM emits AND/OR/NOT/field-scoped queries against a plain inverted index ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
+- LogicalRAG moves retrieval precision from the index to the query author: a frontier LLM emits AND/OR/NOT and field-scoped queries against a plain inverted index ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
 - The pattern matches an agentic hybrid baseline at KILT-scale Wikipedia (0.717 vs. 0.716) and trails it on medium-scale multi-hop QA (0.784 vs. 0.807); the win is cost (41× faster indexing) and hallucination rate (0.083 vs. 0.128), not raw accuracy ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
-- The Boolean "no match" gives a sharper unanswerable signal than a low cosine score, which is why hallucination on answer-unavailable queries drops materially ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
-- Weaker generators cannot author useful Boolean decompositions — Search-R1 + BM25 collapses to 3.86% on BrowseComp-Plus while a frontier-agent + BM25 reaches 83.1% ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848); [Chen et al., 2025](https://arxiv.org/abs/2508.06600)). The pattern is a precision-cost migration, not a free optimization.
-- The pattern composes with the broader retrieval-side-dominance trend: retriever choice exerts more influence than generator choice for SE-task RAG when corpora have high lexical overlap ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
+- Evaluate this pattern by checking hallucination rate on answer-unavailable queries specifically — that is where its gap over hybrid concentrates ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
+- Benchmark your specific agent model on Boolean decomposition before switching — Search-R1 + BM25 collapses to 3.86% where a frontier agent reaches 83.1% on the same index ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848); [Chen et al., 2025](https://arxiv.org/abs/2508.06600)).
+- When corpora have high lexical overlap, weight retriever choice over generator upgrades — the broader SE-task RAG evidence shows retriever choice dominates outcomes there ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
 
 ## Related
 

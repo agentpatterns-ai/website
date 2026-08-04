@@ -67,7 +67,7 @@ Direct the compaction to preserve what matters:
 
 Spawn a [subagent](../tools/claude/sub-agents.md) for work that generates intermediate output you will not need again. The subagent runs in its own window, and only the final result returns.
 
-Ask yourself one question: "Will I need this output again, or just the conclusion?" If you need just the conclusion, delegate. [Codebase exploration](../patterns/multi-agent/sub-agents-fan-out.md), security review, and test analysis generate large volumes of reads that pollute the parent context. A subagent absorbs that cost and returns a summary.
+The deciding question: will you need this output again, or just the conclusion? Delegate when you only need the conclusion. [Codebase exploration](../patterns/multi-agent/sub-agents-fan-out.md), security review, and test analysis generate large volumes of reads that pollute the parent context. A subagent absorbs that cost and returns a summary.
 
 ```
 Use a subagent to investigate how the auth system handles token refresh.
@@ -99,7 +99,7 @@ The framework assumes you can know task boundaries in advance. Three conditions 
 
 - Exploratory work with unpredictable direction: clearing or compacting too early discards context that turns out to be critical. When you cannot predict what will become relevant, err toward continue.
 - Highly interconnected multi-file changes: [subagent delegation](../tools/claude/sub-agents.md) loses the cross-file awareness the main session preserves. If the delegated task needs accumulated decisions across files, keep it in the parent session.
-- Compaction at the worst time: the model produces the poorest summaries precisely when context rot is worst, at high fill. [Manual compaction](manual-compaction-dumb-zone-mitigation.md) at task transitions beats auto-compaction at 95%.
+- Compaction at the worst time: the model produces the poorest summaries when context rot is worst, at high fill. [Manual compaction](manual-compaction-dumb-zone-mitigation.md) at task transitions beats auto-compaction at 95%.
 
 ## Key Takeaways
 

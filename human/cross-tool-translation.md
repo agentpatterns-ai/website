@@ -16,7 +16,7 @@ maturity: established
 
 > Open standards and shared file formats make agentic patterns portable across AI coding tools — learn concepts once, apply them everywhere.
 
-Cross-tool translation means learning agentic concepts from the clearest documentation available — regardless of which tool wrote it — then applying them in every AI assistant you use. Two open standards ([Agent Skills](https://agentskills.io) and [AGENTS.md](https://agents.md)) and cross-tool file compatibility make skills and instruction files portable across 30+ tools.
+Cross-tool translation means learning agentic concepts from the clearest documentation available, regardless of which tool wrote it. You then apply them in every AI assistant you use. Two open standards ([Agent Skills](https://agentskills.io) and [AGENTS.md](https://agents.md)) and cross-tool file compatibility make skills and instruction files portable across 30+ tools.
 
 ## Open standards enable portability
 
@@ -91,7 +91,7 @@ Not all concepts have equivalents:
 
 - Agent teams (multi-agent coordination with shared task lists) exist in Claude Code but have no Copilot equivalent yet
 - Hooks have similar concepts across tools but use different event models
-- Translation works best for foundational patterns; advanced features may stay tool-specific
+- Translation works best for foundational patterns. Advanced features may stay tool-specific
 
 ## When this backfires
 
@@ -99,7 +99,7 @@ Cross-tool translation fails in three recurring scenarios:
 
 - Execution-model mismatch: tools differ in token budgets, tool-call approval flows, and sandboxing policies. A skill that runs silently in Claude Code may surface approval prompts or fail outright in Copilot because the permission models differ.
 - Tool-name mapping gaps: when VS Code reads `.claude/agents/*.md`, it maps Claude tool names to its own equivalents. If the agent references a tool with no counterpart, for example a Claude-specific built-in, the definition loads but behaves differently or fails silently.
-- Standard version drift: Agent Skills and AGENTS.md are still evolving. A `SKILL.md` written against one tool's reading of the spec may rely on a feature another tool has not implemented yet. Test portability claims; do not assume them.
+- Standard version drift: Agent Skills and AGENTS.md are still evolving. A `SKILL.md` written against one tool's reading of the spec may rely on a feature another tool has not implemented yet. Test portability claims. Do not assume them.
 
 ## Example
 

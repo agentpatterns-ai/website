@@ -246,6 +246,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Reasoning Retention and Compaction as Harness Settings](context-engineering/reasoning-retention-and-compaction.md)
 - [Per-Object Context Allocation (Selective Invariance)](context-engineering/per-object-context-allocation.md)
 - [Context Compiler: Deterministic Assembly Over Bigger Windows](context-engineering/context-compiler.md)
+- [Organizational Context Layer for Agents (Company Brain)](context-engineering/organizational-context-layer.md)
+- [Choosing a Compression Budget for Agent Control Context](context-engineering/control-context-compression-budget.md)
 
 ## Instructions & Prompts
 
@@ -323,6 +325,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Prompt Transpilation: Instructions as Build Artifacts](instructions/prompt-transpilation.md)
 - [Restraint Rules Need External Enforcement](instructions/restraint-rules-need-external-enforcement.md)
 - [Knowledge Gap or Skill Gap: Triage Before Writing Context](instructions/knowledge-gap-vs-skill-gap-triage.md)
+- [Advisory Prompts Distilled from Reasoning Traces](instructions/advisory-prompts-from-reasoning-traces.md)
 
 ## Agent Architecture
 
@@ -589,6 +592,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Sandbox Forking: Branch Agent Runs From a Warm Snapshot](patterns/agent-design/sandbox-forking.md)
 - [Persistent Teammate Workspace: Durable State for Agent Teams](patterns/agent-design/persistent-teammate-workspace.md)
 - [Bounded Agent Steps Inside a Deterministic Workflow](patterns/agent-design/bounded-agent-step.md)
+- [Applying Coding Agents to Non-Code Tasks](patterns/agent-design/coding-agents-for-non-code-tasks.md)
+- [Execution-State Ledger for Long-Horizon Coding Agents](patterns/agent-design/execution-state-ledger-coding-agents.md)
 
 ## Loop Engineering
 
@@ -853,6 +858,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Distributing Security Controls Through the Agent Harness](security/harness-distributed-security-controls.md)
 - [Authorization Continuity Across Agent Mutation](security/authorization-continuity-across-agent-mutation.md)
 - [Document-Borne Prompt Injection Through Agent Read Tools](security/document-borne-prompt-injection.md)
+- [Flattened Tool Specs for Agent Safety Judgment (SafeKeep)](security/flattened-tool-specs-safety-judgment.md)
 
 ## Testing & Evaluation
 
@@ -1004,6 +1010,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Purpose-Built Eval Suites for Model and Harness Swaps](verification/purpose-built-eval-suites.md)
 - [Dual Executable Specifications for Long-Horizon Features](verification/dual-executable-specifications.md)
 - [Non-Compensatory Readiness Gates Before Agent Release](verification/non-compensatory-readiness-gates.md)
+- [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](verification/bug-discriminating-validation-evidence.md)
+- [Reviewer Theme Distribution Audit for AI Code Review](code-review/reviewer-theme-distribution-audit.md)
+- [Eval Environment Containment for Cyber-Capable Agents](verification/eval-environment-containment.md)
 
 ## Hooks & Guardrails
 
@@ -1368,6 +1377,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Trusting a Skill Scanner's Verdict as a Security Judgment (Green-Check Fallacy)](patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md)
 - [Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)](patterns/anti-patterns/response-path-control-gap.md)
 - [Artifact-Only Verification Hides Skipped Skill Steps](patterns/anti-patterns/artifact-only-verification.md)
+- [Deletion Avoidance: Agents That Guard Code Instead of Removing It](patterns/anti-patterns/deletion-avoidance.md)
+- [The Token Price Index Fallacy in Agent Cost Planning](fallacies/token-price-index-fallacy.md)
+- [The Meat Proxy: Relaying Agent Output Without Reading It](patterns/anti-patterns/meat-proxy.md)
 
 ## Emerging Concepts
 

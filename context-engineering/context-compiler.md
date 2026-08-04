@@ -18,7 +18,7 @@ maturity: emerging
 
 > A context compiler resolves what a task actually reaches, trims those dependencies to interfaces, and excludes the rest.
 
-A context compiler is a deterministic step that runs before the model and builds the payload for one task. It takes a target file, resolves what that file reaches through the dependency graph, trims the reachable set down to interfaces, and drops everything else ([Alexander, 2026](https://towardsdatascience.com/coding-agents-dont-need-bigger-context-windows-they-need-a-context-compiler/)). The output is an artifact you can read, diff, and attach to a failed run. Window size stops being the lever; selection becomes the lever.
+A context compiler is a deterministic step that runs before the model and builds the payload for one task. It takes a target file, resolves what that file reaches through the dependency graph, trims the reachable set down to interfaces, and drops everything else ([Alexander, 2026](https://towardsdatascience.com/coding-agents-dont-need-bigger-context-windows-they-need-a-context-compiler/)). The output is an artifact you can read, diff, and attach to a failed run. Selection becomes the lever instead of window size.
 
 ## Apply only under these conditions
 
@@ -45,12 +45,12 @@ The author reports 69.4% token reduction across 7 files and 74.3% on a 12-file r
 
 Two causes work here, and the better-known one is the weaker. Cutting irrelevant code preserves attention: models draw on a finite [attention budget](context-budget-allocation.md) that "every new token introduced depletes", so context carries diminishing marginal returns and unrelated files compete with the target for the same scarce resource ([Anthropic — Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
-The stronger cause is determinism. Lin et al. measured that supplying lightweight call and inheritance topology improves function localization, reduces interaction rounds, and roughly halves run-to-run variance ([Lin et al., 2026](https://arxiv.org/abs/2606.26979v2)). The agent sees the same structural facts in the same position every run, instead of letting a stochastic first search result bias the whole trajectory. What compilation reliably buys is reproducibility and attributability, not raw capability — a failed run arrives with the exact payload that produced it, which turns "the agent got confused" into a claim you can check.
+The stronger cause is determinism. Lin et al. measured that supplying lightweight call and inheritance topology improves function localization, reduces interaction rounds, and roughly halves run-to-run variance ([Lin et al., 2026](https://arxiv.org/abs/2606.26979v2)). The agent sees the same structural facts in the same position every run, instead of letting a stochastic first search result bias the whole trajectory. Compilation reliably buys reproducibility and attributability, not raw capability. A failed run arrives with the exact payload that produced it, so "the agent got confused" becomes a claim you can check.
 
 ## When this backfires
 
 - Token reduction is not the outcome metric. The nearest controlled measurement cut input tokens 42% through minification and lost 12 percentage points of resolution rate on SWE-bench Verified ([Hrubec & Cito, 2026](https://arxiv.org/abs/2606.01326v1)). A compiler tuned to the token number keeps looking like a win past the point it starts costing accuracy.
-- A good search loop may already beat it. Grep generally outperformed vector retrieval in a controlled comparison, and scores depended strongly on which harness and tool-calling style was used ([Sen et al., 2026](https://arxiv.org/abs/2605.15184v1)). Anthropic recommends the opposite posture — keep lightweight identifiers and load data at runtime, with "some data up front for speed" only as a hybrid ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+- A good search loop may already beat it. Grep generally outperformed vector retrieval in a controlled comparison, and scores depended strongly on which harness and tool-calling style was used ([Sen et al., 2026](https://arxiv.org/abs/2605.15184v1)). Anthropic recommends the opposite posture: keep lightweight identifiers and load data at runtime, with "some data up front for speed" only as a hybrid ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 - Exclusion is subtractive, so a silent tier-3 decision hides its own errors. A [repository map](repository-map-pattern.md) or an inline [deterministic anchor](deterministic-anchoring.md) adds facts the agent can ignore; a dropped file is one the agent never learns exists. The source's own compiler flags what it could not resolve rather than guessing, on the principle that "an incomplete map with explicit warnings is far more useful than a complete map that is secretly wrong" ([Alexander, 2026](https://towardsdatascience.com/coding-agents-dont-need-bigger-context-windows-they-need-a-context-compiler/)).
 - Fast-moving repositories outrun the payload. Nothing recompiles it after the agent's own edits, so a monorepo with high commit frequency invalidates the artifact mid-session.
 - Small repositories gain nothing. When the whole codebase already fits comfortably in the window, tier 3 has nothing to exclude and the compile step is pure overhead.
@@ -72,11 +72,11 @@ The agent gets what it needs to call `refresh` correctly and none of the retry l
 
 ## Key Takeaways
 
-- A context compiler is a deterministic pre-model step that resolves a target file's reachable set, skeletonizes it, and excludes the rest.
-- Its dependable payoff is reproducibility and attributability, not accuracy — the compiled payload is an inspectable input you can attach to a failed run.
-- Measure tasks resolved, not tokens saved. The reported gains are token reductions on 7-file and 12-file samples with no task-success measurement, and a comparable cut elsewhere cost 12 percentage points of resolution rate.
-- Static reachability is unsound under runtime dispatch, and tier-3 exclusion hides its own misses, so keep a live-search escape hatch.
-- Where the agent already searches the live filesystem well, compilation competes with a loop that has fresher facts.
+- Check all four apply-only conditions before adopting compilation: a named target file, static-runtime parity, a live-search fallback, and a tasks-resolved metric. Missing any one changes what the deterministic step actually measures.
+- Pin the compiled payload alongside the run's transcript at failure time so reproducibility survives long enough to be checked.
+- Validate any token-reduction percentage against your own tasks-resolved rate before trusting it. A comparable cut elsewhere cost 12 percentage points of resolution.
+- Build the live-search fallback into the harness up front. A runtime-dispatch miss produces no warning, so only that fallback catches it later.
+- Benchmark against the existing search loop before adding a compile step. Results depend heavily on harness and tool-calling style, so a win elsewhere will not transfer automatically.
 
 ## Related
 

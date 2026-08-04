@@ -38,7 +38,7 @@ At L3, the agent operates within a constrained solution space:
 - Session scaffolding maintains quality across multi-session work
 - The agent completes well-specified tasks without per-action supervision
 
-Exit criterion: the agent can run a scoped, well-defined task end-to-end — writing code, running verification, committing — without human review or intervention, for tasks within its defined scope.
+Exit criterion: the agent can run a scoped, well-defined task end-to-end (writing code, running verification, committing) without human review or intervention, for tasks within its defined scope.
 
 ---
 

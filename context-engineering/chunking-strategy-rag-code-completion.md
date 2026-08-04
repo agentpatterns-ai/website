@@ -22,9 +22,9 @@ maturity: emerging
 
 ## The counter-intuitive result
 
-Practitioner guides recommend chunking code along function or class boundaries to preserve semantic units, citing the failure mode where a sliding window cuts a function mid-body and severs its return type from the call site ([Stack Overflow, 2024](https://stackoverflow.blog/2024/12/27/breaking-up-is-hard-to-do-chunking-in-rag-applications/)). A controlled empirical study running 864 settings across four chunking strategies, four retrievers, five generators, and nine parameter configurations on RepoEval and CrossCodeEval reports the opposite: function chunking underperforms every other strategy by 3.57-5.64 percentage points on RepoEval, with Cliff's delta of -1.0, and never lands on the cost-quality Pareto frontier ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)).
+Practitioner guides recommend chunking code along function or class boundaries to preserve semantic units, citing the failure mode where a sliding window cuts a function mid-body and severs its return type from the call site ([Stack Overflow, 2024](https://stackoverflow.blog/2024/12/27/breaking-up-is-hard-to-do-chunking-in-rag-applications/)). A controlled empirical study running 864 settings across four chunking strategies, four retrievers, five generators, and nine parameter configurations on RepoEval and CrossCodeEval reports the opposite. Function chunking underperforms every other strategy by 3.57-5.64 percentage points on RepoEval, with Cliff's delta of -1.0, and never lands on the cost-quality Pareto frontier ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)).
 
-The other three strategies — Declaration, Sliding Window, and cAST — produce statistically indistinguishable results across retriever-generator pairs. Sliding Window and cAST dominate the Pareto frontier on both benchmarks; Declaration sits just behind on cost-quality.
+The other three strategies (Declaration, Sliding Window, and cAST) produce statistically indistinguishable results across retriever-generator pairs. Sliding Window and cAST dominate the Pareto frontier on both benchmarks; Declaration sits just behind on cost-quality.
 
 ## The four strategies compared
 
@@ -49,19 +49,19 @@ graph TD
 
 ## Why function chunking loses
 
-Two effects compound. First, function chunks have high size variance — a 5-line getter and a 500-line handler embed into the same vector space, distorting cosine-similarity scores during retrieval ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)). Second, line-level completion benchmarks reward retrieving short fragments similar to the cursor's surrounding lines, not whole functions. Sliding windows produce many overlapping candidates at the right granularity; function chunks force one coarse retrieval unit per function.
+Two effects compound. Function chunks have high size variance: a 5-line getter and a 500-line handler embed into the same vector space, distorting cosine-similarity scores during retrieval ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)). Line-level completion benchmarks also reward retrieving short fragments similar to the cursor's surrounding lines, not whole functions. Sliding windows produce many overlapping candidates at the right granularity; function chunks force one coarse retrieval unit per function.
 
-The mechanism generalizes: retrieval works best when chunk size matches the granularity of the task's relevance signal. Whole-function generation tasks (SWE-bench style) likely flip this conclusion, because the generation unit is the function — but the controlled study tested line-level completion on RepoEval and CrossCodeEval, which is the task shape that drives inline completion suggestions in IDE-integrated assistants.
+The mechanism generalizes: retrieval works best when chunk size matches the granularity of the task's relevance signal. Whole-function generation tasks (SWE-bench style) likely flip this conclusion, because the generation unit is the function. The controlled study, though, tested line-level completion on RepoEval and CrossCodeEval, which is the task shape that drives inline completion suggestions in IDE-integrated assistants.
 
 ## The larger lever: context length
 
-Strategy choice among the non-function options changes outcomes by a few percentage points. Doubling cross-file context length from 2,048 to 8,192 tokens delivers up to 4.2 percentage points of improvement on the same benchmarks ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)) — larger than the gap between Sliding Window/cAST and Declaration. Chunk size itself has a weaker, non-monotonic effect: bigger is not consistently better, and the optimum varies by retriever.
+Strategy choice among the non-function options changes outcomes by a few percentage points. Doubling cross-file context length from 2,048 to 8,192 tokens delivers up to 4.2 percentage points of improvement on the same benchmarks ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)). That gain is larger than the gap between Sliding Window/cAST and Declaration. Chunk size itself has a weaker, non-monotonic effect: bigger is not consistently better, and the optimum varies by retriever.
 
 Allocate optimization effort accordingly: pick any non-function strategy, then spend the remaining budget extending cross-file context length within the model's effective range (see [Context Window Dumb Zone](context-window-dumb-zone.md) for the upper bound).
 
 ## When the default inverts
 
-The controlled study's finding is qualified by task shape and repository structure. The opposite recommendation — prefer function-respecting chunks — holds in these conditions:
+The controlled study's finding is qualified by task shape and repository structure. The opposite recommendation (prefer function-respecting chunks) holds in these conditions:
 
 - Whole-function generation tasks: SWE-bench-style benchmarks where the output is an entire function body align retrieval and generation units; cAST's reported +4.3 pp Recall@5 and +2.67 pp Pass@1 on those tasks ([Zhang et al., 2025](https://arxiv.org/abs/2506.15655)) reflect this alignment.
 - Polyglot repositories with patchy parser coverage: AST-based chunking needs a language-specific parser. The cAST paper demonstrates the method on Python, Java, JavaScript, TypeScript, Go, C++, and Rust ([Zhang et al., 2025](https://arxiv.org/abs/2506.15655)); files outside that set fall back to non-structural splitting, so Sliding Window is safer when the repo mixes supported languages with Bicep, HCL, or proprietary DSLs.
@@ -76,11 +76,11 @@ The controlled study's finding is qualified by task shape and repository structu
 
 ## Key Takeaways
 
-- Function-based chunking is dominated by every other strategy on line-level code completion benchmarks (3.57-5.64 pp gap on RepoEval) — the most "natural" code unit is the worst chunking choice for this task ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)).
-- Sliding Window and cAST sit on the cost-quality Pareto frontier; Declaration is statistically tied with both.
-- Cross-file context length doubling delivers up to 4.2 pp — a larger gain than choosing among the non-function strategies. Optimize context length before chunking strategy.
-- Chunk size has a non-monotonic effect; tune by retriever, not by intuition.
-- The default inverts for whole-function generation tasks and parser-incomplete polyglot repos.
+- A pipeline that chunks by function for line-level completion has a near-certain win available: Cliff's delta of -1.0 means no retriever-generator pairing among the 864 tested closed the RepoEval gap ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)).
+- Sliding Window, cAST, and Declaration score statistically the same, so choose among them by parser coverage or engineering cost, not benchmark score.
+- Context length is the bigger lever only up to a point. Check the Context Window Dumb Zone before pushing past 8k tokens instead of assuming more is always better.
+- Sweep chunk size per retriever during setup: a value tuned for one retriever will not transfer to another.
+- When none of the invert conditions clearly applies, default to Sliding Window or cAST. Only switch to function-respecting chunking once a specific condition (whole-function generation, patchy parser coverage, or long functions) is confirmed.
 
 ## Example
 
@@ -109,7 +109,7 @@ retriever:
   context_tokens: 8192
 ```
 
-The chunking change moves the configuration onto the Pareto frontier; the context-length change moves along it. Re-evaluate on a held-out task slice before committing — the controlled study's directionality is robust on RepoEval and CrossCodeEval, but task shape matters (see "When the Default Inverts").
+The chunking change moves the configuration onto the Pareto frontier; the context-length change moves along it. Re-evaluate on a held-out task slice before committing. The controlled study's directionality is robust on RepoEval and CrossCodeEval, but task shape matters (see "When the default inverts").
 
 ## Related
 

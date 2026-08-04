@@ -18,7 +18,7 @@ maturity: established
 
 > Coding agents make a platform choice reversible only in proportion to how well executable tests capture behavior — not by any property of the agent.
 
-Coding-agent reversibility is the decision-economics shift in which a platform or language choice — once a multi-year, one-way commitment — becomes a multi-day agent run if the codebase meets specific conditions. Mitchell Hashimoto framed it as: "Programming languages used to be LOCK IN, and they're increasingly not so" ([Simon Willison, 2026-05-14](https://simonwillison.net/2026/May/14/mitchell-hashimoto/)). The conditions decide whether that holds or is a trap that ships the wrong stack.
+Coding-agent reversibility is the decision-economics shift in which a platform or language choice — once a multi-year, one-way commitment — becomes a multi-day agent run. This holds only if the codebase meets specific conditions. Mitchell Hashimoto framed it as: "Programming languages used to be LOCK IN, and they're increasingly not so" ([Simon Willison, 2026-05-14](https://simonwillison.net/2026/May/14/mitchell-hashimoto/)). The conditions decide whether that holds or is a trap that ships the wrong stack.
 
 ## When reversibility holds
 
@@ -35,15 +35,15 @@ If any is missing, the cost saving is the small half of the bill.
 
 ## Why it works (when it does)
 
-The agent's translate, compile, test, correct loop converges quickly when the suite is dense enough to anchor every behavioral decision, and slowly or wrongly when it is not ([FreshBrew §3](https://arxiv.org/abs/2510.04852)). The test suite is the portability substrate, and the agent amortizes it into a one-time port cost ([Simon Willison, 2026-05-14](https://simonwillison.net/2026/May/14/not-so-locked-in/)).
+The agent's translate, compile, test, correct loop converges quickly when the suite is dense enough to anchor every behavioral decision. It converges slowly or wrongly when the suite is not dense enough ([FreshBrew §3](https://arxiv.org/abs/2510.04852)). The test suite is the portability substrate, and the agent amortizes it into a one-time port cost ([Simon Willison, 2026-05-14](https://simonwillison.net/2026/May/14/not-so-locked-in/)).
 
-The empirical anchor is Bun PR [#30412](https://github.com/oven-sh/bun/pull/30412): 1,009,257 lines of Rust replacing Zig in six days at a 99.8% pass rate, produced by Claude agents in a four-phase translate, error-correct, and verify loop ([byteiota analysis](https://byteiota.com/bun-rust-rewrite-merged-the-13000-unsafe-block-problem/)). The pre-existing dense suite was the precondition.
+The empirical anchor is Bun PR [#30412](https://github.com/oven-sh/bun/pull/30412): 1,009,257 lines of Rust replacing Zig in six days at a 99.8% pass rate. Claude agents produced it in a four-phase translate, error-correct, and verify loop ([byteiota analysis](https://byteiota.com/bun-rust-rewrite-merged-the-13000-unsafe-block-problem/)). The pre-existing dense suite was the precondition.
 
 ## When this backfires
 
 Five situations break the framing:
 
-- Anemic test coverage. FreshBrew — same-language JDK 8 → JDK 17 upgrades with mandatory ≥50% baseline coverage — caps the top model (Gemini 2.5 Flash) at 52.3% project success across 228 real Java projects ([arxiv 2510.04852](https://arxiv.org/abs/2510.04852)). Cross-language ports against weaker suites do worse.
+- Anemic test coverage. FreshBrew — same-language JDK 8 to JDK 17 upgrades with mandatory ≥50% baseline coverage — caps the top model (Gemini 2.5 Flash) at 52.3% project success across 228 real Java projects ([arxiv 2510.04852](https://arxiv.org/abs/2510.04852)). Cross-language ports against weaker suites do worse.
 - Tests pass but production does not. A logistics company migrating Java to Node.js passed every functional test, then failed under realistic load — the agent translated logic without preserving performance ([eleks: Code Migration with AI](https://eleks.com/expert-opinion/code-migration-with-ai/)).
 - The headline language change is cosmetic. Bun's Rust port shipped with 13,000+ `unsafe` blocks versus 73 in `uv`, a comparable-size project ([byteiota](https://byteiota.com/bun-rust-rewrite-merged-the-13000-unsafe-block-problem/)). The 99.8% pass validates behavior at the public API, not that the unsafe blocks uphold memory invariants — a migration that nominally bought "memory safety" delivered something softer.
 - Deep platform-API integration. React Native ports of native apps still hit framework limits on heavy GPU work, AR, real-time video, and design-system fidelity — "feature parity becomes a budgeting problem instead of a technical one" ([leanware, 2026](https://www.leanware.co/insights/react-native-vs-native-development)). The agent ports your code, not platform capabilities.

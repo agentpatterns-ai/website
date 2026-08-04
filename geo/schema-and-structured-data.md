@@ -177,13 +177,13 @@ Independent studies report FAQPage schema lifting AI citation appearances by 2.7
 
 **Does ChatGPT or Perplexity read a page's JSON-LD when they visit it live?**
 
-No. ChatGPT, Perplexity, and most AI engines don't parse a page's JSON-LD during a live fetch — the hook-injected schema is processed at indexing and training time instead, not the moment they visit the page. Gemini is the exception: it renders JavaScript and processes schema in real time, unlike the others.
+No. ChatGPT, Perplexity, and most AI engines do not parse a page's JSON-LD during a live fetch — the hook-injected schema is processed at indexing and training time instead, not the moment they visit the page. Gemini is the exception: it renders JavaScript and processes schema in real time, unlike the others.
 
 **What exact heading and format triggers automatic FAQPage schema on this site?**
 
 Write a `## FAQ` (or `## Frequently Asked Questions`) heading followed by bold-paragraph questions and plain-text answer paragraphs — the same `**Question**` / answer pattern this page uses. The `hooks/structured_data.py` hook scans for that exact shape at build time and emits a `FAQPage` JSON-LD block automatically; no frontmatter flag or manual schema authoring is required.
 
-**Why doesn't adding schema markup fix citation problems on a low-authority page?**
+**Why does adding schema markup not fix citation problems on a low-authority page?**
 
 Schema markup amplifies an existing signal rather than creating one — its citation lift is relative to a page's baseline authority. On a thin or low-authority page, adding FAQPage or HowTo JSON-LD accelerates whatever [topical authority](topical-authority.md) the page already has, but it does not manufacture credibility the page lacks.
 

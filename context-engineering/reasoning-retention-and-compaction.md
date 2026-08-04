@@ -19,7 +19,7 @@ status: current
 
 > A harness that keeps private reasoning across tool calls and compacts instead of truncating changes measured agent performance, sometimes by multiples.
 
-Two harness settings decide how much of an agent's thinking survives between actions: whether private reasoning is passed back with each tool result, and whether old context is summarized or deleted. Both are configuration, not model capability. When a harness discards reasoning, the agent rebuilds its understanding of the task from scratch every turn.
+Two harness settings decide how much of an agent's thinking survives between actions: whether private reasoning is passed back with each tool result, and whether old context is summarized or deleted. Both are harness configuration, independent of the model itself. When a harness discards reasoning, the agent rebuilds its understanding of the task from scratch every turn.
 
 ## How much you gain depends on what you currently discard
 
@@ -27,7 +27,7 @@ Read the headline numbers below as a ceiling rather than an expectation: they me
 
 The extreme case is ARC-AGI-3, a benchmark of unfamiliar 2D puzzle games. Its harness discarded all private reasoning after every game action and used a rolling truncation window that dropped the oldest messages once the conversation passed 175,000 characters (OpenAI's reproduction used 175,000 tokens, which it reports as near-equivalent because this benchmark's text is mostly 1:1-tokenized action grids). Against that harness as the baseline, retained reasoning and compaction moved GPT-5.6 Sol from 13.3% to 38.3% on the ARC-AGI-3 public set while cutting output tokens sixfold — roughly 3x, on a metric (relative human action efficiency) whose estimated human average is 48% ([OpenAI, 2026](https://openai.com/index/how-two-settings-tripled-our-arc-agi-3-scores)).
 
-Where a harness is otherwise reasonable, the same change is worth points, not multiples. An independent study measured retained thinking history improving two small open models, Qwen3-4B and Qwen3-8B, by roughly 3 to 5% on the BFCL multi-turn category, and generalizes the result only as far as "reasoning models" ([Liu et al., 2026](https://arxiv.org/abs/2606.00135)). Two small models are not a population, but that is the closest thing to a controlled measurement of the setting on its own — where the 3x figure measures how much one benchmark harness was throwing away.
+Where a harness is otherwise reasonable, the same change is worth only a few points, well short of the multiples above. An independent study measured retained thinking history improving two small open models, Qwen3-4B and Qwen3-8B, by roughly 3 to 5% on the BFCL multi-turn category, and generalizes the result only as far as "reasoning models" ([Liu et al., 2026](https://arxiv.org/abs/2606.00135)). Two small models are not a population, but that is the closest thing to a controlled measurement of the setting on its own — where the 3x figure measures how much one benchmark harness was throwing away.
 
 ## Two independent settings
 
@@ -53,13 +53,13 @@ Anthropic states the same causal claim as an API requirement rather than a tunin
 - You switch models mid-conversation. Thinking blocks belong to the model that produced them; other models ignore them silently while still billing the input tokens ([Anthropic](https://platform.claude.com/docs/en/build-with-claude/thinking)).
 - Long multi-turn work amplifies early mistakes. Across more than 200,000 simulated conversations, models dropped 39% on average from single-turn to multi-turn performance across six generation tasks, partly by relying too heavily on previous incorrect attempts ([Laban et al., 2025](https://arxiv.org/abs/2505.06120)).
 - Compaction inherits summarization loss. Replacing a hard cut-off with a summary trades one failure mode for [objective drift and compounding error across cycles](context-compression-strategies.md).
-- You are comparing models, not shipping one. ARC's generic harness exists because a simple harness makes model shortcomings visible and comparisons fair; tuning your own harness raises your score and turns the comparison into a harness comparison ([OpenAI, 2026](https://openai.com/index/how-two-settings-tripled-our-arc-agi-3-scores)).
+- Benchmark comparisons need the untuned harness. ARC's generic harness exists because a simple harness makes model shortcomings visible and comparisons fair; tuning your own harness raises your score and turns the comparison into a harness comparison ([OpenAI, 2026](https://openai.com/index/how-two-settings-tripled-our-arc-agi-3-scores)).
 
 ## What this means for reading benchmarks
 
 Any leaderboard row measures a model and a harness together. The paper that measured retained thinking history also found that results are "highly sensitive to seemingly minor, often undocumented implementation choices," including how prior reasoning history is carried forward, and concluded that "without rigorous standardization, leaderboard rankings are unreliable" ([Liu et al., 2026](https://arxiv.org/abs/2606.00135)). Before attributing a score gap to model quality, check whether both runs retained reasoning and how each handled context overflow — a caveat that generalizes past the two settings here to [everything an eval fails to observe](../verification/eval-blind-spots.md).
 
-Apply the same caution to this page's own numbers. The ARC-AGI-3 result is a 2D puzzle-game benchmark scored on relative human action efficiency, not a coding benchmark ([OpenAI, 2026](https://openai.com/index/how-two-settings-tripled-our-arc-agi-3-scores)); the direction of the effect is corroborated on tool-calling tasks, the magnitude is not.
+Apply the same caution to this page's own numbers. The ARC-AGI-3 result is a 2D puzzle-game benchmark scored on relative human action efficiency, a different domain from a coding benchmark ([OpenAI, 2026](https://openai.com/index/how-two-settings-tripled-our-arc-agi-3-scores)); the direction of the effect is corroborated on tool-calling tasks, but the magnitude there remains unconfirmed.
 
 ## Example
 
@@ -89,10 +89,10 @@ The only differences are which prior content the harness sends back and what it 
 
 ## Key Takeaways
 
-- Reasoning retention and compaction are separate settings; enabling one does not give you the other.
+- Reasoning retention and compaction are separate settings: audit both when reviewing a harness config, since turning on one leaves the other at its default.
 - Where a harness is already reasonable, the one controlled measurement available reports single-digit gains on small open models; expect multiples only where the harness was discarding reasoning outright.
-- Retention costs context on models that keep every prior turn, and it preserves wrong hypotheses as faithfully as right ones.
-- On the Claude API, whether prior thinking stays in context is a per-model default, so the model string changes retention behavior.
+- Retention costs context on models that keep every prior turn, so budget for it, and watch for a hypothesis that locks in early and never gets revisited.
+- On the Claude API, whether prior thinking stays in context is a per-model default: check the model string before assuming two agents on the same harness retain reasoning the same way.
 - Treat every benchmark score as a model-plus-harness measurement, and check both runs' context settings before reading a gap as capability.
 
 ## Related

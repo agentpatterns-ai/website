@@ -81,7 +81,7 @@ Breunig built `scaffold-docs`, an opinionated skill that operationalizes the fiv
 2. Diving Deeper — one file per topic, organized around intent and design decisions (not API surface).
 3. Reference — [per-module API spec](../tool-engineering/designing-for-agent-consumers.md), lookup-oriented.
 
-Two structural choices reinforce the five rules. First, the tutorial is single-use-case: Breunig refuses to enumerate use cases in the mental-model layer, and the agent does that on demand. Second, the Diving Deeper tier is organized by intent, not API surface, so the human reader reaches design decisions without traversing a reference they did not need. The skill builds each section in passes (structure first, then headers and topic sentences, then full prose) and "the agent pauses for your review between passes and does not advance until you approve" ([Breunig, 2026](https://www.dbreunig.com/2026/05/31/what-do-humans-need-from-docs.html)), keeping the human in the editorial loop the five rules require.
+Two structural choices reinforce the five rules. The tutorial is single-use-case: Breunig refuses to enumerate use cases in the mental-model layer, and the agent does that on demand. The Diving Deeper tier is organized by intent, not API surface, so the human reader reaches design decisions without traversing a reference they did not need. The skill builds each section in passes (structure first, then headers and topic sentences, then full prose) and "the agent pauses for your review between passes and does not advance until you approve" ([Breunig, 2026](https://www.dbreunig.com/2026/05/31/what-do-humans-need-from-docs.html)). This keeps the human in the editorial loop the five rules require.
 
 ## Key Takeaways
 

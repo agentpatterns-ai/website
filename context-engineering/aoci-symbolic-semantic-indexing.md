@@ -1,7 +1,7 @@
 ---
 title: "AOCI: Symbolic-Semantic Repository Indexing"
 term: "AOCI"
-description: "A persistent, query-independent blueprint pairing architectural coordinates with semantic content — read whole before any task, distinct from on-demand retrieval and token-fitted repo maps."
+description: "A persistent, query-independent blueprint pairing architectural coordinates with semantic content. It's read whole before any task, distinct from on-demand retrieval and token-fitted repo maps."
 aliases:
   - AOCI
   - AI-oriented code indexing
@@ -18,7 +18,7 @@ maturity: emerging
 
 # AOCI: Symbolic-Semantic Repository Indexing
 
-> A persistent repository blueprint pairing each entry's symbolic architectural coordinates with semantic content — read whole before any task to give the agent global structure.
+> A persistent repository blueprint pairing each entry's symbolic architectural coordinates with semantic content, read whole before any task to give the agent global structure.
 
 ## The orientation problem AOCI targets
 
@@ -60,15 +60,15 @@ AOCI sits alongside two patterns already on this site:
 | [Repository-Level Retrieval](repository-level-retrieval-code-generation.md) | Per query | Top-k chunks scored against the current task | The relevant slice is small and the task is well-specified |
 | Agentic search (Claude Code's choice) | Never — no index | Whatever the agent fetches via Glob, Grep, Read | Living repos where freshness matters more than structure ([Vadim, 2025](https://vadim.blog/claude-code-no-indexing)) |
 
-The repo map is still query-shaped (PageRank personalization weights files being edited). RAG is fully query-shaped. AOCI is query-independent — the same index serves every task, which is the point.
+The repo map is still query-shaped (PageRank personalization weights files being edited). RAG is fully query-shaped. AOCI is query-independent. The same index serves every task, which is the point.
 
 ## Reported results
 
-In the AOCI paper's evaluation across 4 projects, 3 LLMs, and 6 context conditions (2,160 evaluations), AOCI ranked second only to a theoretical upper-bound oracle. On 19 industrial tasks across 5 systems, AOCI produced zero final-state defects, while mainstream agent-based tools introduced defects in 12 tasks and consumed 4 to 130x more tokens (p < 0.001). The performance gap widens with task complexity. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421))
+In the AOCI paper's evaluation across 4 projects, 3 LLMs, and 6 context conditions (2,160 evaluations), AOCI ranked second only to a theoretical upper-bound oracle. On 19 industrial tasks across 5 systems, AOCI produced zero final-state defects. Mainstream agent-based tools introduced defects in 12 tasks and consumed 4 to 130x more tokens (p < 0.001). The performance gap widens with task complexity. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421))
 
 These figures come from one team's evaluation and are not yet independently replicated. Treat them as a directional signal, not a settled benchmark.
 
-Independent counter-evidence points the other way. The strongest independent benchmark of this category reaches the opposite conclusion. Gloaguen et al. evaluated AGENTS.md-style files (persistent context read before the task, the family AOCI belongs to) across SWE-bench Lite and AGENTbench. They found these files tend to reduce task success versus no repository context, while raising inference cost over 20% as agents over-explore. Auto-generated files fared worst (−3% success); even human-written ones gained only about 4% at about 19% cost ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988); covered in [Evaluating AGENTS.md](../instructions/evaluating-agents-md-context-files.md)). AOCI was not tested directly but sits squarely in that read-whole category — weigh its favorable single-source numbers against this signal before adopting.
+Independent counter-evidence points the other way. The strongest independent benchmark of this category reaches the opposite conclusion. Gloaguen et al. evaluated AGENTS.md-style files (persistent context read before the task, the family AOCI belongs to) across SWE-bench Lite and AGENTbench. They found these files tend to reduce task success versus no repository context, while raising inference cost over 20% as agents over-explore. Auto-generated files fared worst (−3% success); even human-written ones gained only about 4% at about 19% cost ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988); covered in [Evaluating AGENTS.md](../instructions/evaluating-agents-md-context-files.md)). AOCI was not tested directly but sits squarely in that read-whole category. Weigh its favorable single-source numbers against this signal before adopting.
 
 ## When this backfires
 
@@ -103,14 +103,14 @@ design_decisions:
   - "Sessions are server-side; tokens are opaque references, not JWT claims"
 ```
 
-An agent reading this before any task knows the architectural role, the invariants it must preserve, and the consumers whose contract it must not break — without retrieving a line of implementation. The agent fetches the implementation on demand once it decides which file to edit.
+An agent reading this before any task knows the architectural role, the invariants it must preserve, and the consumers whose contract it must not break. It gets all of that without retrieving a line of implementation, and fetches the implementation on demand once it decides which file to edit.
 
 ## Key Takeaways
 
-- AOCI is a query-independent blueprint built once and read whole — not a retrieval method and not a token-fitted token map.
+- AOCI's index has two owners: an AST or call-graph extractor produces the symbolic half automatically, and an architect writes the semantic half by hand in an ADR.
 - Each entry pairs symbolic architectural coordinates with semantic content describing function and constraints — both halves are required.
-- Position AOCI as a third option alongside agentic search and [per-query retrieval](repository-level-retrieval-code-generation.md); choose by codebase stability, repo size, and model context window.
-- Reported results are strong but single-source — adopt with verification, not as a settled benchmark.
+- Position AOCI as a third option alongside agentic search and [per-query retrieval](repository-level-retrieval-code-generation.md). Choose by codebase stability, repo size, and model context window.
+- Reported results are strong but single-source, and independent counter-evidence exists for the same file family. Verify before you adopt, not after.
 
 ## Related
 

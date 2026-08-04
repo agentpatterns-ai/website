@@ -68,7 +68,7 @@ Copilot's own lever is [auto model selection](../patterns/agent-design/auto-mode
 
 ## What the seat fee buys
 
-Three things, none of them a token discount.
+The seat fee buys three things, and none of them is a token discount.
 
 ### Pooled allowances
 

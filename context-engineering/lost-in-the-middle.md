@@ -33,7 +33,7 @@ This is a structural property of how transformer attention weights earlier and l
 
 Position decides how well an instruction works. An instruction placed in section 5 of a 10-section system prompt sits in the weak attention zone. The instruction may be well written and clear, but the model is statistically less likely to follow it than the same instruction placed at the top or bottom. Position affects retrieval accuracy even when the content is identical ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)).
 
-Adding content degrades the content around it. Each instruction added in the middle does more than dilute attention. It pushes existing instructions further from the high-attention edges. A long AGENTS.md file buries most of its instructions in the zone where they are least likely to be followed.
+Adding content degrades the content around it. Each instruction added in the middle pushes existing instructions further from the high-attention edges. A long AGENTS.md file buries most of its instructions in the zone where they are least likely to be followed.
 
 Use the middle for reference, not rules. Content that must be followed reliably belongs at the edges. Content that the agent retrieves and refers to, such as schemas, examples, and lookup information, can sit mid-context because the agent is actively pulling it rather than relying on passive attention.
 
@@ -94,7 +94,7 @@ The opening section carries the rules the agent must follow reliably. The middle
 
 **What causes the U-shaped attention curve?**
 
-It is a structural property of how transformer attention weights earlier and later tokens, not a quirk of a particular model or instruction format. Later theoretical work traces the pattern to how causal masking and relative positional encodings such as RoPE interact, biasing attention toward the edges of the sequence ([Wu et al., 2025](https://arxiv.org/abs/2502.01951)). The size of the gap varies by model, but the bias holds across architectures tested.
+It is a structural property of how transformer attention weights earlier and later tokens, not a quirk of a particular model or instruction format. Later theoretical work traces the pattern to how causal masking and relative positional encodings such as RoPE interact and bias attention toward the edges of the sequence ([Wu et al., 2025](https://arxiv.org/abs/2502.01951)). The size of the gap varies by model, but the bias holds across architectures tested.
 
 **Does position matter even when the wording is good?**
 
@@ -106,14 +106,14 @@ Reference material the agent actively pulls — schemas, examples, and lookup in
 
 **When is placement tuning not worth the effort?**
 
-When the whole input fits in a few hundred tokens, there is no meaningful middle zone, so tuning adds structural overhead for no gain. Models trained with long-context fine-tuning or instruction-following reinforcement show less middle-degradation, making placement a default safeguard rather than a guarantee. In loops that compact or re-inject context each step, the middle shifts continuously anyway.
+When the whole input fits in a few hundred tokens, there is no meaningful middle zone, so tuning adds structural overhead for no gain. Models trained with long-context fine-tuning or instruction-following reinforcement show less middle-degradation; treat placement as a default safeguard, not a guarantee. In loops that compact or re-inject context each step, the middle shifts continuously anyway.
 
 ## Key Takeaways
 
-- Model attention follows a U-shape: strongest at the start and end, weakest in the middle.
-- Critical rules belong at the beginning and end of instruction files like `AGENTS.md`; reference material can occupy the middle.
-- Adding instructions in the middle of a long file pushes existing instructions further into the low-attention zone.
-- Keep instruction files short enough to minimize the size of the weak-attention middle zone.
+- Diagnose an ignored instruction by position before wording: content buried mid-file needs a stronger signal to survive the low-attention zone, even when it reads clearly.
+- When auditing an existing `AGENTS.md` or system prompt, check whether must-follow rules already sit in the first or last third of the file — move them there before touching the wording.
+- Before adding a rule to a long instruction file, check whether it can replace or merge with an existing one — insertion pushes prior rules further from the edges.
+- After a compaction or partway through a long conversation, restate an early constraint near the end of context — do not assume the model scrolled back for it.
 
 ## Related
 

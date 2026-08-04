@@ -23,7 +23,7 @@ maturity: established
 
 ## Why seeding works
 
-Agents explore codebases by reading files — what they find shapes what they do. Seeded context is persistent: it influences every session that touches that codebase region, shifting [context management](context-engineering.md) from a per-session concern to codebase hygiene.
+Agents explore codebases by reading files. What they find shapes what they do. Seeded context is persistent: it influences every session that touches that codebase region, shifting [context management](context-engineering.md) from a per-session concern to codebase hygiene.
 
 ## The durability spectrum
 
@@ -50,7 +50,7 @@ Claude Code uses [CLAUDE.md files](https://code.claude.com/docs/en/memory) with 
 
 ### Progressive disclosure over monoliths
 
-A lean entry-point file (~100 lines) pointing to structured subdirectories outperforms a monolithic instruction file — the repository functions as agent memory, and anything not in context does not exist ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings); see also [progressive disclosure for agent definitions](../patterns/agent-design/progressive-disclosure-agents.md)).
+A lean entry-point file (~100 lines) pointing to structured subdirectories outperforms a monolithic instruction file. The repository functions as agent memory, and anything not in context does not exist ([Lavaee, "OpenAI Agent-First Codebase Learnings"](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings); see also [progressive disclosure for agent definitions](../patterns/agent-design/progressive-disclosure-agents.md)).
 
 ### Inline decision comments
 
@@ -63,7 +63,7 @@ Comments explaining why a decision was made prevent agents from reverting it. Wi
 
 ### TODO and FIXME markers
 
-Placing a `TODO` or `FIXME` at the exact location ensures the agent encounters it when editing nearby code — though whether agents treat these as actionable items varies by tool.
+Placing a `TODO` or `FIXME` at the exact location ensures the agent encounters it when editing nearby code, though whether agents treat these as actionable items varies by tool.
 
 ### Type annotations
 
@@ -71,11 +71,11 @@ Complete type signatures eliminate agent guesswork about return types, parameter
 
 ### Example files and pattern replication
 
-Agents pattern-match against existing code — a well-written reference implementation communicates conventions more precisely than prose. But agents replicate good and bad patterns alike; poor examples compound drift, a dynamic known as [pattern replication risk](../patterns/anti-patterns/pattern-replication-risk.md) ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
+Agents pattern-match against existing code. A well-written reference implementation communicates conventions more precisely than prose. But agents replicate good and bad patterns alike; poor examples compound drift, a dynamic known as [pattern replication risk](../patterns/anti-patterns/pattern-replication-risk.md) ([Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings)).
 
 ### Progress files as breadcrumbs
 
-Long-running agents maintain [progress files](../observability/trajectory-logging-progress-files.md) (for example, `todo.md`) that subsequent sessions read to get oriented, eliminating repeated discovery ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Manus uses a continuously updated `todo.md` as a [goal recitation](goal-recitation.md) mechanism ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
+Long-running agents maintain [progress files](../observability/trajectory-logging-progress-files.md) (for example, `todo.md`) that subsequent sessions read to get oriented instead of rediscovering the codebase from scratch ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)). Manus uses a continuously updated `todo.md` as a [goal recitation](goal-recitation.md) mechanism ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
 
 ## What to seed versus what to prompt
 
@@ -89,23 +89,23 @@ Long-running agents maintain [progress files](../observability/trajectory-loggin
 
 Seed durable information; prompt session-specific intent. See [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) for the boundary.
 
-Some tools expose a deliberate interactive channel for injecting context mid-session. Claude Code's `!` shell escape runs a bash command inline; as of v2.1.186 its output is fed back to the model for a response by default, with a `respondToBashCommands: false` toggle to inject the output as context-only instead — a human-in-the-loop way to prime a session with live command output rather than codebase breadcrumbs ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+Some tools expose a deliberate interactive channel for injecting context mid-session. Claude Code's `!` shell escape runs a bash command inline and, as of v2.1.186, feeds the output back to the model for a response by default. A `respondToBashCommands: false` toggle injects the output as context only instead — a human-in-the-loop way to prime a session with live command output rather than codebase breadcrumbs ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
 
 ## When this backfires
 
-- Stale breadcrumbs: an AGENTS.md that no longer reflects the codebase misleads the agent — it acts on false premises with high confidence. Stale seeding is worse than no seeding.
+- Stale breadcrumbs: an AGENTS.md that no longer reflects the codebase misleads the agent. It acts on false premises with high confidence, and stale seeding is worse than no seeding.
 - Pattern replication: agents replicate existing code indiscriminately ([pattern replication risk](../patterns/anti-patterns/pattern-replication-risk.md)). A single poor reference implementation propagates the anti-pattern across every new file; mechanical enforcement is the only reliable safeguard.
-- Conflicting scopes: nested context files with contradictory instructions cause agents to apply the [wrong scope](prompt-layering.md) — unpredictable and difficult to debug.
+- Conflicting scopes: nested context files with contradictory instructions cause agents to apply the [wrong scope](prompt-layering.md), which is unpredictable and difficult to debug.
 
 Seeding suits stable, long-lived codebases. For short-lived projects, the maintenance overhead may exceed the benefit.
 
-Even accurate seeding is not free. A controlled study found that repository-level context files often reduce coding-agent task success versus no context while raising inference cost by over 20% — broad architectural overviews can pull agents into unbounded exploration, and LLM-generated files fare worst, with human-curated ones giving only modest gains ([Gloaguen et al., "Evaluating AGENTS.md"](https://arxiv.org/abs/2602.11988)). Seed lean, specific, hand-written context — not generated bulk.
+Even accurate seeding is not free. A controlled study found that repository-level context files often reduce coding-agent task success versus no context while raising inference cost by over 20%. Broad architectural overviews can pull agents into unbounded exploration, and LLM-generated files fare worst, with human-curated ones giving only modest gains ([Gloaguen et al., "Evaluating AGENTS.md"](https://arxiv.org/abs/2602.11988)). Seed lean, specific, hand-written context rather than generated bulk.
 
 ## FAQ
 
 **What should be seeded in the codebase rather than prompted?**
 
-Seed durable information: stable conventions and constraints, architectural decisions and their rationale, known issues and TODOs, type annotations and interfaces, and progress files for multi-session work. Prompt session-specific intent instead — task requirements, what you are building now, session priorities and scope, one-off instructions, and corrections. The dividing line is durability.
+Seed durable information: stable conventions and constraints, architectural decisions and their rationale, known issues and TODOs, type annotations and interfaces, and progress files for multi-session work. Prompt session-specific intent instead: task requirements, what you are building now, session priorities and scope, one-off instructions, and corrections. The dividing line is durability.
 
 **Does adding an AGENTS.md always improve agent performance?**
 
@@ -117,11 +117,11 @@ Contradictory instructions across scopes make agents apply the wrong scope, whic
 
 ## Key Takeaways
 
-- Mechanical enforcement is the most durable seeding form — agents cannot ignore a failing check.
-- Directory-scoped context files (`AGENTS.md`, `CLAUDE.md`) place conventions where the work happens.
-- Agents replicate existing patterns indiscriminately — good and bad examples both propagate.
-- Progress files and git history eliminate repeated discovery across sessions.
-- A lean entry-point file outperforms a monolithic instruction file.
+- Mechanical enforcement is the most durable seeding form: agents cannot ignore a failing check the way they can skip a written guideline.
+- The nearest `AGENTS.md`/`CLAUDE.md` wins: subdirectory files override project-level instructions, so scope conventions to the directory they apply to.
+- A single poor reference implementation propagates its anti-pattern across every new file agents write. Audit examples before pointing agents at them, or back them with mechanical enforcement.
+- Progress files persist where chat history does not: write task state to a file like `todo.md` so the next session picks up instead of rediscovering it.
+- Keep the top-level entry-point file to about 100 lines and link out to structured subdirectories. A monolithic instruction file underperforms it.
 
 ## Example
 
@@ -177,7 +177,7 @@ def fetch_records(
     ...
 ```
 
-An agent editing `ingest_raw.py` reads the package AGENTS.md, encounters the decision comment, sees the TODO, and understands the typed interface — all without session-level prompting.
+An agent editing `ingest_raw.py` reads the package AGENTS.md, encounters the decision comment, sees the TODO, and understands the typed interface, all without session-level prompting.
 
 ## Sources
 

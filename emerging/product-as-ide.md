@@ -78,7 +78,7 @@ A SaaS product team ships a customer-facing dashboard. Using Product-as-IDE:
 5. The [risk-based shipping](../verification/risk-based-shipping.md) gate evaluates the diff: UI-only change, no schema migration, no auth boundary changes — auto-ships to production.
 6. The PM sees the updated filter live in the product within minutes, without opening a terminal, pull request, or CI dashboard.
 
-If the change had touched the database schema, for example storing user-selected date preferences per account, the agent halts and routes the diff to an engineer for manual review before deployment.
+If the change had touched the database schema, for example storing user-selected date preferences per account, the agent halts. It routes the diff to an engineer for manual review before deployment.
 
 ## Related
 

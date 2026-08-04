@@ -1,7 +1,7 @@
 ---
 title: "Review-Feedback-to-Rule Loop: Promoting Recurring PR Comments into Harness Rules"
 term: "Review-Feedback-to-Rule Loop"
-description: "Convert recurring code review comments into mechanical checks — a lint rule, an AST boundary check, or an evaluator rubric line — so the same comment never needs to be written twice."
+description: "Convert recurring code review comments into mechanical checks (a lint rule, an AST boundary check, or an evaluator rubric line) so the same comment never needs to be written twice."
 tags:
   - code-review
   - instructions
@@ -18,7 +18,7 @@ maturity: established
 
 # Review-Feedback-to-Rule Loop: Promoting Recurring PR Comments into Harness Rules
 
-> Promote a recurring review comment into a harness rule once it fires across 3+ PRs — then retire it when the hit count hits zero.
+> Promote a recurring review comment into a harness rule once it fires across 3+ PRs, then retire it when the hit count hits zero.
 
 ## When a comment becomes a signal
 
@@ -65,29 +65,29 @@ ERROR: Service layer cannot import from UI layer.
   See docs/architecture/layer-rules.md for the dependency diagram.
 ```
 
-What is wrong, what to do instead, where the rationale lives — see [Feedback as Capability Equalizer](../patterns/agent-design/feedback-capability-equalizer.md).
+That structure states what is wrong, what to do instead, and where the rationale lives. See [Feedback as Capability Equalizer](../patterns/agent-design/feedback-capability-equalizer.md) for why it works.
 
 ### 4. Track hit count and retire
 
 Every rule has a finite shelf life. Refactors obviate boundaries, model upgrades eliminate failure modes, conventions solidify until no one would write the violation. Without retirement, the rule library accumulates dead weight and the priority-saturation failure mode of [standards as agent instructions](../instructions/standards-as-agent-instructions.md) kicks in: when every rule has equal weight, nothing signals priority and adherence degrades.
 
-Periodic decay pairs this loop with [harness impermanence](../patterns/agent-design/harness-impermanence.md): rules whose hits trend toward zero are deletion candidates. Annotate each rule with its obsolescence condition — the observable signal that it has done its job.
+Periodic decay pairs this loop with [harness impermanence](../patterns/agent-design/harness-impermanence.md): rules whose hits trend toward zero are deletion candidates. Annotate each rule with its obsolescence condition, the observable signal that it has done its job.
 
 ## Why mechanical enforcement beats repeated comments
 
-Anthropic separates the modes explicitly: "Unlike CLAUDE.md instructions which are advisory, hooks are deterministic and guarantee the action happens" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). The distinction holds for review comments versus lint rules — a reviewer's eye is probabilistic, a mechanical check fires every time. LangChain's harness changes lifted Terminal Bench 2.0 from 52.8% to 66.5%, with self-verification among the high-impact components ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)); mechanical pre-merge checks are the human-team analogue.
+Anthropic separates the modes explicitly: "Unlike CLAUDE.md instructions which are advisory, hooks are deterministic and guarantee the action happens" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). The distinction holds for review comments versus lint rules. A reviewer's eye is probabilistic; a mechanical check fires every time. LangChain's harness changes lifted Terminal Bench 2.0 from 52.8% to 66.5%, with self-verification among the high-impact components ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)); mechanical pre-merge checks are the human-team analogue.
 
 ## What this is not
 
-This differs from [learned review rules](learned-review-rules.md): the Cursor Bugbot pattern adjusts the reviewer's behavior by extracting rules from accept and reject signals. This loop promotes the invariant out of the reviewer entirely — into the lint stack, checklist, or evaluator rubric. The two compose. Bugbot tunes reviewer defaults; this loop drains high-frequency comments before they reach review.
+This differs from [learned review rules](learned-review-rules.md): the Cursor Bugbot pattern adjusts the reviewer's behavior by extracting rules from accept and reject signals. This loop promotes the invariant out of the reviewer entirely, into the lint stack, checklist, or evaluator rubric. The two compose. Bugbot tunes reviewer defaults; this loop drains high-frequency comments before they reach review.
 
-It also differs from [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md), which converts production failures into regression tests. The trigger and the enforcement layer differ. And where a comment is semantic rather than mechanically checkable — a design-judgment call no lint rule can express — the counterpart move is [accumulated behavioral rules](../workflows/accumulated-behavioral-rules.md): keep the correction as a loaded instruction the agent self-checks, rather than promoting it to a deterministic check.
+It also differs from [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md), which converts production failures into regression tests. The trigger and the enforcement layer differ. And where a comment is semantic rather than mechanically checkable (a design-judgment call no lint rule can express), the counterpart move is [accumulated behavioral rules](../workflows/accumulated-behavioral-rules.md): keep the correction as a loaded instruction the agent self-checks, rather than promoting it to a deterministic check.
 
 ## Example
 
 A team's reviewer leaves the same comment on six PRs over two weeks: "This handler swallows the database error. Re-throw or wrap it with context — silent failures here cause the on-call to chase ghosts."
 
-The trigger fires (6 ≥ 3). Categorize it: this is a safety and correctness invariant, not a style point. An AST check is the wrong choice here, because the violation is semantic — whether the handler "swallows" the error depends on what the catch block does with it. A pre-completion checklist line is the right layer.
+The trigger fires (6 ≥ 3). Categorize it: this is a safety and correctness invariant, not a style point. An AST check is the wrong choice here, because the violation is semantic: whether the handler "swallows" the error depends on what the catch block does with it. A pre-completion checklist line is the right layer.
 
 Add to `.claude/checklists/pre-merge.json`:
 
@@ -105,17 +105,17 @@ Six weeks later, the on-call dashboard shows no silent-handler-failure incidents
 ## When this backfires
 
 - Premature promotion: encoding after one or two occurrences freezes a hypothesis as a rule. Suppression comments proliferate and the rule's signal degrades.
-- Wrong enforcement layer: a semantic check forced into a regex linter fires on every legitimate exception — get the layer wrong and the rule becomes the new recurring noise source.
+- Wrong enforcement layer: a semantic check forced into a regex linter fires on every legitimate exception; get the layer wrong and the rule becomes the new recurring noise source.
 - Remediation text omitted or stale: a rule without "what to do instead" is a finger-wag, not the [structured remediation](../patterns/agent-design/feedback-capability-equalizer.md) that closes the loop. Developers and agents both stall, suppress, or copy-paste workarounds.
-- No retirement discipline: the lint stack accumulates. Adherence degrades as instruction volume grows — context rot means models recall earlier rules less accurately as context fills ([Anthropic context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Priority saturation makes individual rules unreliable.
+- No retirement discipline: the lint stack accumulates. Adherence degrades as instruction volume grows: context rot means models recall earlier rules less accurately as context fills ([Anthropic context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Priority saturation makes individual rules unreliable.
 
 ## Key Takeaways
 
-- Three or more occurrences of the same review comment is the trigger — fewer is a hypothesis, not a pattern.
-- Categorize before encoding: style → linter, boundary → AST check, safety → [pre-completion checklist](../verification/pre-completion-checklists.md), spec → evaluator rubric. Wrong layer is a recurring-noise source.
-- Remediation text is non-optional. A rule that says *what is wrong* without *what to do instead* relocates the bottleneck instead of removing it.
-- Hooks and mechanical checks are deterministic; CLAUDE.md instructions and review comments are advisory. Promotion converts advisory into enforced.
-- Pair promotion with retirement. Rules whose hit count trends to zero have done their job — delete them before priority saturation degrades the rest.
+- Log each occurrence with a link to its PR as it happens; reconstructing the count later turns the three-or-more threshold into a guess.
+- Watch suppression comments as a signal: a rule that needs frequent overrides sits at the wrong layer. Move a safety-layer violation to a [pre-completion checklist](../verification/pre-completion-checklists.md) instead of suppressing it in a linter.
+- Write the remediation text before the check. If you cannot state the fix in one line, the check is not ready to encode.
+- The same logic applies upstream: a CLAUDE.md rule the agent keeps missing is itself a promotion candidate, not just a repeated PR comment.
+- A hit count trending to zero over many PRs is retirement evidence; one quiet PR is not. Retire on the trend, not a single data point.
 
 ## Related
 

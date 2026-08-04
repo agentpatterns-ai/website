@@ -9,7 +9,7 @@ tags:
 aliases:
   - grill me technique
   - plan interrogation technique
-last_reviewed: 2026-06-12
+last_reviewed: 2026-08-03
 maturity: adopted
 ---
 
@@ -34,6 +34,8 @@ Matt Pocock's [grill-me skill](https://github.com/mattpocock/skills/blob/main/sk
 The one-question-at-a-time constraint matters: it prevents the session from collapsing into a questionnaire the developer answers superficially. The recommended-answer per question prevents interrogation fatigue — the agent proposes, the developer confirms or corrects, and the session stays productive.
 
 The codebase-first heuristic cuts noise: the agent resolves questions whose answers already exist in code, without developer input, so the session stays focused on genuine unknowns.
+
+For the skill's own reference page, see [AI Hero, /grill-me](https://www.aihero.dev/skills-grill-me).
 
 The "walk every branch of the decision tree" framing predates the skill. Frederick Brooks catalogs this approach as a central design discipline in [The Design of Design (ACM Digital Library)](https://dl.acm.org/doi/10.5555/1738960), where making the design tree explicit is what separates rigorous design from premature commitment.
 

@@ -133,10 +133,10 @@ The retriever-first ordering removes the dense-stack cost, defers the generator 
 
 ## Key Takeaways
 
-- A 21+ model component-wise empirical study reports retriever choice exerts more influence on SE-task RAG quality than generator choice across code generation, summarization, and program repair ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
-- BM25 is "exceptionally robust" across the three SE tasks despite being older and cheaper than dense or hybrid alternatives — a default, not a fallback, for SE corpora ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
-- Investment order: tune retriever first, then context length and chunking, then query processing and refinement, then generator. Generator upgrades are the smallest lever in the study.
-- The result inverts when the generator is sub-frontier, queries are natural-language against code, the corpus drifts faster than BM25 parameters retune, or the workload leaves the SE-task setting.
+- Before budgeting a generator upgrade for a lagging SE-task RAG pipeline, audit retriever recall first — the component-wise study puts the larger effect there for code generation, summarization, and program repair ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
+- Benchmark any dense or hybrid retriever against a tuned BM25 baseline before adopting it for an SE corpus; the added infrastructure cost has to beat, not just match, the classical baseline ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
+- Stop tuning retrieval and move to a generator upgrade only after BM25's `b`/`k1`, context length and chunking, and query processing and refinement have each been tested — a generator swap attempted earlier is the lowest-yield lever in the study.
+- Check these four conditions before defaulting to BM25-first: generator capability tier, whether queries are natural language against code rather than identifier-to-identifier, corpus drift rate versus retuning cadence, and whether the workload is SE-specific at all — any one flips the default.
 - The retriever-dominance mechanism is consistent across SE-task RAG ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)), code-completion chunking ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)), and frontier-agent deep-research search ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)) — retrieval-side levers dominate generator-side levers when the generator is strong enough to use what it sees.
 
 ## Related

@@ -65,10 +65,10 @@ Adjacent results in the same literature point the same way: ReSum's external sum
 
 ## Where the pattern does not apply
 
-Elastic orchestration suits search agents, not short coding sessions.
+Elastic orchestration suits search agents. Four situations fall outside it:
 
 - Short-horizon tasks (about 20 turns or fewer). The five-operation vocabulary adds policy complexity and SFT cost without payoff. Raw ReAct or [tiered compression](context-compression-strategies.md) is cheaper.
-- Code agents with persistent file state. Evidence lives in files, not the trajectory. Aggressive Skip or Delete on tool observations breaks debug loops where the agent needs to [re-read prior outputs](observation-masking.md).
+- Code agents with persistent file state. Evidence lives in the files, and aggressive Skip or Delete on tool observations breaks debug loops where the agent needs to [re-read prior outputs](observation-masking.md).
 - Off-the-shelf models with no SFT on the vocabulary. Skip, Snippet, and Rollback are not natural ReAct actions. Models invoke them inconsistently and can regress below the ReAct baseline. LongSeeker reports 10,000-trajectory SFT specifically to teach the operation policy ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)).
 - Side-effecting tools. Rollback removes context but cannot undo bookings, payments, or writes. See [Rollback-First Design](../patterns/agent-design/rollback-first-design.md) for the separate mechanism that handles world state.
 
@@ -103,10 +103,10 @@ The agent ends with a working context of a few hundred tokens covering 22 search
 
 ## Key Takeaways
 
-- Elastic context orchestration treats context management as a per-turn action drawn from a fixed vocabulary, not a [periodic background process](context-compression-strategies.md).
-- The Skip / Compress / Snippet / Rollback / Delete vocabulary lets the policy tier retention by current relevance — Compress is expressively complete; the others exist for efficiency and fidelity.
-- Reported gains come from search-agent benchmarks (BrowseComp, BrowseComp-ZH) on SFT-trained models; numbers are first-party and unreplicated.
-- Short coding sessions, file-state-heavy agents, and off-the-shelf models without operation-vocabulary SFT will not benefit and can regress.
+- Reach for elastic orchestration over [periodic compaction](context-compression-strategies.md) when the agent needs to judge each turn's value on its own — a fixed schedule cannot distinguish a resolved sub-task from evidence still in play.
+- Compress alone can implement the whole vocabulary, so a minimal build can start there and add Skip, Snippet, Rollback, and Delete only once generation cost or hallucination risk demands them.
+- The reported BrowseComp gains are first-party and unreplicated — pilot on your own workload before sizing an SFT budget around the LongSeeker or AgentFold numbers.
+- Before adopting the vocabulary, check turn count, where evidence lives, and whether the base model has operation-vocabulary SFT; if any of those work against you, default to raw ReAct or tiered compression instead.
 - Rollback removes context but does not undo side-effects; pair with [Rollback-First Design](../patterns/agent-design/rollback-first-design.md) for world-state recovery.
 
 ## Related

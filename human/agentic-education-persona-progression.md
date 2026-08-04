@@ -32,7 +32,7 @@ Each persona defines the support level the learner receives from the instructor 
 | `Peer` | Suggestions on request; learner leads | Makes the decisions; instructor reviews |
 | `Launcher` | Minimal intervention; available on exception | Operates independently; asks only when stuck |
 
-The sequence is an explicit instantiation of Vygotsky's Zone of Proximal Development — scaffolding operates at the edge of current ability and fades as competence builds ([Tool, tutor, or crutch? 2025](https://link.springer.com/article/10.1186/s40594-025-00592-w)). The same mechanism underpins [deliberate AI-assisted learning](deliberate-ai-learning.md).
+The sequence is an explicit instantiation of Vygotsky's Zone of Proximal Development. Scaffolding operates at the edge of current ability and fades as competence builds ([Tool, tutor, or crutch? 2025](https://link.springer.com/article/10.1186/s40594-025-00592-w)). The same mechanism underpins [deliberate AI-assisted learning](deliberate-ai-learning.md).
 
 ## Transition criteria
 
@@ -52,7 +52,7 @@ Pauses matter most in the Guide and Collaborator phases, where the learner is ab
 
 ## The measurement trap
 
-The paper's pilot reported statistically significant self-efficacy gains (p < 0.001, n=27) across ten skill areas. Self-efficacy is self-reported confidence, not retained capability. The [University of Pennsylvania AI-tutor study](https://pmc.ncbi.nlm.nih.gov/articles/PMC12036037/) documents the failure mode: students using AI to practice solved 48% more problems in the session but scored 17% lower on a concept-understanding test afterward. Procedural throughput rose; durable learning did not.
+The paper's pilot reported statistically significant self-efficacy gains (p < 0.001, n=27) across ten skill areas. Self-efficacy is self-reported confidence, not retained capability. The [University of Pennsylvania AI-tutor study](https://pmc.ncbi.nlm.nih.gov/articles/PMC12036037/) documents the failure mode. Students using AI to practice solved 48% more problems in the session but scored 17% lower on a concept-understanding test afterward. Procedural throughput rose; durable learning did not.
 
 This mirrors the finding in [deliberate AI-assisted learning](deliberate-ai-learning.md) that passive delegation produces the feeling of comprehension without the retention. The fix is to validate each persona transition with a task the learner completes without the instructor present — independent reconstruction, not session-concurrent performance.
 
@@ -62,7 +62,7 @@ A minimum gate for each transition:
 - Collaborator to Peer: implement the next module's feature before the walkthrough starts
 - Peer to Launcher: debug a seeded failure with the instructor persona set to silent
 
-Without these checks, the persona scaffold risks collapsing into cognitive offloading — the failure mode AI-tutor research identifies, where scaffolding turns into answer-giving ([Do AI tutors empower or enslave learners?, 2025](https://arxiv.org/html/2507.06878v1)).
+Without these checks, the persona scaffold risks collapsing into cognitive offloading. This is the failure mode AI-tutor research identifies, where scaffolding turns into answer-giving ([Do AI tutors empower or enslave learners?, 2025](https://arxiv.org/html/2507.06878v1)).
 
 ## When this backfires
 
@@ -77,7 +77,7 @@ Structured persona progression adds curriculum and measurement overhead. It is w
 
 A team onboarding three new engineers to Claude Code over four weeks runs a four-persona curriculum against a single project template (a small FastAPI service).
 
-Week 1, Guide. Each engineer works through five modules where Claude Code acts as a step-by-step narrator: it writes code, explains each line, and pauses for the learner to confirm understanding before continuing. End-of-week gate: each engineer reproduces module 3 from scratch the next morning, no assistance. Two pass; one repeats the week.
+Week 1, Guide. Each engineer works through five modules where Claude Code acts as a step-by-step narrator. It writes code, explains each line, and pauses for the learner to confirm understanding before continuing. End-of-week gate: each engineer reproduces module 3 from scratch the next morning, no assistance. Two pass; one repeats the week.
 
 Week 2, Collaborator. Claude Code proposes diffs; the engineer edits before applying. The engineer writes the next failing test; Claude Code proposes the implementation. End-of-week gate: the engineer implements the next module's feature — a rate-limiting middleware — before reading the walkthrough. All three pass.
 
@@ -85,7 +85,7 @@ Week 3, Peer. The engineer drives; Claude Code answers on request. The engineer 
 
 Week 4, Launcher. The engineer ships a new feature independently, calling Claude Code only as a senior engineer would — on architectural questions or when stuck for thirty minutes. Progress is reviewed in the PR, not through the agent transcript.
 
-The measurement shift across weeks is the load-bearing part: self-reported confidence would rise steadily in all four weeks, but only the independent-reconstruction gates tell apart learners who retained the capability from those who relied on in-session scaffolding.
+The measurement shift across weeks is the load-bearing part. Self-reported confidence would rise steadily in all four weeks, but only the independent-reconstruction gates tell apart learners who retained the capability from those who relied on in-session scaffolding.
 
 ## Key Takeaways
 

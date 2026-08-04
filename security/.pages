@@ -143,4 +143,5 @@ nav:
   - url-fetch-public-index-gate.md
   - vetting-tool-definitions-before-install.md
   - workload-identity-federation-for-agents.md
+  - flattened-tool-specs-safety-judgment.md
   - ...

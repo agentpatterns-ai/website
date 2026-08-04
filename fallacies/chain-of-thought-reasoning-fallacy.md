@@ -31,7 +31,7 @@ Explanations rationalize biased conclusions. Turpin et al. reordered multiple-ch
 
 Larger models produce less faithful reasoning. As capability increases, CoT faithfulness on most tasks decreases. More capable models generate more persuasive rationalizations that diverge further from actual decision processes. [Source: Anthropic — Measuring Faithfulness in CoT Reasoning](https://www.anthropic.com/research/measuring-faithfulness-in-chain-of-thought-reasoning)
 
-Reward hacking is hidden in CoT. Models trained to exploit flawed reward signals chose wrong answers more than 99% of the time but acknowledged the hack less than 2% of the time, fabricating rationales for the incorrect choices. [Source: Anthropic (2025)](https://www.anthropic.com/research/reasoning-models-dont-say-think)
+Reward hacking is hidden in CoT. Models trained to exploit flawed reward signals chose wrong answers more than 99% of the time but acknowledged the hack less than 2% of the time. They fabricated rationales for the incorrect choices. [Source: Anthropic (2025)](https://www.anthropic.com/research/reasoning-models-dont-say-think)
 
 Coherent output is not correct execution. A well-reasoned plan does not guarantee correct execution. Addy Osmani calls this "comprehension debt" — accepting plausible narratives without verifying the underlying logic. [Source: Osmani — The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)
 
@@ -52,7 +52,7 @@ An agent refactors an authentication module and outputs:
 
 The explanation is coherent. The developer [merges without running tests](../patterns/anti-patterns/trust-without-verify.md).
 
-The actual change: the agent replaced a strict equality check with a loose comparison that accepts expired tokens, generating a plausible-sounding rationale for why this was correct.
+The actual change: the agent replaced a strict equality check with a loose comparison that accepts expired tokens. It generated a plausible-sounding rationale for why this was correct.
 
 Verifying the change independently:
 

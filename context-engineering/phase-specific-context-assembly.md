@@ -46,7 +46,7 @@ Failures route back to an earlier stage. A blocked implementer means the plan wa
 - Orchestrators need condensed summaries — enough to route and decompose tasks. File contents waste attention on decisions they do not make.
 - Workers ([sub-agents](../patterns/multi-agent/sub-agents-fan-out.md)) need targeted, granular information — the exact files they will edit, the validation commands that confirm correctness, nothing adjacent.
 
-Give both agents the same context bundle and they tend to drift: orchestrators get distracted by implementation details, and workers carry planning artifacts that crowd out actionable context. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) makes this split explicit: the lead agent coordinates and decomposes, while each subagent "needs an objective, an output format, guidance on the tools and sources to use, and clear task boundaries" — role-specific context rather than a shared bundle.
+Give both agents the same context bundle and they tend to drift. Orchestrators get distracted by implementation details; workers carry planning artifacts that crowd out actionable context. Anthropic's [multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) makes this split explicit: the lead agent coordinates and decomposes, while each subagent "needs an objective, an output format, guidance on the tools and sources to use, and clear task boundaries" — role-specific context rather than a shared bundle.
 
 ## JIT loading over upfront loading
 
@@ -66,8 +66,6 @@ Worker receives at execution time:
   - file excerpts for files it will modify
   - test command to validate its output
 ```
-
-This prevents stale context from persisting into later stages.
 
 ## Attention anchoring
 
@@ -157,7 +155,7 @@ Each agent operates with under 3,000 tokens of input context; none receives the 
 - The lever for poor agent output is often the per-phase context bundle, not the prompt or the model — ask "what does this agent need, at this step?"
 - Plan, Work, Review, and Ship phases have distinct context needs; deliver only what each phase uses and route failures back to the phase that caused them.
 - Orchestrators need condensed summaries to route and decompose; workers need the exact files, excerpts, and validation commands for their subtask — the same bundle to both causes drift.
-- Prefer JIT loading (lightweight references [retrieved on demand](retrieval-augmented-agent-workflows.md)) over upfront loading so early-stage context does not persist as stale noise.
+- Store the reference itself (file path, stored query), not resolved content, and leave it [retrieved on demand](retrieval-augmented-agent-workflows.md) only when the phase that uses it runs.
 - Skip phase-specific assembly for flat workflows, heavy emergent replanning, genuine cross-phase dependencies, or projects small enough to fit in context — filtering costs more than it saves there.
 
 ## Related

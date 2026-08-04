@@ -22,7 +22,7 @@ The reproduce-before-report gate is a structural step in a multi-agent code revi
 
 ## What "reproduce" means at the gate
 
-The verifier is not a second opinion. It takes the diff plus the reviewer's claim ("function `X` will crash on empty input on line 42") and tries to build evidence: an input that triggers the failure, a code path that shows the contradiction, or a citation to the specific behavior in the source. Anthropic's managed Code Review exposes this artifact — each finding "includes a collapsible extended reasoning section you can expand to understand why Claude flagged the issue and how it verified the problem" ([Code Review docs](https://code.claude.com/docs/en/code-review)). `REVIEW.md` makes the reproduction bar a per-repo dial; the canonical example is "behavior claims need a `file:line` citation in the source, not an inference from naming" ([Code Review docs](https://code.claude.com/docs/en/code-review)).
+The verifier takes the diff plus the reviewer's claim ("function `X` will crash on empty input on line 42") and tries to build evidence: an input that triggers the failure, a code path that shows the contradiction, or a citation to the specific behavior in the source. Anthropic's managed Code Review exposes this artifact — each finding "includes a collapsible extended reasoning section you can expand to understand why Claude flagged the issue and how it verified the problem" ([Code Review docs](https://code.claude.com/docs/en/code-review)). `REVIEW.md` makes the reproduction bar a per-repo dial; the canonical example is "behavior claims need a `file:line` citation in the source, not an inference from naming" ([Code Review docs](https://code.claude.com/docs/en/code-review)).
 
 ## Why the verifier must be independent
 
@@ -50,7 +50,7 @@ Non-reproducing findings are dropped, not appended with a low-confidence flag. T
 | Drop policy | Discard non-reproducing findings | Silent — not surfaced to user |
 | Reasoning artifact | Expose verification evidence | "How it verified the problem" collapsible ([Code Review docs](https://code.claude.com/docs/en/code-review)) |
 
-A pipeline that fans out reviewers but reports every candidate is not running this gate — it is fan-out, which amplifies false positives.
+A pipeline that fans out reviewers but reports every candidate is fan-out: it amplifies false positives instead of filtering them.
 
 ## When this backfires
 
@@ -86,12 +86,12 @@ This configuration makes the verifier's reproduction artifact explicit per defec
 
 ## Key Takeaways
 
-- The gate sits between reviewer and user — high-recall reviewing stays freely speculative; the user only sees what survives independent reproduction
-- Independence (fresh context, ideally different model family) is the load-bearing property; same-family verifiers inherit reviewer biases
-- Silent drop of non-reproducing findings is the default — surfacing them with a confidence flag re-creates the noise problem the gate exists to solve
-- Multi-agent verification with conditionally independent agents lifted accuracy from 32.8% to 72.4% in CodeX-Verify — the gain is empirical, not speculative
-- Cost runs $5-25 per review with verification as a named scaling factor — appropriate for substantial pre-merge changes, not for typo PRs
-- The pattern is unavailable for ZDR organizations and non-Anthropic cloud hosting today; a self-hosted fleet is the only option there
+- Keep reviewer and verifier as separate roles with separate goals: tune the reviewer for recall, the verifier for precision. Merging the two passes collapses the gate into plain fan-out
+- Reset context and pick a different model family for the verifier. Reusing the reviewer's session or model lets it confirm the reviewer's own errors instead of catching them
+- Route reproduction-incapable classes like races to a separate suspected-but-not-reproduced channel. The default silent drop otherwise discards exactly the highest-stakes findings it cannot reproduce
+- Track the verifier's independence directly. CodeX-Verify's reviewer-pair correlation (0.05 to 0.25) is more diagnostic than the headline 32.8% to 72.4% accuracy jump alone
+- Push count, more than diff size, drives cost on iterative pipelines. Suppress re-verification per push with `@claude review once` instead of paying full gate cost on every commit
+- Confirm hosting and data-retention status before adopting the gate: cloud fleet verification is unavailable on Bedrock, Vertex AI, and Foundry, and to organizations running Zero Data Retention. Check once during setup rather than per review
 
 ## Related
 

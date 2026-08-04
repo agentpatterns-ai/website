@@ -51,7 +51,7 @@ This is an architectural decision, not a per-request one. It applies when you co
 
 ### 2. Counter-prompting
 
-Add explicit instructions that directly override premature-closure behavior. [Cognition found](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) that prompts at the start of the conversation were not enough — reminders at both the beginning and the end of the prompt were needed to keep Devin from wrapping up early. This aligns with [primacy and recency effects](lost-in-the-middle.md) — see [Critical Instruction Repetition](../instructions/critical-instruction-repetition.md) for the full technique:
+Add explicit instructions that directly override premature-closure behavior. [Cognition found](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) that a prompt at the start of the conversation was not enough. Reminders at both the beginning and the end kept Devin from wrapping up early. This aligns with [primacy and recency effects](lost-in-the-middle.md) — see [Critical Instruction Repetition](../instructions/critical-instruction-repetition.md) for the full technique:
 
 Example counter-prompt:
 
@@ -65,7 +65,7 @@ The instruction mirrors how Anthropic's best-practices documentation recommends 
 
 ### 3. Token budget transparency
 
-Tell the model explicitly how many tokens remain. A model that underestimates available space acts on that underestimate. Communicating the actual budget — or a deliberately padded estimate — corrects the trigger.
+Tell the model explicitly how many tokens remain. A model that underestimates available space acts on that underestimate. Communicating the actual budget (or a deliberately padded estimate) corrects the trigger.
 
 Practical approaches:
 - Include a token budget field in your system prompt that the harness updates each turn
@@ -91,12 +91,12 @@ It is less relevant for short, single-turn interactions where context fill is no
 | Counter-prompting | Adds tokens to every prompt | Long system prompts can cause rule-compliance drop-off per Anthropic guidance |
 | Budget transparency | Harness complexity; stale values if not updated | Incorrect budget values may worsen the problem |
 
-None of these mitigations eliminates the behavior — they reduce its likelihood. Where completeness is critical, combine all three and verify output against a checklist rather than relying on model self-reporting.
+Each mitigation reduces the likelihood of the behavior; none eliminates it. Where completeness is critical, combine all three and verify output against a checklist rather than relying on model self-reporting.
 
 ## Key Takeaways
 
-- Context anxiety is a behavioral shift (premature closure) distinct from [quality degradation (dumb zone)](context-window-dumb-zone.md) and memory loss (compaction).
-- Buffer allocation, counter-prompting, and token budget transparency each address the same root cause from different angles.
+- Diagnose which pattern is happening before picking a fix: [quality degradation (dumb zone)](context-window-dumb-zone.md) needs compaction, context anxiety needs the mitigations here.
+- Layer more than one mitigation for extended sessions, multi-step research, or long planning work, and verify against a checklist rather than the model's self-report.
 - Trigger thresholds are model-dependent and not publicly benchmarked; apply mitigations proactively in long, multi-step agentic tasks.
 - Counter-prompting placement matters: both start and end of the system prompt, exploiting primacy and recency.
 

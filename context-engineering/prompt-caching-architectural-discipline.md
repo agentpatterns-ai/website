@@ -48,13 +48,11 @@ The [Bui (2026) paper on OpenDev](https://arxiv.org/abs/2603.05344) describes th
 
 ## Three rules that break caching
 
-Prefix caching requires exact byte-level matches. Three patterns consistently bust the cache.
+Prefix caching requires exact byte-level matches. Three patterns consistently bust the cache:
 
-Adding or removing tools mid-session breaks the cache. Tool definitions sit in the prefix, so changing them invalidates everything after. Keep the tool list static across the session — [Anthropic's caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) confirm that modifying tool definitions (names, descriptions, parameters) invalidates the entire cache.
-
-Switching models breaks the cache. Model-specific instructions go into the prefix, so a model change [invalidates the cache](https://openai.com/index/unrolling-the-codex-agent-loop/) for the entire session. Treat model switches as context boundaries.
-
-Mutating the prefix to convey state breaks the cache. Timestamps, config, or metadata in early sections bust the cache on every call. Place variable state in the dynamic tail instead.
+- Adding or removing tools mid-session. Tool definitions sit in the prefix, so changing them invalidates everything after. Keep the tool list static across the session — [Anthropic's caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) confirm that modifying tool definitions (names, descriptions, parameters) invalidates the entire cache.
+- Switching models. Model-specific instructions go into the prefix, so a model change [invalidates the cache](https://openai.com/index/unrolling-the-codex-agent-loop/) for the entire session. Treat model switches as context boundaries.
+- Mutating the prefix to convey state. Timestamps, config, or metadata in early sections bust the cache on every call. Place variable state in the dynamic tail instead.
 
 Long-running deep agents stress all three rules at once: file-system tools and dynamically spawned subagents can each rewrite the prefix mid-run. [LangChain's deep-agents guidance](https://blog.langchain.com/blog/deep-agents-prompt-caching) frames cache discipline as a framework-level concern — pin the tool list and keep subagent system prompts stable so a spawned subagent does not re-emit a mutated prefix that invalidates the parent's cache.
 
@@ -148,9 +146,21 @@ Break-even turns matter more than the headline discount. Take a coding agent wit
     | Total input cost | $0.91 | $0.71 |
     | Savings | -- | 22% |
 
-Per-session cache savings = `prefix_tokens` × `turns` × `base_price` × `discount_rate` − `cache_write_cost`. Caching can lose money in three economic conditions even when the prefix is stable: short sessions (1--2 turns), where Anthropic's 1.25x or 2x write premium needs 2--3 reads to recoup; high parallelism, where simultaneous requests each miss the cache and pay the write because the entry only becomes available after the first response begins (sequence the first request before fanning out); and Google explicit caching, where storage fees ($1.00--$4.50/MTok/hour) exceed read savings unless the cache is hit several times per hour. [Source: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)]
+Per-session cache savings = `prefix_tokens` × `turns` × `base_price` × `discount_rate` − `cache_write_cost`. Caching can lose money in three economic conditions even when the prefix is stable:
 
-Monitor per provider: Anthropic `cache_read_input_tokens` against `cache_creation_input_tokens` (high reads; creation near-zero after turn 1 with prefix-only breakpoints, or tracking the per-turn delta under incremental conversation caching — alert when creation approaches the full prefix size, not merely on nonzero creation); OpenAI `usage.prompt_tokens_details.cached_tokens` (non-zero on turns 2+); Google explicit caching hit metadata. A creation-token spike mid-session signals prefix mutation, not a pricing question.
+- Short sessions (1--2 turns): Anthropic's 1.25x or 2x write premium needs 2--3 reads to recoup.
+- High parallelism: simultaneous requests each miss the cache and pay the write, because the entry only becomes available after the first response begins. Sequence the first request before fanning out.
+- Google explicit caching: storage fees ($1.00--$4.50/MTok/hour) exceed read savings unless the cache is hit several times per hour.
+
+[Source: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)]
+
+Monitor per provider:
+
+- Anthropic: `cache_read_input_tokens` against `cache_creation_input_tokens` — high reads; creation near-zero after turn 1 with prefix-only breakpoints, or tracking the per-turn delta under incremental conversation caching. Alert when creation approaches the full prefix size, not merely on nonzero creation.
+- OpenAI: `usage.prompt_tokens_details.cached_tokens`, non-zero on turns 2+.
+- Google: explicit caching hit metadata.
+
+A creation-token spike mid-session signals prefix mutation, not a pricing question.
 
 ## Choosing a cache TTL by session shape
 
@@ -181,15 +191,21 @@ Source: [Anthropic prompt caching docs](https://platform.claude.com/docs/en/buil
 
 Verify the flag is doing work via the `usage` block, which separates 5-minute and 1-hour writes — the system prompt and tool definitions should appear in `ephemeral_1h_input_tokens` on turn 1 and in `cache_read_input_tokens` thereafter. If they keep landing in `ephemeral_5m_input_tokens` or `cache_creation_input_tokens` mid-session, the flag is not honored or a prefix mutation is busting the cache before the longer TTL can help.
 
-The longer TTL backfires in the same prefix-mutation cases as the default cache, plus three of its own: walk-away workflows past one hour (the cache evicts anyway, so you paid 2x for nothing — at T = 90 min, holding a 500K Opus prefix costs $1.375 more than letting it expire); a session-wide flag with mixed block sizes (`ENABLE_PROMPT_CACHING_1H` paints every breakpoint with the 1-hour premium, so set `ttl: "1h"` per breakpoint for finer control, 1-hour blocks before 5-minute blocks in the same request); and 20-block lookback exhaustion (each breakpoint scans at most 20 content blocks backwards, and a long tool-heavy session can exceed that depth and silently miss the cache regardless of TTL). [Source: [Skidmore](https://skids.dev/blog/anthropic-cache-tokenomics/)]
+The longer TTL backfires in the same prefix-mutation cases as the default cache, plus three of its own:
+
+- Walk-away workflows past one hour: the cache evicts anyway, so you paid 2x for nothing. At T = 90 min, holding a 500K Opus prefix costs $1.375 more than letting it expire.
+- A session-wide flag with mixed block sizes: `ENABLE_PROMPT_CACHING_1H` paints every breakpoint with the 1-hour premium. Set `ttl: "1h"` per breakpoint for finer control, 1-hour blocks before 5-minute blocks in the same request.
+- 20-block lookback exhaustion: each breakpoint scans at most 20 content blocks backwards, and a long tool-heavy session can exceed that depth and silently miss the cache regardless of TTL.
+
+[Source: [Skidmore](https://skids.dev/blog/anthropic-cache-tokenomics/)]
 
 ## Key Takeaways
 
-- Stable prefix first, dynamic content last — this determines whether you pay 10% or 100% per turn.
+- Before adding anything new to the prompt, ask whether it changes within the session. If it does, put it in the dynamic tail, never the prefix.
 - Three cache-busters: modifying tool definitions, switching models, injecting variable data into the prefix.
-- Resend full conversation history on every request — enables caching and ZDR compatibility simultaneously.
-- Compact by forking with the prefix intact; append the summary as new tail content.
-- Monitor `cache_read_input_tokens` vs `cache_creation_input_tokens` — cache misses are silent.
+- Resending full history is required for caching and ZDR alike, so budget for the payload growth with compression or truncation policies rather than trimming history ad hoc.
+- Verify a compaction step preserved the prefix byte-for-byte — prefix caching tolerates no reordering, so even a close-but-approximate summary in place of the prefix forces a full cache miss.
+- Watch for creation approaching the full prefix size, not merely nonzero creation — that gap is what separates routine per-turn writes from a prefix mutation.
 
 ## Example
 

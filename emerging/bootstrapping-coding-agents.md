@@ -49,7 +49,7 @@ The bootstrap property inverts the traditional relationship between specificatio
 | Implementations are maintained | Implementations are regenerated |
 | Version control tracks code changes | Version control tracks spec changes |
 
-The practical implication: improving an agent means improving its specification. The implementation becomes a build artifact — reconstructible on demand, not maintained by hand.
+Improving an agent means improving its specification. The implementation becomes a build artifact, reconstructible on demand rather than maintained by hand.
 
 ## Specification properties
 
@@ -68,13 +68,13 @@ This concept extends existing agent-driven development patterns.
 
 [Frozen spec files](../instructions/frozen-spec-file.md) preserve intent across context compaction. Bootstrap-grade specs go further: they are sufficient, because the implementation can be reconstructed from the spec alone.
 
-[Specification as prompt](../instructions/specification-as-prompt.md) uses formal artifacts (types, schemas, tests) as agent instructions. The bootstrap paper uses natural language specs instead, suggesting well-structured prose can achieve comparable precision.
+[Specification as prompt](../instructions/specification-as-prompt.md) uses formal artifacts (types, schemas, tests) as agent instructions. The bootstrap paper uses natural language specs instead. This suggests well-structured prose can achieve comparable precision.
 
 ## Limitations
 
 This is a single-paper finding with important caveats:
 
-- Scale is unresolved. The demonstration uses a 926-word spec. Whether specs of 10,000+ words stay tractable is an open question. The companion [Attractor project](https://github.com/strongdm/attractor) uses 34,900-word specifications — roughly 38 times larger — but the paper notes that verification difficulty grows with spec size: the test suite must cover a larger behavioral surface, and the specification itself may hold internal inconsistencies ([bootstrap demonstration paper](https://arxiv.org/abs/2603.17399)).
+- Scale is unresolved. The demonstration uses a 926-word spec. Whether specs of 10,000+ words stay tractable is an open question. The companion [Attractor project](https://github.com/strongdm/attractor) uses 34,900-word specifications (roughly 38 times larger), but the paper notes that verification difficulty grows with spec size: the test suite must cover a larger behavioral surface, and the specification itself may hold internal inconsistencies ([bootstrap demonstration paper](https://arxiv.org/abs/2603.17399)).
 - Model-dependent. The bootstrap succeeds only with frontier models. Earlier or smaller models produce syntactically invalid or behaviorally incorrect implementations. This makes the property a moving target, not a universal guarantee: the 926-word demonstration assumes a model at least as capable as the one that produced it.
 - Security risk. Per Ken Thompson's "Reflections on Trusting Trust," a compromised model could inject subtle errors that propagate through every bootstrap generation. Countermeasures include version-pinning models and running generation in controlled CI environments.
 - Industrial validation is thin. The paper cites a team of three to seven engineers that built a million-line codebase over five months using Codex, with zero manually written lines of code, by treating their `docs/` directory as the reference system ([bootstrap demonstration paper](https://arxiv.org/abs/2603.17399)). This is reported as an industrial existence proof, not a peer-reviewed replication.
@@ -104,7 +104,7 @@ A bootstrappable specification for a file-search agent:
 - No external dependencies beyond the standard library
 ```
 
-Feeding this specification to a coding agent produces a working implementation. Feeding the same specification to that implementation (as a worker agent) produces a second, functionally equivalent implementation — the bootstrap.
+Feeding this specification to a coding agent produces a working implementation. That implementation can then run as a worker agent: feeding it the same specification produces a second, functionally equivalent implementation — the bootstrap.
 
 ```bash
 # Generate agent₀ from the spec
@@ -118,11 +118,11 @@ Both `agent0.py` and `agent1.py` satisfy the specification. Divergences between 
 
 ## Key Takeaways
 
-- A coding agent can re-implement itself from a 926-word natural language specification, demonstrating meta-circular bootstrapping
-- The specification — not the implementation — becomes the stable artifact of record
+- A coding agent can re-implement itself from a 926-word natural language specification, an instance of meta-circular bootstrapping
+- The specification, not the implementation, becomes the stable artifact of record
 - Effective bootstrappable specs are auditable, behaviorally complete, convergence-testable, and abstraction-focused
 - Code review shifts to specification review; implementations become regenerable build artifacts
-- The finding is model-dependent and scale-limited — treat it as an emerging direction, not an established pattern
+- The finding is model-dependent and scale-limited: treat it as an emerging direction, not an established pattern
 
 ## Related
 

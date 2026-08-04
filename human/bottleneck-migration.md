@@ -62,11 +62,9 @@ The same structural dynamic drove Jevons' original 1865 observation. Cheaper coa
 
 ## Why review gets harder
 
-Volume inflation. AI generates much more code for the same tasks. It produces boilerplate, error handling, and defensive branches a human author would omit, so the review surface area expands.
-
-[Comprehension debt](../patterns/anti-patterns/comprehension-debt.md). When agents write code you cannot explain, you build up understanding gaps that erode your review competence.
-
-Law of Triviality inversion. Small changes get scrutiny, while large AI-generated diffs bypass careful review. See [Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md).
+- Volume inflation: AI generates much more code for the same tasks. It produces boilerplate, error handling, and defensive branches a human author would omit, so the review surface area expands.
+- [Comprehension debt](../patterns/anti-patterns/comprehension-debt.md): when agents write code you cannot explain, you build up understanding gaps that erode your review competence.
+- Law of Triviality inversion: small changes get scrutiny, while large AI-generated diffs bypass careful review. See [Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md).
 
 ## Three response strategies
 
@@ -83,7 +81,7 @@ flowchart TD
     B -->|Fail| F[Return to agent]
 ```
 
-This model emerges naturally when PR volume outpaces reviewer capacity — automation handles the high-frequency, low-stakes review work so human attention concentrates where ownership matters.
+This model emerges when PR volume outpaces reviewer capacity — automation handles the high-frequency, low-stakes review work so human attention concentrates where ownership matters.
 
 ### 2. Structural enforcement
 
@@ -145,7 +143,7 @@ Jevons observed in 1865 that cheaper coal energy raised total coal consumption, 
 
 **Why can a hard line-count cap on PRs make review worse?**
 
-Because it fragments logically unified changes. Each atomic PR passes review on its own while the assembled feature is never reviewed as a whole, and architectural changes spanning many files resist artificial splitting. Scope discipline still helps once volume strains reviewer capacity, but apply the constraint at generation time and split at natural boundaries rather than at an arbitrary line count.
+Because it fragments logically unified changes. Each atomic PR passes review on its own while the assembled feature is never reviewed as a whole. Architectural changes spanning many files resist artificial splitting. Scope discipline still helps once volume strains reviewer capacity, but apply the constraint at generation time and split at natural boundaries rather than at an arbitrary line count.
 
 ## Related
 

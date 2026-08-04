@@ -24,7 +24,7 @@ Tooling increasingly builds this in. Cursor's Bugbot added incremental review th
 
 ## The PR model as review boundary
 
-[GitHub Copilot's coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) produces output as pull requests. This is not incidental — PRs are the natural diff boundary for code review. The same structure applies to content pipelines:
+[GitHub Copilot's coding agent](https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent) produces output as pull requests because PRs are the natural diff boundary for code review. The same structure applies to content pipelines:
 
 - Draft pages open as PRs against main
 - Review agents comment on the PR diff, not on the full page
@@ -43,7 +43,7 @@ Structuring work around checkpoints keeps the diff scope predictable:
 
 ## Review fatigue and output size
 
-Review fatigue grows with output size. An agent producing 2,000 lines across ten files gets reviewed less carefully than one producing 20 lines in a single file.
+Review fatigue grows with output size. Reviewers give less scrutiny to a 2,000-line, ten-file agent output than to a 20-line, one-file output.
 
 Designing for diff-based review means:
 
@@ -51,7 +51,7 @@ Designing for diff-based review means:
 - Committing checkpoints between logical stages
 - Opening separate PRs for separate concerns rather than one large PR
 
-The SmartBear/Cisco study of 2,500 reviews found defect detection peaks at 200–400 lines and drops off sharply beyond that ([SmartBear, "Code Review at Cisco Systems"](https://static0.smartbear.co/support/media/resources/cc/book/code-review-cisco-case-study.pdf)).
+The SmartBear/Cisco study of 2,500 reviews found defect detection peaks at 200 to 400 lines and drops off sharply beyond that ([SmartBear, "Code Review at Cisco Systems"](https://static0.smartbear.co/support/media/resources/cc/book/code-review-cisco-case-study.pdf)).
 
 ## Staged review
 
@@ -59,13 +59,13 @@ Multi-stage pipelines have multiple natural diff boundaries:
 
 1. Research stage — diff the research notes against the issue description. Verify the researcher captured the right sources.
 2. Draft stage — diff the draft against the research notes. Verify the writer only used sourced material. Unsourced additions show up in the `git diff`.
-3. Revision stage — diff the revised draft against the original draft. Verify the reviewer feedback was applied correctly.
+3. Revision stage — diff the revised draft against the original draft. Verify the writer applied the reviewer's feedback correctly.
 
 Each diff is small and reviewable in isolation. Reviewing a 10-line diff against a known state is far easier than reviewing the final artifact against nothing.
 
 ## When this backfires
 
-Diff-only review has blind spots. Graphite notes that diff-only reviewers "may miss violations of global invariants, API misuse, or architectural consistency problems", and that larger context is needed to catch cross-file issues like "a change in one module that breaks usage elsewhere" ([Graphite, "How much context do AI code reviews need?"](https://graphite.com/guides/ai-code-review-context-full-repo-vs-diff)). Pair diff-based review with codebase-aware checks when:
+Diff-only review has blind spots. Graphite notes that diff-only reviewers "may miss violations of global invariants, API misuse, or architectural consistency problems", and that catching cross-file issues like "a change in one module that breaks usage elsewhere" needs larger context ([Graphite, "How much context do AI code reviews need?"](https://graphite.com/guides/ai-code-review-context-full-repo-vs-diff)). Pair diff-based review with codebase-aware checks when:
 
 - Cross-file invariants are at stake. A one-line schema change looks trivial but can silently break downstream consumers. Run a repo-wide search, type check, or contract test alongside the diff.
 - The PR spans many files from one AI session. Reviewers who read only the diff must reassemble intent from disconnected fragments. Require a clear PR description or split the change before reviewing.
@@ -97,22 +97,22 @@ After the draft stage, the reviewer checks only what the writer used from resear
 git diff research/issue-84-oauth-patterns...draft/issue-84-oauth-patterns -- docs/patterns/oauth-patterns.md
 ```
 
-After the revision stage, the reviewer checks only that feedback was applied:
+After the revision stage, the reviewer checks only that the writer applied the feedback:
 
 ```bash
 # Compare revised draft against original draft — verify reviewer notes were addressed
 git diff draft/issue-84-oauth-patterns...revision/issue-84-oauth-patterns -- docs/patterns/oauth-patterns.md
 ```
 
-Each `git diff` is 10–30 lines. The reviewer never re-reads the full page — only the delta from the prior known-good state. The same pattern applies to code: GitHub Copilot's coding agent opens a PR per task, so the diff scope matches one unit of work.
+Each `git diff` is 10 to 30 lines. The reviewer never re-reads the full page — only the delta from the prior known-good state. The same pattern applies to code: GitHub Copilot's coding agent opens a PR per task, so the diff scope matches one unit of work.
 
 ## Key Takeaways
 
-- Mistakes live in new content — diffs focus review on exactly that
+- Budget review time by diff size, not the size of the finished artifact
 - Put the review boundary where the pipeline already has one: a PR, a staged change, a stage handoff. A boundary you introduce has to be maintained; one the pipeline already produces does not
-- Review fatigue scales with output size; diff-based review keeps the review surface manageable
-- Multiple small diffs are preferable to one large diff — they are easier to review and easier to bisect
-- Staged pipelines have natural diff boundaries at each stage handoff
+- Target PRs of 200 to 400 lines — Cisco's data ties that range to peak defect detection, not just lower fatigue
+- Splitting into small diffs cuts review effort but does not restore cross-file visibility — pair it with a repo-wide check when invariants span files
+- At each stage handoff, review only what that stage owns: sourcing at research, sourced material at drafting, feedback application at revision
 
 ## Related
 

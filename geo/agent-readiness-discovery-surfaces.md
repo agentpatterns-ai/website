@@ -18,7 +18,7 @@ maturity: emerging
 
 > Publish the discovery surfaces that match your site — a content corpus advertises crawler signals, Link headers, and markdown, not API or MCP metadata.
 
-Agent-readiness scanners score a site on the machine-readable surfaces it exposes so AI agents can discover how to consume it. The core judgment is not "publish more surfaces" — it is publish the surfaces that describe what your site actually is.
+Agent-readiness scanners score a site on the machine-readable surfaces it exposes so AI agents can discover how to consume it. The core judgment is publishing the surfaces that describe what your site actually is, not publishing more surfaces.
 
 ## Match the surface to the site
 
@@ -29,7 +29,7 @@ Discovery surfaces fall into two families, and only one applies to a static cont
 | Content-corpus | Content Signals, `Link` headers, markdown alternates, agent-skills index | Yes — the site is the content |
 | Service | OpenAPI / API catalog, OAuth metadata, MCP server card | Only if you run a callable service |
 
-Cloudflare's Agent Readiness score scans four dimensions — Discoverability, Content, Bot Access Control, and Capabilities — and marks the Commerce checks optional on non-commerce sites, excluding them from the score when no commerce signals exist ([Cloudflare](https://blog.cloudflare.com/agent-readiness/)). That exclusion is the applicability split in miniature: a scanner that always demanded every surface would penalize a docs site for lacking a checkout API it has no reason to expose.
+Cloudflare's Agent Readiness score scans four dimensions — Discoverability, Content, Bot Access Control, and Capabilities. It marks the Commerce checks optional on non-commerce sites and excludes them from the score when no commerce signals exist ([Cloudflare](https://blog.cloudflare.com/agent-readiness/)). That exclusion is the applicability split in miniature. A scanner that always demanded every surface would penalize a docs site for lacking a checkout API it has no reason to expose.
 
 ## The content-corpus surfaces
 
@@ -52,7 +52,7 @@ Earlier-stage proposals sit in the same family: DNS-AID advertises agents throug
 
 ## Why it works
 
-These surfaces work because they relocate consumption metadata to predictable, machine-readable locations, chiefly the `/.well-known/` URI prefix defined by RFC 8615, so an agent finds what a site offers without prior configuration or URL guessing ([RFC 8615](https://www.rfc-editor.org/info/rfc8615/), [Agent Skills Discovery RFC](https://github.com/cloudflare/agent-skills-discovery-rfc)). The payoff holds only under two conditions: a real consumer reads the surface, and something real sits behind it. A surface that names a capability the site does not have is a dangling pointer — it signals nothing an agent can act on.
+These surfaces work because they relocate consumption metadata to predictable, machine-readable locations, chiefly the `/.well-known/` URI prefix defined by RFC 8615 ([RFC 8615](https://www.rfc-editor.org/info/rfc8615/), [Agent Skills Discovery RFC](https://github.com/cloudflare/agent-skills-discovery-rfc)). An agent then finds what a site offers without prior configuration or URL guessing. The payoff holds only under two conditions: a real consumer reads the surface, and something real sits behind it. A surface that names a capability the site does not have is a dangling pointer. It signals nothing an agent can act on.
 
 ## When this backfires
 
@@ -64,7 +64,7 @@ Publishing surfaces that do not match the site is the same failure mode as keywo
 
 ## Example
 
-The agentpatterns.ai site ran an [isitagentready.com](https://isitagentready.com/) scan and actioned only the content-corpus findings. It added Content Signals to `robots.txt`, an RFC 8288 `Link` header, build-time markdown twins for every page, and an agent-skills index advertising its public skills shelf. It rejected the API catalog, OAuth metadata, and MCP server-card findings as not applicable — the site is a static corpus with no service to call, so those surfaces would have been dangling pointers. Publishing them to lift a score would have added maintenance cost for no agent-facing signal.
+The agentpatterns.ai site ran an [isitagentready.com](https://isitagentready.com/) scan and actioned only the content-corpus findings. It added Content Signals to `robots.txt`, an RFC 8288 `Link` header, build-time markdown twins for every page, and an agent-skills index advertising its public skills shelf. It rejected the API catalog, OAuth metadata, and MCP server-card findings as not applicable. The site is a static corpus with no service to call, so those surfaces would have been dangling pointers. Publishing them to lift a score would have added maintenance cost for no agent-facing signal.
 
 ## Key Takeaways
 

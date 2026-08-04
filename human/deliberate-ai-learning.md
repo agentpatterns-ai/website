@@ -34,7 +34,7 @@ The [Anthropic (Shen & Tamkin, 2026) RCT](https://www.anthropic.com/research/AI-
 | Hybrid code-explanation — request explanations alongside code | ~65% | Comprehension built in parallel |
 | Conceptual inquiry — ask only "why", resolve errors independently | ~65% | Retains independent problem-solving |
 
-The Anthropic study's differentiated outcomes suggest the largest gains from deliberate interaction patterns accrue to developers who default to passive delegation — a pattern more common among less experienced practitioners still building mental models of unfamiliar domains.
+The Anthropic study's differentiated outcomes suggest the largest gains from deliberate interaction patterns accrue to developers who default to passive delegation. This pattern is more common among less experienced practitioners still building mental models of unfamiliar domains.
 
 ## Interaction patterns that build skill
 

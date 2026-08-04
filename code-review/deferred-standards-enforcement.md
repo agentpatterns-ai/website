@@ -1,6 +1,6 @@
 ---
 title: "Deferred Standards Enforcement via Review Agents"
-description: "Move post-hoc-checkable standards out of CLAUDE.md into a reviewer agent that runs at PR time — saving implementation context for code understanding, spending it at review where compliance checking is the entire job."
+description: "Move post-hoc-checkable standards out of CLAUDE.md into a reviewer agent that runs at PR time. Implementation sessions keep their context for understanding code; review sessions spend theirs on checking compliance."
 term: "Deferred Standards Enforcement"
 tags:
   - code-review
@@ -20,15 +20,15 @@ maturity: adopted
 
 ## The problem with standards in CLAUDE.md
 
-CLAUDE.md loads into every Claude Code session. Every line it contains costs tokens on every task, whether or not those tokens matter to the work in that session; Anthropic's own guidance recommends keeping a project CLAUDE.md under 200 lines, since longer files consume more context and reduce adherence ([Claude Code memory docs](https://code.claude.com/docs/en/memory)). Anthropic frames this as an attention budget: in a fully packed context, preloaded content competes with task instructions, tool results, and code for the model's attention — on Claude Sonnet 4.5, for example, that budget is a 200,000-token context window shared by CLAUDE.md, every tool result, and every file the agent reads ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); [Anthropic: Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows); see also [Context Engineering](../context-engineering/context-engineering.md)).
+CLAUDE.md loads into every Claude Code session. Every line it contains costs tokens on every task, whether or not those tokens matter to the work in that session. Anthropic's own guidance recommends keeping a project CLAUDE.md under 200 lines, since longer files consume more context and reduce adherence ([Claude Code memory docs](https://code.claude.com/docs/en/memory)). Anthropic frames this as an attention budget: in a fully packed context, preloaded content competes with task instructions, tool results, and code for the model's attention. On Claude Sonnet 4.5, for example, that budget is a 200,000-token context window shared by CLAUDE.md, every tool result, and every file the agent reads ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); [Anthropic: Context windows](https://platform.claude.com/docs/en/build-with-claude/context-windows); see also [Context Engineering](../context-engineering/context-engineering.md)).
 
-Standards documents can be large. Style guides, compliance checklists, naming conventions, and API requirements all add up. Load all of them into every implementation session and the agent writing code carries the same context as the agent that should be reviewing it — a phase mismatch.
+Standards documents can be large. Style guides, compliance checklists, naming conventions, and API requirements all add up. Load all of them into every implementation session and the agent writing code carries the same context as the agent that should be reviewing it. That is a phase mismatch.
 
 ## The split
 
 Not all standards need to be present during code generation. Standards fall into two types:
 
-Generation-shaping standards affect the structure of the code being written. The agent must know these during generation — they belong with the other [standards loaded as agent instructions](../instructions/standards-as-agent-instructions.md) — or it makes architectural decisions that need rework, not revision.
+Generation-shaping standards affect the structure of the code being written. The agent must know these during generation (they belong with the other [standards loaded as agent instructions](../instructions/standards-as-agent-instructions.md)), or it makes architectural decisions that need rework, not revision.
 
 Examples: "Every new API endpoint requires an integration test", "Use repository pattern for all database access", "API keys must come from environment variables, never hardcoded"
 
@@ -87,17 +87,17 @@ The implementation agent carries only what shapes code decisions. The review age
 
 Generation-shaping rules deferred by mistake. Moving architectural rules to review time means the implementation agent makes structural decisions without knowing the constraints. The PR fails review and the agent must rework rather than revise — one iteration becomes two.
 
-High-cost review cycles. If each PR review cycle is expensive (slow CI, large codebase, costly review agents), the rework cost from deferred discovery outweighs the savings on generation context — a pressure [tiered code review](tiered-code-review.md) exists to manage. The economics only favor deferral when review catches style violations, not when it triggers re-implementation.
+High-cost review cycles. If each PR review cycle is expensive (slow CI, large codebase, costly review agents), the rework cost from deferred discovery outweighs the savings on generation context. [Tiered code review](tiered-code-review.md) exists to manage exactly this pressure. The economics only favor deferral when review catches style violations, not when it triggers re-implementation.
 
-No PR gate. The pattern needs a review step. In direct-commit workflows or single-agent loops that skip PRs, there is no enforcement point — deferred standards simply go unenforced.
+No PR gate. The pattern needs a review step. In direct-commit workflows or single-agent loops that skip PRs, there is no enforcement point. Deferred standards go unenforced.
 
 ## Key Takeaways
 
-- CLAUDE.md is always-on context: every line costs tokens on every task, not just the ones where it matters
-- Standards split into two types: generation-shaping (stay in CLAUDE.md) and post-hoc-checkable (move to REVIEW.md or reviewer agent)
-- Claude Code Review formalizes this split: `REVIEW.md` is read exclusively by the review agent at PR time ([docs](https://code.claude.com/docs/en/code-review))
-- The mechanism is phase-specific context allocation: each phase receives only the context its task requires
-- The split backfires when architectural rules are mistakenly deferred — rework costs exceed the token savings
+- Split standards by generation impact, not by topic: rules that shape what gets written stay in CLAUDE.md; rules checkable afterward move to the reviewer agent
+- The 200-line CLAUDE.md ceiling Anthropic recommends is a forcing function: split large standards docs before they push a project's file over it
+- The pattern is not tied to one product: any file the reviewer agent loads and the implementation agent never reads reproduces it. Claude Code Review's `REVIEW.md` ([docs](https://code.claude.com/docs/en/code-review)) is one instance, not the whole pattern
+- The split only pays off with a PR gate in the loop: direct-commit workflows and single-agent loops have no step that checks the deferred standards
+- Deferring a rule that shapes structure costs more than it saves: the PR fails review, and the agent reworks the code instead of revising it
 
 ## Related
 

@@ -120,10 +120,10 @@ Retrieval for each sub-question filters to nodes tagged with the declared `schem
 
 ## Key Takeaways
 
-- A single domain schema aligned across construction, decomposition, and retrieval eliminates the stage-to-stage mismatch that causes GraphRAG noise — Youtu-GraphRAG reports 16.62% higher accuracy and up to 90.71% lower token cost from this alignment.
-- Typed sub-questions are the critical coupling: decomposition without type annotations provides minimal retrieval benefit.
-- Typed filtering narrows candidates before semantic scoring — precision comes from the filter, not from a larger semantic model.
-- Schema governance is a real cost; domains with unstable ontologies are poor candidates.
+- Youtu-GraphRAG's 16.62% accuracy and 90.71% token-cost figures come from one self-reported evaluation across six benchmarks; confirm the gains hold on your own corpus before committing engineering budget to schema design.
+- Require the decomposer to emit `schema_types` for every sub-question. An untyped sub-question bypasses the typed-retrieval filter and searches the whole graph like flat semantic search.
+- The precision gain comes from the schema filter narrowing candidates before scoring runs, not the semantic scorer itself. When precision drops, check the sub-question's schema-type mapping before assuming the semantic model needs upgrading.
+- Budget schema maintenance as an ongoing cost rather than a one-time design step. Skip this pattern if the domain's entity and relation types shift faster than the schema can be updated.
 
 ## Related
 

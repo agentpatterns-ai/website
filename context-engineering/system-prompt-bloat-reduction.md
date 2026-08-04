@@ -20,7 +20,7 @@ maturity: adopted
 
 System-prompt token bloat is the static payload — tool definitions, a skills catalog, and feature instructions — that a coding agent re-sends on every request whether you touch those features or not. You reduce it by measuring the payload first, then switching off the parts that do not earn their place, so the fixed prefix shrinks and more of the context window stays free for your task.
 
-Two conditions shape the payoff before you cut anything: with prompt caching active the win is mostly context-window headroom, not a large per-turn cost cut, and every cut disables a feature. Trim what you do not use, keep what your workflow relies on.
+Two conditions shape the payoff before you cut anything: with prompt caching active, the win is mostly context-window headroom rather than a large per-turn cost cut, and every cut disables a feature. Trim what you do not use, keep what your workflow relies on.
 
 ## Measure before you trim
 
@@ -36,7 +36,7 @@ Two Claude Code settings do the trimming, both in `~/.claude/settings.json` (all
 
 A `permissions.deny` rule with a bare tool name removes an individual tool's definition from the payload. The distinction matters: a bare name (`"NotebookEdit"`) drops the definition, while a scoped rule (`"Bash(rm *)"`) only blocks the matching call and leaves the schema in the payload, so it saves no tokens ([AI Hero](https://www.aihero.dev/how-to-kill-the-bloat-in-claude-codes-system-prompt), observed by reading the proxied requests). When `disableBundledSkills` is too blunt, `skillOverrides` set to `"off"` or `"user-invocable-only"` drops individual bundled skills instead.
 
-Then restart and re-run `/context` to confirm the drop. Do not hand-prune MCP servers first: Claude Code already defers MCP tool definitions by default through tool search, so the trimmable weight is mostly built-in tools, skills, and features, not MCP ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs); [Anthropic — advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
+Then restart and re-run `/context` to confirm the drop. Do not hand-prune MCP servers first: Claude Code already defers MCP tool definitions by default through tool search, so the trimmable weight is mostly built-in tools, skills, and features rather than MCP ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs); [Anthropic — advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 Token count is only one reason to drop a skill. When the symptom is the agent reaching for the wrong skill rather than a crowded prefix, the fix is [skill loadout curation](skill-loadout-curation.md), which prunes for colliding descriptions instead of size.
 
@@ -48,7 +48,7 @@ Each turn is a stateless API request that re-sends the whole system prompt and e
 
 Trimming is conditional, not free:
 
-- Prompt caching already bills the repeated prefix as cache reads at a fraction of the base input cost, so the per-turn dollar saving is smaller than the raw token delta implies ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs)). The durable win is context-window headroom, not a large cost cut.
+- Prompt caching already bills the repeated prefix as cache reads at a fraction of the base input cost, so the per-turn dollar saving is smaller than the raw token delta implies ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs)). The durable win is context-window headroom rather than a large cost cut.
 - Every cut disables a feature. `disableWorkflows` removes the `Workflow` tool that background jobs and multi-agent runs depend on, and denying plan-mode or notebook tools removes those too ([AI Hero](https://www.aihero.dev/how-to-kill-the-bloat-in-claude-codes-system-prompt)). Keep what your workflow uses.
 - A shared `.claude/settings.json` deny list strips the tool for every teammate and every project — a blunt instrument that produces confusing capability gaps.
 - If your real cost driver is conversation history or large file reads, the static preamble is a rounding error. Clearing between tasks with `/clear` and keeping CLAUDE.md lean do more ([Claude Code — Manage costs](https://code.claude.com/docs/en/costs)).
@@ -68,7 +68,7 @@ A settings block that trims features you have measured as unused, drawn from Mat
 }
 ```
 
-The bare names in `deny` remove those tool definitions from every request; the `disable*` flags remove whole feature clusters. Treat it as a menu, not a prescription — keep any feature your own `/context` run shows you actually use.
+The bare names in `deny` remove those tool definitions from every request; the `disable*` flags remove whole feature clusters. These settings are optional: keep any feature your own `/context` run shows you actually use.
 
 ## Key Takeaways
 
@@ -81,6 +81,7 @@ The bare names in `deny` remove those tool definitions from every request; the `
 
 - [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — the measurement step: attribute context growth to specific tools before you trim.
 - [Context Budget Allocation](context-budget-allocation.md) — the finite-budget principle this technique applies.
+- [Choosing a Compression Budget for Agent Control Context](control-context-compression-budget.md) — what to do with the instructions you keep, once you have switched off the features you do not use.
 - [Dynamic System Prompt Composition](dynamic-system-prompt-composition.md) — assembling prompts at runtime, distinct from removing dead weight.
 - [Exclude Dynamic System Prompt Sections for Cross-Machine Cache Sharing](exclude-dynamic-system-prompt-sections.md) — a different Claude Code system-prompt saving, aimed at cache sharing.
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — the caching economics behind the cost caveat above.

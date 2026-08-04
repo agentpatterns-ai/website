@@ -114,7 +114,7 @@ This gives an in-band audit trail. Reviewers understand agent decisions without 
 
 ### Step 3: define rollback triggers
 
-Define the conditions under which agent work is automatically rejected or flagged before granting broader autonomy — [rollback-first design](../../patterns/agent-design/rollback-first-design.md) applied to agent PRs:
+Define the conditions under which agent work is automatically rejected or flagged before granting broader autonomy. This is [rollback-first design](../../patterns/agent-design/rollback-first-design.md) applied to agent PRs:
 
 | Trigger | Response |
 |---------|----------|
@@ -123,7 +123,7 @@ Define the conditions under which agent work is automatically rejected or flagge
 | Diff size exceeds limit (for example, >500 lines) | Flag for human review before merge approval |
 | Agent PR modifies security-sensitive paths | Require security team approval |
 
-[Anthropic's autonomy research](https://www.anthropic.com/research/measuring-agent-autonomy) confirms 80% of tool calls come from agents with at least one safeguard — L4 formalizes and automates those safeguards.
+[Anthropic's autonomy research](https://www.anthropic.com/research/measuring-agent-autonomy) confirms 80% of tool calls come from agents with at least one safeguard. L4 formalizes and automates those safeguards.
 
 ---
 
@@ -131,7 +131,7 @@ Define the conditions under which agent work is automatically rejected or flagge
 
 ### Step 1: write goal specifications
 
-L3 tasks prescribe steps; L5 goal specifications declare the outcome and acceptance criteria, leaving the plan to the agent.
+L3 tasks prescribe steps; L5 goal specifications declare the outcome and acceptance criteria, and the agent decides the plan.
 
 ```yaml
 # goals/add-user-preferences.yaml
@@ -161,7 +161,7 @@ Goal specs outperform step-by-step tasks at L5 because they define the outcome, 
 
 ### Step 2: add evals for continuous quality measurement
 
-Evals measure agent output quality across runs and over time — answering "is the agent getting better or worse?" in a way pass/fail CI cannot. CI checks syntactic validity; evals check whether output is correct, complete, and consistent with your quality bar.
+Evals measure agent output quality across runs and over time. That tells you whether the agent is getting better or worse, something pass/fail CI cannot do. CI checks syntactic validity; evals check whether output is correct, complete, and consistent with your quality bar.
 
 A minimal eval suite for a brownfield repo:
 
@@ -195,7 +195,7 @@ See the [Eval-Driven Development](../../workflows/eval-driven-development.md) an
 
 ### Step 3: integrate agents into CI/CD
 
-At L5, agents enter the pipeline without manual invocation: an issue triggers a session, the session produces a PR, CI validates it, and human review focuses on design — not mechanical correctness.
+At L5, agents enter the pipeline without manual invocation: an issue triggers a session, the session produces a PR, CI validates it, and human review focuses on design rather than mechanical correctness.
 
 GitHub Actions workflow for issue-triggered agent work:
 

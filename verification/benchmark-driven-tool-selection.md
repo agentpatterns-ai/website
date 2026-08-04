@@ -11,7 +11,7 @@ tags:
 aliases:
   - DevBench evaluation
   - code generation benchmark selection
-last_reviewed: 2026-06-12
+last_reviewed: 2026-08-03
 maturity: established
 ---
 
@@ -64,6 +64,8 @@ Never rely on aggregate cross-language scores. If your codebase is 80% TypeScrip
 ### 4. Evaluate on your own code
 
 Public benchmarks identify candidates; internal evaluation confirms them. Run 2-3 models against your actual codebase to catch training-data contamination and surface project-specific context gaps.
+
+Sourcegraph publishes a vendor methodology for this step, covering how to evaluate its own product against your codebase ([How to evaluate Sourcegraph on your own codebase](https://sourcegraph.com/blog/how-to-evaluate-sourcegraph-on-your-own-codebase)).
 
 ## What DevBench gets right
 

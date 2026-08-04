@@ -21,11 +21,11 @@ maturity: emerging
 
 Reach for addressable recall when your agent loses specific details it already saw. Keep every tool observation verbatim in an append-only store keyed by a stable identifier. When the window fills, swap the observation in the transcript for a compact citation and let the agent ask for the record back by ID. [Summarization and masking](context-compression-strategies.md) make the loss permanent; addressing makes it reversible.
 
-The condition is narrow, and the evidence says so. Addressable Recall Compaction (ARC), the named form of this pattern, scored 99.00% exact-answer accuracy on a needle-in-a-haystack task against 79.57% for a similarity-retrieval baseline, running Qwen3-8B at a 16k window. On the LongBench-v2 hard subset, which needs synthesis rather than lookup, that same 8B setup scored 27.47% against 25.83% ([Dang et al., arxiv 2607.25066](https://arxiv.org/abs/2607.25066)). Treat the Qwen3 figures as the shape of the effect, not a claim about frontier models — the authors scope their evaluation to that family.
+Addressable Recall Compaction (ARC), the named form of this pattern, backs a narrow claim: it scored 99.00% exact-answer accuracy on a needle-in-a-haystack task against 79.57% for a similarity-retrieval baseline, running Qwen3-8B at a 16k window. On the LongBench-v2 hard subset, which needs synthesis rather than lookup, that same 8B setup scored 27.47% against 25.83% ([Dang et al., arxiv 2607.25066](https://arxiv.org/abs/2607.25066)). Treat the Qwen3 figures as the shape of the effect, not a claim about frontier models — the authors scope their evaluation to that family.
 
 ## What the citation carries
 
-A citation is not a summary. It is a pointer plus enough surface for the agent to decide whether to follow it. ARC computes the identifier as a hash of the action signature and the observation, then stores the record without ever overwriting or deleting it ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
+A citation is a pointer plus enough surface for the agent to decide whether to follow it. ARC computes the identifier as a hash of the action signature and the observation, then stores the record without ever overwriting or deleting it ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
 
 | Element | Purpose |
 |---------|---------|
@@ -34,7 +34,7 @@ A citation is not a summary. It is a pointer plus enough surface for the agent t
 | Length and type metadata | Signals what a recall would cost before paying for it |
 | Recall hint | Names the action that fetches the full record |
 
-Recall is bounded, not free. ARC caps recalls per step, caps the total materialized recall budget, caps each recall's length, and evicts least-recently-used recalled bodies back to stubs when a budget is exceeded ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
+Because recall is not free, ARC bounds it deliberately: it caps recalls per step, caps the total materialized recall budget, caps each recall's length, and evicts least-recently-used recalled bodies back to stubs when a budget is exceeded ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
 
 ## Why it works
 

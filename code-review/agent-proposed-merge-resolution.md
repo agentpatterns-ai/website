@@ -33,9 +33,9 @@ The result lands as a single new commit, not a rebase. In a study of agent-autho
 
 ## Why this matters at the PR boundary
 
-Merge conflicts appear at the seam between agent-authored PRs and the rest of the codebase — the surface where parallel agent work grows fastest. Worktree-based practitioner guides [cap at 3–5 parallel agents](https://superset.sh/blog/parallel-coding-agents-guide) because beyond that, rebase work eats context that should be spent on implementation ([Agent Flywheel](https://agent-flywheel.com/complete-guide); breakdown in [Single-Branch Git for Agent Swarms](../workflows/single-branch-git-agent-swarms.md)).
+That seam gets busier as parallel agent work grows. Worktree-based practitioner guides [cap at 3–5 parallel agents](https://superset.sh/blog/parallel-coding-agents-guide) because beyond that, rebase work eats context that should be spent on implementation ([Agent Flywheel](https://agent-flywheel.com/complete-guide); breakdown in [Single-Branch Git for Agent Swarms](../workflows/single-branch-git-agent-swarms.md)).
 
-As parallel agent use increases, more PRs stall waiting for conflict triage. Lowering the conflict tax through a bounded interaction pays off more than it appears — not because each conflict takes long, but because the friction compounds across PR volume.
+As parallel agent use increases, more PRs stall waiting for conflict triage. Lowering that friction through a bounded interaction pays off more than it appears — not because each conflict takes long, but because it compounds across PR volume.
 
 ## The design contract, step by step
 
@@ -64,7 +64,7 @@ The critical transitions:
 The low-friction interaction is the pattern's strength and its weakness. Four conditions degrade it:
 
 - Semantic merges that pass the gate silently: build and test passing is necessary but not sufficient. A test gap lets a wrong-side-chosen resolution ship without any signal. Textual merges routinely hide logical conflicts — a signature change merging cleanly with a new callsite that then fails to compile — and the same risk applies to agent resolutions, just packaged more smoothly ([AgenticFlict](https://arxiv.org/abs/2604.03551) reports a 27.67% conflict rate across 142,000+ agent PRs).
-- Large, deeply intertwined conflicts: the three-click model assumes the agent can bound the conflict and propose a single merge candidate. Sprawling conflicts need human decomposition first; a one-shot agent proposal on them is more likely to hide disagreement than resolve it.
+- Large, intertwined conflicts: the three-click model assumes the agent can bound the conflict and propose a single merge candidate. Sprawling conflicts need human decomposition first; a one-shot agent proposal on them is more likely to hide disagreement than resolve it.
 - Click-through acceptance bias: the cheaper the accept action, the more it invites rubber-stamping — GitHub's one-click submit lowers that friction the most. If the pre-populated comment does not surface the trade-off — why this side, not the other — the "human confirms" step degrades into a reflex.
 - Reviewer is not the original author: low-friction accept assumes shared context between the reviewer and both sides of the conflict. Unfamiliar reviewers need more context, not fewer clicks. This is the same failure mode identified for large changesets in [Agent-Authored PR Integration](agent-authored-pr-integration.md).
 
@@ -76,11 +76,11 @@ Copilot cloud agent's three-click conflict resolution ships with all paid Copilo
 
 A feature branch targets `main`. While the PR was in review, `main` moved forward and now conflicts with a refactor on the branch. On github.com the reviewer sees the conflict banner and a "Fix with Copilot" button. One click opens a pre-populated PR comment. A second click submits it. The Copilot cloud agent clones the PR in its cloud environment, resolves the conflict, runs the repository's CI workflows, confirms they pass, and pushes a single commit titled `Resolve merge conflicts with main` onto the PR branch ([GitHub Changelog](https://github.blog/changelog/2026-04-13-fix-merge-conflicts-in-three-clicks-with-copilot-cloud-agent/)). The reviewer sees the new commit, reads the diff, and — because the resolution came in as a new commit rather than a rebase, the force-push penalty quantified in [Agent-Authored PR Integration](agent-authored-pr-integration.md) — review context from earlier rounds is preserved. One further approval merges the PR.
 
-Contrast with the failure mode: the same conflict is resolved by a one-shot prompt that asks the agent to "pick whichever side works," the agent chooses, tests pass because the test suite does not cover the affected path, and a subtle logic bug ships. The difference is not automation — it is whether the proposal, its rationale, and its validation all surface to the human before confirmation.
+Contrast with the failure mode: the same conflict is resolved by a one-shot prompt that asks the agent to "pick whichever side works," the agent chooses, tests pass because the test suite does not cover the affected path, and a subtle logic bug ships. The difference is whether the proposal, its rationale, and its validation all surface to the human before confirmation.
 
 ## Key Takeaways
 
-- The working contract is agent-proposes-and-validates, human-confirms — not auto-merge.
+- Do not apply the pattern to large, intertwined conflicts — a one-shot proposal there is more likely to hide disagreement than resolve it; decompose those by hand first.
 - Build and test validation inside the agent's sandbox is load-bearing; without it the interaction collapses into pick-a-side.
 - Resolution must land as a new commit, not a force push; rebases destroy review context and correlate with lower merge rates ([Agent-Authored PR Integration](agent-authored-pr-integration.md)).
 - Low click-count is a feature only when the rationale is surfaced; otherwise the human step degrades into a rubber stamp.

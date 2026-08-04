@@ -81,7 +81,7 @@ def post_step_recitation(agent_state: AgentState) -> str:
 
 ## Amplifying recitation with strong goal elicitation
 
-Arike et al. (2025) found that strong goal elicitation — restating the core objective in imperative language — sharply reduced drift across all tested models.
+Arike et al. (2025) found that strong goal elicitation, restating the core objective in imperative language, sharply reduced drift across all tested models.
 
 Weak (task list only):
 

@@ -15,7 +15,7 @@ maturity: established
 
 > The explanation an agent returns can inflate confidence without building competence, so lead with the conditions under which the loop backfires.
 
-The loop is simple. After an agent proposes a structural or tooling decision, the user asks: why this, and what would change if we chose the alternative? The returned answer is the learning artifact, not the code. This inverts the default user-to-agent direction — from 'produce X' to 'justify X against its alternatives' — so the user commits a hypothesis before hearing the rationale. On a Team OS repo, a non-engineer [curates agent-chosen conventions long-term](../../human/strategy-over-code-generation.md). A repo they cannot explain is a repo they cannot evolve.
+The loop is simple. After an agent proposes a structural or tooling decision, the user asks: why this, and what would change if we chose the alternative? The returned answer is the learning artifact, not the code. This inverts the default user-to-agent direction, from 'produce X' to 'justify X against its alternatives', so the user commits a hypothesis before hearing the rationale. On a Team OS repo, a non-engineer [curates agent-chosen conventions long-term](../../human/strategy-over-code-generation.md). A repo they cannot explain is a repo they cannot evolve.
 
 Treat the page as a qualified technique. The cognitive mechanism is strong. The failure modes live in applying it through an LLM surface.
 
@@ -30,7 +30,7 @@ Four conditions under which the loop backfires:
 
 ## The mechanism
 
-Generating an explanation forces constructive inference across prior knowledge and new material. This produces stronger schemas than reading an identical explanation passively. The meta-analytic effect across 5,917 learners and 69 effect sizes is g = .55, with prompted self-explanation beating provided explanation and periodic prompting beating one-shot ([Bisra et al. 2018](https://link.springer.com/article/10.1007/s10648-018-9434-x)). The foundational result — that high-explainers outperform low-explainers through constructive inference — is [Chi et al. 1994](https://onlinelibrary.wiley.com/doi/10.1207/s15516709cog1803_3).
+Generating an explanation forces constructive inference across prior knowledge and new material. This produces stronger schemas than reading an identical explanation passively. The meta-analytic effect across 5,917 learners and 69 effect sizes is g = .55, with prompted self-explanation beating provided explanation and periodic prompting beating one-shot ([Bisra et al. 2018](https://link.springer.com/article/10.1007/s10648-018-9434-x)). [Chi et al. 1994](https://onlinelibrary.wiley.com/doi/10.1207/s15516709cog1803_3) established the foundational result: high-explainers outperform low-explainers through constructive inference.
 
 Direct evidence that this generalizes to coding-agent use comes from the [Anthropic (Shen & Tamkin 2026) RCT, N=52](https://www.anthropic.com/research/AI-assistance-coding-skills): "conceptual inquiry" (ask why) and "hybrid code-explanation" patterns scored ~65% on the skill quiz against ~40% for full-delegation patterns.
 
@@ -59,7 +59,7 @@ Not for every output. If the user can already name the alternative and one reaso
 
 ## Example
 
-The canonical artifact is Stulberg's "why is this a YAML file?" moment. She has a feature index checked in as YAML. A teammate who inherits the repo cannot adapt the file without understanding the choice, so the prompt goes to Claude: "explain why this is a YAML file and not markdown." The agent returns a tradeoff — structured key/value access versus free-form prose — and the escalation prompt forces it to name at least one condition under which Markdown would have been correct. The teammate can now predict what would have to change to justify Markdown, and defend the YAML choice to a third party a week later. Those two checks are the falsifiability tests that distinguish real comprehension from fluent agreement.
+The canonical artifact is Stulberg's "why is this a YAML file?" moment. She has a feature index checked in as YAML. A teammate who inherits the repo cannot adapt the file without understanding the choice, so the prompt goes to Claude: "explain why this is a YAML file and not markdown." The agent returns a tradeoff: structured key/value access versus free-form prose. The escalation prompt then forces it to name at least one condition under which Markdown would have been correct. The teammate can now predict what would have to change to justify Markdown, and defend the YAML choice to a third party a week later. Those two checks are the falsifiability tests that distinguish real comprehension from fluent agreement.
 
 ## Key Takeaways
 

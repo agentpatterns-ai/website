@@ -64,7 +64,7 @@ When possible, give the agent working code to migrate rather than generating fro
 
 ### Use execution feedback loops
 
-Error traces from failed execution contain version-specific signals (for example `AttributeError: module 'torch' has no attribute 'compile'`). Feeding these back into context acts as a corrective signal. This is a specific application of [error preservation in context](error-preservation-in-context.md) tuned for version mismatches.
+Error traces from failed execution contain version-specific signals (for example `AttributeError: module 'torch' has no attribute 'compile'`). Feeding these back into context lets the model correct its next attempt. This is a specific application of [error preservation in context](error-preservation-in-context.md) tuned for version mismatches.
 
 ### Scope caution to high-churn libraries
 
@@ -106,12 +106,12 @@ args = TrainingArguments(
 )
 ```
 
-One renamed parameter — a `FutureWarning` or outright failure depending on version. Trivial to fix, expensive to debug without context.
+The renamed parameter triggers a `FutureWarning` or an outright failure depending on version. It is trivial to fix once found, but costly to debug without version context.
 
 ## Key Takeaways
 
-- Models drop from 80%+ to 13–28% accuracy when code must target specific library versions — the gap is a context problem, not a capability problem.
-- Deprecated API preference is systematic: models default to the most-represented patterns in training data, which skew older.
+- The 80%+ to 13–28% accuracy drop is a context gap, not a capability gap — close it by feeding the model version signals, not by switching to a larger model.
+- When generated code calls a library incorrectly, suspect a deprecated-API default first: models systematically favor older, more common patterns over the current API.
 - Feed lock files and version manifests into agent context to shift generation toward the correct API surface.
 - Prefer migration tasks (adapt existing code) over from-scratch generation — adaptation accuracy is 2–3x higher.
 - Focus verification on fast-evolving libraries (ML frameworks, web frameworks) where version churn causes the steepest accuracy drops.

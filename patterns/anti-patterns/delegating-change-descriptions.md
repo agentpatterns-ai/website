@@ -79,3 +79,4 @@ retries so a transient restart no longer fails the whole run.
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](../../human/author-to-reviewer-role-inversion.md) — why the description is where intent crosses the human-to-reviewer boundary
 - [Comprehension Debt](comprehension-debt.md) — the understanding gap that widens when intent is not written down
 - [Agent-Laundered Bug Reports](agent-laundered-bug-reports.md) — a sibling failure where an LLM pass strips the load-bearing human observation
+- [The Meat Proxy: Relaying Agent Output Without Reading It](meat-proxy.md) — the same handoff failure outside the pull request, in Slack replies and review comments

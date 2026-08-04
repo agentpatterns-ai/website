@@ -36,7 +36,7 @@ The agent validates most of its own work:
 - Strong types catch structural errors at write time
 - A test suite gives a binary "did I break anything?" signal
 - Linter rules carry remediation messages the agent can act on
-- Iteration runs through the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md): write → lint fails → fix → lint passes → tests fail → fix → tests pass
+- Iteration runs through the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md): write, lint fails, fix, lint passes, tests fail, fix, tests pass
 
 Exit criterion: the agent completes a scoped task (add a function with tests) and verifies its output without human review of mechanical errors.
 
@@ -44,7 +44,7 @@ Exit criterion: the agent completes a scoped task (add a function with tests) an
 
 ## Step 1: Enable a strong type system
 
-Type errors fire at write time, at the exact location of the violation, with a specific message about what the type should be — the most actionable form of backpressure.
+Type errors fire at write time, at the exact location of the violation, with a specific message about what the type should be. That makes them the most actionable form of backpressure.
 
 TypeScript strict mode:
 
@@ -60,7 +60,7 @@ TypeScript strict mode:
 }
 ```
 
-Enabling strict mode on an existing repo produces type errors. Fix them incrementally — they represent real bugs or assumptions agents would otherwise replicate.
+Enabling strict mode on an existing repo produces type errors. Fix them incrementally. They represent real bugs or assumptions agents would otherwise replicate.
 
 Python:
 
@@ -78,7 +78,7 @@ Why agents benefit more: a human reasons from experience; an agent reads the mes
 
 ## Step 2: Build test coverage on critical paths
 
-A test suite gives a binary answer to "did I break anything?" Agents run tests, read failures, and fix — only if the suite exists.
+A test suite gives a binary answer to "did I break anything?" Agents run tests, read failures, and fix, but only if the suite exists.
 
 Prioritize by agent risk, not business risk:
 
@@ -112,7 +112,7 @@ Use integration tests over unit tests for agent-critical paths: they catch ORM m
 
 ## Step 3: Write linter rules with remediation messages
 
-Standard linter rules flag violations; agent-useful rules explain the fix. The message enters context at the exact moment of the wrong decision — just-in-time delivery.
+Standard linter rules flag violations; agent-useful rules explain the fix. The message enters context at the exact moment of the wrong decision. That is just-in-time delivery.
 
 Good remediation message:
 ```
@@ -197,7 +197,7 @@ Or with Node tooling directly:
 npm run lint && npm run type-check
 ```
 
-Commit → hook runs → on failure the commit is rejected with the error → agent reads, fixes, commits again. This is the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md) at the commit boundary.
+A commit triggers the hook. On failure, the commit is rejected with the error, and the agent reads it, fixes the issue, and commits again. This is the [Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md) at the commit boundary.
 
 ## Step 5: Verify the transition
 
@@ -211,7 +211,7 @@ If the agent still needs you to correct mechanical errors (wrong imports, types,
 
 ## When this backfires
 
-The L1→L2 transition pays off, but it is not free. Three conditions make it a poor investment:
+The L1 to L2 transition pays off, but it is not free. Three conditions make it a poor investment:
 
 - Large existing `any` surface: strict mode on a codebase with hundreds of implicit `any` types floods unrelated files with errors. Fix cost dwarfs the agent benefit until most are annotated. Start with `noImplicitAny` scoped to new files, then expand incrementally.
 - High-churn paths with low test stability: if integration tests on agent-critical paths break often from schema or environment drift, agents learn to ignore failing tests rather than treat them as a [backpressure](../../patterns/agent-design/agent-backpressure.md) signal. Stabilize the environment before you rely on tests as a feedback source.

@@ -39,7 +39,7 @@ Small changes to prompt wording cause [around 15% accuracy swings](https://www.i
 
 ## The compounding risk
 
-The natural language interface masks failures. Models produce confident, plausible-looking output even when the reasoning behind it is wrong. This [creates false confidence](https://undark.org/2026/02/19/opinion-jagged-intelligence/) in both the current output and the model's general reliability. The main danger is not a model that fails obviously. It is people who [overestimate capability](https://undark.org/2026/02/19/opinion-jagged-intelligence/) because they saw it succeed.
+The natural language interface masks failures. Models produce confident, plausible-looking output even when the reasoning behind it is wrong. This [creates false confidence](https://undark.org/2026/02/19/opinion-jagged-intelligence/) in both the current output and the model's general reliability. The main danger comes from people who [overestimate capability](https://undark.org/2026/02/19/opinion-jagged-intelligence/) because they saw the model succeed, more than from a model that fails obviously.
 
 ## Example
 

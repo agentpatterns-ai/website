@@ -19,7 +19,7 @@ maturity: established
 
 If a model is capable enough, it should solve a problem regardless of presentation. Variable names, [surrounding context](../context-engineering/context-engineering.md), and prompt wording are noise the model filters out. Prompt engineering is aesthetics, not substance.
 
-This leads practitioners to underinvest in prompt construction, leave irrelevant files open, use vague task descriptions, and dismiss output quality differences as model inconsistency rather than framing variation.
+This leads practitioners to underinvest in prompt construction, leave irrelevant files open, and use vague task descriptions. They dismiss output quality differences as model inconsistency rather than framing variation.
 
 ## Why it fails
 
@@ -28,11 +28,11 @@ LLMs are pattern matchers. A model that appears to "understand" a task is findin
 Documented consequences:
 
 - Anthropic's SWE-bench work found that models consistently made errors with relative filepaths once an agent moved out of the root directory. Switching to absolute filepaths — a surface framing change with no logical significance — produced ["flawless" tool use](https://www.anthropic.com/engineering/building-effective-agents). The underlying task was identical; the surface framing was not.
-- Cursor found that token-conservation language in system prompts caused their Codex integration to halt mid-task, outputting: "I'm not supposed to waste tokens, and I don't think it's worth continuing with this task!" — a minor phrasing choice that [constrained model autonomy in an unintended way](https://cursor.com/blog/codex-model-harness).
+- Cursor found that token-conservation language in system prompts caused their Codex integration to halt mid-task. It output: "I'm not supposed to waste tokens, and I don't think it's worth continuing with this task!" — a minor phrasing choice that [constrained model autonomy in an unintended way](https://cursor.com/blog/codex-model-harness).
 - [Removing reasoning traces from GPT-5-Codex](https://cursor.com/blog/codex-model-harness) caused a 30% performance drop in Cursor's harness — compared to OpenAI's observed 3% degradation on standard benchmarks. The structural framing of the reasoning context, not just the model's capability, determined output quality.
 - GitHub Copilot's official guidance explicitly instructs users to [close irrelevant files in the IDE](https://docs.github.com/en/copilot/using-github-copilot/best-practices-for-using-github-copilot) — because open files enter the context surface and shift which patterns the model matches against.
 
-Anthropic's guidance on building agents states that tool definitions deserve ["just as much prompt engineering attention as your overall prompts"](https://www.anthropic.com/engineering/building-effective-agents) and frames parameter naming directly: "How can you change parameter names or descriptions to make things more obvious?" If framing were irrelevant, tool parameter names would not matter.
+Anthropic's guidance on building agents states that tool definitions deserve ["just as much prompt engineering attention as your overall prompts"](https://www.anthropic.com/engineering/building-effective-agents). It also frames parameter naming directly: "How can you change parameter names or descriptions to make things more obvious?" If framing were irrelevant, tool parameter names would not matter.
 
 ## How it manifests
 
@@ -53,7 +53,7 @@ Fallacy corrected — closed irrelevant files, provided specific framing:
 
 > "Refactor `src/payments/processor.ts` to separate the authorization step from charge execution. The current `processPayment()` function does both. Create `authorizePayment()` and `chargePayment()` as separate functions. Keep the existing public interface unchanged."
 
-Same underlying problem. Different framing. Different output.
+The underlying problem is the same, but the framing and the output are not.
 
 ## When framing matters less
 

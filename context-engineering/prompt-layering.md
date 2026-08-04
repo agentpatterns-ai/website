@@ -16,7 +16,7 @@ maturity: established
 
 > Prompt layering stacks agent instructions across four sources — system prompt, project instructions, skill content, user message — where specificity determines precedence on conflicts.
 
-Learn it hands-on: [The Layer Stack](https://learn.agentpatterns.ai/context-engineering/prompt-layering/) — guided lesson with quizzes.
+Learn it hands-on with [The Layer Stack](https://learn.agentpatterns.ai/context-engineering/prompt-layering/), a guided lesson with quizzes.
 
 ## The layer stack
 
@@ -30,7 +30,7 @@ graph TD
     D --> E[Agent Response]
 ```
 
-Each layer is more specific than the one above it. Specificity generally determines precedence when layers conflict: the user message overrides the skill, which overrides project instructions (`AGENTS.md`, `CLAUDE.md`), which overrides the system prompt — because the more specific instruction is closer to the actual task.
+Each layer is more specific than the one above it. Specificity generally determines precedence when layers conflict: the user message overrides the skill, which overrides project instructions (`AGENTS.md`, `CLAUDE.md`), which overrides the system prompt. The more specific instruction wins because it sits closer to the actual task.
 
 This is a behavioral tendency, not a formal rule enforced by the model. Contradictions between layers produce unpredictable outputs.
 
@@ -40,13 +40,13 @@ The system prompt is the outermost layer, set by the tool or platform. It define
 
 Project instructions live in `AGENTS.md`, `CLAUDE.md`, and [`.github/copilot-instructions.md`](../tools/copilot/copilot-instructions-md-convention.md). They load at session start and apply to every task in the project: conventions, constraints, and tooling preferences. This layer must apply universally. If a rule is task-specific, it does not belong here.
 
-Skill content is task-specific knowledge that loads when a skill runs, such as a `SKILL.md` file. A code review skill carries review conventions; a documentation skill carries writing standards. Skills extend or refine project instructions for a specific task type — they do not repeat them. Repeating project conventions in a skill creates a [second source of truth that can drift](../instructions/instruction-file-ecosystem.md).
+Skill content is task-specific knowledge that loads when a skill runs, such as a `SKILL.md` file. A code review skill carries review conventions; a documentation skill carries writing standards. Skills extend or refine project instructions for a specific task type. They do not repeat them. Repeating project conventions in a skill creates a [second source of truth that can drift](../instructions/instruction-file-ecosystem.md).
 
 The user message is the immediate task. It overrides everything below it because it represents the most specific current intent. If the user message contradicts a higher layer, the agent typically follows the user message. That is correct for the immediate task, but it may violate project conventions.
 
 ## Subagents break the stack
 
-Subagents do not inherit the parent agent's context. A subagent invoked by a parent agent starts fresh with its own system prompt — typically one injected at invocation time ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)). The parent's project instructions, loaded skills, and conversation history are not present unless explicitly passed.
+Subagents do not inherit the parent agent's context. A subagent invoked by a parent agent starts fresh with its own system prompt, typically one injected at invocation time ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)). The parent's project instructions, loaded skills, and conversation history are not present unless explicitly passed.
 
 A subagent can violate project conventions the parent was following unless the parent explicitly passes the relevant constraints. Debugging requires knowing what the subagent received at invocation, not what the parent had.
 
@@ -77,15 +77,15 @@ A team configures Claude Code with a project-level `CLAUDE.md` that says: "Alway
 
 The user message overrides the project instruction. Claude Code generates the function without tests. The more specific instruction (immediate task) takes precedence over the less specific one (project convention).
 
-Now the team adds a code-review skill that includes the rule `Flag any function without a corresponding test`. When this skill runs on the same helper function, it flags the missing test — because the skill layer is more specific than the project layer for that task type, and the instruction to flag is not in conflict with the earlier user message (which was about generation, not review).
+Now the team adds a code-review skill that includes the rule `Flag any function without a corresponding test`. When this skill runs on the same helper function, it flags the missing test. The skill layer is more specific than the project layer for that task type. The instruction to flag does not conflict with the earlier user message, which was about generation, not review.
 
 The gap is intentional: the project layer sets policy, the skill layer enforces it contextually, and the user message scopes the immediate action. Keeping these concerns in separate layers prevents the skill from being silenced by a user message that was not meant to apply to it.
 
 ## Key Takeaways
 
-- Instructions stack in order: system prompt → project instructions → skill content → user message; specificity determines precedence on conflicts
-- Subagents do not inherit parent context — they receive only what is explicitly passed at invocation
-- Duplicate instructions across layers create drift; each convention belongs in exactly one layer
+- The layer closest to the task usually wins a conflict, but that is a tendency, not an enforced rule, so repeat critical constraints instead of relying on position alone
+- Before dispatching a subagent, explicitly pass any project convention it must follow, since it starts fresh with no parent context
+- If you find the same convention duplicated across layers, delete the copy and let the other layer reference it, since the duplicate is what drifts when only one copy gets updated
 - When an agent ignores an instruction, check: layer position, conflicting instructions closer to the task, subagent context isolation, total compliance ceiling
 
 ## When this backfires

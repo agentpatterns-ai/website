@@ -60,10 +60,10 @@ The source is a single preprint from July 2026 whose own limitations section run
 ## Key Takeaways
 
 - Measure recall at the model input, not only at retrieval. A 64.16% retrieval hit rate delivered 39.59% surviving evidence in the studied setup ([Lu et al., 2026](https://arxiv.org/abs/2607.26937v1)).
-- Redundant renderings of one code object, not duplicate strings, are what consume the budget. Exact deduplication recovers 0.02 points ([Lu et al., 2026](https://arxiv.org/abs/2607.26937v1)).
+- Deduplicate by object identity, not by exact-match strings. Exact-string dedup recovers only 0.02 points of recall ([Lu et al., 2026](https://arxiv.org/abs/2607.26937v1)).
 - Compact rendering under a per-object cap carries more of the gain than object grouping does — do that first.
 - The technique needs a provenance-preserving index and a bounded render step. Agentic file-system exploration has neither.
-- Gains saturate once evidence fits the window; a larger context window is not a substitute, but a sufficient one removes the problem.
+- Check whether evidence already fits the window before adopting this technique. A window large enough to hold all retrieved evidence removes the crowding problem on its own.
 
 ## Related
 

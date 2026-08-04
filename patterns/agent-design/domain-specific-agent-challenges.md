@@ -124,6 +124,7 @@ Constraining component choice converts visual judgment into a structural check: 
 
 ## Related
 
+- [Applying Coding Agents to Non-Code Tasks](coding-agents-for-non-code-tasks.md)
 - [Progressive Autonomy: Scaling Trust with Model Evolution](../../human/progressive-autonomy-model-evolution.md)
 - [Rigor Relocation](../../human/rigor-relocation.md)
 - [Safe Command Allowlisting](../../security/safe-command-allowlisting.md)

@@ -1,7 +1,7 @@
 ---
 title: "Inline Suggestion Attachment in Agent Code Review"
 term: "Inline Suggestion Attachment"
-description: "Attaching a ready-to-apply patch is the strongest measured predictor that an agent review comment gets resolved — but only attach one where the finding is mechanically verifiable, because a one-click patch on a false positive is a one-click defect."
+description: "Attaching a ready-to-apply patch is the strongest measured predictor that an agent review comment gets resolved, but attach one only where the finding is mechanically verifiable: a one-click patch on a false positive is a one-click defect."
 tags:
   - code-review
   - human-factors
@@ -23,13 +23,13 @@ Attach an inline code suggestion to an agent review comment and developers act o
 
 ## Attach only where the finding is mechanically checkable
 
-The attachment decision is a gate, not a default. A suggestion block lowers the cost of acting, which is useful only when acting is the right outcome — so apply it under three conditions:
+The attachment decision is a gate, not a default. A suggestion block lowers the cost of acting, which is useful only when acting is the right outcome, so apply it under three conditions:
 
 - The finding is verifiable from the diff alone. A missing null check, a wrong comparison operator, an unhandled error path. Where correctness can be confirmed by reading the patch, cheap acceptance is cheap correctness.
 - The fix is localized. One hunk, one call site, no dependent edits elsewhere. A suggestion that is only part of the change invites a partial application.
 - The surrounding code is simple enough to review at a glance.
 
-Where those conditions fail — design disagreements, cross-file refactors, anything contestable — post prose and no patch. Among the comments core developers left unresolved, over 72% were rejected on intentional-design-decision grounds ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)); a diff-shaped suggestion cannot carry an architectural argument, and dressing an opinion as a mechanical fix invites the wrong kind of agreement.
+Where those conditions fail (design disagreements, cross-file refactors, anything contestable), post prose and no patch. Among the comments core developers left unresolved, over 72% were rejected on intentional-design-decision grounds ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)); a diff-shaped suggestion cannot carry an architectural argument, and dressing an opinion as a mechanical fix invites the wrong kind of agreement.
 
 ## What the model actually ranks
 
@@ -44,29 +44,29 @@ Every variable that reduces interpretive work moves resolution. Every variable t
 | Comment length (log) | 0.926 | Lowers resolution |
 | Has explanation | 0.593 | Lowers resolution |
 
-All values from [arXiv:2607.21997](https://arxiv.org/abs/2607.21997); every row is significant at p<0.05. The length penalty is sharper on functional-issue comments at 0.855. Read the explanation row carefully: among comments that carry explanations, two explanation types peak at 71.7% usefulness, so the finding is that more prose does not buy action, not that explaining is pointless.
+All values from [arXiv:2607.21997](https://arxiv.org/abs/2607.21997); every row is significant at p<0.05. The length penalty is sharper on functional-issue comments at 0.855. Read the explanation row carefully: among comments that carry explanations, two explanation types peak at 71.7% usefulness. The finding is that more prose does not buy action, which is a narrower claim than explaining being pointless.
 
 Resolution rates varied by agent: Copilot 72.9%, Cursor 67.2%, Codex 54.8% ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)).
 
 ## Why it works
 
-An inline suggestion changes what the comment asks of the developer. Prose requires them to interpret the finding, locate the site, author the edit, and commit it. A suggestion block collapses that to reading a concrete diff and applying it — which is what the GitHub suggestion feature exists to do, making "reviewers' feedback more actionable for the submitters" ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835)). Cost of acting, not persuasiveness, is what resolution varies with ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). The same mechanism corroborates outside agent review — pull requests using human-authored suggestions merged at 76.2% against 65.7% without ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835)).
+An inline suggestion changes what the comment asks of the developer. Prose requires them to interpret the finding, locate the site, author the edit, and commit it. A suggestion block collapses that to reading a concrete diff and applying it. The GitHub suggestion feature exists for exactly that: it makes "reviewers' feedback more actionable for the submitters" ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835)). Resolution varies with the cost of acting, not persuasiveness ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). The same mechanism corroborates outside agent review: pull requests using human-authored suggestions merged at 76.2% against 65.7% without ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835)).
 
 ## When this backfires
 
 The mechanism is friction removal, so it removes friction from wrong changes just as efficiently.
 
 - Comment validity is unmeasured. A patch attached to a false positive converts a comment the developer would have skipped into a one-click defect. Incorrect suggestions and intentional design decisions are the two most prevalent reasons comments go unresolved, and 63 of the 67 incorrect-suggestion cases were factually wrong or false positives ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)); a separate reception study finds rejection tracks validity rather than packaging ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). Gate on [comment acceptance data](agentic-review-comment-acceptance.md) before optimizing attachment.
-- The person applying the patch is not the person who would push back. Core developers — the top 20% by authored and reviewed pull requests — resolved 78.1% of Copilot's resolved comments, and design-grounds rejection concentrates in that group ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). A one-click patch applied by a contributor with less repository context skips the scrutiny that data attributes to core reviewers.
+- The person applying the patch is not the person who would push back. Core developers (the top 20% by authored and reviewed pull requests) resolved 78.1% of Copilot's resolved comments, and design-grounds rejection concentrates in that group ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). A one-click patch applied by a contributor with less repository context skips the scrutiny that data attributes to core reviewers.
 - Merge latency matters more than resolution. Suggestion use significantly increased pull request resolution time and produced no decrease in code complexity ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835)). More action is not faster delivery.
 - You are treating resolution as usefulness. The authors flag resolution as "an imperfect proxy" and report the model's discrimination as low at AUC 0.58 ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). Suggestion attachment is the strongest lever inside a model that explains a small share of the outcome.
 - Your stack is unlike the sample. Findings come from Python repositories with at least 1,000 stars, 1,000 pull requests, and 50 contributors; the authors name other languages, small projects, and proprietary settings as generalizability threats, and excluded Devin and Claude for insufficient data ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)).
 
 ## Key Takeaways
 
-- Inline suggestion attachment is the strongest measured predictor of comment resolution, at odds ratio 1.617 against 1.022 for clarity ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)).
-- Comments with suggestions resolved at 75.5% versus 64.5% without.
-- Longer comments resolve less often (odds ratio 0.926), and the explanation flag is negatively associated at 0.593 — rewriting prose is the wrong first knob.
+- Suggestion attachment resolved comments at 75.5% versus 64.5% without and was the strongest predictor at odds ratio 1.617 against 1.022 for clarity; spend triage time writing the patch, not polishing the comment.
+- Core developers resolved 78.1% of Copilot's resolved comments and are also where design-grounds rejection concentrates: route one-click patches through a reviewer with real repository context.
+- Longer comments resolve less often (odds ratio 0.926), and the explanation flag is negatively associated at 0.593: rewriting prose is the wrong first knob.
 - Attach a patch only where the finding is diff-verifiable and localized; post prose for design disagreements.
 - The effect is observational on a model with AUC 0.58, measured against resolution rather than usefulness, so validity gating comes before attachment.
 

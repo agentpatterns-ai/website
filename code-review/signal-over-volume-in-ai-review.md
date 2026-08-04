@@ -16,7 +16,7 @@ maturity: established
 
 ## The principle
 
-AI review tools that always produce output, whatever its value, train you to ignore them. The signal-over-volume principle treats silence as a valid review outcome. When the AI does comment, it matters. When it has nothing high-confidence to add, it says nothing — the same silent-drop discipline a [reproduce-before-report gate](reproduce-before-report-verification-gate.md) enforces.
+AI review tools that always produce output, whatever its value, train you to ignore them. The signal-over-volume principle treats silence as a valid review outcome. The AI comments only when it matters. It says nothing when it lacks a high-confidence finding — the same silent-drop discipline a [reproduce-before-report gate](reproduce-before-report-verification-gate.md) enforces.
 
 GitHub's Copilot code review shows this across millions of reviews: [in 71% of reviews, Copilot surfaces actionable feedback; in the remaining 29%, the agent says nothing at all](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). GitHub explicitly rejected maximizing comment frequency, stating "more comments don't necessarily mean a better review."
 
@@ -24,7 +24,7 @@ GitHub's Copilot code review shows this across millions of reviews: [in 71% of r
 
 Alert fatigue is the primary failure mode. When every PR gets a wall of comments — style nits, suggestions on intentional patterns, low-confidence speculation — you stop reading AI review output entirely. The one critical security finding gets buried in twenty stylistic preferences.
 
-The pressure intensifies as agents author more PRs: Linear describes [keeping the review quality bar high under the higher PR throughput agents generate](https://linear.app/now/reviewing-code-in-the-agent-era), treating volume as a reason to tighten the signal bar rather than relax it.
+The pressure intensifies as agents author more PRs. Linear [keeps its review quality bar high as PR throughput rises](https://linear.app/now/reviewing-code-in-the-agent-era): rising volume is a reason to tighten the signal bar, not relax it.
 
 ## Designing for signal
 
@@ -42,7 +42,7 @@ When the same pattern error appears across many locations, a separate comment fo
 
 ### Batch autofixes
 
-When the agent finds many instances of the same issue, offer [batch fixes that resolve an entire class of issues at once](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) rather than applying each fix on its own.
+Offer [batch fixes that resolve an entire class of issues at once](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/) rather than applying each fix on its own, when the agent finds many instances of the same issue.
 
 ## Measuring signal quality
 
@@ -116,11 +116,11 @@ GitHub's data says yes. The agentic architecture redesign raised positive feedba
 
 ## Key Takeaways
 
-- Silence is a valid review output — 29% of Copilot code reviews intentionally produce no comments
-- Alert fatigue from noisy AI review trains you to ignore all AI feedback, including critical findings
-- Attach feedback to logical code ranges, not individual lines, so you see full context
-- Cluster repeated pattern errors into a single finding to reduce cognitive load
-- Measure signal quality through reactions and issue resolution rates, not comment volume
+- Judge an AI reviewer by how often it correctly finds nothing to flag, not only by the comments it makes
+- Alert fatigue is a one-way cost. Once it sets in, reviewers discount even a correct critical finding along with the noise
+- Comments scoped to a single line force reviewers to reconstruct context on their own; scope every comment to its logical block instead
+- A repeated finding across many locations is one signal, not many. Cluster it into a single comment that lists every affected location
+- Comment volume is not a quality signal. Track resolution rates and reaction trends instead, and recalibrate the confidence floor when they decline
 
 ## Related
 

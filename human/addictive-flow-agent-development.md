@@ -28,13 +28,13 @@ Variable ratio reinforcement (rewards after an unpredictable number of responses
 
 ## Friction removal and the compulsion loop
 
-Traditional development has natural stopping points: compile waits, context switches, and dependency installs. Agents collapse the feedback loop to prompt-then-result in seconds. Each iteration becomes a new pull of the lever.
+Traditional development has natural stopping points: compile waits, context switches, and dependency installs. Agents collapse the feedback loop to prompt-then-result in seconds. Each iteration repeats the same anticipation-reward cycle.
 
 Game design calls this a compulsion loop: anticipation, action, reward — prompting an agent, waiting for output, evaluating the result ([compulsion loop explained, GameAnalytics](https://www.gameanalytics.com/blog/the-compulsion-loop-explained)).
 
 ## The perception-reality gap
 
-The [METR study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) (July 2025) found developers using AI were 19% slower but believed they were 20% faster — a 40-percentage-point perception gap. Researchers noted developers may use AI "for reasons other than pure productivity," suggesting engagement is rewarding independent of output.
+The [METR study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) (July 2025) found developers using AI were 19% slower but believed they were 20% faster — a 40-percentage-point perception gap. Researchers noted developers may use AI "for reasons other than pure productivity." This suggests engagement is rewarding independent of output.
 
 An [HBR / UC Berkeley ethnographic study](https://hbr.org/2026/02/ai-doesnt-reduce-work-it-intensifies-it) (~200 employees) found AI "intensifies" work: scope expanded because doing more felt possible, with burnout as a recurring outcome. Prompting felt "closer to chatting than to undertaking a formal task," blurring work and leisure.
 

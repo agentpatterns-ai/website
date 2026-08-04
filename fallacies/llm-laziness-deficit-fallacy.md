@@ -33,7 +33,7 @@ Attitude instructions have a documented backfire mode. Cursor found that telling
 
 Empirical signal without restraint gates:
 
-- Median PR size grew 33% between March and November 2025 (57 → 76 lines) as AI adoption rose ([Greptile, State of AI Coding 2025](https://www.greptile.com/state-of-ai-coding-2025)); "too large" is a documented rejection reason for agentic PRs ([Xiao et al., 2025](https://arxiv.org/abs/2509.14745)).
+- Median PR size grew 33% between March and November 2025 (57 to 76 lines) as AI adoption rose ([Greptile, State of AI Coding 2025](https://www.greptile.com/state-of-ai-coding-2025)); "too large" is a documented rejection reason for agentic PRs ([Xiao et al., 2025](https://arxiv.org/abs/2509.14745)).
 - Lines of code rose 76% and cognitive complexity 39% in agent-assisted repositories ([Agile Pain Relief](https://agilepainrelief.com/blog/ai-generated-code-quality-problems/)).
 - Agents scaffold "1,000 lines where 100 would suffice" ([Addy Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
 
@@ -57,7 +57,7 @@ Gates are not universal:
 - Known-growth systems — when a factory or registry is on the roadmap, a [diff cap](../verification/deterministic-guardrails.md) forces a later refactor. Scope gates to the current task.
 - Small single-author projects — one person's cognitive-load budget is their own; layered review adds process without addressing debt.
 
-The operative question is not "are agents lazy enough?" but "does my harness impose a cost the agent can observe?"
+The operative question is whether the harness imposes a cost the agent can observe, not whether agents are lazy enough.
 
 ## Example
 
@@ -78,7 +78,7 @@ The same agent hits the 400-line cap on the first attempt, splits the change, an
 ## Key Takeaways
 
 - Human laziness is produced by time scarcity; LLMs have no equivalent cost function, so instruction alone cannot reproduce it.
-- Attitude prompts like "be concise" either do nothing or backfire by changing *whether* the agent works, not *how*.
+- Attitude prompts like "be concise" either do nothing or backfire by changing whether the agent works, not how.
 - Restraint that binds is objective and external — [harness-engineered](../patterns/agent-design/harness-engineering.md) diff-size caps, complexity budgets, deletion targets, review gates.
 - Gates are not universal — exploratory harness calls, known-growth systems, and small single-author projects have different constraints.
 

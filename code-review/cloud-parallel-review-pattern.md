@@ -19,7 +19,7 @@ maturity: established
 
 > Fan out code review across multiple agents in a remote sandbox, verify each candidate finding against actual code behavior, then aggregate into a single severity-ranked review posted back to the PR.
 
-Multiple reviewer agents examine the diff in parallel, each scoped to a different defect class. A verification step reproduces each candidate finding against code behavior. The orchestrator deduplicates, severity-ranks, and posts one consolidated review. Unlike [committee review](committee-review-pattern.md) (voting with implementer iteration) and [tiered code review](tiered-code-review.md) (escalation by risk class), fan-out + verify + aggregate runs off the developer's machine as a single review artifact.
+Multiple reviewer agents examine the diff in parallel, each scoped to a different defect class. A verification step reproduces each candidate finding against code behavior. The orchestrator deduplicates, severity-ranks, and posts one consolidated review. Fan-out + verify + aggregate runs off the developer's machine as a single review artifact. That differs from [committee review](committee-review-pattern.md) (voting with implementer iteration) and [tiered code review](tiered-code-review.md) (escalation by risk class).
 
 ## Structure
 
@@ -44,14 +44,14 @@ Claude Code's `/ultrareview` launches "a fleet of reviewer agents in a remote sa
 
 ## Why verification is load-bearing
 
-Fan-out without verification amplifies noise: each agent contributes its own false positives, and aggregation cannot tell real findings from hallucinated ones. Verification reproduces each candidate against code behavior, turning a high-recall, low-precision fan-out into a high-precision output.
+Fan-out without verification amplifies noise: each agent contributes its own false positives, and aggregation cannot tell real findings from hallucinated ones. Verification reproduces each candidate against code behavior. That turns a high-recall, low-precision fan-out into a high-precision output.
 
 Per the [EMNLP 2024 peer-review simulation study](https://aclanthology.org/2024.emnlp-main.70), dimension-scoped reviewers activate narrower reasoning pathways, so their error populations are largely non-overlapping. Fan-out captures more real defects. Verification discards the non-overlapping false positives each reviewer introduces.
 
 ## Cloud execution trade-offs
 
 - Latency is asynchronous. `/ultrareview` takes 5 to 10 minutes, and managed Code Review averages 20 minutes ([Code Review docs](https://code.claude.com/docs/en/code-review)). The developer's session is not blocked.
-- Cost is per-review. `/ultrareview` "typically costs \$5 to \$20" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)), and managed Code Review averages "\$15-25 in cost, scaling with PR size, codebase complexity, and how many issues require verification" ([Code Review docs](https://code.claude.com/docs/en/code-review)).
+- Cost is per-review. `/ultrareview` "typically costs \$5 to \$20" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Managed Code Review averages "\$15-25 in cost, scaling with PR size, codebase complexity, and how many issues require verification" ([Code Review docs](https://code.claude.com/docs/en/code-review)).
 - The trust boundary expands. Cloud execution is unavailable for "Amazon Bedrock, Google Cloud Vertex AI, or Microsoft Foundry" and for Zero Data Retention organizations ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
 
 ## When to trigger
@@ -60,7 +60,7 @@ Three trigger modes: once per PR (fixed cost), every push (cost multiplied by pu
 
 ## Relationship to CI gates
 
-The check run "always completes with a neutral conclusion so it never blocks merging through branch protection rules" ([Code Review docs](https://code.claude.com/docs/en/code-review)). Cloud parallel review is a signal layer, not a pipeline gate. Teams that want merges gated on findings parse the machine-readable severity breakdown from the check run in their own CI.
+The check run "always completes with a neutral conclusion so it never blocks merging through branch protection rules" ([Code Review docs](https://code.claude.com/docs/en/code-review)). Cloud parallel review is a signal layer. Teams that want merges gated on findings parse the machine-readable severity breakdown from the check run in their own CI.
 
 ## Comparison to related patterns
 
@@ -82,7 +82,7 @@ Load-bearing differentiators: the verification step, cloud execution, and a sing
 
 ## Tuning
 
-Anthropic's managed Code Review reads two files. `CLAUDE.md` contributes project context; new violations surface as nit-level findings. `REVIEW.md` is "injected directly into every agent in the review pipeline as highest priority" ([Code Review docs](https://code.claude.com/docs/en/code-review)) — the surface for severity recalibration, skip rules, per-repo checks, and nit caps.
+Anthropic's managed Code Review reads two files. `CLAUDE.md` contributes project context; new violations surface as nit-level findings. `REVIEW.md` is "injected directly into every agent in the review pipeline as highest priority" ([Code Review docs](https://code.claude.com/docs/en/code-review)). It is the surface for severity recalibration, skip rules, per-repo checks, and nit caps.
 
 ## Example
 
@@ -116,15 +116,15 @@ similar items" in the summary instead of posting them inline.
 - Database queries are scoped to the caller's tenant
 ```
 
-A 400-line PR that adds a new API route triggers review on push. The agents fan out: a correctness agent flags a missing tenant scope on one query; a regression agent flags a changed response shape for an existing endpoint; a security agent flags a new log line that includes the user ID. Each finding is verified against code before posting. The aggregated review posts three inline comments with severity markers and a summary: "2 Important, 1 Nit." The check run completes with a neutral conclusion. Branch protection is not triggered, but the team's own CI parses the machine-readable severity counts and blocks merge while `normal > 0`.
+A 400-line PR that adds a new API route triggers review on push. The agents fan out. A correctness agent flags a missing tenant scope on one query. A regression agent flags a changed response shape for an existing endpoint. A security agent flags a new log line that includes the user ID. Each finding is verified against code before posting. The aggregated review posts three inline comments with severity markers and a summary: "2 Important, 1 Nit." The check run completes with a neutral conclusion. Branch protection is not triggered, but the team's own CI parses the machine-readable severity counts and blocks merge while `normal > 0`.
 
 ## Key Takeaways
 
 - Cloud parallel review is parallel-decompose + verify + aggregate, distinct from committee voting and tiered escalation
-- The verification step is load-bearing — without it the pattern amplifies false positives rather than reducing them
-- Cloud execution decouples review from the developer's terminal; 5-to-20-minute latency becomes an asynchronous background cost, not a blocked session
+- The verification step is load-bearing: without it the pattern amplifies false positives rather than reducing them
+- Cloud execution runs the 5-to-20-minute review in the background, so the developer's session stays unblocked
 - Cost scales with PR size and trigger mode; push-triggered review on long PRs is the primary budget risk
-- The default check run is neutral — gate on findings in your own CI by parsing the severity breakdown
+- The default check run is neutral: gate on findings in your own CI by parsing the severity breakdown
 - `REVIEW.md` is the intended tuning surface for severity, skip rules, and nit caps; `CLAUDE.md` contributes general project context
 
 ## Related

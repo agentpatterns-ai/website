@@ -25,7 +25,7 @@ Agentic coding tools shift work from writing to reviewing. When an agent generat
 
 ## Deletion reason categories (author-derived taxonomy)
 
-[arXiv:2602.17091](https://arxiv.org/abs/2602.17091) identifies structural features that distinguish deleted from surviving functions — method name length, lines of code, Halstead volume, and call count — but does not name deletion-reason categories. The taxonomy below is author-derived, organizing those structural signals into three practitioner-facing buckets to make the predictors actionable. Treat the category names as framing, not findings.
+[arXiv:2602.17091](https://arxiv.org/abs/2602.17091) identifies structural features that distinguish deleted from surviving functions: method name length, lines of code, Halstead volume, and call count. It does not name deletion-reason categories. The taxonomy below is author-derived, organizing those structural signals into three practitioner-facing buckets to make the predictors actionable. Treat the category names as framing, not findings.
 
 Dead code: functions generated but never called from the PR's entry points. This maps to the paper's call-count signal — functions with fewer inbound references ([arXiv:2602.17091](https://arxiv.org/abs/2602.17091)).
 
@@ -123,16 +123,16 @@ These two functions would be candidates for deletion. Returning this report to t
 
 Pre-flagging adds value when the cost of reviewer time exceeds the cost of running structural analysis, but several conditions undermine that trade-off:
 
-- Infrastructure and setup functions: functions not yet called within the PR — setup hooks, migration helpers, exported API surface — will appear as dead code to a call-graph analyzer. Treat entry-point configuration as a first-class parameter, not an afterthought.
+- Infrastructure and setup functions: functions not yet called within the PR — setup hooks, migration helpers, exported API surface — will appear as dead code to a call-graph analyzer. Treat entry-point configuration as a first-class parameter.
 - Cross-file call graphs are expensive: dead code detection that only inspects the generated module (as in the `flag_dead_code` example above) misses legitimate calls from existing files. Building a full project call graph adds pipeline latency and may require language-specific tooling.
 - Single-study generalization risk: the AUC 87.1% result comes from one codebase and one AI model. Feature importance will differ across languages, project types, and model generations — validate false-positive rates locally before routing suppressions to the agent.
-- False negatives pass bad code unexamined: a 12.9% error rate leaves roughly 1-in-8 deletable functions unflagged. Reviewers who lean on the report may skip unflagged code too quickly, raising the cost of each missed deletion.
+- False negatives pass bad code unexamined: a 12.9% error rate leaves roughly 1-in-8 deletable functions unflagged. Reviewers who lean on the report may skip unflagged code too quickly. A missed deletion then costs more to catch.
 - False positives block valid abstractions: a utility called only once looks like over-engineering by metrics but may be essential for testability or extension. Flags routed back to the agent can regenerate away intentional design decisions — the inverse risk to the [abstraction bloat](../patterns/anti-patterns/abstraction-bloat.md) the pattern targets.
 - Feedback loop without calibration: returning flags for regeneration without calibrating "spec scope" can cause under-generation in later tasks. A regeneration limit and human fallback prevent loops.
 
 ## Key Takeaways
 
-- AI-generated PRs shift the bottleneck from writing to reviewing; predictive pre-filtering reduces that shift's cost
+- A 12.9% false-negative rate means roughly 1 in 8 deletable functions pass unflagged, so pre-filtering complements human review rather than replacing it
 - The paper shows deletion likelihood is statistically predictable from structural features (method name length, LOC, Halstead volume, call count); the dead-code, over-engineering, and spec-mismatch grouping is author-derived framing, not a paper result
 - Agent scope instructions should target the root causes: require reachability, prohibit over-abstraction, match spec scope
 - Pre-flag reports returned to the agent before human review cut total review cost

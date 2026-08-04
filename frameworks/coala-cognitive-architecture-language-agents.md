@@ -44,7 +44,7 @@ CoALA inherits four memory types from cognitive psychology, each defined by what
 | Semantic | World and self knowledge — facts about the environment | RAG corpus, vector index |
 | Procedural | Implicit LLM weights plus explicit agent code | `CLAUDE.md`, skills, hooks, scaffolding |
 
-The mapping is the practitioner-facing contribution. LangChain's [Memory for Agents](https://blog.langchain.com/memory-for-agents/) cites CoALA's memory taxonomy as the substrate for the LangGraph Memory Store, confirming the categories carry weight in production code, not only in the paper.
+The mapping is the practitioner-facing contribution. LangChain's [Memory for Agents](https://blog.langchain.com/memory-for-agents/) cites CoALA's memory taxonomy as the substrate for the LangGraph Memory Store. The categories carry weight in production code, not only in the paper.
 
 The classifier's diagnostic use is the missing-slot question: which of the four does your harness lack? An agent with no episodic memory cannot reflect on prior sessions. An agent with no semantic memory has no place to put facts that outlive its training cutoff.
 
@@ -79,7 +79,7 @@ The mechanism breaks the moment readers mistake the taxonomy for a checklist. Th
 - Single-session, short-horizon agents. For one-shot Copilot completion or a single Cursor edit, the loop's four phases collapse to "ask the model and apply the diff." Adding CoALA vocabulary delivers nothing the team did not already know ([Anthropic: Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)).
 - Reading the framework as a build spec. The paper is explicitly descriptive. A team that infers "an agent needs all four memory types" from the taxonomy builds infrastructure nothing reads back — the exact failure mode Anthropic warns about: complexity added without a triggering need.
 - Knowledge versus experience persistence conflation. CoALA groups facts (semantic) and trajectories (episodic) under the same "long-term memory" umbrella. Applying experience-style decay or forgetting to a semantic fact store produces correctness regressions. [The Missing Knowledge Layer](https://arxiv.org/abs/2604.11364) (arXiv:2604.11364) names this category error explicitly.
-- Vocabulary churn with no behavioral change. If the team already uses "context window," "transcript," "RAG index," and "skills file" consistently, renaming them as "working," "episodic," "semantic," and "procedural memory" delivers zero new affordance and breaks search across existing docs.
+- Vocabulary churn with no behavioral change. If the team already uses "context window," "transcript," "RAG index," and "skills file" consistently, renaming them as "working," "episodic," "semantic," and "procedural memory" delivers zero new affordance. It also breaks search across existing docs.
 - Borrowed biological framing held too literally. The CoALA authors themselves note LLMs "are not subject to biological limitations" ([arXiv:2309.02427 v3](https://arxiv.org/html/2309.02427v3)). Pushing the cognitive-science analogy past its taxonomic use — for example, designing memory consolidation to mimic human sleep cycles without evidence — invents constraints the medium does not have.
 
 ## Example

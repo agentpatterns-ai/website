@@ -20,7 +20,7 @@ maturity: established
 
 ## The problem
 
-AI-generated code is [increasing PR volume](agent-pr-volume-vs-value.md). PRs are [~18% larger and change failure rates are up ~30%](https://addyo.substack.com/p/code-review-in-the-age-of-ai) compared to human-only codebases. Review is the rate limiter, and uniform human depth does not scale.
+AI-generated code is [increasing PR volume](agent-pr-volume-vs-value.md). PRs are [~18% larger and change failure rates are up ~30%](https://addyo.substack.com/p/code-review-in-the-age-of-ai) compared to human-only codebases. Review capacity limits how fast code ships, and uniform human depth does not scale.
 
 Tiered code review treats review as a risk-routing problem: classify code by criticality, then match review effort to risk level.
 
@@ -101,10 +101,10 @@ This [severity-driven pattern](https://www.qodo.ai/blog/5-ai-code-review-pattern
 
 Deciding what counts as "critical" is the hardest part. Four heuristics:
 
-- Security boundary: code handling authentication, authorization, encryption, or PII requires human review — the paths where the [security review gap in AI-authored PRs](security-review-gap-in-ai-prs.md) is widest.
+- Security boundary: code handling authentication, authorization, encryption, or PII requires human review. This is where the [security review gap in AI-authored PRs](security-review-gap-in-ai-prs.md) is widest.
 - Financial impact: code processing payments, billing, or subscriptions requires human review.
 - Blast radius: bugs that affect all users rather than one feature. Higher [blast radius](../security/blast-radius-containment.md) demands human review.
-- Reversibility: changes that corrupt persistent state rather than rolling back in minutes need human eyes.
+- Reversibility: changes that corrupt persistent state rather than rolling back in minutes need human review.
 
 Non-critical is everything else: tests, docs, configuration, CSS, build scripts, and reversible migrations.
 
@@ -170,11 +170,11 @@ Pair this with the CODEOWNERS file from the implementation section above. Tier 1
 
 Tiered review depends entirely on correct classification. Three conditions cause it to fail:
 
-- Misclassified security code: a database migration that adds a PII column, a config change that broadens CORS policy, or a utility function called from an auth path — none of these match a CODEOWNERS pattern for `/src/auth/`, so they route to Tier 1 and merge without human review.
+- Misclassified security code: a database migration that adds a PII column, a config change that broadens CORS policy, or a utility function called from an auth path. None of these match a CODEOWNERS pattern for `/src/auth/`, so they route to Tier 1 and merge without human review.
 - Cross-cutting changes: a refactor touching both `tests/` (Tier 1) and `src/api/` (Tier 2) in one PR. If classification logic checks the first matching tier, the PR may under-escalate.
 - AI confidence drift: AI reviewers trained on earlier code patterns silently degrade on novel architectural styles. Without periodic accuracy audits, the Tier 1 gate erodes while appearing functional.
 
-Tiered review is not a substitute for threat modeling or dependency scanning — it reduces the volume reaching human reviewers, not the need for human judgment on the paths that matter.
+Tiered review reduces the volume reaching human reviewers. It does not replace threat modeling, dependency scanning, or human judgment on the paths that matter.
 
 ## FAQ
 

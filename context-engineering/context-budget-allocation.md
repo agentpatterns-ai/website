@@ -1,7 +1,7 @@
 ---
 title: "Context Budget Allocation: Spending Every Token Wisely"
 term: "Context Budget Allocation"
-description: "Context is a finite budget — every token preloaded into the context window displaces a token available for reasoning, tool results, and implementation."
+description: "A 200K-token window can be 150K spent before work starts: context budget allocation means choosing what loads always and what loads only on demand."
 tags:
   - context-engineering
   - cost-performance
@@ -15,9 +15,9 @@ maturity: adopted
 
 # Context Budget Allocation: Spending Every Token Wisely
 
-> Context is a finite budget — every token preloaded into the context window displaces a token available for reasoning, tool results, and implementation.
+> Context is a finite budget: every token preloaded into the context window displaces a token available for reasoning, tool results, and implementation.
 
-Learn it hands-on: [Every Token Has a Cost](https://learn.agentpatterns.ai/context-engineering/every-token-has-a-cost/) — a guided lesson with quizzes.
+Learn it hands-on: [Every Token Has a Cost](https://learn.agentpatterns.ai/context-engineering/every-token-has-a-cost/), a guided lesson with quizzes.
 
 !!! info "Also known as"
     The 50% Rule, Context Budget. For the failure mode when budgets are ignored, see [Context Window Management: The Dumb Zone](context-window-dumb-zone.md).
@@ -26,9 +26,9 @@ Learn it hands-on: [Every Token Has a Cost](https://learn.agentpatterns.ai/conte
 
 Context budget allocation means deciding, before a task starts, which content goes into the always-on layer and which loads on demand. It treats the context window as a finite budget that must cover preloaded instructions, tool calls, reasoning, and file reads in one session.
 
-A 200K token context window sounds large. Load AGENTS.md, five skill definitions, three reference files, and the system prompt, and the agent may start a task with 150K tokens already consumed. The remaining 50K must cover tool calls, intermediate reasoning, file reads, and implementation — and shrinks further as the conversation accumulates turns.
+A 200K token context window sounds large. Load AGENTS.md, five skill definitions, three reference files, and the system prompt, and the agent may start a task with 150K tokens already consumed. The remaining 50K must cover tool calls, intermediate reasoning, file reads, and implementation. That budget shrinks further as the conversation accumulates turns.
 
-Claude Opus 4.6 and Sonnet 4.6 support a [1M token context window](https://docs.anthropic.com/en/docs/about-claude/models) natively — no beta header required, at flat pricing. Older models (Sonnet 4.5 and Sonnet 4) still require the `context-1m-2025-08-07` beta header and face a pricing cliff above 200K tokens. Use 1M context when retaining full history matters. Prefer compaction when you can safely summarize prior context.
+Claude Opus 4.6 and Sonnet 4.6 support a [1M token context window](https://docs.anthropic.com/en/docs/about-claude/models) natively, at flat pricing and with no beta header required. Older models (Sonnet 4.5 and Sonnet 4) still require the `context-1m-2025-08-07` beta header and face a pricing cliff above 200K tokens. Use 1M context when retaining full history matters. Prefer compaction when you can safely summarize prior context.
 
 [Anthropic frames this](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) as an attention budget: the n² cost of token-pair relationships means a fully packed context is computationally thinner. Signal injected early competes with signal injected later.
 
@@ -42,8 +42,6 @@ Content loaded at session start, present for every interaction:
 - Project instructions — conventions, architectural decisions, non-discoverable context
 - Skill descriptions — lightweight identifiers, not full content
 
-Cost: paid on every task. Benefit: zero latency.
-
 ### On-demand (JIT)
 
 Content loaded when actually needed, via tool calls:
@@ -53,8 +51,6 @@ Content loaded when actually needed, via tool calls:
 - Web fetches, search results — loaded at the point of need
 
 [Anthropic describes this as JIT loading](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): maintain lightweight identifiers in the always-on layer; load actual data dynamically when needed.
-
-Cost: one tool call. Benefit: budget preserved until needed.
 
 ### The trade-off
 
@@ -68,7 +64,7 @@ A hybrid works best: preload what every task needs, and load everything else on-
 
 ## Sub-agents as context isolation
 
-Sub-agents are a budget tool, not just an architecture pattern. Each sub-agent runs in its own isolated context. A research sub-agent can read 50 files without that overhead appearing in the coordinator's context. [Anthropic describes](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) sub-agent architectures as one of three approaches — alongside compaction and structured note-taking — for managing context across long tasks.
+Sub-agents are a context budget tool. Each sub-agent runs in its own isolated context. A research sub-agent can read 50 files without that overhead appearing in the coordinator's context. [Anthropic describes](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) sub-agent architectures as one of three approaches (alongside compaction and structured note-taking) for managing context across long tasks.
 
 ## Measuring what you load
 
@@ -106,7 +102,7 @@ steps:
   - run: "gh pr view $PR_NUMBER --json title,body,files"
 ```
 
-At session start, Claude Code loads only the two `description` strings (~30 tokens total). When you trigger `migrate-api`, the full YAML — including the three `steps` entries and the file paths — enters context for that task alone. A research sub-agent that reads `src/api/v1/` does so in its own isolated context window. Only its condensed summary appears in the coordinator's context, which leaves the coordinator's budget free for synthesis and implementation.
+At session start, Claude Code loads only the two `description` strings (~30 tokens total). When you trigger `migrate-api`, the full YAML (including the three `steps` entries and the file paths) enters context for that task alone. A research sub-agent that reads `src/api/v1/` does so in its own isolated context window. Only its condensed summary appears in the coordinator's context. That leaves the coordinator's budget free for synthesis and implementation.
 
 ## FAQ
 
@@ -124,10 +120,10 @@ It converts a conditional cost into fixed overhead paid on every task, whether o
 
 ## Key Takeaways
 
-- Context is a budget: every preloaded token displaces a token available for work.
-- Preload only what every task needs; load everything else on-demand.
-- Sub-agents isolate context cost — research in one context, synthesis in another.
-- Reserve meaningful headroom beyond preloaded content for tool calls, reasoning, and file reads — the [n² attention cost](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) of a fully packed window makes late-session reasoning computationally thinner.
+- A 200K-token window can be 150K committed before a task even starts. Check total preload against the window size before assuming spare room exists.
+- On-demand content costs one tool call; preloaded content costs budget on every task whether or not you use it. Default to on-demand for anything conditional.
+- Route research-heavy work to a sub-agent: only its condensed summary reaches the coordinator's context, not the files it read to produce it.
+- Reserve meaningful headroom beyond preloaded content for tool calls, reasoning, and file reads: a fully packed window's [n² attention cost](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) makes late-session reasoning computationally thinner.
 
 ## Related
 

@@ -23,7 +23,7 @@ Work through the [hands-on Dumb Zone lesson](https://learn.agentpatterns.ai/cont
 
 ## What the dumb zone is
 
-As an agent's context fills, output quality drops. [Anthropic calls this "context rot"](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): pairwise token relationships stretch thin and reasoning degrades — "a performance gradient rather than a hard cliff" that appears "across all models."
+As an agent's context fills, output quality drops. [Anthropic calls this "context rot"](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): pairwise token relationships weaken and reasoning degrades. The result is "a performance gradient rather than a hard cliff" that appears "across all models."
 
 ## Why the 50% rule is too simple
 
@@ -42,7 +42,7 @@ The original heuristic — complete tasks within 50% of the context window — a
 | Code comprehension | [LongCodeBench](https://arxiv.org/abs/2505.07897) | Model-dependent (GPT-4.1 stable to 1M, others decline) | Some models improve with more context |
 | Code bug fixing | [LongCodeBench](https://arxiv.org/abs/2505.07897) | Claude 3.5 Sonnet: 29% at 32K to 3% at 256K | Severe collapse for most models |
 
-The [Chroma context rot study](https://research.trychroma.com/context-rot) confirmed all 18 frontier models tested (including Claude Opus 4, GPT-4.1, Gemini 2.5 Pro) degrade with input length — non-uniformly by task type, similarity, and position, with no fixed threshold.
+The [Chroma context rot study](https://research.trychroma.com/context-rot) confirmed all 18 frontier models tested (including Claude Opus 4, GPT-4.1, Gemini 2.5 Pro) degrade with input length. Degradation is non-uniform: it varies by task type, similarity, and position, with no fixed threshold.
 
 !!! warning "NIAH benchmarks are misleadingly optimistic"
     Standard needle-in-a-haystack tests use high lexical overlap between needle and question. [NoLiMa](https://arxiv.org/abs/2502.05167) removes this cue and finds 11 of 13 models drop below 50% accuracy at 32K tokens. Do not use NIAH results to justify large context loads.
@@ -55,7 +55,7 @@ Size context budgets by task type, not a single percentage rule:
 - Reasoning-heavy tasks (multi-step planning, architecture): keep total context under 32K tokens where possible. The effective window can be 10-20% of the advertised limit.
 - Code generation and bug fixing: highly model-dependent. Test at your target context length before you commit to a budget.
 
-Claude Code's [auto-compaction triggers at ~95% of the window](https://code.claude.com/docs/en/sub-agents#auto-compaction). Compact well before that, especially for reasoning tasks. Towards Data Science describes [session-level "governed context" tactics for managing context rot in Claude Code](https://towardsdatascience.com/governed-context-managing-context-rot-in-claude-code/) — deliberately governing and refreshing what stays in the window before the token limit is reached, rather than waiting for auto-compaction to intervene.
+Claude Code's [auto-compaction triggers at ~95% of the window](https://code.claude.com/docs/en/sub-agents#auto-compaction). Compact well before that, especially for reasoning tasks. Towards Data Science describes [session-level "governed context" tactics for managing context rot in Claude Code](https://towardsdatascience.com/governed-context-managing-context-rot-in-claude-code/). These tactics deliberately govern and refresh what stays in the window before the token limit is reached, rather than waiting for auto-compaction to intervene.
 
 ## Context load is half the problem
 
@@ -77,14 +77,14 @@ graph TD
 
 ## Key Takeaways
 
-- Context rot is a gradient, not a cliff — but starts earlier than most teams expect.
-- Degradation onset is absolute (~32K-100K tokens), not proportional to window size.
-- Reasoning tasks degrade fastest (10-20% effective context); simple retrieval is most resilient.
-- NIAH benchmarks dramatically overstate real-world context utilization.
+- Treat degrading output as a context-budget signal, not an isolated mistake — quality erosion starts earlier than most teams expect.
+- Set the budget from the absolute range (roughly 32K to 100K tokens), then check it against your task type — a bigger advertised window does not buy proportionally more usable space.
+- When budgets are tight, trim reasoning-task context first — it reaches its ceiling well before retrieval or code tasks reach theirs.
+- Validate a context-window claim against a task-specific benchmark (RULER, NoLiMa, BABILong), not a NIAH headline number, before sizing a budget around it.
 
 ## Example
 
-A Claude 3.5 Sonnet deployment uses a 200K-token context window. The team loads a 60K-token system prompt (role definition, tool specs, skill definitions), 20K tokens of project instructions, and 15K of recent conversation history — 95K preloaded before the first task token.
+A Claude 3.5 Sonnet deployment uses a 200K-token context window. The team loads a 60K-token system prompt (role definition, tool specs, skill definitions), 20K tokens of project instructions, and 15K of recent conversation history. That is 95K preloaded before the first task token.
 
 The agent then takes a multi-step reasoning task (architectural review): 5K task instructions + 30K of file reads = 35K task tokens. Total context: 130K tokens.
 
@@ -105,15 +105,15 @@ The guidance to keep reasoning-task context under 32K tokens is conservative, an
 
 **Does the dumb zone only apply to what I put in the task prompt?**
 
-No. It applies to total context, not just task instructions: system prompts, skill definitions, reference files, and conversation history all count against the same window. A deployment that preloads a 60K-token system prompt, 20K of project instructions, and 15K of recent history has already spent 95K tokens before the first task token arrives.
+No. It applies to total context, not just task instructions: system prompts, skill definitions, reference files, and conversation history all count against the same window. A deployment that preloads a 60K-token system prompt, 20K of project instructions, and 15K of recent history spends 95K tokens before the first task token arrives.
 
 **Should I apply the 32K reasoning ceiling to every task?**
 
-No — it applies to reasoning-heavy work only. Applying it to retrieval-heavy or code-comprehension tasks discards legitimate capacity, since simple retrieval benchmarks show over 99% recall well past 32K and over-compacting adds needless summarization loss. Frontier models released since the benchmark generation also improve on the curve, so calibrate against the model version you actually deploy.
+No — it applies to reasoning-heavy work only. Applying it to retrieval-heavy or code-comprehension tasks discards legitimate capacity. Simple retrieval benchmarks show over 99% recall well past 32K, and over-compacting adds needless summarization loss. Frontier models released since the benchmark generation also improve on the curve, so calibrate against the model version you actually deploy.
 
 **Is compacting early always the safer choice?**
 
-No. Compressing a long context into a shorter summary discards detail, and multi-step tasks that depend on specific prior outputs can lose critical intermediate state. Claude Code's auto-compaction triggers at about 95%, and `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` lets teams lower it, but a blanket 50% setting adds fixed overhead on every session regardless of task type. Test compaction fidelity first.
+No. Compressing a long context into a shorter summary discards detail, and multi-step tasks that depend on specific prior outputs can lose critical intermediate state. Claude Code's auto-compaction triggers at about 95%, and `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE` lets teams lower it. But a blanket 50% setting adds fixed overhead on every session regardless of task type. Test compaction fidelity first.
 
 ## Related
 

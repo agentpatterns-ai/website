@@ -15,6 +15,7 @@ nav:
       - attention-latch.md
       - classical-se-patterns-agent-analogues.md
       - coding-agent-scope-expansion.md
+      - coding-agents-for-non-code-tasks.md
       - cognitive-reasoning-execution-separation.md
       - coala-decision-making-loop.md
       - coala-structured-action-space.md
@@ -66,6 +67,7 @@ nav:
       - handoff-skill-context-transfer.md
       - layered-mutability.md
       - ledger-agent-structured-task-state.md
+      - execution-state-ledger-coding-agents.md
       - epistemic-working-memory-multi-hop-reasoning.md
       - knowledge-graph-shared-memory.md
       - memory-retrieval-as-control.md

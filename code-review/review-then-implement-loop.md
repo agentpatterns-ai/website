@@ -1,7 +1,7 @@
 ---
 title: "Review-Then-Implement Loop for AI Agent Development"
 term: "Review-Then-Implement Loop"
-description: "Close the loop between AI code review and code generation — the reviewer identifies issues, a coding agent implements fixes, and a human reviews the result."
+description: "Close the loop between AI code review and code generation: the reviewer identifies issues, a coding agent implements fixes, and a human reviews the result."
 tags:
   - testing-verification
   - agent-design
@@ -52,7 +52,7 @@ The coding agent can target the existing PR branch or create a separate child PR
 
 ## Where the loop applies
 
-The pattern works best for mechanical fixes — review feedback that has a clear, unambiguous resolution:
+The pattern works best for mechanical fixes. It applies to review feedback that has a clear, unambiguous resolution:
 
 - Style violations with a known correct form
 - Missing null checks or error handling on identified code paths
@@ -60,7 +60,7 @@ The pattern works best for mechanical fixes — review feedback that has a clear
 - Type narrowing or assertion additions
 - Test coverage gaps where the test structure is straightforward
 
-Architectural feedback — "this should be split into two services" or "consider an event-driven approach here" — requires human judgment. The pattern's value comes from recognizing this boundary and automating only the mechanical side.
+Architectural feedback (for example, "this should be split into two services" or "consider an event-driven approach here") requires human judgment. The pattern's value comes from recognizing this boundary and automating only the mechanical side.
 
 ## Building the pattern in other tools
 
@@ -75,38 +75,38 @@ Cap automated fix attempts at one pass. If the coding agent's fix does not resol
 
 ## The CLI-flag variant: in-process auto-fix
 
-The dialog-mediated loop above keeps review and apply on separate surfaces. A tighter variant collapses them: the same agent run that scores the diff also writes the corrected version. Claude Code's `/code-review --fix` ships this shape at the CLI-tool tier, targeting "reuse, simplification, and efficiency suggestions" — classes where the fix has a known shape (`extract helper`, `remove unused`, `inline expression`) ([Claude Code 2026-05-27 changelog](https://code.claude.com/docs/en/changelog)). `/simplify` is the cleanup-only sibling that runs the reuse / simplification / efficiency / altitude review and applies the fixes, skipping the bug-hunting pass `/code-review --fix` carries. The architectural move mirrors `cargo clippy --fix` for compiler-class lints ([Clippy usage docs](https://doc.rust-lang.org/stable/clippy/usage.html)) and LSP code actions for editor-tier refactors via `codeAction/resolve` ([LSP 3.17 specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/)).
+The dialog-mediated loop above keeps review and apply on separate surfaces. A tighter variant collapses them: the same agent run that scores the diff also writes the corrected version. Claude Code's `/code-review --fix` ships this shape at the CLI-tool tier, targeting "reuse, simplification, and efficiency suggestions": classes where the fix has a known shape (`extract helper`, `remove unused`, `inline expression`) ([Claude Code 2026-05-27 changelog](https://code.claude.com/docs/en/changelog)). `/simplify` is the cleanup-only sibling that runs the reuse / simplification / efficiency / altitude review and applies the fixes, skipping the bug-hunting pass `/code-review --fix` carries. The architectural move mirrors `cargo clippy --fix` for compiler-class lints ([Clippy usage docs](https://doc.rust-lang.org/stable/clippy/usage.html)) and LSP code actions for editor-tier refactors via `codeAction/resolve` ([LSP 3.17 specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/)).
 
 Because there is no separate dispatch surface, three pre-conditions are load-bearing before wiring it in:
 
-- The rubric is calibrated on template-shaped findings. Applying against a freshly tuned heuristic with no false-positive baseline imports an unknown error rate as a working-tree mutation. The empirical floor: AI suggestions on 278,790 PRs were adopted at 16.6% versus 56.5% for humans, with "over half of unadopted suggestions from AI agents either incorrect or addressed through alternative fixes" ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)) — a meaningful fraction should not be applied at all.
+- The rubric is calibrated on template-shaped findings. Applying against a freshly tuned heuristic with no false-positive baseline imports an unknown error rate as a working-tree mutation. The empirical floor: AI suggestions on 278,790 PRs were adopted at 16.6% versus 56.5% for humans, with "over half of unadopted suggestions from AI agents either incorrect or addressed through alternative fixes" ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). A meaningful fraction should not be applied at all.
 - The working tree is clean, or the flag refuses. The precedent is `cargo fix`, which errors on a dirty tree and requires explicit `--allow-dirty` / `--allow-staged` / `--allow-no-vcs` flags ([Cargo documentation on DeepWiki](https://deepwiki.com/rust-lang/cargo/9.2-code-fixing)). Without that guard the apply step destroys the recoverable state needed to inspect or revert the patch.
 - Design-judgment findings are out of scope. Design disagreements are the dominant failure mode for unmerged agentic PRs (10 of 32 qualitatively analyzed in [arxiv:2602.19441](https://arxiv.org/abs/2602.19441)). A `--fix` invocation that surfaces "extract this into a service" and then writes the extraction has converted a judgment call into a done deal.
 
-The load-bearing claim is not the keystroke saving but that review and apply can share state safely — that the rubric's confidence on a finding transfers without re-inspection to confidence on the patch. This is the same amortization argument behind [Batched Suggestion Application](batched-suggestion-application.md), applied one tier higher: there the batch is the unit of human adjudication; here the rubric is. Idempotency is the rollback proxy — re-running `--fix` on a clean tree must be a no-op, otherwise the rubric is not stable enough to trust. Two runs against the same diff that produce different patches mean "the fix" is not a reproducible artifact unless the model and rubric are pinned.
+The load-bearing claim is not the keystroke saving but that review and apply can share state safely: the rubric's confidence on a finding transfers without re-inspection to confidence on the patch. This is the same amortization argument behind [Batched Suggestion Application](batched-suggestion-application.md), applied one tier higher: there the batch is the unit of human adjudication; here the rubric is. Idempotency is the rollback proxy: re-running `--fix` on a clean tree must be a no-op, otherwise the rubric is not stable enough to trust. Two runs against the same diff that produce different patches mean "the fix" is not a reproducible artifact unless the model and rubric are pinned.
 
 ## The cloud-agent variant: direct-apply review comments
 
-A third variant sits between the dialog loop and the CLI flag: the maintainer classifies agent-eligible comments and a cloud agent pushes one fix commit back to the existing PR branch, then re-requests review. GitHub shipped it on 2026-05-19 by renaming "Implement suggestion" to "Fix with Copilot" and adding a pre-action dialog with three controls — apply directly to the PR or open a new PR targeting the branch, model selection, and optional steering instructions ([GitHub Changelog, 19 May 2026](https://github.blog/changelog/2026-05-19-easily-apply-copilot-code-review-feedback-with-copilot-cloud-agent)). "Fix batch with Copilot" in the PR Overview comment dispatches a tick-selected set of review comments in one cloud agent run.
+A third variant sits between the dialog loop and the CLI flag: the maintainer classifies agent-eligible comments and a cloud agent pushes one fix commit back to the existing PR branch, then re-requests review. GitHub shipped it on 2026-05-19 by renaming "Implement suggestion" to "Fix with Copilot" and adding a pre-action dialog with three controls: apply directly to the PR or open a new PR targeting the branch, model selection, and optional steering instructions ([GitHub Changelog, 19 May 2026](https://github.blog/changelog/2026-05-19-easily-apply-copilot-code-review-feedback-with-copilot-cloud-agent)). "Fix batch with Copilot" in the PR Overview comment dispatches a tick-selected set of review comments in one cloud agent run.
 
 The contract is human-classifies, agent-applies, human-re-reviews, in four steps:
 
-1. Classify. The maintainer reads the Copilot review comments — tagged High / Medium / Low severity and grouped to remove duplicates ([GitHub Changelog, 12 May 2026](https://github.blog/changelog/2026-05-12-copilot-code-review-comment-experience-improvements)) — and decides which are agent-eligible.
+1. Classify. The maintainer reads the Copilot review comments, tagged High / Medium / Low severity and grouped to remove duplicates ([GitHub Changelog, 12 May 2026](https://github.blog/changelog/2026-05-12-copilot-code-review-comment-experience-improvements)), and decides which are agent-eligible.
 2. Dispatch. Fix with Copilot on a single comment, or Fix batch on a selection. The dialog selects direct-apply or spin-off PR.
 3. Push. The cloud agent applies the change in its sandbox and pushes one commit to the existing branch (or opens a separate fix PR targeting it) ([GitHub Changelog, 19 May 2026](https://github.blog/changelog/2026-05-19-easily-apply-copilot-code-review-feedback-with-copilot-cloud-agent)).
 4. Re-request review. The agent does not run a second pass on its own output.
 
 Three conditions keep the variant from eroding the merge-rate signal it protects:
 
-- Comment classification is human-set, not agent-inferred. The best published comment-intent classifier reaches 59.3% accuracy on a 1,828-comment dataset ([arXiv:2307.03852](https://arxiv.org/abs/2307.03852)) — automated routing would import a ~40% misclassification rate.
+- Comment classification is human-set, not agent-inferred. The best published comment-intent classifier reaches 59.3% accuracy on a 1,828-comment dataset ([arXiv:2307.03852](https://arxiv.org/abs/2307.03852)). Automated routing would import a ~40% misclassification rate.
 - The agent pushes a new commit, never a rebase or force push. Force pushes are the strongest negative predictor of merge across 33,596 agent-authored PRs ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441)). Reviewer engagement is the strongest positive predictor in the same cohort, so preserving the reviewer's branch context is what makes re-review tractable.
-- The contract terminates after one push. Re-triggering the agent on its own commits produces unbounded iteration — the same circuit-breaker problem documented for [one-click CI auto-fix](../workflows/one-click-ci-auto-fix.md).
+- The contract terminates after one push. Re-triggering the agent on its own commits produces unbounded iteration (the same circuit-breaker problem documented for [one-click CI auto-fix](../workflows/one-click-ci-auto-fix.md)).
 
 The cross-tool equivalent (anthropics/claude-code-action, invoked by `@claude` on a PR) pushes to the existing branch and updates a single status comment, and explicitly cannot submit formal PR reviews or approvals ([claude-code-action capabilities-and-limitations.md](https://github.com/anthropics/claude-code-action/blob/main/docs/capabilities-and-limitations.md)). Both vendors converge on this shape. Use direct-apply for unambiguous mechanical comments and spin-off PR for ambiguous or cross-cutting changes the reviewer needs to inspect as a discrete diff. One caution specific to the cloud-agent surface: agentic GitHub Actions that consume PR comments are an injection surface, with 519 such vulnerabilities found across 10,792 repos ([arXiv:2605.07135](https://arxiv.org/abs/2605.07135)). The human click is the load-bearing mitigation; policies that let non-maintainer comments auto-dispatch remove it.
 
 ## Limitations
 
-[Human-in-the-loop](../workflows/human-in-the-loop.md) is structural, not optional. You click "Fix with Copilot" — the agent does not decide on its own which findings to act on. You keep authority over which changes proceed.
+[Human-in-the-loop](../workflows/human-in-the-loop.md) is structural, not optional. You click "Fix with Copilot". The agent does not decide on its own which findings to act on. You keep authority over which changes proceed.
 
 Fix quality depends on review quality. If the reviewer misidentifies an issue or proposes a wrong fix, the coding agent implements the wrong change. Your review of the fix PR is the safety net.
 
@@ -158,15 +158,15 @@ Keep classification human-set. The best published comment-intent classifier reac
 
 **What has to be true before enabling an in-process `--fix` flag?**
 
-Three preconditions: the rubric is calibrated on template-shaped findings, the working tree is clean or the flag refuses (the `cargo fix` precedent), and design-judgment findings stay out of scope. Re-running the flag on a clean tree must be a no-op — idempotency is the rollback proxy, and two different patches for one diff mean the rubric is not stable enough to apply.
+Three preconditions: the rubric is calibrated on template-shaped findings, the working tree is clean or the flag refuses (the `cargo fix` precedent), and design-judgment findings stay out of scope. Re-running the flag on a clean tree must be a no-op: idempotency is the rollback proxy, and two different patches for one diff mean the rubric is not stable enough to apply.
 
 ## Key Takeaways
 
-- Connect AI code review to a coding agent so review findings can be implemented automatically for mechanical issues
-- GitHub Copilot's "Fix with Copilot" button applies review suggestions via the coding agent, collapsing the review-fix-re-review cycle
-- The pattern applies to mechanical fixes (style, missing checks, test gaps) — not architectural or design feedback
-- Your authority is preserved: you decide which suggestions to implement and review the result
-- Cap automated fix attempts at one pass — escalate to human review if the fix does not resolve cleanly
+- A finding is safe to route automatically only with two things present: a concrete proposed fix and a severity rated below architectural
+- Picking a child PR over landing on the existing branch keeps the review findings and the applied fix as two separate, inspectable diffs
+- The dividing line is whether the fix has one unambiguous resolution: style violations, missing checks, and test-coverage gaps qualify; splitting a service into two does not
+- The system never applies a fix on its own initiative: every "Fix with Copilot" click is a decision you make
+- Cap automated fix attempts at one pass and escalate to human review if the fix does not resolve cleanly: each extra pass risks new issues while masking the original
 
 ## Related
 

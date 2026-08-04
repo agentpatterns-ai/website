@@ -28,7 +28,7 @@ The cut point is [the decision](manual-compaction-dumb-zone-mitigation.md), not 
 
 ## Direction matters: up to vs from here
 
-The two options look symmetric but invert the semantics. `Summarize up to here` compresses everything before the selected message — recent work survives. `Summarize from here` compresses it onward — early context survives. Pick by which side you want to discard:
+The two options look symmetric but invert the semantics. `Summarize up to here` compresses everything before the selected message, and recent work survives. `Summarize from here` compresses it onward, and early context survives. Pick by which side you want to discard:
 
 | Session shape | Direction | Why |
 |---------------|-----------|-----|
@@ -61,7 +61,7 @@ The strongest counter is the Amp position: skip compaction, keep sessions short,
 
 A developer spends an hour exploring a bug across twelve source files, four test logs, and three speculative root-cause theories. They finally confirm the issue is a race condition in `PaymentService.process()` and write a passing regression test. Context is at ~70%.
 
-The fix needs the test failure mode, the relevant module, and the recent reasoning — not the twelve exploratory reads or the three discarded theories.
+The fix needs the test failure mode, the relevant module, and the recent reasoning. The twelve exploratory reads and three discarded theories are what selective summarization compresses away.
 
 In the Rewind menu, the developer selects the turn where the regression test passed and chooses **Summarize up to here**, with a focus directive:
 
@@ -77,11 +77,11 @@ If the developer had run `/compact` instead, the recent reasoning chain — incl
 
 ## Key Takeaways
 
-- Selective summarization compresses one side of a chosen turn; uniform compaction compresses everything indiscriminately.
-- The cut point is the decision — pick the last verified milestone, not the most recent natural break.
-- `Summarize up to here` preserves recent work; `Summarize from here` preserves early context. Wrong direction discards what you meant to keep.
-- Recent turns carry the agent's current working model — preserving them avoids the rediscovery cost that uniform compaction incurs.
-- Original messages remain in the session transcript; the cut is non-destructive at the file layer. `Restore conversation` recovers if the cut was wrong.
+- Match the direction to the session shape: `Summarize up to here` for exploration that resolved into focused work, `Summarize from here` when the setup matters and later turns wandered. There's no confirmation prompt, so the wrong pick costs exactly what you meant to protect.
+- Verify the post-cut conversation before resuming high-stakes work. Shipped bugs have summarized an entire session (issue #42293) or dropped pre-rewind messages (issue #47987) instead of cutting cleanly.
+- When early context is irrecoverable-on-loss, fork instead of summarizing: `claude --continue --fork-session` keeps full fidelity at zero compression cost, at the price of a second session to track.
+- Selective summarization is for sessions with no natural break. A session that already splits into short, separable pieces is better served by skipping compaction and branching.
+- Repeated cuts compound: each pass layers more lossy compression onto the earliest context. Treat a thrice-summarized session as unrecoverable outside `Restore conversation`.
 
 ## Related
 

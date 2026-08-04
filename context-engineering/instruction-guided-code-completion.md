@@ -14,11 +14,15 @@ maturity: emerging
 
 # Instruction-Guided Code Completion
 
-> Functional correctness and instruction adherence are independent capabilities — a model that completes code correctly may still ignore your structural, algorithmic, and scope constraints.
+> Functional correctness and instruction adherence are independent capabilities. A model that completes code correctly may still ignore your structural, algorithmic, and scope constraints.
 
 ## The problem
 
-Standard benchmarks measure whether generated code passes tests. HumanEval ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) scores functional correctness with unit tests and gives no signal on how the model implemented the solution. Developers routinely specify implementation constraints: a specific algorithm, a structural pattern, a limited completion scope. C3-Bench results show most models treat scale instructions as suggestions. Even advanced proprietary models score as low as 7% on scale-control tasks, while implementation-control adherence reaches only 50 to 60% even for top proprietary models.
+Standard benchmarks measure whether generated code passes tests.
+HumanEval ([Chen et al., 2021](https://arxiv.org/abs/2107.03374)) scores functional correctness with unit tests and gives no signal on how the model implemented the solution.
+Developers routinely specify implementation constraints: a specific algorithm, a structural pattern, a limited completion scope.
+C3-Bench results show most models treat scale instructions as suggestions.
+Even advanced proprietary models score as low as 7% on scale-control tasks, while implementation-control adherence reaches only 50 to 60% for top proprietary models.
 
 C3-Bench (arxiv [2601.15879](https://arxiv.org/abs/2601.15879)) is the first benchmark to measure this gap directly, testing 2,195 Python tasks across two instruction categories.
 
@@ -46,7 +50,7 @@ If your workflow involves guided completions (Cursor Composer, Copilot Chat, age
 
 ### Be explicit about implementation constraints
 
-Ablation studies show that removing instructions from prompts causes instruction-following scores to drop while functional correctness stays roughly the same. Models do respond to fine-grained guidance. Specify:
+C3-Bench's ablation studies show that removing instructions from prompts causes instruction-following scores to drop while functional correctness stays roughly the same. Models do respond to fine-grained guidance. Specify:
 
 - Algorithmic approach: "Use iterative depth-first search, not recursion"
 - Structural patterns: "Implement as a generator that yields results"
@@ -67,7 +71,7 @@ For workflows with heavy instruction guidance, which is the norm for agent-assis
 
 ### Training improves instruction-following
 
-Qwen2.5-Coder-32B-C3 (a fine-tuned Qwen2.5-Coder variant) improved ICC instruction-following from 28.8% to 52.5% and SCC from 16.9% to 80.7% using 200K synthetic instruction-completion pairs, while also improving functional correctness (ICC Pass@1 rose from 49.8% to 62.0%). This suggests instruction-following is a trainable capability, not an inherent limitation. Teams running local models can invest in instruction-tuning data to close the gap.
+Qwen2.5-Coder-32B-C3 (a fine-tuned Qwen2.5-Coder variant) improved ICC instruction-following from 28.8% to 52.5% and SCC from 16.9% to 80.7% using 200K synthetic instruction-completion pairs, while also improving functional correctness (ICC Pass@1 rose from 49.8% to 62.0%). This suggests instruction-following is a trainable capability. Teams running local models can invest in instruction-tuning data to close the gap.
 
 ## When this backfires
 
@@ -79,10 +83,10 @@ Instruction-guided completion increases prompt complexity and slows iteration. T
 
 ## Key Takeaways
 
-- Instruction adherence and functional correctness are orthogonal. A model that writes correct code may still ignore your structural and scope constraints.
-- Implementation instructions work; scale instructions do not. Tell models *how* to implement (algorithm, pattern, flow) but do not rely on telling them *how much* to generate.
+- Test instruction adherence separately from functional correctness: passing unit tests does not confirm the model followed your algorithm, structural, or scope constraints.
+- Implementation instructions work; scale instructions do not. Tell models how to implement (algorithm, pattern, flow); do not rely on telling them how much to generate.
 - Benchmark rankings do not predict instruction-following. Evaluate models on the specific capability your workflow requires.
-- Fine-tuning on instruction-completion pairs closes the gap. If you run local models, synthetic instruction data is an effective lever — it lifted scale-control adherence from 16.9% to 80.7% in the C3-Bench fine-tuning run above.
+- Fine-tuning on instruction-completion pairs closes the gap. If you run local models, synthetic instruction data is an effective lever. It lifted scale-control adherence from 16.9% to 80.7% in the C3-Bench fine-tuning run above.
 
 ## Example
 

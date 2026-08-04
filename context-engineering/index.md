@@ -55,6 +55,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Version-Controlled Agent Context](version-controlled-agent-context.md) — Commit, branch, merge, and read agent memory as a durable file tree so the abstraction level is chosen at read time; the retrieval path carries the benefit, not the checkpoints
 - [Elastic Context Orchestration](elastic-context-orchestration.md) — A per-turn vocabulary of context operations — Skip, Compress, Snippet, Rollback, Delete — that lets long-horizon search agents tier retention by current task relevance instead of accumulating raw trajectory
 - [Prompt Compression](prompt-compression.md) — Write instructions that convey the same guidance in fewer words; shorter, denser instructions improve agent compliance and reduce token cost
+- [Choosing a Compression Budget for Agent Control Context](control-context-compression-budget.md) — Set how far you compress an agent's always-loaded instructions from environment-verified task success rather than a token-reduction ratio, and keep semantic sections whole
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — Treat prompt caching as a structural constraint on prompt composition, with cross-provider economics and extended-TTL guidance folded in
 - [Static Content First for Cache Hits](static-content-first-caching.md) — Place static content at the beginning of the prompt and variable content at the end to maximize prompt cache hits and keep inference costs linear
 - [Prompt Cache Keepalive for Agent Pauses](prompt-cache-keepalive-agent-pauses.md) — Replay a cached prefix on a timer so it survives tool runs and approval waits, and the billing, pause-length, and interval conditions that decide whether it saves money or costs 4x more
@@ -105,6 +106,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Compositional Skill Routing](compositional-skill-routing.md) — Decompose a query into atomic sub-tasks, retrieve one skill per sub-task, then compose the plan — earns its cost only above hundreds of skills, where decomposition quality caps the system
 - [Skill Loadout Curation for Coding Agents](skill-loadout-curation.md) — Curate the skills and MCP servers an agent loads before a session; above roughly 30 skills the gain comes from removing colliding descriptions, not from saving tokens
 - [Per-Object Context Allocation](per-object-context-allocation.md) — Group retrieved fragments by canonical code object and cap each object's token share, so repeated views of one function stop displacing independent dependencies before the model sees them
+- [Organizational Context Layer for Agents](organizational-context-layer.md) — A shared context layer maps many source systems into one governed store that many agents query; deterministic identity and rebuildable index projections transfer well below that scale
 
 ## Error Handling & Drift Prevention
 

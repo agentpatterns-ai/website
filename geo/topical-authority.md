@@ -65,7 +65,9 @@ External knowledge infrastructure amplifies entity recognition:
 
 ## Why it works
 
-AI systems are trained on large corpora where authoritative sources appear repeatedly across many documents on the same subject. When a domain publishes many interconnected pages on one topic, its content appears more often in training data and retrieval indexes for that subject area, so a query that touches the domain is more likely to select it. RAG systems weight sources by topical relevance signals built from co-occurrence patterns: a source cited alongside a concept many times accumulates stronger association weights than a source cited once with high authority but little topic depth. Internal linking reinforces this by creating a navigable semantic graph that retrieval systems can traverse, surfacing related entities and strengthening the association between domain and topic.
+AI systems are trained on large corpora where authoritative sources appear repeatedly across many documents on the same subject. When a domain publishes many interconnected pages on one topic, its content appears more often in training data and retrieval indexes for that subject area. A query that touches the domain is more likely to select it. RAG systems weight sources by topical relevance signals built from co-occurrence patterns. A source cited alongside a concept many times accumulates stronger association weights than a source cited once with high authority but little topic depth.
+
+Internal linking reinforces this pattern. It creates a navigable semantic graph that retrieval systems can traverse. The graph surfaces related entities and strengthens the association between domain and topic.
 
 ## Diagram
 
@@ -106,7 +108,7 @@ Topical coverage feeds the "original research" and "entity reinforcement" inputs
 
 | Approach | Pros | Cons |
 |----------|------|------|
-| Deep coverage of one subtopic | Authoritative single page, faster to produce | Doesn't establish domain authority; vulnerable to single-page content drift |
+| Deep coverage of one subtopic | Authoritative single page, faster to produce | Does not establish domain authority; vulnerable to single-page content drift |
 | Broad shallow coverage | Establishes entity map quickly | Weak individual pages fail content quality thresholds; may not pass citation gate |
 | Systematic comprehensive coverage | Compounding citation gains; entity recognition across varied queries | High production investment; requires consistent taxonomy and internal link maintenance |
 
@@ -127,19 +129,19 @@ A single "GEO Overview" page covering all of the above would not achieve the sam
 
 **Why does broad topical coverage outperform a single high-quality page?**
 
-AI systems weight sources by how consistently they appear across a topic domain, not by individual page quality alone. Once a source clears the citation quality threshold, a niche-relevant site that publishes broadly across a subject outperforms a generic high-authority site that only touches the topic once, because coverage breadth signals a stronger domain-to-concept association than depth on one page does.
+AI systems weight sources by how consistently they appear across a topic domain, not by individual page quality alone. Once a source clears the citation quality threshold, a niche-relevant site that publishes broadly across a subject outperforms a generic high-authority site that only touches the topic once. Coverage breadth signals a stronger domain-to-concept association than depth on one page does.
 
 **Does internal linking actually affect topical authority, or is content quality enough on its own?**
 
-Yes — internal links function as a semantic graph connecting entities and topics, not just navigation. Topical authority requires content, information architecture, and internal linking together; strong content without link structure leaves the entity graph incomplete. Body links carry more weight than navigation or footer links ([iPullRank: How Does Internal Linking Impact Topical Authority?](https://ipullrank.com/internal-linking-topical-authority)).
+Yes. Internal links function as a semantic graph connecting entities and topics, not just navigation. Topical authority requires content, information architecture, and internal linking together. Strong content without link structure leaves the entity graph incomplete. Body links carry more weight than navigation or footer links ([iPullRank: How Does Internal Linking Impact Topical Authority?](https://ipullrank.com/internal-linking-topical-authority)).
 
 **What role does brand search volume play in AI citation?**
 
-Brand search volume — how often people search for your brand by name — predicts AI citation rates better than backlink counts do ([Digital Bloom 2025 AI Citation Report](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/)). Building topical authority raises brand recall by making your domain the recognized entity for a subject, and that recall is what drives citations, not link volume.
+Brand search volume (how often people search for your brand by name) predicts AI citation rates better than backlink counts do ([Digital Bloom 2025 AI Citation Report](https://thedigitalbloom.com/learn/2025-ai-citation-llm-visibility-report/)). Building topical authority raises brand recall by making your domain the recognized entity for a subject. That recall drives citations, not link volume.
 
 **Does topical authority require external signals like Wikidata or schema markup, or is internal content enough?**
 
-External infrastructure amplifies but doesn't replace internal coverage. A Wikidata entry with Label, Description, Aliases, and Website registers your site as a distinct entity, and schema markup that ties an About page, README, and API spec to the same Organization entry gives AI systems confidence to treat them as one source. Multi-platform consistency across GitHub and Stack Overflow further reinforces that entity mapping.
+External infrastructure amplifies but does not replace internal coverage. A Wikidata entry with Label, Description, Aliases, and Website registers your site as a distinct entity. Schema markup that ties an About page, README, and API spec to the same Organization entry gives AI systems confidence to treat them as one source. Multi-platform consistency across GitHub and Stack Overflow further reinforces that entity mapping.
 
 ## Related
 

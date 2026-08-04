@@ -12,7 +12,7 @@ tags:
   - skills
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-07-28
+last_reviewed: 2026-08-03
 maturity: adopted
 ---
 
@@ -20,7 +20,7 @@ maturity: adopted
 
 > A loadout is the skill set an agent carries into a session; past roughly 30 skills, extras shadow the right one and selection degrades.
 
-A loadout is everything an agent loads before you type a word: the name and description of every installed skill, plus the tools of every connected MCP server ([Breunig, 2026](https://www.dbreunig.com/2026/07/24/manage-your-agent-s-loadout-with-dr-skill.html)). Curating it means choosing what to carry in, not only what to author. The practice pays above roughly 30 skills, and it pays by removing descriptions that collide — not by saving tokens.
+A loadout is everything an agent loads before you type a word. It includes the name and description of every installed skill, plus the tools of every connected MCP server ([Breunig, 2026](https://www.dbreunig.com/2026/07/24/manage-your-agent-s-loadout-with-dr-skill.html)). Curating it means choosing what to carry in, beyond what you author. Candidates come from published catalogs too, such as AI Hero's index of its engineering skills ([AI Skills for Real Engineers](https://www.aihero.dev/skills-catalog)). The practice pays above roughly 30 skills. The gain comes from removing descriptions that collide, not from saving tokens.
 
 ## When curation pays
 
@@ -67,7 +67,7 @@ An automated alternative competes with curation directly: retrieve skills on dem
 
 ## Example
 
-Breunig's Hermes agent kept invoking the wrong note-taking skill. Inspecting the machine showed Hermes ships with nearly 100 skills. Deleting the stock note-taking skill helped but did not fully fix the behavior, because the remaining collisions were in descriptions he had not yet found — which is what motivated a scanner rather than more manual deletion ([Breunig, 2026](https://www.dbreunig.com/2026/07/24/manage-your-agent-s-loadout-with-dr-skill.html)).
+Breunig's Hermes agent kept invoking the wrong note-taking skill. Inspecting the machine showed Hermes ships with nearly 100 skills. Deleting the stock note-taking skill helped but did not fully fix the behavior, because the remaining collisions were in descriptions he had not yet found. That gap is what motivated a scanner rather than more manual deletion ([Breunig, 2026](https://www.dbreunig.com/2026/07/24/manage-your-agent-s-loadout-with-dr-skill.html)).
 
 The corrective sequence is diagnostic, not subtractive:
 

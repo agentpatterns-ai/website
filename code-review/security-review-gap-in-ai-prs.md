@@ -1,7 +1,7 @@
 ---
 title: "The Security Review Gap in AI-Authored PRs"
 term: "Security Review Gap"
-description: "Agent-authored security PRs cluster around six CWE categories, yet 52% merge — reviewer heuristics calibrated for human PRs systematically miss AI-specific failure modes."
+description: "Agent-authored security PRs cluster around six CWE categories, yet 52% merge. Reviewer heuristics calibrated for human PRs systematically miss AI-specific failure modes."
 tags:
   - code-review
   - security
@@ -39,7 +39,7 @@ LLM-generated regexes reproduce polynomial-backtracking patterns from their trai
 
 ## Flawed patches still merge
 
-Of 675 security-related PRs, 52.4% merged, 32.4% closed unmerged, 15.1% remained open. 15.4% contained detected CWEs — review does not filter them out ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965)). Of 219 rejections, only 1.8% cited distrust in AI-written code. Most were procedural:
+Of 675 security-related PRs, 52.4% merged, 32.4% closed unmerged, 15.1% remained open. 15.4% contained detected CWEs. Review does not filter them out ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965)). Of 219 rejections, only 1.8% cited distrust in AI-written code. Most were procedural:
 
 | Reason | Share |
 |---|---|
@@ -52,21 +52,21 @@ Of 675 security-related PRs, 52.4% merged, 32.4% closed unmerged, 15.1% remained
 | Code style / formatting | 3.7% (new category) |
 | Distrust in AI-written code | 1.8% |
 
-Reviewers reject on inactivity, test gaps, and style — not on SAST-detectable CWEs. The authors call this an imbalance where "serious flaws pass review while minor issues cause rejection" ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965)).
+Reviewers reject on inactivity, test gaps, and style, not on SAST-detectable CWEs. The authors call this an imbalance where "serious flaws pass review while minor issues cause rejection" ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965)).
 
 ## Commit message quality stops predicting acceptance
 
-For human PRs, commit-message quality correlates with acceptance and speed. For agent PRs, the relationship disappears ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965)):
+Commit-message quality correlates with acceptance and speed for human PRs. For agent PRs, the relationship disappears ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965)):
 
 - High-quality messages: 45.6% acceptance
 - Low-quality messages: 58.0% acceptance
 - Mean time-to-close: 4.31 days (high) and 4.46 days (low)
 
-Pseudo-R² of 0.23 on the logistic regression confirms limited predictive power. Reviewers rely on different signals for agent PRs — project-level trust, CI pass, surface correctness — none of which track security behavior.
+Pseudo-R² of 0.23 on the logistic regression confirms limited predictive power. Reviewers rely on different signals for agent PRs (project-level trust, CI pass, surface correctness), none of which track security behavior.
 
 ## Why review heuristics fail on agent PRs
 
-Reviewer proxies (message care, test scaffolding, change size, contributor history) assume a careful author produces careful code. Agent PRs break the link: a CI-passing patch with a detailed message still ships a polynomial regex. A regression on 33,596 agent-authored PRs shows reviewer engagement as the strongest single merge predictor ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441); see [Agent-Authored PR Integration](agent-authored-pr-integration.md)) — a social signal that under-weights security analysis.
+Reviewer proxies (message care, test scaffolding, change size, contributor history) assume a careful author produces careful code. Agent PRs break the link: a CI-passing patch with a detailed message still ships a polynomial regex. A regression on 33,596 agent-authored PRs shows reviewer engagement as the strongest single merge predictor ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441); see [Agent-Authored PR Integration](agent-authored-pr-integration.md)), a social signal that under-weights security analysis.
 
 ## What to change
 
@@ -90,15 +90,15 @@ An agent PR adds an email validator:
 EMAIL_RE = re.compile(r"^([a-zA-Z0-9_\.\-])+@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$")
 ```
 
-Detailed commit message, passing tests, clean CI — a human-PR heuristic approves. The nested quantifiers `(...)+` over classes that overlap on `-` produce exponential backtracking on crafted input, a textbook CWE-1333 ([OWASP ReDoS](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS)). Correct review puts a ReDoS analyzer as a blocking CI gate on any PR touching `re.compile`, which surfaces the finding. The reviewer rewrites without nested quantifiers, or switches to a linear-time engine like `google/re2`. The commit message and test suite would have missed it.
+A human-PR heuristic approves on a detailed commit message, passing tests, and clean CI. The nested quantifiers `(...)+` over classes that overlap on `-` produce exponential backtracking on crafted input, a textbook CWE-1333 ([OWASP ReDoS](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS)). Correct review puts a ReDoS analyzer as a blocking CI gate on any PR touching `re.compile`, which surfaces the finding. The reviewer rewrites without nested quantifiers, or switches to a linear-time engine like `google/re2`. The commit message and test suite would have missed it.
 
 ## Key Takeaways
 
-- Six CWE categories cover 80%+ of weaknesses in agent-authored security PRs — target SAST rules at this set rather than the full CWE Top 25
-- 52.4% of security-related AI PRs merge, with only 1.8% of rejections citing distrust in AI code — the review process does not systematically filter on security
-- Commit message quality, a strong human-PR signal, has no predictive value for agent PR acceptance or security outcomes
-- Procedural rejections (unknown, inactive) account for more than half of rejected PRs — closure is not security confirmation
-- Treat agent PRs touching regex, shell, paths, format strings, HTML output, or credentials as high-risk paths requiring adversarial review, regardless of surface quality
+- Six CWE categories cover 80%+ of weaknesses in agent-authored security PRs: target SAST rules at this set rather than the full CWE Top 25
+- 52.4% of security-related AI PRs merge, and only 1.8% of rejections cite distrust in AI code: do not treat a merge, or the absence of a distrust-based rejection, as evidence a PR is secure
+- Commit message quality, a strong human-PR signal, has no predictive value for agent PR acceptance or security outcomes: do not use message quality or CI status as a review-priority signal for agent-authored PRs
+- Procedural rejections (unknown, inactive) account for more than half of rejected PRs: closure is not security confirmation
+- Treat agent PRs touching regex, shell, paths, format strings, HTML output, or credentials as high-risk paths that require adversarial review and a blocking SAST gate, regardless of surface quality
 
 ## Related
 

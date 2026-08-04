@@ -46,13 +46,13 @@ When most comments are noise, developers stop acting on them. PRs stall and are 
 
 ### Adoption rate baseline
 
-This finding matches adoption rate data from a separate study of 278,790 code reviews: developers adopt AI suggestions at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)). Low adoption follows directly from a low signal ratio — if most comments are not actionable, most comments are not adopted. The same low uptake appears at the level of individual comments in [agentic review comment acceptance](agentic-review-comment-acceptance.md).
+This finding matches adoption rate data from a separate study of 278,790 code reviews: developers adopt AI suggestions at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)). Low adoption follows from a low signal ratio — if most comments are not actionable, most comments are not adopted. The same low uptake appears at the level of individual comments in [agentic review comment acceptance](agentic-review-comment-acceptance.md).
 
 ## What mixed composition recovers
 
 Human-dominated mixed reviews (CRA plus at least one human reviewer) reach a 67.99% merge rate — nearly the same as human-only. Adding a single human reviewer to a CRA-reviewed PR recovers most of the merge rate deficit.
 
-The paper does not identify the mechanism, but the data holds whatever any single comment says: reviewer composition predicts merge outcomes on its own.
+The paper does not identify the mechanism. Regardless of what any single comment says, reviewer composition alone predicts merge outcomes.
 
 ## Practical implications
 
@@ -66,11 +66,11 @@ Mixed composition is the practical baseline. CRA-first review with required huma
 
 ## Key Takeaways
 
-- CRA-only reviewed PRs merge at 45.20% versus 68.37% for human-only — a 23-point gap driven by low signal ratios
-- 60.2% of closed CRA-only PRs receive fewer than 30% actionable comments, causing abandonment
+- A CRA-only reviewed PR merges at roughly two-thirds the rate of a human-reviewed one (45.20% vs. 68.37%) — treat CRA-only review as a partial pass that still needs a human check
+- 60.2% of closed CRA-only PRs had fewer than 30% actionable comments — audit a CRA's comment history alongside its pass/fail verdict before trusting an approval
 - Signal ratio is the lever, not vendor choice: 12 of 13 CRAs sit below 60%, so constraining what the agent may comment on moves the number further than switching tools
 - One human reviewer is the cheapest available fix, recovering the merge rate to 67.99%. Route CRA output to a person rather than trying to raise CRA autonomy
-- Industry claims of 80% CRA self-sufficiency are not supported by empirical merge rate data
+- Do not size human review headcount off vendor claims of 80% CRA self-sufficiency — plan review capacity from measured merge outcomes instead
 
 ## When this backfires
 

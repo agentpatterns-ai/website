@@ -41,17 +41,17 @@ Smaller-scale versions of this loop appear in daily coding agent workflows:
 
 Anthropic's multi-agent research documentation notes that "people testing agents find edge cases that evals miss" and recommends you "[c]alibrate against humans: Frequently compare LLM judge outputs against expert human judgment." [Source: [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system)]
 
-Broken graders compound the problem. In the CORE-Bench case, rigid string-match grading penalized correct answers — "96.12" failed against the expected "96.124991" — and scores jumped from 42% to 95% after the graders were fixed. A pass rate that reflects a broken grader, not agent capability, is what treating unvalidated evaluation infrastructure as ground truth produces. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
+Broken graders compound the problem. In the CORE-Bench case, rigid string-match grading penalized correct answers — "96.12" failed against the expected "96.124991" — and scores jumped from 42% to 95% after the graders were fixed. Treating unvalidated evaluation infrastructure as ground truth produces a pass rate that reflects a broken grader, not agent capability. [Source: [Demystifying Evals for AI Agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)]
 
 ### Environmental feedback is the correct ground truth
 
-Anthropic's agent design guidance recommends that agents gain "ground truth from the environment at each step (such as tool call results or code execution)" — not from AI-generated assessments. [Source: [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)]
+Anthropic's agent design guidance recommends that agents gain "ground truth from the environment at each step (such as tool call results or code execution)" rather than from AI-generated assessments. [Source: [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)]
 
 The agentic handbook anchors reflection loops to "objective signals: tests, lints, schema validation, compilation, eval rubric" and notes explicitly that "self-critique without objective checks is also brittle — models can rationalize." [Source: [The Agentic AI Handbook](https://www.nibzard.com/agentic-handbook)]
 
 ## The scope of the problem
 
-| Artifact | Synthetic Ground Truth Risk |
+| Artifact | Synthetic ground truth risk |
 |----------|----------------------------|
 | Test suite | Tests pass when code matches model priors, not when code is correct |
 | Eval rubric | Scores plausibility; misses edge cases humans catch |
@@ -63,7 +63,7 @@ The agentic handbook anchors reflection loops to "objective signals: tests, lint
 
 A team building a coding agent uses Claude to generate an eval suite covering 50 representative tasks. The evals look thorough. The team ships based on a 90% pass rate.
 
-Six months later, users report failures on tasks that the evals don't cover. Post-mortem reveals the 50 eval tasks reflected the model's idea of "representative coding problems" — skewed toward patterns common in its training data, under-representing the team's actual workload.
+Six months later, users report failures on tasks that the evals do not cover. Post-mortem reveals the 50 eval tasks reflected the model's idea of "representative coding problems" — skewed toward patterns common in its training data, under-representing the team's actual workload.
 
 The evals measured what the model found plausible. They never measured what the users needed.
 

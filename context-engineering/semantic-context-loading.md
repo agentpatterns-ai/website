@@ -41,9 +41,9 @@ LSP powers IDE features like "Go to Definition" and "Find All References." An ag
 
 ## Serena: LSP for agents
 
-Serena is an open-source MCP server that provides semantic code retrieval and editing tools across 40+ languages via a language server backend ([github.com/oraios/serena](https://github.com/oraios/serena)). The pattern applies to any LSP-compatible tooling — what matters is the capability, not the specific implementation.
+Serena is an open-source MCP server that provides semantic code retrieval and editing tools across 40+ languages via a language server backend ([github.com/oraios/serena](https://github.com/oraios/serena)). The pattern applies to any LSP-compatible tooling. What matters is the capability, not the specific implementation.
 
-Agents using LSP-backed tools can answer: where is this type defined? what implements this interface? what calls this function (`findReferences`)? — without loading any file into context until they have a specific location to read.
+LSP-backed tools let agents ask where a type is defined, what implements an interface, or what calls a function, without loading any file into context until they have a specific location to read.
 
 ## Comparison with native indexing
 
@@ -66,15 +66,15 @@ Precision versus breadth. Semantic queries return exactly what you ask for. If t
 
 Language coverage. TypeScript, Python, Go, and Rust have strong LSP implementations. Less common languages may have limited or no support.
 
-Protocol-level critique. LSP was designed for editors, not agents. Armin Ronacher argues that LSP forces agents to chain many atomic calls (open file, calculate offset, request definition, parse URI, extract snippet), and that agents often skip LSP entirely when working from doc snippets or ad-hoc reads ([A Language For Agents](https://lucumr.pocoo.org/2026/2/9/a-language-for-agents/)). The LSAP project layers higher-level, agent-native operations on top of LSP to avoid this overhead ([LSAP on GitHub](https://github.com/lsp-client/LSAP)). Treat LSP-backed retrieval as a floor — wrappers like Serena or LSAP-style protocols carry most of the benefit.
+Protocol-level critique. LSP was designed for editors, not agents. Armin Ronacher argues that LSP forces agents to chain many atomic calls (open file, calculate offset, request definition, parse URI, extract snippet), and that agents often skip LSP entirely when working from doc snippets or ad-hoc reads ([A Language For Agents](https://lucumr.pocoo.org/2026/2/9/a-language-for-agents/)). The LSAP project layers higher-level, agent-native operations on top of LSP to avoid this overhead ([LSAP on GitHub](https://github.com/lsp-client/LSAP)). Treat LSP-backed retrieval as a floor. Wrappers like Serena or LSAP-style protocols carry most of the benefit.
 
-Grep is the baseline to beat, not file reading. The realistic alternative most coding agents already default to is not naive whole-file reading — it is well-aimed `grep` or `ripgrep`. Claude Code, Cursor, Codex CLI, and similar agents lean on text search as their primary code-retrieval backbone, and a controlled comparison found grep-based retrieval generally more accurate than vector retrieval for agentic search ([_Is Grep All You Need?_, arXiv 2605.15184](https://arxiv.org/abs/2605.15184)). Grep needs zero infrastructure and never returns stale results. The honest case for LSP-backed loading is high-precision, symbol-grounded confirmation (exact definition site, every reference, the real type) on top of grep's broad exploratory sweep — not a replacement for it. If a single grep pins the symbol, the LSP round-trip rarely pays for itself.
+Grep is the baseline to beat, not file reading. The realistic alternative most coding agents already default to is well-aimed `grep` or `ripgrep`, not naive whole-file reading. Claude Code, Cursor, Codex CLI, and similar agents lean on text search as their primary code-retrieval backbone, and a controlled comparison found grep-based retrieval generally more accurate than vector retrieval for agentic search ([_Is Grep All You Need?_, arXiv 2605.15184](https://arxiv.org/abs/2605.15184)). Grep needs zero infrastructure and never returns stale results. The honest case for LSP-backed loading is high-precision, symbol-grounded confirmation (exact definition site, every reference, the real type) on top of grep's broad exploratory sweep, not a replacement for it. If a single grep pins the symbol, the LSP round-trip rarely pays for itself.
 
 ## Example
 
 Contrast between file-based and LSP-backed context loading for the same navigation task using Serena's MCP tools in Claude Code.
 
-File-based approach — loads the entire module to find one function signature:
+File-based approach, which loads the entire module to find one function signature:
 
 ```bash
 # Agent reads the full file to locate AuthService
@@ -82,14 +82,14 @@ File-based approach — loads the entire module to find one function signature:
 cat src/auth/auth_service.py
 ```
 
-LSP-backed approach — queries only the relevant symbol:
+LSP-backed approach, which queries only the relevant symbol:
 
 ```
 # Agent calls Serena's find_symbol tool
 mcp__plugin_serena_serena__find_symbol: {"symbol_name": "AuthService", "path": "src/"}
 ```
 
-The LSP query returns the class definition, its constructor signature, and public method names — not the full file. For a 400-line module, this might return 20–30 lines of directly relevant symbols instead of the complete source.
+The LSP query returns the class definition, its constructor signature, and public method names, not the full file. For a 400-line module, this might return 20–30 lines of directly relevant symbols instead of the complete source.
 
 Chaining queries for cross-file navigation avoids loading any intermediate files:
 
@@ -101,14 +101,14 @@ mcp__plugin_serena_serena__find_referencing_symbols: {
 }
 ```
 
-This returns call sites across the codebase with their file paths and line numbers. The agent can then read only the specific lines it needs — rather than every file that might reference `AuthService`.
+This returns call sites across the codebase with their file paths and line numbers. The agent can then read only the specific lines it needs, rather than every file that might reference `AuthService`.
 
 ## Key Takeaways
 
-- LSP-backed tools let agents retrieve symbols, references, and type hierarchies instead of reading entire files, reducing context consumption proportionally.
-- The approach is most effective for large codebases with clear navigation targets; exploratory tasks still benefit from file reading.
-- Setup requires a running language server; LSP quality and coverage vary by language (TypeScript, Python, Go, and Rust have the strongest support).
-- The same pattern applies to any LSP-compatible tooling — the capability (semantic queries) matters more than the specific tool.
+- Default to grep or ripgrep for exploratory search; reach for LSP-backed queries only once a specific symbol is the target. The round-trip rarely pays off otherwise.
+- Setup cost gates the payoff: without a running language server for the codebase's language, LSP-backed queries are not available, regardless of codebase size.
+- Check language support before planning a workflow around LSP-backed queries. Coverage is strongest for TypeScript, Python, Go, and Rust, and thinner or absent elsewhere.
+- Serena is one implementation, not the requirement. Any MCP server or IDE feature backed by LSP semantics gets the same context-cost benefit.
 
 ## Related
 

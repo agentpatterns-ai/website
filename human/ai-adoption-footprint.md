@@ -33,7 +33,7 @@ graph LR
     style C fill:#2d5a2d,stroke:#4a4a4a,color:#e0e0e0
 ```
 
-The exact percentages are one practitioner's estimate; the segmentation pattern is corroborated by independent measurement.
+The exact percentages are one practitioner's estimate; independent measurement corroborates the segmentation pattern.
 
 ## What the segmented data shows
 

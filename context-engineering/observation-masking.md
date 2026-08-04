@@ -1,7 +1,7 @@
 ---
 title: "Observation Masking: Filter Tool Outputs from Context"
 term: "Observation Masking"
-description: "Observation masking removes processed tool outputs from conversation history to keep the context window lean, replacing each output with a one-line summary."
+description: "Observation masking strips processed tool outputs from conversation history and replaces each with a one-line summary to keep the context window lean."
 aliases:
   - Tool Output Masking
   - Context Masking
@@ -40,7 +40,7 @@ The retention decision turns on whether the agent will need to reference the too
 | API response (used in one step) | Mask after use |
 | Reference documentation (checked repeatedly) | Retain |
 
-The heuristic is simple. Once the agent has extracted what it needs from the tool output and expressed it as a decision or artifact, the raw output is no longer needed.
+Once the agent has extracted what it needs from the tool output and expressed it as a decision or artifact, the raw output is no longer needed.
 
 When you cannot make that call confidently, [addressable recall compaction](addressable-recall-compaction.md) removes the need to: it swaps the observation for a citation the agent can dereference, so a wrong masking decision stays recoverable.
 
@@ -57,7 +57,7 @@ The one-line replacement preserves traceability, so the agent can see what it co
 
 ## Why it works
 
-Retaining stale tool outputs degrades inference quality two ways. First, transformer attention is quadratic: adding tokens raises the cost of every later call and spreads attention thinner across all token pairs ([context rot research, Chroma 2025](https://www.trychroma.com/research/context-rot)). Second, outdated content that still looks relevant acts as a distractor. A file read that has since been edited is one example. Models attend to it even when it no longer reflects the current state, which skews generation toward stale assumptions. Removing processed outputs cuts both the cost and the distraction, and it keeps the synthesized result that the agent actually needs.
+Retaining stale tool outputs degrades inference quality two ways. Transformer attention is quadratic, so adding tokens raises the cost of every later call and spreads attention thinner across all token pairs ([context rot research, Chroma 2025](https://www.trychroma.com/research/context-rot)). Outdated content that still looks relevant also acts as a distractor: a file read that has since been edited is one example, and models attend to it even when it no longer reflects the current state, which skews generation toward stale assumptions. Removing processed outputs cuts both the cost and the distraction, and it keeps the synthesized result that the agent needs.
 
 ## What masking does not address
 
@@ -125,14 +125,14 @@ def summarise(tool_name: str, tool_output: str) -> str:
     ...
 ```
 
-The token saving from masking `read_file` and `edit_file` in this example is roughly 1,100 tokens — the cost of re-including stale content in every subsequent inference call for the remainder of the session.
+The token saving from masking `read_file` and `edit_file` in this example is roughly 1,100 tokens: the cost of re-including stale content in every subsequent inference call for the remainder of the session.
 
 ## Key Takeaways
 
-- Most tool outputs are referenced once and then abandoned — they account for roughly 84% of trajectory content in SE benchmarks — so masking them prevents unnecessary context accumulation.
-- Retain tool outputs when the agent will query them repeatedly; mask them after single-use synthesis.
-- Apply masking at the conversation history management layer, before each inference call.
-- Replace masked outputs with a brief summary line to preserve traceability without the full token cost.
+- Mask a tool output only after the agent has synthesized it into a decision, edit, or plan it will not re-check; an unverified test fix still counts as ground truth, so retain it until the fix lands.
+- Keep frequently re-queried reference material, such as schema definitions or API contracts, off the masking list: masking it forces the agent to re-read or hallucinate the content later.
+- Hard masking reduces solve rate by about 10% for models with extended thinking enabled, so prefer LLM-based summarization over outright deletion when reasoning traces run long.
+- The savings case is strongest for software-engineering agents, where tool outputs dominate the trajectory; in domains with short outputs and long reasoning, weigh the smaller payoff against the higher risk of over-masking.
 
 ## Related
 

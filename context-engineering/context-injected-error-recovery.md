@@ -1,7 +1,7 @@
 ---
 title: "Context-Injected Error Recovery for AI Agent Development"
 term: "Context-Injected Error Recovery"
-description: "When a tool call fails, inject structured error context — the error message, previous attempts, and targeted recovery suggestions — into the next inference call to prevent retry loops."
+description: "When a tool call fails, inject structured error context (the error message, previous attempts, and targeted recovery suggestions) into the next inference call to prevent retry loops."
 aliases:
   - error context injection
   - structured error recovery
@@ -17,7 +17,7 @@ maturity: emerging
 
 # Context-Injected Error Recovery
 
-> When a tool call fails, inject structured error context — the error message, previous attempts, and targeted recovery suggestions — into the next inference call to prevent retry loops before they form.
+> When a tool call fails, inject structured error context (the error, prior attempts, and recovery suggestions) into the next inference call to prevent retry loops.
 
 ## The problem: blind retries
 
@@ -54,7 +54,7 @@ Recovery suggestions:
   - The file may have been moved or renamed earlier in this session
 ```
 
-The key property is structure. The model receives not just what went wrong, but what has already been tried and which alternatives are still open ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)).
+The key property is structure: the model receives what went wrong, what has already been tried, and which alternatives are still open ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)).
 
 ## Impact
 
@@ -156,10 +156,10 @@ The harness calls `build_context` after each tool failure and appends the return
 
 ## Key Takeaways
 
-- Inject structured error context — not just the raw error — into the next inference call after a tool failure
-- Include the error message, previous attempts, and targeted recovery suggestions in a single block
-- This prevents retry loops at the source, reducing them by 25–40%
-- Error recovery complements loop detection: recovery prevents loops, detection catches the ones that still form
+- Build the structured context block from the error, prior attempts, and recovery hints, and inject it into the next inference call immediately after the tool failure
+- Key the per-session failure log to operation and target, not just error type, so previous-attempt entries surface only for the exact call that is failing again
+- The 25–40% reduction comes from removing the first two to three redundant retries that repeat a failed approach, not from later-stage gains
+- Loop detection stays required even after adding error recovery — recovery only lightens its load, since enriched context does not catch every case
 - Recovery suggestions are static mappings, not LLM-generated — the harness does the enrichment deterministically
 
 ## Related

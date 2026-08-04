@@ -57,7 +57,7 @@ The trade-off inverts under five conditions:
 4. Domain-rich codebases. Code where identifiers encode business semantics — financial, medical, legal — degrades hardest when names are shortened ([Liu et al., 2025](https://arxiv.org/abs/2510.03178)).
 5. Iterative multi-turn agents. Agents that re-read code across turns compound the accuracy loss each turn rather than absorbing it once.
 
-For most production stacks the right baseline is unminified code plus orthogonal levers — prompt caching, structural transforms that preserve semantics ([Token-Efficient Code Generation](../token-engineering/token-efficient-code-generation.md)), and field projection at tool boundaries — which buy tokens without the accuracy gamble.
+For most production stacks, the right baseline is unminified code backed by orthogonal levers: prompt caching, structural transforms that preserve semantics ([Token-Efficient Code Generation](../token-engineering/token-efficient-code-generation.md)), and field projection at tool boundaries. These levers save tokens without the accuracy trade-off minification forces.
 
 ## Example
 

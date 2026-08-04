@@ -20,7 +20,7 @@ maturity: emerging
 
 Version-controlled agent context gives memory the operations of a version control system: commit a milestone, branch to try an alternative, merge the useful result back, and read the store at whatever abstraction level the current step needs. The store is plain files on disk, so a fresh session recovers state the way a new engineer reads git history ([Git Context Controller, arxiv 2508.00031](https://arxiv.org/abs/2508.00031)).
 
-The gains do not come from checkpointing, which is why the condition leads. In the source paper's ablation, adding a roadmap and commit records moved SWE-bench Verified resolution from 67.2% to 69.1%; adding fine-grained logs plus the read operation that retrieves them moved it from 69.1% to 75.3% ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031)). Skip the read path and you land in the smaller number.
+The gains do not come from checkpointing, which is why the condition leads. In the source paper's ablation, adding a roadmap and commit records moved SWE-bench Verified resolution from 67.2% to 69.1%. Adding fine-grained logs plus the read operation that retrieves them moved it from 69.1% to 75.3% ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031)). Skip the read path and you land in the smaller number.
 
 ## When it pays
 
@@ -41,13 +41,13 @@ The paper defines four operations over a plain-text store ([arxiv 2508.00031](ht
 | Merge | Folds a branch summary back into the main roadmap | The alternative resolved and is worth keeping |
 | Read | Returns the store at a chosen level: roadmap, commit, raw log, or metadata | The agent needs orientation, or one specific earlier detail |
 
-The layout is a directory of markdown and YAML: a top-level roadmap file, and per-branch files holding the commit log, the fine-grained action trace, and structural metadata such as file layout and dependencies ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031)). Nothing in it requires a database.
+The layout is a directory of markdown and YAML. It has a top-level roadmap file, plus per-branch files holding the commit log, the fine-grained action trace, and structural metadata such as file layout and dependencies ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031)). Nothing in it requires a database.
 
 ## Why it works
 
-Compaction is a one-shot lossy decision made before you know which details will matter. Anthropic names the failure directly: "overly aggressive compaction can result in the loss of subtle but critical context whose importance only becomes apparent later" ([Anthropic: effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). A summary fixes one abstraction level at write time. A structured store defers that choice to read time, so the agent pulls the roadmap for orientation and the raw trace for a specific earlier detail.
+Compaction is a one-shot lossy decision made before you know which details will matter. Anthropic names the failure directly: "overly aggressive compaction can result in the loss of subtle but critical context whose importance only becomes apparent later" ([Anthropic: effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). A summary fixes one abstraction level at write time. A structured store defers that choice to read time. The agent pulls the roadmap for orientation and the raw trace for a specific earlier detail.
 
-That is why the ablation credits retrieval rather than checkpointing or branching. The same mechanism explains the cross-session claim: a durable file tree lets a fresh agent recover state without inheriting an earlier author's compression choices. Anthropic's long-running-agent harness reaches the same shape from practice, starting each session by reading git logs and a progress file "to get up to speed on what was recently worked on" ([Anthropic: effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
+That is why the ablation credits retrieval rather than checkpointing or branching. The same mechanism explains the cross-session claim: a durable file tree lets a fresh agent recover state without inheriting an earlier author's compression choices. Anthropic's long-running-agent harness reaches the same shape from practice. It starts each session by reading git logs and a progress file "to get up to speed on what was recently worked on" ([Anthropic: effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).
 
 ## When this backfires
 
@@ -73,7 +73,7 @@ The paper's own store is four plain files, and the read path — not the commit 
       metadata.yaml          # file structures, dependencies, configs
 ```
 
-The agent starts a session by reading `main.md` alone. It opens `commit.md` when the roadmap is too coarse to place the current step, and `log.md` only when it needs an exact earlier command, error, or decision that a summary dropped. Three depths, and the choice made at read time.
+The agent starts a session by reading `main.md` alone. It opens `commit.md` when the roadmap is too coarse to place the current step, and `log.md` only when it needs an exact earlier command, error, or decision that a summary dropped. That gives three depths, and the agent chooses among them at read time.
 
 A second directory under `branches/` is the optional fourth step. Keep it sequential — one agent, one trace at a time — so the merge does not have to reconcile assumptions two contexts never shared ([Cognition: Don't Build Multi-Agents](https://cognition.com/blog/dont-build-multi-agents)).
 

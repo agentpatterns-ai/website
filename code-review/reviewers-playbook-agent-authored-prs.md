@@ -1,7 +1,7 @@
 ---
 title: "Reviewer's Playbook for Agent-Authored Pull Requests"
 term: "Reviewer's Playbook"
-description: "A time-boxed inspection priority order for reviewing agent-authored PRs — what to read first, where defects hide, and the evidence test that catches fabricated fixes."
+description: "A time-boxed inspection priority order for reviewing agent-authored PRs: what to read first, where defects hide, and the evidence test that catches fabricated fixes."
 tags:
   - code-review
   - workflows
@@ -14,7 +14,7 @@ maturity: established
 
 > A time-boxed inspection priority order for reviewing agent-authored PRs — CI changes first, then duplicated utilities, then the critical path, then evidence.
 
-Reviewing an agent-authored pull request verifies context, not correctness — the agent has already produced code that parses and usually passes its own tests. The defects that ship are the ones the agent could not catch itself: weakened CI, reimplemented utilities, boundary cases the happy path doesn't reach, and unsourced assumptions about contracts. This playbook is the inspection priority order GitHub's engineering team published on 7 May 2026 ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)), with the conditions under which it stops working.
+Reviewing an agent-authored pull request checks context. The agent has already produced code that parses and usually passes its own tests. The review's job is judging whether that code fits the codebase's actual contracts and conventions. The defects that ship are the ones the agent could not catch itself: weakened CI, reimplemented utilities, boundary cases the happy path does not reach, and unsourced assumptions about contracts. This playbook is the inspection priority order GitHub's engineering team published on 7 May 2026 ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)), with the conditions under which it stops working.
 
 ## The ten-minute inspection order
 
@@ -45,7 +45,7 @@ Each step in the order targets a specific known failure mode of agent-authored c
 
 ## Where defects hide beyond the diff
 
-The non-obvious failure mode is that defects often hide outside the changed lines:
+Defects often hide outside the changed lines:
 
 - Adjacent unchanged files where the contract the agent assumed diverges from the contract the codebase actually exposes — Sourcegraph's "Partial Completion" pattern ([Sourcegraph](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases))
 - Existing utilities that the agent reimplemented because keyword search returned hundreds of matches and it picked the wrong one — "Wrong File, Wrong Symbol" ([Sourcegraph](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases))
@@ -56,7 +56,7 @@ Steps 3–5 target this surface explicitly: scan for duplicated utilities across
 
 ## Distinguishing unidiomatic-but-valid from fabricated
 
-The single most useful heuristic is to demand a test that fails on the pre-change behavior. "If the agent can't write a test that would have caught the bug it claims to fix, the fix is incomplete or the understanding is wrong" ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)). The test proves the agent understood the actual defect, not a plausible-sounding one, and it pins the contract for future edits to the same area.
+One heuristic does more work than the rest: demand a test that fails on the pre-change behavior. "If the agent can't write a test that would have caught the bug it claims to fix, the fix is incomplete or the understanding is wrong" ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)). The test proves the agent understood the actual defect, not a plausible-sounding one, and it pins the contract for future edits to the same area.
 
 Three diff-level tells separate a reasonable unidiomatic approach from a fabricated one:
 
@@ -64,11 +64,11 @@ Three diff-level tells separate a reasonable unidiomatic approach from a fabrica
 - Fabricated contract — the agent calls `response.paginate(cursor)` on a type whose class never defines that method, or reads a `retry_after_ms` config key the schema does not declare.
 - Phantom dependency — the diff adds `import lodash-es` with no matching `package.json` entry, or calls a `v3` endpoint method the installed SDK only exposes through `v2`.
 
-Run the flagged code path locally before approving — agents fabricate confidently, and the surface markers alone are too weak to trust.
+Run the flagged code path locally before approving. Agents fabricate confidently, and the surface markers alone are too weak to trust.
 
 ## Effort budget: AI versus human PRs
 
-The review-effort budget shifts in two directions. Automated review handles more of the mechanical first pass — style, type mismatches, error handling, missing edge cases — freeing human attention for the semantic judgment agents cannot self-check (see [Agent-Assisted Code Review](agent-assisted-code-review.md)). The human role narrows to context verification: did the agent understand the codebase, the contract, and the intent.
+Review effort now shifts in two directions. Automated review handles more of the mechanical first pass: style, type mismatches, error handling, missing edge cases. That frees human attention for the semantic judgment agents cannot self-check (see [Agent-Assisted Code Review](agent-assisted-code-review.md)). The human role narrows to context verification: did the agent understand the codebase, the contract, and the intent.
 
 Request a smaller PR rather than approving as-is when ([GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)):
 
@@ -77,23 +77,30 @@ Request a smaller PR rather than approving as-is when ([GitHub Blog](https://git
 - PR body is empty or boilerplate
 - CI is failing with only test-file changes
 
-These are the conditions under which the 10-minute framework cannot complete — restructuring is cheaper than rushing the review.
+These are the conditions under which the 10-minute framework cannot complete. Restructuring is cheaper than rushing the review.
 
-The human-factors reading of the same limit comes from Jon Udell, who names the "unreviewable PR" as an anti-pattern and reframes "human in the loop" as "agent in the loop" — the fix is to size agent PRs to stay reviewable rather than to expand review effort to match them ([Simon Willison](https://simonwillison.net/2026/Jun/28/jon-udell/)).
+Jon Udell gives the human-factors reading of the same limit: he names the "unreviewable PR" an anti-pattern and reframes "human in the loop" as "agent in the loop". The fix, in his framing, is to size agent PRs to stay reviewable, not to expand review effort to match them ([Simon Willison](https://simonwillison.net/2026/Jun/28/jon-udell/)).
 
 ## When this backfires
 
-The playbook describes the target review, not the achievable one. Five conditions degrade it:
+Five conditions degrade the playbook below its target review:
 
 - High agent-PR volume exceeds reviewer bandwidth — past roughly 400 lines per diff, sustained review degrades into surface scanning regardless of checklist quality ([Atomic Robot](https://atomicrobot.com/blog/ai-review-fatigue/)). The framework assumes the reviewer can spend 10 focused minutes per PR; volume kills that assumption.
 - CRA-only review — when an automated Reviewer Code Assistant applies the checklist mechanically with no human at the keyboard, merge rates drop to about 45% versus about 68% for human-only review ([CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)). The playbook is for humans.
 - Grep-only repositories — two steps (scan for duplicates, trace critical path) presume keyword and structural search. Without code intelligence, the reviewer faces the same retrieval ceiling Sourcegraph measured for agents ([Sourcegraph](https://sourcegraph.com/blog/why-coding-agents-fail-large-codebases)).
 - Comment volume as a correction signal — each extra reviewer comment on an agent PR correlates with a 2.8 percentage-point decrease in merge probability (versus +2.7% for human PRs), interpreted as required corrections rather than productive alignment ([arXiv:2601.18749](https://arxiv.org/abs/2601.18749)). A thorough checklist that surfaces ten findings per PR amplifies ghosting; consolidate into a single review round.
-- Alert fatigue past the rubber-stamp threshold — two-thirds of surveyed developers bypass or delay security checks under pressure ([CodeAnt](https://www.codeant.ai/blogs/prevent-ai-code-review-overload)). When the checklist becomes a comfort blanket producing approvals without genuine inspection, removing PRs from the queue (tiered routing, structural agent constraints, smaller scopes) yields more than refining the checklist.
+- Alert fatigue past the rubber-stamp threshold — two-thirds of surveyed developers bypass or delay security checks under pressure ([CodeAnt](https://www.codeant.ai/blogs/prevent-ai-code-review-overload)). When the checklist produces approvals without genuine inspection instead of catching defects, removing PRs from the queue (tiered routing, structural agent constraints, smaller scopes) yields more than refining the checklist.
 
 ## Why it works
 
-AI coding agents optimize for syntactic correctness and surface plausibility — code that parses, passes type checks, and matches training-data patterns — not for semantic correctness, architectural fit, or whether the result solves the problem ([Atomic Robot](https://atomicrobot.com/blog/ai-review-fatigue/)). The inspection order is built around that asymmetry: CI changes catch the gaming move, duplicate scans the reuse-blindness move, critical-path tracing the boundary-case move, and evidence-by-failing-test the hallucinated-correctness move. Without an order that targets the generator's known weaknesses, generic checklist review degrades to the surface review the agent already produced.
+AI coding agents optimize for syntactic correctness and surface plausibility: code that parses, passes type checks, and matches training-data patterns ([Atomic Robot](https://atomicrobot.com/blog/ai-review-fatigue/)). Semantic correctness, architectural fit, and whether the result solves the problem are separate questions the agent has no mechanism to check. The inspection order targets that gap directly:
+
+- CI changes catch the gaming move.
+- Duplicate scans catch the reuse-blindness move.
+- Critical-path tracing catches the boundary-case move.
+- Evidence-by-failing-test catches the hallucinated-correctness move.
+
+Without an order that targets the generator's known weaknesses, generic checklist review degrades to the surface review the agent already produced.
 
 ## Example
 
@@ -101,7 +108,7 @@ A reviewer opens an agent-authored PR that adds rate limiting to a public API. T
 
 - 1–2 min: 4 files changed, 180 lines, PR description names the rate-limit policy. Tractable size.
 - 2–3 min: `.github/workflows/ci.yml` is unchanged; coverage threshold unchanged. No CI gaming. Proceed.
-- 3–5 min: Search the repo for "rate limit" — finds an existing `internal/middleware/throttle.go` the agent ignored, reimplementing the same token-bucket logic in `handlers/`. Block with a "use existing utility" comment.
+- 3–5 min: Search the repo for "rate limit". The search finds an existing `internal/middleware/throttle.go` that the agent ignored, reimplementing the same token-bucket logic in `handlers/`. Block with a "use existing utility" comment.
 - (if the duplicate had not existed) 5–8 min: Trace `request → limiter → handler`. The agent handles the normal case but the limiter check returns silently on zero-quota tenants instead of 429-ing. Boundary-case miss.
 - 9–10 min: Demand a test that calls the endpoint with a zero-quota tenant and asserts a 429. The agent cannot produce one without admitting the silent-return path was unintended.
 
@@ -110,10 +117,10 @@ Two of the six steps caught the substantive defects. The CI and security steps p
 ## Key Takeaways
 
 - The inspection order is sequenced for cost: CI changes first, evidence last; running the steps out of order wastes the cheapest stops
-- Defects in agent PRs hide *outside* the changed lines — duplicated utilities, adjacent unchanged code, workflow edits — not just inside the diff
-- The evidence test (a failing-before test) is the strongest heuristic for distinguishing genuine fixes from fabricated ones
-- The review budget shifts from correctness verification (for humans) to context verification (for agents); automated review owns the mechanical first pass
-- The playbook degrades to surface review past ~400 lines per diff, in CRA-only setups, and in grep-only repos — recognize these conditions and reduce volume rather than refining the checklist
+- Duplicated utilities and adjacent contract drift hide in unchanged files, so budget review time for the repo search and critical-path trace, not a diff-only read
+- The evidence test does double duty: it proves the agent found the real defect, and becomes the regression guard for the next PR to touch that code
+- When automated review already flags style, type mismatches, and edge cases, re-checking those wastes the human reviewer's scarce time; spend it on whether the agent understood the codebase instead
+- Past any of these conditions, stop tuning the checklist. Cut the queue instead: tiered routing, a per-reviewer PR cap, or a lines-per-diff limit
 
 ## Related
 
