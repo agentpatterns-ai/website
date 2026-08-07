@@ -65,7 +65,7 @@ Size breaks it differently. A diff past the context limit gets truncated, and wh
 
 Self-review is subtler. A reviewer running in the same session validates the assumptions that produced the code, so route to a fresh-context reviewer instead ([Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md)).
 
-Accountability decays quietly. Treat agent approval as sufficient and architectural debt accumulates exactly where the agent cannot see it, because nobody is answerable for design any more.
+Accountability decays without a failing signal. Treat agent approval as sufficient and architectural debt accumulates exactly where the agent cannot see it, because nobody is answerable for design any more.
 
 Calibration decides whether any of this gets used at all. AI suggestions are adopted at 16.6% against 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)), and an untuned prompt depresses adoption even for findings that are correct.
 

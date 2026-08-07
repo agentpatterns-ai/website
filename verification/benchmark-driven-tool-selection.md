@@ -119,3 +119,4 @@ Result: The team selects Model B despite its lower aggregate ranking — the tas
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — Design evaluations that account for agent non-determinism
 - [Eval-Driven Development](../workflows/eval-driven-development.md) — Define correctness criteria before comparing tools
 - [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — Build your own small suite when no public benchmark matches your workload
+- [Head-to-Head Evaluation of Competing MCP Servers](head-to-head-mcp-server-evaluation.md) — Apply the same selection discipline when the unit under test is a tool server rather than a model

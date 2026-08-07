@@ -91,3 +91,4 @@ Step 1 is the load-bearing part. Replaying the whole working tree would carry th
 - [State-Bound Evidence and Typed Revision Contracts for Repair Loops](state-bound-repair-evidence.md) — binds a test result to the code state that produced it, the freshness half of the same evidence discipline.
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — orders cheap evidence ahead of expensive runs, which is where a B replay belongs.
 - [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](precise-debugging-benchmark.md) — the adjacent failure where tests pass because the agent regenerated unrelated code.
+- [Audit Your Test Suite With an Agent, Then Certify Each Flag](certified-agent-test-suite-auditing.md) — the certification chain that turns an agent's failing-input claim into evidence, applied to the suite rather than to one repair.

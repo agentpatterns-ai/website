@@ -177,7 +177,7 @@ The audit-before-rewriting step is the safeguard: steps that cannot be made unam
 
 ## Related
 
-- [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
+- [Generated Procedure Drivers: Skills That Emit a Program](../tool-engineering/generated-procedure-drivers.md)
 - [Separation of Knowledge and Execution](../patterns/agent-design/separation-of-knowledge-and-execution.md)
 - [Human-in-the-Loop Placement](human-in-the-loop.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)

@@ -11,7 +11,7 @@ aliases:
   - cloud agent auto model selection
   - harness-side model routing
   - vendor-side model broker
-last_reviewed: 2026-07-28
+last_reviewed: 2026-08-06
 maturity: established
 ---
 
@@ -116,6 +116,8 @@ graph TD
 ```
 
 Capability scales sub-linearly with price across tiers, so most queries need no frontier model ([Tianpan: LLM Routing](https://tianpan.co/blog/2025-10-19-llm-routing-production)). Anthropic claims Haiku 4.5 "delivers similar levels of coding performance to Sonnet 4 but at one-third the cost and more than twice the speed" ([Anthropic: Claude Haiku 4.5](https://www.anthropic.com/news/claude-haiku-4-5)), and [FrugalGPT](https://arxiv.org/abs/2305.05176) shows a cascade upper bound of 98% cost reduction at GPT-4 quality. The tier-routing variant is its manual, human-classified instance.
+
+Microsoft reports a comparable in-band claim for a cheaper model: in early developer workflows, MAI-Code-1-Flash used 67% to 94% fewer tokens than larger models ([VS Code, 2026-07-29](https://code.visualstudio.com/blogs/2026/07/29/mai-code-1-flash)). The same post rates its quality above Haiku 4.5 and GPT-5.4 Mini. Both are a vendor's own numbers on its own model, so confirm them against your traffic before you route to it.
 
 Where it backfires: there is no documented in-session escalation — a failed cheap-tier PR is caught at human review after the session's tokens have already billed, and re-dispatching at Sonnet pays for both sessions. As budgets rise, "routers systematically default to the most capable and most expensive model even when cheaper models already suffice" ([arxiv:2602.03478](https://arxiv.org/abs/2602.03478)); the human picker likewise reverts to the safe default under shipping pressure. Long-context refactors widen the gap — Anthropic's "comparable to Sonnet 4" framing benchmarks short-context tasks, exactly where the canonical cloud-agent workload diverges.
 

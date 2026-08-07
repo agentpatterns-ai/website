@@ -82,3 +82,4 @@ The block names the source and pinned version, separates the bindings this fork 
 - [Skill Authoring Patterns](skill-authoring-patterns.md) — how to write the skill that later gets forked; this page covers what happens to it after adoption
 - [Contractual Skill Files](../instructions/contractual-skill-files.md) — structuring the inherited contract as named fields so a reviewer can check a fork's bindings fast
 - [Tool Cloning and Provenance Assessment](tool-cloning-provenance-assessment.md) — why raw marketplace counts overstate diversity when most entries are near-verbatim clones
+- [Skill Packs: Registry Distribution Needs Pinning Discipline](../instructions/skill-pack-registry-distribution.md) — the distribution side: what a registry pack's update channel does and does not give a team

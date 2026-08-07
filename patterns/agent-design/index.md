@@ -92,11 +92,13 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — Run an agent over raw sources to build and maintain a compact, file-based knowledge layer future agents read instead of re-deriving structure via query-time RAG — for durable domain knowledge with enough query volume to amortize
 - [Organizing Filesystem Agent Memory for Retrieval Cost](filesystem-memory-organization.md) — Organizing a markdown memory tree roughly halves per-query retrieval cost on large stores while leaving answer quality unchanged — a cost optimization with a size threshold
 - [Persistent Teammate Workspace: Durable State for Agent Teams](persistent-teammate-workspace.md) — A per-teammate directory on disk that survives compaction and process exit — worth its token and security cost only when the team's work genuinely outlives one session
+- [Weakest Consistent Learning: What Agent Loops Should Persist](weakest-consistent-learning.md) — Persist the learning that permits the most future cases while staying consistent with what was observed, under three stated conditions
 
 ## Control & Orchestration
 
 Patterns for steering agent behavior, detecting convergence, and managing execution flow.
 
+- [Agent as Tool vs Handoff: Who Keeps the Conversation](agent-as-tool-vs-handoff.md) — Registering a specialist as a callable tool keeps the parent in control with a clean context window, while a handoff transfers the conversation to the specialist
 - [Background Todo Agent](background-todo-agent.md) — Route the agent's todo-list maintenance loop to a small background model so the frontier model spends its attention budget on the active sub-task instead of bookkeeping
 - [In-Agent Task Prioritization: Ranking the Next Action](in-agent-task-prioritization.md) — Rank pending work by a composite score (urgency, value, dependency, blast radius, staleness) — distinct from routing and scheduling — so the agent's scarce attention lands on the item that pays back most per turn
 - [Controlling Agent Output: Concise Answers, Not Essays](../../instructions/controlling-agent-output.md) — Matching the agent's response format to what you actually need reduces noise and preserves context budget
@@ -142,6 +144,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Auto Model Selection: Harness-Driven Routing per Task](auto-model-selection.md) — Vendor-side Auto modes let the harness pick the model per request based on availability, policy, and plan — useful for executor-class work, costly for long sessions and eval-gated CI
 - [Behavioral Drivers of Coding Agent Success and Failure](behavioral-drivers-agent-success.md) — Four observable failure clusters and three behavioral patterns that predict success — derived from trajectory analysis of 19 agents across 8 frameworks and 14 LLMs
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — Assign competing vendor agents to the same task, collect independent results, and let a human or automated gate select the winner
+- [Dispatch-Time Reasoning Level for Delegated Agents](dispatch-time-reasoning-level.md) — Choosing a delegated agent's reasoning level at hand-off is a one-shot commitment, so select on blast radius, reversibility, and detection cost rather than estimated difficulty
 - [Decoupled Search Grounding: A Vendor-Agnostic Grounding Boundary](decoupled-search-grounding.md) — Lift retrieval out of the reasoning model and into an MCP-compatible gateway so provider, caching, and evidence rendering become independently tunable controls — pays off only when strict output contracts, cacheable query mix, and real multi-vendor routing all hold
 - [Dual-Budget Control for Search Agents](dual-budget-control-search-agents.md) — Under hard limits on both tool calls and generated tokens, score each candidate action by Value-of-Information per unit budget and spend the next unit on the highest-ranking action
 - [Effective Feedback Compute (EFC) for Harness Comparison](effective-feedback-compute.md) — A trace-level scaling coordinate that credits feedback only when it is informative, valid, non-redundant, and retained — replacing raw tokens or tool calls when comparing two harnesses on the same multi-turn task

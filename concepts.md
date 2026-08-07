@@ -248,6 +248,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Context Compiler: Deterministic Assembly Over Bigger Windows](context-engineering/context-compiler.md)
 - [Organizational Context Layer for Agents (Company Brain)](context-engineering/organizational-context-layer.md)
 - [Choosing a Compression Budget for Agent Control Context](context-engineering/control-context-compression-budget.md)
+- [Generated Questionnaires: Eliciting Someone Else's Context](context-engineering/generated-questionnaires.md)
+- [Silent Handoff Failure in Delegated Code Search](context-engineering/silent-handoff-failure-delegated-search.md)
 
 ## Instructions & Prompts
 
@@ -326,6 +328,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Restraint Rules Need External Enforcement](instructions/restraint-rules-need-external-enforcement.md)
 - [Knowledge Gap or Skill Gap: Triage Before Writing Context](instructions/knowledge-gap-vs-skill-gap-triage.md)
 - [Advisory Prompts Distilled from Reasoning Traces](instructions/advisory-prompts-from-reasoning-traces.md)
+- [The No-Op Test: Prune Agent Docs by Behavior, Not Length](instructions/behavioral-no-op-test.md)
+- [Skill Packs: Registry Distribution Needs Pinning Discipline](instructions/skill-pack-registry-distribution.md)
 
 ## Agent Architecture
 
@@ -594,6 +598,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Bounded Agent Steps Inside a Deterministic Workflow](patterns/agent-design/bounded-agent-step.md)
 - [Applying Coding Agents to Non-Code Tasks](patterns/agent-design/coding-agents-for-non-code-tasks.md)
 - [Execution-State Ledger for Long-Horizon Coding Agents](patterns/agent-design/execution-state-ledger-coding-agents.md)
+- [Weakest Consistent Learning: What Agent Loops Should Persist](patterns/agent-design/weakest-consistent-learning.md)
+- [Agent as Tool vs Handoff: Who Keeps the Conversation](patterns/agent-design/agent-as-tool-vs-handoff.md)
+- [Dispatch-Time Reasoning Level for Delegated Agents](patterns/agent-design/dispatch-time-reasoning-level.md)
 
 ## Loop Engineering
 
@@ -698,6 +705,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Skill Reuse as Vendored Forking](tool-engineering/skill-reuse-as-vendored-forking.md)
 - [Restricting a Coding Agent to a Single execute_code Tool](tool-engineering/restrict-coding-agent-to-execute-code.md)
 - [Skill Authoring as Software Engineering: What Transfers](tool-engineering/skill-authoring-software-engineering.md)
+- [Generated Procedure Drivers: Skills That Emit a Program](tool-engineering/generated-procedure-drivers.md)
+- [Listener-State Naming for User-Invoked Agent Skills](tool-engineering/listener-state-skill-naming.md)
 
 ## Token Engineering
 
@@ -859,6 +868,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Authorization Continuity Across Agent Mutation](security/authorization-continuity-across-agent-mutation.md)
 - [Document-Borne Prompt Injection Through Agent Read Tools](security/document-borne-prompt-injection.md)
 - [Flattened Tool Specs for Agent Safety Judgment (SafeKeep)](security/flattened-tool-specs-safety-judgment.md)
+- [Team-Scoped Agent Policy Delegation](security/team-scoped-policy-delegation.md)
 
 ## Testing & Evaluation
 
@@ -1013,6 +1023,12 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](verification/bug-discriminating-validation-evidence.md)
 - [Reviewer Theme Distribution Audit for AI Code Review](code-review/reviewer-theme-distribution-audit.md)
 - [Eval Environment Containment for Cyber-Capable Agents](verification/eval-environment-containment.md)
+- [Policy-Graded Evaluation of Coding Agents](verification/policy-graded-agent-evaluation.md)
+- [Head-to-Head Evaluation of Competing MCP Servers](verification/head-to-head-mcp-server-evaluation.md)
+- [Behavior Specs: Grading the Trajectory, Not the Result](verification/behavior-specs.md)
+- [Audit Your Test Suite With an Agent, Then Certify Each Flag](verification/certified-agent-test-suite-auditing.md)
+- [Equivalence Testing for Agent Configuration Changes](verification/equivalence-testing-agent-config-changes.md)
+- [Skill-Use Gates: Trigger, Compliance and Boundary](verification/skill-use-gate-decomposition.md)
 
 ## Hooks & Guardrails
 
@@ -1210,6 +1226,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Oracle-Gated Delegation Beyond Your Domain Expertise](workflows/oracle-gated-delegation.md)
 - [Stacked Agent Sessions on Unmerged Feature Branches](workflows/stacked-agent-sessions.md)
 - [Behavioral Specification Elicitation Before Synthesis (SpecFirst)](workflows/behavioral-spec-elicitation.md)
+- [Porting a Coding-Agent Harness Beyond Engineering](workflows/porting-agent-harness-beyond-engineering.md)
 
 ## Human Factors
 
@@ -1380,6 +1397,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Deletion Avoidance: Agents That Guard Code Instead of Removing It](patterns/anti-patterns/deletion-avoidance.md)
 - [The Token Price Index Fallacy in Agent Cost Planning](fallacies/token-price-index-fallacy.md)
 - [The Meat Proxy: Relaying Agent Output Without Reading It](patterns/anti-patterns/meat-proxy.md)
+- [Homogeneous Debate Panels as a Groundedness Quality Lever](patterns/anti-patterns/homogeneous-debate-panel-groundedness.md)
+- [Deliberation-Inducing Cues That Multiply Reasoning Cost](patterns/anti-patterns/deliberation-inducing-prompt-cues.md)
+- [Task-Uniform Agent Permissions Ignore Where Failures Land](patterns/anti-patterns/task-uniform-agent-permissions.md)
 
 ## Emerging Concepts
 

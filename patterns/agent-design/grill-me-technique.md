@@ -118,3 +118,4 @@ Invoke it by including this text in your system prompt or as a slash command ski
 - [Spec-Driven Development](../../workflows/spec-driven-development.md)
 - [Discrete Phase Separation](discrete-phase-separation.md)
 - [Living-Docs-Grounded Agent Design Conversations](../../instructions/living-docs-grounded-design-conversations.md) — grounding the same design interrogation in current domain docs so the Q&A anchors in shared vocabulary
+- [Generated Questionnaires: Eliciting Someone Else's Context](../../context-engineering/generated-questionnaires.md) — the sibling skill for questions a grilling session cannot close because the answers are in someone else's head

@@ -57,3 +57,4 @@ The fix is calibrated restraint, not maximal clarification. Forcing an agent to 
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — the sibling failure where the completion signal itself is unreliable.
 - [Run-Status vs Task-Status Confusion in Autonomous Agent Runs](run-status-vs-task-status-confusion.md) — why a clean exit code is not evidence the task succeeded.
 - [Task Completion as Tool Certification (Silent Tool Rot)](task-completion-as-tool-certification.md) — the parallel failure where completion overstates the correctness of a reused agent-built tool rather than its safety.
+- [Task-Uniform Agent Permissions Ignore Where Failures Land](task-uniform-agent-permissions.md) — which task contexts the confirmation gate belongs in, from an incident corpus of 547 confirmed failures.

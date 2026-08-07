@@ -97,6 +97,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Environment Specification as Context](environment-specification-as-context.md) — Feed dependency versions, lock files, and runtime constraints into agent context to prevent the 50–70% accuracy drop caused by environment-blind code generation
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — AI coding agents that retrieve cross-file context from dependency graphs, ASTs, and semantic embeddings generate more accurate code than those limited to local file context
 - [Agent-Tuned Code Search](agent-tuned-code-search.md) — A search tool that runs its own loop and returns file paths plus line ranges cuts search latency sharply, but the token win against local grep is modest and bounded by index freshness
+- [Silent Handoff Failure in Delegated Code Search](silent-handoff-failure-delegated-search.md) — For read-only questions over an indexable repository, a pre-built vector index beat a search subagent 65.2% to 46.2%, and 41.8% of the subagent's failures broke silently at the planner handoff
 - [AOCI: Symbolic-Semantic Repository Indexing](aoci-symbolic-semantic-indexing.md) — A persistent, query-independent blueprint pairing architectural coordinates with semantic content — read whole before any task, distinct from on-demand retrieval and token-fitted repo maps
 - [Structured Domain Retrieval](structured-domain-retrieval.md) — Combine hierarchical knowledge graphs with coverage-driven case selection to retrieve domain-specific context that flat vector search misses
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — Use one shared domain schema across graph construction, query decomposition, and typed retrieval to improve multi-hop reasoning precision over private knowledge bases
@@ -107,6 +108,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Skill Loadout Curation for Coding Agents](skill-loadout-curation.md) — Curate the skills and MCP servers an agent loads before a session; above roughly 30 skills the gain comes from removing colliding descriptions, not from saving tokens
 - [Per-Object Context Allocation](per-object-context-allocation.md) — Group retrieved fragments by canonical code object and cap each object's token share, so repeated views of one function stop displacing independent dependencies before the model sees them
 - [Organizational Context Layer for Agents](organizational-context-layer.md) — A shared context layer maps many source systems into one governed store that many agents query; deterministic identity and rebuildable index projections transfer well below that scale
+- [Generated Questionnaires: Eliciting Someone Else's Context](generated-questionnaires.md) — Have the agent draft a questionnaire for the one person who holds the missing knowledge, instead of guessing the gap; the technique holds only where that knowledge is statable rather than tacit
 
 ## Error Handling & Drift Prevention
 

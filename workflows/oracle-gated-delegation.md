@@ -101,3 +101,4 @@ AES failed the first. The output was an improved meet-in-the-middle attack on a 
 - [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../patterns/anti-patterns/code-first-test-oracle-bias.md) — why a check derived from the agent's own output is not independent
 - [Verification-Gated Agent Autonomy via Automated Review](../patterns/agent-design/verification-gated-agent-autonomy.md) — scaling an agent's permission to act to the strength of the review behind it
 - [Deliberate AI-Assisted Learning: Accelerating Skill Acquisition](../human/deliberate-ai-learning.md) — building the domain knowledge this cycle deliberately routes around
+- [Porting a Coding-Agent Harness Beyond Engineering](porting-agent-harness-beyond-engineering.md) — what to do when the harness moves to work that has no oracle at all

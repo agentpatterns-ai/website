@@ -134,3 +134,5 @@ After the second pass the surface dropped from 130 to 71 rules — under the cei
 - [Prompt Governance via PR Review](prompt-governance-via-pr.md)
 - [Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)
 - [Agent Context File Evolution: Treating ACFs as Configuration Code](agent-context-file-evolution.md) — the file-level maintenance lifecycle that sits above per-rule pruning; the compact loop the metadata triple makes mechanical
+- [Weakest Consistent Learning: What Agent Loops Should Persist](../patterns/agent-design/weakest-consistent-learning.md) — how broadly to scope a rule an agent writes for itself, before the lifecycle metadata governs its removal
+- [The No-Op Test: Prune Agent Docs by Behavior, Not Length](behavioral-no-op-test.md) — the per-line deletion check that decides which of the flagged rules actually goes

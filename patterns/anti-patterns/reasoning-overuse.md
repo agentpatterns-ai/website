@@ -99,3 +99,4 @@ To detect whether reasoning is contributing, measure pass^k — run the same tas
 - [Chain-of-Thought Reasoning Fallacy](../../fallacies/chain-of-thought-reasoning-fallacy.md) — Why coherent reasoning traces are not proof of correct decisions
 - [The Kitchen Sink Session](session-partitioning.md) — Another cost-performance anti-pattern: mixing unrelated tasks fills context with irrelevant history
 - [The Infinite Context](infinite-context.md) — Another cost-performance anti-pattern: loading unnecessary tokens degrades output
+- [Deliberation-Inducing Cues That Multiply Reasoning Cost](deliberation-inducing-prompt-cues.md) — the prompt-side version: cues that invite deliberation multiply reasoning tokens without a correctness gain

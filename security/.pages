@@ -57,6 +57,7 @@ nav:
       - scanner-as-mcp-server.md
       - cross-repository-security-posture.md
       - structural-safeguard-monitoring.md
+      - team-scoped-policy-delegation.md
   - action-selector-pattern.md
   - adaptive-evaluation-out-of-band-defenses.md
   - agent-authored-message-rendered-image-exfiltration.md

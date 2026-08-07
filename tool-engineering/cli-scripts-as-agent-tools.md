@@ -155,6 +155,6 @@ Two tool calls, two concise responses. The agent identifies the root cause (data
 - [Unix CLI as the Native Tool Interface for AI Agents](unix-cli-native-tool-interface.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
 - [Batch File Operations via Bash Scripts](batch-file-operations.md)
-- [PostToolUse Hook for BSD/GNU Tool Miss Detection](posttooluse-bsd-gnu-detection.md)
+- [Generated Procedure Drivers: Skills That Emit a Program](generated-procedure-drivers.md)
 - [Tool Selection Guidance](tool-description-quality.md)
 - [Context Priming](../context-engineering/context-priming.md)

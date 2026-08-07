@@ -104,3 +104,4 @@ If `authorization_check` returns `deny`, the call is blocked regardless of what 
 - [Tool Confirmation Carousel: Batched UI for Per-Call Approvals](tool-confirmation-carousel.md) — How the `ask` rung renders when multiple approvals queue up.
 - [Permission Framework Over Model](../../security/permission-framework-over-model.md) — Why the framework owns the merge function rather than the model.
 - [Agent Runtime Middleware: Per-Call Interception Pipeline](agent-runtime-middleware.md) — Composing cross-cutting concerns around model and tool calls — the middleware layer parallel-hook authors plug into.
+- [Team-Scoped Agent Policy Delegation](../../security/team-scoped-policy-delegation.md) — A managed-settings layer that merges across a user's teams least-restrictive, inverting this ladder.
