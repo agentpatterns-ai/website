@@ -9,7 +9,7 @@ tags:
   - code-review
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-07
 maturity: established
 ---
 
@@ -56,7 +56,7 @@ Developers report large time savings on writing tasks, yet total engineering hou
 
 ## Why the bottleneck shifts
 
-The bottleneck shifts because the constraint on software delivery is the slowest stage, not a single resource. When AI cuts generation time sharply, generation stops being the bottleneck. Review then becomes the binding constraint, because it scales with human attention rather than compute.
+The bottleneck shifts because the constraint on software delivery is the slowest stage, not a single resource. When AI cuts generation time sharply, generation stops being the bottleneck. Review then becomes the binding constraint, because it scales with human attention rather than compute. Rachel Laycock traces the same migration through the software delivery lifecycle in [Conductor Developer](https://martinfowler.com/rachels-ramblings/conductor-developer.html) on martinfowler.com (July 2026).
 
 The same structural dynamic drove Jevons' original 1865 observation. Cheaper coal energy raised total coal consumption, because the lower cost made new uses worthwhile. Cheaper code generation works the same way: it enables more features, which drive more review load, which consumes the freed capacity and then some.
 

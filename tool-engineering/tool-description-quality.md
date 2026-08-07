@@ -122,6 +122,7 @@ Each description adds tokens on every invocation. This matters in three cases:
 
 ## Related
 
+- [Canary Tools for Diagnosing Tool-Selection Reasoning](../verification/canary-tools-tool-selection-diagnosis.md)
 - [Write Tool Descriptions Like Onboarding Docs](tool-descriptions-as-onboarding.md)
 - [OpenAPI Documentation Smells for Agent-Ready APIs](openapi-documentation-smells.md)
 - [Agent-Computer Interface](agent-computer-interface.md)

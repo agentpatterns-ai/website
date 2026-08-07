@@ -132,6 +132,7 @@ Pinning to a tag (`@v1.2.0`) means the project stays on a known-good version unt
 ## Related
 
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
+- [Agent Plugins: Portable Packaging With Client-Defined Trust](agent-plugins-standard.md) — the vendor-neutral layout for the skills and MCP half of a bundle
 - [Portable Agent Definitions: Full-Stack Identity as Code](portable-agent-definitions.md)
 - [Cross-IDE Plugin Discovery](cross-ide-plugin-discovery.md) — discovery model for plugins across IDEs
 - [Pre-Install Plugin Transparency](pre-install-plugin-transparency.md) — capability inventory before install

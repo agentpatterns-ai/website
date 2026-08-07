@@ -88,3 +88,4 @@ A gap between A and B is the cost of exposure. A gap between B and C is the valu
 - [The Ralph Wiggum Loop: Fresh-Context Iteration Pattern](ralph-wiggum-loop.md) — the same clean-slate-per-iteration idea at task scale.
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](loop-budgeting.md) — where the k≈2 cap and the token comparison fit into a wider budget.
 - [Local Model Viability Factors for Coding](../patterns/agent-design/local-model-viability-for-coding.md) — the deployment context in which sub-7B quantized models are the ones doing the retrying.
+- [Calibrated Early Termination and Warm Restart for Agent Runs (FailFast-RestartSmart)](early-termination-and-warm-restart.md) — the repo-scale counterpart, where a restart keeps the failed attempt's diff behind an optional tool rather than in the prompt.

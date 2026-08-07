@@ -105,3 +105,4 @@ A team enabling verification-gated autonomy on a Codex fleet pins the reviewer m
 - [Selective Autonomy from Copilot Feedback](selective-autonomy-from-copilot-feedback.md) — selective classification with learned abstention; the policy-side analogue to verification-gated screening
 - [Agent Self-Review Loop](../../code-review/agent-self-review-loop.md) — the same agent reviews its own output before submission; verification-gated autonomy puts the review on a *separate* agent to break the shared-failure-mode chain
 - [Risk-Score Threshold Calibration for Auto-Approval](../../code-review/risk-score-threshold-calibration.md) — the explicit yield-vs-safety dial on the reviewer's threshold, with revert and incident telemetry for recalibration
+- [Informed Abstention as a Tool-Boundary Runtime Gate](informed-abstention-tool-boundary-gate.md) — blocks the call before it runs on a typed information gap, where this technique screens the result after it is produced

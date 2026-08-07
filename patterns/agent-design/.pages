@@ -115,6 +115,7 @@ nav:
       - tool-preamble-status-update.md
       - verification-gated-agent-autonomy.md
       - deterministic-precondition-gates.md
+      - informed-abstention-tool-boundary-gate.md
       - delegated-autonomy-boundary-artifacts.md
       - trigger-level-agent-intake-gating.md
   - "Reliability":

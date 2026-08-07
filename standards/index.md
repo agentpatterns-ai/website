@@ -16,6 +16,7 @@ last_reviewed: 2026-05-27
 - [A2UI: Framework-Agnostic Generative UI Standard](a2ui.md) — An open standard for agents to emit declarative UI blueprints that a host application renders with its own native components
 - [ACDL: A Language for Describing Agentic LLM Contexts](acdl-context-description-language.md) — A formal notation for specifying how an LLM agent's context is assembled and evolves across interaction steps
 - [Agent-to-Agent (A2A) Protocol](a2a-protocol.md) — An open standard for inter-agent communication — agents discover capabilities, delegate tasks, and exchange results over HTTP
+- [Agent Plugins: Portable Packaging With Client-Defined Trust](agent-plugins-standard.md) — A vendor-neutral directory format for shipping Agent Skills and MCP servers across clients, which leaves installation, provenance, and permissions to each client
 - [Agent Cards: Capability Discovery Standard](agent-cards.md) — Machine-readable JSON descriptors that advertise agent capabilities, skills, and authentication at a well-known URL
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md) — Agent definitions control system prompt, tool access, model selection, and permissions — the format varies by tool but the concerns are the same across all implementations
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md) — The Agent Skills open standard packages task-specific knowledge into portable SKILL.md folders that AI coding tools can discover and load on demand

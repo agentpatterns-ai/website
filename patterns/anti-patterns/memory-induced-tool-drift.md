@@ -85,4 +85,5 @@ Scoped correctly, personality memory pays off: [MAPLE](https://arxiv.org/abs/260
 - [Context Poisoning: When Hallucinations Become Premises](context-poisoning.md)
 - [Distractor Interference: Relevance Is Not Enough](distractor-interference.md)
 - [Objective Drift: When Agents Lose the Thread](objective-drift.md)
+- [Belief Inertia After Tool-Map Drift](belief-inertia-after-tool-map-drift.md)
 - [The Anthropomorphized Agent](anthropomorphized-agent.md)

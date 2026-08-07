@@ -81,3 +81,4 @@ Retry-on-fail closed 96 to 101% of the schedule-oracle gap on MemTrapBench, beat
 - [Agent Failure Trajectories and the Recovery Window](../agent-design/failure-trajectory-recovery-window.md) — the same early-entry, false-premise, narrow-recovery shape in coding-agent runs
 - [Context Poisoning: When Hallucinations Become Premises](context-poisoning.md) — an adopted premise reasoned forward as fact, the consumption mechanism without the memory store
 - [Memory-Induced Tool-Drift](memory-induced-tool-drift.md) — a sibling memory failure where stored preferences silently steer tool calls in unrelated contexts
+- [Belief Inertia After Tool-Map Drift](belief-inertia-after-tool-map-drift.md) — the same refusal to drop an invalidated belief, measured on a tool map the agent built itself

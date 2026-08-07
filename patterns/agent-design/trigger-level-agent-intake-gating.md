@@ -83,3 +83,4 @@ The approval gate is set to Cautious while the team calibrates, so medium and lo
 - [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — a deterministic predicate on the write path, operating inside the tool gate
 - [Safe Outputs Pattern](../../security/safe-outputs-pattern.md) — the architectural guarantee that grants write capability per output type rather than reviewing writes afterwards
 - [Verification-Gated Agent Autonomy via Automated Review](verification-gated-agent-autonomy.md) — what to do when review must scale past a human reading every suggestion
+- [Comment-Triggered Agent Dispatch on Issues and PRs](../../workflows/comment-triggered-agent-dispatch.md) — the trigger gate applied to a comment, where the phrase is public and the automation behind it is not

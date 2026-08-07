@@ -83,3 +83,4 @@ A small team runs three concurrent Copilot sessions against one monorepo from th
 - [Cloud-Agent Three-Layer State Decoupling](../../patterns/agent-design/cloud-agent-state-layer-decoupling.md) — the architectural primitive (agent loop / machine state / conversation state) that lets clients be replaced without losing sessions
 - [GitHub Copilot Agent Mode](agent-mode.md) — the IDE-embedded sibling for tactical inline work
 - [Copilot Unified Sessions View and CLI Agent in JetBrains](unified-sessions-view.md) — the in-IDE registry that aggregates the same kind of session list the dedicated app surfaces standalone
+- [GitHub Copilot App Slash Commands and What They Change](slash-commands-copilot-app.md) — the command surface inside this app, mapped by the session state each command changes

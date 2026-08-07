@@ -9,7 +9,7 @@ tags:
 aliases:
   - agent-authored dev environment
   - agent-iterated Dockerfile
-last_reviewed: 2026-06-12
+last_reviewed: 2026-08-07
 maturity: established
 ---
 
@@ -52,7 +52,7 @@ Two reference implementations:
 
 Repo2Run (academic, the mechanism). [Hu et al. (2025)](https://arxiv.org/abs/2502.13681) describe a dual-environment design: the agent operates inside a Docker container sandbox while the external harness manages snapshots. Each command is wrapped, so `docker commit` snapshots state, the command runs, and a non-zero exit code triggers an atomic rollback to the previous snapshot. Only successful commands are synthesized into the final Dockerfile, with version constraints replaced by the actual resolved versions. The approach reaches 86.0% success on 420 Python repos against SWE-agent's 9.0% — a 77.0-point gap attributable to the atomic-execution substrate ([arxiv 2502.13681](https://arxiv.org/abs/2502.13681)).
 
-Cursor cloud agent environments (production — the controls). Cursor's [2026-05-13 release](https://cursor.com/changelog) added agent-led env authoring for cloud agents: the harness inspects the repos, generates a Dockerfile, asks clarifying questions, flags missing credentials, and validates the build before promoting it ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)). Layer caching makes cached builds 70% faster, which is what makes per-change iteration economical. Build secrets are scoped to the build step and not exposed to the running agent. Every environment has its own version history with admin-restrictable rollback and a team-wide audit log of every change ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)). If configuration fails, the harness falls back to a base image with explicit warnings rather than hard-failing.
+Cursor cloud agent environments (production — the controls). Cursor's [2026-05-13 release](https://cursor.com/changelog) added agent-led env authoring for cloud agents: the harness inspects the repos, generates a Dockerfile, asks clarifying questions, flags missing credentials, and validates the build before promoting it ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)). Layer caching makes cached builds 70% faster, which is what makes per-change iteration economical. Build secrets are scoped to the build step and not exposed to the running agent. Every environment has its own version history with admin-restrictable rollback and a team-wide audit log of every change ([Cursor blog](https://cursor.com/blog/cloud-agent-development-environments)). If configuration fails, the harness falls back to a base image with explicit warnings rather than hard-failing. Cursor documents the same environment again in a 2026-07-30 engineering post, separate from the release announcement cited above ([Cursor: cloud agent environment](https://cursor.com/blog/cloud-agent-environment)).
 
 ## Why it works
 

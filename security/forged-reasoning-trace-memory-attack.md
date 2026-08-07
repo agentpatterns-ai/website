@@ -82,5 +82,6 @@ The second entry contains no imperative and no trigger word. Retrieved during a 
 - [Detecting Memory-Poisoning Exfiltration by Tool-Call Order (Recall-Before-Send Signature)](recall-before-send-memory-poisoning-detection.md) — a log-only detector for exfiltration-style memory poisoning; blind to reasoning-trace forgery that emits no anomalous send
 - [Oracle Poisoning: Knowledge Graph Corruption Against Tool-Using Agents](oracle-poisoning-knowledge-graph.md) — the same provenance-blindness root cause via a poisoned data path rather than stored reasoning
 - [Provenance-Aware Decision Auditing for LLM Agents](provenance-aware-decision-auditing.md) — the provenance-tracking direction that a reasoning guard formalizes
+- [Trajectory Poisoning of Promoted Agent Skills (PoisonedEvolution)](trajectory-poisoning-promoted-skills.md) — the same manufactured-recurrence lever applied one stage earlier, where poisoned evidence is distilled into a persistent skill instead of retrieved as memory
 - [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md) — the persistent-memory designs that create the write surface this attack needs
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the conditions memory poisoning composes across sessions

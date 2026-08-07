@@ -11,7 +11,7 @@ aliases:
   - agent factory
   - dark factory
   - lit factory
-last_reviewed: 2026-07-22
+last_reviewed: 2026-08-07
 maturity: emerging
 ---
 
@@ -19,7 +19,7 @@ maturity: emerging
 
 > A software factory is many harnessed agent loops draining through one review gate, and its throughput is bounded by verification, not generation.
 
-A software factory is many harnessed agent loops, fed by a queue of work and drained through one human review gate into production ([Osmani, "Software Factories, Light and Dark", 2026](https://addyosmani.com/blog/software-factories/)). It is not a bigger agent; it is an org chart made of loops. The model pays off under one condition, so lead with it: you can hand a loop as much autonomy as you can cheaply and reliably verify, and not one inch more. Industrialize the loops whose output a machine can check for near-zero cost; keep a person reading the output wherever a wrong call is expensive. Ignore that condition and the factory industrializes [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) instead of software.
+A software factory is many harnessed agent loops, fed by a queue of work and drained through one human review gate into production ([Osmani, "Software Factories, Light and Dark", 2026](https://addyosmani.com/blog/software-factories/); [Substack permalink](https://addyo.substack.com/p/software-factories-light-and-dark)). It is not a bigger agent; it is an org chart made of loops. The model pays off under one condition, so lead with it: you can hand a loop as much autonomy as you can cheaply and reliably verify, and not one inch more. Industrialize the loops whose output a machine can check for near-zero cost; keep a person reading the output wherever a wrong call is expensive. Ignore that condition and the factory industrializes [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) instead of software.
 
 ## The bottleneck was never generation
 

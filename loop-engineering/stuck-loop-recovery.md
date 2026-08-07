@@ -71,6 +71,8 @@ Recovery has the same runaway problem as the original loop. Without a cap, the h
 - Per-incident attempt cap. Cole's three-strikes rule: after three consecutive recovery attempts on the same stuck signal, climb to the next rung instead of repeating the current one. After three rungs have failed, escalate to human ([Cole, 2026](https://dev.to/clawgenesis/how-to-detect-when-your-ai-agent-is-stuck-and-what-to-do-about-it-ce9)).
 - Iteration-cap backstop. A hard maximum iteration count per conversation catches everything pattern detectors miss. OpenDev pairs doom-loop detection with this iteration cap as defense-in-depth — pattern detectors miss iterations that differ each time but are equally unproductive ([Bui, 2026 §2.2.6](https://arxiv.org/abs/2603.05344)).
 
+A detector firing also permits a response outside the ladder. [Calibrated early termination](early-termination-and-warm-restart.md) skips it: kill the run on a predicted-failure signal, then restart with the killed attempt's diff available as an optional overlay rather than perturbing the stuck policy in place.
+
 ## Why it works
 
 A stuck loop is a fixed point in the agent's policy — the same state keeps producing the same action, which produces the same state. Each rung is a strictly larger perturbation of that policy: a nudge changes one token; reflection adds a reasoning step; a model swap changes the policy itself; a context reset wipes the priors; a human handoff replaces the policy entirely. Climbing one rung at a time finds the cheapest perturbation that breaks the fixed point, so recovery does not become more disruptive than the original problem.
