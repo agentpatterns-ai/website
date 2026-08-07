@@ -30,5 +30,6 @@ status: current
 - [Managing Agent Skills from the GitHub CLI](gh-skill-cli-management.md) — Install, pin, update, and publish agent skills with `gh skill` for scriptable provisioning
 - [MCP Integration](mcp-integration.md) — Connect Copilot to external tools via Model Context Protocol
 - [Monorepo Skill and Agent Discovery](monorepo-hierarchical-discovery.md) — Hierarchical configuration discovery from working directory to git root, enabling per-package skills and MCP servers
+- [GitHub Copilot App Slash Commands and What They Change](slash-commands-copilot-app.md) — A fixed, GitHub-provided command set mapped by the session state each one changes; your own named operations ship as a custom agent or agent skill, not a prompt file
 - [Unified Sessions View and CLI Agent in JetBrains](unified-sessions-view.md) — Chat-window registry aggregating CLI agent, agent mode, custom agent, and sub-agent sessions with worktree or workspace isolation
 - [Agent Host Review Comments: Server-Side Feedback Transport](agent-host-review-comments.md) — Server-side review comment storage via three agent tools, enabling async resolution after client disconnect

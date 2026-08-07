@@ -23,7 +23,7 @@ Two mechanisms protect sensitive files: path-based permission rules and pre-read
 
 Agents exploring a codebase read whatever files they encounter. A `.env` file with production database credentials, `~/.aws/credentials`, or a `secrets.yaml` can end up in the context window. From there it flows into API requests sent to the model, generated code, and session logs. The exposure is often invisible: the developer does not see the agent reading the file.
 
-Advisory instructions ("don't read .env files") are unreliable. Instruction-following degrades as the number of simultaneous constraints grows. The [Curse of Instructions](https://openreview.net/forum?id=R6q67CDBCH) paper shows multiplicative failure when models must satisfy many rules at once, and [practitioner reports](https://github.com/run-llama/llama_index/issues/13343) describe system-prompt rules being ignored mid-task. You need mechanical enforcement instead.
+Advisory instructions ("don't read .env files") are unreliable. Instruction-following degrades as the number of simultaneous constraints grows. The [Curse of Instructions](https://openreview.net/forum?id=R6q67CDBCH) paper shows multiplicative failure when models must satisfy many rules at once, and [practitioner reports](https://github.com/run-llama/llama_index/issues/13343) describe system-prompt rules being ignored mid-task. You need [mechanical enforcement rather than advisory controls](enforced-versus-advisory-controls.md).
 
 ## Permission rules in settings.json
 

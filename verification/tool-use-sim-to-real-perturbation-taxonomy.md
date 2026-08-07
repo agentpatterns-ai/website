@@ -163,3 +163,4 @@ The team ships with a robustness profile instead of a single number, and they kn
 - [Skill Retrieval Realism Gap](eval-blind-spots.md) — the retrieval-side analogue: idealized benchmark conditions collapse under realistic deployment
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — model-family variance under identical inputs, complementary to perturbation-class variance
 - [Tool Description Quality](../tool-engineering/tool-description-quality.md) — descriptions are part of the selection prompt; this page explains why reward-axis perturbations hit so hard
+- [Canary Tools for Diagnosing Tool-Selection Reasoning](canary-tools-tool-selection-diagnosis.md) — the same diagnostic move applied to the tool advertisement instead of the environment

@@ -10,7 +10,7 @@ aliases:
   - AGENTS.md-aware review
   - convention-aware reviewer
   - instruction-file code review
-last_reviewed: 2026-06-28
+last_reviewed: 2026-08-07
 maturity: emerging
 ---
 
@@ -38,7 +38,7 @@ The mechanism is the same across tools: the reviewer's system prompt is construc
 | Claude Code Review (managed) | `CLAUDE.md` (all directory levels); `REVIEW.md` at repo root | `CLAUDE.md` violations surface as *nit*; `REVIEW.md` is "injected into the system prompt of every agent in the review pipeline as the highest-priority instruction block" ([Claude Code Review docs](https://code.claude.com/docs/en/code-review)) |
 | Cursor Bugbot | Accumulated learned rules from accept/reject feedback | Reviewer-specific rules are stored per repo and prepended to context — see [learned review rules](learned-review-rules.md) |
 
-GitHub's launch of `AGENTS.md` support for Copilot code review on 2026-06-18 is the trigger that made this pattern visible across tools: the reviewer "will read `AGENTS.md` from the root of your repository and use relevant instructions from that file when generating review feedback" ([GitHub Changelog 2026-06-18](https://github.blog/changelog/2026-06-18-copilot-code-review-agents-md-support-and-ui-improvements/)).
+GitHub's launch of `AGENTS.md` support for Copilot code review on 2026-06-18 is the trigger that made this pattern visible across tools: the reviewer "will read `AGENTS.md` from the root of your repository and use relevant instructions from that file when generating review feedback" ([GitHub Changelog 2026-06-18](https://github.blog/changelog/2026-06-18-copilot-code-review-agents-md-support-and-ui-improvements/)). OpenAI ships custom code review rules for Codex, the same wiring under another vendor ([OpenAI: Custom code review rules for Codex](https://developers.openai.com/blog/custom-code-review-rules-for-codex)).
 
 ## Why it works
 

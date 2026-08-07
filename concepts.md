@@ -601,6 +601,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Weakest Consistent Learning: What Agent Loops Should Persist](patterns/agent-design/weakest-consistent-learning.md)
 - [Agent as Tool vs Handoff: Who Keeps the Conversation](patterns/agent-design/agent-as-tool-vs-handoff.md)
 - [Dispatch-Time Reasoning Level for Delegated Agents](patterns/agent-design/dispatch-time-reasoning-level.md)
+- [Informed Abstention as a Tool-Boundary Runtime Gate](patterns/agent-design/informed-abstention-tool-boundary-gate.md)
 
 ## Loop Engineering
 
@@ -620,6 +621,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Stuck-Loop Recovery: Detecting and Escaping Non-Converging Agent Loops](loop-engineering/stuck-loop-recovery.md)
 - [Within-Task Model Cascade: Designing the Escalation Gate](loop-engineering/within-task-model-cascade.md)
 - [Blind Resampling Over Self-Repair in Small Code Models](loop-engineering/blind-resampling-over-self-repair.md)
+- [Calibrated Early Termination and Warm Restart for Agent Runs (FailFast-RestartSmart)](loop-engineering/early-termination-and-warm-restart.md)
 
 ## Tool Design
 
@@ -869,6 +871,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Document-Borne Prompt Injection Through Agent Read Tools](security/document-borne-prompt-injection.md)
 - [Flattened Tool Specs for Agent Safety Judgment (SafeKeep)](security/flattened-tool-specs-safety-judgment.md)
 - [Team-Scoped Agent Policy Delegation](security/team-scoped-policy-delegation.md)
+- [Trajectory Poisoning of Promoted Agent Skills (PoisonedEvolution)](security/trajectory-poisoning-promoted-skills.md)
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](security/enforced-versus-advisory-controls.md)
 
 ## Testing & Evaluation
 
@@ -1029,6 +1033,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Audit Your Test Suite With an Agent, Then Certify Each Flag](verification/certified-agent-test-suite-auditing.md)
 - [Equivalence Testing for Agent Configuration Changes](verification/equivalence-testing-agent-config-changes.md)
 - [Skill-Use Gates: Trigger, Compliance and Boundary](verification/skill-use-gate-decomposition.md)
+- [Canary Tools for Diagnosing Tool-Selection Reasoning](verification/canary-tools-tool-selection-diagnosis.md)
+- [Evidence-Conditioned Execution: Gate Edits on Observations](verification/evidence-conditioned-execution.md)
 
 ## Hooks & Guardrails
 
@@ -1120,6 +1126,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agentic Resource Discovery: Federated Pre-Invocation Search](standards/agentic-resource-discovery.md)
 - [Governance Layer for Agent Interoperability Protocols](standards/protocol-governance-layer.md)
 - [Stateless MCP: One Request per Tool Call](standards/stateless-mcp.md)
+- [Agent Plugins: Portable Packaging With Client-Defined Trust](standards/agent-plugins-standard.md)
 
 ## Development Workflows
 
@@ -1227,6 +1234,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Stacked Agent Sessions on Unmerged Feature Branches](workflows/stacked-agent-sessions.md)
 - [Behavioral Specification Elicitation Before Synthesis (SpecFirst)](workflows/behavioral-spec-elicitation.md)
 - [Porting a Coding-Agent Harness Beyond Engineering](workflows/porting-agent-harness-beyond-engineering.md)
+- [Comment-Triggered Agent Dispatch on Issues and PRs](workflows/comment-triggered-agent-dispatch.md)
 
 ## Human Factors
 
@@ -1400,6 +1408,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Homogeneous Debate Panels as a Groundedness Quality Lever](patterns/anti-patterns/homogeneous-debate-panel-groundedness.md)
 - [Deliberation-Inducing Cues That Multiply Reasoning Cost](patterns/anti-patterns/deliberation-inducing-prompt-cues.md)
 - [Task-Uniform Agent Permissions Ignore Where Failures Land](patterns/anti-patterns/task-uniform-agent-permissions.md)
+- [Belief Inertia After Tool-Map Drift in AI Agents](patterns/anti-patterns/belief-inertia-after-tool-map-drift.md)
+- [Frozen Playbook Reuse Without Target-Side Validation](patterns/anti-patterns/frozen-playbook-reuse-validation.md)
 
 ## Emerging Concepts
 
@@ -1537,5 +1547,6 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cursor Customize Page: Unified Surface for Agent Primitives](tools/cursor/customize-page.md)
 - [Parameter-Level Permission Rules (Tool(param:value) Syntax)](tools/claude/tool-param-value-permission-rules.md)
 - [Agent Host Review Comments: Server-Side Feedback Transport](tools/copilot/agent-host-review-comments.md)
+- [GitHub Copilot App Slash Commands and What They Change](tools/copilot/slash-commands-copilot-app.md)
 
 </div>

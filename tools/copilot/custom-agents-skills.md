@@ -31,6 +31,8 @@ The [Agent Skills specification](https://agentskills.io) defines the open standa
 
 [Prompt files](../../instructions/prompt-file-libraries.md) live in `.github/prompts/` and define specialized prompts you invoke with `/` commands. They use YAML frontmatter to set which model to use, and you keep them in source control to share across the team.
 
+Their reach stops at chat. "Agents running on the Agent Host don't use prompt files. To use an existing prompt with the Copilot agent, convert it to an agent skill" ([VS Code — Prompt files](https://code.visualstudio.com/docs/copilot/customization/prompt-files)), so a prompt file does not appear among [the Copilot app's slash commands](slash-commands-copilot-app.md).
+
 ## Plugins
 
 [Plugins](https://github.com/microsoft/skills) bundle MCP servers, agents, skills, and hooks into installable packages. Install from GitHub repos with `npx skills add owner/repo`. Skills from a plugin appear alongside local skills.

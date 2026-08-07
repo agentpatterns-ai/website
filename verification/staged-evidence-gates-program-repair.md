@@ -31,7 +31,7 @@ If any one of these fails, the gates either become noise sources (flaky-test fai
 
 ## The pattern
 
-An agentic automated-program-repair loop generates and validates candidate patches. The naive design runs the full regression suite on every candidate — accurate but slow, and most candidates fail on cheaper signals first, the case for [incremental verification](incremental-verification.md). Staged evidence gates re-order the checks by cost:
+An agentic automated-program-repair loop generates and validates candidate patches. The naive design runs the full regression suite on every candidate — accurate but slow, and most candidates fail on cheaper signals first, the case for [incremental verification](incremental-verification.md). Staged evidence gates re-order the checks by cost. Every gate below fires on a candidate that already exists; for the complementary control that holds the edit until the agent has made the observations it depends on, see [evidence-conditioned execution](evidence-conditioned-execution.md).
 
 ```mermaid
 graph TD

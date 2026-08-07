@@ -160,6 +160,7 @@ When nothing crosses a tool or team boundary. A single developer on a single too
 - [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md)
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md)
+- [Agent Plugins: Portable Packaging With Client-Defined Trust](agent-plugins-standard.md) — the plugin format that carries `SKILL.md` folders in its `skills/` directory
 - [Cross-Tool Translation: Learning from Multiple AI Assistants](../human/cross-tool-translation.md)
 - [AGENTS.md: Project-Level README for AI Coding Agents](agents-md.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](mcp-protocol.md)

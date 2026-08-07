@@ -156,6 +156,7 @@ The full stack is most justified when agents load third-party skills at runtime 
 ## Related
 
 - [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md)
+- [Trajectory Poisoning of Promoted Agent Skills (PoisonedEvolution)](trajectory-poisoning-promoted-skills.md) — the evolution-side sibling, where the skill text is synthesized in good faith from poisoned trajectory evidence rather than arriving malicious from a registry
 - [Tool Signing and Signature Verification](tool-signing-verification.md)
 - [Blast Radius Containment](blast-radius-containment.md)
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)

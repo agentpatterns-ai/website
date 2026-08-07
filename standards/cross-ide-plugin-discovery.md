@@ -5,7 +5,7 @@ tags:
   - standards
   - tool-engineering
   - copilot
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-07
 maturity: adopted
 ---
 
@@ -26,6 +26,8 @@ graph LR
 ```
 
 The writer does not need to know what consumers exist, and consumers do not coordinate with each other. The same convention underlies `~/.config/`, `~/.local/share/`, and the GnuPG agent's `~/.gnupg/` — shared state held in a stable path rather than a coordination protocol ([XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/latest/)).
+
+Vercel announced Agent Plugins on August 6, 2026, a second vendor instance of the same install-and-discovery pattern ([Vercel](https://vercel.com/blog/introducing-agent-plugins)).
 
 ## Reference implementation: VS Code 1.120 + Copilot CLI
 
@@ -101,6 +103,7 @@ After `copilot plugin install github/moda-linter/copilot-plugin`, the plugin app
 ## Related
 
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md)
+- [Agent Plugins: Portable Packaging With Client-Defined Trust](agent-plugins-standard.md) — the cross-vendor package format, where this contract fixes the install path
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md)
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)

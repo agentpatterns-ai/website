@@ -175,6 +175,7 @@ Prompt file libraries degrade in several predictable conditions:
 - [Prompt Governance via PRs](prompt-governance-via-pr.md)
 - [Specification as Prompt](specification-as-prompt.md)
 - [Custom Agents and Skills (Copilot)](../tools/copilot/custom-agents-skills.md)
+- [GitHub Copilot App Slash Commands and What They Change](../tools/copilot/slash-commands-copilot-app.md)
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [@import Composition Pattern](import-composition-pattern.md)
 - [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)

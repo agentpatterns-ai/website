@@ -11,7 +11,7 @@ aliases:
   - cloud agent auto model selection
   - harness-side model routing
   - vendor-side model broker
-last_reviewed: 2026-08-06
+last_reviewed: 2026-08-07
 maturity: established
 ---
 
@@ -44,7 +44,7 @@ graph TD
     S --> C[Per-session lock<br>or per-request swap]
 ```
 
-1. Routing dimensions. Copilot's published criteria are availability, model performance, plan, and admin policy — not declared task class or context size ([GitHub Changelog 2026-05-14](https://github.blog/changelog/2026-05-14-copilot-cloud-agent-supports-auto-model-selection/)). Visual Studio Magazine names the trade-off: the broker "currently prioritizes server health and regional availability over the specific technical requirements of a developer's prompt" ([VS Magazine 2026-02-06](https://visualstudiomagazine.com/articles/2026/02/06/why-copilots-auto-mode-for-ai-models-ignores-your-actual-task.aspx)).
+1. Routing dimensions. Copilot's published criteria are availability, model performance, plan, and admin policy — not declared task class or context size ([GitHub Changelog 2026-05-14](https://github.blog/changelog/2026-05-14-copilot-cloud-agent-supports-auto-model-selection/)). Visual Studio Magazine names the trade-off: the broker "currently prioritizes server health and regional availability over the specific technical requirements of a developer's prompt" ([VS Magazine 2026-02-06](https://visualstudiomagazine.com/articles/2026/02/06/why-copilots-auto-mode-for-ai-models-ignores-your-actual-task.aspx)). Cursor publishes its own account of how Cursor Router picks a model for a request ([Cursor 2026-08-06](https://cursor.com/blog/how-cursor-router-works)).
 2. Session vs request scope. Copilot CLI keeps "the selected model consistent throughout a chat session" — the decision fires once, at session start ([GitHub Changelog 2026-04-17](https://github.blog/changelog/2026-04-17-github-copilot-cli-now-supports-copilot-auto-model-selection/)). Per-session locking preserves in-context state; per-request routing maximizes pool use.
 3. Observability surface. Until 2026-03-20, Copilot dashboards collapsed all Auto traffic under a generic "Auto" label, so admins could not see "exactly which models are being used across your organization" ([GitHub Changelog 2026-03-20](https://github.blog/changelog/2026-03-20-copilot-usage-metrics-now-resolve-auto-model-selection-to-actual-models/)). A harness that hides the resolved `model_id` from telemetry is unauditable.
 4. Policy and plan as routing inputs. Auto "honors all administrator model settings" and the pool is "subject to your policies and subscription type" ([GitHub Changelog 2026-05-14](https://github.blog/changelog/2026-05-14-copilot-cloud-agent-supports-auto-model-selection/)) — an org-level restriction shrinks the broker's choice set directly.

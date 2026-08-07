@@ -42,6 +42,8 @@ A flat per-turn token cap is the common mistake. Per-turn cost in a single-sessi
 
 The wrong default is to set all three primitives high and trust whichever fires first. Budgets that bind force discipline; budgets that never bind are decorative. One binding primitive beats three slack ones.
 
+A cap can also be predicted rather than preset. [Calibrated early termination](early-termination-and-warm-restart.md) scores the live trajectory against a target false-positive rate and stops the run on a failure signal, so the bound tracks how the run is going instead of a fixed count chosen in advance.
+
 ## Per-turn allocation: front-loaded vs even split
 
 Once the cap is chosen, allocation across turns is the second decision. The two options are even split, where each turn gets the same compute budget, and front-loaded, where planning and verification get extra-high compute and execution runs at high. The [reasoning sandwich](../patterns/agent-design/reasoning-budget-allocation.md) is the canonical front-loaded shape and the only one with published benchmark numbers: extra-high planning, high execution, extra-high verification scored 66.5% on Terminal Bench 2.0, beating uniform high (63.6%) and continuous maximum (53.9%, penalized by timeouts) ([LangChain — Improving deep agents with harness engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)).

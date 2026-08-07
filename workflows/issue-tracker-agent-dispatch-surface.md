@@ -136,3 +136,4 @@ The same ticket dispatched without the R/A/P sections — "users get logged out 
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — the upstream skill that ensures tickets reach the dispatch surface in a WRAP-ready state
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md) — generates the kind of investigated, context-rich tickets that succeed on this dispatch surface
 - [Trigger-Level Gating for Autonomous Agent Intake](../patterns/agent-design/trigger-level-agent-intake-gating.md) — the opt-in pickup filter above, expanded into the three gates that decide whether an agent starts and what it may change
+- [Comment-Triggered Agent Dispatch on Issues and PRs](comment-triggered-agent-dispatch.md) — the same tracker with the comment as the trigger, where dispatch repeats without bound on one artifact

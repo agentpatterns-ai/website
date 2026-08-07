@@ -17,6 +17,7 @@ nav:
       - owasp-llm-top-10-2025-agent-crosswalk.md
       - pre-trust-execution-surface.md
       - rag-architecture-poisoning-robustness.md
+      - trajectory-poisoning-promoted-skills.md
       - trojan-hippo-memory-attack.md
       - unbounded-consumption-resource-bounds.md
   - "Sandboxing":
@@ -43,6 +44,7 @@ nav:
       - agent-retrieval-provenance.md
       - cryptographic-governance-audit-trail.md
       - defense-in-depth-agent-safety.md
+      - enforced-versus-advisory-controls.md
       - enterprise-agent-hardening.md
       - harness-distributed-security-controls.md
       - inline-lifecycle-safety-harness.md

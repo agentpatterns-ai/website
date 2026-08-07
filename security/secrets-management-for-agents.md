@@ -63,7 +63,7 @@ Agent-readable files include:
 
 Do not store secrets in:
 
-- `.env` files unless they are blocked by `permissions.deny` rules (see [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md))
+- `.env` files unless they are blocked by `permissions.deny` rules (see [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)), since [ignore files are advisory](enforced-versus-advisory-controls.md)
 - AGENTS.md, system prompts, or instruction files
 - Comments in code files
 
