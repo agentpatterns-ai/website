@@ -67,12 +67,14 @@ Packaging domain knowledge and reusable capabilities as agent skills with reliab
 - [Skill Authoring Patterns](skill-authoring-patterns.md) — Practical patterns for building, testing, and troubleshooting agent skills -- categories, description craft, implementation patterns, and debugging
 - [Skill Authoring as Software Engineering: What Transfers](skill-authoring-software-engineering.md) — Which software-engineering principles survive contact with measurement when authoring skills, and the two questions that decide skill versus hook
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md) — All SKILL.md frontmatter fields: invocation control, subagent delegation, tool restriction, hooks, and argument handling
+- [Listener-State Naming for User-Invoked Agent Skills](listener-state-skill-naming.md) — Name a user-invoked skill after the reader's failure state rather than the output shape, so the agent adds the missing premise instead of deleting words
 - [Skill Context Isolation](skill-context-isolation.md) — Run a skill in an isolated subagent context so its auxiliary tokens never enter the main chat; the parent receives only the distilled result
 - [Skill Library Evolution](skill-library-evolution.md) — How agent skill libraries grow, get pruned, and evolve through versioning, quality gates, and lifecycle governance
 - [Skill Reuse as Vendored Forking](skill-reuse-as-vendored-forking.md) — Reusing a SKILL.md is a one-time near-verbatim copy that silently forks from its source; bind project specifics at adoption and track upstream only where the contract is coupled to a moving source
 - [Skill Tool Runtime Enforcement](skill-tool-runtime-enforcement.md) — Use the Skill tool to load command prompts at invocation time rather than telling agents to read the file -- eliminates stale instructions and path drift
 - [Google ADK Skills](adk-skills.md) — How Google ADK implements the Agent Skills standard via SkillToolset, inline `models.Skill`, and three auto-generated tools mapped to L1/L2/L3 progressive disclosure
 - [Interpreter Skills](interpreter-skills.md) — Ship a SKILL.md plus an importable module so the model decides when the behavior fires while the runtime executes a reviewed, testable function — the named, versionable unit on top of an embedded code interpreter
+- [Generated Procedure Drivers: Skills That Emit a Program](generated-procedure-drivers.md) — A skill whose output is an executable script that walks a person through a manual procedure, useful only where automation genuinely stops
 
 ## Hooks & Lifecycle
 

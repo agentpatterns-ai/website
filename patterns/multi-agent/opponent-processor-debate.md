@@ -191,3 +191,4 @@ The advocate and skeptic receive the same task but structurally incompatible inc
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
 - [Reviewer Precision as a Pipeline Quality Proxy](reviewer-precision-proxy.md)
+- [Homogeneous Debate Panels as a Groundedness Quality Lever](../anti-patterns/homogeneous-debate-panel-groundedness.md)

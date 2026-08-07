@@ -111,6 +111,7 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Materialize each subgoal-scoped capability as an opaque epoch-bound handle that closure removes from the planner's interface; stale replay is rejected before side effects, closing lingering authority when tool traffic is mediated and the catalog is typed
 - [Safe Outputs Pattern](safe-outputs-pattern.md) — Default agents to read-only and require explicit grants for each write output type, producing a deterministic blast radius
 - [Task-Based Access Control with Hybrid Inspection](task-based-access-control-hybrid-inspection.md) — Bind each tool call to the user's current task via short-lived signed credentials, with a semantic axis flagging in-scope-but-off-task calls; the deterministic axis carries the security guarantee
+- [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md) — Mark selected agent-config keys `overridable` so enterprise teams vary them inside an admin-owned ceiling; the multi-team merge resolves least-restrictive, so team membership becomes a capability grant no settings diff shows
 - [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md) — Mine session transcripts for repeated read-only tool calls and propose a prioritized allowlist — narrower than bypass, tighter than manual curation
 
 ## Code Injection

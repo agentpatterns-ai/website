@@ -75,6 +75,7 @@ The block names the default, the escalation trigger, and the high-effort review 
 - [Heuristic-Based Effort Scaling in Agent System Prompts](../patterns/agent-design/heuristic-effort-scaling.md) — encode per-tier effort ceilings for multi-agent work; the complement that sizes effort from task cues
 - [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](../patterns/agent-design/reasoning-effort-over-tool-scaffolding.md) — evidence that the effort dial, not extra tools, moves first-try reliability
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](../patterns/agent-design/trajectory-conditioned-model-escalation.md) — the runtime escalation signal a codified "escalate on evidence" rule points to
+- [Dispatch-Time Reasoning Level for Delegated Agents](../patterns/agent-design/dispatch-time-reasoning-level.md) — when a codified default is the better answer, and the two conditions under which per-task choice beats it
 - [Convention Over Configuration for Agent Workflows](convention-over-configuration.md) — the broader case for encoding decisions into the harness so agents follow patterns rather than re-decide
 - [Indiscriminate Structured Reasoning](../patterns/anti-patterns/reasoning-overuse.md) — the failure mode when effort is spent past the point it helps
 - [Advisory Prompts Distilled from Reasoning Traces](advisory-prompts-from-reasoning-traces.md) — what the cheap, reasoning-off branch of this policy can and cannot recover through the prompt alone

@@ -112,3 +112,4 @@ The anchor-preservation framing has real costs that the 7.0% headline win must j
 - [Skill as Knowledge Pattern](../tool-engineering/skill-as-knowledge.md) — what a skill should *contain*; this page covers what to *remove*
 - [Cost-Aware Tracing for Skill Distillation](../observability/cost-aware-tracing-skill-distillation.md) — the trace-side instrumentation that makes anchor-preservation decisions measurable
 - [Skill Library Technical Debt](../tool-engineering/skill-library-technical-debt.md) — library-level debt patterns including stale anchors and missing validators
+- [The No-Op Test: Prune Agent Docs by Behavior, Not Length](behavioral-no-op-test.md) — the behavioral deletion check, and why an operational anchor reads as a no-op on a happy-path task

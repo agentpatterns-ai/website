@@ -151,3 +151,5 @@ The first stage adds a managed marketplace without breaking working sessions. Th
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md)
+- [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md)
+- [Skill Packs: Registry Distribution Needs Pinning Discipline](../instructions/skill-pack-registry-distribution.md) — the developer-side install-and-update decision this admin contract sits above

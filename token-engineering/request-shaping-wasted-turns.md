@@ -89,3 +89,4 @@ Note what the second version does not do. It does not restate the project's test
 - [Context Budget Allocation](../context-engineering/context-budget-allocation.md) — the budget this technique spends against, across all context sources
 - [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the failure mode when trimming the request goes too far
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — measure where spend actually goes before tuning phrasing
+- [Deliberation-Inducing Cues That Multiply Reasoning Cost](../patterns/anti-patterns/deliberation-inducing-prompt-cues.md) — the phrasings that inflate reasoning tokens rather than retrieval turns

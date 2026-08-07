@@ -9,7 +9,7 @@ tags:
 aliases:
   - coding agents for non-programming tasks
   - coding agents on non-code work
-last_reviewed: 2026-08-03
+last_reviewed: 2026-08-05
 maturity: adopted
 ---
 
@@ -24,6 +24,8 @@ Decide the check before you decide the task. A coding agent's loop is edit a fil
 The move that makes a non-code task tractable is converting it into something a script produces, so re-running the script is the check. [Scope expansion](coding-agent-scope-expansion.md) treats a verification signal in the new domain as a precondition; this is where that signal comes from.
 
 Anthropic's analysis of roughly 400,000 Claude Code sessions between October 2025 and April 2026 found that "every one of the ten largest occupations in our dataset lands within seven points of software engineers" on success ([Anthropic](https://www.anthropic.com/research/claude-code-expertise)). Its worked legal example is a lawyer building a script that flags missing clauses across a folder of contracts. That session produced code, where success rates ran 34% for software occupations and 29% for everyone else.
+
+GitHub's legal team is a second case: they used Copilot CLI on their own department's workflows ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/how-the-github-legal-team-used-copilot-cli-to-streamline-their-workflows/)). For a practitioner account outside a vendor blog, see [Towards Data Science on coding agents for non-programming tasks](https://towardsdatascience.com/how-to-apply-coding-agents-to-non-programming-tasks/).
 
 Checks that hold up outside a test suite:
 

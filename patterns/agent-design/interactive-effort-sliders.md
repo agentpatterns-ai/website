@@ -105,6 +105,7 @@ The operator matches slider position to turn type: `medium` for reads, `max` for
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — the agent-driven alternative: system-prompt tiers decide effort rather than the operator
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — phase-based allocation (plan, execute, verify) as the architectural alternative to runtime dialing
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](../../token-engineering/cost-aware-agent-design.md) — the broader cost-routing context where effort sits alongside model selection
+- [Dispatch-Time Reasoning Level for Delegated Agents](dispatch-time-reasoning-level.md) — the absent-operator case, where the level is set once at hand-off and cannot be corrected mid-run
 - [Steering Running Agents](steering-running-agents.md) — companion primitive for mid-session operator input on direction rather than compute
 - [Agent Turn Model](agent-turn-model.md) — the turn abstraction that makes per-turn controls meaningful
 - [The Think Tool](think-tool.md) — mid-stream reasoning checkpoint; complementary to extended-thinking budget

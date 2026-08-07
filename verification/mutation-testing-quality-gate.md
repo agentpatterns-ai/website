@@ -118,3 +118,4 @@ The agent adds three targeted tests; the mutation tool reruns and confirms all 1
 - [Anti-Reward-Hacking](anti-reward-hacking.md) — designing rubrics agents cannot game by surface metrics
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — the changed-line coverage gate whose assertion-free blind spot mutation testing closes
 - [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](bug-discriminating-validation-evidence.md) — the same discrimination question asked against the real reported defect rather than a synthetic mutant
+- [Audit Your Test Suite With an Agent, Then Certify Each Flag](certified-agent-test-suite-auditing.md) — measures adequacy against real accepted-but-buggy code instead of synthetic mutants, at a much higher cost per unit

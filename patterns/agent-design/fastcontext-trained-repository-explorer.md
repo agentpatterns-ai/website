@@ -112,3 +112,4 @@ The integration becomes a liability in the hugo-12448 case study: the explorer r
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md) — The architectural seam FastContext draws between explorer and solver is one instance of the broader reasoning-vs-execution split.
 - [Discrete Phase Separation](discrete-phase-separation.md) — The same isolate-then-distil mechanism applied across workflow phases instead of across the exploration boundary.
 - [Agent-Tuned Code Search](../../context-engineering/agent-tuned-code-search.md) — The hosted, vendor-indexed variant of the same explorer contract, where index freshness and code egress replace the serving-infrastructure constraint.
+- [Silent Handoff Failure in Delegated Code Search](../../context-engineering/silent-handoff-failure-delegated-search.md) — The failure mode the citation-only output contract is defending against, measured on read-only repository Q&A.

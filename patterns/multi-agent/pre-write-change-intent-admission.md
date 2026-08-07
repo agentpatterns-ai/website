@@ -11,7 +11,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-07-28
+last_reviewed: 2026-08-04
 maturity: emerging
 ---
 
@@ -19,7 +19,9 @@ maturity: emerging
 
 > Agents declare base commit and write scope before coding; a deterministic control plane admits, constrains, or refuses each claim before any byte changes.
 
-Pre-write change intent admission moves interference detection ahead of the write. Each parallel worker declares a versioned change intent — an exact base commit, typed resources, dependencies, and the operations it plans — and a control plane decides whether that claim can coexist with the intents already active ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)). The distinction it rests on is between an integration conflict, which you can only see after both agents have written code, and an authority conflict, which two active workers already have the moment they claim incompatible rights over the same surface. The published evidence is a six-pair feasibility check, so treat the mechanism as clear and the payoff as unproven.
+Pre-write change intent admission moves interference detection ahead of the write. Each parallel worker declares a versioned change intent — an exact base commit, typed resources, dependencies, and the operations it plans — and a control plane decides whether that claim can coexist with the intents already active ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)). The distinction it rests on is between an integration conflict, which you can only see after both agents have written code, and an authority conflict, which two active workers already have the moment they claim incompatible rights over the same surface.
+
+The first published evidence was a six-pair feasibility check. A 30-pair, three-seed study of 360 executions has since measured the payoff ([Claim Plane confirmatory study, 2026](https://arxiv.org/abs/2608.00947v1)): static Claim Plane raised the pair pass rate from 23.3% to 50.0% and integration success from 65.6% to 96.7%.
 
 ## When this pattern applies
 
@@ -69,7 +71,7 @@ Adapted from Appendix A of [Nikolaev (2026)](https://arxiv.org/abs/2607.21909). 
 
 ## When this backfires
 
-- Serialization is the common outcome, not the exception. In the paper's six-pair check, the arm that treated all planned scope as committed passed 6 of 6 pairs, but only by serializing all 6. Plain always-serial execution passed 4 of 6, and the dynamic-scope arm the paper introduces passed 3 of 6 with 7 promotions and 2 fail-closed blocks ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)). The author reports one safe parallel case that was conservatively serialized and labels the run a debugging signal.
+- Serialization is the common outcome, not the exception. In the paper's six-pair check, the arm that treated all planned scope as committed passed 6 of 6 pairs, but only by serializing all 6. Plain always-serial execution passed 4 of 6, and the dynamic-scope arm the paper introduces passed 3 of 6 with 7 promotions and 2 fail-closed blocks ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)). The author reports one safe parallel case that was conservatively serialized and labels the run a debugging signal. The 30-pair study qualifies that picture: static admission passed 60.0% of conflict-labeled pairs against 6.7% for the baseline, and the paper records the limits of selective concurrency alongside the gain ([Claim Plane confirmatory study, 2026](https://arxiv.org/abs/2608.00947v1)).
 - Blocking is expensive when transactions are long. An agent holds authority across minutes of inference, so a pessimistic gate blocks far longer than a database lock would — the cost regime behind [multi-agent shared state isolation anomalies](../anti-patterns/multi-agent-shared-state-isolation-anomalies.md). [CoAgent](https://arxiv.org/abs/2606.15376) argues the opposite design from that premise, advisory notification plus targeted repair, and reports staying within 5% of serial correctness at 1.4x speedup where two-phase locking and optimistic concurrency control give up nearly all concurrency gains.
 - High-recall planners lower precision. Declaring many bounded contingent regions reduces undeclared writes, but the paper reports it also makes static policy far more conservative and blurs region boundaries ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)).
 - Language coverage is thin. The prototype is Python-first for typed symbol and callable extraction; the protocol is language-agnostic, but the author notes that useful semantic analysis elsewhere needs language adapters that do not yet exist ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)).
@@ -84,7 +86,7 @@ Pre-write admission is also not a replacement for merge, tests, or review. It is
 - Committed scope reserves authority now; contingent scope reserves nothing until the first attempted mutation triggers a narrowed promotion and atomic re-admission
 - A rejected promotion leaves the intent unchanged, so a planner that guesses wrong cannot widen its own write authority
 - The mechanism only binds where writes cross an enforceable boundary; without tool-call hooks or a broker, direct host writes bypass the control plane
-- Published results are a six-pair feasibility check in which full serialization was the only clean arm, so treat parallel throughput as unproven and measure it yourself ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909))
+- A 30-pair, three-seed study puts static admission at a 50.0% pair pass rate against a 23.3% baseline and 96.7% integration success, with the largest gain on conflict-labeled pairs ([Claim Plane confirmatory study, 2026](https://arxiv.org/abs/2608.00947v1))
 
 ## Related
 

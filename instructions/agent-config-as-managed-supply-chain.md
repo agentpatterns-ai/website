@@ -99,3 +99,4 @@ The qualified scope is not decoration — several conditions invert the recommen
 - [Hooks for Enforcement vs Prompts for Guidance](hooks-vs-prompts.md) — the execution-layer counterpart that closes what a config-layer DSL cannot
 - [Prompt Governance via PR](prompt-governance-via-pr.md) — the minimum-viable governance discipline this pattern extends with hashing and pinning
 - [Instruction File Ecosystem](instruction-file-ecosystem.md) — the broader landscape of instruction-file types this supply-chain framing operates over
+- [Skill Packs: Registry Distribution Needs Pinning Discipline](skill-pack-registry-distribution.md) — the same pinning discipline applied to skills installed from a registry rather than to config files

@@ -101,3 +101,4 @@ Encoding tacit knowledge is expensive and carries its own failure modes:
 - [Closed-Loop Agent Training](closed-loop-agent-training.md) — full feedback loop from production to training
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — converting failures into eval cases
 - [AI Development Maturity Model](ai-development-maturity-model.md) — calibration and eval stages in the broader maturity arc
+- [Porting a Coding-Agent Harness Beyond Engineering](porting-agent-harness-beyond-engineering.md) — encoding a non-engineering function's methodology so a CLI agent can run it

@@ -138,3 +138,4 @@ Because each stage compounds the last. A downstream agent reading prose must wor
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
 - [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md)
+- [Agent as Tool vs Handoff: Who Keeps the Conversation](../agent-design/agent-as-tool-vs-handoff.md) — whether to hand off at all, or delegate and take the result back

@@ -127,3 +127,4 @@ A project-specific convention (for example, always use `assert_raises` instead o
 - [Layered Mutability](layered-mutability.md)
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md)
 - [Continuous Agent Improvement](../../workflows/continuous-agent-improvement.md)
+- [Weakest Consistent Learning: What Agent Loops Should Persist](weakest-consistent-learning.md) — how to phrase a learning once the layer is chosen

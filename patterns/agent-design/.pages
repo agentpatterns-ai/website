@@ -81,7 +81,9 @@ nav:
       - wiki-memory-agent-maintained-knowledge-base.md
       - filesystem-memory-organization.md
       - persistent-teammate-workspace.md
+      - weakest-consistent-learning.md
   - "Control & Orchestration":
+      - agent-as-tool-vs-handoff.md
       - background-todo-agent.md
       - in-agent-task-prioritization.md
       - interactive-clarification-underspecified-tasks.md
@@ -123,6 +125,7 @@ nav:
       - behavioral-drivers-agent-success.md
       - cross-vendor-competitive-routing.md
       - decoupled-search-grounding.md
+      - dispatch-time-reasoning-level.md
       - dual-budget-control-search-agents.md
       - effective-feedback-compute.md
       - gateway-model-routing.md

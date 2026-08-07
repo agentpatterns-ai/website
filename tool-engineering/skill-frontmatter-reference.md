@@ -197,6 +197,7 @@ Setting both `user-invocable: false` and `disable-model-invocation: true` leaves
 ## Related
 
 - [Skill Authoring Patterns](skill-authoring-patterns.md)
+- [Listener-State Naming for User-Invoked Agent Skills](listener-state-skill-naming.md)
 - [Skill Tool as Enforcement: Loading Command Prompts at Runtime](skill-tool-runtime-enforcement.md)
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../standards/agent-skills-standard.md)
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](hook-catalog.md)

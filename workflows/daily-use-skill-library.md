@@ -42,6 +42,8 @@ A three-sentence skill that directs the agent to interview you relentlessly abou
 
 The design-tree framing — walking every branch before implementation — prevents the most expensive failure mode: building the wrong thing because an important assumption went unexamined. Pocock's [grill-me SKILL.md](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) is only three sentences long.
 
+A grilling session stalls when some of what it surfaces is not yours to answer. The same pack ships `to-questionnaire` for that case, which turns the unanswerable questions into a file for the person who does hold them ([Generated Questionnaires](../context-engineering/generated-questionnaires.md)).
+
 ### /write-a-prd — convert understanding to specification
 
 Takes the output of the grill-me session and produces a Product Requirements Document through interactive interview and codebase exploration. The skill files the PRD as a GitHub issue, a durable, addressable artifact. It prevents the common anti-pattern of starting implementation against verbal or implicit requirements.

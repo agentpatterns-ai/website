@@ -84,3 +84,4 @@ Both delegations happen in the same session. The fork-vs-fresh choice is per-tas
 - [Cross-Tool Subagent Comparison](cross-tool-subagent-comparison.md) — how Claude Code, Gemini CLI, and Copilot CLI differ on subagent context isolation.
 - [Subagent Schema-Level Tool Filtering](subagent-schema-level-tool-filtering.md) — narrowing what a subagent can do, complementary to narrowing what it sees.
 - [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — orchestrator-side concurrency model that pairs with the fork/fresh choice on each spawn.
+- [Agent as Tool vs Handoff: Who Keeps the Conversation](../agent-design/agent-as-tool-vs-handoff.md) — the control-return axis, orthogonal to the context-inheritance axis this page covers.

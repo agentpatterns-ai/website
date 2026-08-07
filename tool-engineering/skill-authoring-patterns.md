@@ -269,7 +269,9 @@ The instructions are probably too verbose or buried. Put the critical ones first
 - [Skill Authoring as Software Engineering: What Transfers](skill-authoring-software-engineering.md) — the construction principles behind these patterns, and which of them independent measurement actually supports
 - [CLI-First Skill Design](cli-first-skill-design.md) — the dual-use script shape for executable skills
 - [Skill Frontmatter Reference](skill-frontmatter-reference.md)
+- [Listener-State Naming for User-Invoked Agent Skills](listener-state-skill-naming.md) — how the invocation name itself does work the skill body cannot
 - [Skill Library Evolution](skill-library-evolution.md) — lifecycle governance for authored skills
 - [Progressive Disclosure for Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md)
 - [Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit](../verification/skill-evals.md) — evaluating an authored skill as a unit
+- [Skill-Use Gates: Trigger, Compliance and Boundary](../verification/skill-use-gate-decomposition.md) — measured evidence that recognition and procedure-following fail independently
 - [Project Writing Skill: House Style as Model-Invocable Skill](project-writing-skill.md) — a concrete authored skill packaging house-style writing conventions, loaded only when the agent writes prose

@@ -181,3 +181,4 @@ No. Manus retains failure traces in context rather than summarizing them away, s
 - [Context Engineering: The Discipline of Designing Agent Context](../../context-engineering/context-engineering.md)
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — the general form that synthesizes arbitrary domain sources, where this page mines lessons from execution traces
 - [Git-Bound Memory for the Agentic Development Lifecycle](git-bound-memory.md) — binds synthesized rationale to commits so the merge gate verifies it; depends on the capture this page describes
+- [Weakest Consistent Learning: What Agent Loops Should Persist](weakest-consistent-learning.md) — a selection criterion for choosing which phrasing of a synthesized lesson to keep

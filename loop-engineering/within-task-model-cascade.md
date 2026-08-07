@@ -10,7 +10,7 @@ aliases:
   - within-task model escalation
   - escalation-gated model cascade
   - cheap-model-first escalation ladder
-last_reviewed: 2026-07-28
+last_reviewed: 2026-08-06
 maturity: adopted
 ---
 
@@ -42,6 +42,8 @@ One published implementation extracts structured fields from retrieved documents
 Step 4 matters as much as step 1. An unbounded ladder is a [non-converging loop](stuck-loop-recovery.md) with a bigger bill; the explicit no-answer terminal is what keeps a failed item visible instead of silently degraded.
 
 Pick the starting rung by measurement, not parameter count. Across twenty local models, a 4B (`qwen3:4b`) and a 7B (`mistral:7b`) beat 12B and 14B variants ("size is a poor predictor") while a 0.5B model "returned empty JSON on most fields" ([Towards Data Science](https://towardsdatascience.com/loop-engineering-for-rag-generation-an-llm-cascade-from-a-cheap-local-model-up-to-a-hosted-flagship/)). [Local Model Viability Factors for Coding](../patterns/agent-design/local-model-viability-for-coding.md) covers the rest of the screen for a self-hosted rung: memory, context length, and tool-calling reliability.
+
+Microsoft's VS Code team reports its MAI-Code-1-Flash used 67% to 94% fewer tokens than larger models in real developer workflows ([VS Code on MAI-Code-1-Flash](https://code.visualstudio.com/blogs/2026/07/29/mai-code-1-flash)). Those are early results, and the same post rates the model above Haiku 4.5 and GPT-5.4 Mini on quality. Both figures come from the vendor, on the vendor's own model. Use them to shortlist a cheap rung, then measure field accuracy yourself.
 
 This is escalation inside one step, which is a different axis from the routing patterns already on this site. [Utility-Model Split](../patterns/agent-design/utility-model-split.md) is a static split by call type fixed at design time. [Auto Model Selection](../patterns/agent-design/auto-model-selection.md) is a single up-front pick per request. [Trajectory-Conditioned Model Escalation](../patterns/agent-design/trajectory-conditioned-model-escalation.md) escalates mid-run for agentic tasks that have no pass/fail signal to gate on. A within-task cascade needs that signal and reruns the whole step when it fires.
 

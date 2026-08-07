@@ -71,3 +71,5 @@ There is also a floor case the measurement itself reveals: if the best judge you
 - [Evaluator Templates: Portable Primitives for Agent Eval Suites](evaluator-templates.md) — reusable judge templates whose reliability this meta-evaluation measures.
 - [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md) — aggregating judge-graded per-trace findings, which assumes the judge is reliable enough to aggregate.
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — when to combine outcome checks with LLM rubric graders in the first place.
+- [Homogeneous Debate Panels as a Groundedness Quality Lever](../patterns/anti-patterns/homogeneous-debate-panel-groundedness.md) — why scaling one judge into a same-model panel does not substitute for meta-evaluating it.
+- [Behavior Specs: Grading the Trajectory, Not the Result](behavior-specs.md) — a written standard a judge grades trajectories against, which only pays off once that judge has been meta-evaluated.

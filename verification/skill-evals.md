@@ -30,6 +30,8 @@ Skills fail on two axes that require separate evals: [Source: [Improving skill-c
 
 Output-only evals leave trigger failures invisible; trigger-only evals leave silent output regressions unreported.
 
+Under progressive disclosure the output axis splits again, into how faithfully the agent follows the prescribed procedure and whether it respects the skill's prohibitions. See [Skill-Use Gates](skill-use-gate-decomposition.md) for the three-gate version and when it is worth the extra instrumentation.
+
 ## Dataset shape
 
 A skill eval dataset is small, hand-labeled, and version-controlled alongside `SKILL.md`. The agentskills.io spec stores cases in `evals/evals.json` next to the skill. Each case has a prompt (realistic message with concrete paths), an expected output description, optional input files, and assertions — verifiable statements about what the output must contain. [Source: [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)]

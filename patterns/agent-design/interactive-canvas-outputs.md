@@ -9,7 +9,7 @@ tags:
 aliases:
   - agent canvas output
   - interactive artifact output
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-06
 maturity: established
 ---
 
@@ -17,7 +17,7 @@ maturity: established
 
 > Canvases are an output-shape choice, not a new pattern: they earn their overhead only on irreducibly multi-dimensional output, and they change what review means.
 
-Claude Artifacts (Claude 3.5 Sonnet, June 2024) introduced a dedicated window for generated content "alongside their conversation" for code snippets, text documents, and website designs ([Anthropic](https://www.anthropic.com/news/claude-3-5-sonnet)). Cursor 3.1 extended the primitive to agent-built visualizations: "Cursor can now respond by creating interactive canvases" with first-party components — tables, boxes, diagrams, charts — plus diffs and to-do lists ([Cursor changelog](https://cursor.com/changelog)). The shape is now available across mainstream tools; the question is when to produce one.
+Claude Artifacts (Claude 3.5 Sonnet, June 2024) introduced a dedicated window for generated content "alongside their conversation" for code snippets, text documents, and website designs ([Anthropic](https://www.anthropic.com/news/claude-3-5-sonnet)). Cursor 3.1 extended the primitive to agent-built visualizations: "Cursor can now respond by creating interactive canvases" with first-party components — tables, boxes, diagrams, charts — plus diffs and to-do lists ([Cursor changelog](https://cursor.com/changelog)). In GitHub Copilot, a `/create-canvas` command creates a shared surface that the human and the agent both change in real time ([GitHub](https://github.blog/ai-and-ml/github-copilot/how-to-build-interactive-experiences-with-canvases/)). The shape is now available across mainstream tools; the question is when to produce one.
 
 This page covers the output-shape decision: when a canvas beats text or a Git-tracked file, and what changes about review once one exists.
 

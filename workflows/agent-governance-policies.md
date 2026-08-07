@@ -151,4 +151,5 @@ Centralized governance creates bottlenecks when allowlist approval cycles are sl
 - [Architecting a Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md)
 - [Enterprise Skill Marketplace](enterprise-skill-marketplace.md)
 - [Canary Rollout for Agent Policy Changes](canary-rollout-agent-policy.md)
+- [Team-Scoped Agent Policy Delegation](../security/team-scoped-policy-delegation.md) — the enterprise-team dimension that cuts across this three-tier hierarchy.
 - [Team Onboarding for Agent Workflows](team-onboarding.md)

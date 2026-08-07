@@ -53,6 +53,7 @@ The architectural fix is not always necessary or sufficient.
 - Off-protocol calls. A proxy enforces only what traverses it. Shell, raw HTTP, and non-MCP channels bypass it entirely ([Security Boulevard 2026](https://securityboulevard.com/2026/03/why-mcp-gateways-are-a-bad-idea-and-what-to-do-instead/)).
 - Single point of failure. One broker concentrates outage and compromise surface, so replicate it and keep credentials out of the proxy.
 - Scope of the 11–18 pp figure. Uppala tested "explicitly instructed otherwise" restrictions; constitutional schemas and tool-call output validation are different mechanisms and were not ablated.
+- Benign-regime null results do not lift it. A prespecified study of GPT-5.6 recorded zero prohibited calls across 840 clerical trajectories under prompt-only prohibition, bounded above 3.50% per arm ([Xu and Wu 2026](https://arxiv.org/abs/2608.03169v1)). Read what that bound covers before quoting it: [Equivalence Testing for Agent Configuration Changes](../../verification/equivalence-testing-agent-config-changes.md).
 
 ## Example
 

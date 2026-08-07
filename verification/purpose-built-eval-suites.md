@@ -12,7 +12,7 @@ aliases:
   - small eval suite
   - local eval suite
   - custom eval suite
-last_reviewed: 2026-08-02
+last_reviewed: 2026-08-06
 maturity: emerging
 ---
 
@@ -81,6 +81,8 @@ uvx smevals grade . --regrade
 
 The first grader only checked that the output had exactly three non-empty lines. A second checker, added later, used a model to score syllable counts and subject fidelity against a 0.8 pass threshold ([Prime Radiant, 2026](https://primeradiant.com/blog/2026/smevals.html)). The regrade step applied that new checker to the runs already collected, so a better grader cost nothing to re-run the models under test.
 
+Simon Willison covers the same tool in a practitioner write-up ([Willison, 2026](https://simonwillison.net/2026/Jul/31/smevals/)).
+
 ## Key Takeaways
 
 - Build a purpose-built suite when you have a named swap to decide and no public benchmark was measured on your setup.
@@ -97,3 +99,4 @@ The first grader only checked that the output had exactly three non-empty lines.
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — the held-out gap you create by tuning against a fixed suite
 - [Decomposing Agent Output Variability by Layer](sampling-state-agent-variability-layers.md) — which layer the run-to-run noise in your suite comes from
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — why public scores drift from real capability over time
+- [Head-to-Head Evaluation of Competing MCP Servers](head-to-head-mcp-server-evaluation.md) — a worked instance where the configuration under test is a tool server, and the quality axis ties

@@ -63,3 +63,4 @@ On the τ²-bench airline domain, adding the four-gate suite to a gpt-4o-mini bu
 - [Silent-Failure Mechanism Taxonomy in Production Agent Runtimes](../anti-patterns/silent-failure-mechanism-taxonomy.md) — the broader failure family; the silent wrong-state write is one mechanism this gate targets directly
 - [LedgerAgent: Structured Task State for Policy-Adherent Tool Calling](ledger-agent-structured-task-state.md) — structured state that the same style of deterministic precondition predicate reads before an environment-changing call
 - [Execution-State Ledger for Long-Horizon Coding Agents](execution-state-ledger-coding-agents.md) — the same pre-execution check in a coding agent, where the state is observation freshness and the third outcome is reusing a still-valid result
+- [Task-Uniform Agent Permissions Ignore Where Failures Land](../anti-patterns/task-uniform-agent-permissions.md) — incident data on which task contexts justify paying for this gate
