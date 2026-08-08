@@ -9,7 +9,7 @@ tags:
   - instructions
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-26
+last_reviewed: 2026-08-08
 maturity: emerging
 ---
 
@@ -47,7 +47,7 @@ The duplication is mostly cross-organization, so these are not just fork copies.
 
 The paper's prescription, mapped to artifacts a practitioner team can adopt incrementally:
 
-1. Content addressing. Hash the bytes (SHA-256) and pin consumers to a specific hash, not a path or a moving branch. Every agent run can prove which exact configuration produced its behavior — the question "what did the agent actually read?" becomes answerable from a log.
+1. Content addressing. Hash the bytes (SHA-256) and pin consumers to a specific hash, not a path or a moving branch. Every agent run can prove which exact configuration produced its behavior — the question "what did the agent actually read?" becomes answerable from a log. Claude Code 2.1.224 added an `archive` plugin source that installs a plugin from a zip over HTTPS with an optional SHA-256 pin ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-224)). The pin gives plugin distribution the same addressing this mechanism prescribes for config files.
 2. Permission declaration. Add an explicit boundaries section to the config — tools the agent may use, paths it may read, paths it may write, network destinations it may reach. This is the same shape as a [GitHub Actions `permissions:` block](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token), which is why the 33% baseline is a meaningful comparator.
 3. State-machine promotion. Tag environments (`dev`, `staging`, `prod`) and promote a hash from one tag to the next under PR review. The config never advances silently. This is the same control-plane / data-plane split that worked for feature flags and that the [Shared Context Bundle Registry](shared-context-bundle-registry.md) applies to multi-agent context.
 4. Drift detection. Continuously compare the pinned hash against the consuming repo's runtime bytes and the upstream canonical bytes. A mismatch is a notification, not a silent regression.

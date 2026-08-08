@@ -8,13 +8,13 @@ aliases:
   - cursor multi-root workspaces
   - cursor cross-repo agent edits
 applies_to: "cursor@3.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-08-08
 status: current
 ---
 
 # Cursor Multi-Root Workspaces
 
-> One agent session, multiple repository folders — for edits whose intent crosses repo boundaries.
+> A multi-root workspace gives one agent session several repository folders, for edits whose intent crosses repo boundaries.
 
 Cursor 3.2 (2026-04-24) added multi-root workspaces to the Agents Window: one agent session targets a reusable workspace of multiple folders "without retargeting the agent every time it moves between repos" ([Cursor changelog 3.2](https://cursor.com/changelog/04-24-26)). The same release shipped `/multitask` async subagents and revised worktrees, though worktrees and cloud agents are currently disabled inside multi-root sessions (see below).
 
@@ -29,6 +29,8 @@ Use multi-root when one intent fragments across repos. For example, renaming `Or
 | Change spans 2+ repos and cannot be sequenced | Change is contained to one repo |
 | Repos share schemas/types/contracts being edited together | Repos are coupled only by deployment |
 | Review wants one coherent diff narrative | Reviewers prefer narrow per-repo PRs |
+
+Cross-repo review is a separate surface from the cross-repo edit. OpenAI's Codex added "Review changes across repositories" on 2026-07-30, one view of the diffs from every repo in a multi-folder project ([Codex changelog](https://developers.openai.com/codex/changelog/#codex-2026-07-30-app)).
 
 For narrow work inside one service of a monorepo, the opposite isolation usually wins — see [Sparse-Checkout Worktrees for Monorepo Agent Isolation](../claude/sparse-paths-monorepo-isolation.md).
 

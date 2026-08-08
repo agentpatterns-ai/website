@@ -107,6 +107,7 @@ The estimate is calibrated on PR-merged sessions only (Cognition's gate). The im
 
 - [The Productivity-Experience Paradox in AI-Assisted Development](productivity-experience-paradox.md) — perceived productivity can rise while experience declines; the inflation channel that hours-saved estimates inherit
 - [The Bottleneck Migration When Humans Supervise Agents](bottleneck-migration.md) — review time absorbs the generation gain; the downstream signal the metric must be paired with
+- [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — the vendor-side counterpart to this ratio; which half of a first-party ROI panel to trust, and when this metric should override it
 - [Copilot vs Claude Billing Semantics for Enterprise Teams](copilot-vs-claude-billing-semantics.md) — the cost-side denominator the agent-hours figure is being compared against
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](../token-engineering/token-cost-profiling-always-on-workflows.md) — the spend-side instrumentation that anchors the ROI ratio
 - [Rigor Relocation: Engineering Discipline with AI Agents](rigor-relocation.md) — verification cost shifts that show up only when the metric is paired with downstream signals

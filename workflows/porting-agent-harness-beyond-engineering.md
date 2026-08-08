@@ -10,7 +10,7 @@ tags:
   - agent-design
   - human-factors
   - copilot
-last_reviewed: 2026-08-05
+last_reviewed: 2026-08-08
 maturity: emerging
 status: current
 ---
@@ -64,7 +64,7 @@ Write the check before the workflow ships rather than after the first bad output
 
 ## Tool coverage
 
-The reported implementation used GitHub Copilot CLI. Nothing in the three layers depends on which CLI agent runs them, because the portable parts are files, a corpus, and a review step rather than vendor features. Pick the agent the adopting function's colleagues already run, so the people they will ask for help know the tool.
+The reported implementation used GitHub Copilot CLI. OpenAI reports a comparable adoption outside engineering: a creative team took up Codex ([OpenAI, 2026-07-16](https://openai.com/index/codex-collaborator-creative-team)). That account is vendor-authored like the case study above, so read it as a second existence proof of the same class. Nothing in the three layers depends on which CLI agent runs them, because the portable parts are files, a corpus, and a review step rather than vendor features. Pick the agent the adopting function's colleagues already run, so the people they will ask for help know the tool.
 
 ## Why it works
 

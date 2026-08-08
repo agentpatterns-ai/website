@@ -125,5 +125,6 @@ The same flow works with Claude Code: `claude remote-control`, open `claude.ai/c
 - [Channels Permission Relay](../../tools/claude/channels-permission-relay.md) — narrower approve-only path over chat apps
 - [Agent Mission Control](../../tools/copilot/agent-mission-control.md) — dashboard for cloud-hosted agents, not local sessions
 - [Copilot CLI Agentic Workflows](../../tools/copilot/copilot-cli-agentic-workflows.md) — interactive, programmatic, and plan modes the remote surface steers
+- [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](cross-session-peer-messaging.md) — session-to-session messages travelling over the same remote connection, gated on the receiver's permission posture
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — complementary approach for headless sessions
 - [Cloud Agent: Research, Plan, Code](../../tools/copilot/cloud-agent-research-plan-code.md) — alternative when local execution context is not required

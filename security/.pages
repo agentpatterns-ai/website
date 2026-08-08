@@ -125,6 +125,7 @@ nav:
   - safe-command-allowlisting.md
   - safe-outputs-pattern.md
   - sandbox-approvals-auto-review-triad.md
+  - sandbox-credential-masking.md
   - scoped-credentials-proxy.md
   - secrets-management-for-agents.md
   - security-audit-harness-composition.md
