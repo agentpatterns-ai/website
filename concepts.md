@@ -602,6 +602,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent as Tool vs Handoff: Who Keeps the Conversation](patterns/agent-design/agent-as-tool-vs-handoff.md)
 - [Dispatch-Time Reasoning Level for Delegated Agents](patterns/agent-design/dispatch-time-reasoning-level.md)
 - [Informed Abstention as a Tool-Boundary Runtime Gate](patterns/agent-design/informed-abstention-tool-boundary-gate.md)
+- [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](patterns/agent-design/cross-session-peer-messaging.md)
 
 ## Loop Engineering
 
@@ -709,6 +710,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Skill Authoring as Software Engineering: What Transfers](tool-engineering/skill-authoring-software-engineering.md)
 - [Generated Procedure Drivers: Skills That Emit a Program](tool-engineering/generated-procedure-drivers.md)
 - [Listener-State Naming for User-Invoked Agent Skills](tool-engineering/listener-state-skill-naming.md)
+- [Terminal-First Agent Interfaces with Browser Escalation](tool-engineering/terminal-first-browser-escalation.md)
 
 ## Token Engineering
 
@@ -873,6 +875,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Team-Scoped Agent Policy Delegation](security/team-scoped-policy-delegation.md)
 - [Trajectory Poisoning of Promoted Agent Skills (PoisonedEvolution)](security/trajectory-poisoning-promoted-skills.md)
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](security/enforced-versus-advisory-controls.md)
+- [Sandbox Credential Masking: Authenticate Without Seeing the Secret](security/sandbox-credential-masking.md)
 
 ## Testing & Evaluation
 
@@ -1285,6 +1288,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](human/author-to-reviewer-role-inversion.md)
 - [Marking Which Artifacts Are for Humans or Agents (Landmarking)](human/landmarking-human-vs-agent-artifacts.md)
 - [Step Budgets and Trust in Agent-Generated Code Tours](human/agent-generated-code-tour-step-budgets.md)
+- [Reading a Vendor-Computed AI Coding ROI Dashboard](human/vendor-computed-roi-copilot-impact-dashboard.md)
 
 ## Anti-Patterns
 

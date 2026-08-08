@@ -11,7 +11,7 @@ aliases:
   - serverName allowlist trap
   - MCP label-based allowlist
   - identity-vs-label allowlist failure
-last_reviewed: 2026-06-02
+last_reviewed: 2026-08-08
 maturity: established
 ---
 
@@ -26,6 +26,8 @@ The trap lands because `serverName` is the most familiar matching shape — it m
 ## Why it fails
 
 A key the controlled principal chooses is not an access-control primitive. The MCP server name is a user-supplied positional argument: `claude mcp add --transport http <name> <url>` ([Installing MCP servers](https://code.claude.com/docs/en/mcp#installing-mcp-servers)). Nothing constrains `<name>` to the underlying artifact. `serverCommand` and `serverUrl` instead pin to the resolved invocation and hostname — impersonation requires a different attack class (filesystem write, DNS hijack).
+
+GitHub's enterprise managed settings accept the same three matchers. Its changelog carries the matching caveat: `serverName` is supplied as a convenience, not a security control ([MCP allowlists in enterprise managed settings](https://github.blog/changelog/2026-08-06-mcp-allowlists-in-enterprise-managed-settings)).
 
 Anthropic's evaluation order makes the demotion mechanical: when the allowlist contains any `serverUrl` entry, "A `serverName` match counts only when the allowlist contains no `serverUrl` entries", and the equivalent rule applies to stdio and `serverCommand` ([How a server is evaluated](https://code.claude.com/docs/en/managed-mcp#how-a-server-is-evaluated)). A mixed allowlist silently never matches `serverName` entries against the transport that has the stricter rule.
 

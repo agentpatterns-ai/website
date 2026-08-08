@@ -94,5 +94,6 @@ The 62% headline is consistent with this org and with a uniform-60%-medium-use o
 - [AI Adoption Footprint: The Segmented Shape of Engineering Orgs](ai-adoption-footprint.md) — the underlying segmented-distribution mechanism cohort segmentation operationalizes.
 - [Agent Headcount as a Vanity Metric](../patterns/anti-patterns/agent-headcount-vanity-metric.md) — the Goodhart failure mode Phase 3 will exhibit if treated as a target.
 - [The Productivity-Experience Paradox in AI-Assisted Development](productivity-experience-paradox.md) — why depth-of-use can rise while developer experience and outcomes diverge.
+- [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — the ROI panel built on top of these phases; how to read a cross-cohort cost and throughput comparison without treating it as causal.
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the other side of Copilot-specific instrumentation; cost telemetry that pairs with the cohort distribution.
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the rollout that these adoption-phase cohorts instrument: seed adoption socially, then track retention as a separate number.

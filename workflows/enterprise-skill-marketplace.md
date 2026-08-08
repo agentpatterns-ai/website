@@ -8,7 +8,7 @@ tags:
   - skills
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-05-27
+last_reviewed: 2026-08-08
 maturity: adopted
 ---
 
@@ -60,6 +60,8 @@ The controls:
 [Source: [Plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)]
 
 Governance happens at the git repo level: whoever can merge to the marketplace repo decides who can publish skills to the organization.
+
+Skills also reach developers outside the marketplace repo you control. Vercel ships agent skills through its own marketplace, where adding an integration installs the provider's skills as a side effect [Source: [Vercel Marketplace agent skills](https://vercel.com/changelog/vercel-marketplace-agent-skills)].
 
 ## Stage 2: usage visibility
 

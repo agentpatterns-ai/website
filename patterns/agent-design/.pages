@@ -88,6 +88,7 @@ nav:
       - in-agent-task-prioritization.md
       - interactive-clarification-underspecified-tasks.md
       - critic-agent-plan-review.md
+      - cross-session-peer-messaging.md
       - deterministic-orchestration-structured-modernization.md
       - llm-as-code-agentic-programming.md
       - bounded-agent-step.md

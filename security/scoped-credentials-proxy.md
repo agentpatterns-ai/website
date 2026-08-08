@@ -77,7 +77,7 @@ Environment variable injection keeps secrets out of context but still places the
 - The agent processes untrusted external content (email, web pages, user uploads)
 - Compliance or audit requirements mandate authenticated-action logging
 
-For low-stakes dev tasks, environment variable injection is enough. See [Secrets Management for Agent Workflows](secrets-management-for-agents.md).
+For low-stakes dev tasks, environment variable injection is enough. See [Secrets Management for Agent Workflows](secrets-management-for-agents.md). Where the tool insists on reading a credential and cannot be rewritten to call a proxy, [sandbox credential masking](sandbox-credential-masking.md) is the third option: the tool reads a sentinel and the proxy substitutes the real value on egress.
 
 ## Example
 

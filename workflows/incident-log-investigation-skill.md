@@ -8,7 +8,7 @@ tags:
   - technique
   - skills
   - tool-agnostic
-last_reviewed: 2026-06-12
+last_reviewed: 2026-08-08
 maturity: adopted
 ---
 
@@ -21,6 +21,8 @@ An incident log investigation skill is a specialist agent. It dispatches paralle
 ## The framing
 
 Incident investigation is one of the strongest uses for agents. A slow investigation is costly, and the signals you need are scattered across several observability systems. A well-designed skill can search all of them and surface correlated evidence, but only if you can trust its output. The patterns here — parallel tool calls, context-budget discipline, eval-backed precision — apply well beyond this 3-system setup.
+
+OpenAI's customer case study reports that NTT DATA cut incident analysis to 30 minutes using Codex. The figure is vendor-reported and covers one customer's deployment. [Source: [NTT DATA](https://openai.com/index/ntt-data)]
 
 ## Architecture
 

@@ -153,3 +153,4 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [Override Interactive Commands](override-interactive-commands.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Restricting a Coding Agent to a Single execute_code Tool](restrict-coding-agent-to-execute-code.md) — measures the cost of this single-bash surface against an interpreter-only surface, by task regime and agent
+- [Terminal-First Agent Interfaces with Browser Escalation](terminal-first-browser-escalation.md) — the same interface applied to enterprise platform automation, with measured cost against browser and MCP-style agents and an explicit escalation list

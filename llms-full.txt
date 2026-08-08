@@ -726,6 +726,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent as Tool vs Handoff: Who Keeps the Conversation](patterns/agent-design/agent-as-tool-vs-handoff.md)
 - [Dispatch-Time Reasoning Level for Delegated Agents](patterns/agent-design/dispatch-time-reasoning-level.md)
 - [Informed Abstention as a Tool-Boundary Runtime Gate](patterns/agent-design/informed-abstention-tool-boundary-gate.md)
+- [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](patterns/agent-design/cross-session-peer-messaging.md)
 
 ## Loop Engineering
 
@@ -833,6 +834,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Skill Authoring as Software Engineering: What Transfers](tool-engineering/skill-authoring-software-engineering.md)
 - [Generated Procedure Drivers: Skills That Emit a Program](tool-engineering/generated-procedure-drivers.md)
 - [Listener-State Naming for User-Invoked Agent Skills](tool-engineering/listener-state-skill-naming.md)
+- [Terminal-First Agent Interfaces with Browser Escalation](tool-engineering/terminal-first-browser-escalation.md)
 
 ## Token Engineering
 
@@ -997,6 +999,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Team-Scoped Agent Policy Delegation](security/team-scoped-policy-delegation.md)
 - [Trajectory Poisoning of Promoted Agent Skills (PoisonedEvolution)](security/trajectory-poisoning-promoted-skills.md)
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](security/enforced-versus-advisory-controls.md)
+- [Sandbox Credential Masking: Authenticate Without Seeing the Secret](security/sandbox-credential-masking.md)
 
 ## Testing & Evaluation
 
@@ -1409,6 +1412,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](human/author-to-reviewer-role-inversion.md)
 - [Marking Which Artifacts Are for Humans or Agents (Landmarking)](human/landmarking-human-vs-agent-artifacts.md)
 - [Step Budgets and Trust in Agent-Generated Code Tours](human/agent-generated-code-tour-step-budgets.md)
+- [Reading a Vendor-Computed AI Coding ROI Dashboard](human/vendor-computed-roi-copilot-impact-dashboard.md)
 
 ## Anti-Patterns
 
@@ -11003,7 +11007,7 @@ The duplication is mostly cross-organization, so these are not just fork copies.
 
 The paper's prescription, mapped to artifacts a practitioner team can adopt incrementally:
 
-1. Content addressing. Hash the bytes (SHA-256) and pin consumers to a specific hash, not a path or a moving branch. Every agent run can prove which exact configuration produced its behavior — the question "what did the agent actually read?" becomes answerable from a log.
+1. Content addressing. Hash the bytes (SHA-256) and pin consumers to a specific hash, not a path or a moving branch. Every agent run can prove which exact configuration produced its behavior — the question "what did the agent actually read?" becomes answerable from a log. Claude Code 2.1.224 added an `archive` plugin source that installs a plugin from a zip over HTTPS with an optional SHA-256 pin ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-224)). The pin gives plugin distribution the same addressing this mechanism prescribes for config files.
 2. Permission declaration. Add an explicit boundaries section to the config — tools the agent may use, paths it may read, paths it may write, network destinations it may reach. This is the same shape as a [GitHub Actions `permissions:` block](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token), which is why the 33% baseline is a meaningful comparator.
 3. State-machine promotion. Tag environments (`dev`, `staging`, `prod`) and promote a hash from one tag to the next under PR review. The config never advances silently. This is the same control-plane / data-plane split that worked for feature flags and that the [Shared Context Bundle Registry](shared-context-bundle-registry.md) applies to multi-agent context.
 4. Drift detection. Continuously compare the pinned hash against the consuming repo's runtime bytes and the upstream canonical bytes. A mismatch is a notification, not a silent regression.
@@ -19822,6 +19826,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [In-Agent Task Prioritization: Ranking the Next Action](in-agent-task-prioritization.md) — Rank pending work by a composite score (urgency, value, dependency, blast radius, staleness) — distinct from routing and scheduling — so the agent's scarce attention lands on the item that pays back most per turn
 - [Controlling Agent Output: Concise Answers, Not Essays](../../instructions/controlling-agent-output.md) — Matching the agent's response format to what you actually need reduces noise and preserves context budget
 - [Critic Agent Pattern](critic-agent-plan-review.md) — A second model reviews the primary agent's plan before execution begins, catching structural errors early when recovery is cheap
+- [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](cross-session-peer-messaging.md) — Two independently steered sessions exchange plain-text messages through per-session inboxes, with the receiving side gating delivery on permission posture rather than sender identity
 - [Deterministic Orchestration for Structured Modernization](deterministic-orchestration-structured-modernization.md) — When the workflow shape is stable, encoding orchestration in code reserves the LLM for translation choices — comparable accuracy at up to 3.5x lower token cost
 - [LLM-as-Code Agentic Programming for Agent Harnesses](llm-as-code-agentic-programming.md) — When the workflow shape is enumerable, the program holds control flow and the LLM is a callable component; context scales with call-tree depth instead of accumulated steps
 - [Bounded Agent Steps Inside a Deterministic Workflow](bounded-agent-step.md) — Keep the agentic loop but run it as one fenced workflow stage — pre-set goal, tool allowlist, turn cap, typed output — and only where the stage boundary is a durable domain seam
@@ -25791,6 +25796,135 @@ The agent writes the relay at cycle end using the temp-file-rename pattern. The 
 - [Loop Strategy Spectrum](../../loop-engineering/loop-strategy-spectrum.md) — choosing between accumulated, compressed, and fresh context across loops
 - [Agent Memory Patterns](agent-memory-patterns.md) — scoped memory systems that persist knowledge across sessions and complement the relay
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — structured contracts for passing work between pipeline stages
+
+---
+
+### Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate
+Source: https://agentpatterns.ai/patterns/agent-design/cross-session-peer-messaging/
+
+# Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate
+
+> Two independently steered agent sessions exchange plain-text messages through per-session inboxes, and the receiving inbox gates delivery on permission posture rather than peer identity.
+
+Reach for a peer inbox when two sessions you steer yourself need a fact mid-run and no shared file, queue, or sub-agent gets it there in time. Claude Code v2.1.224 ships the channel: `SendMessage` writes plain text into another session's inbox, and `ListAgents` discovers which sessions are reachable ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The receiver decides what happens next, not the sender.
+
+## What has to be true first
+
+Each limit below rules out a plausible use.
+
+- Claude Code v2.1.224 or later, on macOS or Linux. Native Windows lacks the feature, as do Amazon Bedrock, Claude Platform on AWS, Google Cloud's Agent Platform, and Microsoft Foundry ([cross-session messaging docs](https://code.claude.com/docs/en/cross-session-messaging#availability)).
+- Both sessions read the same registration files on disk, so a session in a container and one on the host never find each other.
+- The receiver can answer an approval dialog, or is set never to need one. A `claude -p` worker binds an inbox but cannot render that dialog.
+- The fact fits in prose. A message carries text, never conversation history and never files.
+- Across machines, v2.1.224 allowed only a reply. Version 2.1.225 added starting a conversation with a Remote Control session by name ([changelog](https://code.claude.com/docs/en/changelog)).
+
+## The inbound gate
+
+An arriving message is delivered, held undelivered, or refused and dropped. The `crossSessionInbound` setting picks which.
+
+| Value | Behavior |
+|---|---|
+| `accept` | Claude Code delivers each message to Claude |
+| `hold` | Claude Code shows a notice and withholds the message until an `accept` later applies |
+| `refuse` | Claude Code drops each message without delivering it |
+
+With no value set, the default decides per message from the permission class of both endpoints. Sessions that bypass permission prompts form one class and every other session forms the other, with `auto`, `acceptEdits`, and `dontAsk` counting as prompting ([docs](https://code.claude.com/docs/en/cross-session-messaging#control-inbound-messages)):
+
+| Receiving session | Sender asserts bypassing | Sender does not |
+|---|---|---|
+| Prompts for permissions | Held for approval | Delivered |
+| Bypasses prompts | Delivered | Held for approval |
+
+Sender identity never enters that decision. The sender's permission class does, and it arrives as the sender's own assertion, so a message asserting no class is held rather than delivered in a bypassing receiver. The gate fails closed on the one input it cannot verify.
+
+An unanswered hold dialog closes after `dialogExpiry`, five minutes by default, and the message is dropped. A parked message that never resolves is a stuck sender, so v2.1.225 added the missing notice and expiry for headless sessions and startup ([changelog](https://code.claude.com/docs/en/changelog)).
+
+## Why it works
+
+Permission posture bounds what an injected instruction can reach, and identity does not. Where a session still prompts, an instruction arriving by message meets a permission prompt at the dangerous action, so a check at the channel entrance adds friction without containment. Where permissions are bypassed there is no later gate, so the entrance is the only place left to interpose. Identity fails as a key because a trusted peer that has itself been injected emits the same bytes as a hostile one, and injected prompts self-replicate from agent to agent ([Lee and Tiwari, 2024](https://arxiv.org/abs/2410.07283v1)).
+
+The rest of the receiving-side contract applies the authority-confusion invariant: an untrusted source may inform reasoning but must never authorize a side effect ([Qin et al., 2026](https://arxiv.org/abs/2605.28914v1)). A peer message never counts as your consent, cannot answer a pending permission prompt, and cannot license a change to permission settings or `CLAUDE.md`. Any slash command in the text arrives as inert prose ([docs](https://code.claude.com/docs/en/cross-session-messaging#how-a-session-treats-an-incoming-message)).
+
+## When this backfires
+
+- Unattended receivers swallow the coordination. The default holds messages in exactly the bypassed-permissions sessions that tend to run without a human, and a headless worker cannot show the dialog at all. Setting `crossSessionInbound` to `accept` there restores delivery and removes the gate with it.
+- Approval fatigue arrives with the dialogs. Repeated hold prompts train approve-by-reflex, the documented failure mode of every [confirmation gate](../../security/human-in-the-loop-confirmation-gates.md), and expiry then drops unanswered content silently.
+- Own-child verification is platform-dependent. Where Claude Code runs as process ID 1 it cannot confirm that a message came from its own child process, so a hook posting to its own socket is treated as an unverified peer and held.
+- A compromised session becomes an authenticated sender. Receiving-side protection here is model instruction, which measures weaker than harness enforcement of the same rule: on DTAP-150 with GPT-5.4-mini, a prompt-only policy left 17% attack success against 4% for runtime dispatch-layer control ([Qin et al., 2026 §4.3](https://arxiv.org/abs/2605.28914v1)).
+- Dependency-dense work needs more than prose. Peers acting on one-paragraph summaries make conflicting implicit decisions, the case against self-coordinating agents that Cognition argues in [Don't Build Multi-Agents](https://cognition.com/blog/dont-build-multi-agents). Split by worktree or use an orchestrator.
+- Larger meshes degrade. Coordination quality in LLM peer networks falls away as the network grows ([AgentsNet](https://arxiv.org/abs/2507.08616)), so a peer inbox complements an orchestrator rather than replacing one.
+
+## Example
+
+A migration runs unattended in a headless worker while you work the API in a second terminal. The worker should take findings from you but never reach another machine on its own. Put the two settings in `worker-settings.json`, scoped to that session:
+
+```json
+{
+  "crossSessionInbound": "accept",
+  "isolatePeerMachines": true
+}
+```
+
+```bash
+claude -p --name migration-worker --settings ./worker-settings.json \
+  "Run the tenant_id migration, then report what changed"
+```
+
+`isolatePeerMachines` requires your approval before any reply leaves the machine, and it holds even under `bypassPermissions`. A `true` from any settings scope applies, so a checked-in project file can turn the requirement on but cannot turn it off.
+
+From the API terminal, `/list-agents` shows `migration-worker` with its working directory, which is what tells two same-named sessions apart. Ask for the message in your own words and Claude writes the text it sends:
+
+```text
+Ask the migration worker whether the tenant_id backfill finished
+```
+
+What arrives in the other session is one line of prose with a sender name and a reply address:
+
+```text
+Schema migration finished: the new column is tenant_id, and rebasing on main is safe now.
+```
+
+To close the channel instead, deny both tools and refuse arrivals in managed settings:
+
+```json
+{
+  "permissions": { "deny": ["SendMessage", "ListAgents"] },
+  "crossSessionInbound": "refuse"
+}
+```
+
+Denying `SendMessage` also removes messaging to sub-agents and agent-team teammates, because one tool serves all three.
+
+## FAQ
+
+**Does a peer message let another session approve a permission prompt for me?**
+
+No. Claude Code tells the receiving session that the message came from another session rather than from you, and a peer message never counts as your consent. It cannot answer a pending permission prompt, cannot change permission settings or `CLAUDE.md`, and any slash command in its text arrives as plain text that never executes ([cross-session messaging docs](https://code.claude.com/docs/en/cross-session-messaging#how-a-session-treats-an-incoming-message)).
+
+**What stops two sessions from messaging each other in a loop?**
+
+Claude Code rate-limits repeated messages per sender, drops identical repeats that arrive within a short window, and caps accepted-but-unread messages at 50 per session. Held messages cap separately at 100, with the oldest dropped past that. A loop between two sessions therefore stops on its own without anyone intervening ([docs](https://code.claude.com/docs/en/cross-session-messaging#limitations)).
+
+**How do I tell whether a session has the feature at all?**
+
+Run `/list-agents`, also available as `/peers`. An unrecognized command means the session lacks cross-session messaging, so check `claude --version` and then the platform and provider requirements. If the command works but a send never arrived, something narrower applies: a deny rule, the receiver's inbound controls, or a cross-machine reply-only path.
+
+## Key Takeaways
+
+- Treat a peer message as untrusted input with the same control-flow boundary you apply to fetched content, because a trusted peer that has been injected sends identical bytes to a hostile one
+- The default gate keys on the permission class of both endpoints, and the sender's class is self-asserted, so design for a receiver that holds anything it cannot classify
+- Decide a headless worker's `crossSessionInbound` value at launch, in its `--settings`, because the alternative is a session that neither delivers nor reports what it holds
+- `dialogExpiry` drops rather than delivers after five minutes, so a peer inbox is not a durable queue and must not carry a fact the receiver has to have
+- Confirm reachability with `/list-agents` before you rely on the channel, because an unreachable peer produces silence rather than an error
+
+## Related
+
+- [Claude Code Agent Teams](../../tools/claude/agent-teams.md) — supervised teammates inside one team, with structured protocol messages that stay in the team
+- [Remote Session Control for Local CLI Agents](remote-session-control.md) — the human-to-session channel that cross-machine peer messages travel over
+- [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md) — the durable, ordered alternative when the coordination fact can wait for a commit
+- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — what to transfer when the whole task moves rather than one fact
+- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](../../security/authority-confusion-untrusted-context.md) — the invariant the inbound contract implements
+- [Agent View](../../tools/claude/agent-view.md) — watching many sessions from one place, which reports to you rather than between sessions
 
 ---
 
@@ -37703,6 +37837,7 @@ The same flow works with Claude Code: `claude remote-control`, open `claude.ai/c
 - [Channels Permission Relay](../../tools/claude/channels-permission-relay.md) — narrower approve-only path over chat apps
 - [Agent Mission Control](../../tools/copilot/agent-mission-control.md) — dashboard for cloud-hosted agents, not local sessions
 - [Copilot CLI Agentic Workflows](../../tools/copilot/copilot-cli-agentic-workflows.md) — interactive, programmatic, and plan modes the remote surface steers
+- [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](cross-session-peer-messaging.md) — session-to-session messages travelling over the same remote connection, gated on the receiver's permission posture
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — complementary approach for headless sessions
 - [Cloud Agent: Research, Plan, Code](../../tools/copilot/cloud-agent-research-plan-code.md) — alternative when local execution context is not required
 
@@ -48300,6 +48435,8 @@ The trap lands because `serverName` is the most familiar matching shape — it m
 ## Why it fails
 
 A key the controlled principal chooses is not an access-control primitive. The MCP server name is a user-supplied positional argument: `claude mcp add --transport http <name> <url>` ([Installing MCP servers](https://code.claude.com/docs/en/mcp#installing-mcp-servers)). Nothing constrains `<name>` to the underlying artifact. `serverCommand` and `serverUrl` instead pin to the resolved invocation and hostname — impersonation requires a different attack class (filesystem write, DNS hijack).
+
+GitHub's enterprise managed settings accept the same three matchers. Its changelog carries the matching caveat: `serverName` is supplied as a convenience, not a security control ([MCP allowlists in enterprise managed settings](https://github.blog/changelog/2026-08-06-mcp-allowlists-in-enterprise-managed-settings)).
 
 Anthropic's evaluation order makes the demotion mechanical: when the allowlist contains any `serverUrl` entry, "A `serverName` match counts only when the allowlist contains no `serverUrl` entries", and the equivalent rule applies to stdio and `serverCommand` ([How a server is evaluated](https://code.claude.com/docs/en/managed-mcp#how-a-server-is-evaluated)). A mixed allowlist silently never matches `serverName` entries against the transport that has the stricter rule.
 
@@ -59801,6 +59938,7 @@ Purpose-built tool patterns for file operations, web research, CLI integration, 
 - [Self-Healing Tool Routing](self-healing-tool-routing.md) — Route agent tool calls through a cost-weighted graph; recompute paths on failure and escalate to the LLM only when no feasible path exists
 - [Terminal Tools for Agents: send_to_terminal and Background Interaction](send-to-terminal-background-interaction.md) — Use VS Code's send_to_terminal tool and backgroundNotifications setting to give agents bidirectional control over background terminal processes
 - [Unix CLI as Native Tool Interface](unix-cli-native-tool-interface.md) — A single run(command) tool backed by Unix CLI can replace large function catalogs, leveraging pretraining on shell usage and built-in discovery primitives
+- [Terminal-First Agent Interfaces with Browser Escalation](terminal-first-browser-escalation.md) — Default an enterprise agent to a terminal calling platform APIs and escalate to a browser only for session-bound, render-bound, and UI-authored tasks
 - [Restricting a Coding Agent to a Single execute_code Tool](restrict-coding-agent-to-execute-code.md) — When narrowing an agent to one execute_code tool is cheaper than bash or native edit, and when edit-heavy modification work makes it costlier — a regime-by-agent decision
 - [Web Search Agent Loop](web-search-agent-loop.md) — Instead of firing a single query, wrap retrieval in a cycle of search, evaluate, refine, and synthesize -- giving the agent autonomy to decide when evidence is sufficient
 - [Lexical-First Retrieval for Agentic Search](lexical-first-retrieval-for-agentic-search.md) — A tuned BM25 index paired with a frontier LLM and deep retrieval can match or beat dense retrieval on deep-research benchmarks -- when the agent loop is strong enough to filter the ranking noise
@@ -60347,6 +60485,7 @@ The same capability — GitHub access — flips choice depending on the auth bou
 - [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md) — the broader CLI-as-tool framing; relevant when the auth-isolation condition does not fire
 - [Scoped Credentials via Proxy](../security/scoped-credentials-proxy.md) — the structural alternative that closes the same gap below the protocol layer
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — the threat model that makes credential isolation load-bearing in the first place
+- [Terminal-First Agent Interfaces with Browser Escalation](terminal-first-browser-escalation.md) — the cost-and-success side of the same selection question, measured across three enterprise platforms
 
 ---
 
@@ -69668,6 +69807,75 @@ Notification reliability. The `backgroundNotifications` event fires when the she
 
 ---
 
+### Terminal-First Agent Interfaces with Browser Escalation
+Source: https://agentpatterns.ai/tool-engineering/terminal-first-browser-escalation/
+
+# Terminal-First Agent Interfaces with Browser Escalation
+
+> Where platform API coverage is good, default an agent to terminal and API access and escalate to a browser only for session-bound or UI-bound tasks.
+
+Give the agent a shell and a filesystem, point it at the platform's REST API, and add browser access only for the task classes with no programmatic path. Across 729 tasks on ServiceNow, GitLab and ERPNext, terminal agents running Claude Opus 4.6 reached 78.7% success at $1.22 per task against web agents' 79.9% at $3.97 ([Bechard et al., arXiv:2604.00073v3](https://arxiv.org/abs/2604.00073v3)). Success is level, cost is not.
+
+## The conditions this default needs
+
+The result is conditional. Check all three before adopting terminal-first as the standing choice.
+
+API coverage has to be real. An API agent's ceiling is the endpoint surface, not the interface style. On WebArena, an API-only agent scored 43.9% on GitLab, which publishes 988 documented endpoints, and 18.9% on Reddit, which exposes 31 ([Song et al., arXiv:2410.16464v3](https://arxiv.org/abs/2410.16464v3)).
+
+The agent needs the API documentation on disk. In the enterprise study the terminal agent worked from official platform documentation scraped to markdown and stored locally ([arXiv:2604.00073v3](https://arxiv.org/abs/2604.00073v3)). Without it the agent guesses endpoint shapes.
+
+Escalation needs a model strong enough to route. Below that bar the router loses to the terminal specialist it was meant to improve on, at several times the price.
+
+## Escalate to the browser for three task classes
+
+The study names the cases where the UI is the shorter path ([arXiv:2604.00073v3](https://arxiv.org/abs/2604.00073v3)):
+
+- Session-dependent operations. ServiceNow impersonation carries state in browser cookies rather than in the API response. Terminal agents scored 0% on it, against two clicks in the browser.
+- Values that exist only as rendered output. Reading a dashboard chart forces the terminal agent to recompute the aggregation over the underlying tables.
+- Artifacts authored in a UI builder. Workflows built through Flow Designer have no reliable public API equivalent.
+
+Everything else routes to the terminal.
+
+## Why it works
+
+Two different mechanisms produce the two gaps, and conflating them leads to the wrong redesign.
+
+Against tool-augmented agents, the cause is [tool granularity](consolidate-agent-tools.md) rather than the terminal. The ServiceNow tool-use agent held 83 narrow per-endpoint tools and could not set fields beyond what each tool defined. Swapping that catalog for a single generic HTTP call tool reached 79.2% success at $0.25 per task, and the authors conclude that "tool granularity, rather than terminal access, explains most of the gap between tool-use and terminal agents" ([arXiv:2604.00073v3](https://arxiv.org/abs/2604.00073v3)). A coarse tool recovers the flexibility; the shell is one way to obtain it, not the only one.
+
+Against web agents, the cause is observation cost. The filesystem lets the agent offload large intermediate results outside the model's context window and filter them with standard utilities, while DOM snapshots and screenshots enter context whole ([arXiv:2604.00073v3](https://arxiv.org/abs/2604.00073v3)).
+
+## When this backfires
+
+- Thin API coverage inverts the default. On WebArena's Reddit a hybrid browser-and-API agent scored 51.9% against API-only's 18.9% ([arXiv:2410.16464v3](https://arxiv.org/abs/2410.16464v3)). With a small endpoint surface the browser is the primary path.
+- Sufficiency does not hold on every benchmark. Hybrid agents beat API-only agents on WebArena overall, 38.9% against 29.2% ([arXiv:2410.16464v3](https://arxiv.org/abs/2410.16464v3)), and web agents beat terminal agents on GitLab for all four models in the enterprise study ([arXiv:2604.00073v3](https://arxiv.org/abs/2604.00073v3)).
+- A weak router makes escalation cost more than it returns. With Claude Sonnet 4.6 the hybrid agent scored 72.1% against the terminal specialist's 73.6% at four times the cost. Opus 4.6 improved on the specialist, reaching 83.0% ([arXiv:2604.00073v3](https://arxiv.org/abs/2604.00073v3)).
+- Terminal-only leaves measurable headroom. A per-task oracle picking the better agent on ServiceNow reached 89.1% against terminal's 73.6% ([arXiv:2604.00073v3](https://arxiv.org/abs/2604.00073v3)).
+- The action space is wider than the task. The study's own harness handed the agent authentication headers as readable environment variables, which its authors flag as poor practice and offset with role-scoped service accounts and read-only credentials ([arXiv:2604.00073v3](https://arxiv.org/abs/2604.00073v3)). That is the [credential boundary an MCP server would hold](mcp-auth-isolation-vs-cli-selection.md), and terminal-first spends it.
+
+## Example
+
+A ServiceNow automation covering incident triage, catalog requests and user administration. Incident and catalog work has full REST coverage, so the terminal path is a `curl` against the Table API, a `jq` filter over the response, and intermediate result sets written to files rather than held in context. Terminal agents scored 79.1% at $1.94 per task on the study's 330 ServiceNow tasks with Claude Opus 4.6, against a web agent's 77.6% at $4.21 ([arXiv:2604.00073v3](https://arxiv.org/abs/2604.00073v3)).
+
+One task in the set asks the agent to act as another user to verify a permission. Session state for impersonation lives in the browser cookie, not the API response, and terminal agents complete it 0% of the time ([arXiv:2604.00073v3](https://arxiv.org/abs/2604.00073v3)). That single task class gets browser access, and the rest of the suite does not. Routing the whole suite through the browser instead would roughly double the bill for slightly lower success.
+
+## Key Takeaways
+
+- Terminal-first is a default with an escalation list attached, not a claim that browsers are unnecessary. Write the list before you deploy.
+- The three escalation triggers are session state held outside API responses, values that exist only as rendered output, and artifacts authored in UI builders.
+- The gap over MCP-style agents measures tool granularity, so a single coarse API tool captures most of it without granting shell access.
+- Verify endpoint coverage per platform before committing. The same agent design swings 25 points between a well-documented API and a thin one.
+- Cost the router, not just the agents. Escalation on a weak model can score below the terminal specialist while spending four times as much.
+
+## Related
+
+- [Unix CLI as Native Tool Interface](unix-cli-native-tool-interface.md) — the mechanism underneath the terminal half: one `run(command)` tool in place of a typed catalog
+- [Auth-Isolation as the MCP-vs-CLI Selection Heuristic](mcp-auth-isolation-vs-cli-selection.md) — the credential boundary a terminal-first default gives up, and when that boundary outranks cost
+- [Browser as Agent Action Space](../patterns/agent-design/browser-as-agent-action-space.md) — how to build the escalation path once a task class earns it
+- [Headless-First Services: APIs for Agent Consumers](headless-first-services.md) — the vendor-side condition this pattern depends on: full product surface reachable programmatically
+- [Consolidate Agent Tools](consolidate-agent-tools.md) — the tool-granularity finding applied to catalog design
+
+---
+
 ### Tool Cloning and Provenance Assessment
 Source: https://agentpatterns.ai/tool-engineering/tool-cloning-provenance-assessment/
 
@@ -70358,6 +70566,7 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [Override Interactive Commands](override-interactive-commands.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Restricting a Coding Agent to a Single execute_code Tool](restrict-coding-agent-to-execute-code.md) — measures the cost of this single-bash surface against an interpreter-only surface, by task regime and agent
+- [Terminal-First Agent Interfaces with Browser Escalation](terminal-first-browser-escalation.md) — the same interface applied to enterprise platform automation, with measured cost against browser and MCP-style agents and an explicit escalation list
 
 ---
 
@@ -73083,7 +73292,7 @@ Trip the interrupt before any action the loop cannot undo from its own state —
 
 ## Why it works
 
-The mechanism rides on the loop's existing state. LangGraph's persistence layer writes the exact node state at the interrupt point, the `thread_id` acts as a cursor for resumption, and the resume value substitutes back into the `interrupt()` call without re-running upstream nodes ([LangChain — Making it easier to build human-in-the-loop agents with interrupt](https://www.langchain.com/blog/making-it-easier-to-build-human-in-the-loop-agents-with-interrupt)). HITL is one consumer of the same checkpointer that powers fault tolerance and time travel.
+The mechanism rides on the loop's existing state. LangGraph's persistence layer writes the exact node state at the interrupt point, the `thread_id` acts as a cursor for resumption, and the resume value substitutes back into the `interrupt()` call without re-running upstream nodes ([LangChain — Making it easier to build human-in-the-loop agents with interrupt](https://www.langchain.com/blog/making-it-easier-to-build-human-in-the-loop-agents-with-interrupt)). HITL is one consumer of the same checkpointer that powers fault tolerance and time travel. Vercel's Chat SDK ships durable approvals, a second implementation of the same suspend-and-resume checkpoint ([Chat SDK durable approvals](https://vercel.com/changelog/chat-sdk-durable-approvals)).
 
 The four verbs work as loop control because the resume value feeds back into the node's executing logic. Edit mutates the next call's arguments; reject substitutes a rejection message into the tool-result slot so the model re-plans; respond synthesizes a tool result the agent treats as ground truth. Each verb changes the loop's trajectory, not just its permission state. Anthropic's framing fits the same shape: agents "can pause for human feedback at checkpoints or when encountering blockers" ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
 
@@ -78080,7 +78289,9 @@ This is the per-PR analogue of [heuristic effort scaling](../patterns/agent-desi
 
 Single-calibration agents force a compromise. Calibrate for thoroughness and routine PRs drown in commentary: developers [override more than 30% of flags](https://www.codeant.ai/blogs/ai-code-review-false-positives) until the tool is functionally disabled. Calibrate for signal and the agent misses real regressions in high-stakes code.
 
-GitHub Copilot's review began as the implicit binary form: in [29% of reviews the agent stays silent and in 71% it surfaces actionable feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). A multi-level dial generalizes it: silence is the lowest rung, full agentic exploration the highest. By mid-2026 Copilot had externalized the dial too. Admins set a per-repository analysis tier: `low` (the fast, cost-efficient default) or a new `medium` tier that routes complex logic, security-sensitive code, and cross-service changes to a higher-reasoning model ([GitHub, 2026-06-02](https://github.blog/changelog/2026-06-02-shape-copilot-code-review-around-your-team/)). Weeks later, GitHub widened the surface with [new configurations and controls for tuning the review agent](https://github.blog/changelog/2026-06-12-copilot-code-review-new-configurations-and-controls) (GitHub, 2026-06-12). Cursor binds the choice to one PR, Copilot to one repository: coarser-grained, but the same effort-routing primitive.
+GitHub Copilot's review began as the implicit binary form: in [29% of reviews the agent stays silent and in 71% it surfaces actionable feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). A multi-level dial generalizes it: silence is the lowest rung, full agentic exploration the highest. Copilot externalized that dial in a [preview on 2026-06-02](https://github.blog/changelog/2026-06-02-shape-copilot-code-review-around-your-team/) and took it to [general availability on 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-code-review-effort-levels-are-generally-available), renaming the preview `low` and `medium` tiers to `Lite` and `Balanced`. `Lite` is the default standard review; `Balanced` routes complex logic, security-sensitive code, and cross-service changes to a higher-reasoning model ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/code-review#review-effort-level)).
+
+That release also settled where the dial sits. An organization default applies across its repositories, a repository can override it, and whoever requests a review can pick a level for that run without changing either default. Both vendors now expose a per-PR dial; what differs is who turns it. Cursor's Custom level is a policy the tool evaluates automatically, while Copilot's is a human decision at request time.
 
 ## Calibration is the pattern
 
@@ -78092,6 +78303,8 @@ Cursor publishes two metrics:
 - Resolution rate — share of flagged bugs authors address at merge, classified by an LLM-as-judge validated against humans
 
 Holding resolution rate constant across levels is the calibration commitment: High costs more but does not flood with low-quality flags. Resolution rate gates whether the higher-effort flags are useful.
+
+Copilot publishes no equivalent curve. `Lite` and `Balanced` are documented by description rather than by a measured bug-discovery rate, so the tiers shipped as an interface without the evidence that makes a dial actionable. A routing policy tuned against Cursor's numbers has no basis on Copilot.
 
 ## Routing axes
 
@@ -78126,7 +78339,7 @@ The arithmetic only holds when routing concentrates High on high-stakes runs. A 
 - Routing policy can drift in Custom. Natural-language Custom is an instruction file with the same [primacy and drift issues](../instructions/system-prompt-altitude.md). A correct policy in May 2026 may misroute six months later, and no eval is exposed by default.
 - High-effort defaults create alert fatigue. [Signal over volume](signal-over-volume-in-ai-review.md) is the dominant trust factor. Pinning High at the policy level burns attention on routine PRs and un-funds the high-stakes runs the dial protects.
 - Cost-blind defaults backfire. Without per-PR cost ranges, reviewers toggle High on everything, collapsing the dial back to a fixed-pipeline calibration.
-- No vendor provides author or defect-rate signals. Cursor exposes path-based routing but not author-trust or directory-defect-rate routing. Teams encode those manually in Custom, with no audit trail.
+- No vendor provides author or defect-rate signals. Cursor exposes path-based routing but not author-trust or directory-defect-rate routing, so teams encode those manually in Custom. Copilot [labels which effort level ran](https://github.blog/changelog/2026-08-07-copilot-code-review-effort-levels-are-generally-available) in the timeline and the pull request overview comment (GitHub, 2026-08-07), which records the outcome without recording the axis that triggered it.
 
 Tunable effort assumes a published curve and a routing policy that concentrates the higher tier on the runs that pay for it. Without both, the dial reduces to per-PR cost optionality with no signal benefit.
 
@@ -82969,7 +83182,9 @@ Treat the environment running an offensive-capability agent evaluation as produc
 
 [Source: [Anthropic's incident disclosure](https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals)]
 
-OpenAI reports the same class of failure. Its models, inside a sandboxed evaluation, spent substantial inference compute finding open internet access, exploited a zero-day in a package registry cache proxy, then moved laterally to a node with internet access. [Source: [OpenAI on the Hugging Face model-evaluation security incident](https://openai.com/index/hugging-face-model-evaluation-security-incident/)]
+OpenAI reports the same class of failure. Its models, inside a sandboxed evaluation, spent substantial inference compute finding open internet access, exploited a zero-day in a package registry cache proxy, then moved laterally to a node with internet access. [Source: [OpenAI on the Hugging Face model-evaluation security incident](https://openai.com/index/hugging-face-model-evaluation-security-incident/)] Simon Willison has published a timeline of that attack. [Source: [Simon Willison's timeline of the OpenAI to Hugging Face attack](https://simonwillison.net/2026/Aug/7/openai-timeline/)]
+
+OpenAI has also disclosed cyber-evaluation incidents involving its models that began with third-party evaluators rather than its own harness. [Source: [OpenAI on third-party cyber evaluations involving its models](https://openai.com/index/third-party-cyber-evaluations-involving-openai-models)] Simon Willison records the same failure class at Meta, a third vendor, so the pattern is not particular to Anthropic and OpenAI. [Source: [Simon Willison on an AI model from Meta](https://simonwillison.net/2026/Aug/6/an-ai-model-from-meta/)]
 
 ## Why it works
 
@@ -91247,6 +91462,7 @@ Preventing sensitive data from entering agent context is cheaper than scrubbing 
 - [PII Tokenization in Agent Context](pii-tokenization-in-agent-context.md) — Replace sensitive fields with deterministic tokens before data reaches the model
 - [Privacy-Preserving LLM Requests](privacy-preserving-llm-requests.md) — Eight techniques exist for keeping sensitive content out of cloud LLM APIs; only four are practical today, and composing local routing with redact-and-rephrase cuts PII leakage to 0.6%
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md) — Use permission rules and hooks to prevent agents from reading credentials and secrets
+- [Sandbox Credential Masking: Authenticate Without Seeing the Secret](sandbox-credential-masking.md) — The sandbox shows a sentinel and the proxy swaps in the real credential on egress, so tools that must read a credential keep working while the secret stays out of the agent's context
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md) — Keep broad credentials outside the sandbox; use an external proxy that attaches scoped tokens only to validated requests
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — Inject credentials as environment variables so secrets never appear in context or generated code
 - [System Prompt as Secret Store (OWASP LLM07)](system-prompt-not-a-secret-store.md) — Treating the system prompt as a confidentiality boundary is the underlying vulnerability — secrets, credentials, and security-critical logic in the prompt are recoverable at 84–92% ASR on frontier models
@@ -102332,6 +102548,119 @@ The verbatim snippets come from [Running Codex safely at OpenAI](https://openai.
 
 ---
 
+### Sandbox Credential Masking: Authenticate Without Seeing the Secret
+Source: https://agentpatterns.ai/security/sandbox-credential-masking/
+
+# Sandbox Credential Masking: Authenticate Without Seeing the Secret
+
+> A sandbox proxy swaps a per-session sentinel for the real credential on egress, so the agent authenticates without the secret entering its context.
+
+Credential masking closes the gap that authoring-layer hygiene leaves open. Keeping secrets out of prompts, skill files, and the repo does nothing about the moment the agent calls an authenticated API, because the value still has to exist somewhere the tool can read it. Masking moves it to the network boundary: the sandboxed command sees a placeholder, and the proxy substitutes the real credential on requests to hosts you name.
+
+## When masking is the right control
+
+Use masking when a tool must read a credential and you cannot rewrite it. The AWS CLI, `gh`, and `npm` each expect a token in an environment variable or a config file, and a `deny` entry "removes the variable entirely, which also breaks tools that need it" ([Claude Code sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)). Four conditions have to hold first:
+
+- The proxy can read the traffic. Substitution rewrites request contents, so the experimental `network.tlsTerminate` setting is mandatory ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#network-isolation)).
+- The platform supports your credential type. Environment-variable masking behaves the same everywhere; file masking is Linux and WSL2 behavior ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-credential-files)).
+- The configuration lives somewhere the agent cannot write. Masking is honored only from user settings, managed settings, and the `--settings` flag, never from a repository's `.claude/settings.json` ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)).
+- You have hardened the no-match defaults. `onExtractNoMatch` ships as `warn`, which passes the value through unmasked ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)).
+
+Where you own the calling code, a wrapper script or a [scoped credentials proxy](scoped-credentials-proxy.md) reaches the same end state without a regular expression, a JWT verifier, or TLS termination.
+
+## How the substitution works
+
+The placeholder is a per-session sentinel, and each masked entry can list `injectHosts`. The proxy replaces the sentinel in the headers or body of requests bound for one of those hosts, so "the command and anything it logs never hold the real credential, but its requests still authenticate" ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)). Misconfiguration fails safe: without `tlsTerminate` the sentinel reaches the server unchanged, authentication fails, and Claude Code reports the problem at startup.
+
+## Structured values and JWT claims
+
+Whole-value replacement suits a bare token. Two options added in Claude Code 2.1.224 handle values a tool parses ([changelog](https://code.claude.com/docs/en/changelog)):
+
+- `extract` takes a regular expression and replaces "only the text captured by group 1 of each match", so a `DATABASE_URL` connection string still parses inside the sandbox ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)).
+- `decode: "jwt"` verifies the value is a JSON Web Token and replaces it with "a structurally valid fake token, so code inside the sandbox that decodes the token keeps working". Adding `maskClaims` masks named top-level payload claims and leaves the rest readable. It cannot be combined with `extract` ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)).
+
+That distinction matters when sandboxed code branches on the token, since the claims a reader does not name stay readable while the rest is replaced.
+
+## Signed requests are the hard case
+
+A proxy cannot fix an AWS request by swapping a header value. "AWS requests carry SigV4 signatures over the request contents, so mask `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` together"; the proxy detects the request by the access key's sentinel and re-signs it after substituting the real values ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#re-sign-aws-requests)). Masking the secret alone leaves a placeholder-signed request the proxy cannot detect, and it fails at AWS. Three forms carry signatures the proxy cannot recompute at all: aws-chunked streaming uploads, presigned URLs, and SigV4A. Those fail with a proxy error rather than a broken signature on the wire, and `credentials.sigv4` relaxes that per form ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#re-sign-aws-requests)).
+
+## Why it works
+
+The sentinel-to-value mapping lives in a process the agent cannot address. Every channel the agent can read or exfiltrate through carries the placeholder, while the proxy outside the sandbox holds the only copy of the real value and injects it on egress ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)). Anthropic's earlier sandbox design took the same line: "sensitive credentials (such as git credentials or signing keys) are never inside the sandbox with Claude Code", with a proxy that validates the request and attaches the token ([Anthropic: Claude Code sandboxing](https://www.anthropic.com/engineering/claude-code-sandboxing)).
+
+Settings provenance is the second half. A `mask` entry authorizes the proxy to release a real secret to named hosts, so honoring one from a repo file would let anything with write access, including the agent, nominate its own `injectHosts`. Restricting the options to user, managed, and `--settings` sources makes the boundary non-self-modifiable, which turns it into an [enforced rather than advisory control](enforced-versus-advisory-controls.md).
+
+## When this backfires
+
+- The no-match defaults are fail-open. `onExtractNoMatch` defaults to `warn`, which "warns and passes the variable through unmasked", and a value failing JWT verification is passed through the same way ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)). A rotated credential format silently disables the mask. Set `deny` or `error` where the secret should be present.
+- macOS file masking is not masking. There, "sandboxed commands can't read the listed file at all", the same effect as `deny`, so the tool breaks instead of working with a placeholder ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-credential-files)).
+- Masking stops disclosure, not misuse. Sandboxed execution "does not prevent legitimate-looking API calls with malicious parameters within the sandbox's permitted scope" ([Uchibeke, 2026](https://arxiv.org/abs/2603.20953v1)). A prompt-injected agent can still spend the credential's full authority against an allowed host, which is a job for an authorization layer.
+- TLS termination is a trust decision of its own, giving the proxy operator plaintext view of `git push`, `npm install`, and `aws sts` traffic. Some regulated regimes forbid it, as the [hostname-allowlist blind spot](hostname-allowlist-tls-blind-spot.md) page covers.
+- Some targets cannot be masked at all: directory paths, glob patterns, files over 8 MiB, and non-UTF-8 files fall back to `deny`, and `maskDuplicates` matches raw substrings, so a short value is replaced wherever it appears ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-credential-files)).
+
+## Example
+
+Masking the GitHub token in `~/.config/gh/hosts.yml` so `gh` keeps working while the agent reads a placeholder. The `extract` pattern names the secret span, and the rest of the YAML stays parseable ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-credential-files)):
+
+```json
+{
+  "sandbox": {
+    "enabled": true,
+    "network": {
+      "tlsTerminate": {},
+      "allowedDomains": ["*.github.com"]
+    },
+    "credentials": {
+      "files": [
+        {
+          "path": "~/.config/gh/hosts.yml",
+          "mode": "mask",
+          "extract": "oauth_token:\\s*(\\S+)",
+          "injectHosts": ["api.github.com"]
+        }
+      ]
+    }
+  }
+}
+```
+
+On Linux and WSL2, a sandboxed `cat ~/.config/gh/hosts.yml` shows a sentinel where the token was, and the proxy substitutes the real token on requests to `api.github.com`. On macOS the read fails instead. Put this in user or managed settings, since the repository's own settings file is ignored for masking.
+
+## FAQ
+
+**Why does masking need TLS termination?**
+
+The proxy substitutes the credential inside request headers and bodies, which it can only do if it can read them. A proxy forwarding opaque encrypted bytes has nothing to rewrite. Without `network.tlsTerminate` the sentinel reaches the server unchanged and authentication fails, so the failure is safe rather than a silent exposure, and Claude Code reports the misconfiguration at startup.
+
+**Does masking protect against a prompt-injected agent?**
+
+Only against disclosure of the secret. The agent holds a placeholder, so it cannot exfiltrate the credential itself or leak it through logs. It can still direct the proxy to make authenticated requests within the credential's scope to an allowed host. Pair masking with an authorization layer that judges the action rather than the identity behind it.
+
+**When should I use a scoped credentials proxy instead?**
+
+When you control the code that calls the API. A proxy that attaches tokens to unauthenticated requests has no regular expression to drift, no JWT verifier to fall back from, and no TLS termination requirement. Masking earns its extra machinery only when an unmodifiable tool insists on reading a credential from an environment variable or a config file.
+
+## Key Takeaways
+
+- Masking is for credential-consuming tools you cannot rewrite; wrap the call instead when you own it
+- Check `onExtractNoMatch` before trusting a mask, because the default passes the value through unmasked
+- File masking is Linux and WSL2 only; macOS applies mask entries as `deny`
+- SigV4 needs re-signing rather than substitution, and three request forms cannot be re-signed at all
+- The settings-provenance restriction is what makes this enforcement, since the agent cannot grant itself an `injectHosts` entry
+- A masked credential retains its full scope, so authorization stays a separate layer
+
+## Related
+
+- [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
+- [Secrets Management for AI Agents: Credential Injection](secrets-management-for-agents.md)
+- [Hostname-Allowlist Proxy: The TLS-Inspection Blind Spot](hostname-allowlist-tls-blind-spot.md)
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md)
+- [Sandbox-Enforced PII Tokenization in Agent Workflows](pii-tokenization-in-agent-context.md)
+- [Sensitive Terminal Prompt Interception](sensitive-terminal-prompt-interception.md)
+
+---
+
 ### Sandbox-Enforced PII Tokenization in Agent Workflows
 Source: https://agentpatterns.ai/security/pii-tokenization-in-agent-context/
 
@@ -102792,7 +103121,7 @@ Environment variable injection keeps secrets out of context but still places the
 - The agent processes untrusted external content (email, web pages, user uploads)
 - Compliance or audit requirements mandate authenticated-action logging
 
-For low-stakes dev tasks, environment variable injection is enough. See [Secrets Management for Agent Workflows](secrets-management-for-agents.md).
+For low-stakes dev tasks, environment variable injection is enough. See [Secrets Management for Agent Workflows](secrets-management-for-agents.md). Where the tool insists on reading a credential and cannot be rewritten to call a proxy, [sandbox credential masking](sandbox-credential-masking.md) is the third option: the tool reads a sentinel and the proxy substitutes the real value on egress.
 
 ## Example
 
@@ -105005,7 +105334,7 @@ Team-scoped policy delegation splits one agent configuration into keys a team ma
 
 A key becomes eligible only when the enterprise marks it with the `{ "overridable": <VALUE> }` syntax in `copilot/managed-settings.json`. Everything else is closed by default: "Keys not marked overridable remain an enterprise-level decision that teams can't modify" ([GitHub Docs: Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)).
 
-The allowlist is narrow today. The syntax "applies to the governance keys `permissions.model` and `permissions.disableBypassPermissionsMode`", and two further keys compose additively instead: `enabledPlugins` and `extraKnownMarketplaces` let a team file add to the enterprise baseline rather than replace it ([Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)).
+The allowlist is narrow today. The syntax "applies to the governance keys `permissions.model` and `permissions.disableBypassPermissionsMode`", and two further keys compose additively instead: `enabledPlugins` and `extraKnownMarketplaces` let a team file add to the enterprise baseline rather than replace it ([Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)). GitHub extended the marking to MCP servers on 6 August 2026, so the new MCP allowlist keys can carry `overridable` too. That release also makes MCP access fail closed, and a server must pass every configuration layer before it loads ([GitHub Changelog](https://github.blog/changelog/2026-08-06-mcp-allowlists-in-enterprise-managed-settings)).
 
 Teams select among enterprise-authored values and do not write new ones. "The enterprise defines all settings—team membership only determines which users receive a given set of values" ([Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)). A team file releases a key by setting it to `"unmanaged"`. It does not invent one.
 
@@ -113338,6 +113667,7 @@ Source: https://agentpatterns.ai/human/
 - [Marking Which Artifacts Are for Humans or Agents (Landmarking)](landmarking-human-vs-agent-artifacts.md) — Agree a team-wide readership contract for which repository artifacts are written to be understood by a person and which are agent context, and back it with tooling
 - [Programming Language Choice Still Shapes Agent Artifacts](programming-language-choice-shapes-agent-artefacts.md) — Coding agents reach every language but the language you pick still decides performance ceiling, run cost, and verification effort — budget both
 - [Human-Equivalent Hours for Autonomous Coding Agent Productivity](human-equivalent-hours-agent-productivity.md) — Estimate the human engineering hours an autonomous agent's output would have taken so spend can be weighed against a denominator finance and headcount already use
+- [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — A first-party ROI panel meters the cost side of the ratio and models the value side; which decisions the metered half can settle, and when to override the throughput half
 - [Intent-Centric Engineering: Oversight Over Authorship](intent-centric-engineering.md) — When code generation is cheap, the engineer's leverage moves from authorship to specifying intent and governing humans-plus-agents-plus-tools — but only under specific conditions, with sharp failure modes (spec-as-code displacement, skill atrophy, vendor ToS gaps)
 - [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — Long-form analysis of the builder/coder identity split: bottleneck migration, skill atrophy, and rigor relocation as code production is commoditized
 - [Evaluating Agent Patterns Catalog as a Source](evaluating-agent-patterns-catalog-as-a-source.md) — Source assessment of agentpatternscatalog.org with citation guard-rails and an explicit no-MCP-wiring boundary
@@ -114137,6 +114467,7 @@ The 62% headline is consistent with this org and with a uniform-60%-medium-use o
 - [AI Adoption Footprint: The Segmented Shape of Engineering Orgs](ai-adoption-footprint.md) — the underlying segmented-distribution mechanism cohort segmentation operationalizes.
 - [Agent Headcount as a Vanity Metric](../patterns/anti-patterns/agent-headcount-vanity-metric.md) — the Goodhart failure mode Phase 3 will exhibit if treated as a target.
 - [The Productivity-Experience Paradox in AI-Assisted Development](productivity-experience-paradox.md) — why depth-of-use can rise while developer experience and outcomes diverge.
+- [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — the ROI panel built on top of these phases; how to read a cross-cohort cost and throughput comparison without treating it as causal.
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the other side of Copilot-specific instrumentation; cost telemetry that pairs with the cohort distribution.
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the rollout that these adoption-phase cohorts instrument: seed adoption socially, then track retention as a separate number.
 
@@ -115207,6 +115538,7 @@ The estimate is calibrated on PR-merged sessions only (Cognition's gate). The im
 
 - [The Productivity-Experience Paradox in AI-Assisted Development](productivity-experience-paradox.md) — perceived productivity can rise while experience declines; the inflation channel that hours-saved estimates inherit
 - [The Bottleneck Migration When Humans Supervise Agents](bottleneck-migration.md) — review time absorbs the generation gain; the downstream signal the metric must be paired with
+- [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — the vendor-side counterpart to this ratio; which half of a first-party ROI panel to trust, and when this metric should override it
 - [Copilot vs Claude Billing Semantics for Enterprise Teams](copilot-vs-claude-billing-semantics.md) — the cost-side denominator the agent-hours figure is being compared against
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](../token-engineering/token-cost-profiling-always-on-workflows.md) — the spend-side instrumentation that anchors the ROI ratio
 - [Rigor Relocation: Engineering Discipline with AI Agents](rigor-relocation.md) — verification cost shifts that show up only when the metric is paired with downstream signals
@@ -116342,6 +116674,106 @@ This trajectory is not guaranteed. A production incident in week 5 would have tr
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md)
 - [Domain-Specific Agent Challenges](../patterns/agent-design/domain-specific-agent-challenges.md)
 - [Suggestion Gating](suggestion-gating.md)
+
+---
+
+### Reading a Vendor-Computed AI Coding ROI Dashboard
+Source: https://agentpatterns.ai/human/vendor-computed-roi-copilot-impact-dashboard/
+
+# Reading a Vendor-Computed AI Coding ROI Dashboard
+
+> A vendor-computed ROI dashboard meters the cost side of the ratio and models the value side; trust the first, override the second.
+
+The return-on-investment section of the Copilot impact dashboard reports three numbers per adoption cohort: cost per developer per month "derived from actual AI credit consumption", that cost as a percentage of developer compensation, and pull requests per developer per month ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-impact-dashboard-adds-a-return-on-investment-section)). One of the three is measured. Read the panel by splitting it along that line.
+
+## What the panel reports
+
+The cards are keyed to the same `ai_adoption_phase` cohorts as the Copilot usage metrics API, computed over a rolling 28-day window ([GitHub Changelog, 2026-07-22](https://github.blog/changelog/2026-07-22-new-copilot-usage-metrics-impact-dashboard/)). The section sets an early-adoption cohort beside an agent-first cohort, and a salary selector picks the compensation band the cost figures recalculate against. No division happens on screen: the reader supplies the ratio and the theory of what a merged pull request is worth.
+
+## The measured half and the modeled half
+
+Cost per developer per month comes from metered credit consumption, so it answers a question buyers previously had to estimate: what this costs per person in the cohorts that use it hardest. GitHub still asks readers to "treat these metrics as directional" ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-impact-dashboard-adds-a-return-on-investment-section)).
+
+The value half did not improve. Pull requests per developer per month is the same activity proxy it always was, and the salary selector is "a modeling input rather than actual payroll data" ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-impact-dashboard-adds-a-return-on-investment-section)). Two properties weaken the throughput figure further:
+
+- The comparison is cross-sectional. Cohort membership is self-selected along the same axis as the outcome: at Microsoft, retention of CLI coding agents tracked baseline coding activity rather than demographics ([Murphy-Hill et al., arXiv:2607.01418v1](https://arxiv.org/abs/2607.01418v1)). The agent-first cohort was the higher-throughput cohort before it became agent-first.
+- Task mix moves the number independently of the tool. Across 7,156 agent pull requests, documentation tasks were accepted at 82.1% against 66.1% for new features, a gap wider than the variance between agents ([Pinna et al., arXiv:2602.08915v2](https://arxiv.org/abs/2602.08915v2)).
+
+## When the vendor figure settles the question
+
+Use the panel unmodified when the decision turns on cost:
+
+- Renewal and budget scale. When metered spend lands at a low single-digit percentage of payroll, error in the throughput term cannot flip the renewal.
+- Spend shape. Which cohorts burn credits, and how steeply cost climbs with adoption depth, are now observations instead of guesses.
+- Checking a local model. A hand-built ROI spreadsheet whose cost term disagrees with metered consumption has a bug in the spreadsheet.
+
+The direction of the gap holds up independently. Across tens of thousands of Microsoft engineers, adopters merged roughly 24% more pull requests than they would have otherwise, persisting over four months ([Murphy-Hill et al., arXiv:2607.01418v1](https://arxiv.org/abs/2607.01418v1)). That is a counterfactual estimate rather than a cohort mean; [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) covers what it licenses.
+
+## When to override the throughput half
+
+Replace the pull-request term with a locally derived value term whenever the decision turns on value: team-level staffing, per-team budget allocation, or any argument that adoption depth caused the gap. [Human-Equivalent Hours](human-equivalent-hours-agent-productivity.md) is the buyer-side construction of the same ratio, converting agent output into the hours finance already uses. Pair either figure with a downstream signal such as review time or revert rate before reading a gap as value.
+
+## Why it works
+
+The panel collapses uncertainty on exactly one side of the ratio and leaves the other side untouched. GitHub bills the credits, so cost per developer is an observation; the compensation band stays an input the buyer chose, and the pull-request count stays a proxy the field already distrusts ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-impact-dashboard-adds-a-return-on-investment-section)). That asymmetry predicts which decisions the panel can close: anything dominated by cost uncertainty is answerable from metered data, and anything dominated by value uncertainty sits where it sat before the section shipped.
+
+Measurement frameworks pair outcome-oriented north-star metrics with diagnostic submetrics rather than promoting a submetric to the headline ([Houck et al., arXiv:2605.04259](https://arxiv.org/abs/2605.04259)). A cohort card is a diagnostic submetric rendered where a north star belongs.
+
+## When this backfires
+
+- Small per-cohort populations. Cards report per-user averages inside a phase over a rolling 28-day window ([GitHub Changelog, 2026-07-22](https://github.blog/changelog/2026-07-22-new-copilot-usage-metrics-impact-dashboard/)). With a handful of engineers in a phase, one person's sprint moves the mean and a month-over-month delta is noise.
+- Organizations already saturated on AI IDEs. A staggered difference-in-differences study with matched controls found large velocity gains only where agents were the first AI tool in a project; repositories with prior AI IDE use saw "minimal or short-lived throughput increases" ([Agarwal et al., arXiv:2601.13597v2](https://arxiv.org/abs/2601.13597v2)). The card still renders a gap.
+- Quality cost carrying the decision. The same study measured static-analysis warnings up about 18% and cognitive complexity about 39%, persisting after the velocity advantage faded ([Agarwal et al., arXiv:2601.13597v2](https://arxiv.org/abs/2601.13597v2)). The panel has no field for that debit.
+- Policy-constrained organizations. Where agent surfaces are disabled by policy, phase membership records what compliance permits, so the gap measures the policy rather than the tool.
+- Promotion of the figure to a target. Pull requests per developer per month rises when work is sliced more finely, and agent tooling makes slicing cheap. [Cohort segmentation](cohort-segmentation-copilot-usage-metrics.md) flags the same trap for adoption phases, and [stakeholder-trust evals](../workflows/stakeholder-trust-evals-observability.md) flags it for composite quality scores.
+
+## Example
+
+A 300-engineer organization opens the ROI section during renewal planning. The card figures below are illustrative rather than GitHub-published numbers. Two ways to read the same two cards:
+
+**Before** — treating the card as a ratio:
+
+```text
+Code-first cohort:    $41/dev/mo    0.4% payroll    4.1 PRs/dev/mo
+Agent-first cohort:  $138/dev/mo    1.3% payroll    5.6 PRs/dev/mo
+
+Read:     "agent-first ships 37% more PRs for 0.9% more payroll"
+Decision: move every team to agent-first, fund it from open headcount
+```
+
+**After** — splitting the card along the measured line:
+
+```text
+Trust as measured:
+  $138/dev/mo in the agent-first cohort, 1.3% of payroll
+  -> renewal is not close; fund it
+
+Do not trust as causal:
+  the 1.5 PR/dev/mo gap is a cross-sectional cohort difference
+  -> do not restaff teams on it
+
+Override with a local value term:
+  human-equivalent hours on PR-gated sessions,
+  paired with review time and revert rate
+```
+
+Reading the card as a ratio moves headcount on a number the vendor itself labels directional. Splitting it closes the renewal with the metered half and sends the staffing question to a figure built from the organization's own outcomes.
+
+## Key Takeaways
+
+- The ROI section reports cost per developer per month from metered credit consumption, that cost against a chosen compensation band, and pull requests per developer per month ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-impact-dashboard-adds-a-return-on-investment-section)). It does not divide them for you.
+- The cost half is measured. The value half is the same activity proxy as before, and the salary selector is a modeling input rather than payroll data.
+- Cohort cards compare self-selected groups. Retention tracked baseline coding activity, so the agent-first cohort was already the higher-throughput cohort ([Murphy-Hill et al., arXiv:2607.01418v1](https://arxiv.org/abs/2607.01418v1)).
+- Use the panel unmodified for renewal-scale and spend-shape decisions. Override the throughput term for team-level staffing or any causal claim.
+- The costs it cannot see are real: static-analysis warnings up about 18% and cognitive complexity about 39% after agent adoption, persisting after velocity gains fade ([Agarwal et al., arXiv:2601.13597v2](https://arxiv.org/abs/2601.13597v2)).
+
+## Related
+
+- [Human-Equivalent Hours for Autonomous Coding Agent Productivity](human-equivalent-hours-agent-productivity.md) — the buyer-side construction of this same ratio, and the value term to substitute when the vendor's proxy will not carry the decision
+- [Cohort Segmentation in the Copilot Usage Metrics API](cohort-segmentation-copilot-usage-metrics.md) — the adoption-phase classification the ROI cards are keyed to, and why a phase is a descriptor rather than a target
+- [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the Microsoft rollout evidence behind the throughput lift, and the conditions that make it observational
+- [Copilot vs Claude Billing Semantics for Enterprise Teams](copilot-vs-claude-billing-semantics.md) — the credit-billing mechanics the panel's metered cost figure is drawn from
+- [Stakeholder Trust Through Evals and Observability](../workflows/stakeholder-trust-evals-observability.md) — the Goodhart failure a single stakeholder-facing score invites once it becomes a target
 
 ---
 
@@ -129686,6 +130118,7 @@ The first prompt dispatches a fresh session; the second routes to the `code-revi
 - [Editor and Manager Surface Separation in Agent IDEs](../../patterns/agent-design/editor-manager-surface-separation.md) — the cross-tool convergence this pattern is a Claude-specific instance of
 - [Parallel Agent Sessions Shift the Bottleneck from Writing](../../workflows/parallel-agent-sessions.md) — the human-factors bottleneck shift that agent view absorbs
 - [Claude Code Agent Teams](agent-teams.md) — cross-session coordination with shared task lists and mailbox messaging
+- [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](../../patterns/agent-design/cross-session-peer-messaging.md) — the messaging channel between independent sessions, and the inbound gate that decides what a listed session accepts
 - [Dynamic Workflows](dynamic-workflows.md) — script-driven parallelism when a job outgrows a handful of subagents
 - [Sub-Agents](sub-agents.md) — the in-session delegation primitive dispatched via `@name` in agent view
 - [/batch & Worktrees](batch-worktrees.md) — the worktree isolation primitive that backs every dispatched session
@@ -136451,7 +136884,7 @@ Source: https://agentpatterns.ai/tools/cursor/multi-root-workspaces/
 
 # Cursor Multi-Root Workspaces
 
-> One agent session, multiple repository folders — for edits whose intent crosses repo boundaries.
+> A multi-root workspace gives one agent session several repository folders, for edits whose intent crosses repo boundaries.
 
 Cursor 3.2 (2026-04-24) added multi-root workspaces to the Agents Window: one agent session targets a reusable workspace of multiple folders "without retargeting the agent every time it moves between repos" ([Cursor changelog 3.2](https://cursor.com/changelog/04-24-26)). The same release shipped `/multitask` async subagents and revised worktrees, though worktrees and cloud agents are currently disabled inside multi-root sessions (see below).
 
@@ -136466,6 +136899,8 @@ Use multi-root when one intent fragments across repos. For example, renaming `Or
 | Change spans 2+ repos and cannot be sequenced | Change is contained to one repo |
 | Repos share schemas/types/contracts being edited together | Repos are coupled only by deployment |
 | Review wants one coherent diff narrative | Reviewers prefer narrow per-repo PRs |
+
+Cross-repo review is a separate surface from the cross-repo edit. OpenAI's Codex added "Review changes across repositories" on 2026-07-30, one view of the diffs from every repo in a multi-folder project ([Codex changelog](https://developers.openai.com/codex/changelog/#codex-2026-07-30-app)).
 
 For narrow work inside one service of a monorepo, the opposite isolation usually wins — see [Sparse-Checkout Worktrees for Monorepo Agent Isolation](../claude/sparse-paths-monorepo-isolation.md).
 
@@ -142605,6 +143040,8 @@ The controls:
 
 Governance happens at the git repo level: whoever can merge to the marketplace repo decides who can publish skills to the organization.
 
+Skills also reach developers outside the marketplace repo you control. Vercel ships agent skills through its own marketplace, where adding an integration installs the provider's skills as a side effect [Source: [Vercel Marketplace agent skills](https://vercel.com/changelog/vercel-marketplace-agent-skills)].
+
 ## Stage 2: usage visibility
 
 Without usage data, skill investment is a guess. Two data sources are available:
@@ -144373,6 +144810,8 @@ An incident log investigation skill is a specialist agent. It dispatches paralle
 ## The framing
 
 Incident investigation is one of the strongest uses for agents. A slow investigation is costly, and the signals you need are scattered across several observability systems. A well-designed skill can search all of them and surface correlated evidence, but only if you can trust its output. The patterns here — parallel tool calls, context-budget discipline, eval-backed precision — apply well beyond this 3-system setup.
+
+OpenAI's customer case study reports that NTT DATA cut incident analysis to 30 minutes using Codex. The figure is vendor-reported and covers one customer's deployment. [Source: [NTT DATA](https://openai.com/index/ntt-data)]
 
 ## Architecture
 
@@ -147165,7 +147604,7 @@ Write the check before the workflow ships rather than after the first bad output
 
 ## Tool coverage
 
-The reported implementation used GitHub Copilot CLI. Nothing in the three layers depends on which CLI agent runs them, because the portable parts are files, a corpus, and a review step rather than vendor features. Pick the agent the adopting function's colleagues already run, so the people they will ask for help know the tool.
+The reported implementation used GitHub Copilot CLI. OpenAI reports a comparable adoption outside engineering: a creative team took up Codex ([OpenAI, 2026-07-16](https://openai.com/index/codex-collaborator-creative-team)). That account is vendor-authored like the case study above, so read it as a second existence proof of the same class. Nothing in the three layers depends on which CLI agent runs them, because the portable parts are files, a corpus, and a review step rather than vendor features. Pick the agent the adopting function's colleagues already run, so the people they will ask for help know the tool.
 
 ## Why it works
 

@@ -11,7 +11,7 @@ tags:
   - evals
   - security
   - tool-agnostic
-last_reviewed: 2026-08-03
+last_reviewed: 2026-08-08
 maturity: adopted
 ---
 
@@ -29,7 +29,9 @@ Treat the environment running an offensive-capability agent evaluation as produc
 
 [Source: [Anthropic's incident disclosure](https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals)]
 
-OpenAI reports the same class of failure. Its models, inside a sandboxed evaluation, spent substantial inference compute finding open internet access, exploited a zero-day in a package registry cache proxy, then moved laterally to a node with internet access. [Source: [OpenAI on the Hugging Face model-evaluation security incident](https://openai.com/index/hugging-face-model-evaluation-security-incident/)]
+OpenAI reports the same class of failure. Its models, inside a sandboxed evaluation, spent substantial inference compute finding open internet access, exploited a zero-day in a package registry cache proxy, then moved laterally to a node with internet access. [Source: [OpenAI on the Hugging Face model-evaluation security incident](https://openai.com/index/hugging-face-model-evaluation-security-incident/)] Simon Willison has published a timeline of that attack. [Source: [Simon Willison's timeline of the OpenAI to Hugging Face attack](https://simonwillison.net/2026/Aug/7/openai-timeline/)]
+
+OpenAI has also disclosed cyber-evaluation incidents involving its models that began with third-party evaluators rather than its own harness. [Source: [OpenAI on third-party cyber evaluations involving its models](https://openai.com/index/third-party-cyber-evaluations-involving-openai-models)] Simon Willison records the same failure class at Meta, a third vendor, so the pattern is not particular to Anthropic and OpenAI. [Source: [Simon Willison on an AI model from Meta](https://simonwillison.net/2026/Aug/6/an-ai-model-from-meta/)]
 
 ## Why it works
 

@@ -10,7 +10,7 @@ aliases:
   - human checkpoints as loop control
   - HITL interrupts as loop control
   - human-in-the-loop as convergence aid
-last_reviewed: 2026-06-29
+last_reviewed: 2026-08-08
 maturity: adopted
 ---
 
@@ -57,7 +57,7 @@ Trip the interrupt before any action the loop cannot undo from its own state —
 
 ## Why it works
 
-The mechanism rides on the loop's existing state. LangGraph's persistence layer writes the exact node state at the interrupt point, the `thread_id` acts as a cursor for resumption, and the resume value substitutes back into the `interrupt()` call without re-running upstream nodes ([LangChain — Making it easier to build human-in-the-loop agents with interrupt](https://www.langchain.com/blog/making-it-easier-to-build-human-in-the-loop-agents-with-interrupt)). HITL is one consumer of the same checkpointer that powers fault tolerance and time travel.
+The mechanism rides on the loop's existing state. LangGraph's persistence layer writes the exact node state at the interrupt point, the `thread_id` acts as a cursor for resumption, and the resume value substitutes back into the `interrupt()` call without re-running upstream nodes ([LangChain — Making it easier to build human-in-the-loop agents with interrupt](https://www.langchain.com/blog/making-it-easier-to-build-human-in-the-loop-agents-with-interrupt)). HITL is one consumer of the same checkpointer that powers fault tolerance and time travel. Vercel's Chat SDK ships durable approvals, a second implementation of the same suspend-and-resume checkpoint ([Chat SDK durable approvals](https://vercel.com/changelog/chat-sdk-durable-approvals)).
 
 The four verbs work as loop control because the resume value feeds back into the node's executing logic. Edit mutates the next call's arguments; reject substitutes a rejection message into the tool-result slot so the model re-plans; respond synthesizes a tool result the agent treats as ground truth. Each verb changes the loop's trajectory, not just its permission state. Anthropic's framing fits the same shape: agents "can pause for human feedback at checkpoints or when encountering blockers" ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)).
 

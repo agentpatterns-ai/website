@@ -10,7 +10,7 @@ tags:
   - security
   - instructions
   - copilot
-last_reviewed: 2026-08-06
+last_reviewed: 2026-08-08
 maturity: emerging
 ---
 
@@ -24,7 +24,7 @@ Team-scoped policy delegation splits one agent configuration into keys a team ma
 
 A key becomes eligible only when the enterprise marks it with the `{ "overridable": <VALUE> }` syntax in `copilot/managed-settings.json`. Everything else is closed by default: "Keys not marked overridable remain an enterprise-level decision that teams can't modify" ([GitHub Docs: Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)).
 
-The allowlist is narrow today. The syntax "applies to the governance keys `permissions.model` and `permissions.disableBypassPermissionsMode`", and two further keys compose additively instead: `enabledPlugins` and `extraKnownMarketplaces` let a team file add to the enterprise baseline rather than replace it ([Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)).
+The allowlist is narrow today. The syntax "applies to the governance keys `permissions.model` and `permissions.disableBypassPermissionsMode`", and two further keys compose additively instead: `enabledPlugins` and `extraKnownMarketplaces` let a team file add to the enterprise baseline rather than replace it ([Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)). GitHub extended the marking to MCP servers on 6 August 2026, so the new MCP allowlist keys can carry `overridable` too. That release also makes MCP access fail closed, and a server must pass every configuration layer before it loads ([GitHub Changelog](https://github.blog/changelog/2026-08-06-mcp-allowlists-in-enterprise-managed-settings)).
 
 Teams select among enterprise-authored values and do not write new ones. "The enterprise defines all settings—team membership only determines which users receive a given set of values" ([Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)). A team file releases a key by setting it to `"unmanaged"`. It does not invent one.
 

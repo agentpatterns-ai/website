@@ -10,7 +10,7 @@ tags:
   - code-review
   - cost-performance
   - cursor
-last_reviewed: 2026-06-18
+last_reviewed: 2026-08-08
 maturity: established
 ---
 
@@ -38,7 +38,9 @@ This is the per-PR analogue of [heuristic effort scaling](../patterns/agent-desi
 
 Single-calibration agents force a compromise. Calibrate for thoroughness and routine PRs drown in commentary: developers [override more than 30% of flags](https://www.codeant.ai/blogs/ai-code-review-false-positives) until the tool is functionally disabled. Calibrate for signal and the agent misses real regressions in high-stakes code.
 
-GitHub Copilot's review began as the implicit binary form: in [29% of reviews the agent stays silent and in 71% it surfaces actionable feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). A multi-level dial generalizes it: silence is the lowest rung, full agentic exploration the highest. By mid-2026 Copilot had externalized the dial too. Admins set a per-repository analysis tier: `low` (the fast, cost-efficient default) or a new `medium` tier that routes complex logic, security-sensitive code, and cross-service changes to a higher-reasoning model ([GitHub, 2026-06-02](https://github.blog/changelog/2026-06-02-shape-copilot-code-review-around-your-team/)). Weeks later, GitHub widened the surface with [new configurations and controls for tuning the review agent](https://github.blog/changelog/2026-06-12-copilot-code-review-new-configurations-and-controls) (GitHub, 2026-06-12). Cursor binds the choice to one PR, Copilot to one repository: coarser-grained, but the same effort-routing primitive.
+GitHub Copilot's review began as the implicit binary form: in [29% of reviews the agent stays silent and in 71% it surfaces actionable feedback](https://github.blog/ai-and-ml/github-copilot/60-million-copilot-code-reviews-and-counting/). A multi-level dial generalizes it: silence is the lowest rung, full agentic exploration the highest. Copilot externalized that dial in a [preview on 2026-06-02](https://github.blog/changelog/2026-06-02-shape-copilot-code-review-around-your-team/) and took it to [general availability on 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-code-review-effort-levels-are-generally-available), renaming the preview `low` and `medium` tiers to `Lite` and `Balanced`. `Lite` is the default standard review; `Balanced` routes complex logic, security-sensitive code, and cross-service changes to a higher-reasoning model ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/code-review#review-effort-level)).
+
+That release also settled where the dial sits. An organization default applies across its repositories, a repository can override it, and whoever requests a review can pick a level for that run without changing either default. Both vendors now expose a per-PR dial; what differs is who turns it. Cursor's Custom level is a policy the tool evaluates automatically, while Copilot's is a human decision at request time.
 
 ## Calibration is the pattern
 
@@ -50,6 +52,8 @@ Cursor publishes two metrics:
 - Resolution rate — share of flagged bugs authors address at merge, classified by an LLM-as-judge validated against humans
 
 Holding resolution rate constant across levels is the calibration commitment: High costs more but does not flood with low-quality flags. Resolution rate gates whether the higher-effort flags are useful.
+
+Copilot publishes no equivalent curve. `Lite` and `Balanced` are documented by description rather than by a measured bug-discovery rate, so the tiers shipped as an interface without the evidence that makes a dial actionable. A routing policy tuned against Cursor's numbers has no basis on Copilot.
 
 ## Routing axes
 
@@ -84,7 +88,7 @@ The arithmetic only holds when routing concentrates High on high-stakes runs. A 
 - Routing policy can drift in Custom. Natural-language Custom is an instruction file with the same [primacy and drift issues](../instructions/system-prompt-altitude.md). A correct policy in May 2026 may misroute six months later, and no eval is exposed by default.
 - High-effort defaults create alert fatigue. [Signal over volume](signal-over-volume-in-ai-review.md) is the dominant trust factor. Pinning High at the policy level burns attention on routine PRs and un-funds the high-stakes runs the dial protects.
 - Cost-blind defaults backfire. Without per-PR cost ranges, reviewers toggle High on everything, collapsing the dial back to a fixed-pipeline calibration.
-- No vendor provides author or defect-rate signals. Cursor exposes path-based routing but not author-trust or directory-defect-rate routing. Teams encode those manually in Custom, with no audit trail.
+- No vendor provides author or defect-rate signals. Cursor exposes path-based routing but not author-trust or directory-defect-rate routing, so teams encode those manually in Custom. Copilot [labels which effort level ran](https://github.blog/changelog/2026-08-07-copilot-code-review-effort-levels-are-generally-available) in the timeline and the pull request overview comment (GitHub, 2026-08-07), which records the outcome without recording the axis that triggered it.
 
 Tunable effort assumes a published curve and a routing policy that concentrates the higher tier on the runs that pay for it. Without both, the dial reduces to per-PR cost optionality with no signal benefit.
 

@@ -102,6 +102,7 @@ The first prompt dispatches a fresh session; the second routes to the `code-revi
 - [Editor and Manager Surface Separation in Agent IDEs](../../patterns/agent-design/editor-manager-surface-separation.md) — the cross-tool convergence this pattern is a Claude-specific instance of
 - [Parallel Agent Sessions Shift the Bottleneck from Writing](../../workflows/parallel-agent-sessions.md) — the human-factors bottleneck shift that agent view absorbs
 - [Claude Code Agent Teams](agent-teams.md) — cross-session coordination with shared task lists and mailbox messaging
+- [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](../../patterns/agent-design/cross-session-peer-messaging.md) — the messaging channel between independent sessions, and the inbound gate that decides what a listed session accepts
 - [Dynamic Workflows](dynamic-workflows.md) — script-driven parallelism when a job outgrows a handful of subagents
 - [Sub-Agents](sub-agents.md) — the in-session delegation primitive dispatched via `@name` in agent view
 - [/batch & Worktrees](batch-worktrees.md) — the worktree isolation primitive that backs every dispatched session
