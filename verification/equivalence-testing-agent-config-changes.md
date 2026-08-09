@@ -72,3 +72,4 @@ Inspection moved hard while action did not move at all. Any monitor keyed to how
 - [Dispatch-Time Reasoning Level for Delegated Agents](../patterns/agent-design/dispatch-time-reasoning-level.md) — How to choose the effort setting once you know what changing it does and does not move.
 - [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md) — Why a stated prohibition is not an access control, whatever a propensity study reports.
 - [Subagent Schema-Level Tool Filtering](../patterns/multi-agent/subagent-schema-level-tool-filtering.md) — Making an unauthorized call structurally impossible instead of measuring how often it happens.
+- [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — What to report when a result moves with the seed, and why a cell at a bound is sometimes the design and sometimes the defect.

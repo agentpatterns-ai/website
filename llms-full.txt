@@ -727,6 +727,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Dispatch-Time Reasoning Level for Delegated Agents](patterns/agent-design/dispatch-time-reasoning-level.md)
 - [Informed Abstention as a Tool-Boundary Runtime Gate](patterns/agent-design/informed-abstention-tool-boundary-gate.md)
 - [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](patterns/agent-design/cross-session-peer-messaging.md)
+- [Scout-Then-Route: Verify the Handoff Before Routing](patterns/agent-design/scout-then-route.md)
 
 ## Loop Engineering
 
@@ -1162,6 +1163,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Skill-Use Gates: Trigger, Compliance and Boundary](verification/skill-use-gate-decomposition.md)
 - [Canary Tools for Diagnosing Tool-Selection Reasoning](verification/canary-tools-tool-selection-diagnosis.md)
 - [Evidence-Conditioned Execution: Gate Edits on Observations](verification/evidence-conditioned-execution.md)
+- [Seed-Variance Reporting and Measurable-Range Eval Design](verification/seed-variance-reporting.md)
 
 ## Hooks & Guardrails
 
@@ -1413,6 +1415,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Marking Which Artifacts Are for Humans or Agents (Landmarking)](human/landmarking-human-vs-agent-artifacts.md)
 - [Step Budgets and Trust in Agent-Generated Code Tours](human/agent-generated-code-tour-step-budgets.md)
 - [Reading a Vendor-Computed AI Coding ROI Dashboard](human/vendor-computed-roi-copilot-impact-dashboard.md)
+- [Per-Agent-App Attribution in the Copilot Usage Metrics API](human/per-agent-app-attribution-copilot-metrics.md)
 
 ## Anti-Patterns
 
@@ -19892,6 +19895,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — On a fixed budget for a single-shot agentic build, raising reasoning effort buys first-try functional reliability more cost-effectively than adding testing tools or design prompts — under three explicit conditions
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md) — Before choosing how an agent will perform an action, choose how you will undo it — if recovery costs more than one command, reconsider the approach
 - [RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use](rubric-refine-pre-execution-tool-use.md) — Generate a task- and registry-specific rubric, score candidate tool-use code against explicit contract checks, and repair failures before any execution — for multi-step tool sequences where contract violations run silently to completion
+- [Scout-Then-Route: Verify the Handoff Before Routing](scout-then-route.md) — Send a cheap scout into the repository, sandbox-verify its reproduction claims and strip what fails, then pick the fixer on price rather than skill
 - [Selective Checkpoint Restore Across Code and Conversation State](selective-checkpoint-restore.md) — Restore the agent's mental model and re-edit, restore the edits and re-plan, or reset both — when code and conversation are stored separately, the choice is three actions, not one
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — Hide a small fine-tuned model behind a tool-call interface so a large orchestrator can offload high-volume narrow operations — search, exploration, terminal output filtering — without spending its own context budget
 - [Tail Control for Agent Workflows: Engineering for the Failure Tail, Not the Average](tail-control-for-agent-workflows.md) — Engineer non-deterministic agent workflows for worst-case usability — per-step p95 timeouts, hedged re-draws, graceful degradation — because the failure tail sets the reliability behind an API, not the median run
@@ -23228,6 +23232,7 @@ Code-health routing decides before the small model runs; syntax-aware routing de
 - [Gateway Model Routing](gateway-model-routing.md) — infrastructure layer that exposes many models behind one endpoint; Auto routing is the policy layer that picks among them.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — within-harness tier selection by task complexity; Auto is the vendor-side counterpart.
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — fan-out across vendors at the agent level, complementary to within-vendor pool routing.
+- [Scout-Then-Route: Verify the Handoff Before Routing](scout-then-route.md) — routes on repository evidence gathered by a cheap scout rather than on vendor availability.
 - [BYOK Model Token Visibility](../../observability/byok-model-token-visibility.md) — the parallel observability contract for self-hosted routes; both fail the same way when `model_id` is missing.
 - [Utility Model Split](utility-model-split.md) — background-vs-foreground model routing and vendor model fleet partitioning; complements Auto's within-pool selection.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the taxonomic framework for per-task tier routing across an entire harness; upstream of the tiered, code-health-gated, and syntax-aware variants folded above.
@@ -23867,6 +23872,8 @@ Three implementation tiers recur across the cloud-IDE coding agents that ship th
 | 3 — Boundary-crossing | — | Shell commands, external APIs, out-of-project writes, subagent spawns |
 
 The tier table comes from Claude Code's auto-mode ([Claude Code permission modes](https://code.claude.com/docs/en/permission-modes)). VS Code 1.121's `github.copilot.chat.claudeAgent.allowAutoPermissions` ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)) and OpenAI Codex's `approvals_reviewer = "auto_review"` ([Codex Agent Approvals](https://developers.openai.com/codex/agent-approvals-security)) follow the same shape. Cursor ships the pattern for headless agents through a natural-language classifier: `autoRun.allow_instructions` and `autoRun.block_instructions` in `permissions.json` steer which tool calls run automatically versus hold for review, for example allowing read-only build-artifact inspection while always pausing deletes ([Cursor — agent autonomy auto-review](https://cursor.com/blog/agent-autonomy-auto-review)). Inputs the classifier reads typically include the user prompt, tool name, argument shape, target paths, and network destinations, never the doing agent's own reasoning (see below).
+
+One vendor now ships the gate on by default. Simon Willison reports that auto mode is the default in Claude Code for Pro, Max, and Team plans ([Auto mode is now the default in Claude Code](https://simonwillison.net/2026/Aug/8/auto-mode/)), so those users run under the classifier without opting in.
 
 VS Code 1.121's escalation criteria are stated verbatim: the classifier blocks anything that "escalates beyond your request", "targets unrecognized infrastructure", or "appears driven by hostile content Claude read" ([VS Code 1.121 release notes](https://code.visualstudio.com/updates/v1_121)).
 
@@ -38490,6 +38497,89 @@ The page-scope guarantee is what makes the attachment safe: ["the agent can read
 
 ---
 
+### Scout-Then-Route: Verify the Handoff Before Routing
+Source: https://agentpatterns.ai/patterns/agent-design/scout-then-route/
+
+# Scout-Then-Route: Verify the Handoff Before Routing
+
+> Verify the scout's handoff in a sandbox, strip the false claims, then route the task to the cheapest fixer that can solve it.
+
+Scout-then-route sends a small, cheap model into the repository before picking any frontier model. The scout returns a short structured artifact. A sandbox then replays the reproduction command it claims and deletes that claim when the replay fails. Only after that does a router choose which expensive fixer receives the task. SuperScout implements the architecture and reports 159 of 266 solves on the Python slice of SWE-bench Pro at $0.230 per solve, against 158 solves at $1.274 per solve for Claude Opus 4.6 on its own ([Bhola et al., arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+
+## When this applies
+
+Three conditions carry the result.
+
+- Your fixer pool has nested strengths. Weaker models solve a subset of what the strongest solves, with overlap of 0.941, 0.912, and 0.773 across three benchmarks, so accuracy routing has little headroom and cost becomes the only axis worth routing on ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+- You have a cheap tier that the handoff lifts. Kimi K2.5 gained 4.0 points and Gemini 3 Flash 2.0 points once they received a scouted handoff ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+- You can replay a reproduction command in a sandbox. Of the 266 benchmark tasks, only 50 carried a genuine reproduction claim and 174 were demonstrably false ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+
+Outside those conditions, pin one competent mid-tier model and keep a manual escalation path.
+
+## How it runs
+
+1. A small model searches the repository under a bounded turn budget. SuperScout allows 40 turns and decodes with sampling: temperature 0.90 lifts the find rate from 0.110 to 0.306 ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+2. It writes a handoff of about a page, roughly 4 KB, holding implicated files with line regions ranked by confidence, one reproduction attempt as a file plus command plus observed output, dead ends already tried, and free-form notes ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+3. A sandbox replays the claimed command against the unpatched repository. A failed replay removes the claim and its test file from the handoff before any fixer sees it ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+4. The router scores fixers from the task text plus the scout's internal state. Against a task-text-only baseline of 30.5% held-out cost savings, adding the hidden state raises them to 34.3% and adding the handoff prose instead drops them to 8.0% ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+5. The chosen fixer receives the verified handoff and works the task.
+
+```mermaid
+graph LR
+    I[Issue text] --> S[Cheap scout<br>bounded search]
+    S --> H[Structured handoff<br>files, repro, dead ends]
+    H --> V{Sandbox replays<br>repro command}
+    V -->|passes| K[Verified handoff]
+    V -->|fails| X[Strip claim<br>and test file]
+    X --> K
+    S -.->|internal state| R[Cost router]
+    I -.-> R
+    R --> F[Chosen fixer]
+    K --> F
+```
+
+## Why it works
+
+The handoff redistributes solving ability downward rather than adding it. A verified repository briefing moves tasks that previously needed the frontier model into range for a cheaper one, which is the shape cost routing needs when solve sets are nested and accuracy routing has nothing to win ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)). Independent work on deterministic anchoring reaches the same conclusion about the mechanism: static structure helps code agents "less by making agents 'smarter' and more by making their navigation disciplined and reproducible", improving Pass@1 by 3.4 points and roughly halving run-to-run variance ([Lin et al., arxiv 2606.26979v2](https://arxiv.org/abs/2606.26979v2)). The verification step exists because a false reproduction claim is an anchor, and LLM answers follow biased hints even when prompted to ignore them ([Lou and Sun, arxiv 2412.06593v2](https://arxiv.org/abs/2412.06593v2)).
+
+## When this backfires
+
+- The router earns nothing. SuperScout's own no-router arm, always Kimi K2.5 plus the handoff, also solves 159 of 266 at $0.227 per solve. The authors concede that "the handoff carries the result and routing collapses to cost allocation" ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)). Build the scout and the guard first, and treat the learned router as an optional last step.
+- A frontier-only pool loses accuracy. With no cheap tier to redistribute toward, the handoff is downside: GPT-5.2 fell from 60.6% to 56.6% ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)). Transferred context degrades exploration on some task types by as much as 46% while helping others ([Vigraham, arxiv 2605.04361v1](https://arxiv.org/abs/2605.04361v1)).
+- No sandbox means shipping fiction. On 174 of the 266 benchmark tasks the scout's reproduction claim was demonstrably false, and the paper's separate calibration census puts 56% of claims in the same bucket, so an unverified handoff anchors the fixer on a command that never ran ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+- Latency-sensitive loops pay first. Up to 40 search turns and a sandbox replay run before the fixer takes a single turn ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+- The evidence base is thin. One benchmark's Python slice, 266 tasks, a calibration study at N=99 that reaches no significant per-fixer result, and no pass-through arm, so the guard's contribution to the headline is the authors' inference rather than a measurement ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+
+## Example
+
+The measured trade on SWE-bench Pro's Python slice, 266 tasks, under the benchmark's capped budget tier ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)):
+
+| System | Solves | Cost per solve |
+|---|---|---|
+| SuperScout, routed | 159 | $0.230 |
+| No-router ablation, Kimi K2.5 plus handoff | 159 | $0.227 |
+| Claude Opus 4.6 alone | 158 | $1.274 |
+| GPT-5.2 alone | 139 | $1.091 |
+
+The scout itself cost $1.13 in GPU time across all 266 search episodes, under half a cent per task. Localization stays partial even so: recall 0.586 and precision 0.833 on spontaneous handoffs, with all implicated files correct on only 28.2% of them ([arxiv 2608.04804v1](https://arxiv.org/abs/2608.04804v1)).
+
+## Key Takeaways
+
+- Scout first, then choose the fixer. The routing decision improves once a cheap model has read the repository, because issue text alone does not say how hard the task is.
+- Verify before handing off. Most reproduction claims a scout makes are false, and a false claim anchors the fixer, so replay the command and delete what fails.
+- Build in that order. The scout and the sandbox guard are cheap and carry the measured win; a learned router is the last and least proven piece, so ship it only after the handoff pays.
+- Reach for it when your model pool has nested strengths and a cheap tier worth promoting. A frontier-only pool can lose accuracy to the same handoff.
+
+## Related
+
+- [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — routes mid-task on a cheap model's partial trajectory instead of a pre-task scouting artifact.
+- [Trained Repository Explorer Sub-Agent (FastContext)](fastcontext-trained-repository-explorer.md) — the same cheap-explorer split, aimed at token savings rather than model choice.
+- [Auto Model Selection](auto-model-selection.md) — vendor-side per-request routing that decides from availability and policy, with no repository evidence.
+- [Utility-Model Split](utility-model-split.md) — a cheaper model for background harness calls inside one turn.
+- [Gateway Model Routing](gateway-model-routing.md) — the infrastructure layer that makes a multi-fixer pool addressable in the first place.
+
+---
+
 ### Selective Autonomy from Copilot Feedback
 Source: https://agentpatterns.ai/patterns/agent-design/selective-autonomy-from-copilot-feedback/
 
@@ -43074,6 +43164,7 @@ SWE-Router pairs a weak model with a strong one and lets the weak model explore 
 - [Within-Task Model Cascade: Designing the Escalation Gate](../../loop-engineering/within-task-model-cascade.md) — cascade routing that escalates when a gate rejects the output; this technique fills the gap it leaves on feedback-less tasks.
 - [GitHub Copilot: Model Selection & Routing](../../training/copilot/model-selection.md) — the same cascade taught as a Copilot curriculum lesson, with worked credit costs.
 - [Gateway Model Routing](gateway-model-routing.md) — the infrastructure layer that exposes the weak and strong models a router escalates between.
+- [Scout-Then-Route: Verify the Handoff Before Routing](scout-then-route.md) — the same execution-evidence idea moved before the task starts, with a sandbox-verified handoff instead of a partial trajectory.
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — a prompt-time complement that allocates effort from task cues rather than trajectory evidence.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — the weak-model side of the pairing, used as a bounded sub-tool.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the broader cost-routing frame this escalation policy sits inside.
@@ -44175,6 +44266,7 @@ Throughput and cost-per-unit are up while agent count is down. The vanity metric
 ## Related
 
 - [The AI Adoption Footprint](../../human/ai-adoption-footprint.md) — segmented adoption is a more honest org-level metric than aggregate headcount
+- [Per-Agent-App Attribution in the Copilot Usage Metrics API](../../human/per-agent-app-attribution-copilot-metrics.md) — per-app activity counts replace headcount with a finer number that still needs an outcome metric beside it
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) — adding agents copied from elsewhere multiplies count without adding capability
 - [The Copy-Paste Agent](copy-paste-agent.md) — duplicated agent definitions inflate count while diluting maintainability
 - [Cross-Component Interference in Agent Scaffolds](cross-component-interference.md) — maximally-equipped multi-component agents lose to smaller subsets in 30-50% of tasks
@@ -72245,6 +72337,8 @@ A useful heuristic is that tool output should fit in a paragraph. If it does not
 2. The task genuinely needs that much information, in which case load it once and structure it carefully.
 3. The output should be written to a file rather than returned inline.
 
+Document conversion is a frequent offender. [Simon Willison](https://simonwillison.net/2026/Aug/7/pdfs-are-terrible/) names PDF-to-image-to-markdown conversion as a major token sink, so a document-reading tool should return the extracted section the agent asked for rather than the whole converted file.
+
 ## When this backfires
 
 Over-filtering introduces its own failure modes:
@@ -78428,6 +78522,7 @@ Source: https://agentpatterns.ai/verification/
 - [ComplexMCP: Three Bottlenecks in Large Interdependent Tool Sandboxes](complexmcp-tool-sandbox-bottlenecks.md) — 300+ MCP tools across stateful sandboxes expose tool retrieval saturation, over-confidence skipping verification, and strategic defeatism — each maps to a deployment choice
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Grade red-team outcomes on an L0 to L6 harm scale over reversibility, scope, and privilege so evals surface how harmful a compromise was, not just whether one occurred — a defense can report 0% attack success while still leaking cross-scope
 - [Equivalence Testing for Agent Configuration Changes](equivalence-testing-agent-config-changes.md) — Bound how far a config change could have moved behavior against a margin fixed in advance; a zero-event run states an upper limit computed from n, never an absence
+- [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — Report the spread of a result across seeds rather than the favorable run, and treat any accuracy cell pinned at a floor or ceiling as a design fault to fix before drawing a verdict
 
 ## Behavioral Testing
 
@@ -81511,6 +81606,7 @@ The dominant misattribution is treating a batch-invariance drift as a temperatur
 - [Markov-Chain Reliability for LLM Agents](markov-chain-agent-reliability.md)
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md)
 - [Dominator-Graph Trajectory Invariants](dominator-graph-trajectory-invariants.md)
+- [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md)
 
 ---
 
@@ -82684,6 +82780,7 @@ Inspection moved hard while action did not move at all. Any monitor keyed to how
 - [Dispatch-Time Reasoning Level for Delegated Agents](../patterns/agent-design/dispatch-time-reasoning-level.md) — How to choose the effort setting once you know what changing it does and does not move.
 - [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md) — Why a stated prohibition is not an access control, whatever a propensity study reports.
 - [Subagent Schema-Level Tool Filtering](../patterns/multi-agent/subagent-schema-level-tool-filtering.md) — Making an unauthorized call structurally impossible instead of measuring how often it happens.
+- [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — What to report when a result moves with the seed, and why a cell at a bound is sometimes the design and sometimes the defect.
 
 ---
 
@@ -88712,6 +88809,82 @@ Tested docs do not guarantee freshness at the retrieval layer. A RAG system inde
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — hard CI checks as the enforcement layer for agent output
 - [Test Harness Design for LLM Context Windows](llm-context-test-harness.md) — keeping test output useful when agents consume it as context
 - [Agent-Recorded Video Demos as a Verification Artifact](agent-recorded-video-demos.md) — the visual modality of executable proof-of-work, for changes with a rendered UI
+
+---
+
+### Seed-Variance Reporting and Measurable-Range Eval Design
+Source: https://agentpatterns.ai/verification/seed-variance-reporting/
+
+# Seed-Variance Reporting and Measurable-Range Eval Design
+
+> An eval result that moves with nothing but the random seed carries a seed range, and that range is the reportable finding.
+
+Seed-variance reporting means publishing the spread of a result across seeds rather than the run that looked like an effect. It comes with a design precondition: every accuracy cell in the comparison has to sit inside the band where the contrast is attributable, away from both the floor and the ceiling. A number from outside that band describes the instrument, not the system under test.
+
+## When the discipline applies
+
+Three conditions decide whether this is executable for you.
+
+- Seed control. Braintrust's negative-transfer study served base weights and a LoRA adapter from one vLLM process, which is what made a second seed possible ([Braintrust, 2026](https://www.braintrust.dev/blog/rlm-harness-negative-transfer)). Without it you can report a run-to-run range but cannot reproduce a specific run.
+- A sample large enough for a spread to mean something. Over 13 matched pairs, excluding one capped pair moved a reported interaction from −0.077 to −0.167 ([Braintrust, 2026](https://www.braintrust.dev/blog/rlm-harness-negative-transfer)). A reproducibility study of reasoning benchmarks sets the bar higher, calling bootstrapping over 30 runs "a minimal standard for reliable evaluation" ([Hochlehnert et al., arXiv:2504.07086v2](https://arxiv.org/abs/2504.07086v2)).
+- A contrast that a bound would destroy. Rare-event rates and zero-event arms sit at the floor on purpose, and [equivalence testing](equivalence-testing-agent-config-changes.md) turns one into a usable bound.
+
+## Report the range, not the favorable run
+
+Braintrust ran the same 13 matched pairs at two seeds. Seed 1 gave −0.462 with a bootstrap interval of [−0.692, −0.231], clearing every numerical rule the author had fixed in advance. Seed 0 gave −0.077 with an interval of [−0.769, 0.615], spanning zero. That is close to 0.4 of movement on identical tasks with only the seed changed ([Braintrust, 2026](https://www.braintrust.dev/blog/rlm-harness-negative-transfer)).
+
+Both numbers came from one instrument, so the range is the result.
+
+## Check the measurable range first
+
+Set the band before scoring and treat a cell outside it as a design fault. Braintrust required every accuracy cell between 10% and 90%. Two successive designs failed that rule: a pilot where the adapter scored 0 of 8 on both tasks, and a holdout where both conditions scored 5 of 5 on the treatment task. Each apparent effect came from saturation rather than the contrast ([Braintrust, 2026](https://www.braintrust.dev/blog/rlm-harness-negative-transfer)).
+
+The band belongs to your instrument and is not a constant. A permutation diagnostic for position bias is statistically detectable only inside a roughly 60% to 95% base-accuracy window, and outside it "absence of signal there should be read as not measurable, not unbiased" ([Tamba, arXiv:2607.20864v1](https://arxiv.org/abs/2607.20864v1)).
+
+## Score the mechanism, not only the outcome
+
+Add a measure of what the system did alongside whether it was right. Braintrust matched each numeric answer to the strategy that would produce it: correct answers averaged 2.23, double-counting 10.53, and counting every mentioned name near 22, with the signatures separating in 30 of 30 tasks. Accuracy swung 0.4 across seeds while the double-counting difference stayed at 0.0 in every run ([Braintrust, 2026](https://www.braintrust.dev/blog/rlm-harness-negative-transfer)).
+
+Emit those labels during the run. That study could not reconstruct its central trajectory check afterwards: 20 of 104 traces were truncated and none carried run, seed, or episode identifiers ([Braintrust, 2026](https://www.braintrust.dev/blog/rlm-harness-negative-transfer)).
+
+## Why it works
+
+A paired difference-of-differences over a small sample has coarse granularity, so one flipped pair moves the headline by several points. Across 20 independent runs of nine models, "Pass@1 values show surprisingly high standard deviation—ranging from 5 to 15 percentage points across seeds", and on a 30-question benchmark "a change in just one question shifts Pass@1 by 2.5–3.3 percentage points" ([Hochlehnert et al., arXiv:2504.07086v2](https://arxiv.org/abs/2504.07086v2)). A categorical strategy label resists that swing because a perturbation big enough to flip an exact-match answer rarely carries it across a several-unit gap between classes. Near a bound the metric's variance is compressed instead, so a gap between conditions cannot be attributed to the contrast rather than to saturation ([Tamba, arXiv:2607.20864v1](https://arxiv.org/abs/2607.20864v1)).
+
+## When this backfires
+
+- Stacks where you cannot pin a seed. Re-running gives a run-to-run range that also carries infrastructure nondeterminism, so the spread is not attributable to sampling. Attribute it by layer first ([variability layer decomposition](sampling-state-agent-variability-layers.md)).
+- Budget-bound programs. Eight reruns per cell takes a $40,000 agent-leaderboard sweep to roughly $320,000 ([EvalEval Coalition, 2026](https://evalevalai.com/research/2026/04/29/eval-costs-bottleneck/)). On a reversible decision, one run plus an honest interval beats precision nobody uses.
+- Two seeds treated as a variance estimate. A spread across two runs bounds nothing, and quoting it as though it did repeats the original error at one remove.
+- Measurements taken at a bound by design. A prespecified equivalence study saw no unauthorized tool call across 840 trajectories and reported an interaction interval of ±4.34 percentage points inside a ±7.01-point margin fixed in advance ([Xu and Wu, arXiv:2608.03169v1](https://arxiv.org/abs/2608.03169v1)).
+- Variance dominated by something other than sampling. Where kernel and hardware drift or stochastic external tools carry the spread, fixing the seed neither reproduces nor characterizes it.
+
+## Example
+
+The same 13 matched pairs, rerun at a second seed, with the mechanism measure beside the accuracy measure ([Braintrust, 2026](https://www.braintrust.dev/blog/rlm-harness-negative-transfer)):
+
+| Run | Interaction | Bootstrap 95% interval | Double-counting difference |
+|---|---|---|---|
+| Seed 0 | −0.077 | [−0.769, 0.615] | 0.0 (2 of 13 in each condition) |
+| Seed 1 | −0.462 | [−0.692, −0.231] | 0.0 (1 of 13 in each condition) |
+| Both seeds, 104 episodes | −0.269 | not reported | 0.0 |
+
+Seed 1 alone reads as a confirmed effect. The pair of rows reads as an unstable accuracy metric over a stable mechanism, which is the honest summary.
+
+## Key Takeaways
+
+- Fix the reporting unit before the run: the seed range, not the best seed. Two seeds is the minimum that exposes instability and is still too few to bound it.
+- Write the measurable band into the decision criteria alongside the effect threshold, so a saturated cell stops the study rather than producing a headline.
+- Pair every outcome metric with a categorical measure of what the system did, and separate the classes wide enough that noise cannot cross the gap.
+- Emit run, seed, and episode identifiers on every trace at run time. The trajectory check you skip is the one you cannot reconstruct.
+- When the budget buys one run, publish the interval you have and call the result a prior.
+
+## Related
+
+- [Decomposing Agent Output Variability by Layer](sampling-state-agent-variability-layers.md) — which layer a spread comes from, once you know it exists
+- [Equivalence Testing for Agent Configuration Changes](equivalence-testing-agent-config-changes.md) — how to get a usable bound from a zero-event arm
+- [Eval Blind Spots](eval-blind-spots.md) — structural gaps in what the harness can observe
+- [pass@k and pass^k Metrics](pass-at-k-metrics.md) — aggregate metrics for run-to-run spread you cannot attribute
 
 ---
 
@@ -107435,7 +107608,7 @@ Source: https://agentpatterns.ai/observability/agent-observability-otel/
 
 # Agent Observability with OpenTelemetry and Trajectory Logging
 
-> Agent observability combines OpenTelemetry metrics and events, trajectory tracing, and structured audit trails to give you cost attribution, compliance evidence, and debugging data that survives context resets — all without custom instrumentation.
+> Agent observability combines OpenTelemetry metrics, trajectory tracing, and audit trails to give cost attribution, compliance evidence, and debugging data that survives context resets.
 
 Learn it hands-on: [Attributing the Context](https://learn.agentpatterns.ai/observability/attributing-the-context/) — guided lesson with quizzes.
 
@@ -107532,6 +107705,8 @@ Pair these with `tool_result` events, which carry `tool_parameters`, and store t
 ## LangSmith trajectory tracing for LangChain agents
 
 [LangSmith](https://docs.langchain.com/langsmith/trace-with-langchain) records each agent action with tool name, inputs, outputs, latency, and token counts. You can run parallel analysis agents over the retrieved traces to synthesize harness improvements — a natural automation loop.
+
+Other runtimes have their own vendor write-ups. Braintrust documents tracing for Cloudflare Agents ([Trace and improve Cloudflare Agents](https://www.braintrust.dev/blog/cloudflare-agents), 2026-08-05).
 
 ## Progress files as human-readable audit trails
 
@@ -113662,6 +113837,7 @@ Source: https://agentpatterns.ai/human/
 - [Suggestion Gating: Why Fewer AI Completions Improve Developer Experience](suggestion-gating.md) — Lightweight classifiers gate suggestions before display, improving acceptance rates 33–48% while cutting wasted inference
 - [AI Adoption Footprint: The Segmented Shape of Engineering Orgs](ai-adoption-footprint.md) — Engineering orgs adopt AI in three segments — power users, chat-tool middle, refusers — and the shape determines where enablement and tooling investment pays back
 - [Cohort Segmentation in the Copilot Usage Metrics API](cohort-segmentation-copilot-usage-metrics.md) — The May 2026 Copilot API exposes four AI-adoption phases per user, a diagnostic primitive that recovers the segmented shape an aggregate utilization number hides
+- [Per-Agent-App Attribution in the Copilot Usage Metrics API](per-agent-app-attribution-copilot-metrics.md) — The August 2026 agent app activity dimension attributes engineering activity to a specific agent app, readable only under the four limits GitHub states
 - [LLM Refactoring Adoption Patterns](llm-refactoring-adoption-patterns.md) — Five patterns for how developers modify ChatGPT refactoring suggestions — driven by prompt context completeness and refactor complexity
 - [Human-Facing Docs in the Agent Era: Mental Models Over Reference](human-docs-mental-models-agent-era.md) — When the audience reads alongside an agent, human docs shift from exhaustive reference to mental models, intent, and design exclusions — with the conditions under which the pivot backfires
 - [Marking Which Artifacts Are for Humans or Agents (Landmarking)](landmarking-human-vs-agent-artifacts.md) — Agree a team-wide readership contract for which repository artifacts are written to be understood by a person and which are agent context, and back it with tooling
@@ -114468,6 +114644,7 @@ The 62% headline is consistent with this org and with a uniform-60%-medium-use o
 - [Agent Headcount as a Vanity Metric](../patterns/anti-patterns/agent-headcount-vanity-metric.md) — the Goodhart failure mode Phase 3 will exhibit if treated as a target.
 - [The Productivity-Experience Paradox in AI-Assisted Development](productivity-experience-paradox.md) — why depth-of-use can rise while developer experience and outcomes diverge.
 - [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — the ROI panel built on top of these phases; how to read a cross-cohort cost and throughput comparison without treating it as causal.
+- [Per-Agent-App Attribution in the Copilot Usage Metrics API](per-agent-app-attribution-copilot-metrics.md) — the same diagnostic move on the same API, one axis over: the agent inventory instead of the user population.
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the other side of Copilot-specific instrumentation; cost telemetry that pairs with the cohort distribution.
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the rollout that these adoption-phase cohorts instrument: seed adoption socially, then track retention as a separate number.
 
@@ -116154,6 +116331,87 @@ The social half is the sentence the team agrees and commits, adapted from the me
 - [Visible Thinking in AI-Assisted Development](visible-thinking-ai-development.md) — commit and PR practices that make one of these schemes concrete.
 - [Encode Project Conventions in Distributed AGENTS.md Files](../instructions/agents-md-distributed-conventions.md) — where a readership contract is written so agents and people both read it.
 - [Agent Commit Attribution: Signed Commits and Agent Identity](../workflows/agent-commit-attribution.md) — the provenance half: marking which commits an agent authored, distinct from marking who an artifact is for.
+
+---
+
+### Per-Agent-App Attribution in the Copilot Usage Metrics API
+Source: https://agentpatterns.ai/human/per-agent-app-attribution-copilot-metrics/
+
+# Per-Agent-App Attribution in the Copilot Usage Metrics API
+
+> The Copilot Usage Metrics API reports activity per agent app, a breakdown that fits the per-app install decision under four stated limits.
+
+On 7 August 2026 the Copilot Usage Metrics API gained an optional `totals_by_3rd_party_agent` array carrying "one entry per recognized agent app", in the enterprise, organization, enterprise-user, and organization-user reports over both 1-day and 28-day periods ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-usage-metrics-api-adds-agent-app-activity)).
+
+## Read the breakdown under four limits
+
+GitHub states each of these in the changelog. Every one of them breaks a naive dashboard.
+
+- Never sum the two interaction counters. The nested `user_initiated_interaction_count` counts agent app job starts; the top-level field of the same name counts explicit prompts from other telemetry. GitHub calls them distinct.
+- The array is not a partition. Activity from agents that cannot be identified is omitted, and multiple apps belonging to one agent collapse into a single entry, so per-app shares carry an unmeasured residual and do not reconstruct the total.
+- An absent array is not zero activity. The field is excluded from reports that have no agent activity at all, so a consumer must distinguish a missing key from a silent app.
+- Per-user rows are thinner. `session_count` appears only in the enterprise and organization reports; user-level entries carry interaction counts alone.
+
+## What each entry carries
+
+| Field | Meaning | Scope |
+|---|---|---|
+| `agent_name` | The agent's display name | All four reports |
+| `agent_id` | Identifier stable across reporting periods | All four reports |
+| `user_initiated_interaction_count` | Agent app job starts | All four reports |
+| `session_count` | Agent sessions | Enterprise and organization only |
+
+Agent apps are partner AI agents installed from the GitHub Marketplace and enabled by an administrator, invoked by assigning an issue, mentioning the agent in a pull request comment, or picking it in the Agents interface ([GitHub Changelog, 2026-06-02](https://github.blog/changelog/2026-06-02-extend-github-with-agent-apps/)). Claude and Codex are named among the agents the new dimension reports ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-usage-metrics-api-adds-agent-app-activity)).
+
+## Why it works
+
+The intervention is per app, so the metric has to be per app or it cannot be joined to the decision. An enterprise owner installs, enables, and removes one GitHub App at a time, a capability that only reached third-party apps on the same day the metrics dimension shipped ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-enterprises-can-now-install-third-party-github-apps)). An activity total summed over apps has no join key to that action: two inventories with identical totals can differ completely in composition, and composition is the only thing an administrator can change. `agent_id` is specified as stable across reporting periods, which is what turns a snapshot into a longitudinal series per app. This is the same conditional-over-marginal recovery that [cohort segmentation](cohort-segmentation-copilot-usage-metrics.md) performs on the user population, applied instead to the agent inventory.
+
+## When this backfires
+
+- Low agent-app volume. Across 25,264 agentic pull requests in 2,361 popular GitHub repositories, the median repository produced one to two agentic pull requests per three-month window ([Raida & Hou, 2026, arXiv:2607.14037v2](https://arxiv.org/abs/2607.14037v2)). At that base rate a 1-day or 28-day per-app split ranks noise.
+- Retiring an app on low activity. In Microsoft's early-2026 rollout, first use spread primarily through social networks and retention was associated more with engineers' coding activity than with demographics ([Murphy-Hill et al., 2026, arXiv:2607.01418v1](https://arxiv.org/abs/2607.01418v1)). An app that never reached the right teams reports the same number as one nobody wants.
+- Reading activity as value. Experienced open-source developers in a randomized trial took 19% longer with early-2025 AI tools while estimating a 20% speedup ([Becker et al., 2025, arXiv:2507.09089v2](https://arxiv.org/abs/2507.09089v2)), so the intuition a reader brings to a per-app chart is an unreliable prior.
+- Shipping it without an outcome measure. Activity per app is an output metric, and unpaired it becomes the [agent headcount vanity metric](../patterns/anti-patterns/agent-headcount-vanity-metric.md) on a new axis. The impact dashboard's return-on-investment section, released the same day, reports cost per developer per month and pull requests per developer per month, though GitHub calls the figures "estimates based on AI credit consumption" against a salary "modeling input rather than actual payroll data" and says to treat them as directional ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-impact-dashboard-adds-a-return-on-investment-section)).
+
+## Example
+
+Both counters share a name, which is where the double count comes from.
+
+**Before** — summing the nested counter into the top-level one:
+
+```text
+top-level  user_initiated_interaction_count  = 4120
+per-agent  user_initiated_interaction_count  =  860   (summed over the array)
+
+total interactions = 4120 + 860 = 4980                # wrong
+```
+
+**After** — keeping the two counters apart and naming the residual:
+
+```text
+prompts from other telemetry (top-level counter)  = 4120
+agent app job starts (per-agent counter)          =  860
+unidentified agent activity                       =  not reported
+```
+
+The first form invents 860 interactions that were never prompts. The second keeps the two populations apart and marks the omitted activity as unknown rather than zero.
+
+## Key Takeaways
+
+- Query `totals_by_3rd_party_agent` on the 28-day report rather than the 1-day one, unless the inventory generates enough daily volume to clear the noise floor.
+- Keep the nested and top-level `user_initiated_interaction_count` in separate columns permanently; a single "interactions" column is already wrong.
+- Label the unidentified-agent residual explicitly in any share-of-activity view, because the array does not sum to the total.
+- Key longitudinal series on `agent_id`, not `agent_name`, since only the identifier is specified as stable across periods.
+- Gate every retire-or-renew decision on a paired outcome number. The activity count answers which app is used, never whether the use paid back.
+
+## Related
+
+- [Cohort Segmentation in the Copilot Usage Metrics API](cohort-segmentation-copilot-usage-metrics.md) — the same diagnostic move on the same API, applied to the user population instead of the agent inventory.
+- [Agent Headcount as a Vanity Metric](../patterns/anti-patterns/agent-headcount-vanity-metric.md) — what per-app activity degenerates into when no outcome metric sits beside it.
+- [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the credit consumption that gives each agent app in the inventory a cost to weigh against its activity.
+- [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — why social reach confounds a low adoption number, and what to measure instead of seat count.
+- [Human-Equivalent Hours for Autonomous Coding Agent Productivity](human-equivalent-hours-agent-productivity.md) — a denominator for the outcome half of the pairing this page requires.
 
 ---
 
@@ -130663,17 +130921,21 @@ Source: https://agentpatterns.ai/tools/claude/auto-mode/
 
 # Claude Code Auto Mode
 
-> A two-stage classifier evaluates each tool call before execution, automatically approving safe operations and blocking destructive patterns.
+> Auto mode gates each tool call through a two-stage classifier, and becomes the default for new Pro, Max, and Team sessions.
 
 Related lesson: [Permissions and Safety Boundaries](https://learn.agentpatterns.ai/harness-engineering/permissions-and-safety-boundaries/) — a hands-on lesson with quizzes that covers this concept.
 
-## The permission friction problem
+## The default flips on August 14, 2026
 
-Agentic sessions force a tradeoff. Manual approval invites rubber-stamping. The `--dangerously-skip-permissions` flag removes safety. Auto mode decides each action with a classifier ([Anthropic blog](https://claude.com/blog/auto-mode)).
+Auto mode stops being a mode you opt into. From August 14, 2026 it is the default permission mode for new sessions on Pro, Max, and Team plans ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)). Three qualifiers scope the change:
+
+- It applies to new sessions. A session already running keeps its mode.
+- A `defaultMode` you set yourself stays unless you accept the one-time switch prompt.
+- A default your organization manages is unchanged.
+
+Eligibility widened ahead of the switch. The requirements list now reads "All plans", and auto mode is available on every provider, including Bedrock, Google Cloud's Agent Platform, and Microsoft Foundry, where v2.1.207 retired the `CLAUDE_CODE_ENABLE_AUTO_MODE` opt-in. Availability is not the starting mode: on those providers auto mode only joins the `Shift+Tab` cycle, and sessions still start in your `defaultMode`. What stays gated is the model, scoped by provider: Opus 4.6 or later, Sonnet 4.6 or later, or Fable 5 on the Anthropic API and Claude Platform on AWS; only Sonnet 5, Opus 4.7 or later, and Fable 5 elsewhere ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
 
 ## How the classifier works
-
-The classifier runs on Sonnet 4.6 regardless of session model ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
 
 ```mermaid
 graph TD
@@ -130688,22 +130950,9 @@ graph TD
     H -->|Block| I[Deny + Claude tries alternative]
 ```
 
-Three-tier evaluation order, first match wins ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)):
+First match wins. Reads and working-directory edits auto-approve except on [protected paths](https://code.claude.com/docs/en/permission-modes#protected-paths); everything else runs the pipeline. The classifier itself runs on Claude Sonnet 5 rather than your `/model` selection, falling back to the session model when that is Sonnet 4.6 or when `availableModels` excludes Sonnet 5 ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
 
-1. User rules: explicit allow/deny resolve immediately.
-2. Safe operations: reads and working-directory edits auto-approve, except [protected paths](https://code.claude.com/docs/en/permission-modes#protected-paths).
-3. Classifier: everything else runs the two-stage pipeline.
-
-### Two-stage pipeline
-
-| Stage | Method | Purpose |
-|-------|--------|---------|
-| Stage 1 | Single-token filter, no chain-of-thought | Fast screen, high recall |
-| Stage 2 | Chain-of-thought reasoning | Fires only when Stage 1 flags |
-
-Stage 2 reuses Stage 1's prompt — almost entirely a cache hit.
-
-Performance on real traffic ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)):
+Measured performance on real traffic ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)):
 
 | Metric | Stage 1 | Full pipeline |
 |--------|---------|---------------|
@@ -130711,102 +130960,80 @@ Performance on real traffic ([Anthropic engineering](https://www.anthropic.com/e
 | False negative (overeager, n=52) | 6.6% | 17% |
 | False negative (synthetic exfil, n=1,000) | 1.8% | 5.7% |
 
-The 17% overeager rate reflects consent-scope misjudgment — the classifier spots danger but assumes intent.
+## Why it works
 
-### What the classifier sees
+The two-stage split buys precision without paying for it on every call. Stage 1 is a "fast single-token filter (deciding 'yes' to block or 'no' to allow)" tuned for recall, which alone flags 8.5% of real traffic falsely. Stage 2 fires only on flagged actions, "re-evaluating the same input with chain-of-thought reasoning to reduce false positives", bringing the pipeline to 0.4% ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)). Stage 2 reuses Stage 1's prompt, so the second call is largely a cache hit.
 
-Inputs are user messages, tool call commands, and CLAUDE.md. The classifier strips tool results. A separate input-layer probe scans those results for injection patterns before Claude reads them ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
+What the gate reads matters as much as how it reasons. Its inputs are user messages, tool calls, and CLAUDE.md; tool results are stripped, so hostile content in a file or fetched page cannot address it directly ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)). The residual risk follows from the same design: in most misses the classifier spots the danger and misjudges whether a consent signal in the session covers the action ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
 
-Conversational boundaries block matching actions. A boundary like "don't push" holds until you lift it; Claude's judgment does not. Boundaries re-read from the transcript on each check, so compaction can drop them. For a hard guarantee, add a [deny rule](https://code.claude.com/docs/en/permissions#permission-rule-syntax) ([Claude Code docs](https://code.claude.com/docs/en/permission-modes#eliminate-prompts-with-auto-mode)).
+## What it allows and blocks
 
-Entering auto mode drops broad allow rules — `Bash(*)`, wildcarded interpreters, package-manager run commands, `Agent` rules. Narrow rules like `Bash(npm test)` carry over and restore on exit.
+The classifier trusts your working directory and the remotes configured when the session started. Allowed by default: working-directory file operations, declared-dependency installs, `.env` credentials to the matching API, read-only HTTP, and pushes to any branch of the repository you are working in, including the default branch. A branch named as a deploy target, such as `production` or `gh-pages`, is judged on its own terms instead. Blocked by default: `curl | bash`, exfiltration to external endpoints, production deploys, mass cloud deletion, IAM grants, force push, and `git reset --hard`. Print both lists with `claude auto-mode defaults`.
 
-## Default allow and block lists
+A blocked action returns a reason and Claude tries an alternative. Three consecutive blocks or 20 in a session pause the agent and restore prompting, and headless runs (`-p`) abort instead; neither threshold is configurable. The classifier also checks [subagent](sub-agents.md) work at spawn, at runtime, and on return, ignoring any `permissionMode` in its frontmatter ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
 
-By default, auto mode trusts only the working directory and configured remotes ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
+## Turning it off or fencing it in
 
-Allowed: working-directory file ops, declared-dependency installs, `.env` credentials to the matching API, read-only HTTP, and pushing to the current or Claude-created branch.
+Four mechanisms, ordered by how firmly they hold ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-config)):
 
-Blocked: `curl | bash`, exfil to external endpoints, production deploys and migrations, mass cloud deletion, IAM grants, shared-infra changes, destroying pre-session files, force push, and pushing to `main`.
+1. A boundary stated in conversation blocks matching actions, but the classifier re-reads it from the transcript on every check, so compaction can drop it.
+2. `permissions.ask` rules are evaluated before the classifier and always prompt.
+3. `permissions.deny` in [managed settings](managed-settings-drop-in.md) blocks before the classifier runs and cannot be overridden.
+4. `permissions.disableAutoMode: "disable"` in managed settings removes the mode for the whole organization.
 
-Inspect the full lists with `claude auto-mode defaults`.
+Two scope traps catch teams that configure through the repository. Claude Code has ignored `defaultMode: "auto"` in `.claude/settings.json` and `.claude/settings.local.json` since v2.1.142, and the classifier reads the `autoMode` block from neither, having dropped `.claude/settings.local.json` in v2.1.207. Both keys belong in `~/.claude/settings.json` or managed settings, so a repository cannot grant itself auto mode. A developer-added `allow` entry can also override an organization `soft_deny` entry, because the combination is additive rather than a policy boundary ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-config)).
 
-## Escalation and fallback
-
-Blocked actions return a reason, and Claude tries an alternative. Denials appear in `/permissions` under Recently denied — press `r` to retry with manual approval. Two thresholds pause the agent, neither configurable: 3 consecutive blocks, or 20 in a session. Allowed actions reset the consecutive counter, but the session total persists. Headless mode (`-p`) aborts on repeated blocks ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
-
-## Subagent oversight
-
-The classifier checks [subagent](sub-agents.md) work at spawn (dangerous tasks blocked), runtime (each action evaluated; subagent `permissionMode` ignored), and return (action history reviewed; flagged concerns prepend a warning) ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
-
-## Enterprise configuration
-
-Admins set trust boundaries via `autoMode.environment` in [managed settings](managed-settings-drop-in.md). Setting `permissions.disableAutoMode: "disable"` locks the feature off org-wide ([Claude Code permissions docs](https://code.claude.com/docs/en/permissions)). Start from `claude auto-mode defaults` and remove only rules covering risks mitigated elsewhere.
+To switch one session back, cycle with `Shift+Tab` or start with `claude --permission-mode manual`, an alias for `default` from v2.1.200 ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
 
 ## When this backfires
 
-- Consent-scope misjudgment: the 17% overeager rate lets roughly one in six unsanctioned destructive actions through. Manual review is still safer for production configs or shared branches.
-- Plan and provider gating: unavailable on Pro, Bedrock, Vertex, and Foundry; Max is restricted to Opus 4.7.
-- Power-user flow disruption: broad `Bash(*)`, wildcarded interpreter, and `Agent` rules silently drop until exit.
-- Probabilistic, not deterministic: the classifier fails on novel injection patterns and unusual tool combinations.
+- Ops state inside the repository root. In-project edits auto-approve without reaching the classifier, so Terraform state, sealed secrets, and Kubernetes manifests under the working directory sit outside the gate. An independent stress test measured 36.8% of state-changing actions bypassing classification this way ([Ji et al., Measuring the Permission Gate](https://arxiv.org/abs/2604.04978v2)).
+- Ambiguous prompts on operations work. The same study measured an 81.0% end-to-end false-negative rate (95% CI 73.8%–87.4%) across 128 deliberately ambiguous DevOps prompts. Its authors caution the numbers "should not be extrapolated to production-traffic performance", so read the gap as workload sensitivity rather than a refutation of the 17%.
+- Consent-scope misjudgment on a population that never opted in. That 17% overeager rate now applies to developers who inherited the mode.
+- Narrow allow rules the classifier never sees. Broad rules like `Bash(*)` are suspended on entry, but a narrow rule such as `Bash(npm test)` carries over and can pass a destructive argument. Setting `autoMode.classifyAllShell` closes that, at one classifier call per command.
+- Workflows built on default-branch pushes being blocked. From v2.1.211 those pushes are allowed by default and the protected-branch setting was removed ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-config)).
+- Metered accounts. On Enterprise plans and on Claude API, Bedrock, Agent Platform, and Foundry accounts, every classifier check counts toward token usage ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
 
-## Requirements and activation
+## Example
 
-Auto mode requires Max, Team, Enterprise, or API plans (not Pro); Team/Enterprise admins enable it in [admin settings](https://claude.ai/admin-settings/claude-code). Models: Sonnet 4.6, Opus 4.6, or Opus 4.7 (Max limited to Opus 4.7). Anthropic API only (not Bedrock, Vertex, Foundry). Claude Code v2.1.83+ ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
+Keeping a human checkpoint on pushes while staying in auto mode.
 
-When eligible, auto mode appears in the `Shift+Tab` cycle after `plan`. Start directly via the permission-mode flag — `--enable-auto-mode` was removed in v2.1.111 ([CLI reference](https://code.claude.com/docs/en/cli-reference)):
+**Before** — a conversational boundary, which the classifier re-reads from the transcript and compaction can drop:
 
-```bash
-claude --permission-mode auto
+```text
+Don't push anything until I've reviewed the diff.
 ```
 
-Set as a persistent default in `.claude/settings.json`:
+**After** — an ask rule in `~/.claude/settings.json`, evaluated before the classifier on every call:
 
 ```json
 {
   "permissions": {
-    "defaultMode": "auto"
+    "ask": [
+      "Bash(git push *)",
+      "Bash(gh pr create *)"
+    ]
   }
 }
 ```
 
-## Example
-
-A CI pipeline runs Claude Code in headless mode for documentation updates. Without auto mode, the operator chooses between `--dangerously-skip-permissions` or pre-authorizing every tool call via `dontAsk` (brittle and verbose).
-
-Before — bypass all safety checks:
-
-```bash
-claude -p "Update API docs from openapi.yaml" \
-  --permission-mode bypassPermissions
-```
-
-After — classifier-gated automation:
-
-```bash
-claude -p "Update API docs from openapi.yaml" \
-  --permission-mode auto
-```
-
-The classifier allows file reads, code generation, and writes within the project directory. If Claude attempts to push to `main` or run an unrecognized deployment script, the classifier blocks the action and the headless session aborts — failing safe.
+The rule forces a prompt for those commands and leaves auto mode governing everything else ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-config)).
 
 ## Key Takeaways
 
-- Auto mode uses a two-stage classifier (fast filter + reasoning) to gate tool calls without human prompts
-- The three-tier evaluation order (user rules → safe operations → classifier) minimizes latency for common actions
-- False positive rate is 0.4% on real traffic; false negative rate is 5.7-17% — safer than `bypassPermissions` but not infallible
-- Enterprise admins control trust boundaries via `autoMode.environment` and can disable the feature entirely
-- Broad allow rules drop on entering auto mode to prevent classifier bypass
+- From August 14, 2026 auto mode is the default for new Pro, Max, and Team sessions; a default you already set survives unless you accept the switch prompt
+- Plan gating is gone and provider gating is nearly gone, so the remaining eligibility question is which model the session runs
+- The reasoning pass runs only on flagged actions and reuses the first pass's prompt, which is why 0.4% precision is affordable
+- In-project file edits skip the classifier entirely, and that is where an independent stress test found most of its misses
+- Only `permissions.deny` and `disableAutoMode` in managed settings are hard guarantees; conversational boundaries and developer-scope rules are not
 
 ## Related
 
 - [Hard-Deny Classifier Rule](hard-deny-classifier-rule.md) — `autoMode.hard_deny` provides an unconditional floor beneath the classifier
+- [Classifier-Gated Auto-Permission](../../patterns/agent-design/classifier-gated-auto-permission.md) — the tool-agnostic pattern and when it earns its complexity
 - [Bare Mode](bare-mode.md) — the minimal-permission counterpart to auto mode
-- [Channels Permission Relay](channels-permission-relay.md) — remote approval when the classifier pauses for user input
-- [Managed Settings Drop-in](managed-settings-drop-in.md) — enterprise rollout of `autoMode.environment`
+- [Managed Settings Drop-in](managed-settings-drop-in.md) — enterprise rollout of `autoMode.environment` and deny rules
 - [Sub-Agents](sub-agents.md) — classifier coverage of spawned worker agents
-- [Plan Mode](plan-mode.md) — read-only exploration before implementation
-- [Defense-in-Depth Agent Safety](../../security/defense-in-depth-agent-safety.md) — layered safety mechanisms
 - [Blast Radius Containment](../../security/blast-radius-containment.md) — scoping agent permissions and file access
 
 ---

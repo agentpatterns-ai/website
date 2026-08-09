@@ -71,3 +71,4 @@ The dominant misattribution is treating a batch-invariance drift as a temperatur
 - [Markov-Chain Reliability for LLM Agents](markov-chain-agent-reliability.md)
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md)
 - [Dominator-Graph Trajectory Invariants](dominator-graph-trajectory-invariants.md)
+- [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md)

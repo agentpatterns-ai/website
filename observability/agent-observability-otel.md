@@ -12,13 +12,13 @@ aliases:
   - Trajectory Logging via Progress Files
   - Progress File Pattern
   - Audit Trail for Agent Decisions
-last_reviewed: 2026-05-27
+last_reviewed: 2026-08-09
 maturity: established
 ---
 
 # Agent Observability with OpenTelemetry and Trajectory Logging
 
-> Agent observability combines OpenTelemetry metrics and events, trajectory tracing, and structured audit trails to give you cost attribution, compliance evidence, and debugging data that survives context resets — all without custom instrumentation.
+> Agent observability combines OpenTelemetry metrics, trajectory tracing, and audit trails to give cost attribution, compliance evidence, and debugging data that survives context resets.
 
 Learn it hands-on: [Attributing the Context](https://learn.agentpatterns.ai/observability/attributing-the-context/) — guided lesson with quizzes.
 
@@ -115,6 +115,8 @@ Pair these with `tool_result` events, which carry `tool_parameters`, and store t
 ## LangSmith trajectory tracing for LangChain agents
 
 [LangSmith](https://docs.langchain.com/langsmith/trace-with-langchain) records each agent action with tool name, inputs, outputs, latency, and token counts. You can run parallel analysis agents over the retrieved traces to synthesize harness improvements — a natural automation loop.
+
+Other runtimes have their own vendor write-ups. Braintrust documents tracing for Cloudflare Agents ([Trace and improve Cloudflare Agents](https://www.braintrust.dev/blog/cloudflare-agents), 2026-08-05).
 
 ## Progress files as human-readable audit trails
 

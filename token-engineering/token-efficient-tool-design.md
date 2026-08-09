@@ -10,7 +10,7 @@ tags:
   - tool-engineering
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-09
 maturity: established
 ---
 
@@ -64,6 +64,8 @@ A useful heuristic is that tool output should fit in a paragraph. If it does not
 1. The tool returns too much, so add filtering or summarization.
 2. The task genuinely needs that much information, in which case load it once and structure it carefully.
 3. The output should be written to a file rather than returned inline.
+
+Document conversion is a frequent offender. [Simon Willison](https://simonwillison.net/2026/Aug/7/pdfs-are-terrible/) names PDF-to-image-to-markdown conversion as a major token sink, so a document-reading tool should return the extracted section the agent asked for rather than the whole converted file.
 
 ## When this backfires
 

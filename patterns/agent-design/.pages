@@ -149,6 +149,7 @@ nav:
       - reasoning-effort-over-tool-scaffolding.md
       - rollback-first-design.md
       - rubric-refine-pre-execution-tool-use.md
+      - scout-then-route.md
       - selective-checkpoint-restore.md
       - specialized-slm-as-agent-tool.md
       - tail-control-for-agent-workflows.md
