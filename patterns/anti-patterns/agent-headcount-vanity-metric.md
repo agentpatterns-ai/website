@@ -87,6 +87,7 @@ Throughput and cost-per-unit are up while agent count is down. The vanity metric
 ## Related
 
 - [The AI Adoption Footprint](../../human/ai-adoption-footprint.md) — segmented adoption is a more honest org-level metric than aggregate headcount
+- [Per-Agent-App Attribution in the Copilot Usage Metrics API](../../human/per-agent-app-attribution-copilot-metrics.md) — per-app activity counts replace headcount with a finer number that still needs an outcome metric beside it
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) — adding agents copied from elsewhere multiplies count without adding capability
 - [The Copy-Paste Agent](copy-paste-agent.md) — duplicated agent definitions inflate count while diluting maintainability
 - [Cross-Component Interference in Agent Scaffolds](cross-component-interference.md) — maximally-equipped multi-component agents lose to smaller subsets in 30-50% of tasks

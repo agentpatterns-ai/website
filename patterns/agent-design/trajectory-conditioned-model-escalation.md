@@ -62,6 +62,7 @@ SWE-Router pairs a weak model with a strong one and lets the weak model explore 
 - [Within-Task Model Cascade: Designing the Escalation Gate](../../loop-engineering/within-task-model-cascade.md) — cascade routing that escalates when a gate rejects the output; this technique fills the gap it leaves on feedback-less tasks.
 - [GitHub Copilot: Model Selection & Routing](../../training/copilot/model-selection.md) — the same cascade taught as a Copilot curriculum lesson, with worked credit costs.
 - [Gateway Model Routing](gateway-model-routing.md) — the infrastructure layer that exposes the weak and strong models a router escalates between.
+- [Scout-Then-Route: Verify the Handoff Before Routing](scout-then-route.md) — the same execution-evidence idea moved before the task starts, with a sandbox-verified handoff instead of a partial trajectory.
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — a prompt-time complement that allocates effort from task cues rather than trajectory evidence.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — the weak-model side of the pairing, used as a bounded sub-tool.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the broader cost-routing frame this escalation policy sits inside.

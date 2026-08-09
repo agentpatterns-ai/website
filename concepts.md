@@ -603,6 +603,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Dispatch-Time Reasoning Level for Delegated Agents](patterns/agent-design/dispatch-time-reasoning-level.md)
 - [Informed Abstention as a Tool-Boundary Runtime Gate](patterns/agent-design/informed-abstention-tool-boundary-gate.md)
 - [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](patterns/agent-design/cross-session-peer-messaging.md)
+- [Scout-Then-Route: Verify the Handoff Before Routing](patterns/agent-design/scout-then-route.md)
 
 ## Loop Engineering
 
@@ -1038,6 +1039,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Skill-Use Gates: Trigger, Compliance and Boundary](verification/skill-use-gate-decomposition.md)
 - [Canary Tools for Diagnosing Tool-Selection Reasoning](verification/canary-tools-tool-selection-diagnosis.md)
 - [Evidence-Conditioned Execution: Gate Edits on Observations](verification/evidence-conditioned-execution.md)
+- [Seed-Variance Reporting and Measurable-Range Eval Design](verification/seed-variance-reporting.md)
 
 ## Hooks & Guardrails
 
@@ -1289,6 +1291,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Marking Which Artifacts Are for Humans or Agents (Landmarking)](human/landmarking-human-vs-agent-artifacts.md)
 - [Step Budgets and Trust in Agent-Generated Code Tours](human/agent-generated-code-tour-step-budgets.md)
 - [Reading a Vendor-Computed AI Coding ROI Dashboard](human/vendor-computed-roi-copilot-impact-dashboard.md)
+- [Per-Agent-App Attribution in the Copilot Usage Metrics API](human/per-agent-app-attribution-copilot-metrics.md)
 
 ## Anti-Patterns
 

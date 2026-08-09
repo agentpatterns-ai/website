@@ -50,6 +50,7 @@ last_reviewed: 2026-05-27
 - [ComplexMCP: Three Bottlenecks in Large Interdependent Tool Sandboxes](complexmcp-tool-sandbox-bottlenecks.md) — 300+ MCP tools across stateful sandboxes expose tool retrieval saturation, over-confidence skipping verification, and strategic defeatism — each maps to a deployment choice
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Grade red-team outcomes on an L0 to L6 harm scale over reversibility, scope, and privilege so evals surface how harmful a compromise was, not just whether one occurred — a defense can report 0% attack success while still leaking cross-scope
 - [Equivalence Testing for Agent Configuration Changes](equivalence-testing-agent-config-changes.md) — Bound how far a config change could have moved behavior against a margin fixed in advance; a zero-event run states an upper limit computed from n, never an absence
+- [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — Report the spread of a result across seeds rather than the favorable run, and treat any accuracy cell pinned at a floor or ceiling as a design fault to fix before drawing a verdict
 
 ## Behavioral Testing
 
