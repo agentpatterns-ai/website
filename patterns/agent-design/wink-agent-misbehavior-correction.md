@@ -130,6 +130,7 @@ This shows the value of a category-specific correction. A generic "you seem stuc
 - [Context-Injected Error Recovery](../../context-engineering/context-injected-error-recovery.md)
 - [Steering Running Agents](steering-running-agents.md)
 - [Skill Program Functions](skill-program-functions.md) — the synchronous, compiled-predicate counterpart; Wink observes asynchronously while PFs fire mid-loop on deterministic triggers
+- [Splitting the Drift Judge from the Advisor (LivePlan)](judge-advisor-split.md) — the alternative split, where a rule-based monitor decides whether to consult the model at all
 - [Agent Loop Middleware](../../loop-engineering/agent-loop-middleware.md)
 - [Agent Self-Review Loop](../../code-review/agent-self-review-loop.md)
 - [The Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md)

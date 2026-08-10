@@ -85,4 +85,5 @@ Looking at [resolution rate](goal-monitoring-progress-tracking.md) alone, both s
 - [The Instruction Compliance Ceiling](../../instructions/instruction-compliance-ceiling.md) — compliance decay driven by rule count
 - [Task List Divergence as Instruction Quality Diagnostic](../../instructions/task-list-divergence-diagnostic.md) — divergence in generated plans as an instruction-quality signal
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — observing whether the agent executed what was planned
+- [Splitting the Drift Judge from the Advisor (LivePlan)](judge-advisor-split.md) — acting on a detected compliance violation mid-run rather than measuring it after
 - [Objective Drift: When Agents Lose the Thread](../anti-patterns/objective-drift.md) — the failure mode plan reminders mitigate

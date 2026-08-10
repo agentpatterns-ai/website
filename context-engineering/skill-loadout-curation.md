@@ -92,3 +92,4 @@ drskill audit                        # which skills traces show being called
 - [Cost-Aware Skill Rewriting](../instructions/cost-aware-skill-rewriting.md) — what to keep inside a skill you decide to carry
 - [Contractual Skill Files](../instructions/contractual-skill-files.md) — writing the description a router has to discriminate on
 - [Skill Authoring as Software Engineering: What Transfers](../tool-engineering/skill-authoring-software-engineering.md) — the authoring-time counterpart; single responsibility is what keeps a description from shadowing its siblings
+- [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — why layering a typed graph over that retrieval layer usually returns nothing, and how to test it first

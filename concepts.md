@@ -250,6 +250,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Choosing a Compression Budget for Agent Control Context](context-engineering/control-context-compression-budget.md)
 - [Generated Questionnaires: Eliciting Someone Else's Context](context-engineering/generated-questionnaires.md)
 - [Silent Handoff Failure in Delegated Code Search](context-engineering/silent-handoff-failure-delegated-search.md)
+- [When a Skill Graph Cannot Beat the Ranker (Pre-Filter Topology Bound)](context-engineering/skill-graph-topology-bound.md)
 
 ## Instructions & Prompts
 
@@ -604,6 +605,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Informed Abstention as a Tool-Boundary Runtime Gate](patterns/agent-design/informed-abstention-tool-boundary-gate.md)
 - [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](patterns/agent-design/cross-session-peer-messaging.md)
 - [Scout-Then-Route: Verify the Handoff Before Routing](patterns/agent-design/scout-then-route.md)
+- [Splitting the Drift Judge from the Advisor (LivePlan)](patterns/agent-design/judge-advisor-split.md)
 
 ## Loop Engineering
 
@@ -1040,6 +1042,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Canary Tools for Diagnosing Tool-Selection Reasoning](verification/canary-tools-tool-selection-diagnosis.md)
 - [Evidence-Conditioned Execution: Gate Edits on Observations](verification/evidence-conditioned-execution.md)
 - [Seed-Variance Reporting and Measurable-Range Eval Design](verification/seed-variance-reporting.md)
+- [Verification Capacity as the Agent Quality Ceiling](verification/verification-capacity-quality-ceiling.md)
+- [LLM API Fault Injection at the HTTP Layer (AgentChaos)](verification/llm-api-fault-injection-http-layer.md)
 
 ## Hooks & Guardrails
 
@@ -1097,6 +1101,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Centralized LLM Gateway for Per-Dimension Agent Budgets](observability/llm-gateway-per-dimension-budgets.md)
 - [Agent-Reactive Bugs at the Model-Harness Boundary](observability/agent-reactive-bugs.md)
 - [Event-Loop Contention in Async Agent Fan-Out](observability/event-loop-contention-async-fan-out.md)
+- [Debugging the Tool-Call Loop Before Reaching for a Framework](observability/tool-call-loop-instrumentation.md)
 
 ## Standards & Protocols
 

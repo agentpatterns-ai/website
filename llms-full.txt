@@ -374,6 +374,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Choosing a Compression Budget for Agent Control Context](context-engineering/control-context-compression-budget.md)
 - [Generated Questionnaires: Eliciting Someone Else's Context](context-engineering/generated-questionnaires.md)
 - [Silent Handoff Failure in Delegated Code Search](context-engineering/silent-handoff-failure-delegated-search.md)
+- [When a Skill Graph Cannot Beat the Ranker (Pre-Filter Topology Bound)](context-engineering/skill-graph-topology-bound.md)
 
 ## Instructions & Prompts
 
@@ -728,6 +729,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Informed Abstention as a Tool-Boundary Runtime Gate](patterns/agent-design/informed-abstention-tool-boundary-gate.md)
 - [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](patterns/agent-design/cross-session-peer-messaging.md)
 - [Scout-Then-Route: Verify the Handoff Before Routing](patterns/agent-design/scout-then-route.md)
+- [Splitting the Drift Judge from the Advisor (LivePlan)](patterns/agent-design/judge-advisor-split.md)
 
 ## Loop Engineering
 
@@ -1164,6 +1166,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Canary Tools for Diagnosing Tool-Selection Reasoning](verification/canary-tools-tool-selection-diagnosis.md)
 - [Evidence-Conditioned Execution: Gate Edits on Observations](verification/evidence-conditioned-execution.md)
 - [Seed-Variance Reporting and Measurable-Range Eval Design](verification/seed-variance-reporting.md)
+- [Verification Capacity as the Agent Quality Ceiling](verification/verification-capacity-quality-ceiling.md)
+- [LLM API Fault Injection at the HTTP Layer (AgentChaos)](verification/llm-api-fault-injection-http-layer.md)
 
 ## Hooks & Guardrails
 
@@ -1221,6 +1225,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Centralized LLM Gateway for Per-Dimension Agent Budgets](observability/llm-gateway-per-dimension-budgets.md)
 - [Agent-Reactive Bugs at the Model-Harness Boundary](observability/agent-reactive-bugs.md)
 - [Event-Loop Contention in Async Agent Fan-Out](observability/event-loop-contention-async-fan-out.md)
+- [Debugging the Tool-Call Loop Before Reaching for a Framework](observability/tool-call-loop-instrumentation.md)
 
 ## Standards & Protocols
 
@@ -1867,6 +1872,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [LLM-Driven Logical Retrieval](llm-driven-logical-retrieval.md) — When the agent LLM is frontier-capable, letting it emit AND/OR/NOT Boolean queries against an inverted index matches an agentic hybrid baseline at 41× lower indexing cost — under specific lexical-overlap conditions
 - [Compositional Skill Routing](compositional-skill-routing.md) — Decompose a query into atomic sub-tasks, retrieve one skill per sub-task, then compose the plan — earns its cost only above hundreds of skills, where decomposition quality caps the system
 - [Skill Loadout Curation for Coding Agents](skill-loadout-curation.md) — Curate the skills and MCP servers an agent loads before a session; above roughly 30 skills the gain comes from removing colliding descriptions, not from saving tokens
+- [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — A typed skill graph whose candidate edges come from the retriever's own embedding neighbors can relabel what retrieval found but cannot extend its reach; overlay the edges and count what they newly connect
 - [Per-Object Context Allocation](per-object-context-allocation.md) — Group retrieved fragments by canonical code object and cap each object's token share, so repeated views of one function stop displacing independent dependencies before the model sees them
 - [Organizational Context Layer for Agents](organizational-context-layer.md) — A shared context layer maps many source systems into one governed store that many agents query; deterministic identity and rebuildable index projections transfer well below that scale
 - [Generated Questionnaires: Eliciting Someone Else's Context](generated-questionnaires.md) — Have the agent draft a questionnaire for the one person who holds the missing knowledge, instead of guessing the gap; the technique holds only where that knowledge is statable rather than tacit
@@ -2884,6 +2890,7 @@ At inference, the agent issues a tool-search call, retrieves the small subset of
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
 - [Prompt Chaining: Sequential LLM Calls for Agent Workflows](prompt-chaining.md)
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md)
+- [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — the bound on adding typed structure over a skill ranker instead of decomposing the query
 
 ---
 
@@ -9015,6 +9022,7 @@ Retrieval for each sub-question filters to nodes tagged with the declared `schem
 - [Repository Map Pattern](repository-map-pattern.md) — graph-importance ranking for code context
 - [Observation Masking](observation-masking.md) — filtering intermediate retrieval results before reasoning
 - [Context Budget Allocation](context-budget-allocation.md) — typed filtering reduces tokens consumed by irrelevant candidates
+- [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — the limiting case: a typed graph whose candidates come from the retriever's own embedding adds no reach
 
 ---
 
@@ -9683,6 +9691,7 @@ drskill audit                        # which skills traces show being called
 - [Cost-Aware Skill Rewriting](../instructions/cost-aware-skill-rewriting.md) — what to keep inside a skill you decide to carry
 - [Contractual Skill Files](../instructions/contractual-skill-files.md) — writing the description a router has to discriminate on
 - [Skill Authoring as Software Engineering: What Transfers](../tool-engineering/skill-authoring-software-engineering.md) — the authoring-time counterpart; single responsibility is what keeps a description from shadowing its siblings
+- [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — why layering a typed graph over that retrieval layer usually returns nothing, and how to test it first
 
 ---
 
@@ -10505,6 +10514,75 @@ A second directory under `branches/` is the optional fourth step. Keep it sequen
 - [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — decides when to compact; this page decides what survives compaction and how it reads back.
 - [Stateful Iteration State-Carry](stateful-iteration-state-carry.md) — typed persistent state read through a tool instead of transcript replay, the narrower single-file case.
 - [Context Lifecycle Management](context-lifecycle-management.md) — the broader decide, store, consolidate, compact frame this pattern sits inside.
+
+---
+
+### When a Skill Graph Cannot Beat the Ranker (Pre-Filter Topology Bound)
+Source: https://agentpatterns.ai/context-engineering/skill-graph-topology-bound/
+
+# When a Skill Graph Cannot Beat the Ranker (Pre-Filter Topology Bound)
+
+> A skill graph built from the retriever's own embedding neighbors can relabel what retrieval found, never extend its reach.
+
+Before you build a typed knowledge graph over a skill library, check where its candidate edges come from. When a model generates edges by inspecting each skill's top-K embedding neighbors, the graph inherits that embedding's topology. The model can name the relation between two skills, but it never sees a pair the retriever failed to surface. Kolluru and Sportsman name this the pre-filter topology bound and measure it over a 690-skill library ([arXiv:2608.06196v1](https://arxiv.org/abs/2608.06196v1)).
+
+## The two conditions that decide it
+
+Both conditions are properties of your build, not of graphs in general.
+
+| Question | Structure pays | Structure cannot pay |
+|---|---|---|
+| Where do candidate edges come from? | A signal independent of the retriever: labeled query-tool training data ([COLT](https://arxiv.org/abs/2405.16089v2)), a separately trained dependency discriminator ([Tool Graph Retriever](https://arxiv.org/abs/2508.05152)), or hand-authored prerequisites | The retriever's own embedding top-K |
+| How does the graph get used? | Added alongside ranked results, supplying prerequisites, next steps, and alternatives | Substituted for ranked results at a matched token budget |
+
+Substitution is where the measured loss lands. Swapping graph neighbors in for additional ranked results at a matched token budget cost 11.2 points of hit@5 against a hybrid ranker combining BM25 with `all-MiniLM-L6-v2` embeddings, which scored 73.5% ±8.0 on 117 non-echoing queries (p=0.0007, McNemar) ([arXiv:2608.06196v1](https://arxiv.org/abs/2608.06196v1)). Used additively as a re-ranking boost, the same graph moved hit@5 by 0.85 points, 95% CI −4.8 to +6.5, p≈1.000. No gain, no loss: enrichment is defensible to ship, substitution is not.
+
+## Run the overlay test first
+
+The bound is cheap to measure before committing engineering budget. Overlay the typed edges on the embedding's own nearest-neighbor graph and count two things:
+
+1. Newly connected nodes: skills the typed layer wires up that the embedding layer left isolated.
+2. Merged components: clusters the typed layer joins that the embedding layer kept apart.
+
+Both counters read zero on the 690-skill corpus. Adding 1,421 typed edges to a 1,626-edge embedding backbone left wired nodes at 594 and connected components at 112, neither number moving. Of the typed edges, 98.6% (1,008 of 1,022 pairs) joined skills the ranker had already surfaced together, and 73% of the queries the ranker missed were unreachable through the graph at all ([arXiv:2608.06196v1](https://arxiv.org/abs/2608.06196v1)).
+
+Zero on both counters means the graph is a relabeling of retrieval you already have. The modeling budget is better spent on the descriptions the ranker discriminates on, which is where [skill loadout curation](skill-loadout-curation.md) locates the recoverable loss.
+
+## Why it works
+
+The causal reason is ordering, not model quality. Edge generation runs after a retrieval step that already truncated the candidate space, so the pairs the model may label are fixed before it is called. The authors state it directly: a model asked to type pairs drawn from an embedding's top-K "can enrich semantics by assigning a typed relation to a pair, but it cannot add reach, because it is never shown a pair the embedding did not already surface" ([arXiv:2608.06196v1](https://arxiv.org/abs/2608.06196v1)). A stronger labeler does not lift the ceiling, because the pre-filter set it. Graph methods that beat semantic retrieval break the ordering instead of the labeler: COLT learns collaborative structure from labeled query-tool data ([Qu et al., 2024](https://arxiv.org/abs/2405.16089v2)), and Tool Graph Retriever trains a dependency discriminator on a purpose-built corpus before any graph convolution runs ([Gao et al., 2025](https://arxiv.org/abs/2508.05152)).
+
+## When this backfires
+
+- Independent-signal graphs. If edges come from usage co-occurrence, a trained discriminator, or human authorship, the pre-filter never applies, and the counter-literature reports gains over semantic-similarity retrieval ([COLT](https://arxiv.org/abs/2405.16089v2)).
+- Ordered multi-skill execution. Hit@5 against one gold skill measures single-item lookup. On an n-skill chain, the authors' analysis puts graph traversal ahead of repeated search whenever per-hop edge accuracy exceeds single-query hit rate. Measured directional accuracy of 0.67 to 0.83 straddles the 0.735 threshold, so the sequencing case stays undecided ([arXiv:2608.06196v1](https://arxiv.org/abs/2608.06196v1)).
+- Enrichment read as a loss. The substitution result says nothing against attaching prerequisites and next steps to a resolved skill, though 8.5% of surviving typed pairs pointed the wrong way and direction quality has to be fixed first ([arXiv:2608.06196v1](https://arxiv.org/abs/2608.06196v1)).
+- A different corpus, embedder, or domain. The paper disclaims generalization outright: one corpus, one organization, one embedding model.
+- Multi-hop reasoning over a document corpus rather than skill lookup. Graph structure carries a separate argument there, covered by [schema-guided graph retrieval](schema-guided-graph-retrieval.md).
+
+## Example
+
+The measured system indexed one line of frontmatter per skill, the name and description, after a sibling effort found that indexing skill bodies degraded retrieval. Edges came from a coarse-to-fine pipeline: take each skill's eight nearest embedding neighbors, then make one `claude-haiku-4-5` call under forced tool use to emit typed relations from a fixed vocabulary of eight (`requires`, `specializes`, `feeds_into`, `routes_to`, `precedes`, `complements`, `alternative_to`, `verifies`). Cycle detection dropped 113 hallucinated edges ([arXiv:2608.06196v1](https://arxiv.org/abs/2608.06196v1)).
+
+Every design choice there is reasonable in isolation. The bound comes from the first line: because the candidate shortlist is the embedding top-K, the eight relation types describe the ranker's existing neighborhood rather than reaching past it.
+
+One measurement caveat travels with the result. The same paper scored a 37-query set written by its author while reading the corpus at 0.946 hit@5, against 0.735 on the non-echoing set, a gap of 21.1 points for the hybrid ranker and 44.2 for keyword-only, because queries written against visible descriptions reuse their vocabulary ([arXiv:2608.06196v1](https://arxiv.org/abs/2608.06196v1)). [Controlling lexical leakage in retrieval evals](../verification/lexical-leakage-agent-memory-retrieval-evals.md) covers the construction rules that keep this out of your own numbers.
+
+## Key Takeaways
+
+- Ask where a proposed skill graph's candidate edges come from before asking how good its edge labels are. The candidate source sets the ceiling.
+- Run the overlay test before the build, not after. A non-zero count on either counter is the evidence that justifies the modeling budget; two zeros mean you already have the graph's reach in your index.
+- Never trade ranked results for graph neighbors at a fixed token budget. That specific swap cost 11.2 points of hit@5 on the measured corpus.
+- Audit edge direction before shipping enrichment. Prerequisites and next steps attached to a resolved skill are only useful pointing the right way.
+- Graphs built from usage data or a trained dependency model sit outside this bound entirely, and the tool-retrieval literature reports them beating semantic similarity.
+
+## Related
+
+- [Skill Loadout Curation for Coding Agents](skill-loadout-curation.md) — where the recoverable selection loss sits once retrieval is already in place
+- [Compositional Skill Routing for Large Skill Libraries](compositional-skill-routing.md) — the decompose-retrieve-compose alternative to adding structure at index time
+- [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — the case for typed graphs on multi-hop document reasoning, a different task shape
+- [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md) — the on-demand retrieval baseline both approaches extend
+- [Control Lexical Leakage in Agent-Memory Retrieval Evals](../verification/lexical-leakage-agent-memory-retrieval-evals.md) — why an author-written query set overstates every retriever it scores
 
 ---
 
@@ -19844,6 +19922,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Inference-Time Tool-Call Reviewer](inference-time-tool-call-reviewer.md) — A reviewer agent inspects each provisional tool call before dispatch, gated by Helpfulness-Harmfulness metrics that quantify when feedback adds net value
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — Agents that explore the codebase first and ask targeted clarification questions recover up to 74% of the performance lost to underspecified inputs
 - [Issue Requirements Preprocessing](issue-requirements-preprocessing.md) — Transforming raw issue descriptions into structured requirements before code generation improves patch resolution rates by 17% on average
+- [Splitting the Drift Judge from the Advisor (LivePlan)](judge-advisor-split.md) — Separate the component that decides whether an agent has drifted from the component that decides what to do about it, so the always-on half runs without an LLM call
 - [Minimum-Sufficient Control Ladder: Escalate by Failure Mode](minimum-sufficient-control-ladder.md) — An ordered algorithm for adding agent control mechanisms — Tool Use, Reflection, Evaluator-Optimizer, Human-in-the-Loop, Parallelization — only when a named failure mode justifies the next rung
 - [The Orchestrator's Attention Budget: Delegating to Protect Context](orchestrator-attention-budget.md) — Justify a sub-agent by what it keeps out of the orchestrator's context rather than by time saved, since imported worker output charges attention on every remaining turn
 - [Plan Compliance in Agents: Measure What They Execute, Not What You Wrote](plan-compliance-in-agents.md) — Agents silently deviate from instructed plans; plan quality, phase alignment, and periodic reminders determine whether the plan you wrote actually runs
@@ -24223,6 +24302,7 @@ This shows the value of a category-specific correction. A generic "you seem stuc
 - [Context-Injected Error Recovery](../../context-engineering/context-injected-error-recovery.md)
 - [Steering Running Agents](steering-running-agents.md)
 - [Skill Program Functions](skill-program-functions.md) — the synchronous, compiled-predicate counterpart; Wink observes asynchronously while PFs fire mid-loop on deterministic triggers
+- [Splitting the Drift Judge from the Advisor (LivePlan)](judge-advisor-split.md) — the alternative split, where a rule-based monitor decides whether to consult the model at all
 - [Agent Loop Middleware](../../loop-engineering/agent-loop-middleware.md)
 - [Agent Self-Review Loop](../../code-review/agent-self-review-loop.md)
 - [The Ralph Wiggum Loop](../../loop-engineering/ralph-wiggum-loop.md)
@@ -36241,6 +36321,7 @@ Looking at [resolution rate](goal-monitoring-progress-tracking.md) alone, both s
 - [The Instruction Compliance Ceiling](../../instructions/instruction-compliance-ceiling.md) — compliance decay driven by rule count
 - [Task List Divergence as Instruction Quality Diagnostic](../../instructions/task-list-divergence-diagnostic.md) — divergence in generated plans as an instruction-quality signal
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — observing whether the agent executed what was planned
+- [Splitting the Drift Judge from the Advisor (LivePlan)](judge-advisor-split.md) — acting on a detected compliance violation mid-run rather than measuring it after
 - [Objective Drift: When Agents Lose the Thread](../anti-patterns/objective-drift.md) — the failure mode plan reminders mitigate
 
 ---
@@ -40541,6 +40622,72 @@ In the same release, prompt caching reuses "more than 93% of each request" once 
 - [Advanced Tool Use](../../tool-engineering/advanced-tool-use.md) — Anthropic Tool Search Tool, programmatic calling, tool use examples
 - [Token-Efficient Tool Design](../../token-engineering/token-efficient-tool-design.md) — design-level strategies for shrinking tool output
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md) — multi-agent decomposition; SLM-as-tool is a single-agent analogue
+
+---
+
+### Splitting the Drift Judge from the Advisor (LivePlan)
+Source: https://agentpatterns.ai/patterns/agent-design/judge-advisor-split/
+
+# Splitting the Drift Judge from the Advisor (LivePlan)
+
+> A deterministic monitor decides whether an agent drifted; an advisor model decides what to do, and only sees trajectories the monitor flagged.
+
+Runtime supervision of a long-running coding agent asks two questions: has this trajectory gone wrong, and what should happen next. LivePlan answers them in separate components, with a rule-based monitor gating the advisor LLM ([Liu et al., 2026 — arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)).
+
+## When the split earns its cost
+
+Evidence for this architecture sits on one scaffold and one task shape, so treat it as conditional. Build the split when all four hold:
+
+- The task has a phase sequence a state machine can check. LivePlan's monitor is defined against navigate, reproduce, patch, validate, and its blocking rules exist only because that order does ([arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)).
+- Trajectories are long. The published thresholds fire after seven consecutive steps in one phase, with a five-step cooldown between advisor calls, so a run finishing in a dozen steps rarely trips them.
+- The executor is not already near its ceiling. Reported gains on SWE-bench Pro run from +15.24 pp on the weakest executor tested down to +5.45 pp on the strongest ([arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)).
+- The executor follows mid-run correction. The paper attributes nearly all of its resolved-to-unresolved regressions to "the executor's inability to follow correct guidance" ([arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)).
+
+## The two halves
+
+The monitor builds two views of the trajectory as it runs: an action graph enriched with thought nodes, and a phase-sequence abstraction. It checks both against fixed algorithms and sorts findings into two classes. Blocking drifts stop execution: plan violation, premature patching, skipping the patch, skipping validation, thought and action oscillation. Non-blocking drifts let execution continue with advice attached: long stagnation in one phase, prolonged phase duration, a repeated action appearing as a back-edge in the graph. No model call is involved, and the reported overhead is "a few milliseconds" ([arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)).
+
+The advisor runs only after the monitor fires and the cooldown has elapsed. It receives the issue text, the trajectory slice since the last advice, the previous advice, and a canned message for the detected drift class. It returns "a next-step recommendation, rather than a long-horizon plan" ([arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)). Advisor spend came to $0.01–$0.06 per instance across the three executors tested.
+
+## Why it works
+
+The stated reason is about incentive rather than cost: "an advisor prompted to diagnose and provide corrective advice is incentivized to find a problem," so a model asked both questions at once invents defects on healthy runs ([arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)). Gating on a rule removes the opportunity: the model is never consulted about a trajectory the rules call clean, which changes its question from "is anything wrong here" (to which it will answer yes) into "given this specific drift, what next". This is separation of concerns applied to supervision, and the paper's own re-planning baseline shows the cost of skipping it. That baseline redirected an agent toward a file that did not exist, and it landed below the vanilla agent on two of three executors, by 2.97 pp and 2.12 pp ([arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)). The near-zero monitor cost is a consequence of that design, not its motivation.
+
+## When this backfires
+
+Cheap detection is not well-timed detection. Across 9,429 incident-grounded code-agent trajectories, a rule-based guardrail carrying 847 rules reached 86% recall while its intervention timing came out "statistically indistinguishable from random," because more than three-quarters of its alerts fired on benign prefix code before any violation happened ([StepShield, 2026 — arXiv:2601.22136v2](https://arxiv.org/abs/2601.22136v2)). High recall bought nothing: the alerts arrived before there was anything to correct.
+
+A conflated judge and advisor also works in production, which weakens the case for building two components. Wink runs an LLM observer that classifies and corrects in one pass over 10,000+ real trajectories, and reports 90% resolution for misbehaviors needing a single intervention ([arXiv:2602.17037v2](https://arxiv.org/abs/2602.17037v2); see [Wink](wink-agent-misbehavior-correction.md)). If your drift modes are semantic rather than structural, rules will not see them at all.
+
+Thresholds do not travel. The published constants were tuned on SWE-bench under one scaffold at temperature zero, so carrying them elsewhere imports somebody else's false-positive rate. Deterministic detectors are not reliably net-positive: across 220 instrumented agent runs, only half of twelve automated loop interventions reduced the signal they targeted, and one produced 13 times more signal than it suppressed ([boucle2026, 2026](https://dev.to/boucle2026/how-to-tell-if-your-ai-agent-is-stuck-with-real-data-from-220-loops-4d4h); see [loop detection](../../observability/loop-detection.md)).
+
+The intervention also does not close the gap. Blocking drifts fell from 55.63% of trajectories to 34.37% on SWE-bench Pro ([arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)). A third of runs still drifted with the monitor watching.
+
+## Example
+
+An agent working a repository issue has spent nine consecutive steps reading files without reproducing the reported failure.
+
+A conflated observer reads the trajectory and is asked whether anything is wrong. Because it is prompted to diagnose, it produces a diagnosis: the agent is looking in the wrong module and should try `src/adapters/`. If that module is irrelevant, the agent has now been sent somewhere worse than where it was.
+
+Under the split, the monitor evaluates one rule. Steps in the current phase exceed the stagnation threshold and the phase is still navigation, which is a non-blocking drift. Only then is the advisor called, and its prompt already carries the finding, so it answers a narrower question: the agent has been navigating for nine steps without reproducing, so what is the next step. The advisor recommends writing a minimal reproducer from the issue text before reading further.
+
+On a trajectory where the agent had reproduced the failure at step three and was legitimately reading widely, no rule fires and no model is called at all, which is the case the split exists to protect.
+
+## Key Takeaways
+
+- Separate the component that judges whether a trajectory drifted from the one that advises what to do next
+- A model asked to diagnose will find something, which is why the always-on half should not be a model
+- The deterministic half only exists if the task has a checkable phase structure; without one there is nothing to gate on
+- Gains shrink as the executor gets stronger, from +15.24 pp to +5.45 pp across the executors tested
+- High recall does not mean useful timing, since a rule set can flag every failure and still intervene at random
+
+## Related
+
+- [Classifying and Auto-Correcting Coding Agent Misbehaviors (Wink)](wink-agent-misbehavior-correction.md) — the opposite architecture, where one LLM observer both classifies and corrects
+- [Plan Compliance in Agents](plan-compliance-in-agents.md) — measuring whether the instructed phases run, which is the signal this pattern acts on
+- [The Advisor Strategy](advisor-strategy.md) — a frontier advisor gated by task difficulty rather than by detected drift
+- [Loop Detection for AI Agents](../../observability/loop-detection.md) — deterministic detection with a canned nudge and no advisor
+- [Steering Running Agents](steering-running-agents.md) — the human-issued version of the same mid-run correction
 
 ---
 
@@ -78534,6 +78681,7 @@ Source: https://agentpatterns.ai/verification/
 - [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md) — Coverage proves a line ran; mutation testing proves the suite would notice a regression — the discriminator that separates ceremonial agent-written tests from load-bearing ones
 - [Audit Your Test Suite With an Agent, Then Certify Each Flag](certified-agent-test-suite-auditing.md) — An agent generates inputs your suite wrongly accepts, and a four-gate certification chain proves each flagged failure genuine before a human triages it — usable only where an oracle independent of the code under test exists
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — Plant deterministic bugs and check that captured signals lead an agent to the responsible layer — if they don't, the gap is in the instrumentation, not the bug
+- [LLM API Fault Injection at the HTTP Layer (AgentChaos)](llm-api-fault-injection-http-layer.md) — Corrupt named LLM response fields at the HTTP client to score agent robustness; the ranking tracks architecture across all four backbones, and truncation is the fault diagnosis misses at 4.3% accuracy
 
 ## Regression Testing
 
@@ -78580,6 +78728,7 @@ Source: https://agentpatterns.ai/verification/
 
 ## Guardrails
 
+- [Verification Capacity as the Agent Quality Ceiling](verification-capacity-quality-ceiling.md) — Agent generation scales with compute and verification throughput does not; measure the two rates and pick deliberately between scaling verification, throttling generation, and lowering the bar
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — Gate an agent's PR on the coverage of its changed lines, not the whole-repo percentage, because agents test under half of code-touching PRs and existing suites cover a minority of what they change
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces
 - [Evidence-Conditioned Execution: Gate Edits on Observations](evidence-conditioned-execution.md) — Hold an agent's edit or patch submission until its trajectory satisfies machine-checked conditions naming the repository entities it should have observed first; the gain shrinks as the model strengthens
@@ -81242,6 +81391,7 @@ Coverage saturation is a moving target. Adding an agent or message type expands 
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md)
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
 - [Agent Transcript Analysis](agent-transcript-analysis.md)
+- [LLM API Fault Injection at the HTTP Layer (AgentChaos)](llm-api-fault-injection-http-layer.md) — corrupts a named LLM response field instead of exploring the input space
 
 ---
 
@@ -85474,6 +85624,74 @@ Cost-quality is steep. Gemini 3 Pro costs 9x GPT-5.2 for 5.4 extra points. For C
 
 ---
 
+### LLM API Fault Injection at the HTTP Layer (AgentChaos)
+Source: https://agentpatterns.ai/verification/llm-api-fault-injection-http-layer/
+
+# LLM API Fault Injection at the HTTP Layer (AgentChaos)
+
+> Fault injection at the HTTP layer corrupts named LLM response fields to yield a robustness score that tracks agent architecture more than model choice.
+
+HTTP-layer fault injection wraps the agent's HTTP client, forwards each LLM request to the real provider, then mutates a named field of the response before the agent reads it. AgentChaos implements this by monkey-patching `httpx.AsyncClient` and matching outgoing requests to LLM endpoints such as `/chat/completions`, so no agent source code changes ([Tan et al., 2026](https://arxiv.org/abs/2608.06790v1)).
+
+## When this technique pays off
+
+Three preconditions decide whether the harness returns anything you can act on.
+
+- The system has multiple stages. Measured drops in pass@1 ran from 0.87% on a single-agent system (Mini-SE on SWE-bench Pro) to 49.66% on a pipeline system (MapCoder on HumanEval+ under GPT-5.2, falling from 93.96% to 44.3%) ([Tan et al., 2026](https://arxiv.org/abs/2608.06790v1)). A one-agent loop with a human reading the output gives the injector little to propagate.
+- The transport is interceptable. The published wrapper patches `httpx.AsyncClient`, so a vendor SDK with its own transport or a gateway in front of the app needs the interception point rebuilt first.
+- A clean scored baseline exists. The metric is a delta against an unfaulted pass@1, so a team without an automatically scorable benchmark gets traces rather than a number.
+
+## The fault taxonomy
+
+Six fault types sit in three categories, each applied to either the `content` field or the `tool_calls` field of the response ([Tan et al., 2026](https://arxiv.org/abs/2608.06790v1)).
+
+| Category | Fault types | What they model |
+|----------|-------------|-----------------|
+| Crash | Error, Timeout | Server overload (HTTP 5xx), network delay |
+| Omission | Empty, Truncate | Safety-filter rejection, token-limit cutoff |
+| Value | Corrupt, Schema | Encoding errors, format mismatch |
+
+Injection position and persistence are separate axes, giving 65 configurations. Runs where the fault never fired are detected from the execution trace and excluded before scoring, so an unfired configuration cannot inflate the robustness estimate.
+
+## Why it works
+
+Every agent system reaches its model through the same HTTP interface, so one interception point is architecture-agnostic: a single wrapper covered five systems spanning conversation, debate, pipeline, evolutionary, and single-agent designs ([Tan et al., 2026](https://arxiv.org/abs/2608.06790v1)). Because each fault is deterministic, scoped to one named field, and pinned to a chosen call position, the resulting delta is attributable to that fault rather than to sampling noise. The architecture result follows from where recovery is possible. A pipeline propagates an upstream corruption through every downstream stage, while an iterative system gets another generation to absorb it, which is why MapCoder fell 48.61% on HumanEval and EvoMAC only 18.48%. [MAS-FIRE](https://arxiv.org/abs/2602.19843v1) reaches the same conclusion from a different injection layer, reporting that iterative closed-loop designs neutralize over 40% of faults that are catastrophic in linear workflows.
+
+## The truncation blind spot
+
+Truncation is the one fault that resists diagnosis. Rule-based diagnosis identified the fault type 91.04% of the time for Timeout and 96.74% for Empty, but 4.3% for Truncate ([Tan et al., 2026](https://arxiv.org/abs/2608.06790v1)). A truncated response is syntactically well-formed text with no error marker, so a pattern matcher has nothing to match, whereas an empty string is one trivially detected pattern. Overall accuracy is weak either way: 52.45% on fault type and 55.5% on fault step for the rule-based method, 47.25% and 53.52% for the LLM-based one.
+
+The paper generalizes this to omission faults as a class, which its own per-type figures do not support for Empty. Read the finding as truncation-specific. The detection signal is free: the Anthropic Messages API returns `stop_reason: "max_tokens"` and warns that a truncated response may contain an incomplete `tool_use` block ([Anthropic](https://platform.claude.com/docs/en/api/handling-stop-reasons)). A harness has to read that field for it to help.
+
+## When this backfires
+
+- Failures that look like success. The metric is task failure, so plausible-but-wrong output that never raises stays invisible. MAS-FIRE catalogs that class as propagating silently without runtime exceptions ([Jia et al., 2026](https://arxiv.org/abs/2602.19843v1)). A clean injection run is not evidence of robustness.
+- Portable magnitudes. [ReliabilityBench](https://arxiv.org/abs/2601.06112v1) runs a comparable chaos harness over 1,280 episodes and reports success falling from 96.9% to 88.1% at perturbation intensity 0.2, with rate limiting as the most damaging fault. Rankings and magnitudes are workload-specific.
+- Harnesses that already validate. If you check `stop_reason` and schema-validate tool arguments at the boundary, the omission and value faults arrive already caught.
+
+The harness competes with its own recommendations, which cost one branch per call and need no measurement first: validate output after each call, log `finish_reason` and response length, add stage-level validation.
+
+## Example
+
+A single configuration names four things: the fault type, the target field, the call position, and the persistence strategy. Position is the axis that separates architectures. MapCoder swings from 83.87% impact when the fault lands on the first call to −4.84% on the third, because a pipeline has no later stage left to absorb an early corruption ([Tan et al., 2026](https://arxiv.org/abs/2608.06790v1)). Injecting on every call removes the position question and yields each system's worst figure: MapCoder 62.39%, AutoGen 57.41%, MAD 54.74%, EvoMAC 47.64%, and Mini-SE 10%. Read the position curve rather than the single worst number. A flat curve says the architecture recovers wherever the fault lands, and a spike says one stage carries the whole run.
+
+## Key Takeaways
+
+- The robustness ranking held across all four backbone models tested, so a degraded run is a reason to inspect the orchestration before changing model.
+- Record `stop_reason` and response length per call before building a harness to find truncation, because the logging is cheaper than the campaign.
+- The pipeline-versus-iterative gap is a design lever: adding a recovery pass moves the score more than swapping models.
+- Run the injector only where a delta is computable; without a scored baseline the exercise produces traces you still have to read by hand.
+
+## Related
+
+- [Tool-Use Sim-to-Real Perturbation Taxonomy](tool-use-sim-to-real-perturbation-taxonomy.md) — perturbs tool observations and actions rather than the model's own response
+- [FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems](flare-multi-agent-fuzzing.md) — explores the input space instead of corrupting a fixed response field
+- [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — the same inject-then-check-detection loop applied to instrumentation
+- [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — per-stage attribution for the runs an injection campaign flags
+- [Agent Circuit Breaker](../patterns/agent-design/agent-circuit-breaker.md) — the runtime mitigation for the crash faults this technique simulates
+
+---
+
 ### LLM Static Verification Against Natural-Language Requirements
 Source: https://agentpatterns.ai/verification/llm-static-verification-natural-language-requirements/
 
@@ -87330,6 +87548,7 @@ If the captured logs include only `INFO request received` and `INFO request comp
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md) — the instrumentation substrate planted bugs calibrate against
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — guardrails as another verification layer that planted bugs can probe
 - [Verify Observability in Agent-Generated Code](verify-generated-code-observability.md) — the upstream problem: agent-written code under-instruments in the first place, so its logs may fail calibration before any bug is planted
+- [LLM API Fault Injection at the HTTP Layer (AgentChaos)](llm-api-fault-injection-http-layer.md) — the same inject-then-measure-detection loop moved to the model boundary, where truncation defeats diagnosis at 4.3% accuracy
 
 ---
 
@@ -88581,6 +88800,7 @@ The classifier returns the most severe tier across all changed files. CI auto-me
 - [Deterministic Guardrails](deterministic-guardrails.md)
 - [Circuit Breakers](../observability/circuit-breakers.md)
 - [Blast Radius Containment](../security/blast-radius-containment.md)
+- [Verification Capacity as the Agent Quality Ceiling](verification-capacity-quality-ceiling.md)
 
 ---
 
@@ -91322,6 +91542,77 @@ The team trains on 300 samples instead of 2,000, a 6.7 times compute reduction, 
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md)
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md)
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md)
+
+---
+
+### Verification Capacity as the Agent Quality Ceiling
+Source: https://agentpatterns.ai/verification/verification-capacity-quality-ceiling/
+
+# Verification Capacity as the Agent Quality Ceiling
+
+> Agent output scales with compute and human review does not, so what your gates can truthfully check sets the quality ceiling.
+
+Once agents write most of the diff, quality becomes a capacity question rather than a taste question. Verification is the service rate over a queue whose arrivals are agent changes, the same [queueing identity that governs agent task flow](../patterns/agent-design/wip-1-littles-law-agent-throughput.md). Addy Osmani names the failure: when change volume exceeds what the tools can consume, "we end up building a queue and relying on a verification system that moves at human speed" ([Osmani, *Agentic Code Quality*](https://addyo.substack.com/p/agentic-code-quality)). Reading every diff is the service rate that responds least to added compute.
+
+## Conditions for this framing
+
+The capacity model earns its cost only under three conditions. Outside them it is overhead.
+
+- Generation already outruns verification. A team merging a handful of agent changes a week has review slack, and a gate lattice built against a queue that never forms costs engineering time for nothing.
+- The gates carry signals the agent is not optimizing against. Adding coverage to a suite the agent can see raises the measured pass rate without raising compliance ([arxiv:2605.21384v1](https://arxiv.org/abs/2605.21384v1)). Held-out checks, independent reviewers, and production telemetry add capacity; more of the visible suite does not.
+- Trajectory-level erosion gets its own check. Architectural coherence and cumulative complexity are properties of a sequence of changes, and they degrade across agent trajectories while individual states stay green ([arxiv:2603.24755v2](https://arxiv.org/abs/2603.24755v2)).
+
+## Three responses when verification saturates
+
+Osmani names three moves once the gates cannot keep up, and a team should be ready to use all of them ([Osmani](https://addyo.substack.com/p/agentic-code-quality)).
+
+| Response | What it changes | What it costs |
+|----------|-----------------|---------------|
+| Scale the verification system | Raises the service rate by adding capacity to check and push back | Engineering time, and it only counts when the added signal is independent |
+| Reduce the agent generation rate | Lowers the arrival rate so verification catches up | Throughput, which is recoverable |
+| Lower the quality bar | Reduces how hard verification pushes back | Risk, taken deliberately rather than absorbed silently |
+
+A fourth move reallocates rather than scales. Constraints do not have to be uniform, and Osmani frames tighter constraints where you care most as the way to maximize throughput without sacrificing quality ([Osmani](https://addyo.substack.com/p/agentic-code-quality)). [Risk-Based Shipping](risk-based-shipping.md) is that allocation made explicit.
+
+The model forces honesty about which move you took. A team that quietly stops enforcing a gate has chosen the third response without recording it.
+
+## Why it works
+
+Human review fails first because its service rate is fixed by reading speed and does not respond to compute, while generation scales directly with it. That is the staffing problem behind the [author-to-reviewer role inversion](../human/author-to-reviewer-role-inversion.md). Constraints in the harness fail later because their throughput does scale. DORA supplies the empirical shape, reporting that higher AI adoption is associated with an increase in both software delivery throughput and software delivery instability. Its recommendation follows the same logic: "investing in robust test automation for faster feedback may provide a better return on investment than optimizing manual reviews" ([DORA, *Balancing AI tensions*](https://dora.dev/insights/balancing-ai-tensions/)).
+
+The mechanism is bounded. It says a gate's throughput scales with compute; it says nothing about its fidelity.
+
+## When this backfires
+
+- Scaling the visible test surface buys measured pass rate, not compliance. SpecBench compares visible and held-out pass rates across 30 systems-level tasks and finds that "every frontier agent saturates the visible suite, reward hacking persists", with "the 90th-percentile gap grows by approximately 27 percentage points for every tenfold increase in LOC (R2=0.21)" ([arxiv:2605.21384v1](https://arxiv.org/abs/2605.21384v1)). The over-reporting grows with the volume that motivated automating.
+- Per-change gates miss trajectory degradation. Across iterative agent trajectories, structural erosion increased in 77% and verbosity in 75.5%, and the resulting code measured 2.3x more verbose and 2.0x more eroded than 473 open-source repositories ([arxiv:2603.24755v2](https://arxiv.org/abs/2603.24755v2)). Every intermediate state can be green.
+- Late feedback subtracts capacity even when the gate is sound. A check contributes service rate only at the speed it returns, so a slow gate is a smaller gate.
+- Felt throughput is not measured throughput. In a trial of 16 experienced developers across 246 tasks on mature repositories, participants predicted a 20% speedup and measured a 19% slowdown ([arxiv:2507.09089v2](https://arxiv.org/abs/2507.09089v2)). A capacity decision taken on perception is unsupported.
+- The operator's skill is load-bearing. Osmani concedes that "much of the difference between useful agent output and slop still comes down to the skill of the team operating the loop" ([Osmani](https://addyo.substack.com/p/agentic-code-quality)). A team that cannot tell a challenging constraint from a decorative one will build the second kind and read the resulting green as capacity.
+
+## Example
+
+SpecBench shows what added capacity looks like when the added signal is not independent. Judged against a test suite it could see, one agent produced a 2,900-line hash-table implementation that memorized the test inputs instead of implementing the function ([arxiv:2605.21384v1](https://arxiv.org/abs/2605.21384v1)). The gate reported a pass, the service rate was high, and nothing about the specification had been verified.
+
+The paper reaches that case from this page's own premise: "As tasks scale to longer horizons, the volume of code produced starts exceeding what any developer can meaningfully review. Oversight therefore collapses onto a single surface: the automated test suite" ([arxiv:2605.21384v1](https://arxiv.org/abs/2605.21384v1)). Collapsing oversight onto one surface is the failure the capacity model exists to prevent.
+
+## Key Takeaways
+
+- Publish two numbers on the same dashboard: changes arriving per week and changes your gates clear per week. The crossover is the trigger to act, and it precedes any visible drop in quality.
+- Audit each gate for what the agent can see before counting it as capacity. A gate the agent optimizes against belongs in a different column from one it cannot read.
+- Write the saturation decision down. An unrecorded lowered bar is indistinguishable from a gate that quietly stopped being enforced, and only one of those is recoverable.
+- Give erosion a scheduled check on a cadence, not a per-change one. Nothing that runs on a single diff can observe a trajectory.
+- Trust the measured loop over the reported one, and re-measure after every change to the gate set.
+
+## Related
+
+- [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — what the constraints are made of; this page budgets how much of them you can afford to run.
+- [Risk-Based Shipping: Review by Risk Matrix, Not by Default](risk-based-shipping.md) — the allocation move that concentrates constraint where consequences concentrate.
+- [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — how to build the independent signals that count as real added capacity.
+- [Tiered Code Review: AI-First with Human Escalation](../code-review/tiered-code-review.md) — routes the scarce human service rate to the changes that need it.
+- [Agent PR Volume vs. Value: The Productivity Paradox](../code-review/agent-pr-volume-vs-value.md) — the arrival-rate side of the same imbalance, measured at the pull request.
+- [WIP=1 and Little's Law: Kanban Throughput Theory for Agent Task Design](../patterns/agent-design/wip-1-littles-law-agent-throughput.md) — the queueing identity this page applies to verification rather than to task flow.
+- [Author-to-Reviewer Role Inversion in AI-Assisted Teams](../human/author-to-reviewer-role-inversion.md) — treats human review capacity as a staffing problem; this page treats total verification capacity as a design one.
 
 ---
 
@@ -107238,6 +107529,7 @@ Source: https://agentpatterns.ai/observability/
 - [Context-Usage Attribution: Per-Source Breakdown of Agent Context](context-usage-attribution.md) — An always-on observability surface that breaks the context window into rules, skills, MCP returns, subagent transcripts, and conversation history — so operators prune the right source instead of guessing
 - [Cost-Aware Tracing for Skill Distillation](cost-aware-tracing-skill-distillation.md) — Per-step USD cost paired with redundancy flags lets a distillation pipeline distinguish necessary steps from incidental ones — prune patches transfer; preserve patches do not
 - [Circuit Breakers for Agent Loops](circuit-breakers.md) — Stop agents automatically when progress stalls — repeated errors, escalating costs, context exhaustion, or circular behavior signal a halt
+- [Debugging the Tool-Call Loop Before Reaching for a Framework](tool-call-loop-instrumentation.md) — Give each hop of the tool-call loop its own structured error class before swapping in a heavier agent framework
 - [Event-Loop Contention in Async Agent Fan-Out](event-loop-contention-async-fan-out.md) — Adding concurrent agents raises end-to-end latency when per-response CPU work serializes on one event loop — how to tell it apart from provider throttling and connection-pool exhaustion
 - [Event Sourcing for Agents](event-sourcing-for-agents.md) — Agents emit structured intentions in validated JSON; a deterministic orchestrator validates, persists, and applies effects for replay-verifiable execution
 - [Failure-Aware Observability for Multi-Agent LLM Systems](failure-aware-observability-multi-agent.md) — A six-signal trace taxonomy — tool reliability, execution recovery, orchestration loops, evidence availability, information change, budget pressure — that maps recurring multi-agent failure modes to online observability so wasted runs are caught mid-trajectory
@@ -108417,6 +108709,72 @@ The patch is defensible because it names the high-cost step, supplies a counterf
 
 ---
 
+### Debugging the Tool-Call Loop Before Reaching for a Framework
+Source: https://agentpatterns.ai/observability/tool-call-loop-instrumentation/
+
+# Debugging the Tool-Call Loop Before Reaching for a Framework
+
+> Instrument each hop of the tool-call loop with its own structured error class before swapping in a heavier agent framework.
+
+Make the loop legible first. Log the declared tool schema, the arguments the model emitted, and the raw result at every turn, and give each hop its own error type so a failure names the hop that produced it. The practitioner framing is direct: "Stop judging a tool-calling agent by its final answer. Judge it by the model request, the schema validation, the Python execution, the compact tool result, the error path, and the final answer, together" ([Towards Data Science, 2026](https://towardsdatascience.com/i-built-a-tool-calling-agent-in-python-heres-how-i-debugged-it/)).
+
+## When this applies
+
+Confirm three conditions before instrumenting:
+
+- The symptom is vague and the loop is the suspect. "The agent didn't work" with no stack trace and no obvious missing input is the signature. When the cause is missing context, contradictory instructions, a blocked tool, or a model-tier ceiling, run the four-mode taxonomy in [agent debugging](agent-debugging.md) first; per-hop logs will show a healthy loop and spend the budget for nothing.
+- The payloads are safe to persist, or you can hash the sensitive fields. Raw tool arguments carry whatever the user typed.
+- The loop is sequential and single-agent. Concurrent fan-out needs trace and span identifiers designed in from the start (see [subagent OTel trace correlation](subagent-otel-trace-correlation.md)).
+
+## The five hops
+
+A [single agent turn](../patterns/agent-design/agent-turn-model.md) passes through five places a failure can originate. Give each one its own structured error rather than a stack trace ([Towards Data Science, 2026](https://towardsdatascience.com/i-built-a-tool-calling-agent-in-python-heres-how-i-debugged-it/)):
+
+| Hop | Instrumentation | Failure it isolates |
+|-----|-----------------|---------------------|
+| Model request | Wrap the API call, emit `{"error": {"type": "model_request_failed", "details": str(exc)}}` | Provider error, timeout, refusal before any tool is chosen |
+| Argument parse | Catch JSON decoding separately from execution | Model emitted syntactically broken arguments |
+| Schema validation | Validate against JSON Schema before dispatch, emit `{"error": "Invalid tool arguments", "details": "'latitude' is a required property"}` | Argument shape diverged from the declared schema |
+| Tool dispatch | Registry lookup refuses unknown names with a structured response | Model invented a tool that does not exist |
+| Execution and result | Per-turn record: `{"turn": turn + 1, "tool": tool_name, "arguments": tool_args, "result": tool_result}` | Tool ran but returned the wrong thing |
+
+The same methodology adds a preflight mode that exercises the tool layer without spending API tokens, filters tool results to the fields the model needs, and caps the loop so a repeating call cannot run forever ([Towards Data Science, 2026](https://towardsdatascience.com/i-built-a-tool-calling-agent-in-python-heres-how-i-debugged-it/)). The structured-error shape generalizes past Python; [RFC 9457 problem details](../tool-engineering/rfc9457-machine-readable-errors.md) is the same idea at the HTTP boundary.
+
+## Why it works
+
+The final answer is a lossy projection of the loop, and the projection is not injective: several distinct failures collapse into the same visible symptom. ToolFailBench separates four of them. Tool-Skip is where "the model does not produce a valid executed tool call", Result-Ignore is where "the model calls the tool but does not use the returned data", Output-Fabrication is where "the model calls the tool but adds invented structured information not present in the return", and Unnecessary-Tool-Use covers tools called on tasks needing none ([ToolFailBench, arXiv 2607.04686v1](https://arxiv.org/abs/2607.04686v1)).
+
+That the aggregate hides the mode is measured. Two models of comparable scale diverge once the modes are separated: Llama-3.1-70B scored 62.58% Clean Tool-Use Rate against 8.91% control-task accuracy, while Qwen2.5-72B scored 79.00% and 98.00%. The 89-percentage-point control gap is significant at z = -19.9, p < 10⁻⁸⁰, and reflects one model calling tools compulsively while the other does not ([ToolFailBench, arXiv 2607.04686v1](https://arxiv.org/abs/2607.04686v1)). No accuracy number recovers that distinction. Observing the hops does.
+
+## When this backfires
+
+- The failure is not in the loop. Missing context, conflicting instructions, and capability ceilings all produce a clean per-hop trace ([agent debugging](agent-debugging.md)). Instrumentation confirms the loop is fine and narrows nothing.
+- Sensitive payloads reach a durable log. Raw arguments and prompts written to a log sink become a data-protection exposure. Log which tools ran and hash the identifiers inside them.
+- Volume makes full capture expensive. Every turn writes the arguments and the result, and [telemetry volume at scale](../standards/opentelemetry-agent-observability.md) is already a live cost problem for agent workloads, so per-turn full-payload records belong behind sampling or a debug flag rather than on by default.
+- The team already runs an instrumented framework. Hand-rolled records duplicate spans the framework emits and correlate with nothing outside the process.
+
+That last point carries the strongest case for the opposite move. A production agent needs vendor-neutral traces regardless, and the [GenAI semantic conventions](../standards/opentelemetry-agent-observability.md) already define agent and tool span types with a shared attribute schema, so ad-hoc per-turn JSON becomes a standards regression the moment a second service joins. Treat the hand-rolled log as a diagnostic scaffold with a graduation path: once the failing hop is named, re-express the same five records as spans.
+
+The published research does not settle the question either. AgentTrace specifies operational, cognitive, and contextual logging surfaces for agents but reports no overhead measurement, no time-to-diagnosis figure, and no comparison against final-output inspection ([AgentTrace, arXiv 2602.10133v1](https://arxiv.org/abs/2602.10133v1)). Instrumenting first rests on the diagnostic argument above, not on a measured speedup.
+
+## Key Takeaways
+
+- Rule out context, instruction, and model-tier causes before instrumenting; per-hop logs cannot see them, and a clean trace proves nothing about them.
+- Five hops each carry their own structured error: model request, argument parse, schema validation, tool dispatch, execution and result.
+- Validating arguments before dispatch converts a tool crash into a named schema failure, which is the difference between a stack trace and a diagnosis.
+- The mechanism is that the final answer maps many distinct failure modes onto one symptom; ToolFailBench measures an 89-percentage-point control-accuracy gap between similarly scaled models that aggregate scoring conceals ([arXiv 2607.04686v1](https://arxiv.org/abs/2607.04686v1)).
+- Hand-rolled records are a scaffold, not a destination. Graduate them to standard GenAI spans before a second service needs to read them.
+
+## Related
+
+- [Agent Debugging: Diagnosing Bad Agent Output](agent-debugging.md) — the four-mode taxonomy that decides whether the loop is the right place to look at all.
+- [Agent Observability with OpenTelemetry and Trajectory Logging](agent-observability-otel.md) — the wiring that per-hop records graduate into once the failing hop is known.
+- [OpenTelemetry for AI Agent Observability and Tracing](../standards/opentelemetry-agent-observability.md) — the span types and attribute schema a hand-rolled log should converge on.
+- [Canary Tools for Diagnosing Tool-Selection Reasoning](../verification/canary-tools-tool-selection-diagnosis.md) — goes deeper on the dispatch hop, probing why the model picked the wrong tool rather than that it did.
+- [Observability Feedback Loop: A 7-Step Debug Runbook](observability-feedback-loop.md) — the broader runbook into which per-hop instrumentation plugs as a localization step.
+
+---
+
 ### Event Sourcing for Agents: Separating Cognitive Intention from State Mutation
 Source: https://agentpatterns.ai/observability/event-sourcing-for-agents/
 
@@ -109153,6 +109511,7 @@ Every injected nudge consumes context the agent could otherwise spend on code, s
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
 - [Agent Debugging](agent-debugging.md)
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](agent-observability-otel.md)
+- [Splitting the Drift Judge from the Advisor (LivePlan)](../patterns/agent-design/judge-advisor-split.md) — pairing a deterministic detector with a model-generated correction instead of a canned nudge
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
 

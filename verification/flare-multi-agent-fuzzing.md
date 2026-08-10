@@ -132,3 +132,4 @@ Coverage saturation is a moving target. Adding an agent or message type expands 
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md)
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md)
 - [Agent Transcript Analysis](agent-transcript-analysis.md)
+- [LLM API Fault Injection at the HTTP Layer (AgentChaos)](llm-api-fault-injection-http-layer.md) — corrupts a named LLM response field instead of exploring the input space
