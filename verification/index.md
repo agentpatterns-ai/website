@@ -62,6 +62,7 @@ last_reviewed: 2026-05-27
 - [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md) — Coverage proves a line ran; mutation testing proves the suite would notice a regression — the discriminator that separates ceremonial agent-written tests from load-bearing ones
 - [Audit Your Test Suite With an Agent, Then Certify Each Flag](certified-agent-test-suite-auditing.md) — An agent generates inputs your suite wrongly accepts, and a four-gate certification chain proves each flagged failure genuine before a human triages it — usable only where an oracle independent of the code under test exists
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — Plant deterministic bugs and check that captured signals lead an agent to the responsible layer — if they don't, the gap is in the instrumentation, not the bug
+- [LLM API Fault Injection at the HTTP Layer (AgentChaos)](llm-api-fault-injection-http-layer.md) — Corrupt named LLM response fields at the HTTP client to score agent robustness; the ranking tracks architecture across all four backbones, and truncation is the fault diagnosis misses at 4.3% accuracy
 
 ## Regression Testing
 
@@ -108,6 +109,7 @@ last_reviewed: 2026-05-27
 
 ## Guardrails
 
+- [Verification Capacity as the Agent Quality Ceiling](verification-capacity-quality-ceiling.md) — Agent generation scales with compute and verification throughput does not; measure the two rates and pick deliberately between scaling verification, throttling generation, and lowering the bar
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — Gate an agent's PR on the coverage of its changed lines, not the whole-repo percentage, because agents test under half of code-touching PRs and existing suites cover a minority of what they change
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces
 - [Evidence-Conditioned Execution: Gate Edits on Observations](evidence-conditioned-execution.md) — Hold an agent's edit or patch submission until its trajectory satisfies machine-checked conditions naming the repository entities it should have observed first; the gain shrinks as the model strengthens

@@ -101,6 +101,7 @@ nav:
       - goal-monitoring-progress-tracking.md
       - grill-me-technique.md
       - inference-time-tool-call-reviewer.md
+      - judge-advisor-split.md
       - minimum-sufficient-control-ladder.md
       - orchestrator-attention-budget.md
       - plan-compliance-in-agents.md

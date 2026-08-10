@@ -99,3 +99,4 @@ At inference, the agent issues a tool-search call, retrieves the small subset of
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
 - [Prompt Chaining: Sequential LLM Calls for Agent Workflows](prompt-chaining.md)
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md)
+- [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — the bound on adding typed structure over a skill ranker instead of decomposing the query

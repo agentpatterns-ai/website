@@ -144,3 +144,4 @@ The classifier returns the most severe tier across all changed files. CI auto-me
 - [Deterministic Guardrails](deterministic-guardrails.md)
 - [Circuit Breakers](../observability/circuit-breakers.md)
 - [Blast Radius Containment](../security/blast-radius-containment.md)
+- [Verification Capacity as the Agent Quality Ceiling](verification-capacity-quality-ceiling.md)

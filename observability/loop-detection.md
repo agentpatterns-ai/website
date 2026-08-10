@@ -164,5 +164,6 @@ Every injected nudge consumes context the agent could otherwise spend on code, s
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)
 - [Agent Debugging](agent-debugging.md)
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](agent-observability-otel.md)
+- [Splitting the Drift Judge from the Advisor (LivePlan)](../patterns/agent-design/judge-advisor-split.md) — pairing a deterministic detector with a model-generated correction instead of a canned nudge
 - [Pre-Completion Checklists](../verification/pre-completion-checklists.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
