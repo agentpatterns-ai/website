@@ -9,7 +9,7 @@ aliases:
   - managed agent harness
   - self-hosted agent harness
   - agent harness deployment
-last_reviewed: 2026-06-16
+last_reviewed: 2026-08-08
 maturity: established
 ---
 
@@ -78,7 +78,7 @@ Cursor's self-hosted cloud agents (March 2026) demonstrate a hybrid: managed orc
 
 This is the pattern to consider when compliance concerns are about execution artifacts specifically, not orchestration metadata.
 
-The hybrid is not Cursor-specific. Managed providers increasingly offer self-hosted execution as a first-class mode: Claude Managed Agents supports self-hosted sandboxes where "the agent's code, filesystem, and network egress never leave your environment," positioned for "your organization's own compliance and audit controls" ([Anthropic](https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes)). So the data-residency signal alone rarely forces a fully self-hosted harness. What stays genuinely managed-only is narrower: in that case, [accumulated memory](agent-memory-patterns.md) is unsupported with self-hosted sandboxes, and managed sessions remain ineligible for Zero Data Retention and HIPAA BAA ([Anthropic](https://platform.claude.com/docs/en/managed-agents/overview)). Weigh those residual constraints, not the deployment label.
+The hybrid is not Cursor-specific. Managed providers increasingly offer self-hosted execution as a first-class mode: Claude Managed Agents supports self-hosted sandboxes where "the agent's code, filesystem, and network egress never leave your environment," positioned for "your organization's own compliance and audit controls" ([Anthropic](https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes)). Anthropic offers the same split at the coding-session layer. Claude Code 2.1.224 adds a `claude self-hosted-runner` command that hosts web, mobile, and desktop sessions on your own machines ([Claude Code changelog, August 2026](https://code.claude.com/docs/en/changelog#2-1-224)). So the data-residency signal alone rarely forces a fully self-hosted harness. What stays genuinely managed-only is narrower: in that case, [accumulated memory](agent-memory-patterns.md) is unsupported with self-hosted sandboxes, and managed sessions remain ineligible for Zero Data Retention and HIPAA BAA ([Anthropic](https://platform.claude.com/docs/en/managed-agents/overview)). Weigh those residual constraints, not the deployment label.
 
 ## Key Takeaways
 

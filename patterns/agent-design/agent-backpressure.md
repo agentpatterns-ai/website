@@ -113,5 +113,6 @@ In domains with no reliable oracle: creative work, user-facing copy, API design,
 - [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — iterative feedback can outweigh model scale; backpressure is the automated variant
 - [Harness Engineering](harness-engineering.md) — making codebases agent-ready by building backpressure coverage into the repo
 - [L1 → L2: Adding Feedback Loops](../../frameworks/brownfield-to-agent-first/level-1-to-2.md) — step-by-step guide to enabling types, test coverage, and linter rules on a brownfield repo
+- [Verification Capacity Saturation](../../verification/verification-capacity-saturation.md) — what to do once the constraint stops being signal quality and becomes verification throughput
 - [Loop Strategy Spectrum](../../loop-engineering/loop-strategy-spectrum.md) — when to use tight automated loops vs. human-in-the-loop
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — compensating for model limitations through feedback loops and linter-based enforcement

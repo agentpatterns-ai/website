@@ -73,3 +73,4 @@ Reaching for coverage or mutation score instead is cheaper, but those proxies st
 - [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md) — the cheaper adequacy proxy, and where it stops being informative
 - [LLM-Driven Benchmark Auditing](llm-benchmark-auditing.md) — auditing the benchmark artifact itself rather than the suite under it
 - [Specification-Grounded Test Writing](specification-grounded-test-generation.md) — supplying rules to the writer up front, the preventive counterpart to auditing after the fact
+- [Profile Your Agent Test Suite Against Measured Practice](agent-test-suite-profiling.md) — the cheap distributional read to run before committing to an adversarial audit

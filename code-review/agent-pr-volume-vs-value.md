@@ -7,7 +7,7 @@ tags:
   - human-factors
   - workflows
   - tool-agnostic
-last_reviewed: 2026-06-18
+last_reviewed: 2026-08-09
 maturity: established
 ---
 
@@ -58,7 +58,7 @@ Bots make up 20% of reviewers on agent PRs, compared with 10% for human PRs. Age
 
 As volume rises, the value shifts from writing code to judging it. [Addy Osmani argues that code review becomes the highest-value engineering skill](https://addyo.substack.com/p/agentic-code-review) as agent output grows, because deciding what to merge increasingly outweighs writing the change.
 
-Tooling vendors are responding to the same fixed-reviewer-capacity problem. Linear built a dedicated diff and review surface, [Linear Diffs](https://linear.app/blog/linear-diffs), to make review fast enough to keep pace with agent-generated PRs.
+Tooling vendors are responding to the same fixed-reviewer-capacity problem. Linear built a dedicated diff and review surface, [Linear Diffs](https://linear.app/blog/linear-diffs), to make review fast enough to keep pace with agent-generated PRs. GitHub now lets organizations set pull request limits at the organization level ([GitHub Changelog: pull request limits](https://github.blog/changelog/2026-08-06-set-pull-request-limits-at-the-organization-level)).
 
 ## Why acceptance rates lag
 
@@ -118,6 +118,7 @@ Not on its own. A study of 1,210 merged agent-generated bug-fix PRs found that m
 - [arXiv:2601.20109](https://arxiv.org/abs/2601.20109) — "Beyond Bug Fixes: An Empirical Investigation of Post-Merge Code Quality Issues in Agent-Generated Pull Requests" — merge success does not reliably reflect post-merge code quality
 - [arXiv:2606.13468](https://arxiv.org/abs/2606.13468) — empirical study of agent-authored fixes: 46.41% rejected, with a taxonomy of 14 rejection reasons across four categories
 - [Agentic Code Review (Addy Osmani)](https://addyo.substack.com/p/agentic-code-review) — review becomes the highest-value engineering skill as agent output volume rises
+- [GitHub Changelog: pull request limits](https://github.blog/changelog/2026-08-06-set-pull-request-limits-at-the-organization-level) — GitHub adds organization-level pull request limits (2026-08-06)
 
 > Headline acceptance-rate figures derive primarily from the AIDev snapshot. Treat them as initial benchmarks corroborated by independent integration and post-merge-quality evidence, not as settled industry averages.
 

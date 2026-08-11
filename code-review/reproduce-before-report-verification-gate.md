@@ -103,3 +103,4 @@ This configuration makes the verifier's reproduction artifact explicit per defec
 - [Tiered Code Review](tiered-code-review.md) — risk-class routing that decides which depths apply the gate
 - [Committee Review Pattern](committee-review-pattern.md) — a voting-style contrast that does not gate at the reporter boundary
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md) — the tool-calling reviewer shape the verifier composes with
+- [Bounded Tool Surfaces for Code Review Agents](bounded-tool-surface-review-agents.md) — a delete-only filter that falsifies against the diff instead of reproducing the finding

@@ -118,3 +118,4 @@ Two tools, two clear intents. `find_flights` merges search and detail retrieval 
 - [Advanced Tool Use](advanced-tool-use.md)
 - [Poka-Yoke Agent Tools](poka-yoke-agent-tools.md)
 - [Semantic Tool Output](semantic-tool-output.md)
+- [Product-Operation Tool Surfaces for In-Product Agents](../patterns/agent-design/product-operation-tool-surface.md) — where a large enumerated catalog is the right call, and what has to scope it per thread

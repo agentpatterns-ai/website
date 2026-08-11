@@ -106,3 +106,4 @@ Fatigue migrates rather than dissolves. If every command arrives with "Caution" 
 - [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Hybrid Deterministic + Semantic Tool Authorization](hybrid-deterministic-semantic-tool-authorization.md)
+- [Static-First Shell Command Gating with Selective Escalation](static-first-shell-command-gating.md) — the enforcement counterpart: a canonicalize-then-score gate that decides whether a prompt reaches the human at all

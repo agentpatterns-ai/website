@@ -73,3 +73,4 @@ Inspection moved hard while action did not move at all. Any monitor keyed to how
 - [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md) — Why a stated prohibition is not an access control, whatever a propensity study reports.
 - [Subagent Schema-Level Tool Filtering](../patterns/multi-agent/subagent-schema-level-tool-filtering.md) — Making an unauthorized call structurally impossible instead of measuring how often it happens.
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — What to report when a result moves with the seed, and why a cell at a bound is sometimes the design and sometimes the defect.
+- [Specification-Path Testing: Same Contract, Different History](specification-path-testing.md) — why rate-level equivalence can hold while the set of passing tasks turns over

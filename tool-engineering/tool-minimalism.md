@@ -125,3 +125,4 @@ Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
 - [Chance-Corrected Shortlist Depth Sizing](chance-corrected-shortlist-depth-sizing.md)
 - [Match Tool Instructions to the Agent Workflow](../instructions/match-tool-instructions-to-workflow.md) — the same instructions-over-tools lever from the opposite direction: the tools were better, and the fix was still the instructions
+- [Product-Operation Tool Surfaces for In-Product Agents](../patterns/agent-design/product-operation-tool-surface.md) — the case where a product agent runs many shallow tools instead, and what it has to pay for them

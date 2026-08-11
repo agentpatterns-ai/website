@@ -88,7 +88,6 @@ The scout itself cost $1.13 in GPU time across all 266 search episodes, under ha
 ## Related
 
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — routes mid-task on a cheap model's partial trajectory instead of a pre-task scouting artifact.
-- [Trained Repository Explorer Sub-Agent (FastContext)](fastcontext-trained-repository-explorer.md) — the same cheap-explorer split, aimed at token savings rather than model choice.
 - [Auto Model Selection](auto-model-selection.md) — vendor-side per-request routing that decides from availability and policy, with no repository evidence.
 - [Utility-Model Split](utility-model-split.md) — a cheaper model for background harness calls inside one turn.
 - [Gateway Model Routing](gateway-model-routing.md) — the infrastructure layer that makes a multi-fixer pool addressable in the first place.

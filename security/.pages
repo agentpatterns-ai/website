@@ -136,6 +136,7 @@ nav:
   - sensitive-terminal-prompt-interception.md
   - skill-composition-risk.md
   - skill-shell-execution-gate.md
+  - static-first-shell-command-gating.md
   - sufficiency-tightness-policy-decomposition.md
   - system-prompt-not-a-secret-store.md
   - task-based-access-control-hybrid-inspection.md

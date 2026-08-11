@@ -87,6 +87,7 @@ The failure lands before either skill body is read, because the selector compare
 
 - [Skill Authoring Patterns](skill-authoring-patterns.md) — the canonical practice catalog for description craft, implementation shapes, and troubleshooting; this page supplies the construction principles behind it
 - [Skill Loadout Curation for Coding Agents](../context-engineering/skill-loadout-curation.md) — the session-time counterpart, and the home of the shadowing evidence used here
+- [Skill File Linting](../instructions/skill-file-linting.md) — the automated detector this page argues any standard needs, and which three of its checks to run first
 - [Contractual Skill Files](../instructions/contractual-skill-files.md) — a fixed governance schema for review; complementary to principles for construction
 - [Classical SE Patterns as Agent Design Analogues](../patterns/agent-design/classical-se-patterns-agent-analogues.md) — the same transfer question asked of GoF and SOLID at the system level rather than the artifact level
 - [Skill Evals](../verification/skill-evals.md) — the behavioral evaluation layer that stands in for deterministic tests

@@ -154,3 +154,4 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Restricting a Coding Agent to a Single execute_code Tool](restrict-coding-agent-to-execute-code.md) — measures the cost of this single-bash surface against an interpreter-only surface, by task regime and agent
 - [Terminal-First Agent Interfaces with Browser Escalation](terminal-first-browser-escalation.md) — the same interface applied to enterprise platform automation, with measured cost against browser and MCP-style agents and an explicit escalation list
+- [MCP-vs-CLI Cost Ratios Are a Property of the Scaffolding](mcp-cli-cost-ratio-scaffolding-bound.md) — how much of the CLI cost advantage is the interface and how much is the harness around it

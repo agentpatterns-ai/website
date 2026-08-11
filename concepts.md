@@ -331,6 +331,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Advisory Prompts Distilled from Reasoning Traces](instructions/advisory-prompts-from-reasoning-traces.md)
 - [The No-Op Test: Prune Agent Docs by Behavior, Not Length](instructions/behavioral-no-op-test.md)
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](instructions/skill-pack-registry-distribution.md)
+- [Skill File Linting: Which Three Checks to Run First](instructions/skill-file-linting.md)
 
 ## Agent Architecture
 
@@ -562,7 +563,6 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [LLM-as-Code Agentic Programming for Agent Harnesses](patterns/agent-design/llm-as-code-agentic-programming.md)
 - [Prompted Uncertainty Decomposition for Clarification Routing](patterns/agent-design/prompted-uncertainty-decomposition-clarification.md)
 - [Structured Task-State Ledger for Tool-Calling Agents (LedgerAgent)](patterns/agent-design/ledger-agent-structured-task-state.md)
-- [Trained Repository Explorer Sub-Agent (FastContext)](patterns/agent-design/fastcontext-trained-repository-explorer.md)
 - [Context-Graph Shared Memory for Multi-Agent Systems](patterns/multi-agent/context-graph-shared-memory.md)
 - [Delegation Threshold Calibration for Orchestrator Agents](patterns/agent-design/delegation-threshold-calibration.md)
 - [Fleet Harness Attribution: Pinning the Model to Compare Whole Harnesses](patterns/agent-design/fleet-harness-attribution.md)
@@ -606,6 +606,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](patterns/agent-design/cross-session-peer-messaging.md)
 - [Scout-Then-Route: Verify the Handoff Before Routing](patterns/agent-design/scout-then-route.md)
 - [Splitting the Drift Judge from the Advisor (LivePlan)](patterns/agent-design/judge-advisor-split.md)
+- [Product-Operation Tool Surfaces for In-Product Agents](patterns/agent-design/product-operation-tool-surface.md)
+- [Compiled Specialist Agents: Muscle Memory for Recurring Intent](patterns/agent-design/compiled-specialist-agents.md)
 
 ## Loop Engineering
 
@@ -714,6 +716,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Generated Procedure Drivers: Skills That Emit a Program](tool-engineering/generated-procedure-drivers.md)
 - [Listener-State Naming for User-Invoked Agent Skills](tool-engineering/listener-state-skill-naming.md)
 - [Terminal-First Agent Interfaces with Browser Escalation](tool-engineering/terminal-first-browser-escalation.md)
+- [MCP-vs-CLI Cost Ratios Are a Property of the Scaffolding](tool-engineering/mcp-cli-cost-ratio-scaffolding-bound.md)
 
 ## Token Engineering
 
@@ -879,6 +882,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Trajectory Poisoning of Promoted Agent Skills (PoisonedEvolution)](security/trajectory-poisoning-promoted-skills.md)
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](security/enforced-versus-advisory-controls.md)
 - [Sandbox Credential Masking: Authenticate Without Seeing the Secret](security/sandbox-credential-masking.md)
+- [Static-First Shell Command Gating with Selective Escalation](security/static-first-shell-command-gating.md)
 
 ## Testing & Evaluation
 
@@ -1044,6 +1048,14 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Seed-Variance Reporting and Measurable-Range Eval Design](verification/seed-variance-reporting.md)
 - [Verification Capacity as the Agent Quality Ceiling](verification/verification-capacity-quality-ceiling.md)
 - [LLM API Fault Injection at the HTTP Layer (AgentChaos)](verification/llm-api-fault-injection-http-layer.md)
+- [Slop Detectors Fail as Per-Item Review Gates](verification/slop-detection-as-review-gate.md)
+- [AX Evals: Measure the Agent-Facing Surface, Not the Model](verification/ax-evals-agent-facing-surface.md)
+- [Profile Your Agent Test Suite Against Measured Practice](verification/agent-test-suite-profiling.md)
+- [Probing Unstated Constraints in Generated Code (Intent Violation Rate)](verification/unstated-constraint-probes.md)
+- [Specification-Path Testing: Same Contract, Different History](verification/specification-path-testing.md)
+- [Bounded Tool Surfaces for Code Review Agents](code-review/bounded-tool-surface-review-agents.md)
+- [Behavior-Partitioned Security Tests as Executable Specs](verification/behavior-partitioned-security-tests.md)
+- [Verification Capacity Saturation: Three Levers, One Default](verification/verification-capacity-saturation.md)
 
 ## Hooks & Guardrails
 
@@ -1245,6 +1257,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Behavioral Specification Elicitation Before Synthesis (SpecFirst)](workflows/behavioral-spec-elicitation.md)
 - [Porting a Coding-Agent Harness Beyond Engineering](workflows/porting-agent-harness-beyond-engineering.md)
 - [Comment-Triggered Agent Dispatch on Issues and PRs](workflows/comment-triggered-agent-dispatch.md)
+- [Agent-Driven Deployment: What to Delegate and What to Gate](workflows/agent-driven-deployment.md)
 
 ## Human Factors
 
