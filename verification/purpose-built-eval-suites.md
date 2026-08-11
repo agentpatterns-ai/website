@@ -100,3 +100,4 @@ Simon Willison covers the same tool in a practitioner write-up ([Willison, 2026]
 - [Decomposing Agent Output Variability by Layer](sampling-state-agent-variability-layers.md) — which layer the run-to-run noise in your suite comes from
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — why public scores drift from real capability over time
 - [Head-to-Head Evaluation of Competing MCP Servers](head-to-head-mcp-server-evaluation.md) — a worked instance where the configuration under test is a tool server, and the quality axis ties
+- [AX Evals: Measure the Agent-Facing Surface, Not the Model](ax-evals-agent-facing-surface.md) — the inversion: hold the configuration fixed and vary your own product's agent-facing surface instead

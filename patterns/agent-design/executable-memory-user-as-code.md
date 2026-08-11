@@ -108,3 +108,4 @@ The agent calls `check_drug_interaction("ibuprofen", lunch, user)` and gets a de
 - [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — the abstention / gating mechanism that pairs with checkpoint queries when no rule matches
 - [Externalization in LLM Agents](externalization-in-llm-agents.md) — the broader externalization framework this pattern instantiates (memory as one of four cognitive externalization surfaces)
 - [Skill Program Functions](skill-program-functions.md) — the action-side analogue: executable guardrails over agent state, not user state
+- [Compiled Specialist Agents: Muscle Memory for Recurring Intent](compiled-specialist-agents.md) — the behavior-side instance of compile-over-retrieve, compiling recurring intent into a whole agent where this page compiles user facts into typed data

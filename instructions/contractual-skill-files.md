@@ -108,6 +108,7 @@ The block is readable, locatable, and reviewable in five seconds. It enforces no
 
 ## Related
 
+- [Skill File Linting](skill-file-linting.md) — the three mechanical checks that catch most structural defects before a governance schema is worth adding
 - [Skill Library Technical Debt](../tool-engineering/skill-library-technical-debt.md) — library-time maintenance signals and named actions that complement per-skill contracts
 - [Skill Specification Violation Fuzzing](../verification/skill-specification-violation-fuzzing.md) — empirical evidence that declared rules silently fail on benign inputs; the testing layer contractual fields do not replace
 - [Skill Evals](../verification/skill-evals.md) — paired with-skill versus baseline runs that measure whether the contract actually produces the claimed behavior

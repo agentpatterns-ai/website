@@ -72,3 +72,4 @@ The dominant misattribution is treating a batch-invariance drift as a temperatur
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md)
 - [Dominator-Graph Trajectory Invariants](dominator-graph-trajectory-invariants.md)
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md)
+- [Specification-Path Testing: Same Contract, Different History](specification-path-testing.md) — specification path as a further variability source, held constant in this taxonomy

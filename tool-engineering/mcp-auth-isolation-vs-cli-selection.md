@@ -89,3 +89,4 @@ The same capability — GitHub access — flips choice depending on the auth bou
 - [Scoped Credentials via Proxy](../security/scoped-credentials-proxy.md) — the structural alternative that closes the same gap below the protocol layer
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — the threat model that makes credential isolation load-bearing in the first place
 - [Terminal-First Agent Interfaces with Browser Escalation](terminal-first-browser-escalation.md) — the cost-and-success side of the same selection question, measured across three enterprise platforms
+- [MCP-vs-CLI Cost Ratios Are a Property of the Scaffolding](mcp-cli-cost-ratio-scaffolding-bound.md) — why the token-cost bullet above cannot be settled with a borrowed multiplier: the ratio inverts across scaffoldings

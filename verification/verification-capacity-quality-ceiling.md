@@ -71,6 +71,7 @@ The paper reaches that case from this page's own premise: "As tasks scale to lon
 
 ## Related
 
+- [Verification Capacity Saturation: Three Levers, One Default](verification-capacity-saturation.md) — the saturated case in detail: how to tell saturation from ordinary congestion, and which lever a degrading gate picks for you.
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — what the constraints are made of; this page budgets how much of them you can afford to run.
 - [Risk-Based Shipping: Review by Risk Matrix, Not by Default](risk-based-shipping.md) — the allocation move that concentrates constraint where consequences concentrate.
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — how to build the independent signals that count as real added capacity.

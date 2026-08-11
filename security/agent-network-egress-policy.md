@@ -10,7 +10,7 @@ tags:
   - security
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-06-12
+last_reviewed: 2026-08-08
 maturity: established
 ---
 
@@ -33,6 +33,8 @@ Three tools converged on the same primitive in April 2026:
 - VS Code 1.116 added three group-policy keys: `ChatAgentNetworkFilter`, `ChatAgentAllowedNetworkDomains`, `ChatAgentDeniedNetworkDomains`. With the filter enabled and both lists empty, all domains are blocked ([VS Code 1.116 release notes](https://code.visualstudio.com/updates/v1_116)).
 
 Delivery differs — `settings.json`, organization settings, Group Policy — but the primitive is identical: runtime-enforced domain policy at the harness.
+
+The same primitive appears one layer down, in the platforms agent sandboxes run on. Vercel's full sandbox egress firewall reached the Hobby plan on 5 August 2026, down from the higher plans that carried it first ([Vercel changelog](https://vercel.com/changelog/full-sandbox-egress-firewall-now-available-on-hobby-plan)).
 
 ## Allow-first or deny-first
 

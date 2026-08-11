@@ -156,3 +156,4 @@ Add targeted trajectory constraints scoped to the steps that matter — the audi
 - [Stateful Agent Evals via State Snapshots and Transition Assertions](stateful-agent-state-and-transition-evals.md)
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Extends outcome grading to harm severity, scoring red-team trajectories on an L0 to L6 scale
 - [Behavior Specs: Grading the Trajectory, Not the Result](behavior-specs.md) — When the outcome is expensive or ambiguous to verify, declared behaviors give the process supervision an end-state check cannot
+- [Profile Your Agent Test Suite Against Measured Practice](agent-test-suite-profiling.md) — Measures where a suite's effort actually sits before deciding whether to add anything, and names path assertions as the wrong way to close a coverage gap

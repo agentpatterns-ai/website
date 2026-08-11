@@ -86,3 +86,4 @@ The spec-grounded oracle enforces the rule the prose-grounded one guessed wrong.
 - [Spec-Derived Execution as a Correctness Oracle](spec-derived-execution-correctness-judging.md) — grounding an LLM judge in a natural-language spec by executing spec-derived inputs
 - [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — tying generated code back to specific requirement IDs so a mechanical check flags anything unsupported
 - [Deriving a Specification From Buggy Code Before Generating Tests](derived-specification-test-generation.md) — the fallback when no human specification exists: a model-written docstring recovers part of the gap, but inherits the bug about one time in five
+- [Probing Unstated Constraints in Generated Code (Intent Violation Rate)](unstated-constraint-probes.md) — what to do about the rule you did not know you were holding, which no enumeration of the spec you can write down will contain

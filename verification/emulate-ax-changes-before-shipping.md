@@ -78,6 +78,7 @@ Emulating both against the same baseline surfaces the difference in minutes; shi
 
 ## Related
 
+- [AX Evals: Measure the Agent-Facing Surface, Not the Model](ax-evals-agent-facing-surface.md) — The scoring layer around this experiment: criterion design, judge calibration, and the environment controls that make a with-versus-without delta attributable.
 - [Emulated APIs for Agent Skill Evals](emulated-apis-for-skill-evals.md) — The sibling technique: same interception machinery to isolate a *fixed* API for eval determinism, versus emulating a *proposed change* here.
 - [Training-Data Gravity: Agents Default to Deprecated APIs](../patterns/anti-patterns/training-data-gravity.md) — The mechanism behind why advisory doc changes rarely move behavior: the agent already has a plan from its training priors.
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — Why an emulated score can improve while the real outcome does not — the measurement gap this technique can fall into.

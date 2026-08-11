@@ -77,3 +77,4 @@ An agent opens a PR adding a `refund()` path. The suite passes and whole-repo co
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — a sibling gate that judges an agent PR on the diff, not the absolute pass rate.
 - [Assertion-Free Test Theater in Agent-Authored Patches](../patterns/anti-patterns/assertion-free-test-theater.md) — the failure mode a coverage-only gate invites.
 - [Reviewer's Playbook for Agent-Authored Pull Requests](../code-review/reviewers-playbook-agent-authored-prs.md) — where coverage delta is one tell in a human review order.
+- [Slop Detectors Fail as Per-Item Review Gates](slop-detection-as-review-gate.md) — why the authorship signal a team reaches for first cannot carry a per-item gate.

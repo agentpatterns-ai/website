@@ -148,3 +148,4 @@ The model receives compact JSON (the `matches` array) it can parse. The user see
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md) -- loading context proportional to task complexity is an AX optimization
 - [Agent Debugging](../../observability/agent-debugging.md) -- DX-layer concerns for diagnosing agent behavior
 - [Agent Turn Model](agent-turn-model.md) -- turn-level structure shapes what the model sees (AX) at each step
+- [AX Evals: Measure the Agent-Facing Surface, Not the Model](../../verification/ax-evals-agent-facing-surface.md) -- how to evaluate the AX layer once you have separated it, with the model held fixed

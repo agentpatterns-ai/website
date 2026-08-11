@@ -77,5 +77,4 @@ The study's conclusion is a router: keep "a cheap semantic index for retrieval" 
 - [Semantic Context Loading](semantic-context-loading.md) — the LSP-backed alternative to vector retrieval, querying symbols and references instead of embedding chunks
 - [Agent-Tuned Code Search](agent-tuned-code-search.md) — a hosted single-purpose search tool that returns paths and line ranges, the citation contract this page argues for
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — how cross-file retrieval is assembled on the index side
-- [Trained Repository Explorer Sub-Agent (FastContext)](../patterns/agent-design/fastcontext-trained-repository-explorer.md) — the delegated design with a trained explorer and a citation-only return format
 - [Persistent Shared Search Sub-Agent](../patterns/multi-agent/persistent-search-subagent.md) — delegation tuned for output-token reuse across many workers

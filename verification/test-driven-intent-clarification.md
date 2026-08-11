@@ -137,3 +137,4 @@ The developer reviews each test in seconds — the validation path that scored 8
 - [Test Evolution Blind Spot in Coding Agents](eval-blind-spots.md)
 - [Pre-Completion Checklists](pre-completion-checklists.md)
 - [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verifiable-literate-programming.md) — The mirror artifact: validate a documentation layer derived from code after generation, rather than tests validated before it.
+- [Probing Unstated Constraints in Generated Code (Intent Violation Rate)](unstated-constraint-probes.md) — Measures what survives this technique: how often code that passes the stated tests still breaks a constraint the prompt never named.

@@ -79,3 +79,4 @@ The load-bearing parts are the low `max_rounds` default and the plateau break. T
 - [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — the complementary stop rule for when the verifier is noisy rather than a real oracle; stop on estimated validity, not a fixed round count.
 - [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — changes what signal each round acts on rather than how many rounds run, for the performance-optimization case.
 - [Blind Resampling Over Self-Repair in Small Code Models](../loop-engineering/blind-resampling-over-self-repair.md) — asks whether a round should carry the failed attempt at all; below 7B it should not.
+- [Behavior-Partitioned Security Tests as Executable Specs](behavior-partitioned-security-tests.md) — why some rounds are inert rather than low-yield: the visible oracle is silent on whole security behavior families.
