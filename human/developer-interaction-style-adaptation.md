@@ -113,3 +113,4 @@ Developers select per-task, not per-identity. The team tracks intervention rate 
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — empirical evidence on how experienced developers supervise AI output, complementary to the style framing here
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — the failure mode that persona-tailoring is supposed to reduce
 - [Deliberate AI-Assisted Learning](deliberate-ai-learning.md) — the onboarding-time counter-pressure on persona-as-default
+- [Personalized vs Generic Agent Skills: Where Effort Pays](../instructions/personalized-vs-generic-agent-skills.md) — the skill-file half of the same question, measured against a pooled team file

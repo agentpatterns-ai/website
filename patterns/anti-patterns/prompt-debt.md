@@ -87,3 +87,4 @@ The single guidance line stays short and legible. The eval suite, not the prompt
 - [Reflective Prompt Evolution with Pareto Selection (GEPA)](../agent-design/gepa-reflective-prompt-evolution.md) — an automated optimizer that searches for prompts once a metric can score them.
 - [Model-Neutral Agent Architecture](../agent-design/model-neutral-agent-architecture.md) — the portability bet that measurement-defined behavior makes real.
 - [Prompt-Rewrite Discipline on Cross-Generation Model Migration](../../instructions/prompt-rewrite-on-cross-generation-migration.md) — the migration discipline for when a model swap does force a prompt change.
+- [Catastrophic Remembering: Instruction Files That Only Grow](catastrophic-remembering-instruction-files.md) — the measured cost of paying the debt down, and why deletion stalls once each rule's rationale is gone.

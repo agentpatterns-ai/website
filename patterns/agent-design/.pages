@@ -32,6 +32,7 @@ nav:
       - model-neutral-agent-architecture.md
       - minimum-sufficient-execution.md
       - inversion-analysis.md
+      - agent-ready-data-architecture.md
       - governed-sources-of-truth-analytics-agents.md
       - open-agent-school-pattern-mapping.md
       - persona-as-code.md

@@ -17,6 +17,7 @@ nav:
       - owasp-llm-top-10-2025-agent-crosswalk.md
       - pre-trust-execution-surface.md
       - rag-architecture-poisoning-robustness.md
+      - replayable-encrypted-reasoning-blocks.md
       - trajectory-poisoning-promoted-skills.md
       - trojan-hippo-memory-attack.md
       - unbounded-consumption-resource-bounds.md

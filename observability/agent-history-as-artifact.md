@@ -125,3 +125,4 @@ The audit shape answers a yes/no question with timestamps and turn types — use
 - [Session Recap: Goal-Shaped Handoff at Context Boundaries](../patterns/agent-design/session-recap.md) — per-session handoff, not cross-session aggregate
 - [Memory Synthesis from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — extracting durable lessons for the agent's future runs
 - [Agent Retrieval Provenance as an Audit Control](../security/agent-retrieval-provenance.md) — the audit query shape hardened into a change-management control for regulated teams
+- [Replayable Encrypted Reasoning Blocks in Agent Traces](../security/replayable-encrypted-reasoning-blocks.md) — the disclosure surface a persisted transcript creates when it retains provider reasoning fields nobody can read before sharing

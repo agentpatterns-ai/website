@@ -81,3 +81,4 @@ The shape Treude & Baltes apply in [the paper](https://arxiv.org/abs/2606.09090)
 - [Context Poisoning: When Hallucinations Become Premises](context-poisoning.md) — the downstream failure once the stale reference enters reasoning as a premise.
 - [The Infinite Context](infinite-context.md) — the other meaning of "context rot" the lede disambiguates against.
 - [Pattern Replication Risk](pattern-replication-risk.md) — the related compounding failure where agents propagate whatever they find in the repo, stale references included.
+- [Catastrophic Remembering: Instruction Files That Only Grow](catastrophic-remembering-instruction-files.md) — the rival explanation for the same files, where the deletion hazard falls with age instead of rising as staleness predicts.

@@ -76,3 +76,4 @@ The Conflicting Instructions detector is also the weakest at 57% precision ([arx
 - [Stale AI Configuration Artifacts (Context Rot)](stale-ai-configuration-artifacts.md) — Init Fossilization is the *cause*; this page is the resulting code-reference drift.
 - [The Mega-Prompt (Instruction Compliance Ceiling)](../../instructions/instruction-compliance-ceiling.md) — the upstream pattern that produces Context Bloat at the prompt level.
 - [The Infinite Context](infinite-context.md) — the broader cost of unfocused always-on context.
+- [Catastrophic Remembering: Instruction Files That Only Grow](catastrophic-remembering-instruction-files.md) — why Context Bloat is hard to reverse once the rationale behind each instruction is gone.

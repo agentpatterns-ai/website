@@ -116,3 +116,4 @@ Rules and examples engage different mechanisms in how transformers process instr
 - [Hints Over Code Samples in Agent Prompts](hints-over-code-samples.md) — detailed treatment of when and how to use path references instead of inline code samples
 - [System Prompt Altitude](system-prompt-altitude.md) — balancing specificity and brittleness in instruction design
 - [Prompt Compression: Maximizing Signal Per Token](../context-engineering/prompt-compression.md)
+- [Personalized vs Generic Agent Skills: Where Effort Pays](personalized-vs-generic-agent-skills.md) — whose interaction history to distill instruction content from

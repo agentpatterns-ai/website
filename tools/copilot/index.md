@@ -26,6 +26,7 @@ status: current
 - [copilot-instructions.md Convention](copilot-instructions-md-convention.md) — Repository-level instruction file for persistent project context
 - [Copilot Spaces](copilot-spaces.md) — Named context collections that ground Copilot in curated reference material across repositories, files, PRs, issues, and uploads
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md) — Define specialized agents, reusable skills, and installable bundles
+- [Embedding the Copilot SDK in a Managed Java Runtime](copilot-sdk-managed-runtime.md) — What embedding an agent loop costs a JVM host with its own concurrency model: the executor seam, container context propagation, and the JDK level it assumes
 - [Dependabot Agent Assignment](dependabot-agent-assignment.md) — Route Dependabot alerts to Copilot for autonomous fix generation with human review at merge
 - [Managing Agent Skills from the GitHub CLI](gh-skill-cli-management.md) — Install, pin, update, and publish agent skills with `gh skill` for scriptable provisioning
 - [MCP Integration](mcp-integration.md) — Connect Copilot to external tools via Model Context Protocol
