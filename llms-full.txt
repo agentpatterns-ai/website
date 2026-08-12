@@ -375,6 +375,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Generated Questionnaires: Eliciting Someone Else's Context](context-engineering/generated-questionnaires.md)
 - [Silent Handoff Failure in Delegated Code Search](context-engineering/silent-handoff-failure-delegated-search.md)
 - [When a Skill Graph Cannot Beat the Ranker (Pre-Filter Topology Bound)](context-engineering/skill-graph-topology-bound.md)
+- [Cross-Reference Dereference Hop in Retrieval Loops](context-engineering/cross-reference-dereference-hop.md)
 
 ## Instructions & Prompts
 
@@ -456,6 +457,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The No-Op Test: Prune Agent Docs by Behavior, Not Length](instructions/behavioral-no-op-test.md)
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](instructions/skill-pack-registry-distribution.md)
 - [Skill File Linting: Which Three Checks to Run First](instructions/skill-file-linting.md)
+- [Personalized vs Generic Agent Skills: Where Effort Pays](instructions/personalized-vs-generic-agent-skills.md)
 
 ## Agent Architecture
 
@@ -732,6 +734,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Splitting the Drift Judge from the Advisor (LivePlan)](patterns/agent-design/judge-advisor-split.md)
 - [Product-Operation Tool Surfaces for In-Product Agents](patterns/agent-design/product-operation-tool-surface.md)
 - [Compiled Specialist Agents: Muscle Memory for Recurring Intent](patterns/agent-design/compiled-specialist-agents.md)
+- [Agent-Ready Data Architecture for Analytics Agents](patterns/agent-design/agent-ready-data-architecture.md)
 
 ## Loop Engineering
 
@@ -1007,6 +1010,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](security/enforced-versus-advisory-controls.md)
 - [Sandbox Credential Masking: Authenticate Without Seeing the Secret](security/sandbox-credential-masking.md)
 - [Static-First Shell Command Gating with Selective Escalation](security/static-first-shell-command-gating.md)
+- [Replayable Encrypted Reasoning Blocks in Agent Traces](security/replayable-encrypted-reasoning-blocks.md)
 
 ## Testing & Evaluation
 
@@ -1434,6 +1438,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Step Budgets and Trust in Agent-Generated Code Tours](human/agent-generated-code-tour-step-budgets.md)
 - [Reading a Vendor-Computed AI Coding ROI Dashboard](human/vendor-computed-roi-copilot-impact-dashboard.md)
 - [Per-Agent-App Attribution in the Copilot Usage Metrics API](human/per-agent-app-attribution-copilot-metrics.md)
+- [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](human/agent-rewrite-ownership-rule.md)
 
 ## Anti-Patterns
 
@@ -1559,6 +1564,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Task-Uniform Agent Permissions Ignore Where Failures Land](patterns/anti-patterns/task-uniform-agent-permissions.md)
 - [Belief Inertia After Tool-Map Drift in AI Agents](patterns/anti-patterns/belief-inertia-after-tool-map-drift.md)
 - [Frozen Playbook Reuse Without Target-Side Validation](patterns/anti-patterns/frozen-playbook-reuse-validation.md)
+- [Catastrophic Remembering: Instruction Files That Only Grow](patterns/anti-patterns/catastrophic-remembering-instruction-files.md)
 
 ## Emerging Concepts
 
@@ -1697,6 +1703,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Parameter-Level Permission Rules (Tool(param:value) Syntax)](tools/claude/tool-param-value-permission-rules.md)
 - [Agent Host Review Comments: Server-Side Feedback Transport](tools/copilot/agent-host-review-comments.md)
 - [GitHub Copilot App Slash Commands and What They Change](tools/copilot/slash-commands-copilot-app.md)
+- [Embedding the Copilot SDK in a Managed Java Runtime](tools/copilot/copilot-sdk-managed-runtime.md)
 
 </div>
 
@@ -1880,6 +1887,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [AOCI: Symbolic-Semantic Repository Indexing](aoci-symbolic-semantic-indexing.md) — A persistent, query-independent blueprint pairing architectural coordinates with semantic content — read whole before any task, distinct from on-demand retrieval and token-fitted repo maps
 - [Structured Domain Retrieval](structured-domain-retrieval.md) — Combine hierarchical knowledge graphs with coverage-driven case selection to retrieve domain-specific context that flat vector search misses
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — Use one shared domain schema across graph construction, query decomposition, and typed retrieval to improve multi-hop reasoning precision over private knowledge bases
+- [Cross-Reference Dereference Hop in Retrieval Loops](cross-reference-dereference-hop.md) — A retrieved passage that says "see Section 7.2" ranks first and answers nothing; a one-hop resolution pass fixes it where references resolve to a key and the corpus churns faster than it is queried
 - [Chunking Strategy for RAG-Based Code Completion](chunking-strategy-rag-code-completion.md) — Function-based chunking is dominated by every other strategy on line-level code completion; Sliding Window and cAST sit on the Pareto frontier, and doubling cross-file context length matters more than chunking choice
 - [Component-Wise RAG Prioritization](rag-component-prioritization-software-engineering.md) — A 21+ model component-wise empirical study finds retriever choice dominates generator choice for SE-task RAG, and BM25 is robust across code generation, summarization, and repair — under specific conditions
 - [LLM-Driven Logical Retrieval](llm-driven-logical-retrieval.md) — When the agent LLM is frontier-capable, letting it emit AND/OR/NOT Boolean queries against an inverted index matches an agentic hybrid baseline at 41× lower indexing cost — under specific lexical-overlap conditions
@@ -4430,6 +4438,103 @@ The rewrite drops conversational framing, restatement of intent, and the politen
 - [Context Compression Strategies](context-compression-strategies.md) — session-level compaction operates after the prompt enters the agent; preprocessing operates before.
 - [Token-Efficient Code Generation](../token-engineering/token-efficient-code-generation.md) — output-side compression complements input-side preprocessing.
 - [Validating Token-Optimized Formats Inside Agentic Loops](validate-token-optimized-formats-in-agentic-loops.md) — token savings without an eval gate can mask accuracy regressions.
+
+---
+
+### Cross-Reference Dereference Hop in Retrieval Loops
+Source: https://agentpatterns.ai/context-engineering/cross-reference-dereference-hop/
+
+# Cross-Reference Dereference Hop in Retrieval Loops
+
+> A bounded second retrieval pass that detects a pointer in a retrieved passage, resolves it against the source's own reference table, and re-answers.
+
+Retrieval can return a pointer instead of an answer. A passage reading "the two versions produced nearly identical results, see Table 3 row (E)" satisfies a top-1 retrieval policy and reads as a finished answer, while the figure the question asked for sits on another page ([Shi, 2026](https://towardsdatascience.com/loop-engineering-for-cross-references-when-rag-answers-see-section-7-2-instead-of-the-actual-answer/)). The dereference hop adds one bounded pass: generation flags the pointer, the orchestrator looks its target up in a table the parser already built, re-retrieves that region, and regenerates.
+
+## When this applies
+
+Four conditions decide whether the hop belongs in the loop. Miss any one and index-time resolution is the better placement, for the reasons under [when this backfires](#when-this-backfires).
+
+- References resolve to a key: a numbered section, a table or figure ID, a native PDF link, a table-of-contents anchor, or a symbol a compiler resolves.
+- The corpus turns over faster than it is queried. A 200-page contract holds hundreds of references, and expanding all of them at index time spends effort on passages no query retrieves ([Shi, 2026](https://towardsdatascience.com/loop-engineering-for-cross-references-when-rag-answers-see-section-7-2-instead-of-the-actual-answer/)).
+- The corpus is trusted, because the pointer is written inside the document and selects the next fetch.
+- A second retrieve-and-generate round-trip fits the latency budget.
+
+## Detecting a pointer
+
+A ranker cannot flag the problem, because it scores relevance and the failure is insufficiency. A pointer passage names the section, table, or entity the question asked about, so it tops both lexical and dense similarity while carrying none of the answer. Per-chunk verification misses it too, because it assumes one chunk is a sufficient premise for the answer. Entailment scoring against the original query reaches 0.951 AUC on single-hop SQuAD and drops to 0.643, 0.523, and 0.560 on HotpotQA, 2WikiMultiHopQA, and MuSiQue ([arXiv:2608.00585v1](https://arxiv.org/abs/2608.00585v1)).
+
+Generation is the remaining stage that can see it. Shi's design returns two typed fields beside the answer: `pending_references`, holding pointers that would change the answer if resolved, and `answer_completeness`, one of `complete`, `references_unresolved`, or `partial`. The orchestrator branches on that enum, not on a confidence score ([Shi, 2026](https://towardsdatascience.com/loop-engineering-for-cross-references-when-rag-answers-see-section-7-2-instead-of-the-actual-answer/)).
+
+Keep the signal structural rather than discretionary. Where a dependency-navigation tool was merely available to a coding agent, 58% of trials made zero tool calls, which the authors read as a behavioral alignment gap ([arXiv:2602.20048v1](https://arxiv.org/abs/2602.20048v1)).
+
+## Resolving the pointer and bounding the hop
+
+Resolution runs against a cross-reference table the parser emits, carrying each row's origin page, anchor text, reference type, target, target page, and provenance. Provenance orders the ladder: `native_link` and `toc_anchor` come free from the parser, an `object_registry` entry normalizes "Table 3 row (E)" to a key and joins it to a page, `regex` covers in-prose forms, and `llm` handles what is left ([Shi, 2026](https://towardsdatascience.com/loop-engineering-for-cross-references-when-rag-answers-see-section-7-2-instead-of-the-actual-answer/)).
+
+A budget is what keeps the hop from becoming general iterative retrieval. Shi's orchestrator compares a loop counter against `max_loops`, which defaults to 1, then exits to a normal return or an explicit `give_up_partial` state. A clause pointing at a schedule that points at an annex exhausts that budget, and the give-up state keeps the truncated result from being reported as complete.
+
+## The code analogue
+
+Indirection is the norm in a codebase: an inherited config block, a base class, a re-exported constant. The resolver is stronger than in prose, because a compiler or language server maps a symbol to its declaration exactly.
+
+The payoff concentrates on dependencies sharing no vocabulary with the task description. On those hidden-dependency tasks, an agent given a graph of static dependencies completed 99.4% against 76.2% for a vanilla agent and 78.2% for BM25 retrieval. That measurement covers 258 trials on 30 tasks in a production FastAPI repository ([arXiv:2602.20048v1](https://arxiv.org/abs/2602.20048v1)). [Repository-level retrieval](repository-level-retrieval-code-generation.md) reports its largest gains on the same tasks, and [semantic context loading](semantic-context-loading.md) supplies the resolver.
+
+## Why it works
+
+The hop uses what the document already wrote down. Multi-hop questions defeat per-chunk filtering because the bridge is implicit, so finding it needs another semantic search. Gold decomposition on MuSiQue's later hop lifts entailment AUC from 0.560 to 0.840, a +0.355 paired lift ([arXiv:2608.00585v1](https://arxiv.org/abs/2608.00585v1)). The signal is there once the question is split. A cross-reference is the tractable case of that split: the source names its own second hop, so resolution becomes a lookup. That is why a budget of one suffices here and would be useless for general iterative retrieval.
+
+## When this backfires
+
+- Static corpus, heavy query load. Index-time bridging materializes cross-document links as retrievable units, then answers multi-hop questions in one pass with a single LLM call, improving F1 over naive RAG by 4.6 points on average across the same three benchmarks ([arXiv:2603.16415v1](https://arxiv.org/abs/2603.16415v1)). Paid once per reference, it beats a hop paid on every affected query.
+- Reference chains deeper than the budget. At `max_loops` of 1 a two-link chain ends in `give_up_partial`, and a fluent partial answer one hop out is the original failure relocated.
+- Ambiguous in-prose references. "As described above" has no deterministic target, so the LLM fallback reintroduces the guess the hop removes.
+- Latency-bound paths. Inline completion and interactive chat cannot absorb a second pass at 16–22× naive inference time ([arXiv:2605.06285v1](https://arxiv.org/abs/2605.06285v1)).
+- Untrusted corpora. A poisoned passage chooses the next fetch, so constrain targets to the same trusted corpus and treat the fetched region as data ([arXiv:2601.10923v2](https://arxiv.org/abs/2601.10923v2)).
+- No measured baseline. The design is argued from token accounting, and the primary source reports no metrics ([Shi, 2026](https://towardsdatascience.com/loop-engineering-for-cross-references-when-rag-answers-see-section-7-2-instead-of-the-actual-answer/)).
+
+## Example
+
+A question about the Transformer paper's positional-embedding ablation retrieves page 6, which reports the qualitative result and points at a table on page 9 ([Shi, 2026](https://towardsdatascience.com/loop-engineering-for-cross-references-when-rag-answers-see-section-7-2-instead-of-the-actual-answer/)).
+
+**Before** — generation returns an answer field only:
+
+```json
+{
+  "answer": "The two versions produced nearly identical results. See Table 3 row (E)."
+}
+```
+
+The orchestrator has nothing to branch on, so this returns to the user as a finished answer.
+
+**After** — generation returns the completeness signal alongside it:
+
+```json
+{
+  "answer": "The two versions produced nearly identical results. See Table 3 row (E).",
+  "answer_completeness": "references_unresolved",
+  "pending_references": [
+    {"anchor_text": "Table 3 row (E)", "ref_type": "table", "ref_target": "3"}
+  ]
+}
+```
+
+The orchestrator normalizes `Table 3 row (E)` to the key `(table, 3)`, joins it against the object registry to reach page 9, re-retrieves that region under the row sub-selector, and regenerates. Loop count moves from 0 to 1, hitting the default `max_loops`, so a still-unresolved second pass exits as `give_up_partial` rather than looping again.
+
+## Key Takeaways
+
+- Add the completeness signal at generation, not the ranker, because a pointer passage is maximally relevant and minimally sufficient and no relevance score separates the two ([arXiv:2608.00585v1](https://arxiv.org/abs/2608.00585v1)).
+- Make the hop an orchestrator branch on a typed enum rather than a tool the model may call, because agents leave an available navigation tool uncalled in most trials ([arXiv:2602.20048v1](https://arxiv.org/abs/2602.20048v1)).
+- Set the budget to one hop and give the loop an explicit give-up state, so a truncated reference chain is reported as partial instead of read as complete.
+- Choose the placement by rebuild-to-query ratio: loop-time resolution for corpora that churn, index-time bridging for corpora queried far more often than they change ([arXiv:2603.16415v1](https://arxiv.org/abs/2603.16415v1)).
+- In code, wire the hop to a language server rather than a regex, and expect the gain on dependencies with no lexical overlap with the task ([arXiv:2602.20048v1](https://arxiv.org/abs/2602.20048v1)).
+
+## Related
+
+- [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — the code-side retrieval stage this hop extends, including co-retrieving a helper's current declaration alongside its usage
+- [LLM-Driven Logical Retrieval: Boolean Queries over an Inverted Index](llm-driven-logical-retrieval.md) — moves precision to the query author instead of adding a resolution pass after the answer
+- [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — encodes reference structure as typed graph edges at index time rather than resolving pointers at query time
+- [Semantic Context Loading: Language Server Plugins for Agents](semantic-context-loading.md) — the resolver the code analogue depends on
+- [Epistemic Working Memory for Multi-Hop Reasoning (SLEUTH)](../patterns/agent-design/epistemic-working-memory-multi-hop-reasoning.md) — tracks open questions across hops when the bridge is implicit and no pointer names the target
 
 ---
 
@@ -9035,6 +9140,7 @@ Retrieval for each sub-question filters to nodes tagged with the declared `schem
 - [Observation Masking](observation-masking.md) — filtering intermediate retrieval results before reasoning
 - [Context Budget Allocation](context-budget-allocation.md) — typed filtering reduces tokens consumed by irrelevant candidates
 - [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — the limiting case: a typed graph whose candidates come from the retriever's own embedding adds no reach
+- [Cross-Reference Dereference Hop in Retrieval Loops](cross-reference-dereference-hop.md) — the query-time alternative for the subset of edges the source document names explicitly, rather than encoding every edge in the graph up front
 
 ---
 
@@ -10631,6 +10737,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [Security Knowledge Priming for Code Generation (SPARK)](security-knowledge-priming.md) — A brief task-relevant CWE cue in the prompt activates the model's latent security knowledge — supplementary to mechanical scanners, not a replacement
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md) — Exclusions and constraints eliminate entire classes of mistakes more efficiently than equivalent positive guidance
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — Rules generalize; examples anchor — knowing when to use each determines whether agents interpret your intent or invent their own
+- [Personalized vs Generic Agent Skills: Where Effort Pays](personalized-vs-generic-agent-skills.md) — Per-developer skill files distilled from interaction history matched a random colleague's file; the gain arrives only above roughly six task-relevant prior sessions
 - [Encoding Product-Design Taste into Agent Context](encoding-product-design-taste.md) — Encode product-design decisions as observable rules and mode-routed skill files; pair with design tokens and lint, never instead of them
 - [Iterative Binary Feedback for Pattern Adherence](iterative-binary-feedback-pattern-adherence.md) — Looping yes/no pattern judgments through capable models beats verbose critique for design-pattern adherence when the predicate space is small and the judge is deterministic
 - [Hints Over Code Samples in Agent Prompts](hints-over-code-samples.md) — Reference existing code by path instead of embedding samples in prompts — hints stay current, cost fewer tokens, and eliminate maintenance drift
@@ -14213,6 +14320,7 @@ Rules and examples engage different mechanisms in how transformers process instr
 - [Hints Over Code Samples in Agent Prompts](hints-over-code-samples.md) — detailed treatment of when and how to use path references instead of inline code samples
 - [System Prompt Altitude](system-prompt-altitude.md) — balancing specificity and brittleness in instruction design
 - [Prompt Compression: Maximizing Signal Per Token](../context-engineering/prompt-compression.md)
+- [Personalized vs Generic Agent Skills: Where Effort Pays](personalized-vs-generic-agent-skills.md) — whose interaction history to distill instruction content from
 
 ---
 
@@ -16766,6 +16874,68 @@ For must-never-fail constraints, rely on enforced mechanisms — hooks, CI check
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md)
 - [Guardrails Beat Guidance for Coding Agents](guardrails-beat-guidance-coding-agents.md)
 - [AGENTS.md Design Patterns: Commands, Boundaries, and Personas](agents-md-design-patterns.md)
+
+---
+
+### Personalized vs Generic Agent Skills: Where Effort Pays
+Source: https://agentpatterns.ai/instructions/personalized-vs-generic-agent-skills/
+
+# Personalized vs Generic Agent Skills: Where Effort Pays
+
+> Personalized agent skills pay off only where a developer's history holds several sessions relevant to the task at hand.
+
+A personalized skill file distills one developer's recurring preferences from their past agent sessions into reusable guidance. A replay study measured what that buys. Across 42 held-out test sessions from 13 developers, personalized skills scored 65.99 on a 100-point rubric against a 65.02 no-skill baseline. A single skill file pooled from all 13 developers scored 68.80 ([Huang, Du and Lan, arXiv:2608.10319v1](https://arxiv.org/abs/2608.10319v1)). Handing a developer a random colleague's skill file instead scored 65.94, a gain of +0.92 against the personalized file's +0.97.
+
+## When personalization pays
+
+The study breaks its results down by how many of a developer's prior sessions an LLM reviewer judged semantically relevant to the held-out task ([arXiv:2608.10319v1](https://arxiv.org/abs/2608.10319v1)):
+
+| Relevant prior sessions | Personalized skill minus no-skill baseline |
+|---|---|
+| 0 | −6.33 |
+| 1–5 | minimal or negative |
+| ≥6 | +10.17 |
+
+The +10.17 in the bottom row is the largest single effect the paper reports, and it is personalization working. Settle one question before building per-person files: how many logged sessions each developer has that resemble the work coming in. A team that started capturing agent transcripts this quarter sits in the top row.
+
+## What the numbers do and do not support
+
+Four caveats bound how far the comparison travels ([arXiv:2608.10319v1](https://arxiv.org/abs/2608.10319v1)):
+
+- No condition reached statistical significance. Generic skills gained +3.78 (p=.063), personalized skills +0.97 (p=.399), and a random developer's skills +0.92 (p=.451).
+- The sample is 13 developers and 206 sessions, filtered down from 8,866, with a simulated developer rather than a real one issuing follow-ups.
+- The generic skill was pooled from every developer's evolution sessions "including those of the target developer", so it is a superset of the personal data rather than a competing alternative to it.
+- Skills raised the follow-up rate in every condition, from 24.76% at baseline to 30.95% personalized and 30.00% generic. The authors read this as more implementation and validation work, not faster execution.
+
+The comparison is strong enough to set where you spend first and too weak to settle the question.
+
+## Why it works
+
+Coverage explains the gap. A skill file changes behavior only when one of its rules matches the task in front of the agent. In this study 64.7% of personalized rules were unique to a single developer, so those rules had "limited opportunities to influence held-out tasks" ([arXiv:2608.10319v1](https://arxiv.org/abs/2608.10319v1)). Sparse histories compound the problem: the 164 evolution sessions used for distillation work out to about a dozen per developer, too few to separate a stable preference from one-off feedback on a single task, so some rules encode noise. Pooling across people raises the hit rate because it captures procedural practice that recurs across both tasks and developers, such as validation steps and review conventions. The dose-response curve above is the direct evidence for that reading, since hit rate is what more relevant sessions increases.
+
+## When this backfires
+
+- Zero relevant history. With no semantically related prior sessions, the personalized file made results worse (−6.33). Early in a logging program it is a net cost.
+- Wide task diversity. Rules unique to one developer never fire when the next task resembles nothing in their history, and you still pay the tokens to load them.
+- Team conventions filed as personal preferences. Distilling a shared convention per person writes the same rule into every file and multiplies maintenance for no measured gain.
+- Preferences that must never be violated. Advisory prose is the wrong container. TRACE mines user corrections into atomic rules and compiles them into runtime checks. That cut preference violations on coding tasks from 100.0% to 37.6% in-distribution and to 2.0% out-of-distribution ([Zhou et al., arXiv:2606.13174v1](https://arxiv.org/abs/2606.13174v1)). Enforcement closes that gap where loaded context does not.
+- Restructuring tooling on one study. Thirteen developers and a simulated user are thin ground for a policy change, and the authors expect richer interaction-trace datasets to change the picture ([arXiv:2608.10319v1](https://arxiv.org/abs/2608.10319v1)).
+
+## Key Takeaways
+
+- Measure relevant-session density before building per-developer skill files. Below roughly six relevant prior sessions per task, the personalized file added nothing measurable ([arXiv:2608.10319v1](https://arxiv.org/abs/2608.10319v1)).
+- Put shared procedural conventions in one team-wide skill file first. It is the option that does not depend on any single developer's history being deep enough.
+- Run your own before-and-after on a handful of representative tasks before adopting either shape. Neither result here cleared p<.05, so the study sets a prior rather than a decision.
+- Route hard requirements to enforcement rather than a preference file. Compiled runtime checks cut violations far further than distilled prose ([arXiv:2606.13174v1](https://arxiv.org/abs/2606.13174v1)).
+- Re-test as history accumulates. The finding is about data density, and personalization may pay once per-developer histories deepen.
+
+## Related
+
+- [Adapting AI Assistants to Developer Interaction Style](../human/developer-interaction-style-adaptation.md) — independent evidence that per-developer configuration pays back only under specific team conditions
+- [Skill Loadout Curation for Coding Agents](../context-engineering/skill-loadout-curation.md) — which skills to load once you have decided what to write
+- [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — the other sourcing choice for instruction content
+- [Restraint Rules Need External Enforcement](restraint-rules-need-external-enforcement.md) — why preferences that stop work belong in CI rather than a context file
+- [Cost-Aware Skill Rewriting: Preserve Operational Anchors, Not Skill Tokens](cost-aware-skill-rewriting.md) — the token economics of what stays in a skill file
 
 ---
 
@@ -19962,6 +20132,7 @@ Foundational architecture decisions — how to structure agents, delegate work, 
 - [Execution-First Delegation](execution-first-delegation.md) — Instead of scripting steps, specify the outcome and the boundaries; the agent determines how
 - [Execution Lineage: DAG of Artifacts vs Agent Loops](execution-lineage-dag.md) — Represent revisable AI-native work as a DAG of artifact-producing computations with explicit dependencies, stable boundaries, and identity-based replay — so unrelated edits don't perturb the final output
 - [Externalization in LLM Agents: Memory, Skills, Protocols, and Harness](externalization-in-llm-agents.md) — Reliable agents externalize cognitive burdens into persistent infrastructure — four components that transform hard internal problems into tractable retrieval and composition tasks
+- [Agent-Ready Data Architecture for Analytics Agents](agent-ready-data-architecture.md) — Publish grain, join semantics, authoritative markers, and completeness windows in the warehouse itself; a schema-only change moved text-to-SQL from 64.5% to 90%
 - [Governed Sources of Truth for Analytics Agents (Structure Over Access)](governed-sources-of-truth-analytics-agents.md) — Layer semantic models, lineage, and skill routers between an analytics agent and the warehouse; raw corpus access alone moved Anthropic's accuracy by less than a point
 - [Inversion Analysis: Surface Capabilities Competitors Cannot Replicate](inversion-analysis.md) — Inversion asks what your architecture enables that others cannot replicate, producing novel integrations rather than feature parity
 - [Open Agent School Pattern Mapping](open-agent-school-pattern-mapping.md) — Map the Open Agent School academic pattern taxonomy to practical coding-agent primitives like maxTurns, PreToolUse hooks, and CLAUDE.md memory
@@ -22206,6 +22377,72 @@ The `enum` constraint on `env` and the SHA-1 `pattern` on `ref` make wrong usage
 - [Codebase Readiness for Agents](codebase-readiness.md) — preparing a repository as an agent-first system
 - [Agent Turn Model](agent-turn-model.md) — the inference-tool-call loop that underlies agent execution
 - [Harness Engineering](harness-engineering.md) — the runtime layer agents call into
+
+---
+
+### Agent-Ready Data Architecture for Analytics Agents
+Source: https://agentpatterns.ai/patterns/agent-design/agent-ready-data-architecture/
+
+# Agent-Ready Data Architecture for Analytics Agents
+
+> Publish grain, join semantics, authoritative markers, and completeness windows in the warehouse itself, since an analytics agent cannot infer them from a schema.
+
+An agent-ready data warehouse publishes the facts an analytics agent would otherwise guess: what one row represents, how tables join, which of several candidate tables is authoritative, and how complete each one is. Three conditions decide whether the work pays back. The facts have to be human-authored, because machine-generated database descriptions lifted SQL accuracy by only 0.93% over no descriptions at all ([arXiv:2502.20657v1](https://arxiv.org/abs/2502.20657v1)). The errors you are attacking have to be schema-linking errors rather than analytical ones. And every change needs per-domain validation, because the same transformation that helps most domains measurably hurts others ([arXiv:2606.03145v1](https://arxiv.org/abs/2606.03145v1)).
+
+This is the layer beneath [Governed Sources of Truth for Analytics Agents](governed-sources-of-truth-analytics-agents.md), which covers which source wins and how a semantic layer routes a question. This page covers what the warehouse must state before anyone can define a governed metric on top of it.
+
+## What the warehouse must publish
+
+Schema metadata gives an agent data types. It does not give business rules, so a field named `campaign_costs` never says whether agency fees are included, currencies normalized, or refunds deducted. The four gaps below come from that same account ([Towards Data Science](https://towardsdatascience.com/building-an-agent-ready-data-warehouse-what-traditional-architectures-do-wrong/)).
+
+| Fact | What breaks when it is missing |
+|---|---|
+| Grain | The agent picks a table whose name matches the question and aggregates at the wrong level of detail |
+| Join semantics | Join relationships are frequently implicit in enterprise schemas, so the agent infers joinable columns with no declared key to check against ([arXiv:2409.02038v3](https://arxiv.org/abs/2409.02038v3)) |
+| Authoritative marker | Several valid sources exist; the agent chooses the raw table whose naming matches best, while reconciliation lives in a dashboard it never sees |
+| Completeness and restatement window | Partial load history, pre-cancellation revenue, and differing time zones produce a correct calculation over unsuitable data |
+
+Three schema-side moves make these facts legible, all of them semantics-preserving: expose recurring join paths as logical views, restrict the model-facing schema to the tables a workload actually uses, and rename cryptic identifiers descriptively. Across four text-to-SQL pipelines and three model backbones they gained up to 4.2 percentage points of execution accuracy ([arXiv:2606.03145v1](https://arxiv.org/abs/2606.03145v1)).
+
+Access control does not substitute: traditional governance answers who may read a table, never whether it supports a reliable decision ([Towards Data Science](https://towardsdatascience.com/building-an-agent-ready-data-warehouse-what-traditional-architectures-do-wrong/)).
+
+## Why it works
+
+LLM SQL failures concentrate at schema linking, the step that maps a question onto the right tables, columns, and join paths. BEAVER isolates that step by grading five subtasks separately on a benchmark built from private warehouse query logs. Supplying oracle schema-linking annotations raises the ReFoRCE framework from 11.4% to 18.9% accuracy, and oracle annotations for all five subtasks reach 30.1% ([arXiv:2409.02038v3](https://arxiv.org/abs/2409.02038v3)). The model, the questions, and the framework are held constant across those three conditions, so only the supplied facts differ, which places a large share of the failure in the platform rather than in model reasoning. Renaming shows the same effect directly at the linking step, where table-set match on Spider-Union rose from 64.7% to 94.1% ([arXiv:2606.03145v1](https://arxiv.org/abs/2606.03145v1)). A prompt cannot supply a fact nobody wrote down, which is why this is architecture work. It is [harness engineering](harness-engineering.md) applied to the data platform: the environment determines the output.
+
+## When this backfires
+
+- Machine-generated metadata. Generating the descriptions from the tables themselves re-encodes the ambiguity they were meant to remove. Hand-written context is what moves the number: a 4 KB human-authored semantic document took three frontier models from 45.5–50.5% to 67.7–68.7% ([arXiv:2604.25149v1](https://arxiv.org/abs/2604.25149v1)).
+- Analytical failures rather than linking failures. Window functions, multi-CTE decomposition, and subtle predicates survive oracle annotation; 46.8% of BEAVER residual errors are analytical-construct failures ([arXiv:2409.02038v3](https://arxiv.org/abs/2409.02038v3)).
+- Global rollout without per-domain checks. The schema transformations are non-monotonic. One BIRD domain regressed 5.4%, 42 queries got worse against 74 improved, and aggressive partitioning pruned tables the question needed ([arXiv:2606.03145v1](https://arxiv.org/abs/2606.03145v1)).
+- Small, already-legible schemas. The payoff tracks schema size and opacity. Spider and BIRD databases average 6.8 tables and 72.5 columns, against 101.5 tables and 869.4 columns in BEAVER's private warehouses, and ReFoRCE drops from 62.9% on Spider 2.0 to 11.4% on BEAVER ([arXiv:2409.02038v3](https://arxiv.org/abs/2409.02038v3)). A compact, well-named schema leaves much less to recover.
+- Waiting it out is a real alternative. On an unchanged schema, model progress alone took text-to-SQL from 32.7% in 2023 to 64.5% in 2026, and a bounded semantic layer already reaches 98.2–100% on the queries it covers while refusing the rest instead of returning a confident wrong number ([dbt Labs](https://docs.getdbt.com/blog/semantic-layer-vs-text-to-sql-2026)).
+
+## Example
+
+dbt Labs ran 11 questions 20 times each against a heavily normalized third-normal-form schema. Text-to-SQL scored 64.5% for both Claude Sonnet 4.6 and GPT-5.3 Codex. They then had an LLM add the minimum modeling needed, which came to three dbt models joining a few tables, and reran the identical benchmark ([dbt Labs](https://docs.getdbt.com/blog/semantic-layer-vs-text-to-sql-2026)).
+
+| Configuration | Sonnet 4.6 | GPT-5.3 Codex |
+|---|---|---|
+| Text-to-SQL, original 3NF schema | 64.5% | 64.5% |
+| Text-to-SQL, three added models | 90.0% | 84.1% |
+
+Nothing about the model, the prompt, or the questions changed between the two rows. dbt's own summary is that better modeling helps both approaches. One caveat they state: to make text-to-SQL work they loaded the entire schema into context, which is not practical for larger datasets.
+
+## Key Takeaways
+
+- Budget the work against your error mix. Warehouse metadata recovers schema-linking errors and leaves analytical-construct errors untouched, so measure which class dominates before funding a redesign.
+- Human-author the four facts and give each an owner. Grain, join keys, the authoritative marker, and the completeness window are the inputs a semantic layer's authors need too, so publishing them once serves both surfaces.
+- Roll schema transformations out per domain against a held-out query set, since the measured effect includes regressions.
+- On real private warehouses, frontier agents score around 11% and cap near 30% even with perfect human annotation ([arXiv:2409.02038v3](https://arxiv.org/abs/2409.02038v3)). Scope the agent to a covered surface rather than promising warehouse-wide question answering.
+
+## Related
+
+- [Governed Sources of Truth for Analytics Agents (Structure Over Access)](governed-sources-of-truth-analytics-agents.md) — the semantic-layer and skill-routing tier that sits above the warehouse facts this page covers.
+- [Harness Engineering for Building Reliable AI Agents](harness-engineering.md) — the general form of the argument that environment design outranks prompting.
+- [Codebase Readiness for Agents: Agent-Friendly Code](codebase-readiness.md) — the same legibility discipline applied to a code repository instead of a data platform.
+- [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md) — versioning declarative knowledge apart from the agent that consumes it.
+- [Layered Context Architecture](../../context-engineering/layered-context-architecture.md) — grounding an agent in several distinct context sources rather than one.
 
 ---
 
@@ -30725,7 +30962,7 @@ Coding agents tolerate ambiguity because tests, types, and compilers act as guar
 
 Each layer attacks one or more of the three failure modes:
 
-1. Data foundations — canonical, governed datasets with one source-of-truth model per concept, near-duplicates aggressively deprecated, and standards enforced by tooling, CI, and mandate. Maintain metadata (column descriptions, grain documentation, ownership, model tiering) with the same rigor as the transformations ([Anthropic blog](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude)).
+1. Data foundations — canonical, governed datasets with one source-of-truth model per concept, near-duplicates aggressively deprecated, and standards enforced by tooling, CI, and mandate. Maintain metadata (column descriptions, grain documentation, ownership, model tiering) with the same rigor as the transformations ([Anthropic blog](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude)). [Agent-Ready Data Architecture](agent-ready-data-architecture.md) covers this layer on its own terms.
 2. Sources of truth — reference surfaces in descending order of trust: a semantic layer (compiled metric definitions: one call, one number), a lineage and transformation graph (which upstream models feed a concept, which are deprecated, which share grain), a query corpus (raw material for curation, not direct retrieval), and business context (a knowledge graph of docs, roadmaps, and decision logs so the agent can resolve "the Q2 launch" or "the fraud question").
 3. Skills — the procedural counterpart to declarative sources. A 'knowledge' skill is a thin top-level router that narrows the search space to a few dozen curated reference files before any query is written. An 'unbook' skill encodes senior-analyst process (clarify → find sources → run query → adversarial review) and bundles reusable analysis patterns. Without skills, Anthropic's accuracy ceiling was ≤21%; with them, >95% in aggregate ([Anthropic blog](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude)).
 4. Validation — offline evals pinned to snapshot data, ablation at PR granularity, and online provenance footers with passive monitoring of semantic-layer hit-rate and correction language. See [Behavioral Testing for Agents](../../verification/behavioral-testing-agents.md) for the eval discipline these tiers depend on.
@@ -44154,6 +44391,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Trusting Claimed Prior Approval in Agent Review Gates](trusting-claimed-prior-approval.md) — A multi-agent review gate that treats a cited prior approval as evidence ships laundered malicious code the reviewers can see, because nothing distinguishes a real approval from a fabricated one and content scanners are blind to clean-looking exfiltration
 - [Trusting a Skill Scanner's Verdict as a Security Judgment (Green-Check Fallacy)](skill-scanner-verdict-not-security-judgment.md) — A skill scanner's green check means no known pattern matched, not that the skill is safe; static scans over-flag useful skills and miss novel or image-encoded threats, so read the findings rather than obey the score
 - [Deliberation-Inducing Cues That Multiply Reasoning Cost](deliberation-inducing-prompt-cues.md) — Prompt phrases that invite an agent to deliberate multiply reasoning tokens 2.4-7.4x on small, well-specified tasks with no measured correctness gain; replace them with scope, acceptance criteria and a stop condition
+- [Catastrophic Remembering: Instruction Files That Only Grow](catastrophic-remembering-instruction-files.md) — Appending a rule to CLAUDE.md costs O(1) while safely deleting one costs O(2^|D|) after its rationale decays; measured across 247,694 instruction lifetimes, files grow 226% and the deletion hazard falls with age
 - [Belief Inertia After Tool-Map Drift](belief-inertia-after-tool-map-drift.md) — Agents re-call invalidated tools or brute-force the space after a tool surface changes instead of deducing from the map they already built; externalized tool knowledge recovers 0.09 completion rate but only with an explicit invalidation trigger
 
 ---
@@ -45685,6 +45923,94 @@ Three instructions, all grounded in project reality. The copied configuration ha
 
 ---
 
+### Catastrophic Remembering: Instruction Files That Only Grow
+Source: https://agentpatterns.ai/patterns/anti-patterns/catastrophic-remembering-instruction-files/
+
+# Catastrophic Remembering: Instruction Files That Only Grow
+
+> An instruction file diverges when adding a rule stays cheap and removing one becomes unaffordable, because the reason the rule exists is gone.
+
+Catastrophic remembering is the unbounded growth of an agent instruction file driven by an asymmetry between two edits: appending an instruction costs O(1), while establishing that an existing instruction is safe to delete costs O(2^|D|) in a file of |D| instructions once its original rationale has decayed. Across 1,867 repositories and 247,694 instruction lifetimes, these files grew 226% over their tracked history and gained 4.9 net instructions per commit ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)).
+
+## Disambiguation
+
+"Catastrophic remembering" already names something else in continual learning: a model's worsening ability to discriminate between data from different tasks ([arxiv 2102.11343v1](https://arxiv.org/abs/2102.11343v1)). This page uses the 2026 agentic-coding sense, where a human maintainer keeps an instruction nobody can verify the need for.
+
+## The pattern
+
+An agent does something wrong. You add a line to CLAUDE.md or AGENTS.md and the behavior improves, so the line stays. It records the fix and nothing about the failure that prompted it. Months later the file has passed the observed median of 39 instructions and no one can say which lines still carry weight, so nothing comes out ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)).
+
+Wholesale rewrites are the observed release valve, and they do not hold: growth runs at 4.1% per commit before a rewrite and 4.9% after one ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)).
+
+## Why it fails
+
+Deletion is a judgment about counterfactual harm, and redundancy is what makes it expensive. An instruction is excess only when removing it changes no outcome you care about. Because instructions overlap, dropping one can look harmless when a sibling line covers the same constraint today, so verifying superfluity means testing subsets rather than probing the file once with the line removed ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)). That subset search is the exponential.
+
+The measurement separates this from ordinary drift. Staleness predicts that older instructions get deleted more often, since they describe code that has moved underneath them. The observed hazard runs the other way: the log-hazard of deletion falls 0.032 per commit of instruction age (95% CI [−0.047, −0.019]), and the slope survives adjustment for content heterogeneity ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)). A file keeps its oldest lines because nobody can justify removing them, the failure [stale AI configuration artifacts](stale-ai-configuration-artifacts.md) does not explain.
+
+## Why it works
+
+Recording an instruction's rationale collapses the search. When the line carries which failure it was added for and what happened afterwards, checking whether the rule is still needed means re-running that one failure, at O(1) instead of O(2^|D|) ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)). A comment removes nothing and changes no instruction, so one maintainer can adopt the habit without asking anyone. In a controlled reconstruction task, excess instruction count fell from +211.3% to +1.4% over 51 steps; on real-world prose constraints from WildIFEval, satisfaction rose from 50.4% to 62.0% over three rounds ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)).
+
+Content is what carries that effect. Comment-shaped noise landed inside the control's error bar, and a narrative of attempts with no record of their outcomes was the worst arm measured, at +70.0% excess against a +60.4% control ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)).
+
+## What to write instead
+
+Write the why beside the rule at the moment you add the rule. Three elements carry the result: the failure you observed, how often it recurred, and what changed once the line was in place. Dropping the recurrence count alone costs 37% of the reduction ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)).
+
+In Claude Code the comment is free at inference. Block-level HTML comments in CLAUDE.md are stripped before the content reaches the model's context, so they spend no tokens and stay visible to a maintainer reading the file ([Claude Code memory documentation](https://code.claude.com/docs/en/memory)). Cursor documents rule contents going into the model context with no stripping step ([Cursor rules documentation](https://cursor.com/docs/context/rules)), so budget for the tokens there or keep the rationale in a sidecar file the agent never loads.
+
+## Example
+
+**Before — rules with no recoverable rationale:**
+
+```markdown
+- Always run `make lint` before committing.
+- Never use `pip`; use `uv`.
+```
+
+**After — the same rules with the why attached, in the shape the protocol asks for:**
+
+```markdown
+<!-- 2026-03-04: CI failed on unformatted imports 4 times in two weeks.
+     Lint failures on main dropped to zero after this line landed.
+     Retire once the pre-commit hook covers formatting. -->
+- Always run `make lint` before committing.
+
+<!-- 2026-05-19: an agent installed a denylisted package via `pip install`
+     twice, bypassing the lockfile. No recurrence in three months.
+     Retire once the dependency hook matches bare `pip`. -->
+- Never use `pip`; use `uv`.
+```
+
+The dates and counts stand in for your own incident record. What transfers is the shape: each comment names the failure, its recurrence, and the outcome, so the next maintainer can test the rule rather than guess at it.
+
+## When this backfires
+
+- Files below a few dozen instructions. With ten rules you can test them one at a time, and the controlled experiment used minimum covers of two to three against a real-world median of 39 ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)).
+- Retroactive application. The rationale for the lines already in your file is the thing that decayed, and a comment reconstructed from a guess is a fabricated license to delete.
+- Narrative without outcomes. Recording why someone tried something, with no record of what followed, measured worse than writing nothing ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)).
+- Safety-relevant rules. The author recommends keeping a person in the deletion path and holding these instructions out of scope until the protocol is tested on them ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)).
+- Teams that will not sustain it. Around half the repositories that adopt architecture decision records hold only one to five, which the authors read as the concept being tried rather than adopted ([Buchgeher et al., IEEE Access 2023](https://doi.org/10.1109/ACCESS.2023.3287654)). A half-commented file reads as though the uncommented rules are the unjustifiable ones.
+- Comments decay too. Keeping comments in sync with the code they document takes sustained time and attention, and the largest study of how the two co-evolve mined 1.3 billion syntax-tree changes across 1,500 systems to find where the inconsistencies get introduced ([Wen et al., ICPC 2019](https://doi.org/10.1109/ICPC.2019.00019)). The paper measures neither the maintenance burden of its own comments nor their staleness ([arxiv 2608.11095v1](https://arxiv.org/abs/2608.11095v1)).
+- You already have evals. Where a suite scores the behavior your instructions protect, deleting a line and re-running answers the question directly. That is the argument [prompt debt](prompt-debt.md) makes.
+
+## Key Takeaways
+
+- Growth comes from what never leaves: the deletion hazard falls with instruction age, the opposite of what staleness predicts.
+- Write the failure, the recurrence count, and the outcome beside each rule as you add it; a story with no outcome measured worse than no comment at all.
+- The habit is prospective. It buys nothing for the rules already in your file, and it never licenses an unreviewed deletion.
+
+## Related
+
+- [Stale AI Configuration Artifacts (Context Rot)](stale-ai-configuration-artifacts.md) — the drift explanation this result rules out as the driver of unbounded growth
+- [Configuration Smells in AGENTS.md Files](configuration-smells-agents-md.md) — the six recurring defects that accumulate inside the file
+- [Prompt Debt](prompt-debt.md) — the competing remedy, specifying behavior with evals instead of prose
+- [Deletion Avoidance](deletion-avoidance.md) — the same asymmetry one level down, where agents guard code instead of removing it
+- [Reducing System-Prompt Token Bloat](../../context-engineering/system-prompt-bloat-reduction.md) — trimming the shipped prefix, a different object from the instruction file
+
+---
+
 ### Cheaper-Per-Token Model Upgrades That Cost More Per Task
 Source: https://agentpatterns.ai/patterns/anti-patterns/cheaper-per-token-costlier-per-task/
 
@@ -46159,6 +46485,7 @@ The Conflicting Instructions detector is also the weakest at 57% precision ([arx
 - [Stale AI Configuration Artifacts (Context Rot)](stale-ai-configuration-artifacts.md) — Init Fossilization is the *cause*; this page is the resulting code-reference drift.
 - [The Mega-Prompt (Instruction Compliance Ceiling)](../../instructions/instruction-compliance-ceiling.md) — the upstream pattern that produces Context Bloat at the prompt level.
 - [The Infinite Context](infinite-context.md) — the broader cost of unfocused always-on context.
+- [Catastrophic Remembering: Instruction Files That Only Grow](catastrophic-remembering-instruction-files.md) — why Context Bloat is hard to reverse once the rationale behind each instruction is gone.
 
 ---
 
@@ -50399,6 +50726,7 @@ The single guidance line stays short and legible. The eval suite, not the prompt
 - [Reflective Prompt Evolution with Pareto Selection (GEPA)](../agent-design/gepa-reflective-prompt-evolution.md) — an automated optimizer that searches for prompts once a metric can score them.
 - [Model-Neutral Agent Architecture](../agent-design/model-neutral-agent-architecture.md) — the portability bet that measurement-defined behavior makes real.
 - [Prompt-Rewrite Discipline on Cross-Generation Model Migration](../../instructions/prompt-rewrite-on-cross-generation-migration.md) — the migration discipline for when a model swap does force a prompt change.
+- [Catastrophic Remembering: Instruction Files That Only Grow](catastrophic-remembering-instruction-files.md) — the measured cost of paying the debt down, and why deletion stalls once each rule's rationale is gone.
 
 ---
 
@@ -51298,6 +51626,7 @@ The shape Treude & Baltes apply in [the paper](https://arxiv.org/abs/2606.09090)
 - [Context Poisoning: When Hallucinations Become Premises](context-poisoning.md) — the downstream failure once the stale reference enters reasoning as a premise.
 - [The Infinite Context](infinite-context.md) — the other meaning of "context rot" the lede disambiguates against.
 - [Pattern Replication Risk](pattern-replication-risk.md) — the related compounding failure where agents propagate whatever they find in the repo, stale references included.
+- [Catastrophic Remembering: Instruction Files That Only Grow](catastrophic-remembering-instruction-files.md) — the rival explanation for the same files, where the deletion hazard falls with age instead of rising as staleness predicts.
 
 ---
 
@@ -92770,6 +93099,7 @@ Threat models identify the structural conditions that make agent systems exploit
 - [OWASP LLM Top 10 (2025): Agent Security Crosswalk](owasp-llm-top-10-2025-agent-crosswalk.md) — Map each OWASP LLM Top 10 (2025) risk to coding-agent-specific manifestations and site pages — a navigation aid for readers arriving with the framework's shared vocabulary, not a recommended threat model
 - [Pre-Trust Execution Surface in Coding Agent Harnesses](pre-trust-execution-surface.md) — Project-local config (settings files, hooks, MCP manifests, env vars, localhost listeners) executes before the trust prompt fires; defer parsing and execution until after the trust boundary is established
 - [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md) — Under controlled knowledge-base poisoning, attack success rates span 24.4% to 81.9% across four RAG architectures with comparable clean accuracy; architecture choice is part of the threat model
+- [Replayable Encrypted Reasoning Blocks in Agent Traces](replayable-encrypted-reasoning-blocks.md) — Provider-returned chain-of-thought blocks replay across sessions, users, and sibling models, so a persisted or published trace is recoverable data its holder cannot decrypt or audit; 315,320 blocks decoded from public trajectories yielded 182 credentials
 - [Trajectory Poisoning of Promoted Agent Skills (PoisonedEvolution)](trajectory-poisoning-promoted-skills.md) — Self-evolving skill systems promote agent trajectories into persistent instructions, so the trust boundary sits at promotion; three consistent attacker records in thirty reached 91.0% success across six evolvers, and a provenance gate keyed on distinct contributors took a pilot from 25/25 to 0/25
 - [Trojan Hippo: Dormant Memory Payloads Triggered by Sensitive Topics](trojan-hippo-memory-attack.md) — A single untrusted tool call plants a dormant payload in agent memory that activates sessions later when the user discusses sensitive topics, exfiltrating data via outbound tools; tested defenses cut attack success to 0–5% but at steep utility cost
 - [Unbounded Consumption: Bounding Agent Resource Use Against DoS and Denial-of-Wallet](unbounded-consumption-resource-bounds.md) — OWASP LLM10:2025 framed as a same-surface, two-owner threat (availability and finance); the five complementary bounds — per-call token, per-task iteration, fan-out concurrency, cost-velocity, per-day dollar — close the cost dimension no single layer covers, with $46K/day Sysdig and $82K/48hr Gemini incidents as the empirical floor
@@ -98788,6 +99118,7 @@ The second entry contains no imperative and no trigger word. Retrieved during a 
 - [Provenance-Aware Decision Auditing for LLM Agents](provenance-aware-decision-auditing.md) — the provenance-tracking direction that a reasoning guard formalizes
 - [Trajectory Poisoning of Promoted Agent Skills (PoisonedEvolution)](trajectory-poisoning-promoted-skills.md) — the same manufactured-recurrence lever applied one stage earlier, where poisoned evidence is distilled into a persistent skill instead of retrieved as memory
 - [Agent Memory Patterns: Learning Across Conversations](../patterns/agent-design/agent-memory-patterns.md) — the persistent-memory designs that create the write surface this attack needs
+- [Replayable Encrypted Reasoning Blocks in Agent Traces](replayable-encrypted-reasoning-blocks.md) — the read-out half of the same surface; this page forges reasoning in, that one recovers real reasoning out of a persisted trace
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the conditions memory poisoning composes across sessions
 
 ---
@@ -103227,6 +103558,79 @@ Against vanilla RAG the document lands in the top 10, and the LLM weighs its met
 - [Oracle Poisoning of the Knowledge Graph](oracle-poisoning-knowledge-graph.md)
 - [Multi-tenant RAG Authorization Gap](multitenant-rag-authorization-gap.md)
 - [Trojan Hippo Memory Attack](trojan-hippo-memory-attack.md)
+
+---
+
+### Replayable Encrypted Reasoning Blocks in Agent Traces
+Source: https://agentpatterns.ai/security/replayable-encrypted-reasoning-blocks/
+
+# Replayable Encrypted Reasoning Blocks in Agent Traces
+
+> A persisted agent trace carries encrypted reasoning blocks its holder cannot read, so publishing one ships data nobody on your side has audited.
+
+A replayable encrypted reasoning block is a provider-returned chain-of-thought payload that any holder can resubmit to the provider's API, because the envelope carries no binding to the session, user, or model that produced it. Providers return reasoning this way to keep the API stateless: the client stores the block and passes it back on the next request. Anthropic documents both the field and its portability. "Full thinking content is encrypted and returned in the `signature` field on each thinking block", and `signature` values "are compatible across platforms (the Claude API, Amazon Bedrock, and Google Cloud). Values generated on one platform work on another" ([Anthropic, Thinking](https://platform.claude.com/docs/en/build-with-claude/thinking)).
+
+## When this applies
+
+Three conditions put a harness in scope. Outside them, existing log hygiene already covers the data.
+
+- Reasoning blocks land somewhere that outlives the conversation: a transcript file, a session export, an observability backend.
+- Traces get published, as trajectory datasets, bug reports carrying raw API logs, or evaluation artifacts in a repository.
+- Blocks move between models, vendors, or tenants rather than replaying into the same conversation on the same model.
+
+## What the replay attack demonstrated
+
+Panfilov and colleagues found that encrypted reasoning blocks from Anthropic, OpenAI, and Google were "fully compatible and interchangeable across different sessions, users, and models". Injecting a strong model's trace into a weaker, less safeguarded sibling made the sibling decode and print it verbatim, without jailbreaking the capable model ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)).
+
+The measured exposure came from traces developers had already published. Decoding 315,320 reasoning blocks scraped from 6,708 public agent trajectories on GitHub and Hugging Face surfaced 704 sensitive artifacts, 367 of them personally identifiable information and 182 of them credentials. Narrowed to genuine user sessions rather than benchmark data, the haul included 62 API keys, 33 passwords, 24 access tokens, and 7 private keys. Sixty-four of the 704 artifacts appeared nowhere in the visible chat history ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)).
+
+Portability runs the other way too. An attacker plants an opaque block in a shared trace, a victim resuming that trace replays it, and "the signed reasoning block may be interpreted as part of the model's own prior reasoning" ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)). That is the read-out mirror of the write-in attack in [forged reasoning trace attacks on agent memory](forged-reasoning-trace-memory-attack.md).
+
+The disclosure status matters. Providers were notified before publication, and the authors report they "were unable to launch the same attacks" afterward, with the headline results "no longer reproducible" as of August 2026 ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)). The demonstrated decrypt path is closed. Traces published before it closed are not.
+
+## Why it works
+
+Statelessness was paid for with an unbound bearer token. The paper describes the returned blocks as base64-encoded AEAD envelopes whose header carries model name, version, nonce, MAC, and ciphertext. Encryption supplied confidentiality in transit and integrity, but the envelope was never bound to the user, conversation, or model that produced it, so possession alone authorized decryption ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)). Once any endpoint in a provider's family accepts an arbitrary envelope, that endpoint is a decryption oracle, and the attacker's remaining problem is finding a sibling willing to print the plaintext. The proposed fixes name the missing property: embed user and conversation identifiers into the AEAD payload, and reject envelopes from a different model version at the gateway ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)).
+
+The durable consequence is an inspection asymmetry. Trace holders "have no means for decryption" and "can only operate on the plaintext level", so they will "miss reasoning hidden in encrypted blocks" ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)). You cannot grep a block you cannot read, which leaves a pre-publication secret scan structurally incomplete over these fields however good the scanner is.
+
+## When this backfires
+
+- Stripping in the wrong place breaks the agent. Anthropic's contract requires thinking blocks to be passed back "exactly as you received it", and the API rejects blocks whose content has been modified ([Anthropic, Thinking](https://platform.claude.com/docs/en/build-with-claude/thinking)). Strip at the publication boundary, never in flight.
+- Turning off the display does not shrink the record. With `display: "omitted"` the "`signature` field still carries the encrypted full thinking for multi-turn continuity", and that field "is identical whether `display` is `summarized` or `omitted`" ([Anthropic, Thinking](https://platform.claude.com/docs/en/build-with-claude/thinking)). A harness that hides reasoning from users has changed nothing about what its transcripts hold.
+- Claiming a live decrypt overstates the evidence. The authors note their evaluation covered only API versions available in early July 2026, against proprietary schemes "subject to unannounced changes" ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)). Argue from unverifiability and from already-published logs.
+- Reasoning blocks are the smaller leak. Only 64 of the 704 artifacts existed solely inside reasoning ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)); hardening the encrypted half while committing plaintext transcripts fixes roughly a tenth of the problem.
+- In-memory-only harnesses gain nothing. Where blocks never outlive the request cycle, a stripping stage costs continuity and removes no disclosure surface.
+
+## Example
+
+A single thinking block looks like this on the wire, with an empty summary because `display` defaults to omitted on newer models ([Anthropic, Thinking](https://platform.claude.com/docs/en/build-with-claude/thinking)):
+
+```json
+{
+  "type": "thinking",
+  "thinking": "",
+  "signature": "EosnCkYICxIMMb3LzNrMu..."
+}
+```
+
+Two rules apply to the same object at different boundaries. Inside the conversation, pass it back byte-identical, and include `redacted_thinking` blocks in the round trip, because filtering on `block.type == "thinking"` alone silently drops them and breaks the multi-turn protocol ([Anthropic, Thinking](https://platform.claude.com/docs/en/build-with-claude/thinking)). At the moment the transcript leaves your trust boundary, drop the block. The paper's guidance is to "systematically strip all reasoning blocks and opaque reasoning fields from transcripts prior to public release if any form of secret or private information was exposed to the agent system" ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)).
+
+## Key Takeaways
+
+- Classify reasoning blocks as sensitive data at rest, not as sealed data, wherever a transcript outlives the conversation.
+- Put the strip at the publication boundary and nowhere else; removing blocks in flight violates the pass-back-unchanged contract and breaks tool loops ([Anthropic, Thinking](https://platform.claude.com/docs/en/build-with-claude/thinking)).
+- Ask your provider whether its envelope binds to user, conversation, and model version. That binding, rather than the presence of encryption, is what makes replay fail ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)).
+- Audit traces you published before August 2026 for credentials, because those blocks were decodable while they sat in public repositories ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)).
+- Do not let a secret scanner over the plaintext fields stand in for coverage. Trace holders "have no means for decryption", so a clean scan is silent about the encrypted field rather than clearing it ([Panfilov et al., 2026](https://arxiv.org/abs/2608.09867v1)).
+
+## Related
+
+- [Forged Reasoning Trace Attacks on Agent Memory (FARMA)](forged-reasoning-trace-memory-attack.md) — the write-in half of the same surface; FARMA plants fake reasoning, this page covers reading real reasoning back out
+- [Embedding Inversion: Vector Stores as a Source-Text Disclosure Surface](embedding-inversion-vector-store-disclosure.md) — the same shape in a different representation, where an artifact assumed to be one-way turns out to be reversible
+- [Sandbox-Enforced PII Tokenization in Agent Workflows](pii-tokenization-in-agent-context.md) — keeping the sensitive value out of the trace in the first place, the control that survives a scanner which cannot read the field
+- [System Prompt as Secret Store (OWASP LLM07)](system-prompt-not-a-secret-store.md) — the same failure one field over: treating a hidden part of the request as a confidentiality boundary is the design bug, not the leak that follows
+- [Agent Chat History as a First-Class Artifact](../observability/agent-history-as-artifact.md) — the persistence decision that creates the store this threat needs
 
 ---
 
@@ -108656,6 +109060,7 @@ The audit shape answers a yes/no question with timestamps and turn types — use
 - [Session Recap: Goal-Shaped Handoff at Context Boundaries](../patterns/agent-design/session-recap.md) — per-session handoff, not cross-session aggregate
 - [Memory Synthesis from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — extracting durable lessons for the agent's future runs
 - [Agent Retrieval Provenance as an Audit Control](../security/agent-retrieval-provenance.md) — the audit query shape hardened into a change-management control for regulated teams
+- [Replayable Encrypted Reasoning Blocks in Agent Traces](../security/replayable-encrypted-reasoning-blocks.md) — the disclosure surface a persisted transcript creates when it retains provider reasoning fields nobody can read before sharing
 
 ---
 
@@ -115205,6 +115610,7 @@ Source: https://agentpatterns.ai/human/
 - [Risk Architecture for AI-Native Engineering Teams](risk-architecture-ai-native-teams.md) — Rework ownership, escalation, and assurance for agentic teams; the least-covered failures sit at the boundary where probabilistic outputs meet determinism-assuming dependencies
 - [Step Budgets and Trust in Agent-Generated Code Tours](agent-generated-code-tour-step-budgets.md) — Keep agent-authored debugging walkthroughs near five steps with detail scaled to each segment, expect readers to discount visibly AI-written prose, and never let a second model grade the tour
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](author-to-reviewer-role-inversion.md) — As agents author most code, review overtakes writing as the top developer activity; staff, measure, and budget review capacity as the binding constraint rather than authoring throughput
+- [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](agent-rewrite-ownership-rule.md) — Rewrites drop scope restrictors and emphasis in a measurable direction; the ownership rule that follows, plus the cases where a blanket rule costs more than it saves
 
 ---
 
@@ -115311,6 +115717,64 @@ Developers select per-task, not per-identity. The team tracks intervention rate 
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — empirical evidence on how experienced developers supervise AI output, complementary to the style framing here
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — the failure mode that persona-tailoring is supposed to reduce
 - [Deliberate AI-Assisted Learning](deliberate-ai-learning.md) — the onboarding-time counter-pressure on persona-as-default
+- [Personalized vs Generic Agent Skills: Where Effort Pays](../instructions/personalized-vs-generic-agent-skills.md) — the skill-file half of the same question, measured against a pooled team file
+
+---
+
+### Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing
+Source: https://agentpatterns.ai/human/agent-rewrite-ownership-rule/
+
+# Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing
+
+> Agent rewrites can broaden the claims you made, so the ownership rule holds: you answer for every sentence you ship.
+
+Ask an agent to polish a design doc and it hands back claims slightly broader than the ones you made. Sophie Alpert's internal engineering policy at Clay names the reason: "There are no lossless transformations of natural-language text — every rewrite and rephrase changes the meaning of your writing, and if this is done by an entity that doesn't have the most detailed mental representation of what you personally were trying to communicate, information will be lost" ([Alpert, 2026](https://sophiebits.com/2026/06/25/there-are-no-lossless-transformations-of-natural-language-text)). The policy that follows still permits AI, and it makes the author answerable for the result.
+
+## Where the loss is large enough to matter
+
+The loss is not uniform. Apply the rule where the cost is real:
+
+- High-intent prose, where a hedge, a tense, or the order of two clauses carries the meaning. Design docs, RFCs, and incident retrospectives sit here.
+- Documents one person writes and many people read. Alpert's arithmetic: "More time should be spent authoring a document than consuming it" ([Alpert, 2026](https://sophiebits.com/2026/06/25/there-are-no-lossless-transformations-of-natural-language-text)).
+- Expand-from-a-prompt work. If a long document came from a short prompt, share the prompt ([Alpert, 2026](https://sophiebits.com/2026/06/25/there-are-no-lossless-transformations-of-natural-language-text)).
+
+An edit pass that does not lengthen carries less risk, though Alpert notes meaning can still get obscured.
+
+## The ownership rule
+
+You answer for every line, including the ones a model wrote. Simon Willison singles this rule out as crucial, quoting Alpert: "It is your responsibility to make sure that the entire document is representative of your own thoughts before you share it. If a reviewer asks, 'What did you mean by this line?', it's not acceptable to reply with 'Oh sorry, AI wrote that, just ignore it.'" ([Willison, 2026](https://simonwillison.net/2026/Aug/11/there-are-no-lossless-transformations-of-natural-language-text/)).
+
+That gives a workable split. Critique, questions, proofreading, and clarity checks return signal you act on yourself. Rephrase, massage, and expand return text you must now defend line by line. Verbatim model output stays allowed when you label it, which is how you float an idea without adopting it ([Alpert, 2026](https://sophiebits.com/2026/06/25/there-are-no-lossless-transformations-of-natural-language-text)).
+
+## Why it works
+
+A rewrite regenerates the choices your text under-determines: which qualifier survives, whether a finding stays past tense about a sample or becomes present tense about the world. Peters and Chin-Yee measured which way those choices go. Across 4,900 summaries of scientific texts, the worst performers overgeneralized in 26% to 73% of cases. LLM summaries also ran nearly five times likelier than human ones to carry broad generalizations (odds ratio 4.85, 95% CI [3.06, 7.70], p < 0.001) ([Peters and Chin-Yee, 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC12042776/)). Prompting explicitly for accuracy did not remove the effect. Scope restrictors go first, and only the author knows why one was there.
+
+A second mechanism sits on the author's side. In a four-month EEG study of 54 participants, LLM-assisted essay writers showed the weakest brain connectivity of the three conditions, reported the lowest ownership of their own essays, and struggled to quote their own work accurately ([Kosmyna et al., 2025](https://arxiv.org/abs/2506.08872v2)). Someone who cannot quote their document cannot notice what the rewrite changed, which is why the rule has to be a stated duty. The same reasoning drives [delegating change descriptions to the agent](../patterns/anti-patterns/delegating-change-descriptions.md) and [the meat proxy](../patterns/anti-patterns/meat-proxy.md).
+
+## When this backfires
+
+- The author writes in a second language. One qualitative study reports that for second-language writers, model suggestions augmented their voice because AI "helped overcome their language barriers and better express ideas true to themselves" ([Technology, Knowledge and Learning, 2024](https://link.springer.com/article/10.1007/s10758-024-09744-3)). The sample is six students, so read it as a caution against a blanket rule.
+- The draft is worse than the rewrite. In a preregistered experiment with 453 professionals on incentivized writing tasks, ChatGPT cut time by 40% and raised graded output quality by 18% ([Noy and Zhang, 2023](https://pubmed.ncbi.nlm.nih.gov/37440646/)). Fidelity is worth protecting only once the draft encodes intent.
+- The artifact has no authorial intent to lose. Dependency-bump changelogs and docs for a feature an agent just wrote carry no privileged human mental model.
+- The volume exceeds what a human can read. A per-sentence rule over an autonomous pipeline reinstates the bottleneck the pipeline removed. Attach ownership at the issue or the prompt instead.
+- The model and settings are ones where drift is not measurable. GPT-3.5 Turbo and all three Claude models tested showed no significant generalization drift, and temperature 0 cut generalized conclusions by 76% against temperature 0.7 ([Peters and Chin-Yee, 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC12042776/)).
+
+## Key Takeaways
+
+- Name the direction of the loss in the policy. Rewrites broaden scope and drop hedges, so review qualifiers first rather than reading for tone.
+- Write the rule as an answer a reviewer will accept. "AI wrote that" is not one.
+- Put the split in the team's tooling, not just the policy. A critique prompt and a rephrase prompt should be separate saved commands so the choice is deliberate.
+- Exempt low-intent and agent-authored artifacts explicitly, or the policy gets ignored wholesale at its first collision with a changelog.
+- Lower the temperature before you lower the trust. Temperature 0 removed most of the measured drift, which is cheaper than a review mandate.
+
+## Related
+
+- [Delegating Change Descriptions to the Agent](../patterns/anti-patterns/delegating-change-descriptions.md) — the same loss applied to PR and commit descriptions, where the diff cannot carry intent
+- [The Meat Proxy: Relaying Agent Output Without Reading It](../patterns/anti-patterns/meat-proxy.md) — forwarding unread model output pushes verification onto the receiver
+- [Skill Atrophy: When AI Reliance Erodes Developer Capability](skill-atrophy.md) — the longer-run cost of routing thinking work through a model
+- [Marking Which Artifacts Are for Humans or Agents (Landmarking)](landmarking-human-vs-agent-artifacts.md) — a readership contract that tells you which documents the ownership rule governs
+- [Author-to-Reviewer Role Inversion in AI-Assisted Teams](author-to-reviewer-role-inversion.md) — why review capacity, not authoring speed, becomes the binding constraint
 
 ---
 
@@ -135321,6 +135785,7 @@ Source: https://agentpatterns.ai/tools/copilot/
 - [copilot-instructions.md Convention](copilot-instructions-md-convention.md) — Repository-level instruction file for persistent project context
 - [Copilot Spaces](copilot-spaces.md) — Named context collections that ground Copilot in curated reference material across repositories, files, PRs, issues, and uploads
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md) — Define specialized agents, reusable skills, and installable bundles
+- [Embedding the Copilot SDK in a Managed Java Runtime](copilot-sdk-managed-runtime.md) — What embedding an agent loop costs a JVM host with its own concurrency model: the executor seam, container context propagation, and the JDK level it assumes
 - [Dependabot Agent Assignment](dependabot-agent-assignment.md) — Route Dependabot alerts to Copilot for autonomous fix generation with human review at merge
 - [Managing Agent Skills from the GitHub CLI](gh-skill-cli-management.md) — Install, pin, update, and publish agent skills with `gh skill` for scriptable provisioning
 - [MCP Integration](mcp-integration.md) — Connect Copilot to external tools via Model Context Protocol
@@ -136696,6 +137161,87 @@ Agent assignment degrades or fails in three conditions:
 
 ---
 
+### Embedding the Copilot SDK in a Managed Java Runtime
+Source: https://agentpatterns.ai/tools/copilot/copilot-sdk-managed-runtime/
+
+# Embedding the Copilot SDK in a Managed Java Runtime
+
+> Embedding the Copilot SDK in a JVM service turns on one seam: the executor you hand the client.
+
+The Copilot SDK's Java binding asks the host application for its threads. `CopilotClientOptions.setExecutor(...)` accepts an `Executor`, and inside a Jakarta EE container that executor has to be built from the container's `ManagedThreadFactory`, or the tool callbacks the model invokes run without CDI, JNDI, and transaction context ([Using the GitHub Copilot SDK for Java](https://github.blog/engineering/using-the-github-copilot-sdk-for-java/)). Everything else is ordinary library integration; that one choice is where a managed runtime differs from a script.
+
+## When this applies
+
+Three conditions carry the design, and it degrades if any is missing.
+
+A JDK new enough for virtual threads. The binding accepts "Java 17 or later" but recommends JDK 25, and the shipped multi-release jar "automatically uses virtual threads for its default internal executor" on JDK 25 and above ([java binding README](https://github.com/github/copilot-sdk/tree/main/java)). Virtual threads arrived in Java 21 ([JEP 444](https://openjdk.org/jeps/444)), so the SDK's own floor predates the design it recommends.
+
+A host that propagates context across threads. The post cites section 5.2 of the Jakarta Concurrency 3.1 specification: application-created threads must be obtained from a `ManagedThreadFactory` so the container can track them for lifecycle shutdown, apply concurrency policy, and propagate context automatically ([GitHub Engineering](https://github.blog/engineering/using-the-github-copilot-sdk-for-java/)). A tool callback that injects a JPA repository only works because that propagation happened.
+
+Tolerance for a preview artifact. The published coordinate is `com.github:copilot-sdk-java:1.0.10-preview.0` ([README](https://github.com/github/copilot-sdk/tree/main/java)), and the annotation-based tool API is experimental behind a compiler opt-in (`-Acopilot.experimental.allowed=true`). The SDK as a whole [went generally available on 2026-06-02](https://github.blog/changelog/2026-06-02-copilot-sdk-is-now-generally-available); this binding has not caught up.
+
+## The executor seam
+
+Headless server use runs the client in `CopilotClientMode.EMPTY`: no IDE integration, the client talks directly to the Copilot CLI, and CLI 1.0.71 or later is required ([GitHub Engineering](https://github.blog/engineering/using-the-github-copilot-sdk-for-java/)). The same options object takes the executor, so the wiring is a single construction site.
+
+Calls return `CompletableFuture<T>`, and a turn is driven by `session.sendAndWait(prompt).get()`. That one `.get()` runs the whole agentic loop, during which "the model reasons, calls your tools (potentially multiple times), and returns its final response" ([GitHub Engineering](https://github.blog/engineering/using-the-github-copilot-sdk-for-java/)). Streaming events arrive through `session.on(...)`, which fires typed events such as `AssistantMessageEvent` and `ToolExecutionStartEvent` while the loop is still running ([java binding README](https://github.com/github/copilot-sdk/tree/main/java)).
+
+## Defining tools
+
+The binding offers three registration shapes ([GitHub Engineering](https://github.blog/engineering/using-the-github-copilot-sdk-for-java/)): annotated methods (`@CopilotTool`, collected with `ToolDefinition.fromObject(this)`), inline lambdas (`ToolDefinition.from(name, description, params, handler)`), and scanning tools declared in separate CDI beans. Annotated tools also need an `annotationProcessorPath` entry in the compiler plugin, so they are a build change and not only a code change.
+
+What the agent may reach is bounded by `sessionConfig.setAvailableTools(new ToolSet()...)`, which restricts it to named custom and built-in tools; the sample defaults permission handling to `PermissionHandler.APPROVE_ALL`, a development setting rather than a production one ([GitHub Engineering](https://github.blog/engineering/using-the-github-copilot-sdk-for-java/)).
+
+## Why it works
+
+An agent turn is dominated by waiting on inference, and the JVM has two separate problems with that. The first is cost. A virtual thread that blocks unmounts from its carrier and waits in memory, releasing the platform thread for other virtual threads ([JEP 444](https://openjdk.org/jeps/444)), and GitHub's post states the consequence for this API directly: "On a virtual thread, `.get()` is cheap. No platform thread is consumed while waiting" ([GitHub Engineering](https://github.blog/engineering/using-the-github-copilot-sdk-for-java/)). A blocking, readable call shape therefore stops being a scalability problem. The second is correctness. Tool callbacks are where the agent touches application state, and they run on SDK-owned threads, so routing those threads through the container's factory is what lets a callback resolve a repository and join a transaction. The binding exposes exactly one hook for threading, and it happens to be the seam a managed runtime needs.
+
+## When this backfires
+
+- Running on JDK 17 through 20. Virtual threads did not ship until Java 21 ([JEP 444](https://openjdk.org/jeps/444)), so every `.get()` parks a platform thread for a full agentic turn. The SDK accepts these versions; the design argument does not.
+- Running on JDK 21 through 23 with `synchronized`-heavy libraries. A virtual thread that blocks inside a `synchronized` method or block is pinned to its carrier and cannot unmount, which [JEP 491](https://openjdk.org/jeps/491) fixed only in Java 24. Netflix hit exactly this on Java 21: four pinned virtual threads exhausted the four-thread carrier pool on a 4-vCPU instance, the service stopped serving traffic while the JVM stayed up, and sockets piled up in `closeWait`. The offending `synchronized` was inside a tracing library, not application code, and the failure is hard to see: virtual thread stacks are absent from `jstack` output and Java 21 `jcmd Thread.dump_to_file` dumps carry no lock-ownership information, so the instance presents as an idle JVM ([Netflix Technology Blog](https://netflixtechblog.com/java-21-virtual-threads-dude-wheres-my-lock-3052540e231d)).
+- Passing a plain executor. A bare virtual-thread-per-task executor inside a container drops the context the callbacks depend on, and the failure surfaces inside a tool rather than at startup.
+- Hosts with no container to integrate with. Context propagation is most of what this binding asks of you, so a plain `main()` pays the ceremony and collects none of the benefit.
+- Teams that need a pinned API. Preview versioning and a flag-gated annotation processor suit a slow upgrade cadence badly.
+
+Out-of-process is a real alternative, and the SDK's headless mode already shells out to the CLI. A hung agent turn behind a queue is a consumer you can kill and retry. In-process on the wrong JDK it is a pinned carrier thread.
+
+## Example
+
+Wiring a container-managed virtual thread factory into the client, from the Jakarta EE sample ([GitHub Engineering](https://github.blog/engineering/using-the-github-copilot-sdk-for-java/)):
+
+```java
+@Resource(lookup = "concurrent/virtualThreadFactory")
+private ManagedThreadFactory virtualThreadFactory;
+
+Executor managedVirtualExecutor = runnable ->
+    virtualThreadFactory.newThread(runnable).start();
+
+CopilotClientOptions copilotClientOptions = new CopilotClientOptions()
+        .setMode(CopilotClientMode.EMPTY)
+        .setCopilotHome(copilotHome)
+        .setExecutor(managedVirtualExecutor);
+```
+
+That lambda is the whole integration: the container hands out the thread, the SDK runs its loop on it, and CDI, JNDI, and transaction context reach the tool callbacks. Swapping in `Executors.newVirtualThreadPerTaskExecutor()` compiles, runs, and breaks the callbacks.
+
+## Key Takeaways
+
+- `setExecutor` is the binding's only threading hook, and in a container it must be fed from a `ManagedThreadFactory` or tool callbacks lose their context.
+- The JDK level is a design input rather than a build detail: virtual threads are absent below Java 21 and pin on `synchronized` blocks below Java 24.
+- `sendAndWait(...).get()` runs an entire agentic loop in one blocking call, which is only affordable on a virtual thread.
+- The Java artifact is still preview-versioned and its annotation tool API is flag-gated, so binding parity with the GA SDK is not a given.
+
+## Related
+
+- [GitHub Copilot SDK](copilot-sdk.md) — what the SDK provides, the agent-in-app pattern, and its cost and lock-in trade-offs
+- [MCP Integration](mcp-integration.md) — connecting the agent to external tools over Model Context Protocol
+- [Custom Agents, Skills & Plugins](custom-agents-skills.md) — the declarative alternative to defining tools in host code
+- [Copilot CLI BYOK and Local Model Support](copilot-cli-byok-local-models.md) — pointing the same runtime at another provider
+- [Cost-Aware Agent Design: Route by Complexity, Not Habit](../../token-engineering/cost-aware-agent-design.md) — budgeting the turns an embedded loop will run
+
+---
+
 ### GitHub Agentic Workflows
 Source: https://agentpatterns.ai/tools/copilot/github-agentic-workflows/
 
@@ -137556,6 +138102,8 @@ Core capabilities:
 
 The SDK provides bindings for [Node.js, Python, Go, .NET, and Java](https://github.blog/changelog/2026-04-02-copilot-sdk-in-public-preview/).
 
+Bindings do not all sit at the same maturity. The Java artifact is still published as a preview version, `com.github:copilot-sdk-java:1.0.10-preview.0`, and its annotation-based tool API is gated behind a compiler opt-in ([java binding README](https://github.com/github/copilot-sdk/tree/main/java)). A binding also inherits its host language's concurrency contract: the Java client takes an `Executor`, which a Jakarta EE application must supply from the container so tool callbacks keep their transaction and injection context ([Using the GitHub Copilot SDK for Java](https://github.blog/engineering/using-the-github-copilot-sdk-for-java/)). See [Embedding the Copilot SDK in a Managed Java Runtime](copilot-sdk-managed-runtime.md) for what that integration costs.
+
 ## Architecture
 
 The SDK abstracts the infrastructure that the Copilot CLI uses in production:
@@ -137627,13 +138175,14 @@ Streaming is event-based rather than async-iterable: `assistant.message_delta` f
 ## Key Takeaways
 
 - The Copilot SDK exposes Copilot CLI's production execution loop as an embeddable library you can integrate into your own applications
-- Supports Node.js, Python, Go, .NET, and Java with the same agent capabilities across all bindings
+- Supports Node.js, Python, Go, .NET, and Java, though maturity varies by binding — the Java artifact is still preview-versioned
 - Enables the agent-in-app pattern: you embed planning, tool use, and file editing into custom applications
 - MCP server support and custom tool definitions let you extend the agent's capabilities beyond built-in tools
 - Generally available (GA as of 2026-06-02) with authentication through Copilot subscriptions or custom API keys; sessions consume token-metered AI credits from the plan's allowance
 
 ## Related
 
+- [Embedding the Copilot SDK in a Managed Java Runtime](copilot-sdk-managed-runtime.md)
 - [Agent Mode](agent-mode.md)
 - [Coding Agent](coding-agent.md)
 - [MCP Integration](mcp-integration.md)

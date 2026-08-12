@@ -29,6 +29,8 @@ Core capabilities:
 
 The SDK provides bindings for [Node.js, Python, Go, .NET, and Java](https://github.blog/changelog/2026-04-02-copilot-sdk-in-public-preview/).
 
+Bindings do not all sit at the same maturity. The Java artifact is still published as a preview version, `com.github:copilot-sdk-java:1.0.10-preview.0`, and its annotation-based tool API is gated behind a compiler opt-in ([java binding README](https://github.com/github/copilot-sdk/tree/main/java)). A binding also inherits its host language's concurrency contract: the Java client takes an `Executor`, which a Jakarta EE application must supply from the container so tool callbacks keep their transaction and injection context ([Using the GitHub Copilot SDK for Java](https://github.blog/engineering/using-the-github-copilot-sdk-for-java/)). See [Embedding the Copilot SDK in a Managed Java Runtime](copilot-sdk-managed-runtime.md) for what that integration costs.
+
 ## Architecture
 
 The SDK abstracts the infrastructure that the Copilot CLI uses in production:
@@ -100,13 +102,14 @@ Streaming is event-based rather than async-iterable: `assistant.message_delta` f
 ## Key Takeaways
 
 - The Copilot SDK exposes Copilot CLI's production execution loop as an embeddable library you can integrate into your own applications
-- Supports Node.js, Python, Go, .NET, and Java with the same agent capabilities across all bindings
+- Supports Node.js, Python, Go, .NET, and Java, though maturity varies by binding — the Java artifact is still preview-versioned
 - Enables the agent-in-app pattern: you embed planning, tool use, and file editing into custom applications
 - MCP server support and custom tool definitions let you extend the agent's capabilities beyond built-in tools
 - Generally available (GA as of 2026-06-02) with authentication through Copilot subscriptions or custom API keys; sessions consume token-metered AI credits from the plan's allowance
 
 ## Related
 
+- [Embedding the Copilot SDK in a Managed Java Runtime](copilot-sdk-managed-runtime.md)
 - [Agent Mode](agent-mode.md)
 - [Coding Agent](coding-agent.md)
 - [MCP Integration](mcp-integration.md)

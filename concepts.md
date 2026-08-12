@@ -251,6 +251,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Generated Questionnaires: Eliciting Someone Else's Context](context-engineering/generated-questionnaires.md)
 - [Silent Handoff Failure in Delegated Code Search](context-engineering/silent-handoff-failure-delegated-search.md)
 - [When a Skill Graph Cannot Beat the Ranker (Pre-Filter Topology Bound)](context-engineering/skill-graph-topology-bound.md)
+- [Cross-Reference Dereference Hop in Retrieval Loops](context-engineering/cross-reference-dereference-hop.md)
 
 ## Instructions & Prompts
 
@@ -332,6 +333,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The No-Op Test: Prune Agent Docs by Behavior, Not Length](instructions/behavioral-no-op-test.md)
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](instructions/skill-pack-registry-distribution.md)
 - [Skill File Linting: Which Three Checks to Run First](instructions/skill-file-linting.md)
+- [Personalized vs Generic Agent Skills: Where Effort Pays](instructions/personalized-vs-generic-agent-skills.md)
 
 ## Agent Architecture
 
@@ -608,6 +610,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Splitting the Drift Judge from the Advisor (LivePlan)](patterns/agent-design/judge-advisor-split.md)
 - [Product-Operation Tool Surfaces for In-Product Agents](patterns/agent-design/product-operation-tool-surface.md)
 - [Compiled Specialist Agents: Muscle Memory for Recurring Intent](patterns/agent-design/compiled-specialist-agents.md)
+- [Agent-Ready Data Architecture for Analytics Agents](patterns/agent-design/agent-ready-data-architecture.md)
 
 ## Loop Engineering
 
@@ -883,6 +886,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](security/enforced-versus-advisory-controls.md)
 - [Sandbox Credential Masking: Authenticate Without Seeing the Secret](security/sandbox-credential-masking.md)
 - [Static-First Shell Command Gating with Selective Escalation](security/static-first-shell-command-gating.md)
+- [Replayable Encrypted Reasoning Blocks in Agent Traces](security/replayable-encrypted-reasoning-blocks.md)
 
 ## Testing & Evaluation
 
@@ -1310,6 +1314,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Step Budgets and Trust in Agent-Generated Code Tours](human/agent-generated-code-tour-step-budgets.md)
 - [Reading a Vendor-Computed AI Coding ROI Dashboard](human/vendor-computed-roi-copilot-impact-dashboard.md)
 - [Per-Agent-App Attribution in the Copilot Usage Metrics API](human/per-agent-app-attribution-copilot-metrics.md)
+- [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](human/agent-rewrite-ownership-rule.md)
 
 ## Anti-Patterns
 
@@ -1435,6 +1440,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Task-Uniform Agent Permissions Ignore Where Failures Land](patterns/anti-patterns/task-uniform-agent-permissions.md)
 - [Belief Inertia After Tool-Map Drift in AI Agents](patterns/anti-patterns/belief-inertia-after-tool-map-drift.md)
 - [Frozen Playbook Reuse Without Target-Side Validation](patterns/anti-patterns/frozen-playbook-reuse-validation.md)
+- [Catastrophic Remembering: Instruction Files That Only Grow](patterns/anti-patterns/catastrophic-remembering-instruction-files.md)
 
 ## Emerging Concepts
 
@@ -1573,5 +1579,6 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Parameter-Level Permission Rules (Tool(param:value) Syntax)](tools/claude/tool-param-value-permission-rules.md)
 - [Agent Host Review Comments: Server-Side Feedback Transport](tools/copilot/agent-host-review-comments.md)
 - [GitHub Copilot App Slash Commands and What They Change](tools/copilot/slash-commands-copilot-app.md)
+- [Embedding the Copilot SDK in a Managed Java Runtime](tools/copilot/copilot-sdk-managed-runtime.md)
 
 </div>

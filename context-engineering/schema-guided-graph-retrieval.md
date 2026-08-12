@@ -133,3 +133,4 @@ Retrieval for each sub-question filters to nodes tagged with the declared `schem
 - [Observation Masking](observation-masking.md) — filtering intermediate retrieval results before reasoning
 - [Context Budget Allocation](context-budget-allocation.md) — typed filtering reduces tokens consumed by irrelevant candidates
 - [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — the limiting case: a typed graph whose candidates come from the retriever's own embedding adds no reach
+- [Cross-Reference Dereference Hop in Retrieval Loops](cross-reference-dereference-hop.md) — the query-time alternative for the subset of edges the source document names explicitly, rather than encoding every edge in the graph up front
