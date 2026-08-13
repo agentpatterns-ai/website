@@ -14,7 +14,7 @@ tags:
   - source:opendev-paper
   - memory
   - tool-agnostic
-last_reviewed: 2026-06-28
+last_reviewed: 2026-08-13
 maturity: established
 ---
 
@@ -37,7 +37,7 @@ Every agent conversation starts with an empty context. [Claude Code's memory sys
 
 [Sub-agents](https://code.claude.com/docs/en/sub-agents) can operate with their own scopes. Use project scope for team conventions and user scope for personal preferences — mixing them degrades the experience for one party.
 
-The scope idea is not Claude-specific. LangChain frames the same problem vendor-neutrally: memory has a scope (which conversations it applies to) backed by a store, plus explicit write and read mechanics that decide when a fact is saved and when it is recalled ([LangChain — How to give your agent memory](https://blog.langchain.com/blog/how-to-give-your-agent-memory)).
+The scope idea is not Claude-specific. LangChain frames the same problem vendor-neutrally: memory has a scope (which conversations it applies to) backed by a store, plus explicit write and read mechanics that decide when a fact is saved and when it is recalled ([LangChain — How to give your agent memory](https://blog.langchain.com/blog/how-to-give-your-agent-memory)). IDE plugins ship it too: GitHub added Copilot memory to GitHub Copilot for JetBrains in August 2026 ([GitHub — Copilot memory and Ollama in GitHub Copilot for JetBrains](https://github.blog/changelog/2026-08-11-copilot-memory-and-ollama-in-github-copilot-for-jetbrains)).
 
 ## Temporal memory: episodic and working
 

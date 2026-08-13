@@ -27,6 +27,8 @@ The same trace can describe a 40-step success or a 40-step failure. Without a ve
 
 Once traces carry verdicts, LangChain frames the shift as a data-mining problem over production traces — mining trajectories for the failures worth fixing rather than hand-authoring test cases ([LangChain — Improving agents is a data-mining problem](https://blog.langchain.com/blog/improving-agents-is-a-data-mining-problem)).
 
+Verdicts also unlock attribution. Once a run is labeled a failure, [trajectory attribution for context repair](../context-engineering/trajectory-attribution-context-repair.md) traces it back to the specific skill file, knowledge-base entry, or tool description that caused it.
+
 The fix is structural: every trace gets a verdict attached to the run, not stored in a parallel analytics system whose join keys never line up with the trace ID.
 
 ## The four sources of feedback

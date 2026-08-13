@@ -24,6 +24,7 @@ Every major AI coding tool ships a project-level instruction file. These pages c
 - [Probe-and-Refine Tuning of Repository Guidance for Coding Agents](probe-and-refine-guidance-tuning.md) — Tune a repo-guidance file by probing the agent with synthetic bug-fix tasks and refining on the diagnosed failures; the artifact is model-specific, not transferable
 - [Knowledge Gap or Skill Gap: Triage Before Writing Context](knowledge-gap-vs-skill-gap-triage.md) — Classify agent near-misses before enlarging a context file; a two-agent ablation found near-misses trace to implementation skill, which context cannot supply
 - [Encoding Values in AGENTS.md: Why Prose Without Verification Fails](encoding-values-in-agents-md.md) — Corpus studies show ethics, fairness, and accessibility are largely absent from AGENTS.md; pair every value with a verification command or move it to a lower layer
+- [Public Rules-File Corpora as Evidence](rules-file-corpus-evidence.md) — Corpus studies of `.cursorrules` files measure who wrote them and when, so read the 4.2% security share as an authorship artifact rather than as advice
 - [Natural-Language Customization Bootstrap](natural-language-customization-bootstrap.md) — Describe the customization in plain language; the agent drafts the instruction file, skill, subagent, or hook for you to review and commit
 
 ## Instruction Design

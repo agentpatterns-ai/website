@@ -104,6 +104,7 @@ After `copilot plugin install github/moda-linter/copilot-plugin`, the plugin app
 
 - [Plugin and Extension Packaging: Distributing Agent Capabilities](plugin-packaging.md)
 - [Agent Plugins: Portable Packaging With Client-Defined Trust](agent-plugins-standard.md) — the cross-vendor package format, where this contract fixes the install path
+- [Per-Surface Verification of Agent Plugin Packages](../tool-engineering/per-surface-plugin-verification.md) — why one install surface does not imply one behavior across a vendor's clients
 - [Agent Skills: Cross-Tool Task Knowledge Standard](agent-skills-standard.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](agent-definition-formats.md)
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)

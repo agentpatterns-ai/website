@@ -176,6 +176,7 @@ nav:
       - most-restrictive-wins-fusion.md
       - natural-language-tool-selection.md
       - product-operation-tool-surface.md
+      - programmatic-tool-calling.md
       - tool-confirmation-carousel.md
       - approval-response-taxonomy.md
       - harness-design-dimensions.md

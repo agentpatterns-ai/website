@@ -14,6 +14,7 @@ last_reviewed: 2026-05-27
 ## Measuring Quality
 
 - [RAG/Agent Reliability Problem Map](rag-agent-reliability-problem-map.md) — Structured 16-domain failure taxonomy for systematic diagnosis of RAG and agent failures across retrieval, reasoning, state, and deployment layers
+- [Against-Prior Accuracy: Score the Rules That Fight Defaults](against-prior-accuracy.md) — Aggregate instruction-compliance scores count rules the agent would have followed anyway; withhold each rule, keep only the ones that change behavior, and rescore
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — Static benchmarks inflate model scores as training data overlaps with test sets — decontaminated pipelines restore honest measurement
 - [Control Lexical Leakage in Agent-Memory Retrieval Evals (Entity-Collision)](lexical-leakage-agent-memory-retrieval-evals.md) — A single hit@k confounds semantic retrieval with lexical overlap; pin BM25 with shared-entity distractors and stratify queries by tag so embedder lift is attributable rather than averaged
 - [Controlled Benchmark Rewriting for Agent Safety Judgment](controlled-benchmark-rewriting-safety-judgment.md) — Rewrite unsafe trajectories into deceptive variants while preserving risk labels to measure judgment robustness on out-of-distribution surface forms

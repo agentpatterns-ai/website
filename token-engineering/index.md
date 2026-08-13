@@ -99,6 +99,7 @@ You cannot reduce what you do not measure — instrument spend before cutting it
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the instrument-attribute-fix-verify loop
 - [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — plot each configuration on the (cost, quality) frontier so quality-trading downgrades are visible
 - [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — cleaner code cut token use 7-8% with no pass-rate change
+- [Measuring Refactoring Payback in Tokens](refactoring-payback-in-tokens.md) — replay one frozen change prompt after every refactoring step, because agents never learn between runs
 - [The Token Price Index Fallacy in Agent Cost Planning](../fallacies/token-price-index-fallacy.md) — published price-per-token indices move on routing mix as much as on price; your realized rate is an output of your own routing
 - [Per-Plugin Token-Cost Attribution](../observability/plugin-token-cost-attribution.md) — attribute spend down to the plugin
 - [BYOK Model Token Visibility](../observability/byok-model-token-visibility.md) — in-IDE token and context telemetry for BYOK routes

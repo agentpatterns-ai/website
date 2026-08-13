@@ -9,7 +9,7 @@ tags:
   - security
   - agent-design
   - copilot
-last_reviewed: 2026-07-07
+last_reviewed: 2026-08-13
 maturity: established
 ---
 
@@ -55,7 +55,7 @@ VS Code 1.127 moved the default itself: terminal-command sandboxing now rolls ou
 
 ## What this is not
 
-Claude Code takes the opposite default position: "Effective sandboxing requires both filesystem and network isolation. Without network isolation, a compromised agent could exfiltrate sensitive files like SSH keys" ([Claude Code Sandboxing](https://code.claude.com/docs/en/sandboxing)). The open-source `sandbox-runtime` echoes this — its weaker modes degrade overall guarantees rather than splitting axes cleanly ([anthropic-experimental/sandbox-runtime](https://github.com/anthropic-experimental/sandbox-runtime)).
+Claude Code takes the opposite default position: "Effective sandboxing requires both filesystem and network isolation. Without network isolation, a compromised agent could exfiltrate sensitive files like SSH keys" ([Claude Code Sandboxing](https://code.claude.com/docs/en/sandboxing)). The open-source `sandbox-runtime` echoes this — its weaker modes degrade overall guarantees rather than splitting axes cleanly ([anthropic-experimental/sandbox-runtime](https://github.com/anthropic-experimental/sandbox-runtime)). Vercel reaches the same conclusion from its own sandbox implementation work: [a sandbox without a network boundary is only half a sandbox](https://vercel.com/blog/a-sandbox-without-a-network-boundary-is-only-half-a-sandbox).
 
 `allowNetwork` is a capability-scoping convenience, not a security improvement over `on`. Treating it otherwise is a category error.
 

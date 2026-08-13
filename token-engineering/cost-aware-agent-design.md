@@ -8,7 +8,7 @@ tags:
   - source:opendev-paper
   - long-form
   - tool-agnostic
-last_reviewed: 2026-07-28
+last_reviewed: 2026-08-12
 maturity: established
 ---
 
@@ -90,6 +90,8 @@ Copilot rates, USD per million tokens ([GitHub Docs — models and pricing](http
 | GPT-5.5 | $5.00 | $0.50 | $30.00 |
 
 Tier still drives cost, with Sonnet 5 billing twice Haiku 4.5 per token and Opus 5 five times, but tier is now one term in a product rather than a fixed charge per request. A verbose session on a cheap model can outspend a compact one on an expensive model, so token volume belongs in the routing calculation alongside tier. Cached input bills at a tenth of fresh input on every Claude model listed, which makes a stable prompt prefix worth as much as a tier downgrade. Code completions and next edit suggestions consume no credits and stay unlimited on paid plans ([GitHub Docs — models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)), so this decision applies to chat and agent work only.
+
+The usage report gained a per-model breakdown on 2026-08-11, so you can attribute Copilot token usage to the model that consumed it ([GitHub Changelog: per-model token breakdown in the usage report](https://github.blog/changelog/2026-08-11-per-model-token-breakdown-in-the-usage-report)). That gives a routing change something to check against: move exploration to a cheaper tier, and the tokens should show up under that tier.
 
 Included credits are denominated at the seat price. Copilot Business is $19 per user per month for 1,900 credits per user, promotionally 3,000 through 2026-09-01, so a paid seat is a floor on spend, not a discount on token rates. Organization credits pool at the billing entity and reset unused at the start of each month ([GitHub Docs — usage-based billing for organizations and enterprises](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-organizations-and-enterprises)). Auto model selection gives a 10% discount on model costs on individual plans and lets you override the selected model at any time ([GitHub Docs, usage-based billing for individuals](https://docs.github.com/en/copilot/concepts/billing/usage-based-billing-for-individuals), [GitHub Changelog: Auto Model Selection](https://github.blog/changelog/2025-11-11-auto-model-selection-for-copilot-in-visual-studio-in-public-preview/)).
 
