@@ -30,7 +30,7 @@ Confirm all three conditions before adopting:
 - A structured test-failure report exists. The preliminary diagnosis is seeded from the test-failure artifact; without one, the investigator has no prior to anchor on ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
 - Trajectory noise is dominated by predictable patterns. Pattern matching only helps when "redundant program structure and verbose code context" compose the bulk of trajectory tokens ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Heterogeneous or context-dependent noise leaves the filter little to cut.
 
-If any condition is missing, fall back to [agent debugging](agent-debugging.md) for the four-mode taxonomy, or [trajectory decomposition](../verification/trajectory-decomposition-diagnosis.md) when the goal is per-stage grading rather than root-cause localization.
+If any condition is missing, fall back to [agent debugging](agent-debugging.md) for the four-mode taxonomy, or [trajectory decomposition](../verification/trajectory-decomposition-diagnosis.md) when the goal is per-stage grading rather than root-cause localization. When the suspected cause is a context source rather than the code under test, see [trajectory attribution for context repair](../context-engineering/trajectory-attribution-context-repair.md), which attributes the failure to a skill file, knowledge-base entry, or tool description.
 
 ## The two pre-filters
 

@@ -64,6 +64,7 @@ The model replies in prose (`Website information – YES`) and the harness extra
 ## Related
 
 - [Structured Output Constraints: Reducing Hallucination](../../verification/structured-output-constraints.md)
+- [Tools as Typed Code Stubs (Programmatic Tool Calling)](programmatic-tool-calling.md) — the other alternative to JSON tool calls, which needs strong code generation rather than weak structured output
 - [Per-Model Harness Tuning](per-model-harness-tuning.md)
 - [The Think Tool](think-tool.md)
 - [Auto Model Selection](auto-model-selection.md)

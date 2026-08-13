@@ -81,3 +81,4 @@ The same source names the opposite error. Doing the work once and asking the age
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the density limit that makes freed budget worth having
 - [Critical Instruction Repetition: Exploiting Primacy and Recency Bias](critical-instruction-repetition.md) — the constraints to exempt from single-source-of-truth
 - [Rule Lifecycle Metadata for Prunable Instruction Surfaces](rule-lifecycle-metadata.md) — metadata that tells you which rules to test first
+- [Against-Prior Accuracy: Score the Rules That Fight Defaults](../verification/against-prior-accuracy.md) — the same deletion probe pointed at a compliance score instead of a pruning decision

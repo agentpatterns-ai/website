@@ -252,6 +252,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Silent Handoff Failure in Delegated Code Search](context-engineering/silent-handoff-failure-delegated-search.md)
 - [When a Skill Graph Cannot Beat the Ranker (Pre-Filter Topology Bound)](context-engineering/skill-graph-topology-bound.md)
 - [Cross-Reference Dereference Hop in Retrieval Loops](context-engineering/cross-reference-dereference-hop.md)
+- [Exhaustive Retrieval for Listing Questions](context-engineering/exhaustive-retrieval-for-listing-questions.md)
+- [Trajectory Attribution for Context Repair (TRACE)](context-engineering/trajectory-attribution-context-repair.md)
 
 ## Instructions & Prompts
 
@@ -334,6 +336,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](instructions/skill-pack-registry-distribution.md)
 - [Skill File Linting: Which Three Checks to Run First](instructions/skill-file-linting.md)
 - [Personalized vs Generic Agent Skills: Where Effort Pays](instructions/personalized-vs-generic-agent-skills.md)
+- [Public Rules-File Corpora as Evidence](instructions/rules-file-corpus-evidence.md)
 
 ## Agent Architecture
 
@@ -611,6 +614,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Product-Operation Tool Surfaces for In-Product Agents](patterns/agent-design/product-operation-tool-surface.md)
 - [Compiled Specialist Agents: Muscle Memory for Recurring Intent](patterns/agent-design/compiled-specialist-agents.md)
 - [Agent-Ready Data Architecture for Analytics Agents](patterns/agent-design/agent-ready-data-architecture.md)
+- [Tools as Typed Code Stubs (Programmatic Tool Calling)](patterns/agent-design/programmatic-tool-calling.md)
 
 ## Loop Engineering
 
@@ -720,6 +724,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Listener-State Naming for User-Invoked Agent Skills](tool-engineering/listener-state-skill-naming.md)
 - [Terminal-First Agent Interfaces with Browser Escalation](tool-engineering/terminal-first-browser-escalation.md)
 - [MCP-vs-CLI Cost Ratios Are a Property of the Scaffolding](tool-engineering/mcp-cli-cost-ratio-scaffolding-bound.md)
+- [Per-Surface Verification of Agent Plugin Packages](tool-engineering/per-surface-plugin-verification.md)
+- [Tool Architecture Moves Consistency, Not Resolve Rate](tool-engineering/tool-architecture-consistency-lever.md)
 
 ## Token Engineering
 
@@ -740,6 +746,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Request Shaping to Cut Wasted Agent Turns](token-engineering/request-shaping-wasted-turns.md)
 - [Pricier-Per-Token Models That Cost Less Per Task](token-engineering/pricier-per-token-cheaper-per-task.md)
 - [Language Choice as an Agent Token-Cost Lever](token-engineering/language-choice-token-cost.md)
+- [Measuring Refactoring Payback in Tokens](token-engineering/refactoring-payback-in-tokens.md)
 
 ## Security & Safety
 
@@ -1060,6 +1067,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Bounded Tool Surfaces for Code Review Agents](code-review/bounded-tool-surface-review-agents.md)
 - [Behavior-Partitioned Security Tests as Executable Specs](verification/behavior-partitioned-security-tests.md)
 - [Verification Capacity Saturation: Three Levers, One Default](verification/verification-capacity-saturation.md)
+- [Against-Prior Accuracy: Score the Rules That Fight Defaults](verification/against-prior-accuracy.md)
 
 ## Hooks & Guardrails
 
@@ -1441,6 +1449,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Belief Inertia After Tool-Map Drift in AI Agents](patterns/anti-patterns/belief-inertia-after-tool-map-drift.md)
 - [Frozen Playbook Reuse Without Target-Side Validation](patterns/anti-patterns/frozen-playbook-reuse-validation.md)
 - [Catastrophic Remembering: Instruction Files That Only Grow](patterns/anti-patterns/catastrophic-remembering-instruction-files.md)
+- [Prescribing TDD Inside the Agent Loop (Process Theater)](patterns/anti-patterns/tdd-inside-the-agent-loop.md)
 
 ## Emerging Concepts
 

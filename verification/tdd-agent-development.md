@@ -9,7 +9,7 @@ aliases:
   - "TDD with Agents"
   - "Tests as the Spec"
   - "Red-Green-Refactor for Agents"
-last_reviewed: 2026-07-09
+last_reviewed: 2026-08-13
 maturity: adopted
 ---
 
@@ -78,12 +78,13 @@ Overly broad tests: tests that pass even when the implementation is wrong, for e
 
 ## When this backfires
 
-Tests-first is not always the right move. The pattern degrades under specific conditions:
+Tests-first is not always the right move. The Exploring Gen AI series on martinfowler.com questions whether the practice delivers value inside an agent loop or is only theater ([TDD inside the agent loop - theater or actual value?](https://martinfowler.com/articles/exploring-gen-ai/tdd-in-the-agent-loop.html)). The pattern degrades under specific conditions:
 
 - Exploratory or research code where the problem shape is unclear: writing tests first locks in a premature interface. When the goal is to learn what the correct behavior should be, tests written up front encode guesses, and the agent optimizes toward those guesses instead of the underlying question.
 - Regression risk beyond the focal tests: an agent that makes the target tests green can still break unrelated behavior in the same codebase, which is the case for [golden query pairs as continuous regression tests](golden-query-pairs-regression.md). Anthropic's own guidance warns about the "trust-then-verify gap": a "plausible-looking implementation that doesn't handle edge cases" ([Claude Code best practices](https://code.claude.com/docs/en/best-practices)). A green focal suite is not the same as a green full suite, so run the whole regression set, not just the new tests.
 - Fuzzy or evolving requirements where precise assertions are expensive: property-based and snapshot tests cost more to author, and hand-written examples for every edge case do not scale when the spec is still in flux. Enforced TDD here slows the feedback loop it was meant to tighten.
 - Behaviors that resist cheap oracles: unit-style assertions capture UI polish, performance under load, and stochastic output (LLM responses, ML model outputs) poorly. This is the non-determinism handled in [behavioral testing for non-deterministic agents](behavioral-testing-agents.md). Tests pass without confirming the thing you actually care about.
+- Handing the whole cycle to the agent: this page describes tests you author. Prompting an agent to run red-green-refactor on its own tests is a different workflow with different evidence, covered in [prescribing TDD inside the agent loop](../patterns/anti-patterns/tdd-inside-the-agent-loop.md).
 
 ## Example
 

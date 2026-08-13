@@ -27,6 +27,7 @@ Structural patterns for tool interfaces, schemas, error handling, and output for
 
 - [Designing for Agent Consumers (Agent Experience)](designing-for-agent-consumers.md) — Treat the agent as a first-class consumer of your public SDK, CLI, API, and docs; the AX discipline that routes the surface-design tactics, distinct from harness engineering
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — Tools are the agent's UI; the same principles that make human interfaces usable make agent tools effective
+- [Tool Architecture Moves Consistency, Not Resolve Rate](tool-architecture-consistency-lever.md) — Holding capabilities constant and changing only how tools are organized shifts run-to-run consistency, while the task resolve rate stays flat
 - [Function-Level Debugger Interfaces for Coding Agents](function-level-debugger-interfaces.md) — Re-expose interactive debuggers at the function frame instead of the source line so LLM agents pay one turn per call, not one turn per step
 - [Semantic Tool Output](semantic-tool-output.md) — Return human-readable, contextually filtered output from agent tools to reduce hallucination and improve downstream call accuracy
 - [Typed Schemas at Agent Boundaries](../patterns/multi-agent/typed-schemas-at-agent-boundaries.md) — Formal schemas at every agent-to-agent interface establish explicit contracts that prevent state mismanagement and silent failures
@@ -76,6 +77,7 @@ Packaging domain knowledge and reusable capabilities as agent skills with reliab
 - [Google ADK Skills](adk-skills.md) — How Google ADK implements the Agent Skills standard via SkillToolset, inline `models.Skill`, and three auto-generated tools mapped to L1/L2/L3 progressive disclosure
 - [Interpreter Skills](interpreter-skills.md) — Ship a SKILL.md plus an importable module so the model decides when the behavior fires while the runtime executes a reviewed, testable function — the named, versionable unit on top of an embedded code interpreter
 - [Generated Procedure Drivers: Skills That Emit a Program](generated-procedure-drivers.md) — A skill whose output is an executable script that walks a person through a manual procedure, useful only where automation genuinely stops
+- [Per-Surface Verification of Agent Plugin Packages](per-surface-plugin-verification.md) — An Agent Plugins package is portable at `skills/` and `mcp.json` and nowhere else; GitHub's own three clients differ on enablement, install trust, and namespaced components
 
 ## Hooks & Lifecycle
 

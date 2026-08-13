@@ -155,3 +155,4 @@ In these conditions, a prose spec plus code review is often a better fit.
 - [Pre-Completion Checklists](pre-completion-checklists.md)
 - [Pass@k Metrics](pass-at-k-metrics.md)
 - [TDD Interaction Models: Throughput Versus Test Quality](../workflows/tdd-interaction-models.md)
+- [Prescribing TDD Inside the Agent Loop (Process Theater)](../patterns/anti-patterns/tdd-inside-the-agent-loop.md) — what the cycle loses when no human sits between red and green

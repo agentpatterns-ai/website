@@ -9,7 +9,7 @@ tags:
 aliases:
   - BYOK token usage visibility
   - Bring Your Own Key token observability
-last_reviewed: 2026-06-02
+last_reviewed: 2026-08-13
 maturity: adopted
 ---
 
@@ -22,6 +22,8 @@ maturity: adopted
 An IDE owns its first-party route end to end. BYOK breaks that contract: you do not know the provider until you configure it, the response shape varies, and the IDE sees only what the adapter forwards. Until VS Code 1.120, BYOK token counts showed zero because accounting ran only for built-in models. Version 1.120 feeds adapter responses into the existing indicator ([VS Code 1.120 release notes](https://code.visualstudio.com/updates/v1_120)).
 
 This pattern gives first-class telemetry to routes the IDE does not own. A provider's billing dashboard lags by minutes and sits in another tab, so it cannot inform prompt-time choices about compacting, pruning skills, or falling back to a cheaper model.
+
+Reporting surfaces have improved on the attribution axis. GitHub shipped a per-model token breakdown in the Copilot usage report, which attributes usage to the model that consumed the tokens ([Per-model token breakdown in the usage report](https://github.blog/changelog/2026-08-11-per-model-token-breakdown-in-the-usage-report)). That closes cost attribution after the fact; the in-IDE indicator is still the only count an operator reads mid-turn.
 
 ```mermaid
 graph LR
