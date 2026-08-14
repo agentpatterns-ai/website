@@ -198,6 +198,7 @@ nav:
       - quality-score-rubric.md
       - recursive-agent-harnesses.md
       - sandbox-forking.md
+      - continuously-built-agent-environments.md
       - scoped-devtools-access-runtime-diagnosis.md
       - session-harness-sandbox-separation.md
       - temporary-compensatory-mechanisms.md

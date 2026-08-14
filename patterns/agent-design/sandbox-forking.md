@@ -78,3 +78,4 @@ The check worth writing into a fan-out is a snapshot assertion before the first 
 - [Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State](delta-channels-checkpoint-storage.md) — the same delta-over-snapshot economics applied to session state
 - [Agent Environment Bootstrapping](../../workflows/agent-environment-bootstrapping.md) — provisioning the baseline deterministically before any fork exists
 - [Experiential-Learning Setup Agents with Snapshot Rollback (SetupX)](../../workflows/experiential-setup-agents-snapshot-rollback.md) — the same snapshot primitive used to undo a failed setup step rather than to fan out
+- [Continuously Built Agent Environments](continuously-built-agent-environments.md) — the build-promotion loop that keeps the snapshot you fork from fresh and known-good

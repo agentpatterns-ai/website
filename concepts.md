@@ -615,6 +615,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Compiled Specialist Agents: Muscle Memory for Recurring Intent](patterns/agent-design/compiled-specialist-agents.md)
 - [Agent-Ready Data Architecture for Analytics Agents](patterns/agent-design/agent-ready-data-architecture.md)
 - [Tools as Typed Code Stubs (Programmatic Tool Calling)](patterns/agent-design/programmatic-tool-calling.md)
+- [Continuously Built Agent Environments](patterns/agent-design/continuously-built-agent-environments.md)
 
 ## Loop Engineering
 

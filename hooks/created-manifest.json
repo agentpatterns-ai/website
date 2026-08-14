@@ -396,6 +396,7 @@
   "patterns/agent-design/cognitive-reasoning-execution-separation.md": "2026-03-28T09:17:05+00:00",
   "patterns/agent-design/compiled-specialist-agents.md": "2026-08-11T21:06:46+00:00",
   "patterns/agent-design/continual-learning-layers.md": "2026-04-10T07:49:27+00:00",
+  "patterns/agent-design/continuously-built-agent-environments.md": "2026-08-14T21:19:10+00:00",
   "patterns/agent-design/critic-agent-plan-review.md": "2026-04-10T05:47:43+00:00",
   "patterns/agent-design/cross-cycle-consensus-relay.md": "2026-04-10T22:09:34+00:00",
   "patterns/agent-design/cross-session-peer-messaging.md": "2026-08-08T21:23:53+00:00",
