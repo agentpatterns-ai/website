@@ -89,3 +89,4 @@ The first form invents 860 interactions that were never prompts. The second keep
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the credit consumption that gives each agent app in the inventory a cost to weigh against its activity.
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — why social reach confounds a low adoption number, and what to measure instead of seat count.
 - [Human-Equivalent Hours for Autonomous Coding Agent Productivity](human-equivalent-hours-agent-productivity.md) — a denominator for the outcome half of the pairing this page requires.
+- [Delegating Delivery Stages to GitHub Agent Apps](../workflows/agent-apps-delivery-stage-delegation.md) — the install decision this metric is joined to, decided per delivery stage.

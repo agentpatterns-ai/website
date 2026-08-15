@@ -98,6 +98,7 @@ A weaker condition — `/goal the v1 to v2 migration is complete` — fails beca
 ## Related
 
 - [Goal-Driven Autonomous Loop with Budget Cap](../../loop-engineering/goal-driven-autonomous-loop.md) — Codex CLI's continuation-template variant of the same primitive, with a budget cap as a second stop signal
+- [Loop Trigger Selection: Pairing the Start with the Stop](../../loop-engineering/loop-trigger-selection.md) — where the goal contract sits among the trigger shapes, and when a schedule or an event should start the loop instead
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — feature-list-as-goal-contract, progress files, and the broader monitoring surface the evaluator sits inside
 - [Frozen Spec File](../../instructions/frozen-spec-file.md) — immutable, agent-readable scope file; complementary to `/goal` for long-running tasks where post-compaction drift is the dominant failure mode
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — deterministic Stop-hook gate when the evaluator's leniency bias is unacceptable

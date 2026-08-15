@@ -56,6 +56,7 @@ The crux — what stops a loop and what justifies running one at all.
 
 - [Convergence Detection in Iterative Agent Refinement](convergence-detection.md) — mechanical stopping criteria from change velocity, output size, and similarity
 - [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-loop-go-no-go-gate.md) — the four-condition gate before you build a loop at all
+- [Loop Trigger Selection: Pairing the Start with the Stop](loop-trigger-selection.md) — goal-bounded, scheduled, and event-driven triggers, and the terminal state each one commits you to
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](loop-budgeting.md) — pick the budget primitive (iteration / token / wall-clock) and choose front-loaded vs even-split per-turn allocation
 - [Within-Task Model Cascade: Designing the Escalation Gate](within-task-model-cascade.md) — retry the same step on a cheap model first and escalate on gate failure; the gate's false-accept rate sets both the saving and the quality floor
 - [Calibrated Early Termination and Warm Restart for Agent Runs (FailFast-RestartSmart)](early-termination-and-warm-restart.md) — predict failure from the trajectory prefix against a false-positive budget, then restart with the killed attempt's diff as an optional git overlay

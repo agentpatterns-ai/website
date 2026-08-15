@@ -159,4 +159,5 @@ Graph retrieval is not universally better than flat vector search, even once bui
 - [Context Hub](context-hub.md) — on-demand API docs without hierarchical structure
 - [Domain-Specific Agent Challenges](../patterns/agent-design/domain-specific-agent-challenges.md) — human factors of domain-specific agents
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — cross-file dependency and AST retrieval for code generation
+- [Hypothetical Classification for Large Label Vocabularies](hypothetical-classification.md) — retrieving a label rather than a document, by embedding an invented one against the real vocabulary
 - [Observation Masking](observation-masking.md) — refinement gate for intermediate tool results
