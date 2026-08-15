@@ -21,7 +21,7 @@ maturity: emerging
 
 ## When this technique applies
 
-The label-and-prompt effect lands cleanly in three conditions: reviewers see one labeled PR at a time (not a sustained queue), the originating prompt is surfaced alongside the code, and the reviewer pool has not yet habituated to agent PRs. Outside those conditions — high agent-PR volume, repeat within-reviewer exposure, or trusting priors — the attention shift compresses or inverts ([arXiv:2606.26505 §Threats to Validity](https://arxiv.org/abs/2606.26505); [Reviewer Habituation in Agent PR Review](reviewer-habituation-decay.md)).
+The label-and-prompt effect lands cleanly in three conditions: reviewers see one labeled PR at a time (not a sustained queue), the originating prompt is surfaced alongside the code, and the reviewer pool has not yet habituated to agent PRs. Outside those conditions — high agent-PR volume, repeat within-reviewer exposure, or trusting priors — the attention shift compresses or inverts ([Reviewer Habituation in Agent PR Review](reviewer-habituation-decay.md)). The habituation boundary comes from that longitudinal within-reviewer data. The eye-tracking study measured a single session and found no credible carryover effect from prior exposure to labeled code; the two findings cover different timescales.
 
 ## The measured effect
 

@@ -125,3 +125,4 @@ Copilot automations offer neither half today. Authorization is one binary for ev
 - [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md) — the same locality argument on a Slack or Teams thread, with a different trust boundary
 - [Cursor Automations: Event-Triggered Agents and /automate](cursor-automate-event-triggered-automations.md) — an adjacent vendor's event-trigger surface and how it bounds the trifecta per trigger
 - [Prompt as Security Knob](../patterns/anti-patterns/prompt-as-security-knob.md) — why an instruction in the prompt is not a boundary
+- [Delegating Delivery Stages to GitHub Agent Apps](agent-apps-delivery-stage-delegation.md) — which stage to hand to an agent fired from these triggers, decided by where its write lands

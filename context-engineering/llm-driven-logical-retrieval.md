@@ -136,3 +136,4 @@ The "after" configuration trades about 2 accuracy points (only at medium scale; 
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md) — the JIT-context pattern this retrieval interface plugs into
 - [Codebase-Derived Pattern Libraries as Agent Context](codebase-pattern-library-context.md) — tunes *what* is in the retrieval corpus (vetted in-house code) rather than *how* queries are authored
 - [Exhaustive Retrieval for Listing Questions](exhaustive-retrieval-for-listing-questions.md) — the Boolean empty set as a completeness signal when the answer is a set rather than a best match
+- [Hypothetical Classification for Large Label Vocabularies](hypothetical-classification.md) — the inverse move: the model authors a fake target and the corpus supplies the real one, instead of authoring a query the index executes

@@ -113,6 +113,7 @@ Verdict: do not loop. A single prompt-driven session with a domain expert review
 
 ## Related
 
+- [Loop Trigger Selection: Pairing the Start with the Stop](loop-trigger-selection.md) — the next decision once the gate passes: what starts each iteration, and what that commits the loop to as a stop
 - [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-strategy-spectrum.md) — once the gate passes, this page chooses *how* the loop carries context between iterations
 - [The Ralph Wiggum Loop: Fresh-Context Iteration Pattern](ralph-wiggum-loop.md) — the canonical fresh-context loop mechanic, downstream of this gate
 - [Goal-Driven Autonomous Loop](goal-driven-autonomous-loop.md) — the goal-condition variant of looping, also downstream of this gate

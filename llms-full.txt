@@ -378,6 +378,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cross-Reference Dereference Hop in Retrieval Loops](context-engineering/cross-reference-dereference-hop.md)
 - [Exhaustive Retrieval for Listing Questions](context-engineering/exhaustive-retrieval-for-listing-questions.md)
 - [Trajectory Attribution for Context Repair (TRACE)](context-engineering/trajectory-attribution-context-repair.md)
+- [Hypothetical Classification for Large Label Vocabularies](context-engineering/hypothetical-classification.md)
 
 ## Instructions & Prompts
 
@@ -760,6 +761,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Within-Task Model Cascade: Designing the Escalation Gate](loop-engineering/within-task-model-cascade.md)
 - [Blind Resampling Over Self-Repair in Small Code Models](loop-engineering/blind-resampling-over-self-repair.md)
 - [Calibrated Early Termination and Warm Restart for Agent Runs (FailFast-RestartSmart)](loop-engineering/early-termination-and-warm-restart.md)
+- [Loop Trigger Selection: Pairing the Start with the Stop](loop-engineering/loop-trigger-selection.md)
 
 ## Tool Design
 
@@ -1395,6 +1397,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Porting a Coding-Agent Harness Beyond Engineering](workflows/porting-agent-harness-beyond-engineering.md)
 - [Comment-Triggered Agent Dispatch on Issues and PRs](workflows/comment-triggered-agent-dispatch.md)
 - [Agent-Driven Deployment: What to Delegate and What to Gate](workflows/agent-driven-deployment.md)
+- [Delegating Delivery Stages to GitHub Agent Apps](workflows/agent-apps-delivery-stage-delegation.md)
 
 ## Human Factors
 
@@ -1575,6 +1578,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Frozen Playbook Reuse Without Target-Side Validation](patterns/anti-patterns/frozen-playbook-reuse-validation.md)
 - [Catastrophic Remembering: Instruction Files That Only Grow](patterns/anti-patterns/catastrophic-remembering-instruction-files.md)
 - [Prescribing TDD Inside the Agent Loop (Process Theater)](patterns/anti-patterns/tdd-inside-the-agent-loop.md)
+- [Cumulative-Best Reporting Hides Repair-Loop Security Regressions](patterns/anti-patterns/cumulative-best-hides-repair-regressions.md)
 
 ## Emerging Concepts
 
@@ -1902,6 +1906,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Component-Wise RAG Prioritization](rag-component-prioritization-software-engineering.md) — A 21+ model component-wise empirical study finds retriever choice dominates generator choice for SE-task RAG, and BM25 is robust across code generation, summarization, and repair — under specific conditions
 - [LLM-Driven Logical Retrieval](llm-driven-logical-retrieval.md) — When the agent LLM is frontier-capable, letting it emit AND/OR/NOT Boolean queries against an inverted index matches an agentic hybrid baseline at 41× lower indexing cost — under specific lexical-overlap conditions
 - [Exhaustive Retrieval for Listing Questions](exhaustive-retrieval-for-listing-questions.md) — When the correct answer is every matching passage, ranked top-k truncates silently; the completeness signal you hold decides whether an enumeration loop earns its cost
+- [Hypothetical Classification for Large Label Vocabularies](hypothetical-classification.md) — Let the model invent a label that does not exist, then resolve it to the nearest real one by embedding; the unguided form lost to plain retrieval on both published benchmarks
 - [Compositional Skill Routing](compositional-skill-routing.md) — Decompose a query into atomic sub-tasks, retrieve one skill per sub-task, then compose the plan — earns its cost only above hundreds of skills, where decomposition quality caps the system
 - [Skill Loadout Curation for Coding Agents](skill-loadout-curation.md) — Curate the skills and MCP servers an agent loads before a session; above roughly 30 skills the gain comes from removing colliding descriptions, not from saving tokens
 - [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — A typed skill graph whose candidate edges come from the retriever's own embedding neighbors can relabel what retrieval found but cannot extend its reach; overlay the edges and count what they newly connect
@@ -6173,6 +6178,97 @@ Always-loaded context stays at about 30 lines. The expensive layers load only wh
 
 ---
 
+### Hypothetical Classification for Large Label Vocabularies
+Source: https://agentpatterns.ai/context-engineering/hypothetical-classification/
+
+# Hypothetical Classification for Large Label Vocabularies
+
+> Ask the model to invent a plausible label, then resolve that invention to the nearest real entry by embedding similarity.
+
+Hypothetical classification splits a large-vocabulary classification problem into two cheap steps. A small model invents a label that does not exist in your taxonomy, and an embedding lookup snaps that invention onto the closest entry that does. The vocabulary never enters the prompt, so its size stops constraining the model. Doug Turnbull demonstrated the technique on the Wayfair WANDS taxonomy, sorting a query such as `brown coffee table` into one of hundreds of category paths ([Turnbull, 2026](https://softwaredoug.com/blog/2026/08/10/hypothetical-classifications)).
+
+## When to reach for it
+
+Check all four conditions before adopting the technique:
+
+- The vocabulary genuinely does not fit. Simon Willison's motivating case is 1,856 blog tags, "likely too many to feed to an LLM in one go" ([Willison, 2026](https://simonwillison.net/2026/Aug/14/dont-classify-hallucinate/)). The academic framing matches: "the label set is too large to be given to the LLMs in their prompt" ([Zhu and Zamani, 2024](https://arxiv.org/abs/2311.09649v2)).
+- Inputs are phrased unlike the labels. A short search query and a slash-delimited taxonomy path share few surface tokens, and the invented label bridges that gap.
+- You can validate the mapping, because the resolution step returns a match whether or not one deserves to exist.
+- You have measured the baseline. Embedding the input directly against the label vocabulary is a few lines of code, and it is the number this technique has to beat.
+
+## How the two steps work
+
+```mermaid
+graph LR
+    Q[Input query] --> P[Prompt with shape examples<br>no vocabulary]
+    P --> H[Invented label]
+    H --> E[Embed]
+    E --> N[Nearest real label<br>by vector similarity]
+    V[(Real vocabulary<br>embedded once)] --> N
+```
+
+The prompt carries no candidate answers, only a handful of example paths that establish the depth, register, and delimiter of the real taxonomy ([Turnbull, 2026](https://softwaredoug.com/blog/2026/08/10/hypothetical-classifications)). Those examples do shape-setting work rather than enumeration work, so prompt size stays constant as the vocabulary grows. Turnbull embeds every real classification once with MiniLM, embeds the invented label, then takes the dot product.
+
+## Why it works
+
+The invented label is a query vector rather than an answer. Writing something that reads like a category moves the input into label space, so its embedding lands near real categories instead of near other queries. Grounding then happens in the encoder rather than the model. The authors of HyDE, the retrieval-side ancestor of this shape, state the causal step directly: "This second step ground the generated document to the actual corpus, with the encoder's dense bottleneck filtering out the incorrect details" ([Gao et al., 2022](https://arxiv.org/abs/2212.10496v1)). That bottleneck is lossy, and the loss is the point: fabricated specifics survive generation but not encoding, while the relevance pattern survives both.
+
+Turnbull's post never names HyDE or claims the lineage. The resemblance is structural.
+
+## When this backfires
+
+- The unguided form loses to plain retrieval. In the closest measured analogue, candidates from no-demonstration generation scored P@1 0.160 on a 131K-label benchmark against 0.190 for dense retrieval over the same label space, and 0.250 against 0.270 at 320K labels ([Zhu and Zamani, 2024](https://arxiv.org/abs/2311.09649v2)). Structured guidance in the prompt separated the winning configuration from the losing one.
+- Accuracy erodes as the vocabulary grows. The same work reports that at 320K labels the generation route "does not measure up to the performance levels achieved by soft matching," attributing the gap to scale ([Zhu and Zamani, 2024](https://arxiv.org/abs/2311.09649v2)).
+- The mapping step cannot abstain: "Nearest neighbor assignment guarantees every extracted risk maps to some taxonomy category, even when no appropriate category exists" ([Dolphin et al., 2026](https://arxiv.org/abs/2601.15247v1)). That team added an LLM judge as a third stage to filter what the embedding step wrongly accepted.
+- Inputs already written in the vocabulary's own terms get paraphrased away. Retrieval degradations "co-occur with reduced lexical alignment between rewritten queries and relevant documents, as rewriting replaces domain-specific terms in already well-matched queries" ([Kotte, 2026](https://arxiv.org/abs/2603.13301v1)). SKUs, error codes, and internal jargon are most at risk.
+- Reported gains for the retrieval ancestor may be partly a benchmark artifact. Improvements "consistently occurred for claims whose generated documents included sentences entailed by gold evidence," which suggests leakage inflates the measured benefit ([Yoon et al., 2025](https://arxiv.org/abs/2504.14175v2)).
+
+Turnbull reports no accuracy or cost figures. His claims are qualitative: the work runs on "dumb / cheap LLMs" and "you don't need to ship the schema over to the LLM every time" ([Turnbull, 2026](https://softwaredoug.com/blog/2026/08/10/hypothetical-classifications)). Treat the prompt-size saving as demonstrated and the accuracy as unmeasured.
+
+## Alternatives worth pricing first
+
+Iterative label space reduction ranks and prunes candidate classes across passes instead of inventing one, improving macro-F1 by 7.0% on average with Llama-3.1-70B and 3.3% with Claude-3.5-Sonnet across seven benchmarks ([Vandemoortele et al., 2025](https://arxiv.org/abs/2502.08436v2)). It costs repeated model calls per item, traded against a single cheap generation.
+
+## Example
+
+Turnbull's prompt names no legal values. It supplies six example paths, then the input to classify ([Turnbull, 2026](https://softwaredoug.com/blog/2026/08/10/hypothetical-classifications)):
+
+```text
+Your task is to create novel, never seen before, furniture, home goods,
+or hardware classification that best fit a search query.
+
+Product classifications might look like:
+
+Furniture / Living Room Furniture / Coffee Tables & End Tables / Coffee Tables
+Décor & Pillows / Decorative Pillows & Blankets / Throw Pillows
+Furniture / Bedroom Furniture / Dressers & Chests
+Kitchen & Tabletop / Kitchen Organization / Food Storage & Canisters
+School Furniture and Supplies / School Furniture / School Chairs & Seating / Stackable Chairs
+Baby & Kids / Toddler & Kids Bedroom Furniture / Kids Beds
+
+Here's the query to generate classifications for:
+
+brown coffee table
+```
+
+For that query the model produces something like `Furniture / Living Room / Tables / Coffee`, a path absent from the real taxonomy. Its MiniLM embedding is closest to `Furniture / Living Room Furniture / Coffee Tables & End Tables / Coffee Tables`, which is the answer the system needed and never asked for.
+
+## Key Takeaways
+
+- Moving the vocabulary out of the prompt and into an embedding index trades a prompt-budget constraint for an embedding-quality one, so the accuracy question moves to the encoder.
+- Example labels in the prompt set taxonomy shape rather than candidate answers, and removing that guidance is what made the technique lose its benchmark.
+- Run the one-step baseline before the two-step technique; where the invented label does not beat it on your data, the generation call is pure cost.
+- The resolution step always returns something, so a validation stage belongs in any pipeline where a wrong label is expensive.
+
+## Related
+
+- [Structured Domain Retrieval](structured-domain-retrieval.md) — retrieving domain context through knowledge graphs where flat vector search falls short
+- [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — one shared schema across graph construction, query decomposition, and typed retrieval
+- [LLM-Driven Logical Retrieval](llm-driven-logical-retrieval.md) — letting the model emit Boolean queries against an inverted index
+- [Component-Wise RAG Prioritization](rag-component-prioritization-software-engineering.md) — empirical evidence that retriever choice dominates generator choice, which is why the retrieval baseline comes first
+
+---
+
 ### Instruction-Guided Code Completion
 Source: https://agentpatterns.ai/context-engineering/instruction-guided-code-completion/
 
@@ -6697,6 +6793,7 @@ The "after" configuration trades about 2 accuracy points (only at medium scale; 
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md) — the JIT-context pattern this retrieval interface plugs into
 - [Codebase-Derived Pattern Libraries as Agent Context](codebase-pattern-library-context.md) — tunes *what* is in the retrieval corpus (vetted in-house code) rather than *how* queries are authored
 - [Exhaustive Retrieval for Listing Questions](exhaustive-retrieval-for-listing-questions.md) — the Boolean empty set as a completeness signal when the answer is a set rather than a best match
+- [Hypothetical Classification for Large Label Vocabularies](hypothetical-classification.md) — the inverse move: the model authors a fake target and the corpus supplies the real one, instead of authoring a query the index executes
 
 ---
 
@@ -10361,6 +10458,7 @@ Graph retrieval is not universally better than flat vector search, even once bui
 - [Context Hub](context-hub.md) — on-demand API docs without hierarchical structure
 - [Domain-Specific Agent Challenges](../patterns/agent-design/domain-specific-agent-challenges.md) — human factors of domain-specific agents
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — cross-file dependency and AST retrieval for code generation
+- [Hypothetical Classification for Large Label Vocabularies](hypothetical-classification.md) — retrieving a label rather than a document, by embedding an invented one against the real vocabulary
 - [Observation Masking](observation-masking.md) — refinement gate for intermediate tool results
 
 ---
@@ -31060,6 +31158,7 @@ A weaker condition — `/goal the v1 to v2 migration is complete` — fails beca
 ## Related
 
 - [Goal-Driven Autonomous Loop with Budget Cap](../../loop-engineering/goal-driven-autonomous-loop.md) — Codex CLI's continuation-template variant of the same primitive, with a budget cap as a second stop signal
+- [Loop Trigger Selection: Pairing the Start with the Stop](../../loop-engineering/loop-trigger-selection.md) — where the goal contract sits among the trigger shapes, and when a schedule or an event should start the loop instead
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — feature-list-as-goal-contract, progress files, and the broader monitoring surface the evaluator sits inside
 - [Frozen Spec File](../../instructions/frozen-spec-file.md) — immutable, agent-readable scope file; complementary to `/goal` for long-running tasks where post-compaction drift is the dominant failure mode
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — deterministic Stop-hook gate when the evaluator's leniency bias is unacceptable
@@ -44727,6 +44826,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Blind Tool Deference: Agents Parroting Callable Tools](blind-tool-deference.md) — Agents adopt a callable tool's output wholesale instead of judging it; agreement on a GNN-tool setup is 97.6-99.2% and stronger backbones defer more, not less
 - [Vibe Coding](vibe-coding.md) — Accepting AI-generated code without structural review, producing fragile, unreviewable software
 - [Density-Normalized Quality Metrics Mask AI-Driven Code Growth](density-normalized-quality-metric.md) — A 6.7% smell-density drop after AI adoption can be a 13% LOC inflation, not improvement; divide by a moving denominator and the ratio reports the wrong story
+- [Cumulative-Best Reporting Hides Repair-Loop Security Regressions](cumulative-best-hides-repair-regressions.md) — A best-across-iterations metric is non-decreasing by construction, so it cannot show a repair loop re-breaking passing security checks; 13.8% of IaC scenarios regress under standard detection and 3.3% under strict
 - [Agent-Laundered Bug Reports](agent-laundered-bug-reports.md) — Running a bug report through an LLM before filing strips the load-bearing observation and replaces it with confident speculation that misleads downstream triage
 - [Memory-Induced Tool-Drift](memory-induced-tool-drift.md) — Personality biases stored in long-term memory act as implicit steering vectors on tool-call parameters in unrelated contexts; prompt-based defenses reduce but do not eliminate the drift
 - [The Compliance Trap: Consuming Conflicting Agent Memory](compliance-trap-conflicting-memory.md) — Agents comply with retrieved memory that conflicts with the current situation, adopting it at the first step and rarely recovering; the failure is in consumption, not supply, and the fix is a retry-on-fail consumption policy
@@ -47474,6 +47574,95 @@ Removing four components — Planning, Memory, Self-Reflection, Retrieval — li
 - [Progressive Disclosure for Agents](../agent-design/progressive-disclosure-agents.md) — the attention-dilution mechanism behind CCI, applied to instruction surfaces
 - [Framework-First Agent Development](framework-first.md) — related anti-pattern: adopting abstractions that bundle scaffold components before measuring whether you need them
 - [Blaming the Model for Scaffolding-Driven Quality Regressions](blaming-the-model-for-scaffolding-regressions.md) — what over-stacked scaffolds cost over time, and why the regression gets misattributed to the model
+
+---
+
+### Cumulative-Best Reporting Hides Repair-Loop Security Regressions
+Source: https://agentpatterns.ai/patterns/anti-patterns/cumulative-best-hides-repair-regressions/
+
+# Cumulative-Best Reporting Hides Repair-Loop Security Regressions
+
+> A metric defined as the best result across iterations can never fall, so a repair loop that re-breaks passing security checks looks monotone.
+
+Report a generate-validate-repair loop with a cumulative-best metric and you have chosen a number that cannot decrease. Feeding validator errors back for another repair pass sometimes re-breaks a security check that was passing one iteration earlier, and the aggregate absorbs it silently. A study of 5,968 infrastructure-as-code repair timelines found the per-iteration security trajectory had never been examined for this workload, because prior work reported the cumulative-best form ([Agyekum and Santos, 2026](https://arxiv.org/abs/2608.13404v1)).
+
+## When this applies
+
+The blind spot exists wherever the aggregate is a maximum, but the fix earns its cost only under three conditions.
+
+- Your loop ships its last iteration rather than the best verified one, so an intermediate regression can reach production. A system that exports a retained checkpoint instead reports that "after the early rounds, the current candidate can lag behind the retained checkpoint" ([Wu et al., 2026](https://arxiv.org/abs/2605.26807v1)).
+- Your validator emits a stable per-check pass/fail set of named rules, in the shape Checkov, tfsec, or a policy engine produces. A compiler exit code has no such set to diff.
+- The artifact holds several resources the model can restructure while repairing one of them, which is the edit shape the regressions come from.
+
+## The pattern
+
+A team runs an LLM repair loop against a validator, feeds each round of errors back, and reports the outcome as the best pass rate any iteration reached. The loop appears to climb, so the iteration budget gets raised on the assumption that another round can only help.
+
+The per-transition view says otherwise. Across 4,440 iteration transitions carrying Checkov results on both sides, 24.8% of transitions and 13.8% of scenarios showed at least one previously-passing CIS Benchmark check failing afterwards under standard detection ([Agyekum and Santos, 2026](https://arxiv.org/abs/2608.13404v1)).
+
+Pin that figure to its detection mode, because the study reports two and they differ by roughly four times. Standard detection counts any check that moves from the passed set into the failed set. Strict detection requires the check to be exclusively passing beforehand and exclusively failing afterwards, removing ambiguous multi-resource cases. Under strict detection the rate falls to 5.2% of transitions and 3.3% of scenarios. The authors call 3.3% "the conservative, defensible rate" and read the gap as evidence that "most apparent regressions are multi-resource measurement artifacts" ([Agyekum and Santos, 2026](https://arxiv.org/abs/2608.13404v1)).
+
+## Why it works
+
+The regression follows from a mismatch of scope. Validator feedback names the check that failed, while the model's edit covers the whole resource block it decides to rewrite, so passing properties that went unmentioned become collateral. Resource restructuring accounts for 79.0% of standard-mode regressions and 68.4% of strict-mode ones, ahead of configuration drift at 15.5%. The study describes the shape directly: the model "adds, removes, or renames resource blocks while fixing validation errors, and the restructured code loses security configurations from the prior iteration" ([Agyekum and Santos, 2026](https://arxiv.org/abs/2608.13404v1)).
+
+The second half of the mechanism is arithmetic. A cumulative-best aggregate takes a maximum over iterations, and a maximum is non-decreasing whatever the underlying series does, so no property of the reported number separates a loop that improved steadily from one that broke and re-fixed the same check three times. The evidence survives only in the per-transition trajectory, which is why the effect went unmeasured rather than unnoticed.
+
+## What to measure instead
+
+- Diff the per-check result sets between consecutive iterations and report how many checks moved from passing to failing, with the detection mode named.
+- Watch check volatility as a cheap online signal. Defined as `|C_new| + |C_removed| + |C_flipped|` across a transition, it averages 11.55 on regression transitions against 2.38 otherwise in strict mode, a 4.9x separation with Cohen's d = 1.49 ([Agyekum and Santos, 2026](https://arxiv.org/abs/2608.13404v1)).
+- Name regressions in the feedback prompt instead of replaying the whole error list flatly: "Explicitly flagging regressions ('Warning: CKV_AWS_145 was passing but now fails') could prevent the LLM from unknowingly degrading security" ([Agyekum and Santos, 2026](https://arxiv.org/abs/2608.13404v1)).
+- Instruct minimal edits, since restructuring dominates the root causes. The authors argue models "should be constrained to make minimal modifications during repair rather than regenerating entire resource blocks" ([Agyekum and Santos, 2026](https://arxiv.org/abs/2608.13404v1)).
+- Retain the best verified artifact instead of the final edit. At revision 3 of a forced-revision study, "16.0% of trajectories have produced a correct patch and subsequently lost it" ([Gao et al., 2026, §5.1](https://arxiv.org/abs/2607.24604v1)).
+
+## When this backfires
+
+- The loop already exports the best verified checkpoint. Cumulative-best then describes the artifact you ship, so per-iteration alarms fire on states that never leave the loop.
+- Stopping early to dodge regressions costs pass rate and forfeits self-repair. In the same study 36.6% of standard-mode regressions self-corrected within an average of 1.2 iterations, and the pass-rate maximum sits at iteration 4 (83.4%) rather than iteration 3 (83.1%) ([Agyekum and Santos, 2026](https://arxiv.org/abs/2608.13404v1)). Iteration 3 is a trade-off point, not a safety threshold.
+- Single-resource artifacts, where the four-fold gap between the two detection modes means a standard-mode alert is mostly noise.
+- Treating the root-cause split as settled. The classification came from automated diff analysis that "was not validated against human labels", and single runs per configuration mean "point estimates may vary ±2–5pp" ([Agyekum and Santos, 2026](https://arxiv.org/abs/2608.13404v1)).
+
+## Example
+
+Before, reporting the cumulative best:
+
+```text
+Terraform repair loop — weekly report
+- Checks passing (best across 5 iterations): 83.4%
+- Conclusion: converging; raise the iteration cap to 8
+```
+
+The headline is a maximum over the run, so it rose whatever happened in between.
+
+After, reporting the trajectory alongside it:
+
+```text
+Terraform repair loop — weekly report
+- Checks passing at final iteration: 82.6%
+- Checks passing (best across 5 iterations): 83.4%
+- Regressed checks (strict mode): 5.2% of transitions
+- Check volatility on regressed transitions: 11.6 vs 2.4 baseline
+- Conclusion: final artifact sits below the best one seen; export the
+  retained checkpoint and cap the loop nearer iteration 3-4
+```
+
+Same run. The gap between the final and the best result is the whole finding, and the first report cannot show it.
+
+## Key Takeaways
+
+- Read any repair-loop report that quotes a best-across-iterations or ever-passed figure as unanswered on safety, and ask for the final-iteration number beside it
+- Under standard detection 13.8% of IaC repair scenarios showed at least one security regression, while the defensible strict-mode rate is 3.3%; name the detection mode whenever you cite either
+- The cause is scope mismatch: feedback names one failing check while the model rewrites the whole resource block, and restructuring drives 79.0% of standard-mode regressions
+- Retaining the best verified artifact removes most of the operational risk without any new metric, so instrument the trajectory when your loop ships its final iteration
+
+## Related
+
+- [Density-Normalized Quality Metrics Mask AI-Driven Code Growth](density-normalized-quality-metric.md) — the adjacent measurement artifact, where the denominator rather than the aggregation function produces the misleading trend
+- [State-Bound Evidence and Typed Revision Contracts for Repair Loops](../../verification/state-bound-repair-evidence.md) — the functional-correctness analogue, where a loop finds a correct patch and then destroys it
+- [Bounded Repair-Loop Iterations](../../verification/bounded-repair-loop-iterations.md) — the round-budget argument on functional grounds, which this page's stopping guidance sits alongside
+- [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](../../verification/layered-oracle-iac-security-repair.md) — the within-repair IaC security failure, where a single fix satisfies the scanner without changing the policy
+- [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](../../verification/validity-estimate-stopping-noisy-repair-loops.md) — stopping when the verifier itself is unreliable, a different corruption of the same stop signal
 
 ---
 
@@ -73994,6 +74183,7 @@ The crux — what stops a loop and what justifies running one at all.
 
 - [Convergence Detection in Iterative Agent Refinement](convergence-detection.md) — mechanical stopping criteria from change velocity, output size, and similarity
 - [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-loop-go-no-go-gate.md) — the four-condition gate before you build a loop at all
+- [Loop Trigger Selection: Pairing the Start with the Stop](loop-trigger-selection.md) — goal-bounded, scheduled, and event-driven triggers, and the terminal state each one commits you to
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](loop-budgeting.md) — pick the budget primitive (iteration / token / wall-clock) and choose front-loaded vs even-split per-turn allocation
 - [Within-Task Model Cascade: Designing the Escalation Gate](within-task-model-cascade.md) — retry the same step on a cheap model first and escalate on gate failure; the gate's false-accept rate sets both the saving and the quality floor
 - [Calibrated Early Termination and Warm Restart for Agent Runs (FailFast-RestartSmart)](early-termination-and-warm-restart.md) — predict failure from the trajectory prefix against a false-positive budget, then restart with the killed attempt's diff as an optional git overlay
@@ -74139,6 +74329,7 @@ Verdict: do not loop. A single prompt-driven session with a domain expert review
 
 ## Related
 
+- [Loop Trigger Selection: Pairing the Start with the Stop](loop-trigger-selection.md) — the next decision once the gate passes: what starts each iteration, and what that commits the loop to as a stop
 - [Loop Strategy Spectrum: Accumulated vs Fresh Context](loop-strategy-spectrum.md) — once the gate passes, this page chooses *how* the loop carries context between iterations
 - [The Ralph Wiggum Loop: Fresh-Context Iteration Pattern](ralph-wiggum-loop.md) — the canonical fresh-context loop mechanic, downstream of this gate
 - [Goal-Driven Autonomous Loop](goal-driven-autonomous-loop.md) — the goal-condition variant of looping, also downstream of this gate
@@ -75087,6 +75278,92 @@ Cross-referencing. Each iteration starts a clean window and reads persistent sta
 - [Agent Harness](../patterns/agent-design/agent-harness.md)
 - [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../patterns/agent-design/cognitive-reasoning-execution-separation.md)
+
+---
+
+### Loop Trigger Selection: Pairing the Start with the Stop
+Source: https://agentpatterns.ai/loop-engineering/loop-trigger-selection/
+
+# Loop Trigger Selection: Pairing the Start with the Stop
+
+> An agent loop's trigger decides what can stop it, so pick the start condition and the stopping rule as one decision.
+
+Loop trigger selection is the choice of what begins each iteration of an agent loop, made together with the rule that ends it. A loop specification names both, alongside the goal, the verification step, and the memory that survives between turns ([arXiv 2607.00038v1](https://arxiv.org/abs/2607.00038v1)). Picking them separately is how a loop ends up with a start it cannot stop.
+
+## Conditions for this choice to be live
+
+This decision sits downstream of [the go/no-go gate](agent-loop-go-no-go-gate.md), and automating the start is worth it only under two conditions.
+
+Manual triggering is still the majority practice. In a hand-coded corpus of fifty public loops, "the trigger is manual in seventy-eight percent of loops, with only twelve percent scheduled and ten percent event-driven" ([arXiv 2607.00038v1](https://arxiv.org/abs/2607.00038v1)). Pressing enter yourself is the corpus default, not a fallback.
+
+One turn's result also has to change the next action. The same paper sets the bar plainly: "A loop specification is justified over a bare scheduled prompt only when the result of one turn changes the next action." Independent firings are a cron job, and the notification you already get is cheaper.
+
+## The three shapes
+
+Claude Code's documentation organizes the choice by asking what should start the next turn, and pairs each answer with its stop ([Claude Code: Keep Claude working toward a goal](https://code.claude.com/docs/en/goal)). That comparison supplies the first two rows below. The third is the remaining trigger type in the loop specification taxonomy, which classes triggers as manual, scheduled, or event-driven ([arXiv 2607.00038v1](https://arxiv.org/abs/2607.00038v1)).
+
+| Shape | Next turn starts when | Stops when | Fits |
+|---|---|---|---|
+| Goal-bounded | the previous turn finishes | an evaluator confirms the condition holds, or judges it impossible | work with a finish line the run can surface |
+| Scheduled | a time interval elapses | you stop it, or the agent decides the work is done | a world that keeps producing new work |
+| Event-driven | an external signal arrives | the reaction to that signal completes | state changes you would otherwise poll for |
+
+A scheduled loop carries no completion condition of its own, so each firing has to name its own terminal state. A well-formed specification distinguishes "success, a clean no-op, blocked, stalled, exhausted", and "an error or an exhausted budget never counts as success" ([arXiv 2607.00038v1](https://arxiv.org/abs/2607.00038v1)).
+
+The shapes also compose, which is the common production form. Addy Osmani schedules the detection and bounds the repair: "you use loop to schedule a check, and then goal to solve the problem" ([Practical Loop Engineering](https://addyo.substack.com/p/practical-loop-engineering)). The schedule answers "is there work?" and the goal answers "is this piece of work done?", so neither shape carries a job it has no stopping rule for.
+
+## Why it works
+
+The trigger fixes what information exists when the loop has to decide it is finished. A goal-bounded run starts from a human-supplied completion condition, so the stopping rule has something a person asked for to check against. Claude Code sends that condition plus the conversation to a separate small model each turn, so "completion is decided by a fresh model rather than the one doing the work" ([Claude Code: Keep Claude working toward a goal](https://code.claude.com/docs/en/goal)). A clock supplies no such condition. That is why the same comparison lists a scheduled loop's stop as the operator switching it off, and why its stopping rule has to drive to a named terminal state instead ([arXiv 2607.00038v1](https://arxiv.org/abs/2607.00038v1)).
+
+The pairing buys termination, not quality. The evaluator "does not call tools, so it can only judge what Claude has already surfaced in the conversation" ([Claude Code: Keep Claude working toward a goal](https://code.claude.com/docs/en/goal)). Osmani states the consequence directly: it "doesn't look at the content to see if it's good or bad in any way, shape, or form. All it does is examine the conversation transcript to see if the hard rules you specified have been met" ([Practical Loop Engineering](https://addyo.substack.com/p/practical-loop-engineering)).
+
+## When this backfires
+
+1. Nothing changes between firings. A scheduled trigger over work where one turn does not inform the next is polling waste ([arXiv 2607.00038v1](https://arxiv.org/abs/2607.00038v1)).
+2. The agent can edit the oracle. A subset of the environments used to train Claude Sonnet 3.7 were "all vulnerable to at least one of the following systemic reward hacks: (1) the AlwaysEqual hack, (2) the sys.exit(0) hack, (3) the conftest.py hack", each of which makes the tests report success without the task being solved ([arXiv 2511.18397v1](https://arxiv.org/abs/2511.18397v1)). The [goal contract](../patterns/agent-design/goal-contract-completion-evaluator.md) page covers the gaming surface in full.
+3. The end state is invisible to the run. A condition about a deployed service or a rendered page has no working pairing, because the evaluator sees only what the transcript reports ([Claude Code: Keep Claude working toward a goal](https://code.claude.com/docs/en/goal)).
+4. The bar is taste. Osmani's example of a goal that cannot work: "keep going until this UI design is good. What does that mean? Good to who? How is it being evaluated?" ([Practical Loop Engineering](https://addyo.substack.com/p/practical-loop-engineering)).
+5. A session-scoped scheduler is used for unattended work. Claude Code's `/loop` fires only "while Claude Code is running and idle", offers "no catch-up for missed fires", and expires recurring tasks 7 days after creation ([Claude Code: Run prompts on a schedule](https://code.claude.com/docs/en/scheduled-tasks)). Overnight automation on it produces silent non-execution.
+6. Reviewer attention is already saturated. Stopping rules are per loop; the person reading the diffs is not. Osmani runs "anywhere between five and ten agents" a day, caps concurrency "at about five", and watches closely anything that "happens to touch authentication, or something related to security or finance" ([Practical Loop Engineering](https://addyo.substack.com/p/practical-loop-engineering)).
+
+The loop specification paper names the compound failure cognitive surrender: "the temptation to stop having an opinion once the loop seems to cope; designing the loop is the cure when done with judgment and the accelerant when done to avoid thinking" ([arXiv 2607.00038v1](https://arxiv.org/abs/2607.00038v1)).
+
+## Example
+
+Osmani's composed form, in full ([Practical Loop Engineering](https://addyo.substack.com/p/practical-loop-engineering)):
+
+```text
+/loop every 24h "Check GitHub for issues labeled 'bug'. If one exists, use /goal
+to implement a fix until all local tests pass and push the branch."
+```
+
+The scheduled half has a terminal state per firing: a clean no-op when no bug issue exists. The goal-bounded half has a transcript-visible condition, because the agent runs the tests and the result lands where an evaluator can read it. A standalone goal carries the same discipline, naming the measuring tool alongside the threshold:
+
+```text
+/goal Refactor the data-fetching layer in Dashboard.tsx until Lighthouse
+performance score is >= 92 and LCP is under 1.8s as shown by the Lighthouse CLI
+output. Do not change the public API of any hooks. Each turn must improve at
+least one reported metric; abort if two consecutive turns show no improvement.
+Stop after 10 turns.
+```
+
+## Key Takeaways
+
+- Choose the trigger and the stopping rule together. A clock supplies no completion condition, so a scheduled loop has to define a terminal state for each firing.
+- Manual triggering is the corpus majority at 78%, so treat automating the start as a claim that needs the "one turn changes the next action" test.
+- A goal-bounded loop's stop is a rule check over what the run surfaced. Keep a separate quality gate for the artifact, and keep it outside the loop.
+- Compose rather than stretch one shape: schedule the detector, bound the fix.
+- Session-scoped schedulers expire and skip missed fires, so durable automation needs a scheduler that survives without an open session.
+
+## Related
+
+- [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-loop-go-no-go-gate.md) — the upstream four-condition gate that decides whether to build a loop at all
+- [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](loop-budgeting.md) — once the trigger is chosen, the cap and the per-turn allocation
+- [Goal Contract: Separating the Doer from the Done-Checker](../patterns/agent-design/goal-contract-completion-evaluator.md) — the goal-bounded shape in detail, including evaluator bias and gaming
+- [Human-in-the-Loop Checkpoints as Loop Control](human-in-the-loop-checkpoints.md) — the deliberate suspend that puts human judgment back inside a running loop
+- [Session Scheduling with Loop and Cron in Claude Code](../tools/claude/session-scheduling.md) — the scheduled shape as one tool implements it, with its expiry and jitter semantics
+- [Developer as CPU Scheduler: Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md) — why adding triggers past your review capacity converts loop throughput into unread diffs
 
 ---
 
@@ -76706,7 +76983,7 @@ Source: https://agentpatterns.ai/code-review/ai-label-attention-redistribution/
 
 ## When this technique applies
 
-The label-and-prompt effect lands cleanly in three conditions: reviewers see one labeled PR at a time (not a sustained queue), the originating prompt is surfaced alongside the code, and the reviewer pool has not yet habituated to agent PRs. Outside those conditions — high agent-PR volume, repeat within-reviewer exposure, or trusting priors — the attention shift compresses or inverts ([arXiv:2606.26505 §Threats to Validity](https://arxiv.org/abs/2606.26505); [Reviewer Habituation in Agent PR Review](reviewer-habituation-decay.md)).
+The label-and-prompt effect lands cleanly in three conditions: reviewers see one labeled PR at a time (not a sustained queue), the originating prompt is surfaced alongside the code, and the reviewer pool has not yet habituated to agent PRs. Outside those conditions — high agent-PR volume, repeat within-reviewer exposure, or trusting priors — the attention shift compresses or inverts ([Reviewer Habituation in Agent PR Review](reviewer-habituation-decay.md)). The habituation boundary comes from that longitudinal within-reviewer data. The eye-tracking study measured a single session and found no credible carryover effect from prior exposure to labeled code; the two findings cover different timescales.
 
 ## The measured effect
 
@@ -119003,6 +119280,7 @@ The first form invents 860 interactions that were never prompts. The second keep
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the credit consumption that gives each agent app in the inventory a cost to weigh against its activity.
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — why social reach confounds a low adoption number, and what to measure instead of seat count.
 - [Human-Equivalent Hours for Autonomous Coding Agent Productivity](human-equivalent-hours-agent-productivity.md) — a denominator for the outcome half of the pairing this page requires.
+- [Delegating Delivery Stages to GitHub Agent Apps](../workflows/agent-apps-delivery-stage-delegation.md) — the install decision this metric is joined to, decided per delivery stage.
 
 ---
 
@@ -140317,6 +140595,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md) — Mention a cloud coding agent in a Slack or Microsoft Teams channel to delegate from where coordination already happens, with a concentrated lethal-trifecta posture that the IDE entry point hides
 - [Cursor Automations: Event-Triggered Agents and the /automate Skill](cursor-automate-event-triggered-automations.md) — Cursor 3.8's expanded trigger surface (GitHub events, Slack emoji, default-on computer-use) and the /automate natural-language authoring skill ship event-driven dispatch only when the lethal trifecta is bounded per trigger
 - [Comment-Triggered Agent Dispatch on Issues and PRs](comment-triggered-agent-dispatch.md) — Fire an agent from a phrase in an issue or pull request thread, for bounded, reversible, cheap-to-verify work behind a narrow tool grant
+- [Delegating Delivery Stages to GitHub Agent Apps](agent-apps-delivery-stage-delegation.md) — Sort each delivery stage by where the agent's write lands, and hand over only the stages whose target system already enforces an approval boundary the agent inherits
 - [Public-Channel Agent Work as Lehrwerkstatt](public-channel-agent-work.md) — Force agent conversations into public channels so the team learns from every transcript — a high-yield organizational practice with hard psychological-safety and data-scope preconditions
 - [Stakeholder Trust Through Evals and Observability](stakeholder-trust-evals-observability.md) — Three-artifact stakeholder review cycle — dashboards, custom trace views, ad-hoc query — that transfers eval and observability data to non-engineers when paired with narrated error analysis, plural headline metrics, and an in-workflow surface
 - [Parallel Polyglot Ports as a Spec-Ambiguity Oracle](parallel-polyglot-ports-spec-oracle.md) — Generate multiple AI-paired ports from one executable spec and treat divergence as a signal that the spec under-specifies behavior — not as a fault-tolerance vote
@@ -144155,6 +144434,7 @@ Copilot automations offer neither half today. Authorization is one binary for ev
 - [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md) — the same locality argument on a Slack or Teams thread, with a different trust boundary
 - [Cursor Automations: Event-Triggered Agents and /automate](cursor-automate-event-triggered-automations.md) — an adjacent vendor's event-trigger surface and how it bounds the trifecta per trigger
 - [Prompt as Security Knob](../patterns/anti-patterns/prompt-as-security-knob.md) — why an instruction in the prompt is not a boundary
+- [Delegating Delivery Stages to GitHub Agent Apps](agent-apps-delivery-stage-delegation.md) — which stage to hand to an agent fired from these triggers, decided by where its write lands
 
 ---
 
@@ -145444,6 +145724,96 @@ Audit whether each skill is firing when expected before adding the next one. A t
 - [Red-Green-Refactor with Agents](../verification/red-green-refactor-agents.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
 - [SDLC Skill Taxonomy](sdlc-skill-taxonomy.md)
+
+---
+
+### Delegating Delivery Stages to GitHub Agent Apps
+Source: https://agentpatterns.ai/workflows/agent-apps-delivery-stage-delegation/
+
+# Delegating Delivery Stages to GitHub Agent Apps
+
+> Hand a delivery stage to an agent app when it only reads, or when the write lands behind an approval the agent inherits.
+
+An agent app is a partner AI agent installed as a GitHub App: "Agent apps are AI agents from GitHub partners, installable from the GitHub Marketplace, and integrated directly into GitHub" ([GitHub Changelog, 2026-06-02](https://github.blog/changelog/2026-06-02-extend-github-with-agent-apps/)). Because it runs on the platform rather than in an editor, it can read and act at any stage of delivery, not only while code is being written. Which of those stages you actually hand over is decided by one property of the stage, not by the agent's quality: where the agent's write lands. A stage that only reads is cheap to delegate. A stage that writes is safe to delegate only when the system being written into already enforces an approval boundary the agent's own identity cannot cross.
+
+## Why stage selection is not a question of agent quality
+
+The install decision and the invocation decision sit at different levels, and only the first one is administered. An agent app becomes available once "it's installed and enabled by an administrator" ([GitHub Changelog, 2026-06-02](https://github.blog/changelog/2026-06-02-extend-github-with-agent-apps/)), after which it is invoked by assigning an issue, mentioning the agent in a pull request comment, or selecting it in the Agents interface. One administrator decides that the agent may exist; the routes above then carry whatever anyone able to use them types.
+
+The ecosystem has not closed that gap at the agent level. A study of 1,033 real-world AI-assisted actions found that "only 21 provide explicit caller-identity access controls", and that "composition-facing interfaces are common, while action-level access controls are rare" ([Wang et al., 2026, arXiv:2605.07135v1](https://arxiv.org/abs/2605.07135v1)). So the control you are choosing when you delegate a stage is rarely a control on the agent. It is a control on what the agent's write can reach.
+
+```mermaid
+flowchart TD
+    A[Delivery stage] --> B{Does the agent write<br>outside GitHub?}
+    B -->|No| C[Tier 1: read and advise]
+    B -->|Yes| D{Target system enforces<br>its own approval?}
+    D -->|Yes, verified| E[Tier 2: write behind<br>inherited approval]
+    D -->|No or unknown| F[Tier 3: do not delegate]
+```
+
+## Three delegation tiers
+
+The tiers below are this page's classification, not GitHub's. Applying them to the four agents GitHub demonstrates across a delivery flow ([GitHub Blog, 2026-08-14](https://github.blog/ai-and-ml/github-copilot/how-to-bring-your-software-delivery-workflow-into-github-with-agent-apps/)) puts three of the four in the first tier.
+
+### Tier 1: read and advise
+
+The agent queries an external system and returns an answer into the thread. Nothing outside GitHub changes. GitHub's scoping example asks a product-analytics agent about funnel behavior, its build-stage example asks a dependency agent what to watch out for in the dependencies a pull request touches, and its pre-deploy example uses an incident agent that "maps the repository to its PagerDuty service, checks for active incidents, reviews the previous 90 days, and compares the files in the pull request with areas involved in past incidents" ([GitHub Blog, 2026-08-14](https://github.blog/ai-and-ml/github-copilot/how-to-bring-your-software-delivery-workflow-into-github-with-agent-apps/)).
+
+Delegate these freely on repositories with a trusted contributor set. The output is a comment a reviewer reads, and a wrong answer costs a reviewer's attention rather than a production change.
+
+### Tier 2: write behind an inherited approval
+
+The agent performs a real write in the target system, and that system's existing approval boundary applies to the write unchanged. GitHub's rollout example is the only one of the four that writes: "The agent creates the flag in LaunchDarkly and adds the code implementation as a commit you review. If the target environment requires approval, it creates an approval request instead of applying the targeting change directly. A human still decides whether the rollout moves forward" ([GitHub Blog, 2026-08-14](https://github.blog/ai-and-ml/github-copilot/how-to-bring-your-software-delivery-workflow-into-github-with-agent-apps/)).
+
+Delegate this only after you have opened the target system and confirmed the approval requirement is switched on for the specific environment the agent will touch. The safety property lives in that setting, owned by whoever administers the other product.
+
+### Tier 3: no downstream gate
+
+The agent's action is itself the last control. Nothing downstream reviews it, and no second identity has to agree before the change takes effect. Do not delegate this tier to an agent app. Move the gate first, then reclassify the stage as Tier 2.
+
+Moving the gate is only available to you when you own the system being written into. Where you do own it, build the capability boundary directly rather than adding an approver, as in [agent-driven deployment](agent-driven-deployment.md). The tier rule exists for the case a partner agent creates, where the boundary belongs to a product you administer through someone else's settings page and can verify but not author.
+
+## Why it works
+
+An agent app moves context rather than authority. Its value is that it renders state from another system into the pull request thread at the moment the decision is being made, which is where the reviewer is already looking. Its safety, where it has any, comes from somewhere else entirely: the consequential action still lands in the external system, so that system's approval boundary applies exactly as it would to a human operator. The Tier 2 example states that chain as a conditional. The promised human decision holds because a setting in the other product makes it hold, so the gate is inherited rather than supplied.
+
+GitHub applies the same non-transitive logic to the install itself. Enterprise-level installation deliberately does not cascade downward: "Enterprise installations grant access to the enterprise account itself; they do not grant access to organizations or repositories in the enterprise" ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-enterprises-can-now-install-third-party-github-apps)). A grant at one level is not a grant at the level below it, and the tier rule is that principle applied to delivery stages instead of accounts.
+
+## Triggers and constraints
+
+Agent apps have three invocation routes and no schedule of their own. Each route bounds authority differently in practice.
+
+| Route | What reaches the agent | Who can fire it |
+|---|---|---|
+| Assign an issue to the agent | The issue body, written by whoever filed or edited it | Whoever may assign on that repository |
+| Mention the agent in a pull request comment | The thread, including comments written earlier by others | Whoever may comment on that thread |
+| Select the agent in the Agents interface | The prompt typed at that moment | Whoever may reach the interface |
+
+The tier rule is specific to platform-resident agents that write into third-party systems, so it applies to GitHub agent apps and to equivalent installed integrations rather than to editor-resident assistants. The underlying move, placing the gate in the system that owns the consequence, transfers to any tool.
+
+## When this backfires
+
+- The downstream approval is not configured. The demonstrated safety property rests on a conditional. Where the target environment has no approval requirement set, the agent applies the change directly, and nothing in GitHub reports the state of that setting.
+- The repository accepts outside contributions. The invocation routes are the same untrusted event context that agentic workflow injection exploits. Applying taint analysis to 13,392 real-world agentic workflows across 10,792 repositories surfaced 519 potential vulnerabilities, "of which 496 are confirmed exploitable under our threat model" ([Wang et al., 2026, arXiv:2605.07135v1](https://arxiv.org/abs/2605.07135v1)).
+- Adding a vendor is treated as the fix. A live-workflow evaluation across four AI providers found that "all tested providers are susceptible to at least one attack class in their default configuration", and that the worst flaws "are structural: they arise from how CI/CD infrastructure handles credentials and configuration files, not from any specific model's behavior" ([Isbarov et al., 2026, arXiv:2606.09935v1](https://arxiv.org/abs/2606.09935v1)). Swapping agent apps does not move a structural flaw.
+- Tier 1 is assumed to be the safe tier. Advisory output is the highest-leverage thing to corrupt and the least likely to be re-checked, and the cheap defenses do not reach it. The same evaluation reports that "config-file judgment manipulation has no cheap workflow-level fix" because "no shell commands are involved so tool restriction provides no protection" ([Isbarov et al., 2026, arXiv:2606.09935v1](https://arxiv.org/abs/2606.09935v1)).
+- Author filtering is the only mitigation applied. Restricting invocation to trusted contributors works "by refusing service rather than hardening the reviewer" ([Isbarov et al., 2026, arXiv:2606.09935v1](https://arxiv.org/abs/2606.09935v1)), which removes much of the reason to put the agent in the delivery flow at all.
+- Usage cannot be reconciled afterward. Per-app activity in the Copilot usage metrics is not a partition of the total, so an organization cannot confirm from telemetry alone which installed app a team is actually invoking. See [per-agent-app attribution](../human/per-agent-app-attribution-copilot-metrics.md).
+
+## Key Takeaways
+
+- Classify each delivery stage by where its write lands, then delegate the stage rather than the tool.
+- Verify the approval setting in the target system before any Tier 2 delegation, because that setting is the entire safety property.
+- Treat read-and-advise stages as injection-sensitive, since judgment manipulation survives tool restriction.
+- Remember that installation is administered and invocation usually is not, so decide who may fire an agent app separately from who approved it.
+
+## Related
+
+- [Comment-Triggered Agent Dispatch on Issues and PRs](comment-triggered-agent-dispatch.md) — governs the trigger these agents are fired from
+- [Agent-Driven Deployment: What to Delegate and What to Gate](agent-driven-deployment.md) — the same gate question when you own the target system and can build the boundary yourself
+- [Deterministic Precondition Gates for Tool-Using Agents](../patterns/agent-design/deterministic-precondition-gates.md) — the building block when no downstream gate exists to inherit
+- [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](../patterns/agent-design/delegated-autonomy-boundary-artifacts.md) — recording the authority boundary a tier decision implies
+- [Per-Agent-App Attribution in the Copilot Usage Metrics API](../human/per-agent-app-attribution-copilot-metrics.md) — measuring which installed apps are used
 
 ---
 

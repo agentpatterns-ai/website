@@ -254,6 +254,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cross-Reference Dereference Hop in Retrieval Loops](context-engineering/cross-reference-dereference-hop.md)
 - [Exhaustive Retrieval for Listing Questions](context-engineering/exhaustive-retrieval-for-listing-questions.md)
 - [Trajectory Attribution for Context Repair (TRACE)](context-engineering/trajectory-attribution-context-repair.md)
+- [Hypothetical Classification for Large Label Vocabularies](context-engineering/hypothetical-classification.md)
 
 ## Instructions & Prompts
 
@@ -636,6 +637,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Within-Task Model Cascade: Designing the Escalation Gate](loop-engineering/within-task-model-cascade.md)
 - [Blind Resampling Over Self-Repair in Small Code Models](loop-engineering/blind-resampling-over-self-repair.md)
 - [Calibrated Early Termination and Warm Restart for Agent Runs (FailFast-RestartSmart)](loop-engineering/early-termination-and-warm-restart.md)
+- [Loop Trigger Selection: Pairing the Start with the Stop](loop-engineering/loop-trigger-selection.md)
 
 ## Tool Design
 
@@ -1271,6 +1273,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Porting a Coding-Agent Harness Beyond Engineering](workflows/porting-agent-harness-beyond-engineering.md)
 - [Comment-Triggered Agent Dispatch on Issues and PRs](workflows/comment-triggered-agent-dispatch.md)
 - [Agent-Driven Deployment: What to Delegate and What to Gate](workflows/agent-driven-deployment.md)
+- [Delegating Delivery Stages to GitHub Agent Apps](workflows/agent-apps-delivery-stage-delegation.md)
 
 ## Human Factors
 
@@ -1451,6 +1454,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Frozen Playbook Reuse Without Target-Side Validation](patterns/anti-patterns/frozen-playbook-reuse-validation.md)
 - [Catastrophic Remembering: Instruction Files That Only Grow](patterns/anti-patterns/catastrophic-remembering-instruction-files.md)
 - [Prescribing TDD Inside the Agent Loop (Process Theater)](patterns/anti-patterns/tdd-inside-the-agent-loop.md)
+- [Cumulative-Best Reporting Hides Repair-Loop Security Regressions](patterns/anti-patterns/cumulative-best-hides-repair-regressions.md)
 
 ## Emerging Concepts
 
