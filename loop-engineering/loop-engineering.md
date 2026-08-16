@@ -12,7 +12,7 @@ aliases:
   - loopcraft
   - stacking loops
   - designing loops that prompt agents
-last_reviewed: 2026-07-22
+last_reviewed: 2026-08-15
 maturity: emerging
 ---
 
@@ -46,6 +46,8 @@ LangChain's framing gives the cleanest decomposition. Each layer is named below 
 LangChain's article ([Runkle, 2026](https://blog.langchain.com/the-art-of-loop-engineering/)) calls Loop 4 "arguably most important": "the return arrow doesn't just loop back to the top — it reaches inside and updates the agent loop directly. Each cycle of the outer loop makes the inner loops more effective."
 
 Osmani's parallel framing lists five building blocks rather than loops — automations, worktrees, skills, plugins and connectors, sub-agents — plus disk-resident memory as the sixth element that sits outside the five ([Osmani, 2026](https://addyo.substack.com/p/loop-engineering)). The block list and the loop list overlap heavily: automations supply Loop 3's trigger; sub-agents supply Loop 2's verifier; memory survives Loop 1's context resets. The two framings agree on the underlying mechanism even when their carving differs.
+
+Osmani's August follow-up reports the loops arriving as first-class tool primitives rather than hand-rolled bash: `/goal` in Claude Code drives a bounded task to a measurable finish line while an evaluator model checks each attempted stop, and `/loop` reruns work on a timer. He also relays the Claude Code team's taxonomy of four loop types, classified by how each loop is triggered and how it stops, which is a different carving from the layer stack above ([Osmani, 2026-08-14](https://addyo.substack.com/p/practical-loop-engineering)).
 
 ## Why it works
 

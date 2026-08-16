@@ -9,7 +9,7 @@ tags:
   - workflows
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-06-14
+last_reviewed: 2026-08-16
 maturity: established
 ---
 
@@ -43,7 +43,7 @@ Tasks — The agent [decomposes the plan into small, reviewable units](../patter
 
 Implement — The agent runs the tasks one at a time. You review focused changes rather than large code dumps.
 
-Spec Kit supports 23+ agents including Copilot, Claude Code, Cursor, and Gemini via slash commands (`/speckit.specify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.implement`) ([github/spec-kit AGENTS.md](https://github.com/github/spec-kit/blob/main/AGENTS.md)).
+Spec Kit supports 23+ agents including Copilot, Claude Code, Cursor, and Gemini via slash commands (`/speckit.specify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.implement`) ([github/spec-kit AGENTS.md](https://github.com/github/spec-kit/blob/main/AGENTS.md)). Tooling for the workflow keeps widening: in July 2026 Google documented Conductor adding spec-driven development support for Antigravity ([Google Developers Blog](https://developers.googleblog.com/evolving-spec-driven-development-conductor-now-supports-antigravity/)).
 
 ## The specification file
 

@@ -741,6 +741,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent-Ready Data Architecture for Analytics Agents](patterns/agent-design/agent-ready-data-architecture.md)
 - [Tools as Typed Code Stubs (Programmatic Tool Calling)](patterns/agent-design/programmatic-tool-calling.md)
 - [Continuously Built Agent Environments](patterns/agent-design/continuously-built-agent-environments.md)
+- [Routing Break-Even: When a Cheaper Model Actually Pays](patterns/agent-design/routing-break-even.md)
 
 ## Loop Engineering
 
@@ -1451,6 +1452,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Reading a Vendor-Computed AI Coding ROI Dashboard](human/vendor-computed-roi-copilot-impact-dashboard.md)
 - [Per-Agent-App Attribution in the Copilot Usage Metrics API](human/per-agent-app-attribution-copilot-metrics.md)
 - [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](human/agent-rewrite-ownership-rule.md)
+- [Language Selection Scored on Review Cost](human/language-selection-review-cost.md)
 
 ## Anti-Patterns
 
@@ -6687,6 +6689,8 @@ The pattern only holds under all four conditions:
 - Hallucination on unanswerable queries is tracked — the Boolean "no match" gives a sharper unanswerable signal than a low cosine score.
 
 Outside these conditions, an agentic hybrid baseline keeps a small accuracy edge and is the more conservative default.
+
+Parsing method is an earlier decision: see [Towards Data Science on picking a parsing method before adopting agentic retrieval](https://towardsdatascience.com/before-full-agentic-rag-know-how-you-decide-and-the-parsing-methods-you-pick-from/).
 
 ## The architecture
 
@@ -20601,6 +20605,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate maximum reasoning compute to planning and verification phases, reduced compute to execution — rather than using a fixed level throughout
 - [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — On a fixed budget for a single-shot agentic build, raising reasoning effort buys first-try functional reliability more cost-effectively than adding testing tools or design prompts — under three explicit conditions
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md) — Before choosing how an agent will perform an action, choose how you will undo it — if recovery costs more than one command, reconsider the approach
+- [Routing Break-Even: When a Cheaper Model Actually Pays](routing-break-even.md) — Divide the router's judging cost by the price gap between the two models to get the offload fraction routing must clear; when the models sit close in price, that figure passes 100% and routing cannot pay
 - [RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use](rubric-refine-pre-execution-tool-use.md) — Generate a task- and registry-specific rubric, score candidate tool-use code against explicit contract checks, and repair failures before any execution — for multi-step tool sequences where contract violations run silently to completion
 - [Scout-Then-Route: Verify the Handoff Before Routing](scout-then-route.md) — Send a cheap scout into the repository, sandbox-verify its reproduction claims and strip what fails, then pick the fixer on price rather than skill
 - [Selective Checkpoint Restore Across Code and Conversation State](selective-checkpoint-restore.md) — Restore the agent's mental model and re-edit, restore the edits and re-plan, or reset both — when code and conversation are stored separately, the choice is three actions, not one
@@ -30836,6 +30841,8 @@ A traditional harness ships with a hard-coded model list and uses a base-URL ove
 
 Claude Code 2.1.126 (2026-05-01) ships this pattern as a built-in. From the [changelog](https://code.claude.com/docs/en/changelog): "The `/model` picker now lists models from your gateway's `/v1/models` endpoint when `ANTHROPIC_BASE_URL` points at an Anthropic-compatible gateway."
 
+Google documents an independent implementation of the routing half: Google Cloud API Gateway routes between AI models behind a unified API ([Google Developers Blog](https://developers.googleblog.com/a-unified-api-for-ai-model-routing/), August 2026). That account does not cover catalog discovery, so the contract below still rests on Claude Code alone.
+
 ## The discovery contract
 
 The harness queries the gateway at startup, applies a namespace filter, and shows discovered entries in `/model` alongside built-ins ([Claude Code: LLM gateway](https://code.claude.com/docs/en/llm-gateway)). Four contract points matter:
@@ -39049,6 +39056,73 @@ When re-running is already cheaper than building a rollback primitive. Idempoten
 
 ---
 
+### Routing Break-Even: When a Cheaper Model Actually Pays
+Source: https://agentpatterns.ai/patterns/agent-design/routing-break-even/
+
+# Routing Break-Even: When a Cheaper Model Actually Pays
+
+> Routing pays only when the judge's cost is small against the price gap between the two models it chooses between.
+
+`minimum offload = judge cost / (expensive cost - cheap cost)` gives the fraction of turns you must send to the cheap model before routing costs less than sending everything to the frontier model. LangChain publishes the rule after benchmarking NVIDIA's [NeMo Switchyard](https://github.com/NVIDIA-NeMo/Switchyard) router across 145 agent tasks ([LangChain, 11 August 2026](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
+
+## What the calculation can decide
+
+The formula answers one question: is the gap between your two models wide enough to pay for the judge. When two models sit close in price, the required offload climbs above 100%, which asks you to send more turns to the cheap model than you have. LangChain is explicit that no judge configuration recovers this, and that the one escape is hosting the cheap model yourself, where inference cost falls near zero and the gap reopens ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
+
+Three things it does not decide. It cannot tell you whether the router picks well on your traffic. It compares routing against a frontier-only baseline, so it says nothing about running the cheap model on everything. And on a lopsided pairing it settles nothing, because the bar sits far below any plausible offload rate. As the authors put it: "Use it to rule routing out on cost. Run your own workload to rule it in" ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
+
+## The measured trade
+
+LangChain ran its Deep Agents suite of 145 multi-step tasks through Switchyard's escalation router, pairing Nemotron 3.5 Lightning with Claude Opus 4.8 ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)):
+
+| Arm | Accuracy | Cost per run |
+|---|---|---|
+| Opus 4.8 alone | 86.0% | $11.45 |
+| Routed | 80.0% | $3.00 |
+| Nemotron 3.5 Lightning alone | 77.7% | $0.72 |
+
+Routing was 74% cheaper for about six points of accuracy. Treat that delta as specific to this suite. The benchmark is vendor-adjacent and ran on controlled scenarios that left "just 8 points of variance between a 30B parameter model and a frontier model," which the authors say "gives routing less room to prove its value than a harder workload would" ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
+
+## Why it works
+
+Agent turns differ wildly in difficulty but cost the same per token, so spend concentrates far harder than call count does. Nemotron handled 93% of calls for 10.4% of the bill while Opus handled 7% of calls for 68.4% of it ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)). Each turn moved off the frontier model therefore saves roughly the whole price gap, and total savings rise linearly with the offload rate.
+
+The judge does not scale down alongside those savings. It "runs on every turn until a task escalates, whether or not anything ends up escalating," gets no benefit from prompt caching, and took 21.2% of routed spend ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)). A fixed tax set against a linear saving is what produces the break-even, and why the binding variable is the price gap rather than the cheap model's competence. It also names the cheapest lever on a routed bill: a cheaper judge model, "or one that skips turns that are clearly going fine, comes straight off your bill" ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)). Decision-theoretic work on cascades reaches the same structural conclusion, finding performance "limited primarily by structural cost, since cascades pay the cheap model before any escalation decision" ([Bouchard, arxiv 2605.06350v1](https://arxiv.org/abs/2605.06350v1)).
+
+## When this backfires
+
+- Two models close in price. The required offload exceeds 100% and the trade is arithmetically unavailable, short of self-hosting the cheap tier ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
+- A narrow gap in practice. Cognition routed Opus 5 against Kimi K2.7 in Devin Desktop and landed "within 2.8 percentage points of Opus 5 accuracy at approximately 28% lower mean cost" ([NVIDIA, 11 August 2026](https://developer.nvidia.com/blog/route-ai-agent-workloads-across-models-with-nvidia-nemo-switchyard/)). The saving tracks the gap.
+- A workload the cheap model already handles. Routing scored 2.3 points above Nemotron alone while runs varied by 2.7 points on their own, so "we cannot say routing beat the cheap model here," and cheap-only was the cost-minimal arm ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
+- Budgeting against a mean. Frontier traffic ranged from 4.1% to 9.1% across five identical runs, moving the bill from $2.16 to $3.61 with nothing changed but router decisions ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)). Plan against the top of that range.
+- A router that routes badly. Break-even is a cost screen, and cost is not the failure mode LLMRouterBench found: across 400K instances, 21 datasets and 33 models, "several recent approaches, including commercial routers, fail to reliably outperform a simple baseline" ([arxiv 2601.07206v1](https://arxiv.org/abs/2601.07206v1)).
+
+## Example
+
+Work the LangChain pairing through the formula. The judge model cost $0.64 per run. The price gap was $10.73, the distance between the $11.45 Opus-only arm and the $0.72 Nemotron-only arm in the table above. Dividing gives a minimum offload of 5.9%. The router actually offloaded 93% of calls, clearing the bar by about 16x. Per call the spread was starker still, $0.0324 for Opus against $0.00037 for Nemotron, roughly 87x ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
+
+Clearing the bar that far tells you little. The authors concede that "with a pairing this lopsided the formula is a bit of a formality" ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)). Reach for the calculation when the spread is narrow, when you are pricing a self-hosted cheap tier against a hosted one, or when the judge is expensive enough to be a line item of its own.
+
+## Key Takeaways
+
+- Compute `judge cost / (expensive cost - cheap cost)` before building a router; it gives the offload fraction routing must clear to beat a frontier-only baseline.
+- The question the formula asks is about the price gap, not about whether your cheap model is good enough.
+- It rules routing out and cannot rule it in. Two models close in price make the required offload impossible, and only a self-hosted cheap tier reopens the trade.
+- The judge is a fixed tax that misses prompt caching, so a cheaper judge or one that skips healthy turns comes straight off the bill.
+- Routing widens the range around your average spend as well as lowering it; budget against the top of the observed escalation range.
+- Compare against running the cheap model alone, not only against the frontier model. On a saturated workload that arm can win outright.
+
+## Related
+
+- [Within-Task Model Cascade: Designing the Escalation Gate](../../loop-engineering/within-task-model-cascade.md) — the other break-even in this family, expressed as an escalation-rate ceiling rather than a judge-cost floor.
+- [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — how an escalation router decides mid-task, once the break-even says the trade is affordable.
+- [Auto Model Selection: Harness-Driven Routing per Task](auto-model-selection.md) — what a vendor-side router keys on, and a separate cost gate stated as a pass rate against the inter-tier price ratio.
+- [Gateway Model Routing](gateway-model-routing.md) — the infrastructure layer that exposes the cheap and expensive targets a router picks between.
+- [Model Economics of Agent Swarms](../multi-agent/model-economics-agent-swarms.md) — the same cost-concentration arithmetic applied to a planner and worker split.
+- [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the broader tier-routing frame this calculation sits inside.
+
+---
+
 ### RubricRefine: Pre-Execution Rubric Refinement
 Source: https://agentpatterns.ai/patterns/agent-design/rubric-refine-pre-execution-tool-use/
 
@@ -44204,6 +44278,7 @@ SWE-Router pairs a weak model with a strong one and lets the weak model explore 
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — a prompt-time complement that allocates effort from task cues rather than trajectory evidence.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — the weak-model side of the pairing, used as a bounded sub-tool.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the broader cost-routing frame this escalation policy sits inside.
+- [Routing Break-Even: When a Cheaper Model Actually Pays](routing-break-even.md) — the cost screen to run before building any router, including this one.
 
 ---
 
@@ -73142,6 +73217,7 @@ Rewriting the service in Python to capture at most 1.57x would trade a bounded t
 - [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — the same shape of finding: a real token saving with no pass-rate change
 - [Tokenizer Swap Tax: Budgeting for Model Migrations That Change Token Counts](tokenizer-swap-tax.md) — the other multiplier that moves cost without any code change
 - [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — the larger lever this page defers to when compile loops are not the bottleneck
+- [Language Selection Scored on Review Cost](../human/language-selection-review-cost.md) — the human-cost view of the same decision, with the same free-variable caveat
 
 ---
 
@@ -75401,6 +75477,8 @@ LangChain's article ([Runkle, 2026](https://blog.langchain.com/the-art-of-loop-e
 
 Osmani's parallel framing lists five building blocks rather than loops — automations, worktrees, skills, plugins and connectors, sub-agents — plus disk-resident memory as the sixth element that sits outside the five ([Osmani, 2026](https://addyo.substack.com/p/loop-engineering)). The block list and the loop list overlap heavily: automations supply Loop 3's trigger; sub-agents supply Loop 2's verifier; memory survives Loop 1's context resets. The two framings agree on the underlying mechanism even when their carving differs.
 
+Osmani's August follow-up reports the loops arriving as first-class tool primitives rather than hand-rolled bash: `/goal` in Claude Code drives a bounded task to a measurable finish line while an evaluator model checks each attempted stop, and `/loop` reruns work on a timer. He also relays the Claude Code team's taxonomy of four loop types, classified by how each loop is triggered and how it stops, which is a different carving from the layer stack above ([Osmani, 2026-08-14](https://addyo.substack.com/p/practical-loop-engineering)).
+
 ## Why it works
 
 The causal mechanism is bottleneck migration. The inner agent loop produces output faster than a human can prompt the next task, so the human becomes the throughput ceiling. Each outer loop removes one place the human used to sit. Loop 2 replaces human grading with an automated rubric. Loop 3 replaces human initiation with an event trigger. Loop 4 replaces human harness-tweaking with trace-driven analysis.
@@ -75928,6 +76006,7 @@ The sign is not fixed. MCCom pairs a 121M local model that is genuinely faster t
 ## Related
 
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — the broader tier-routing frame this escalation policy sits inside
+- [Routing Break-Even: When a Cheaper Model Actually Pays](../patterns/agent-design/routing-break-even.md) — the companion break-even, set by the router's own judging cost rather than by the escalation rate
 - [Trajectory-Conditioned Model Escalation](../patterns/agent-design/trajectory-conditioned-model-escalation.md) — escalation for agentic tasks that have no pass/fail gate to key on
 - [Utility-Model Split](../patterns/agent-design/utility-model-split.md) — the static counterpart: split by call type up front, no retry ladder
 - [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-loop-go-no-go-gate.md) — the upstream question of whether the loop earns its overhead at all
@@ -90217,6 +90296,8 @@ uvx smevals grade . --regrade
 The first grader only checked that the output had exactly three non-empty lines. A second checker, added later, used a model to score syllable counts and subject fidelity against a 0.8 pass threshold ([Prime Radiant, 2026](https://primeradiant.com/blog/2026/smevals.html)). The regrade step applied that new checker to the runs already collected, so a better grader cost nothing to re-run the models under test.
 
 Simon Willison covers the same tool in a practitioner write-up ([Willison, 2026](https://simonwillison.net/2026/Jul/31/smevals/)).
+
+LangChain publishes the benchmark setup it runs against its own deep agents, with tasks in coding, conversation, and retrieval ([LangChain, 2026](https://www.langchain.com/blog/how-we-benchmark-deep-agents)). The suite gates whether a change ships.
 
 ## Key Takeaways
 
@@ -113816,7 +113897,7 @@ So the trust decision stays with whoever installs. VS Code supplies its own warn
 
 ## Why it works
 
-The format attacks an N×M problem. Plugin authors previously rearranged or duplicated the same components for each client's layout, so fixing the filesystem layout collapses the client axis for the components it covers ([Vercel](https://vercel.com/blog/introducing-agent-plugins)). GitHub shipped Agent Plugins 1.0 in three of its own surfaces: VS Code, the Copilot CLI, and the Copilot app ([GitHub](https://github.blog/changelog/2026-08-12-agent-plugins-1-0-in-vs-code-copilot-cli-and-the-copilot-app)). The namespaced extension directory is what lets a minimal version ship at all: "Each client defines its own namespace, and other clients ignore it. This prevents client-specific behavior from leaking into the common format or blocking adoption of the shared components" ([Vercel](https://vercel.com/blog/introducing-agent-plugins)). The standard never has to settle the argument about the non-portable parts before shipping the portable ones. That same escape hatch is why the guarantee covers less than the phrase "portable plugin" suggests.
+The format attacks an N×M problem. Plugin authors previously rearranged or duplicated the same components for each client's layout, so fixing the filesystem layout collapses the client axis for the components it covers ([Vercel](https://vercel.com/blog/introducing-agent-plugins)). GitHub shipped Agent Plugins 1.0 in three of its own surfaces: VS Code, the Copilot CLI, and the Copilot app ([GitHub](https://github.blog/changelog/2026-08-12-agent-plugins-1-0-in-vs-code-copilot-cli-and-the-copilot-app)). Google documents the format too, as a package that bundles an agent's skills, tools and more ([Google Developers Blog](https://developers.googleblog.com/agent-plugins-package-your-skills-tools-and-more/)). The namespaced extension directory is what lets a minimal version ship at all: "Each client defines its own namespace, and other clients ignore it. This prevents client-specific behavior from leaking into the common format or blocking adoption of the shared components" ([Vercel](https://vercel.com/blog/introducing-agent-plugins)). The standard never has to settle the argument about the non-portable parts before shipping the portable ones. That same escape hatch is why the guarantee covers less than the phrase "portable plugin" suggests.
 
 ## When this backfires
 
@@ -116651,6 +116732,7 @@ Source: https://agentpatterns.ai/human/
 - [Human-Facing Docs in the Agent Era: Mental Models Over Reference](human-docs-mental-models-agent-era.md) — When the audience reads alongside an agent, human docs shift from exhaustive reference to mental models, intent, and design exclusions — with the conditions under which the pivot backfires
 - [Marking Which Artifacts Are for Humans or Agents (Landmarking)](landmarking-human-vs-agent-artifacts.md) — Agree a team-wide readership contract for which repository artifacts are written to be understood by a person and which are agent context, and back it with tooling
 - [Programming Language Choice Still Shapes Agent Artifacts](programming-language-choice-shapes-agent-artefacts.md) — Coding agents reach every language but the language you pick still decides performance ceiling, run cost, and verification effort — budget both
+- [Language Selection Scored on Review Cost](language-selection-review-cost.md) — Once agents author most of the code, score a candidate language on review, verification, and maintenance cost, under three conditions the vendor case for it leaves out
 - [Human-Equivalent Hours for Autonomous Coding Agent Productivity](human-equivalent-hours-agent-productivity.md) — Estimate the human engineering hours an autonomous agent's output would have taken so spend can be weighed against a denominator finance and headcount already use
 - [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — A first-party ROI panel meters the cost side of the ratio and models the value side; which decisions the metered half can settle, and when to override the throughput half
 - [Intent-Centric Engineering: Oversight Over Authorship](intent-centric-engineering.md) — When code generation is cheap, the engineer's leverage moves from authorship to specifying intent and governing humans-plus-agents-plus-tools — but only under specific conditions, with sharp failure modes (spec-as-code displacement, skill atrophy, vendor ToS gaps)
@@ -118905,6 +118987,70 @@ Baseline by task type. Read the category breakdowns (Sniffly-style) before you r
 
 ---
 
+### Language Selection Scored on Review Cost
+Source: https://agentpatterns.ai/human/language-selection-review-cost/
+
+# Language Selection Scored on Review Cost
+
+> Once agents write the code, score a language on what review, verification, and maintenance cost, not on how fast a human types it.
+
+Score a candidate language or codebase on how cheaply its output can be read, checked, and maintained, and demote write-ergonomics to a tiebreaker. The re-score pays under three conditions: the language has to be a free variable, someone has to still read the diff, and the cheaper machine-checkable fixes have to be exhausted already. Miss any one and the criterion returns a recommendation you cannot act on.
+
+## Three conditions before you re-score
+
+The language is a free variable. A new service, a component not yet written, or a funded rewrite. Most choices in a running system were made years before an agent touched the repository, and the domain often fixes them anyway.
+
+Someone still reads the diff. Across 400 repeat reviewers and 11,429 reviews over seven months, approval rates rose from 30.1% to 36.8% while inline comment volume fell 22% and review latency rose 3.5x — "reflexive habituation under growing workload rather than rational trust calibration alone", in the authors' reading ([Yu et al., 2026](https://arxiv.org/abs/2606.22721v1)). Faros AI reports changes merged with no review at all, human or agentic, up 31.3% ([Faros AI, 2026](https://www.faros.ai/blog/ai-acceleration-whiplash-takeaways)). A review bot does not restore the condition: across 3,109 pull requests, review-agent-only changes merged at 45.20% against 68.37% for human-only, and 12 of 13 review agents scored average signal ratios below 60% ([Chowdhury et al., 2026](https://arxiv.org/abs/2604.03196v1)).
+
+The machine-checkable budget is already spent. A constraint you can add to the language you already have usually beats one you would have to migrate to, so a re-score before that budget is exhausted proposes a migration you did not need.
+
+## What to score
+
+Rank the properties by what still works when the reviewer is tired.
+
+Machine-checkable, and worth the most weight ([Balahan and Seroter, 2026](https://developers.googleblog.com/why-go-is-an-ideal-language-for-ai-assisted-software-engineering/)):
+
+- A static type system that rejects a hallucinated method or a wrong argument type at compile time.
+- A check loop fast enough that the agent fixes its own type errors before a human sees the change.
+- A standard library broad enough that the agent reaches for a maintained package rather than one its training data suggested.
+- Deterministic refactoring tools that update stale patterns without hand edits.
+
+Human-legible, and worth less than its advocates claim: one canonical format, and a design that limits how many ways the same logic can be written. The case for this tier: "If a language offers a dozen different ways to express the same logic, an AI model will inevitably generate a fragmented, haphazardly stylized hodgepodge of syntax" ([Balahan and Seroter, 2026](https://developers.googleblog.com/why-go-is-an-ideal-language-for-ai-assisted-software-engineering/)).
+
+Two discounts apply to that tier. The source is vendor advocacy — Go's group product manager and a Google Cloud evangelist making the case for Go — so its property list is a scoring template, and the shortlist attached to it is not transferable. And the measurements contradict the premise: Faros finds agent output already arrives "idiomatic, well-named, stylistically consistent with the surrounding codebase", with the structural and logical failures "beneath the surface" ([Faros AI, 2026](https://www.faros.ai/blog/ai-acceleration-whiplash-takeaways)).
+
+## Why it works
+
+The cost of a change is generation plus review. Generation collapsed toward zero, because an agent can produce "hundreds of lines of syntactically valid code in seconds" ([Balahan and Seroter, 2026](https://developers.googleblog.com/why-go-is-an-ideal-language-for-ai-assisted-software-engineering/)). Review did not, because it is bounded by comprehension rather than typing: defect-detection ability degrades beyond 200 to 400 lines per sitting, and defect density drops sharply above 500 lines per hour ([SmartBear, citing the Cisco Systems study](https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/)). Faros AI's two-year telemetry across 22,000 developers puts numbers on the split: task throughput per developer up 33.7%, median time in review up 441.5% ([Faros AI, 2026](https://www.faros.ai/blog/ai-acceleration-whiplash-takeaways)).
+
+When one term of a sum collapses and the other carries a hard ceiling, the surviving term sets the total, so a criterion scoring a language against that total has to move with it. [The Bottleneck Migration](bottleneck-migration.md) covers the shift itself; the selection consequence is what this page adds.
+
+## When this backfires
+
+- The defects are semantic. Canonical formatting and limited expressive variance reduce the cost of reading code, not of reconstructing intent. On the failure class Faros measures, the human-legible tier delivers nothing.
+- A constraint is available instead. A small reviewer model inspecting a Python codebase with 11 inserted backdoors raised its recall from 54.5% unconstrained to 90.9% given a constrained substrate and a roughly 200-line command-line tool ([Winninger, 2026](https://arxiv.org/abs/2607.02389v1)). Spend that budget before a migration.
+- The property list came from a vendor. Scoring candidates against a list reverse-engineered from one language returns that language. Derive the list from your own review-cost data.
+- There is no review step. Solo work, prototypes, and disposable artifacts have no review queue, so the criterion has no cost to reduce.
+- The decision reaches past code. Architecture, service boundaries, and production reliability stay with humans, because an agent has "a limited view of the greater context in which the code it generates must operate" ([Balahan and Seroter, 2026](https://developers.googleblog.com/why-go-is-an-ideal-language-for-ai-assisted-software-engineering/)). A language cannot be scored on work it never touches.
+
+## Key Takeaways
+
+- Score a language on review, verification, and maintenance cost once agents author most of the code; the write-speed criterion measures a term that no longer binds ([Balahan and Seroter, 2026](https://developers.googleblog.com/why-go-is-an-ideal-language-for-ai-assisted-software-engineering/)).
+- The re-score requires all three conditions: a free variable, a review that still happens, and a machine-checkable budget already spent. Within the score, rank machine-checkable properties above human-legible ones.
+- Reviewers habituate: approval up 14.5 percentage points across experience deciles with inline comments down 22% ([Yu et al., 2026](https://arxiv.org/abs/2606.22721v1)), and 31.3% more changes merge unreviewed ([Faros AI, 2026](https://www.faros.ai/blog/ai-acceleration-whiplash-takeaways)).
+- Exhaust the constraints available in your current language before a re-score becomes a migration proposal; a constrained substrate and a small command-line tool took one reviewer's backdoor recall from 54.5% to 90.9% with no language change ([Winninger, 2026](https://arxiv.org/abs/2607.02389v1)).
+- Vendor property lists select their own language. Take the properties, leave the conclusion.
+
+## Related
+
+- [The Bottleneck Migration](bottleneck-migration.md) — the premise this page builds on: generation got cheap and review became the constraint.
+- [Author-to-Reviewer Role Inversion in AI-Assisted Teams](author-to-reviewer-role-inversion.md) — the staffing answer to the same shift, where this page gives the technology-selection answer.
+- [Programming Language Choice Still Shapes Agent Artifacts](programming-language-choice-shapes-agent-artefacts.md) — scores languages on training-corpus density and the artifact's quality ceiling, a property of the generator rather than the reader.
+- [Convenience Loops and AI-Friendly Code](convenience-loops-ai-friendly-code.md) — why typed codebases produce fewer agent corrections, which is the machine-checkable tier measured inside the generation loop.
+- [Language Choice as an Agent Token-Cost Lever](../token-engineering/language-choice-token-cost.md) — the token-spend view of the same decision, with the same free-variable caveat.
+
+---
+
 ### LLM Refactoring Adoption Patterns
 Source: https://agentpatterns.ai/human/llm-refactoring-adoption-patterns/
 
@@ -119672,6 +119818,7 @@ The [agentic AI is abstracting away code](https://medium.com/agileinsider/agenti
 - [Cross-Tool Translation: Learning from Multiple AI Assistants](cross-tool-translation.md) — when team velocity dominates the language-density edge.
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — artifact-shaping decisions sit upstream of agent speed.
 - [Suggestion Gating: Why Fewer AI Completions Improve Developer Experience](suggestion-gating.md) — gating lower-density outputs is the same shape as steering away from low-resource languages.
+- [Language Selection Scored on Review Cost](language-selection-review-cost.md) — the other half of the selection decision: what the code costs to review once it exists, rather than what the generator can produce.
 
 ---
 
@@ -120799,6 +120946,7 @@ Because it fragments logically unified changes. Each atomic PR passes review on 
 - [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) -- understanding gaps that erode review competence
 - [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md) -- review burden on senior engineers
 - [Author-to-Reviewer Role Inversion](author-to-reviewer-role-inversion.md) -- the team-level staffing and measurement shift this economic migration produces
+- [Language Selection Scored on Review Cost](language-selection-review-cost.md) -- the technology-selection consequence: score a language on review cost once generation is cheap
 
 ---
 
@@ -153333,7 +153481,7 @@ Tasks — The agent [decomposes the plan into small, reviewable units](../patter
 
 Implement — The agent runs the tasks one at a time. You review focused changes rather than large code dumps.
 
-Spec Kit supports 23+ agents including Copilot, Claude Code, Cursor, and Gemini via slash commands (`/speckit.specify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.implement`) ([github/spec-kit AGENTS.md](https://github.com/github/spec-kit/blob/main/AGENTS.md)).
+Spec Kit supports 23+ agents including Copilot, Claude Code, Cursor, and Gemini via slash commands (`/speckit.specify`, `/speckit.plan`, `/speckit.tasks`, `/speckit.implement`) ([github/spec-kit AGENTS.md](https://github.com/github/spec-kit/blob/main/AGENTS.md)). Tooling for the workflow keeps widening: in July 2026 Google documented Conductor adding spec-driven development support for Antigravity ([Google Developers Blog](https://developers.googleblog.com/evolving-spec-driven-development-conductor-now-supports-antigravity/)).
 
 ## The specification file
 
@@ -154865,6 +155013,8 @@ The factory is many harnessed loops running at once against a work queue, with i
 The real design decision is where the lights go. A dark factory ships code no human has read, verified only by the machines that built it — the software version of a lights-out manufacturing floor. It is easy to reach at first, because the missing review step makes perceived throughput feel suddenly higher, but it takes on comprehension debt as fast as it can, tests green the whole way ([Osmani, 2026](https://addyosmani.com/blog/software-factories/)). The reckoning is quiet and late: Osmani reports a fully automated factory run for about four months with no human reading the code, which then needed painstaking manual debugging to recover.
 
 A lit factory is the same pipeline with the lights left on where judgment lives. Agents still do most of the building, but a human reads the output before it ships, and judgment moves upstream to product, design, and architecture — reviewing a two-hundred-line plan instead of chasing two thousand lines of generated code to find what the decision even was ([Osmani, 2026](https://addyosmani.com/blog/software-factories/)). The person never left the factory; they moved from the line to the end of it, owning the outer loop: deciding whether it is the right fix, verifying the diagnosis, approving, and carrying the consequences of being wrong.
+
+Vercel runs a lit factory on its AI SDK repo: one agent per task type, and human review mandatory on every merge ([Vercel, 2026-08-12](https://vercel.com/blog/building-a-software-factory-for-ai-sdk)). Four weeks in, its agents authored 25 to 35% of the pull requests merged each week, and closed over 75% of the issues closed in July. Open issues fell from a peak of 1,022 in late June to 844 by early August.
 
 ## Triggers and constraints
 
