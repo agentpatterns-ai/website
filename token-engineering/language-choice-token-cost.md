@@ -90,3 +90,4 @@ Rewriting the service in Python to capture at most 1.57x would trade a bounded t
 - [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — the same shape of finding: a real token saving with no pass-rate change
 - [Tokenizer Swap Tax: Budgeting for Model Migrations That Change Token Counts](tokenizer-swap-tax.md) — the other multiplier that moves cost without any code change
 - [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — the larger lever this page defers to when compile loops are not the bottleneck
+- [Language Selection Scored on Review Cost](../human/language-selection-review-cost.md) — the human-cost view of the same decision, with the same free-variable caveat

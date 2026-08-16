@@ -12,7 +12,7 @@ tags:
   - arxiv
   - tool-agnostic
   - rag
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-14
 maturity: emerging
 ---
 
@@ -30,6 +30,8 @@ The pattern only holds under all four conditions:
 - Hallucination on unanswerable queries is tracked — the Boolean "no match" gives a sharper unanswerable signal than a low cosine score.
 
 Outside these conditions, an agentic hybrid baseline keeps a small accuracy edge and is the more conservative default.
+
+Parsing method is an earlier decision: see [Towards Data Science on picking a parsing method before adopting agentic retrieval](https://towardsdatascience.com/before-full-agentic-rag-know-how-you-decide-and-the-parsing-methods-you-pick-from/).
 
 ## The architecture
 

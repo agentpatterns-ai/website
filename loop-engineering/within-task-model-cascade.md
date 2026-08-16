@@ -100,6 +100,7 @@ The sign is not fixed. MCCom pairs a 121M local model that is genuinely faster t
 ## Related
 
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — the broader tier-routing frame this escalation policy sits inside
+- [Routing Break-Even: When a Cheaper Model Actually Pays](../patterns/agent-design/routing-break-even.md) — the companion break-even, set by the router's own judging cost rather than by the escalation rate
 - [Trajectory-Conditioned Model Escalation](../patterns/agent-design/trajectory-conditioned-model-escalation.md) — escalation for agentic tasks that have no pass/fail gate to key on
 - [Utility-Model Split](../patterns/agent-design/utility-model-split.md) — the static counterpart: split by call type up front, no retry ladder
 - [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-loop-go-no-go-gate.md) — the upstream question of whether the loop earns its overhead at all

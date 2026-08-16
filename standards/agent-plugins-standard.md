@@ -9,7 +9,7 @@ term: "Agent Plugins"
 aliases:
   - Agent Plugins specification
   - Agent Plugins 1.0.0
-last_reviewed: 2026-08-13
+last_reviewed: 2026-08-16
 maturity: emerging
 ---
 
@@ -35,7 +35,7 @@ So the trust decision stays with whoever installs. VS Code supplies its own warn
 
 ## Why it works
 
-The format attacks an N×M problem. Plugin authors previously rearranged or duplicated the same components for each client's layout, so fixing the filesystem layout collapses the client axis for the components it covers ([Vercel](https://vercel.com/blog/introducing-agent-plugins)). GitHub shipped Agent Plugins 1.0 in three of its own surfaces: VS Code, the Copilot CLI, and the Copilot app ([GitHub](https://github.blog/changelog/2026-08-12-agent-plugins-1-0-in-vs-code-copilot-cli-and-the-copilot-app)). The namespaced extension directory is what lets a minimal version ship at all: "Each client defines its own namespace, and other clients ignore it. This prevents client-specific behavior from leaking into the common format or blocking adoption of the shared components" ([Vercel](https://vercel.com/blog/introducing-agent-plugins)). The standard never has to settle the argument about the non-portable parts before shipping the portable ones. That same escape hatch is why the guarantee covers less than the phrase "portable plugin" suggests.
+The format attacks an N×M problem. Plugin authors previously rearranged or duplicated the same components for each client's layout, so fixing the filesystem layout collapses the client axis for the components it covers ([Vercel](https://vercel.com/blog/introducing-agent-plugins)). GitHub shipped Agent Plugins 1.0 in three of its own surfaces: VS Code, the Copilot CLI, and the Copilot app ([GitHub](https://github.blog/changelog/2026-08-12-agent-plugins-1-0-in-vs-code-copilot-cli-and-the-copilot-app)). Google documents the format too, as a package that bundles an agent's skills, tools and more ([Google Developers Blog](https://developers.googleblog.com/agent-plugins-package-your-skills-tools-and-more/)). The namespaced extension directory is what lets a minimal version ship at all: "Each client defines its own namespace, and other clients ignore it. This prevents client-specific behavior from leaking into the common format or blocking adoption of the shared components" ([Vercel](https://vercel.com/blog/introducing-agent-plugins)). The standard never has to settle the argument about the non-portable parts before shipping the portable ones. That same escape hatch is why the guarantee covers less than the phrase "portable plugin" suggests.
 
 ## When this backfires
 

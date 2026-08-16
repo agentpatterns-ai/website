@@ -150,6 +150,7 @@ nav:
       - reasoning-budget-allocation.md
       - reasoning-effort-over-tool-scaffolding.md
       - rollback-first-design.md
+      - routing-break-even.md
       - rubric-refine-pre-execution-tool-use.md
       - scout-then-route.md
       - selective-checkpoint-restore.md

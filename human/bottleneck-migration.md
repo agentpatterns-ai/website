@@ -155,3 +155,4 @@ Because it fragments logically unified changes. Each atomic PR passes review on 
 - [Comprehension Debt](../patterns/anti-patterns/comprehension-debt.md) -- understanding gaps that erode review competence
 - [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md) -- review burden on senior engineers
 - [Author-to-Reviewer Role Inversion](author-to-reviewer-role-inversion.md) -- the team-level staffing and measurement shift this economic migration produces
+- [Language Selection Scored on Review Cost](language-selection-review-cost.md) -- the technology-selection consequence: score a language on review cost once generation is cheap

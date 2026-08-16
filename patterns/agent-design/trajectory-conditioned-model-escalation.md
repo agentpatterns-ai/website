@@ -66,3 +66,4 @@ SWE-Router pairs a weak model with a strong one and lets the weak model explore 
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — a prompt-time complement that allocates effort from task cues rather than trajectory evidence.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — the weak-model side of the pairing, used as a bounded sub-tool.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the broader cost-routing frame this escalation policy sits inside.
+- [Routing Break-Even: When a Cheaper Model Actually Pays](routing-break-even.md) — the cost screen to run before building any router, including this one.

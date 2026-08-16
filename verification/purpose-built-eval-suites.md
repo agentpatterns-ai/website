@@ -12,7 +12,7 @@ aliases:
   - small eval suite
   - local eval suite
   - custom eval suite
-last_reviewed: 2026-08-06
+last_reviewed: 2026-08-16
 maturity: emerging
 ---
 
@@ -82,6 +82,8 @@ uvx smevals grade . --regrade
 The first grader only checked that the output had exactly three non-empty lines. A second checker, added later, used a model to score syllable counts and subject fidelity against a 0.8 pass threshold ([Prime Radiant, 2026](https://primeradiant.com/blog/2026/smevals.html)). The regrade step applied that new checker to the runs already collected, so a better grader cost nothing to re-run the models under test.
 
 Simon Willison covers the same tool in a practitioner write-up ([Willison, 2026](https://simonwillison.net/2026/Jul/31/smevals/)).
+
+LangChain publishes the benchmark setup it runs against its own deep agents, with tasks in coding, conversation, and retrieval ([LangChain, 2026](https://www.langchain.com/blog/how-we-benchmark-deep-agents)). The suite gates whether a change ships.
 
 ## Key Takeaways
 

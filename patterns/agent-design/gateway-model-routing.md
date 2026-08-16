@@ -10,7 +10,7 @@ tags:
 aliases:
   - gateway model discovery
   - anthropic-compatible gateway routing
-last_reviewed: 2026-06-02
+last_reviewed: 2026-08-16
 maturity: adopted
 ---
 
@@ -23,6 +23,8 @@ maturity: adopted
 A traditional harness ships with a hard-coded model list and uses a base-URL override only to redirect inference traffic. You then have to add gateway-served models by hand with custom-model env vars or settings flags. The pattern decouples model identity from the harness binary: when the inference endpoint and the catalog come from the same gateway, model choice follows the same configuration path as model invocation.
 
 Claude Code 2.1.126 (2026-05-01) ships this pattern as a built-in. From the [changelog](https://code.claude.com/docs/en/changelog): "The `/model` picker now lists models from your gateway's `/v1/models` endpoint when `ANTHROPIC_BASE_URL` points at an Anthropic-compatible gateway."
+
+Google documents an independent implementation of the routing half: Google Cloud API Gateway routes between AI models behind a unified API ([Google Developers Blog](https://developers.googleblog.com/a-unified-api-for-ai-model-routing/), August 2026). That account does not cover catalog discovery, so the contract below still rests on Claude Code alone.
 
 ## The discovery contract
 

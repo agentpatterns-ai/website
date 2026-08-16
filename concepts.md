@@ -617,6 +617,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent-Ready Data Architecture for Analytics Agents](patterns/agent-design/agent-ready-data-architecture.md)
 - [Tools as Typed Code Stubs (Programmatic Tool Calling)](patterns/agent-design/programmatic-tool-calling.md)
 - [Continuously Built Agent Environments](patterns/agent-design/continuously-built-agent-environments.md)
+- [Routing Break-Even: When a Cheaper Model Actually Pays](patterns/agent-design/routing-break-even.md)
 
 ## Loop Engineering
 
@@ -1327,6 +1328,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Reading a Vendor-Computed AI Coding ROI Dashboard](human/vendor-computed-roi-copilot-impact-dashboard.md)
 - [Per-Agent-App Attribution in the Copilot Usage Metrics API](human/per-agent-app-attribution-copilot-metrics.md)
 - [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](human/agent-rewrite-ownership-rule.md)
+- [Language Selection Scored on Review Cost](human/language-selection-review-cost.md)
 
 ## Anti-Patterns
 

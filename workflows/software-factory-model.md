@@ -11,7 +11,7 @@ aliases:
   - agent factory
   - dark factory
   - lit factory
-last_reviewed: 2026-08-07
+last_reviewed: 2026-08-15
 maturity: emerging
 ---
 
@@ -55,6 +55,8 @@ The factory is many harnessed loops running at once against a work queue, with i
 The real design decision is where the lights go. A dark factory ships code no human has read, verified only by the machines that built it — the software version of a lights-out manufacturing floor. It is easy to reach at first, because the missing review step makes perceived throughput feel suddenly higher, but it takes on comprehension debt as fast as it can, tests green the whole way ([Osmani, 2026](https://addyosmani.com/blog/software-factories/)). The reckoning is quiet and late: Osmani reports a fully automated factory run for about four months with no human reading the code, which then needed painstaking manual debugging to recover.
 
 A lit factory is the same pipeline with the lights left on where judgment lives. Agents still do most of the building, but a human reads the output before it ships, and judgment moves upstream to product, design, and architecture — reviewing a two-hundred-line plan instead of chasing two thousand lines of generated code to find what the decision even was ([Osmani, 2026](https://addyosmani.com/blog/software-factories/)). The person never left the factory; they moved from the line to the end of it, owning the outer loop: deciding whether it is the right fix, verifying the diagnosis, approving, and carrying the consequences of being wrong.
+
+Vercel runs a lit factory on its AI SDK repo: one agent per task type, and human review mandatory on every merge ([Vercel, 2026-08-12](https://vercel.com/blog/building-a-software-factory-for-ai-sdk)). Four weeks in, its agents authored 25 to 35% of the pull requests merged each week, and closed over 75% of the issues closed in July. Open issues fell from a peak of 1,022 in late June to 844 by early August.
 
 ## Triggers and constraints
 
