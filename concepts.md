@@ -255,6 +255,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Exhaustive Retrieval for Listing Questions](context-engineering/exhaustive-retrieval-for-listing-questions.md)
 - [Trajectory Attribution for Context Repair (TRACE)](context-engineering/trajectory-attribution-context-repair.md)
 - [Hypothetical Classification for Large Label Vocabularies](context-engineering/hypothetical-classification.md)
+- [Query-Conditioned Reuse of Retrieved Agent Trajectories](context-engineering/query-conditioned-trajectory-reuse.md)
 
 ## Instructions & Prompts
 
@@ -618,6 +619,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Tools as Typed Code Stubs (Programmatic Tool Calling)](patterns/agent-design/programmatic-tool-calling.md)
 - [Continuously Built Agent Environments](patterns/agent-design/continuously-built-agent-environments.md)
 - [Routing Break-Even: When a Cheaper Model Actually Pays](patterns/agent-design/routing-break-even.md)
+- [Deterministic Fast Paths: Answer Without a Model Call](patterns/agent-design/deterministic-fast-paths.md)
+- [Retry, Switch, or Abstain: Supplying a Tool-Recovery Policy at Runtime](patterns/agent-design/retry-switch-abstain-recovery-policy.md)
+- [Situated Harness Layers: Fix at the Layer That Owns It](patterns/agent-design/situated-harness-layers.md)
 
 ## Loop Engineering
 
@@ -639,6 +643,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Blind Resampling Over Self-Repair in Small Code Models](loop-engineering/blind-resampling-over-self-repair.md)
 - [Calibrated Early Termination and Warm Restart for Agent Runs (FailFast-RestartSmart)](loop-engineering/early-termination-and-warm-restart.md)
 - [Loop Trigger Selection: Pairing the Start with the Stop](loop-engineering/loop-trigger-selection.md)
+- [Continuation Dispatcher: Who Owns the Iterate-or-Stop Call](loop-engineering/continuation-dispatcher.md)
 
 ## Tool Design
 
@@ -898,6 +903,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Sandbox Credential Masking: Authenticate Without Seeing the Secret](security/sandbox-credential-masking.md)
 - [Static-First Shell Command Gating with Selective Escalation](security/static-first-shell-command-gating.md)
 - [Replayable Encrypted Reasoning Blocks in Agent Traces](security/replayable-encrypted-reasoning-blocks.md)
+- [Skill Misevolution in Self-Updating Skill Libraries](security/skill-misevolution-lifecycle-gates.md)
 
 ## Testing & Evaluation
 
@@ -1072,6 +1078,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Behavior-Partitioned Security Tests as Executable Specs](verification/behavior-partitioned-security-tests.md)
 - [Verification Capacity Saturation: Three Levers, One Default](verification/verification-capacity-saturation.md)
 - [Against-Prior Accuracy: Score the Rules That Fight Defaults](verification/against-prior-accuracy.md)
+- [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](verification/evidence-bundled-agent-prs.md)
+- [Review-Comment-Derived Benchmarks for Code Review Agents](verification/review-comment-derived-benchmarks.md)
 
 ## Hooks & Guardrails
 
@@ -1457,6 +1465,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Catastrophic Remembering: Instruction Files That Only Grow](patterns/anti-patterns/catastrophic-remembering-instruction-files.md)
 - [Prescribing TDD Inside the Agent Loop (Process Theater)](patterns/anti-patterns/tdd-inside-the-agent-loop.md)
 - [Cumulative-Best Reporting Hides Repair-Loop Security Regressions](patterns/anti-patterns/cumulative-best-hides-repair-regressions.md)
+- [Pressuring a Coding Agent Degrades the Code It Writes](patterns/anti-patterns/pressured-prompt-framing.md)
 
 ## Emerging Concepts
 

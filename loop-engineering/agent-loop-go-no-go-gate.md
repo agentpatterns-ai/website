@@ -120,3 +120,4 @@ Verdict: do not loop. A single prompt-driven session with a domain expert review
 - [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md) — the split-the-maker-from-the-checker structure that closes the verification condition
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — broader cost-control patterns once a loop is approved
 - [Comprehension Debt: When Developers Understand Less of Their Own Codebase](../patterns/anti-patterns/comprehension-debt.md) — the anti-pattern that emerges when the gate is skipped and the loop ships faster than the team reads
+- [Continuation Dispatcher: Who Owns the Iterate-or-Stop Call](continuation-dispatcher.md) — once the gate passes, this decides whether the harness or the model owns the decision to run another pass

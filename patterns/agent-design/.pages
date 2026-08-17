@@ -123,12 +123,14 @@ nav:
       - trigger-level-agent-intake-gating.md
   - "Reliability":
       - agent-circuit-breaker.md
+      - retry-switch-abstain-recovery-policy.md
       - self-healing-production-agent.md
       - advisor-strategy.md
       - agent-backpressure.md
       - behavioral-drivers-agent-success.md
       - cross-vendor-competitive-routing.md
       - decoupled-search-grounding.md
+      - deterministic-fast-paths.md
       - dispatch-time-reasoning-level.md
       - dual-budget-control-search-agents.md
       - effective-feedback-compute.md
@@ -187,6 +189,7 @@ nav:
       - harness-hill-climbing.md
       - harness-impermanence.md
       - harness-as-product.md
+      - situated-harness-layers.md
       - isometric-harness-ablation.md
       - suspect-the-harness-not-the-model.md
       - lane-based-execution-queueing.md

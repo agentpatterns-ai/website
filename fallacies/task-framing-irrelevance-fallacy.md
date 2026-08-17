@@ -62,6 +62,7 @@ The framing effect is real but uneven. In specific conditions, surface presentat
 - Structured-output and function-calling modes — a strict JSON schema or typed function signature constrains the response space, so surrounding-prompt framing produces negligible output differences.
 - Highly fine-tuned task-specific models — narrow-domain fine-tuning builds strong priors that partially override prompt framing.
 - Very short, unambiguous queries — retrieval-style tasks with one determinate answer (`What is the return type of X?`) rarely shift with framing.
+- Persuasion-style framings on coding tasks — across nine prompt framings and five open-weight models, only [coercive pressure](../patterns/anti-patterns/pressured-prompt-framing.md) changed correctness, and it did so on structured problems and not on repository-level maintenance ([arXiv:2608.11513v1](https://arxiv.org/abs/2608.11513v1)).
 
 Optimizing framing here yields diminishing returns. The fallacy is the blanket claim that framing never matters — not the observation that it matters less in constrained modes.
 

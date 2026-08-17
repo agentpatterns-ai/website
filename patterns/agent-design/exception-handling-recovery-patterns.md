@@ -135,6 +135,7 @@ Throughout, the agent commits after each successful file change (`git commit -m 
 
 - [Rollback-First Design](rollback-first-design.md)
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — per-tool state machine implementation with configuration thresholds
+- [Retry, Switch, or Abstain: Supplying a Tool-Recovery Policy at Runtime](retry-switch-abstain-recovery-policy.md) — measured evidence for the fallback and escalate rungs of this hierarchy, and where supplying them in context backfires
 - [Tail Control for Agent Workflows](tail-control-for-agent-workflows.md) — percentile-based reliability framing — per-step p95 timeouts, hedged re-draws, graceful degradation — that names the workflow-level bound the progressive recovery hierarchy lives inside
 - [Idempotent Agent Operations](idempotent-agent-operations.md)
 - [Agent Harness](agent-harness.md)

@@ -33,6 +33,7 @@ last_reviewed: 2026-05-27
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — Agents analyzing identical data diverge systematically by model family; treat single-run outputs as one point from an unsampled distribution
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — Use realistic, telemetry-derived benchmarks to evaluate AI coding tools — synthetic puzzles hide language-specific and task-specific weaknesses
 - [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — Build a small suite over your own tasks to compare model, prompt, and harness as one configuration — and size it to the decision before trusting the ranking
+- [Review-Comment-Derived Benchmarks for Code Review Agents](review-comment-derived-benchmarks.md) — Curate comments trusted reviewers left on merged PRs into frozen-context tasks with a verifier, so the benchmark scores the codebase-specific contracts public benchmarks never encode
 - [Policy-Graded Evaluation of Coding Agents](policy-graded-agent-evaluation.md) — Score agents at each enforced security tier and report success rate and token cost as separate columns; under a NIST-derived policy success fell up to 18.3 points and cost rose up to 167.3%, on different models
 - [Head-to-Head Evaluation of Competing MCP Servers](head-to-head-mcp-server-evaluation.md) — Score competing MCP servers under one fixed agent configuration and decide on consistency, duration, and cost per quality point, because a small eval rarely separates them on quality
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md) — Two-thirds of code completion failures are model errors, but one quarter are integration failures — fix both to improve acceptance rates
@@ -104,6 +105,7 @@ last_reviewed: 2026-05-27
 - [Natural-Language Documentation as a Code-Review Intermediate (Verifiable Literate Programming)](verifiable-literate-programming.md) — Translate LLM code into a deterministic natural-language documentation layer and review that prose, so intent-code mismatches surface where a human can judge them
 - [Audit-Budget Allocation for Agent Fleets](audit-budget-allocation-agent-fleets.md) — Screen an agent's self-reported confidence for discrimination before ranking a review queue by it; past a mimicry threshold the ranked queue does worse than random, and a larger audit budget flips first
 - [Evidence-Chain Run Logs: Bracket the Reported Symptom](evidence-chain-run-logs.md) — Pair every agent tool call with its actual result and bracket the change with one machine-readable measurement of the reported symptom, taken identically before and after — a gate, never a signal the agent iterates against
+- [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](evidence-bundled-agent-prs.md) — Attach the reproduction, failing probe, and executed test the agent already ran so a reviewer picks a depth per change; the artifacts carry the value, and the agent's own risk grade carries none
 
 ## Rubric Design
 

@@ -106,3 +106,4 @@ The factory works because the pipeline is now almost entirely near-zero-cost and
 - [AI Slop as a Process Problem](slop-as-process-problem.md) — encoding standards as the per-PR gate that supplies back pressure
 - [Model Economics of Agent Swarms](../patterns/multi-agent/model-economics-agent-swarms.md) — the token-cost view of running many loops at once
 - [Verification Capacity Saturation](../verification/verification-capacity-saturation.md) — the levers available once the review gate is the station that saturates
+- [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](../verification/evidence-bundled-agent-prs.md) — one mitigation at the gate, with the conditions under which it holds

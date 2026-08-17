@@ -9,7 +9,7 @@ aliases:
   - managed agent harness
   - self-hosted agent harness
   - agent harness deployment
-last_reviewed: 2026-08-08
+last_reviewed: 2026-08-16
 maturity: established
 ---
 
@@ -22,6 +22,8 @@ maturity: established
 Managed agent services such as [Claude Managed Agents](https://claude.com/blog/building-with-claude-managed-agents) ([platform docs](https://platform.claude.com/docs/en/managed-agents/overview)) provide a pre-built harness, [sandboxed execution](../../security/sandbox-runtime-comparison.md), and hosted infrastructure in exchange for vendor coupling. Self-hosted open-source harnesses such as [LangChain Deep Agents Deploy](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/) and Cursor's self-hosted cloud agents trade ops burden for control over data, model selection, and accumulated [agent memory](agent-memory-patterns.md).
 
 The choice mirrors the classic SaaS vs on-prem decision but with a compounding factor: agents accumulate memory over time. Locking memory behind a proprietary API raises migration cost with every session.
+
+LangChain argues that managed agents are the next major step in agent building ([LangChain, August 2026](https://www.langchain.com/blog/why-managed-agents-are-the-next-big-thing-in-agent-building)). The post is vendor advocacy and reports no measurement. Weigh it as a stated position against the five signals below.
 
 ## Compliance and memory-ownership signals
 
@@ -92,10 +94,8 @@ The hybrid is not Cursor-specific. Managed providers increasingly offer self-hos
 - [Harness Engineering](harness-engineering.md) — the discipline of designing agent environments for reliable output
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md) — the two-phase harness pattern for long-running work
 - [Cursor Self-Hosted Cloud Agents](../../tools/cursor/self-hosted-cloud-agents.md) — hybrid deployment: managed orchestration, self-hosted execution
-- [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — routing by complexity, relevant when multi-provider routing is in scope
 - [The Harness as Product: What Listed-Rate Pricing Buys](harness-as-product.md) — the upstream build-vs-buy question this deployment choice follows: what the product layer adds over raw API tokens
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — assigning competing agents to the same task, a self-hosted-only pattern
 - [Local Model Viability Factors for Coding](local-model-viability-for-coding.md) — when self-hosting extends to a local model, the factors that decide whether it is good enough
 - [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — the three-primitive architecture inside either deployment mode
 - [Agent Observability with OpenTelemetry](../../observability/agent-observability-otel.md) — the OTel instrumentation contract that determines whether a managed surface can plug into your existing observability stack
-- [Sandbox Runtime Comparison](../../security/sandbox-runtime-comparison.md) — sandbox primitive comparison, the same in either deployment mode but with different ownership of the boundary

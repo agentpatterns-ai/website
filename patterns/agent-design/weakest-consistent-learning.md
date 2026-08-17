@@ -83,3 +83,4 @@ The second entry permits every future timezone-dependent test failure, and the r
 - [Self-Rewriting Meta-Prompt Loop](self-rewriting-meta-prompt-loop.md) — the loop shape this selection rule governs.
 - [Rule Lifecycle Metadata for Prunable Instruction Surfaces](../../instructions/rule-lifecycle-metadata.md) — recording applicability and expiry so a persisted rule can later be pruned.
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](../../instructions/guardrails-beat-guidance-coding-agents.md) — the countervailing evidence for prohibitions.
+- [Skill Misevolution in Self-Updating Skill Libraries](../../security/skill-misevolution-lifecycle-gates.md) — what contaminated evidence does once a loop has persisted it, measured across authoring, retrieval, and a later clean session.

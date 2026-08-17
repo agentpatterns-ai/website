@@ -18,6 +18,7 @@ nav:
       - pre-trust-execution-surface.md
       - rag-architecture-poisoning-robustness.md
       - replayable-encrypted-reasoning-blocks.md
+      - skill-misevolution-lifecycle-gates.md
       - trajectory-poisoning-promoted-skills.md
       - trojan-hippo-memory-attack.md
       - unbounded-consumption-resource-bounds.md
