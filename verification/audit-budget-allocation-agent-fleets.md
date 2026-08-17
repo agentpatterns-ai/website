@@ -82,6 +82,7 @@ Reproduce this table on your own traffic first: sample outputs, label each corre
 - [Risk-Score Threshold Calibration for Auto-Approval](../code-review/risk-score-threshold-calibration.md) — the same allocation problem solved with a learned diff-risk score instead of the model's own confidence
 - [Verification-Gated Agent Autonomy via Automated Review](../patterns/agent-design/verification-gated-agent-autonomy.md) — what to do with the audit budget the screening step frees up
 - [Developer as CPU Scheduler: Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md) — the human-side framing of the scarce review capacity this page allocates
+- [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](evidence-bundled-agent-prs.md) — the artifact-based alternative to ranking a queue on a confidence score the producer wrote
 
 ## Sources
 

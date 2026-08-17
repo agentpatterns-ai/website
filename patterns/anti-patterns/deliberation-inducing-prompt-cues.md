@@ -85,3 +85,4 @@ The second prompt is no shorter. It replaces four unbounded sub-goals with one t
 - [Harness-Controlled Token Economics](../../token-engineering/harness-token-economics.md) — why the orchestration layer outweighs prompt wording as a cost lever
 - [Minimum-Sufficient Execution](../agent-design/minimum-sufficient-execution.md) — the same stop-early principle applied to context gathering
 - [Token Reduction Is Not Cost Reduction](token-reduction-not-cost-reduction.md) — why fewer tokens does not automatically mean a smaller bill
+- [Pressuring a Coding Agent Degrades the Code It Writes](pressured-prompt-framing.md) — the quality-side sibling, where coercive wording lowered correctness and raised security warnings

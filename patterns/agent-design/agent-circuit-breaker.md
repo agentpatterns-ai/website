@@ -98,6 +98,7 @@ Circuit breakers add overhead that outweighs the benefit in several common scena
 ## Related
 
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — broader taxonomy of agent failure modes and recovery strategies
+- [Retry, Switch, or Abstain: Supplying a Tool-Recovery Policy at Runtime](retry-switch-abstain-recovery-policy.md) — what the agent does once a breaker opens, supplied as a fallback map and constraint set rather than left to the model
 - [Tail Control for Agent Workflows](tail-control-for-agent-workflows.md) — the workflow-level reliability framing the breaker fits inside; pairs the state-machine bound with hedged re-draws and percentile-based SLOs
 - [Circuit Breakers for Agent Loops](../../observability/circuit-breakers.md) — loop-level stopping mechanisms (iteration limits, cost thresholds)
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md) — designing operations to be undoable when failures occur

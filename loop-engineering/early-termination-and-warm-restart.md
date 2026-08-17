@@ -99,3 +99,4 @@ The restart prompt says only that an earlier attempt was stopped because it look
 - [Stuck-Loop Recovery: Detecting and Escaping Non-Converging Agent Loops](stuck-loop-recovery.md) — the in-place recovery ladder to climb before reaching for a kill-and-restart
 - [Convergence Detection in Iterative Agent Refinement](convergence-detection.md) — stopping a healthy loop on diminishing returns, the mirror of predicting a doomed one
 - [Within-Task Model Cascade: Designing the Escalation Gate](within-task-model-cascade.md) — the same false-accept-rate arithmetic applied to a cheap-model gate
+- [Continuation Dispatcher: Who Owns the Iterate-or-Stop Call](continuation-dispatcher.md) — where a predictor like this one gets read from, and why its verdict should name the reason rather than return a boolean

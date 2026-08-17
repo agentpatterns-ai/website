@@ -55,6 +55,7 @@ The shape of a single iteration and what guarantees run inside it.
 The crux — what stops a loop and what justifies running one at all.
 
 - [Convergence Detection in Iterative Agent Refinement](convergence-detection.md) — mechanical stopping criteria from change velocity, output size, and similarity
+- [Continuation Dispatcher: Who Owns the Iterate-or-Stop Call](continuation-dispatcher.md) — put the iterate-or-stop decision in one named predicate with declared inputs, in loops where the harness rather than the model owns continuation
 - [Agent Loop Go/No-Go: When Looping Earns Its Cost](agent-loop-go-no-go-gate.md) — the four-condition gate before you build a loop at all
 - [Loop Trigger Selection: Pairing the Start with the Stop](loop-trigger-selection.md) — goal-bounded, scheduled, and event-driven triggers, and the terminal state each one commits you to
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](loop-budgeting.md) — pick the budget primitive (iteration / token / wall-clock) and choose front-loaded vs even-split per-turn allocation

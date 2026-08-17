@@ -91,3 +91,4 @@ The scout itself cost $1.13 in GPU time across all 266 search episodes, under ha
 - [Auto Model Selection](auto-model-selection.md) — vendor-side per-request routing that decides from availability and policy, with no repository evidence.
 - [Utility-Model Split](utility-model-split.md) — a cheaper model for background harness calls inside one turn.
 - [Gateway Model Routing](gateway-model-routing.md) — the infrastructure layer that makes a multi-fixer pool addressable in the first place.
+- [Deterministic Fast Paths](deterministic-fast-paths.md) — the prior question: whether the request needs any model call before you choose which model receives it.

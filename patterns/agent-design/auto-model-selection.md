@@ -231,3 +231,4 @@ Code-health routing decides before the small model runs; syntax-aware routing de
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the taxonomic framework for per-task tier routing across an entire harness; upstream of the tiered, code-health-gated, and syntax-aware variants folded above.
 - [Verification-Centric Development](../../workflows/verification-centric-development.md) — the deterministic gate that makes tier equivalence measurable for code-health-gated routing.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — a small model behind a tool boundary rather than a routed completion peer.
+- [Deterministic Fast Paths](deterministic-fast-paths.md) — the rung below every routing policy, which answers a request without reaching any model.

@@ -110,6 +110,7 @@ Three near-identical records from one origin fail the first and third rules. The
 
 ## Related
 
+- [Skill Misevolution in Self-Updating Skill Libraries](skill-misevolution-lifecycle-gates.md) — what happens downstream of promotion: the same artifact followed through retrieval into a fresh session, with the one-cycle limit above lifted
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — the registry-side sibling, where malicious text arrives inside the skill instead of being synthesized from poisoned evidence
 - [Forged Reasoning Trace Attacks on Agent Memory (FARMA)](forged-reasoning-trace-memory-attack.md) — poisoned traces read back at retrieval time, plus the amplification technique that inverts consensus defenses
 - [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md) — the artifact-level layer this page treats as insufficient alone, and still worth running

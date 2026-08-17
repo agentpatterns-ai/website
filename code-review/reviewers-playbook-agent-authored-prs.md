@@ -133,3 +133,4 @@ Two of the six steps caught the substantive defects. The CI and security steps p
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — bandwidth pressure that erodes the 10-minute budget
 - [Security Review Gap in AI-Authored PRs](security-review-gap-in-ai-prs.md) — why step 5 (security boundaries) is a hard stop, not a heuristic
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](../verification/diff-coverage-gate-agent-prs.md) — turn the coverage-delta tell into an automated changed-line merge gate
+- [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](../verification/evidence-bundled-agent-prs.md) — the producer-side artifact that decides how long a reviewer spends before the playbook starts

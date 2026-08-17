@@ -9,7 +9,7 @@ tags:
 aliases:
   - SKILL.md standard
   - agent skills spec
-last_reviewed: 2026-05-27
+last_reviewed: 2026-08-16
 maturity: established
 ---
 
@@ -23,7 +23,7 @@ Related lesson: [Skills and Progressive Disclosure](https://learn.agentpatterns.
 
 The [Agent Skills standard](https://agentskills.io) defines a format for sharing task knowledge across AI coding tools. A skill is a directory with a `SKILL.md` entrypoint that holds YAML frontmatter and markdown instructions. It can also include supporting files: scripts, templates, examples, or schemas.
 
-The standard is tool-agnostic. Claude Code and GitHub Copilot (VS Code, CLI, and cloud agent) both implement it ([VS Code Agent Skills docs](https://code.visualstudio.com/docs/copilot/customization/agent-skills), [Claude Code skills docs](https://code.claude.com/docs/en/skills)). Other tools, including Cursor and Gemini CLI, have adopted it per the agentskills.io registry. Cross-tool portability is confirmed only for tools that have published implementation documentation.
+The standard is tool-agnostic. Claude Code and GitHub Copilot (VS Code, CLI, and cloud agent) both implement it ([VS Code Agent Skills docs](https://code.visualstudio.com/docs/copilot/customization/agent-skills), [Claude Code skills docs](https://code.claude.com/docs/en/skills)). Google documents Agent Skills in Genkit Go, another runtime that loads them on demand ([Google Developers Blog](https://developers.googleblog.com/enable-on-demand-expertise-with-agent-skills-in-genkit-go/)). Other tools, including Cursor and Gemini CLI, have adopted it per the agentskills.io registry. Cross-tool portability is confirmed only for tools that have published implementation documentation.
 
 ## Skill structure
 
