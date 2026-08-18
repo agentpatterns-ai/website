@@ -58,6 +58,7 @@ nav:
       - usability-pressure-security-regression.md
       - llm-cryptographic-code-verification.md
       - always-on-pr-security-review.md
+      - capability-pegged-security-rescan.md
       - scanner-as-mcp-server.md
       - cross-repository-security-posture.md
       - structural-safeguard-monitoring.md

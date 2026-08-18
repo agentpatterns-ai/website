@@ -622,6 +622,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Deterministic Fast Paths: Answer Without a Model Call](patterns/agent-design/deterministic-fast-paths.md)
 - [Retry, Switch, or Abstain: Supplying a Tool-Recovery Policy at Runtime](patterns/agent-design/retry-switch-abstain-recovery-policy.md)
 - [Situated Harness Layers: Fix at the Layer That Owns It](patterns/agent-design/situated-harness-layers.md)
+- [Generated Programs as Web Agent Action Space](patterns/agent-design/generated-programs-web-agent-action-space.md)
 
 ## Loop Engineering
 
@@ -904,6 +905,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Static-First Shell Command Gating with Selective Escalation](security/static-first-shell-command-gating.md)
 - [Replayable Encrypted Reasoning Blocks in Agent Traces](security/replayable-encrypted-reasoning-blocks.md)
 - [Skill Misevolution in Self-Updating Skill Libraries](security/skill-misevolution-lifecycle-gates.md)
+- [Capability-Pegged Security Re-Scans: Reviewing Unchanged Code When the Scanner Improves](security/capability-pegged-security-rescan.md)
 
 ## Testing & Evaluation
 
@@ -1337,6 +1339,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Per-Agent-App Attribution in the Copilot Usage Metrics API](human/per-agent-app-attribution-copilot-metrics.md)
 - [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](human/agent-rewrite-ownership-rule.md)
 - [Language Selection Scored on Review Cost](human/language-selection-review-cost.md)
+- [Artifact-Level Accountability Mapping for Agent Workflows](human/artifact-level-accountability-mapping.md)
 
 ## Anti-Patterns
 

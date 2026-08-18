@@ -11,7 +11,7 @@ tags:
   - agent-design
   - claude
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-08-08
+last_reviewed: 2026-08-18
 maturity: emerging
 ---
 
@@ -38,16 +38,16 @@ The placeholder is a per-session sentinel, and each masked entry can list `injec
 
 ## Structured values and JWT claims
 
-Whole-value replacement suits a bare token. Two options added in Claude Code 2.1.224 handle values a tool parses ([changelog](https://code.claude.com/docs/en/changelog)):
+Whole-value replacement suits a bare token. Two options added in Claude Code 2.1.224 handle values a tool parses ([Claude Code changelog, 2.1.224](https://code.claude.com/docs/en/changelog#2-1-224)):
 
 - `extract` takes a regular expression and replaces "only the text captured by group 1 of each match", so a `DATABASE_URL` connection string still parses inside the sandbox ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)).
 - `decode: "jwt"` verifies the value is a JSON Web Token and replaces it with "a structurally valid fake token, so code inside the sandbox that decodes the token keeps working". Adding `maskClaims` masks named top-level payload claims and leaves the rest readable. It cannot be combined with `extract` ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)).
 
-That distinction matters when sandboxed code branches on the token, since the claims a reader does not name stay readable while the rest is replaced.
+That distinction matters when sandboxed code branches on the token, since the claims a reader does not name stay readable while the rest is replaced. The same release added `onExtractNoMatch` as the fallback setting for `extract` ([Claude Code changelog, 2.1.224](https://code.claude.com/docs/en/changelog#2-1-224)).
 
 ## Signed requests are the hard case
 
-A proxy cannot fix an AWS request by swapping a header value. "AWS requests carry SigV4 signatures over the request contents, so mask `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` together"; the proxy detects the request by the access key's sentinel and re-signs it after substituting the real values ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#re-sign-aws-requests)). Masking the secret alone leaves a placeholder-signed request the proxy cannot detect, and it fails at AWS. Three forms carry signatures the proxy cannot recompute at all: aws-chunked streaming uploads, presigned URLs, and SigV4A. Those fail with a proxy error rather than a broken signature on the wire, and `credentials.sigv4` relaxes that per form ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#re-sign-aws-requests)).
+A proxy cannot fix an AWS request by swapping a header value. "AWS requests carry SigV4 signatures over the request contents, so mask `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` together"; the proxy detects the request by the access key's sentinel and re-signs it after substituting the real values ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#re-sign-aws-requests)). Masking the secret alone leaves a placeholder-signed request the proxy cannot detect, and it fails at AWS. Three forms carry signatures the proxy cannot recompute at all: aws-chunked streaming uploads, presigned URLs, and SigV4A. Those fail with a proxy error rather than a broken signature on the wire, and `credentials.sigv4` relaxes that per form ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#re-sign-aws-requests)). Claude Code 2.1.224 added `awsPairs` and `sigv4` as named options in the credentials config for this re-signing path ([Claude Code changelog, 2.1.224](https://code.claude.com/docs/en/changelog#2-1-224)).
 
 ## Why it works
 
@@ -90,6 +90,8 @@ Masking the GitHub token in `~/.config/gh/hosts.yml` so `gh` keeps working while
 ```
 
 On Linux and WSL2, a sandboxed `cat ~/.config/gh/hosts.yml` shows a sentinel where the token was, and the proxy substitutes the real token on requests to `api.github.com`. On macOS the read fails instead. Put this in user or managed settings, since the repository's own settings file is ignored for masking.
+
+Claude Code added file masking in version 2.1.221 ([Claude Code changelog, 2.1.221](https://code.claude.com/docs/en/changelog#2-1-221)).
 
 ## FAQ
 

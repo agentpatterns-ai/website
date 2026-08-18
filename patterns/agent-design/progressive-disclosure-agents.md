@@ -8,7 +8,7 @@ aliases:
 tags:
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-06-12
+last_reviewed: 2026-08-18
 maturity: adopted
 ---
 
@@ -52,6 +52,8 @@ The agent reads the definition, then reads only the skills relevant to the curre
 A monolithic 2000-token definition loads 2000 tokens on every invocation. Split it into a 200-token definition and five 400-token skills, and a task that needs two skills loads 200 + 400 + 400 = 1000 tokens. That is half the baseline, with the same knowledge available.
 
 For sub-agents spawned at scale, this compounds. Each one that inherits a bloated definition multiplies the waste across the whole fan-out.
+
+Claude Code's built-in `claude-api` skill cut its context cost from over 200,000 tokens to about 25,000. It moved reference documentation to on-demand loading instead of bundling it up front ([Claude Code changelog, August 2026](https://code.claude.com/docs/en/changelog#2-1-234)).
 
 ## Implementation
 

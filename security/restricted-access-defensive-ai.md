@@ -123,3 +123,4 @@ The disclosure-then-fix cadence and the safeguard-readiness exit criterion are t
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
+- [Capability-Pegged Security Re-Scans](capability-pegged-security-rescan.md) — what a defender does once comparable discovery capability ships without a gate

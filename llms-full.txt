@@ -746,6 +746,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Deterministic Fast Paths: Answer Without a Model Call](patterns/agent-design/deterministic-fast-paths.md)
 - [Retry, Switch, or Abstain: Supplying a Tool-Recovery Policy at Runtime](patterns/agent-design/retry-switch-abstain-recovery-policy.md)
 - [Situated Harness Layers: Fix at the Layer That Owns It](patterns/agent-design/situated-harness-layers.md)
+- [Generated Programs as Web Agent Action Space](patterns/agent-design/generated-programs-web-agent-action-space.md)
 
 ## Loop Engineering
 
@@ -1028,6 +1029,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Static-First Shell Command Gating with Selective Escalation](security/static-first-shell-command-gating.md)
 - [Replayable Encrypted Reasoning Blocks in Agent Traces](security/replayable-encrypted-reasoning-blocks.md)
 - [Skill Misevolution in Self-Updating Skill Libraries](security/skill-misevolution-lifecycle-gates.md)
+- [Capability-Pegged Security Re-Scans: Reviewing Unchanged Code When the Scanner Improves](security/capability-pegged-security-rescan.md)
 
 ## Testing & Evaluation
 
@@ -1461,6 +1463,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Per-Agent-App Attribution in the Copilot Usage Metrics API](human/per-agent-app-attribution-copilot-metrics.md)
 - [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](human/agent-rewrite-ownership-rule.md)
 - [Language Selection Scored on Review Cost](human/language-selection-review-cost.md)
+- [Artifact-Level Accountability Mapping for Agent Workflows](human/artifact-level-accountability-mapping.md)
 
 ## Anti-Patterns
 
@@ -20737,6 +20740,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Tools as Typed Code Stubs (Programmatic Tool Calling)](programmatic-tool-calling.md) — Expose tools as typed Python stubs the model calls from a script — it matched or beat JSON tool calling on 11 of 14 models, but only past a code-emission gate and a fan-out-shaped workload
 - [Recursive Agent Harnesses (RAH)](recursive-agent-harnesses.md) — A parent agent generates and runs a script that spawns subagent harnesses in parallel — each with its own tools and context — making the recursive unit a full harness rather than a bare model call
 - [Browser as Agent Action Space](browser-as-agent-action-space.md) — Design an agent-driven browser tool loop with element-addressed actions, signal-triggered observation, and per-step assertions — but only when control flow genuinely depends on what the page returns
+- [Generated Programs as Web Agent Action Space](generated-programs-web-agent-action-space.md) — Let the web agent write and run a program against a disposable browser while the workspace holds the durable code and logs — worth it past three gates, and weaker than plan-then-execute on injection
 - [Scoped Browser DevTools Access for Runtime Diagnosis](scoped-devtools-access-runtime-diagnosis.md) — Give the coding agent a read-oriented Chrome DevTools Protocol attachment for diagnosing runtime, network, and console errors — but only when the agent's other tools cannot close the lethal trifecta against the imported DOM
 - [Temporary Compensatory Mechanisms](temporary-compensatory-mechanisms.md) — Design scaffolding that compensates for current model limitations as removable layers, not load-bearing architecture
 - [The Think Tool](think-tool.md) — A mid-stream reasoning checkpoint that fires between tool calls, giving agents an explicit space to reflect on tool output before deciding the next action
@@ -24597,6 +24601,7 @@ Without the final call, the agent proceeds on the assumption that the click land
 
 ## Related
 
+- [Generated Programs as Web Agent Action Space](generated-programs-web-agent-action-space.md) — the other branch of the gate above: what the harness looks like when the agent emits a runnable program instead of a click trajectory.
 - [Scoped Browser DevTools Access for Runtime Diagnosis](scoped-devtools-access-runtime-diagnosis.md) — the read-oriented counterpart: attach for diagnosis without granting the drive-the-browser surface.
 - [Live Browser as Agent Context Channel](../../context-engineering/live-browser-context-channel.md) — the human's own tabs as passive context, and why that session is riskier than a headless one.
 - [CoALA Structured Action Space: Internal vs External Actions](coala-structured-action-space.md) — the general framing for splitting an agent's actions by cost, reversibility, and permission profile.
@@ -31089,6 +31094,91 @@ This is the gateway version of pinning a Bedrock ARN ([Claude Code: Model config
 - [Per-Model Harness Tuning](per-model-harness-tuning.md) — per-model configuration once a gateway exposes multiple options.
 - [Managed vs Self-Hosted Harness](managed-vs-self-hosted-harness.md) — trade-off frame that gateways sit inside.
 - [Copilot CLI BYOK Local Models](../../tools/copilot/copilot-cli-byok-local-models.md) — comparable BYOK pattern in a different harness.
+
+---
+
+### Generated Programs as Web Agent Action Space
+Source: https://agentpatterns.ai/patterns/agent-design/generated-programs-web-agent-action-space/
+
+# Generated Programs as Web Agent Action Space
+
+> The agent writes and runs a program against the browser, so the durable artifact is code in a workspace rather than a browser session.
+
+Give the agent a terminal and let it write Playwright code, and the browser becomes disposable while the workspace persists. Microsoft Research's Webwright harness is built this way: the agent "emits bash commands and controls the browser by writing Playwright code", and "the persistent artifact is not the browser session, but the code and logs in the local workspace" ([Microsoft Research](https://www.microsoft.com/en-us/research/articles/webwright-a-terminal-is-all-you-need-for-web-agents/)). With GPT-5.4 it reports 60.1% on the Odysseys long-horizon benchmark against a 33.5% base for the same model. That gain is conditional, so start with the conditions.
+
+## Three gates before you adopt it
+
+### The model has to emit runnable code
+
+A code action space beats text and JSON formats when the model writes code correctly. CodeAct measures "up to a 20% absolute improvement over baselines on the success rate" while requiring "up to 30% fewer actions", with gains that "widen as the capabilities of the LLMs increase" and for one model none at all: "Surprisingly, no improvement is observed for the Llama-2 variant" ([Wang et al., arXiv:2402.01030v4](https://arxiv.org/abs/2402.01030v4)). An independent harness study found three of fourteen models emitted literal `\n` escape sequences instead of newlines, so their scripts died on a syntax error ([Patel et al., arXiv:2608.06370v1](https://arxiv.org/abs/2608.06370v1)). Measure emit-validity on the model you run, then keep the result as a [per-model harness setting](per-model-harness-tuning.md).
+
+### The task has to be long enough to amortize the loop
+
+The headline result is measured on Odysseys, 200 long-horizon tasks run on the live internet, where "the strongest models achieved a success rate of 44.5%" ([Jang et al., arXiv:2604.24964v1](https://arxiv.org/abs/2604.24964v1)). Webwright's runs there average 76.1 steps, and on the shorter Online-Mind2Web set it averages "$2.37 per task" with GPT-5.4 ([Microsoft Research](https://www.microsoft.com/en-us/research/articles/webwright-a-terminal-is-all-you-need-for-web-agents/)). A three-action sequence never recovers the turns spent authoring, running, and repairing a script.
+
+### Containment is yours to build
+
+CodeAct's own authors flag the risk: such an agent "may potentially break free of the sandbox restriction and cause harm to the world through cyber-attack, highlighting the need for future work to design better safety mechanism" ([arXiv:2402.01030v4](https://arxiv.org/abs/2402.01030v4)). The [Webwright repository](https://github.com/microsoft/Webwright) documents credential handling for model API keys and says nothing about sandboxing the code it generates. Generated code plus a logged-in browser session is arbitrary code execution holding the user's credentials, the [lethal trifecta](../../security/lethal-trifecta-threat-model.md) condition.
+
+## Harness decisions
+
+Past those gates, four choices define the harness, and Webwright's public implementation makes each one visible ([Microsoft Research](https://www.microsoft.com/en-us/research/articles/webwright-a-terminal-is-all-you-need-for-web-agents/)).
+
+- State lives in the workspace. The browser is "something the agent can launch, inspect, and discard while developing a program", while "intermediate code, logs, screenshots, and results" go to a local folder.
+- The action vocabulary is bash plus Playwright rather than a fixed tool enum, letting the agent "naturally chain many web interactions within a single step, and spawn multiple browser sessions".
+- Completion is established rather than claimed. Against a premature "done", the agent must "generate a self-reflection config, run a final script in a fresh folder with logs and screenshots, and pass its own self-reflection judgement".
+- Context is bounded on a fixed interval, compacting "history every 20 steps into a single summary".
+
+None of that needs a large harness. Webwright is a Runner, a Model Endpoint, and a terminal Environment in roughly 1K lines, with "no multi-agent orchestration".
+
+## Why it works
+
+A program collapses re-decision points. Control flow that a step-wise agent re-derives from a fresh observation at every action, such as loops, retries, and conditionals, is written once and executed by the runtime. CodeAct measures that directly: gpt-4-1106-preview gained "a 20.7% absolute improvement compared to the next best action format (text) while requiring 2.1 fewer interaction turns on average" ([Wang et al., arXiv:2402.01030v4](https://arxiv.org/abs/2402.01030v4)). Fewer model-mediated steps means fewer places for a long trajectory to diverge, and less accumulated observation in the context window.
+
+The other cause is where the state lives. Because the durable artifact lives in the workspace as code and logs ([Microsoft Research](https://www.microsoft.com/en-us/research/articles/webwright-a-terminal-is-all-you-need-for-web-agents/)), a failed run leaves an inspectable script to repair instead of an unrecoverable trajectory. Attribution is partly inferential: the 26.6-point Odysseys delta is a whole-harness comparison, not an ablation isolating either cause.
+
+## When this backfires
+
+- The model cannot reliably produce runnable code. There was no CodeAct gain for the Llama-2 variant ([arXiv:2402.01030v4](https://arxiv.org/abs/2402.01030v4)), and three of fourteen models in an independent study produced scripts that did not parse ([arXiv:2608.06370v1](https://arxiv.org/abs/2608.06370v1)).
+- The plan must be fixed before untrusted content is read. Plan-then-execute earns its security property because untrusted data "may influence values or branches inside a predefined execution graph, but it cannot redefine the user task or cause the model to synthesize new actions at runtime" ([Piet et al., arXiv:2605.14290v1](https://arxiv.org/abs/2605.14290v1)). A write-execute-inspect-repair loop reads the page and then authors the next program, making runtime action synthesis its mechanism — precisely what that guarantee excludes. Emitting code buys that boundary only if you commit to the program before any page is fetched, which this pattern by construction does not.
+- Nobody owns script maintenance. Microsoft names the limitation: "A script index is only as useful as it is current", with open work on "validating scripts before reuse, detecting silent failures, and updating or retiring ones that no longer work" ([Microsoft Research](https://www.microsoft.com/en-us/research/articles/webwright-a-terminal-is-all-you-need-for-web-agents/)). Reuse is the headline benefit and it decays silently as sites change.
+- The page encodes its state visually. Webwright still ships an `image_qa` tool ([microsoft/Webwright](https://github.com/microsoft/Webwright)) and lets the agent "freely decide when to capture screenshots" ([Microsoft Research](https://www.microsoft.com/en-us/research/articles/webwright-a-terminal-is-all-you-need-for-web-agents/)), because code alone cannot read a canvas.
+- The task is already fixed. Where control flow does not depend on what the page returns, skip both action spaces and write the script yourself, as [Browser as Agent Action Space](browser-as-agent-action-space.md) argues from the same measurement.
+
+## Example
+
+The Webwright repository documents its loop as one line, and the shape is the pattern ([microsoft/Webwright](https://github.com/microsoft/Webwright)):
+
+```text
+write code → execute → inspect screenshots → repair (code-as-action)
+```
+
+The completion step stops that loop exiting on an unverified claim. Rather than let the model report success from its own trajectory, the harness requires a fresh run ([Microsoft Research](https://www.microsoft.com/en-us/research/articles/webwright-a-terminal-is-all-you-need-for-web-agents/)):
+
+```text
+generate self-reflection config
+  → run final script in a fresh folder
+  → capture logs and screenshots
+  → pass self-reflection judgement
+```
+
+Running the final script in a fresh folder is the load-bearing detail. A script that only works against residue left by earlier exploratory runs fails there, which is the difference between a task completed once and a program that runs again.
+
+## Key Takeaways
+
+- Gate on emit-validity per model before adopting the pattern, because the code action space assumes a skill three of fourteen measured models lacked.
+- The economics are long-horizon. Published gains come from 76-step tasks at roughly $2.37 each, so short automation pays the authoring cost without recovering it.
+- Design the workspace; the browser session is disposable. Durable code and logs are what make a failed run repairable.
+- Require a fresh-folder verification run before the agent may claim completion; self-reported success from the working trajectory hides state the script depends on.
+- Code actions and a committed plan are different security postures. Only a plan fixed before any page is read stops untrusted content from shaping the actions the agent synthesizes.
+
+## Related
+
+- [Browser as Agent Action Space](browser-as-agent-action-space.md) — the other branch of the same fork, covering the driven-browser loop this pattern replaces.
+- [Tools as Typed Code Stubs (Programmatic Tool Calling)](programmatic-tool-calling.md) — code as an action space inside a single turn, with the model-capability gates measured across 14 models.
+- [Lethal Trifecta Threat Model](../../security/lethal-trifecta-threat-model.md) — why generated code, a logged-in session, and egress in one principal is the condition to avoid.
+- [Restrict the Coding Agent to Executing Code](../../tool-engineering/restrict-coding-agent-to-execute-code.md) — the containment posture this pattern assumes but does not supply.
+- [Per-Model Harness Tuning](per-model-harness-tuning.md) — where a measured emit-validity result belongs once you have it.
 
 ---
 
@@ -37721,6 +37811,8 @@ The agent reads the definition, then reads only the skills relevant to the curre
 A monolithic 2000-token definition loads 2000 tokens on every invocation. Split it into a 200-token definition and five 400-token skills, and a task that needs two skills loads 200 + 400 + 400 = 1000 tokens. That is half the baseline, with the same knowledge available.
 
 For sub-agents spawned at scale, this compounds. Each one that inherits a bloated definition multiplies the waste across the whole fan-out.
+
+Claude Code's built-in `claude-api` skill cut its context cost from over 200,000 tokens to about 25,000. It moved reference documentation to on-demand loading instead of bundling it up front ([Claude Code changelog, August 2026](https://code.claude.com/docs/en/changelog#2-1-234)).
 
 ## Implementation
 
@@ -44526,6 +44618,7 @@ Only the contents of `over` reach the context window. Anthropic describes the sa
 - [Filter and Aggregate Data in the Execution Environment](../../context-engineering/filter-aggregate-execution-env.md) — the context-savings half of the same sandbox
 - [Code Interpreter as a Primary Agent Tool](../../tool-engineering/code-interpreter-as-agent-tool.md) — when to give the agent an interpreter in the first place
 - [Advanced Tool Use: Scaling Agent Tool Libraries](../../tool-engineering/advanced-tool-use.md) — programmatic calling alongside deferred tool loading and tool search
+- [Generated Programs as Web Agent Action Space](generated-programs-web-agent-action-space.md) — the same code-as-action bet taken across a whole web task rather than inside one turn
 
 ---
 
@@ -94947,6 +95040,7 @@ Multi-agent systems with shared retrieval propagate adversarial content agent-to
 Operational patterns that apply security agents to incoming changes and to resident codebase risk on different cadences.
 
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — Pair a PR-time security reviewer with a scheduled whole-codebase scanner so new and resident risk both have continuous coverage; treat the reviewer agent itself as an injection target
+- [Capability-Pegged Security Re-Scans](capability-pegged-security-rescan.md) — Re-scan unchanged code when the scanner improves rather than when the code changes; only worth it when the trigger is measured against your own defects and every finding clears a reproduction gate
 - [Scanner-as-MCP-Server: Secret and Dependency Scans as Typed Agent Tools](scanner-as-mcp-server.md) — Ship the security scanner as an MCP server so the agent invokes typed scans pre-commit and reasons over structured findings; qualified by five failure modes including agent-skips-scan and lethal-trifecta closure on the scanner principal
 - [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](cross-repository-security-posture.md) — Treat one agent-introduced finding as a class to enumerate and remediate across every repository via variant analysis, not a per-repo point-in-time event; the organization-wide layer above per-agent scoping and per-PR review
 - [Structural Monitoring for Covert Safeguard-Weakening](structural-safeguard-monitoring.md) — Diff the control- and data-flow graph of an agent's infrastructure-as-code change to catch a safeguard weakened under task success; an untrained structural monitor missed 3.5% of sabotage versus 11.6% for a git-diff baseline and cut joint sabotage success to 0% under synchronous rollback
@@ -95096,6 +95190,7 @@ It complements the [four-layer threat taxonomy](four-layer-agent-security-taxono
 - [MCP Runtime Control Plane](mcp-runtime-control-plane.md) — F1 control: single chokepoint for tool-call policy evaluation
 - [Agent Network Egress Policy](agent-network-egress-policy.md) — F4 control: target validation at the network boundary
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — F3 control: module-level integrity for executing code
+- [Artifact-Level Accountability Mapping for Agent Workflows](../human/artifact-level-accountability-mapping.md) — the workflow-audit counterpart: whether the log's schema carries the endorsement/comment/authorship distinctions accountability needs, once you know the runtime honored it
 
 ---
 
@@ -95914,6 +96009,7 @@ Both draw from a shared usage pool and a shared suppression-rule store. [Source:
 - [Action-Selector Pattern](action-selector-pattern.md)
 - [Scoped Credentials via Proxy](scoped-credentials-proxy.md)
 - [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](cross-repository-security-posture.md) — the organization-wide layer that enumerates a finding across every repository
+- [Capability-Pegged Security Re-Scans](capability-pegged-security-rescan.md) — a third trigger for the scheduled leg, fired by scanner capability rather than the calendar
 
 ---
 
@@ -96582,6 +96678,77 @@ An injected instruction that tells the code to read `~/.ssh/id_rsa` or POST to a
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — the stricter form: each bridged capability as a revocable subgoal-scoped handle
 - [Selective Network Access in Agent Sandboxes: The `allowNetwork` Pattern](selective-network-sandbox-mode.md) — the subtractive counterpart, where a boundary is lifted rather than added
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — the approval step durable pauses make first-class
+
+---
+
+### Capability-Pegged Security Re-Scans: Reviewing Unchanged Code When the Scanner Improves
+Source: https://agentpatterns.ai/security/capability-pegged-security-rescan/
+
+# Capability-Pegged Security Re-Scans: Reviewing Unchanged Code When the Scanner Improves
+
+> A security review's coverage belongs to the model that ran it, so a capability jump stales the result while the code sits unchanged.
+
+Two conditions decide whether re-scanning unchanged code is worth the money. Miss either and the measured false-discovery rates make it net-negative.
+
+## The two conditions
+
+- Trigger on a capability measurement against your own code, never on a vendor release announcement. Leaderboard position does not transfer to your setup. On a single benchmark of 344 validated vulnerabilities, [SEC-bench Pro](https://arxiv.org/abs/2605.26548v2) records that Claude Code with Opus 4.6 "tends to time out but solves most instances it completes", so realized coverage depends on the harness a model runs in, not the model alone.
+- Gate every finding on reproduction before it reaches an engineer. The [Refute-or-Promote](https://arxiv.org/abs/2604.19049v1) campaign killed roughly 79% of 171 candidates before disclosure, and its worst case is instructive: ten dedicated reviewers unanimously endorsed a Bleichenbacher padding oracle in OpenSSL's CMS module that did not exist, and it "was killed only by a single empirical test".
+
+Without both, the cost side dominates. A project-scale study of five LLM detectors and two static analyzers across 24 active open-source projects found that both kinds of tool "generate substantial warnings but suffer from very high false discovery rates, hindering practical use", at "hundreds of thousands to hundreds of millions of tokens and multi-hour to multi-day runtimes" ([Li et al., 2026](https://arxiv.org/abs/2601.19239v1)).
+
+## Why it works
+
+A security review's coverage is a property of the analyzer, not of the code, so it decays on a schedule the code has no say in. SEC-bench Pro isolates this. Across every configuration on one fixed set of 344 validated vulnerabilities, "the strongest, Codex with GPT-5.5, solves 58% of instances overall", while "GLM-5 solves only 13 of the 344 instances" ([SEC-bench Pro](https://arxiv.org/abs/2605.26548v2)). Nothing about those 344 bugs changed between the two runs. The entire difference in what was found belongs to the analyzer, which is why a clean review dates from the model that produced it rather than from the commit it ran against.
+
+The same paper bounds the claim. That 58% ceiling is on bugs already disclosed, with triggering instructions supplied. A clean re-scan on undisclosed bugs in production code is much weaker evidence, so a capability jump raises the floor and certifies nothing.
+
+## What counts as a trigger
+
+Keep a regression corpus: real defects your own codebase has had, drawn from your CVE history or postmortems, with the fixes reverted on a private branch. Run each candidate model over that corpus first. If it does not beat the incumbent on bugs in your languages and your vulnerability classes, skip the full pass. Running a small corpus costs a fraction of the whole-project figures above, so an otherwise unbounded "whenever a stronger model ships" rule stays affordable as releases accelerate.
+
+Record which model produced each clean result. Once a review has a version attached, "we scanned this last quarter" becomes a checkable statement, not a reassurance.
+
+## How re-scan findings triage differently
+
+Findings from a whole-codebase pass are not pull-request findings with a longer queue.
+
+- The code already shipped and has been running. Reachability and exploitability decide priority, not diff hygiene.
+- Volume arrives in one batch rather than across weeks of pull requests, so triage capacity sets the scan's practical scope.
+- Reproduction is mandatory, because nothing downstream catches a plausible-but-wrong report before it consumes engineering time.
+
+Scope the pass to surfaces where an escape is expensive. Per-diff coverage stays with the [always-on PR security reviewer](always-on-pr-security-review.md); the re-scan covers resident risk the diff path never reaches.
+
+## Example
+
+Vercel reports running "full deepsec reviews across mission-critical repositories every quarter and whenever a stronger model becomes available, in addition to automated security reviews on every pull request" ([Vercel, 2026](https://vercel.com/blog/everything-hackable-will-get-hacked)). Three triggers stack there: per-diff, calendar, and capability.
+
+Vercel motivates the third trigger with its own DeepSec Bench, on which it says the open-weight Kimi K3 "ranks highest among the open-weight models we evaluated, roughly matching Sonnet 5 and outperforming Opus 4.8". That benchmark and the `deepsec` tool are Vercel's own products, and the closest independent measurement points the other way: SEC-bench Pro reports that open-weight models "struggle" on long-horizon security tasks. The cadence does not depend on open-weight parity, only on capability moving, which both sources support.
+
+## When this backfires
+
+- No reproduction gate. "Plausible-but-wrong reports overwhelm maintainers and degrade credibility for real findings" ([Agarwal, 2026](https://arxiv.org/abs/2604.19049v1)), so the cost lands on the next true positive rather than on the scan that produced the noise.
+- Small or low-blast-radius codebases. Multi-day runtimes and hundreds of millions of tokens exceed the value of any plausible finding on an internal tool with no untrusted input.
+- Triggers read off general leaderboards. A coding or reasoning benchmark says nothing about your languages, vulnerability classes, or harness.
+- Accelerating releases with an unbounded trigger. At monthly release cadence, "whenever a stronger model ships" collapses into continuous scanning and the calendar leg stops meaning anything.
+- Treating a clean result as certification. The benchmark ceiling is 58% on known bugs with instructions attached.
+- No per-diff review yet. Chasing capability drift while new risk lands unreviewed inverts the order of operations.
+
+## Key Takeaways
+
+- A review's coverage is a property of the model, so it goes stale on model releases rather than on commits.
+- Trigger on a measured improvement against a regression corpus of your own past defects, not on a release announcement.
+- Re-scan findings need a reproduction step that pull-request findings can survive without.
+- Scope capability-triggered passes to high-blast-radius surfaces and leave the rest to per-diff review.
+- Attach the model and version to every clean result, so a past scan is a dated claim rather than a standing one.
+
+## Related
+
+- [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the per-diff and calendar legs this trigger stacks on top of
+- [Three-Depth In-Session Security Review](three-depth-in-session-security-review.md) — the per-turn layer below both
+- [Restricted-Access Defensive AI](restricted-access-defensive-ai.md) — gating frontier discovery models to vetted defenders, the same dual-use problem from the supply side
+- [Security Budget as Token Economics](security-budget-token-economics.md) — how far inference spend scales vulnerability discovery within a single attempt
+- [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](cross-repository-security-posture.md) — turning one finding into an organization-wide sweep
 
 ---
 
@@ -105490,6 +105657,7 @@ The disclosure-then-fix cadence and the safeguard-readiness exit criterion are t
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
+- [Capability-Pegged Security Re-Scans](capability-pegged-security-rescan.md) — what a defender does once comparable discovery capability ships without a gate
 
 ---
 
@@ -106087,16 +106255,16 @@ The placeholder is a per-session sentinel, and each masked entry can list `injec
 
 ## Structured values and JWT claims
 
-Whole-value replacement suits a bare token. Two options added in Claude Code 2.1.224 handle values a tool parses ([changelog](https://code.claude.com/docs/en/changelog)):
+Whole-value replacement suits a bare token. Two options added in Claude Code 2.1.224 handle values a tool parses ([Claude Code changelog, 2.1.224](https://code.claude.com/docs/en/changelog#2-1-224)):
 
 - `extract` takes a regular expression and replaces "only the text captured by group 1 of each match", so a `DATABASE_URL` connection string still parses inside the sandbox ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)).
 - `decode: "jwt"` verifies the value is a JSON Web Token and replaces it with "a structurally valid fake token, so code inside the sandbox that decodes the token keeps working". Adding `maskClaims` masks named top-level payload claims and leaves the rest readable. It cannot be combined with `extract` ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#mask-environment-variables)).
 
-That distinction matters when sandboxed code branches on the token, since the claims a reader does not name stay readable while the rest is replaced.
+That distinction matters when sandboxed code branches on the token, since the claims a reader does not name stay readable while the rest is replaced. The same release added `onExtractNoMatch` as the fallback setting for `extract` ([Claude Code changelog, 2.1.224](https://code.claude.com/docs/en/changelog#2-1-224)).
 
 ## Signed requests are the hard case
 
-A proxy cannot fix an AWS request by swapping a header value. "AWS requests carry SigV4 signatures over the request contents, so mask `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` together"; the proxy detects the request by the access key's sentinel and re-signs it after substituting the real values ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#re-sign-aws-requests)). Masking the secret alone leaves a placeholder-signed request the proxy cannot detect, and it fails at AWS. Three forms carry signatures the proxy cannot recompute at all: aws-chunked streaming uploads, presigned URLs, and SigV4A. Those fail with a proxy error rather than a broken signature on the wire, and `credentials.sigv4` relaxes that per form ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#re-sign-aws-requests)).
+A proxy cannot fix an AWS request by swapping a header value. "AWS requests carry SigV4 signatures over the request contents, so mask `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` together"; the proxy detects the request by the access key's sentinel and re-signs it after substituting the real values ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#re-sign-aws-requests)). Masking the secret alone leaves a placeholder-signed request the proxy cannot detect, and it fails at AWS. Three forms carry signatures the proxy cannot recompute at all: aws-chunked streaming uploads, presigned URLs, and SigV4A. Those fail with a proxy error rather than a broken signature on the wire, and `credentials.sigv4` relaxes that per form ([sandboxing docs](https://code.claude.com/docs/en/sandboxing#re-sign-aws-requests)). Claude Code 2.1.224 added `awsPairs` and `sigv4` as named options in the credentials config for this re-signing path ([Claude Code changelog, 2.1.224](https://code.claude.com/docs/en/changelog#2-1-224)).
 
 ## Why it works
 
@@ -106139,6 +106307,8 @@ Masking the GitHub token in `~/.config/gh/hosts.yml` so `gh` keeps working while
 ```
 
 On Linux and WSL2, a sandboxed `cat ~/.config/gh/hosts.yml` shows a sentinel where the token was, and the proxy substitutes the real token on requests to `api.github.com`. On macOS the read fails instead. Put this in user or managed settings, since the repository's own settings file is ignored for masking.
+
+Claude Code added file masking in version 2.1.221 ([Claude Code changelog, 2.1.221](https://code.claude.com/docs/en/changelog#2-1-221)).
 
 ## FAQ
 
@@ -107360,6 +107530,8 @@ VS Code 1.127 moved the default itself: terminal-command sandboxing now rolls ou
 Claude Code takes the opposite default position: "Effective sandboxing requires both filesystem and network isolation. Without network isolation, a compromised agent could exfiltrate sensitive files like SSH keys" ([Claude Code Sandboxing](https://code.claude.com/docs/en/sandboxing)). The open-source `sandbox-runtime` echoes this — its weaker modes degrade overall guarantees rather than splitting axes cleanly ([anthropic-experimental/sandbox-runtime](https://github.com/anthropic-experimental/sandbox-runtime)). Vercel reaches the same conclusion from its own sandbox implementation work: [a sandbox without a network boundary is only half a sandbox](https://vercel.com/blog/a-sandbox-without-a-network-boundary-is-only-half-a-sandbox).
 
 `allowNetwork` is a capability-scoping convenience, not a security improvement over `on`. Treating it otherwise is a category error.
+
+Claude Code later shipped a setting that enforces this position directly. The `sandbox.network.strictAllowlist` setting denies requests to hosts outside the allowlist instead of prompting. Once enabled, the block is fail-closed ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-219)).
 
 ## Where it is safe
 
@@ -117445,6 +117617,7 @@ Source: https://agentpatterns.ai/human/
 - [Step Budgets and Trust in Agent-Generated Code Tours](agent-generated-code-tour-step-budgets.md) — Keep agent-authored debugging walkthroughs near five steps with detail scaled to each segment, expect readers to discount visibly AI-written prose, and never let a second model grade the tour
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](author-to-reviewer-role-inversion.md) — As agents author most code, review overtakes writing as the top developer activity; staff, measure, and budget review capacity as the binding constraint rather than authoring throughput
 - [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](agent-rewrite-ownership-rule.md) — Rewrites drop scope restrictors and emphasis in a measurable direction; the ownership rule that follows, plus the cases where a blanket rule costs more than it saves
+- [Artifact-Level Accountability Mapping for Agent Workflows](artifact-level-accountability-mapping.md) — Audit every workflow event against authority, execution, verification, consequence, and record; the map earns its keep on events the artifact schema records opaquely, chiefly approval
 
 ---
 
@@ -118064,6 +118237,92 @@ The captured gain is not a 30% speedup on old work. It is a new category the tea
 - [Rigor Relocation](rigor-relocation.md) — Harness and verification effort must scale with ambition
 - [Process Amplification](process-amplification.md) — Agents amplify whatever process they land in, including ambition decisions
 - [Intervention Rate as a Diagnostic North Star, Not a Target](intervention-rate-diagnostic-north-star.md) — The metric named in the routine-delegate row, with the conditions under which it is a useful signal rather than a Goodhart trap
+
+---
+
+### Artifact-Level Accountability Mapping for Agent Workflows
+Source: https://agentpatterns.ai/human/artifact-level-accountability-mapping/
+
+# Artifact-Level Accountability Mapping for Agent Workflows
+
+> Artifact-level accountability mapping audits each workflow event for authority, execution, verification, consequence, and record — the artifact schema decides whether responsibility can be traced.
+
+Artifact-level accountability mapping is a workflow audit: walk every event an agentic coding pipeline produces, and record who held authority, who executed and under which identity, who had to verify, who bears the consequence, and which artifact carries the trace. Do it when a team enables agent authorship, agent review, or agent merge, and again whenever a provider's terms or defaults change. The framework earns its keep on events current tooling records opaquely, not on events an existing gate already documents cleanly.
+
+## When the mapping earns its keep
+
+The mapping pays back under three conditions. Outside them it is process for its own sake.
+
+- A team has enabled at least one event where an agent occupies the compelled-verification cell — auto-approval under a risk threshold, agent-authored review that gates a merge, or agent-triggered deployment. Farrag documents an "Agent-performed approval below risk threshold" cell producing artifacts indistinguishable from a human endorsement ([Farrag, arXiv:2608.15678v1](https://arxiv.org/abs/2608.15678v1)).
+- Compliance or incident-response practice requires answering "who endorsed this change" or "under which authorization did the agent push" from stored artifacts alone. Orchestration logs commonly attribute activity to workflow identifiers and agent types rather than to specific authenticated agent instances and their human authorizers, so entries do not satisfy identity-traceability requirements such as CMMC AU.2.042 ([Kiteworks, 2026](https://www.kiteworks.com/regulatory-compliance/ai-agent-audit-trail-siem-integration/)).
+- Multiple vendors are in play, and provider terms and defaults disagree on merge authority, attribution direction, and record semantics ([Farrag, arXiv:2608.15678v1](https://arxiv.org/abs/2608.15678v1)).
+
+For a single-tool team that reviews every agent PR by hand and never enables agent-side approval, the map produces the same answer at every event and buys nothing over the [enforced-versus-advisory-controls split](../security/enforced-versus-advisory-controls.md).
+
+## The five dimensions per event
+
+Nine workflow events carry accountability weight — task assignment, plan approval, change authorship, pull request creation, check execution, review, approval, merge, deployment ([Farrag, arXiv:2608.15678v1](https://arxiv.org/abs/2608.15678v1)). For each, ask five questions:
+
+| Dimension | Question the artifact must answer |
+|---|---|
+| Authority | Who held permission to trigger this event? |
+| Execution | Who performed it, and under which recorded identity? |
+| Verification | Who checked it, and did any mechanism compel that check? |
+| Consequence | Who bears outcomes per the governing terms? |
+| Record | Which artifact documents the occurrence, and does its schema distinguish this event from adjacent ones? |
+
+The mapping replaces the older enforced-or-advisory-or-absent trichotomy with a two-axis grid on the verification dimension: whether a mechanism compels the check, and who performs it ([Farrag, arXiv:2608.15678v1](https://arxiv.org/abs/2608.15678v1)). The cell that did not exist before is compelled verification performed by an agent, such as merge queue admission that a bot signs off or auto-approval under a risk threshold. Its output is a compelled verification with no reader present.
+
+## Where the artifact schema quietly loses the distinction
+
+The gap the paper documents most sharply is at the approval event. Farrag writes: "The audit log's pull request category contains no event corresponding to an approving review specifically; approval is recorded as the submission of a review, which is the same event type as a comment or a request for changes. The distinction between endorsing a change and remarking on it is not carried by the record." ([Farrag, arXiv:2608.15678v1](https://arxiv.org/abs/2608.15678v1)). Whether an agent endorsed a diff or merely commented is unrecoverable from the artifact alone, so no downstream policy can rebuild that distinction.
+
+Attribution direction fares no better across vendors. Some tools record the agent as author with a human co-author; others record the human as author with an agent label ([Farrag, arXiv:2608.15678v1](https://arxiv.org/abs/2608.15678v1)). Practitioners describe the co-author trailer as forgeable metadata that tells you little about who authorized the change, and note that a squash-and-merge sets author to Copilot in ways that disrupt blame and contribution history ([AgentLair, 2026](https://agentlair.dev/blog/co-authored-by-is-not-enough/); [GitHub community discussion](https://github.com/orgs/community/discussions/179983)). A team relying on `git log` for attribution is reading a field the provider is still deciding how to fill.
+
+Provider progress on the trace-back sub-problem is real but partial. GitHub's Copilot coding agent now embeds an `Agent-Logs-Url` trailer that links commits back to session logs ([GitHub Changelog, 2026-03-20](https://github.blog/changelog/2026-03-20-trace-any-copilot-coding-agent-commit-to-its-session-logs/)). That closes the "what did the agent do" question for one vendor and does not address the "was this an endorsement or a comment" question at all.
+
+## Why it works
+
+Accountability is artifact-mediated: the after-the-fact question "who is responsible" can only be answered from the records the event left behind, so the artifact schema decides what questions any downstream policy can settle. Where an audit log records approval and comment as one submission event, no reviewer training or contract clause reintroduces the distinction ([Farrag, arXiv:2608.15678v1](https://arxiv.org/abs/2608.15678v1)). Where a commit trailer names an agent but not the authorizing human, identity-traceability regimes cannot recover the authorizer from the log ([Kiteworks, 2026](https://www.kiteworks.com/regulatory-compliance/ai-agent-audit-trail-siem-integration/)). The paper's operational recommendation follows from this: distinguish the artifacts first, then let policy sit on top. GitHub's `Agent-Logs-Url` trailer is the mechanism working in the small: a distinguishable trace that made a per-commit-per-actor question answerable where it was not before ([GitHub Changelog, 2026-03-20](https://github.blog/changelog/2026-03-20-trace-any-copilot-coding-agent-commit-to-its-session-logs/)).
+
+## When this backfires
+
+The mapping is worse than a lighter alternative in five cases.
+
+- Deterministic merge gates already cover the events. When branch protection, required approvals, signed commits, and a merge queue are all on and required, the answers to authority, execution, verification, and record collapse into the gate's own record for the merge event. The framework's discriminating power sits on the events those gates do not touch; if none remain uncovered, there is nothing to map.
+- Agent-approval features stay off. The paper's central concern is agents occupying the compelled-verification cell. A team that reviews every agent PR by hand does not have this failure mode, and [enforced-versus-advisory-controls](../security/enforced-versus-advisory-controls.md) covers what remains.
+- Small team, single identity per human, low-blast-radius repos. The dimensions produce the same answer at every event, so the map returns nothing over an informal runbook.
+- A prescriptive regime already dictates the artifact list. Under SOX, HIPAA, or PCI the required artifacts are set externally, so laying a second five-dimension map on top creates two schemes to reconcile and drift between.
+- Documentation-versus-practice gap. The paper reads published material and does not sample repositories. A team whose informal practice already answers each dimension via runbooks and Slack norms gains little from formalizing the gap and pays coordination cost.
+
+Contracts also stay abstract on purpose. Farrag notes the coherent opposite view — event-level obligations would age faster than the products change — and does not refute it ([Farrag, arXiv:2608.15678v1](https://arxiv.org/abs/2608.15678v1)). And the paper is documentation-only: it "establishes correspondence gaps between documentation layers, not that gaps cause demonstrable harm" ([Farrag, arXiv:2608.15678v1](https://arxiv.org/abs/2608.15678v1)). Weight it accordingly.
+
+## Example
+
+A team has enabled Copilot's coding agent, allows an auto-approval routine on documentation-only pull requests, and runs branch protection with required approvals on the default branch. Apply the map to three events.
+
+Merge. Authority sits with the required-reviewers group; execution runs under whoever clicked merge; verification is compelled by branch protection; consequence is set by the enterprise agreement; the record is the merge commit plus the branch-protection log. No gap.
+
+Approval on an agent-authored documentation pull request. Authority sits with the auto-approval routine under its configured threshold; execution runs under the routine's identity; verification is compelled by the merge gate but performed by an agent; consequence remains with the account owner. The record is a `PullRequestReview` submission, which the audit log does not distinguish from a human's approving review or from a comment on any other pull request ([Farrag, arXiv:2608.15678v1](https://arxiv.org/abs/2608.15678v1)). The gap is at the record dimension, and no downstream policy can rebuild the distinction from that artifact alone.
+
+Change authorship on the agent-drafted commit. Authority sits with the human who requested the task; execution runs as the Copilot agent, with the requester as co-author and an `Agent-Logs-Url` trailer linking back to session logs ([GitHub Changelog, 2026-03-20](https://github.blog/changelog/2026-03-20-trace-any-copilot-coding-agent-commit-to-its-session-logs/)). The record now answers "what did the agent do"; GitHub closed that sub-gap. Attribution direction stays a per-vendor choice a reviewer downstream must know to read.
+
+The map's output is a list: the approval event needs a compensating record before this pipeline can answer a compliance question about endorsement, while merge and authorship do not.
+
+## Key Takeaways
+
+- Artifact-level accountability mapping walks nine workflow events and asks five questions of each — authority, execution, verification, consequence, and record — with the record dimension load-bearing.
+- Its value is on events where the artifact schema quietly loses a distinction, chiefly approval, where a `PullRequestReview` submission conflates endorsing a change with commenting on one ([Farrag, arXiv:2608.15678v1](https://arxiv.org/abs/2608.15678v1)).
+- The mapping earns its keep only when at least one event is agent-verified under a risk threshold, when compliance requires artifact-alone traceability, or when multi-vendor policies disagree; outside those conditions, keep the lighter [enforced-versus-advisory-controls split](../security/enforced-versus-advisory-controls.md).
+- Distinguish the artifact first; downstream policy cannot rebuild a distinction the record schema does not carry. GitHub's `Agent-Logs-Url` trailer shows the mechanism working on one sub-gap and not on approval ([GitHub Changelog, 2026-03-20](https://github.blog/changelog/2026-03-20-trace-any-copilot-coding-agent-commit-to-its-session-logs/)).
+
+## Related
+
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](../security/enforced-versus-advisory-controls.md) — the site-level split between runtime-evaluated and context-evaluated controls; this mapping picks up on the events that split does not resolve
+- [Risk Architecture for AI-Native Engineering Teams](risk-architecture-ai-native-teams.md) — the organization-level ownership map for AI-native teams; artifact-level accountability is the event-level companion
+- [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](../security/action-audit-divergence-taxonomy.md) — asks whether the runtime honored the log; this mapping asks whether the log's schema carries the distinctions accountability needs
+- [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](../verification/evidence-bundled-agent-prs.md) — the producer-side artifact that widens the review gate the approval event depends on
+- [Intent-Centric Engineering: Oversight Over Authorship](intent-centric-engineering.md) — the operating model that allocates accountability across humans, agents, and tools
 
 ---
 
@@ -120940,6 +121199,7 @@ Consider the silent boundary-drift mode the framework describes, made concrete. 
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md) — the security-control counterpart to organizational ownership: bound what an agent can touch.
 - [Enterprise Agent Hardening: Three Production Gates](../security/enterprise-agent-hardening.md) — governance, observability, and reproducibility gates that operationalize the monitoring surface this framework needs.
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](../security/action-audit-divergence-taxonomy.md) — the runtime-safety analogue of semantic escalation: guaranteeing the audit record matches what the agent did.
+- [Artifact-Level Accountability Mapping for Agent Workflows](artifact-level-accountability-mapping.md) — the event-level companion to this org-level framework; audits each workflow event against authority, execution, verification, consequence, and record.
 - [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — the identity-side framing of the same shift in where engineering leverage sits.
 
 ---
