@@ -84,6 +84,7 @@ Without the final call, the agent proceeds on the assumption that the click land
 
 ## Related
 
+- [Generated Programs as Web Agent Action Space](generated-programs-web-agent-action-space.md) — the other branch of the gate above: what the harness looks like when the agent emits a runnable program instead of a click trajectory.
 - [Scoped Browser DevTools Access for Runtime Diagnosis](scoped-devtools-access-runtime-diagnosis.md) — the read-oriented counterpart: attach for diagnosis without granting the drive-the-browser surface.
 - [Live Browser as Agent Context Channel](../../context-engineering/live-browser-context-channel.md) — the human's own tabs as passive context, and why that session is riskier than a headless one.
 - [CoALA Structured Action Space: Internal vs External Actions](coala-structured-action-space.md) — the general framing for splitting an agent's actions by cost, reversibility, and permission profile.

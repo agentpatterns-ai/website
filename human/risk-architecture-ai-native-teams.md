@@ -69,4 +69,5 @@ Consider the silent boundary-drift mode the framework describes, made concrete. 
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md) — the security-control counterpart to organizational ownership: bound what an agent can touch.
 - [Enterprise Agent Hardening: Three Production Gates](../security/enterprise-agent-hardening.md) — governance, observability, and reproducibility gates that operationalize the monitoring surface this framework needs.
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](../security/action-audit-divergence-taxonomy.md) — the runtime-safety analogue of semantic escalation: guaranteeing the audit record matches what the agent did.
+- [Artifact-Level Accountability Mapping for Agent Workflows](artifact-level-accountability-mapping.md) — the event-level companion to this org-level framework; audits each workflow event against authority, execution, verification, consequence, and record.
 - [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — the identity-side framing of the same shift in where engineering leverage sits.

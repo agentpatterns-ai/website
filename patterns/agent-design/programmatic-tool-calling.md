@@ -95,3 +95,4 @@ Only the contents of `over` reach the context window. Anthropic describes the sa
 - [Filter and Aggregate Data in the Execution Environment](../../context-engineering/filter-aggregate-execution-env.md) — the context-savings half of the same sandbox
 - [Code Interpreter as a Primary Agent Tool](../../tool-engineering/code-interpreter-as-agent-tool.md) — when to give the agent an interpreter in the first place
 - [Advanced Tool Use: Scaling Agent Tool Libraries](../../tool-engineering/advanced-tool-use.md) — programmatic calling alongside deferred tool loading and tool search
+- [Generated Programs as Web Agent Action Space](generated-programs-web-agent-action-space.md) — the same code-as-action bet taken across a whole web task rather than inside one turn
