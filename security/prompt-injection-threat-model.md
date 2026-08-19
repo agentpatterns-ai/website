@@ -139,3 +139,4 @@ Not on their own. Approval gates work only if users read the prompts, and in hig
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [URL Exfiltration Guard](url-exfiltration-guard.md)
 - [Design Agents with Defense-in-Depth Against Prompt Injection](../verification/layered-accuracy-defense.md)
+- [Workspace Topology as an Indirect Injection Attack Vector](workspace-topology-injection-attack-vector.md)

@@ -11,7 +11,7 @@ tags:
 aliases:
   - agent troubleshooting
   - LLM debugging
-last_reviewed: 2026-07-21
+last_reviewed: 2026-08-19
 maturity: established
 ---
 
@@ -30,7 +30,7 @@ Code bugs have stack traces. Agent bugs have context windows. When an agent fail
 
 Debugging means working out which category applies before changing anything.
 
-LangChain's [introduction to coding-agent observability](https://blog.langchain.com/blog/your-coding-agents-are-a-black-box-heres-how-to-crack-them-open) frames an opaque agent as a black box to crack open through tracing and instrumentation.
+LangChain's [introduction to coding-agent observability](https://blog.langchain.com/blog/your-coding-agents-are-a-black-box-heres-how-to-crack-them-open) frames an opaque agent as a black box to crack open through tracing and instrumentation. The same observability data also powers agent evaluation, LangChain argues ([its post on agent observability and evaluation](https://www.langchain.com/blog/agent-observability-powers-agent-evaluation)).
 
 ## Diagnostic sequence
 
@@ -141,5 +141,4 @@ Behavior that varies session to session usually means instruction files loaded i
 - [Agent-Reactive Bugs at the Model-Harness Boundary](agent-reactive-bugs.md)
 - [Escape Hatches: Unsticking Stuck Agents](../workflows/escape-hatches.md)
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)
-- [Visible Thinking in AI Development](../human/visible-thinking-ai-development.md)
 - [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md)

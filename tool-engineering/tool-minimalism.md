@@ -9,7 +9,7 @@ tags:
   - instructions
   - tool-agnostic
   - tool-engineering
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-19
 maturity: established
 ---
 
@@ -32,7 +32,9 @@ Redundancy is a liability, not a safety net. When two tools can accomplish the s
 
 Anthropic's engineering team reaches the same conclusion from the tool-authoring side: "When tools overlap in function or have a vague purpose, agents can get confused about which ones to use," and "Too many tools or overlapping tools can also distract agents from pursuing efficient strategies." [Source: [Writing effective tools for AI agents](https://www.anthropic.com/engineering/writing-tools-for-agents)]
 
-A controlled study reinforces the direction empirically. Across 102 tasks against a 100-tool menu, filtering each step's visible tools down to the causally necessary options matched the strongest baseline's task-success rate while cutting token cost by roughly 90% — restricting the menu did not trade away success. [Source: [ToolChoiceConfusion: Causal Minimal Tool Filtering for Reliable LLM Agents](https://arxiv.org/abs/2606.06284)]
+A controlled study reinforces the direction empirically. Across 102 tasks against a 100-tool menu, filtering each step's visible tools down to the causally necessary options matched the strongest baseline's task-success rate while cutting token cost by roughly 90% — restricting the menu did not trade away success. [Source: [ToolChoiceConfusion: Causal Minimal Tool Filtering for Reliable LLM Agents](https://arxiv.org/abs/2606.06284v1)]
+
+LangChain's account of monday.com's Sidekick agent reports the cost in production: overlapping tool descriptions degraded tool selection, and tool schemas consumed context every turn. The team's answer was decomposition: an orchestrator routes work to specialized subagents, each with a smaller toolset, behind a permission-aware context layer and sandboxed execution. [Source: [Building monday.com Sidekick: why capable agents need more than just tools](https://www.langchain.com/blog/building-monday-com-sidekick-why-capable-agents-need-more-than-just-tools)]
 
 ## Removing overlapping tools
 
@@ -120,10 +122,6 @@ Three tools, no overlapping functionality. `read_file` absorbed `read_lines` via
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
 - [Subagent Schema-Level Tool Filtering](../patterns/multi-agent/subagent-schema-level-tool-filtering.md)
-- [Tool Calling Schema Standards](../standards/tool-calling-schema-standards.md)
-- [System Prompt Altitude: Specific Without Being Brittle](../instructions/system-prompt-altitude.md)
-- [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
-- [Chance-Corrected Shortlist Depth Sizing](chance-corrected-shortlist-depth-sizing.md)
 - [Tool Architecture Moves Consistency, Not Resolve Rate](tool-architecture-consistency-lever.md) — the organization axis rather than the count axis, measured with capabilities held constant
 - [Match Tool Instructions to the Agent Workflow](../instructions/match-tool-instructions-to-workflow.md) — the same instructions-over-tools lever from the opposite direction: the tools were better, and the fix was still the instructions
 - [Product-Operation Tool Surfaces for In-Product Agents](../patterns/agent-design/product-operation-tool-surface.md) — the case where a product agent runs many shallow tools instead, and what it has to pay for them

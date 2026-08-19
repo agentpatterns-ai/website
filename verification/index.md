@@ -88,6 +88,7 @@ last_reviewed: 2026-05-27
 - [AX Evals: Measure the Agent-Facing Surface, Not the Model](ax-evals-agent-facing-surface.md) — Score your library, CLI, MCP server, or docs with the model held fixed, and design the criteria, judge, and environment so the with-versus-without delta is attributable to that surface
 - [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](agent-driven-eval-flywheel.md) — Drive the eval-generation loop from your coding agent so each fix is graded against the whole accumulated case set, proving it generalizes instead of patching one case
 - [Eval Difficulty as a Product Smell](eval-difficulty-product-smell.md) — Hard-to-write evals usually signal a product that was not designed for users to verify; redesign the artifact for checkability before scaling the scorer
+- [Agent-Authored Eval Suites From Repo Context and Traces](agent-authored-eval-suites.md) — Let a coding agent map the agent surface and scaffold a runnable task from repo and traces, while capability selection and verifier auditing stay human
 
 ## Review Techniques
 

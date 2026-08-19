@@ -10,7 +10,7 @@ tags:
   - multi-agent
   - tool-agnostic
   - frameworks
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-19
 maturity: established
 ---
 
@@ -29,6 +29,8 @@ A framework speeds up your work when its primitives match your task and fights y
 - Language and tooling fit — Python-first, polyglot SDKs, or TypeScript/Electron.
 
 A feature-by-feature matrix flatters whichever framework runs the comparison. The axes above decide whether you spend the next quarter shipping the agent or rewriting around the wrong primitive.
+
+Vendors draw the same layer distinctions inside their own product lines. LangChain presents Deep Agents, LangChain, and LangGraph as three separate offerings aimed at different jobs ([LangChain, 7 August 2026](https://www.langchain.com/blog/deep-agents-vs-langchain-vs-langgraph)). That post is first-party positioning rather than neutral analysis, so check the boundaries it draws against the axes above.
 
 ## Runtime and browser-automation framework fit
 

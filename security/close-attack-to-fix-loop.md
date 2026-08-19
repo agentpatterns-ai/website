@@ -149,3 +149,4 @@ Training includes only the attack traces the current checkpoint fails, which foc
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Explicit, Narrow Task Instructions to Reduce Injection Susceptibility](task-scope-security-boundary.md)
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
+- [Black-Box Probing in the Agent Build Loop](black-box-probe-build-loop.md) — testing the artifact the agent shipped, rather than hardening the agent

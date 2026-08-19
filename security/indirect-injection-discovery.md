@@ -165,3 +165,4 @@ The fix below uses a PreToolUse hook to block rules file reads from external rep
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
 - [Tool-Invocation Attack Surface in Coding Agents](tool-invocation-attack-surface.md)
 - [RL-Trained Automated Red Teamers for Prompt Injection](rl-automated-red-teamers.md)
+- [Workspace Topology as an Indirect Injection Attack Vector](workspace-topology-injection-attack-vector.md)

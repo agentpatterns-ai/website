@@ -214,3 +214,4 @@ Practitioner-reported tiers put a minimum viable suite at 50-100 cases covering 
 - [LLM-as-Judge Evaluation](../workflows/llm-as-judge-evaluation.md)
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md)
 - [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](agent-driven-eval-flywheel.md)
+- [Agent-Authored Eval Suites From Repo Context and Traces](agent-authored-eval-suites.md)
