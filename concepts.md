@@ -906,6 +906,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Replayable Encrypted Reasoning Blocks in Agent Traces](security/replayable-encrypted-reasoning-blocks.md)
 - [Skill Misevolution in Self-Updating Skill Libraries](security/skill-misevolution-lifecycle-gates.md)
 - [Capability-Pegged Security Re-Scans: Reviewing Unchanged Code When the Scanner Improves](security/capability-pegged-security-rescan.md)
+- [Black-Box Probing in the Agent Build Loop: When It Pays](security/black-box-probe-build-loop.md)
+- [Workspace Topology as an Indirect Injection Attack Vector](security/workspace-topology-injection-attack-vector.md)
 
 ## Testing & Evaluation
 
@@ -1082,6 +1084,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Against-Prior Accuracy: Score the Rules That Fight Defaults](verification/against-prior-accuracy.md)
 - [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](verification/evidence-bundled-agent-prs.md)
 - [Review-Comment-Derived Benchmarks for Code Review Agents](verification/review-comment-derived-benchmarks.md)
+- [Agent-Authored Eval Suites From Repo Context and Traces](verification/agent-authored-eval-suites.md)
 
 ## Hooks & Guardrails
 
@@ -1469,6 +1472,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Prescribing TDD Inside the Agent Loop (Process Theater)](patterns/anti-patterns/tdd-inside-the-agent-loop.md)
 - [Cumulative-Best Reporting Hides Repair-Loop Security Regressions](patterns/anti-patterns/cumulative-best-hides-repair-regressions.md)
 - [Pressuring a Coding Agent Degrades the Code It Writes](patterns/anti-patterns/pressured-prompt-framing.md)
+- [The Recall Trap: Tuning a Code Retriever on Recall@k at a Fixed Slot Budget](patterns/anti-patterns/recall-trap-retriever-tuning.md)
 
 ## Emerging Concepts
 

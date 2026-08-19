@@ -145,3 +145,4 @@ Both draw from a shared usage pool and a shared suppression-rule store. [Source:
 - [Scoped Credentials via Proxy](scoped-credentials-proxy.md)
 - [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](cross-repository-security-posture.md) — the organization-wide layer that enumerates a finding across every repository
 - [Capability-Pegged Security Re-Scans](capability-pegged-security-rescan.md) — a third trigger for the scheduled leg, fired by scanner capability rather than the calendar
+- [Black-Box Probing in the Agent Build Loop](black-box-probe-build-loop.md) — the outside-in half, testing the running deployment rather than the diff

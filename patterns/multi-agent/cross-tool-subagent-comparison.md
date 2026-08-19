@@ -9,15 +9,15 @@ tags:
 aliases:
   - terminal agent subagent comparison
   - gemini cli subagents vs claude code
-last_reviewed: 2026-05-27
+last_reviewed: 2026-08-18
 maturity: adopted
 ---
 
 # Cross-Tool Subagent Comparison
 
-> Three terminal agents now ship subagents as a first-class primitive. The definition format converges on Markdown plus YAML frontmatter; the isolation model, tool scoping, and composition semantics diverge in ways that matter when moving agents between tools.
+> Claude Code, Gemini CLI, and Copilot CLI each ship a subagent primitive with shared Markdown-plus-YAML syntax, but recursion depth, isolation, and tool scoping diverge.
 
-[Gemini CLI v0.38.1 shipped subagents](https://github.com/google-gemini/gemini-cli/blob/main/docs/core/subagents.md) in April 2026, joining [Claude Code](https://code.claude.com/docs/en/sub-agents) and [GitHub Copilot CLI](https://github.blog/changelog/2025-10-28-github-copilot-cli-use-custom-agents-and-delegate-to-copilot-coding-agent/). All three use Markdown plus YAML frontmatter, route delegation through `description`, and cap recursion at one level. The differences in isolation, tool scoping, and composition determine portability.
+[Gemini CLI v0.38.1 shipped subagents](https://github.com/google-gemini/gemini-cli/blob/main/docs/core/subagents.md) in April 2026, joining [Claude Code](https://code.claude.com/docs/en/sub-agents) and [GitHub Copilot CLI](https://github.blog/changelog/2025-10-28-github-copilot-cli-use-custom-agents-and-delegate-to-copilot-coding-agent/). All three use Markdown plus YAML frontmatter and route delegation through `description`. Gemini CLI blocks a subagent from spawning another. Claude Code raised its default subagent nesting depth to 3 in July 2026, and setting `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` restores the single-level cap ([Claude Code changelog #2.1.219](https://code.claude.com/docs/en/changelog#2-1-219)). The differences in isolation, tool scoping, and composition determine portability.
 
 ## The shared model
 
@@ -28,11 +28,11 @@ maturity: adopted
 | Required frontmatter | `name`, `description` | `name`, `description` | `description` (name = filename) |
 | Delegation signal | `description` match | `description` match | `description` + tool-surfaced |
 | Explicit invocation | by name in prompt | `@agent-name` | `/agent <name>` |
-| Recursion depth | 1 | 1 (guard even with wildcard tools) | 1 |
+| Recursion depth | 3 (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` restores 1) | 1 (guard even with wildcard tools) | not documented |
 
-Sources: [Claude Code sub-agents](https://code.claude.com/docs/en/sub-agents), [Gemini CLI subagents](https://github.com/google-gemini/gemini-cli/blob/main/docs/core/subagents.md), [Copilot CLI changelog](https://github.blog/changelog/2025-10-28-github-copilot-cli-use-custom-agents-and-delegate-to-copilot-coding-agent/).
+Sources: [Claude Code sub-agents](https://code.claude.com/docs/en/sub-agents), [Claude Code changelog #2.1.219](https://code.claude.com/docs/en/changelog#2-1-219), [Gemini CLI subagents](https://github.com/google-gemini/gemini-cli/blob/main/docs/core/subagents.md), [Copilot CLI changelog](https://github.blog/changelog/2025-10-28-github-copilot-cli-use-custom-agents-and-delegate-to-copilot-coding-agent/).
 
-No tool lets a subagent spawn another subagent. Gemini CLI enforces this even when `tools: ['*']` is granted. Claude Code's Plan subagent exists because the guard forces single-layer delegation and plan mode needed an in-session researcher.
+Gemini CLI still blocks a subagent from spawning another, even when `tools: ['*']` is granted. Claude Code's Plan subagent was built for that same single-layer restriction. Copilot CLI's docs describe delegation to a subagent but state no depth limit in either direction, so treat its recursion behavior as unspecified rather than capped ([invoking custom agents](https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/invoke-custom-agents)). Claude Code raised its default subagent nesting depth to 3 in July 2026 ([Claude Code changelog #2.1.219](https://code.claude.com/docs/en/changelog#2-1-219)). Setting `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` restores the one-level cap. Claude Code also removed its 200-subagent-per-session spawn cap ([Claude Code changelog #2.1.232](https://code.claude.com/docs/en/changelog#2-1-232)), so session-wide fan-out width is no longer capped either.
 
 ## Context isolation
 
@@ -119,7 +119,7 @@ A single-threaded main agent with disciplined [context engineering](../../contex
 
 ## Key Takeaways
 
-- All three terminal agents ship Markdown + YAML frontmatter subagents with `name`/`description` delegation and one-level recursion caps
+- All three terminal agents ship Markdown + YAML frontmatter subagents with `name`/`description` delegation; Gemini CLI still blocks nested subagents, Copilot CLI documents no depth limit either way, and Claude Code's default rose to 3 in July 2026
 - Isolation semantics are shared (separate context window, summary return); only Claude Code offers file-level isolation via `isolation: worktree`
 - Tool scoping diverges: Claude uses allowlist+denylist, Gemini uses wildcards, Copilot uses explicit lists with inline MCP
 - Composition beyond one level requires distinct primitives in each tool: Claude agent teams, Copilot `/fleet`, Gemini A2A remote subagents

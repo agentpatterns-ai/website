@@ -11,7 +11,7 @@ aliases:
   - observability feedback loop
   - 7-step debug runbook
   - query correlate reason implement restart rerun verify
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-19
 maturity: established
 ---
 
@@ -40,7 +40,7 @@ The steps are scaffolding. The load-bearing piece is the verification predicate 
 
 ## Prerequisites: the minimum stack
 
-The loop assumes runtime signals exist and are queryable. The SOP enumerates the minimum: structured logs on startup and the critical path, metrics for latency and failure counts, traces for multi-step flows, query interfaces in dev, and one repeatable workload to rerun. Without this stack, there is nothing to query. See [Making Observability Legible to Agents](observability-legible-to-agents.md) for wiring patterns.
+The loop assumes runtime signals exist and are queryable. The SOP enumerates the minimum: structured logs on startup and the critical path, metrics for latency and failure counts, traces for multi-step flows, query interfaces in dev, and one repeatable workload to rerun. Without this stack, there is nothing to query. See [Making Observability Legible to Agents](observability-legible-to-agents.md) for wiring patterns. LangChain describes production monitoring for agents in [How to Monitor AI Agents in Production](https://www.langchain.com/blog/production-monitoring).
 
 This loop is reactive — it starts once a signal has surfaced. A complementary posture, "active observability," shifts tooling from passively recording traces to continuously analyzing them: clustering production traces into named patterns and surfacing the ones worth investigating before anyone queries for them ([Braintrust: AI observability is active observability](https://www.braintrust.dev/blog/active-observability)). Active analysis feeds step 1 with candidate signals; it does not replace the verification predicate the loop closes on.
 

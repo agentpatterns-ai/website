@@ -79,3 +79,4 @@ The first pass returned 21% IGNORED. The verdicts located the failure precisely:
 - [Eval-Driven Development](../workflows/eval-driven-development.md) — writing evals before building the feature the loop then guards
 - [Agentic Flywheel: Self-Improving Agent Systems](../patterns/agent-design/agentic-flywheel.md) — the harness-improvement flywheel, where evals here become the measurement substrate
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — measuring a model grader's own error rate before you gate on it
+- [Agent-Authored Eval Suites From Repo Context and Traces](agent-authored-eval-suites.md) — standing up the first case set from repo and traces when no failure history exists yet
