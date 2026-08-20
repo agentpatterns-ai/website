@@ -1032,6 +1032,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Capability-Pegged Security Re-Scans: Reviewing Unchanged Code When the Scanner Improves](security/capability-pegged-security-rescan.md)
 - [Black-Box Probing in the Agent Build Loop: When It Pays](security/black-box-probe-build-loop.md)
 - [Workspace Topology as an Indirect Injection Attack Vector](security/workspace-topology-injection-attack-vector.md)
+- [Cross-OS Library MicroVM Sandbox for Agent Code (smolvm)](security/smolvm-library-microvm-cross-os-sandbox.md)
 
 ## Testing & Evaluation
 
@@ -1412,6 +1413,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Comment-Triggered Agent Dispatch on Issues and PRs](workflows/comment-triggered-agent-dispatch.md)
 - [Agent-Driven Deployment: What to Delegate and What to Gate](workflows/agent-driven-deployment.md)
 - [Delegating Delivery Stages to GitHub Agent Apps](workflows/agent-apps-delivery-stage-delegation.md)
+- [Specification-First Convergence Without a Test Oracle](workflows/specification-first-convergence.md)
 
 ## Human Factors
 
@@ -82691,6 +82693,7 @@ The load-bearing parts are the low `max_rounds` default and the plateau break. T
 - [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — changes what signal each round acts on rather than how many rounds run, for the performance-optimization case.
 - [Blind Resampling Over Self-Repair in Small Code Models](../loop-engineering/blind-resampling-over-self-repair.md) — asks whether a round should carry the failed attempt at all; below 7B it should not.
 - [Behavior-Partitioned Security Tests as Executable Specs](behavior-partitioned-security-tests.md) — why some rounds are inert rather than low-yield: the visible oracle is silent on whole security behavior families.
+- [Specification-First Convergence Without a Test Oracle](../workflows/specification-first-convergence.md) — a reported audit loop whose per-cycle findings rose again at round 15, so this cap did not transfer.
 
 ---
 
@@ -95141,6 +95144,7 @@ Isolation limits what a compromised or misbehaving agent can affect.
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md) — Define guardrail rules only for tools your harness controls; external tools must enforce their own
 - [Selective Network Access in Agent Sandboxes: The `allowNetwork` Pattern](selective-network-sandbox-mode.md) — A sandbox mode that keeps filesystem isolation but lifts network restrictions; safe only when egress is enforced at a layer below the harness
 - [Subprocess PID Namespace Sandboxing in Claude Code](subprocess-pid-namespace-sandboxing.md) — A third isolation layer that prevents Bash subprocesses from persisting daemons across sessions and leaking secrets through inherited environment variables
+- [Cross-OS Library MicroVM Sandbox for Agent Code (smolvm)](smolvm-library-microvm-cross-os-sandbox.md) — smolvm runs each workload in a hardware-isolated libkrun microVM on macOS, Linux, or Windows without a container daemon, closing the cross-OS gap in the microVM row of the sandbox comparison
 - [Use a Public-Web Index to Gate Automatic URL Fetching](url-fetch-public-index-gate.md) — Cross-reference URLs against an independent crawl index before allowing automatic fetching
 - [In-Process WebAssembly Sandboxes for Agent-Generated Code](wasm-sandbox-agent-code-execution.md) — Embed a WebAssembly runtime inside your Python or JavaScript application to execute agent- or LLM-generated code with CPU and memory caps, no filesystem or network by default, and explicit host-function interop
 - [Workload-Keyed Sandbox Selection for Agent-Generated Code](workload-keyed-sandbox-selection.md) — Match sandbox features to workload shape (ephemeral one-shot, stateful long-session, untrusted-code execution) before picking a runtime family, because workload type pins isolation strength and persistence; latency and network policy are configured later
@@ -98341,6 +98345,89 @@ Apply wrapper-script isolation and pre-commit scanning together; neither alone c
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md) — permission rules to block agent reads of credential files
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — limiting the impact when a credential is exposed
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — malicious credentials and payloads embedded in published community skills
+
+---
+
+### Cross-OS Library MicroVM Sandbox for Agent Code (smolvm)
+Source: https://agentpatterns.ai/security/smolvm-library-microvm-cross-os-sandbox/
+
+# Cross-OS Library MicroVM Sandbox for Agent Code (smolvm)
+
+> smolvm runs each workload in a hardware-isolated libkrun microVM on macOS, Linux, or Windows, without adding a container daemon to the host.
+
+smolvm is a single-binary microVM runtime that launches each workload in a KVM, Hypervisor.framework, or Windows Hypervisor Platform guest with its own kernel, using [libkrun](https://github.com/containers/libkrun) as an in-process VMM instead of a background daemon ([smolmachines.com](https://smolmachines.com)). The isolation boundary is the same hardware virtualization Firecracker relies on, exposed through per-workload CLI flags for CPU, memory, timeout, storage, mounts, and network. It fits the microVM slot in the [sandbox runtime comparison](sandbox-runtime-comparison.md) when sandbox hosts are not all Linux or the deployment cannot add a container-runtime daemon.
+
+## When to reach for it
+
+Pick smolvm over the existing microVM defaults when at least one of these conditions holds:
+
+- Cross-OS host support: developers on macOS Apple Silicon or Intel, Linux x86_64/aarch64, or Windows x86_64 with WHP need the same sandbox artifact ([smolmachines.com](https://smolmachines.com) platform table). Firecracker is Linux-only; Kata Containers depends on a container runtime.
+- No daemon on the host: the VMM ships as a library linked into the smolvm binary, so `docker`, `containerd`, or a jailer service is not part of the deployment ([smolmachines.com](https://smolmachines.com) how-it-works).
+- Portable per-workload artifact: `smolvm pack create --image <base> -o <name>` produces a self-contained `.smolmachine` executable with dependencies pre-baked, which runs on any supported host ([smolmachines.com](https://smolmachines.com) pack examples).
+- A per-task cold-start budget of about a second is acceptable, or throughput justifies the persistent-machine or `machine fork` warm-pool pattern the source documents as the intended production shape.
+
+Skip it for production multi-tenant untrusted-code fleets with hardened CVE-response expectations. Firecracker's AWS Lambda and Fargate track record is the reason the [sandbox runtime comparison](sandbox-runtime-comparison.md) names it as the microVM default, and smolvm 1.8.3 has one publicly reported practitioner battery rather than that history.
+
+## What the flags actually enforce
+
+Simon Willison's test battery against smolvm 1.8.3, run on a GitHub Actions `ubuntu-latest` KVM runner, exercised each guarantee independently ([Simon Willison — Research: smolmachines / smolvm as a sandbox for untrusted Python & JavaScript, 2026-08-19](https://simonwillison.net/2026/Aug/19/smolmachines-untrusted-sandbox/); [simonw/research — smolmachines-untrusted-sandbox](https://github.com/simonw/research/tree/main/smolmachines-untrusted-sandbox)):
+
+| Requirement | smolvm mechanism | Test result |
+|-------------|------------------|-------------|
+| RAM cap | `--mem <MiB>` | 1 GiB allocation in a 256 MiB VM fails with MemoryError inside guest; host memory unaffected |
+| CPU cap | `--cpus <N>` | Fork bomb under `--cpus 1` tears down in about one second, host load 0.69, clean teardown |
+| Runaway kill | `--timeout <dur>` enforced by guest agent | `while True:` spin killed at 11 s under `--timeout 10s`, zero leftover VMM processes |
+| Disk cap | `--storage <GiB>` (`--overlay` does not bound `/` writes) | Round 2 with `--storage 3` returns ENOSPC as expected; T8 finding recorded that `--overlay 1` let the guest write 4 GB |
+| No network | Default; no `--net` means no device attached | `wget` and DNS both fail; smolvm README notes `plan_launch_network` returns backend `None` |
+| Read-only inputs | `-v HOST:/in:ro` (virtiofs) | Only the requested `/in` (ro) and `/out` (rw) mounts cross the boundary; `/`, `/workspace`, `/tmp` are guest-local |
+
+Two findings from that battery are worth carrying forward: `--overlay N` does not bound rootfs writes as documented, so use `--storage N`; the HTTP API field is `timeoutSecs` (camelCase), and a `timeout_secs` field is silently ignored.
+
+## Why it works
+
+The isolation guarantee comes from hardware virtualization: each `smolvm machine run` creates a VM with its own guest kernel via KVM on Linux, Hypervisor.framework on macOS, or Windows Hypervisor Platform on Windows ([smolmachines.com](https://smolmachines.com) how-it-works). A syscall exploit inside the guest cannot reach the host kernel, the mechanism the [sandbox runtime comparison](sandbox-runtime-comparison.md) attributes to Firecracker and Kata Containers. The architectural distinctness comes from packaging the VMM as a library. smolmachines.com states "libkrun VMM + custom kernel ... No daemon — the VMM is a library linked into the smolvm binary," which removes the container-runtime daemon the comparison table lists as a microVM cost. Cross-OS reach follows from libkrun compiling against Hypervisor.framework, KVM, and WHP.
+
+## When this backfires
+
+- No nested virtualization available: smolvm needs bare-metal Linux with `/dev/kvm`, macOS 11+, or Windows with WHP. Most container and VM hosts without nested virt cannot run it — Simon Willison's Claude Code container is itself a Firecracker guest and reported "kvm not available" ([simonw/research](https://github.com/simonw/research/tree/main/smolmachines-untrusted-sandbox)).
+- Production multi-tenant untrusted-code fleets: the maturity gap against Firecracker is load-bearing. smolvm 1.8.3 has one AI-authored practitioner battery in public view; Firecracker has years of AWS Lambda and Fargate operations plus a documented CVE and patching cadence ([CVE-2026-1386](https://github.com/firecracker-microvm/firecracker/security/advisories/GHSA-36j2-f825-qvgc), cited on the [sandbox runtime comparison](sandbox-runtime-comparison.md)). Choose Firecracker until smolvm accrues equivalent evidence.
+- Per-task boot dominates the budget at high throughput: smolmachines.com quotes about 200 ms boot for smolvm against Firecracker's under-125 ms, and Simon Willison's full create-boot-exec-teardown cycle measures 577–643 ms with a local Alpine image. Warm pools via persistent `machine exec` (48 ms warm in the same battery) or `machine fork` recover throughput, at the cost of state persisting between execs on the reused machine.
+- The host already carries a container runtime: the library-not-daemon advantage disappears when Docker or Podman is on the box for other reasons.
+- Fully offline image pull: rehydration happens inside the guest, so `--image python:3.12-alpine` with no `--net` cannot work. Feed a `docker save` tar (`--image ./python.tar`) or a packed `.smolmachine` artifact instead.
+
+## Example
+
+Simon Willison's recommended per-task shape for a data-transformation service closes every axis with one `machine run` invocation ([simonw/research — smolmachines-untrusted-sandbox README](https://github.com/simonw/research/tree/main/smolmachines-untrusted-sandbox)):
+
+```bash
+smolvm machine run \
+  --image ./python.tar \
+  --cpus 1 --mem 512 \
+  --timeout 30s \
+  --storage 3 \
+  --unprivileged \
+  -v "$PWD/in:/in:ro" \
+  -v "$PWD/out:/out" \
+  -- python3 /in/transform.py
+```
+
+The task sees only `/in` (read-only), `/out` (read-write), and a throwaway 3 GiB storage disk. Exit code, stdout, and stderr propagate; the guest agent enforces the timeout and the ephemeral VM is torn down on exit either way. The `--unprivileged` flag drops the guest capability set from `1ffffffffff` to `a80425fb` (the standard unprivileged set), a defense-in-depth layer for the guest itself.
+
+## Key Takeaways
+
+- smolvm places a new row on the microVM axis of the [sandbox runtime comparison](sandbox-runtime-comparison.md): the same hardware boundary as Firecracker, delivered as a library rather than a daemon, on macOS and Windows as well as Linux
+- Per-workload flags for CPU, memory, timeout, storage, mounts, and network each map to a mechanism a single practitioner battery has verified against v1.8.3, with two documented gotchas (`--overlay` does not cap rootfs writes, HTTP `timeoutSecs` is case-sensitive)
+- Reach for it when cross-OS host support, the absence of a container daemon, or portable `.smolmachine` artifacts is what unblocks the design; stay on Firecracker or Kata Containers for production multi-tenant untrusted-code fleets until smolvm's operational track record catches up
+- Nested-virtualization dependency rules it out inside most managed container and CI environments; hosts that expose `/dev/kvm` (GitHub Actions `ubuntu-latest`, some bare-metal cloud tiers) are the current fit
+- Per-task cold start is about a second including image rehydration; warm pools via persistent machines or `machine fork` bring per-call latency to about 50 ms, with the trade-off of shared state on the reused machine
+
+## Related
+
+- [Sandboxed Coding Environments: Containers vs MicroVMs vs OS-Level Isolators](sandbox-runtime-comparison.md) — the runtime-family selection this page adds a row to
+- [Workload-Keyed Sandbox Selection for Agent-Generated Code](workload-keyed-sandbox-selection.md) — the workload-shape rubric that decides whether a microVM is the right family in the first place
+- [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) — the filesystem-plus-network threat model smolvm's mount and `--net` defaults satisfy in one runtime
+- [Network-less Container + Unix-Socket Egress Proxy for Agent Sandboxes](network-less-container-unix-socket-egress.md) — the same "no interface, no route" topology at the container layer, useful when nested virt rules out smolvm
+- [In-Process WebAssembly Sandboxes for Agent-Generated Code](wasm-sandbox-agent-code-execution.md) — the lighter in-process choice when a hardware boundary is more than the workload needs
 
 ---
 
@@ -122098,6 +122185,8 @@ Developers report large time savings on writing tasks, yet total engineering hou
 
 The bottleneck shifts because the constraint on software delivery is the slowest stage, not a single resource. When AI cuts generation time sharply, generation stops being the bottleneck. Review then becomes the binding constraint, because it scales with human attention rather than compute. Rachel Laycock traces the same migration through the software delivery lifecycle in [Conductor Developer](https://martinfowler.com/rachels-ramblings/conductor-developer.html) on martinfowler.com (July 2026).
 
+Laycock puts the same migration in organizational terms, [assigning the work to citizens, agents, and experts](https://martinfowler.com/rachels-ramblings/citizens-agents-experts.html) on martinfowler.com in August 2026: "Citizens build. Agents execute. Experts govern." What is scarce, the piece argues, is "knowing what good looks like, understanding the risks and knowing when something that works is actually safe to trust". On that account experts become "dramatically more leveraged", and their job turns into "creating the environment in which thousands of features can be built safely by other people and by agents".
+
 The same structural dynamic drove Jevons' original 1865 observation. Cheaper coal energy raised total coal consumption, because the lower cost made new uses worthwhile. Cheaper code generation works the same way: it enables more features, which drive more review load, which consumes the freed capacity and then some.
 
 ## Why review gets harder
@@ -131958,7 +132047,7 @@ Source: https://agentpatterns.ai/frameworks/team-os/plan-files-resumable-artifac
 
 # Plan Files as Resumable Artifacts
 
-> A plan committed to the repo is a resumable, version-controlled artifact — a pattern that holds for multi-session work, recurring workflows, and cross-functional review, and backfires without a supersession discipline.
+> A plan committed to the repo is a resumable, version-controlled artifact that pays for multi-session, recurring, or cross-functional work, and backfires without a supersession discipline.
 
 ## What a persisted plan file is
 
@@ -131979,7 +132068,7 @@ Outside these conditions, a disposable in-session plan is cheaper.
 No single convention has won. Three are in active use:
 
 - Ralph single-root. One `IMPLEMENTATION_PLAN.md` at the repo root, one task per iteration, one commit per update. The author "throws it out often", so durability is not the goal ([Huntley on Ralph](https://ghuntley.com/ralph/); [how-to-ralph-wiggum](https://github.com/ghuntley/how-to-ralph-wiggum)).
-- Codex `.agent/PLANS.md`. Referenced from `AGENTS.md`, with the invariant that "it should always be possible to restart from only the ExecPlan." The plan is "fully self-contained": progress, decision log, surprises, and outcomes ([Codex cookbook](https://developers.openai.com/cookbook/articles/codex_exec_plans)).
+- Codex `.agent/PLANS.md`. Referenced from `AGENTS.md`, with the invariant that "it should always be possible to restart from only the ExecPlan." The plan is "fully self-contained": progress, decision log, surprises, and outcomes ([Codex cookbook](https://developers.openai.com/cookbook/articles/codex_exec_plans)). OpenAI's cookbook publishes one worked layout of this shape: `AGENTS.md`, `GOALS.md`, `PLANS.md`, and `PROMPTS.md` at the repo root. A `harness/build/` directory holds one file per development phase, and a `context/` directory collects the context record each phase writes as it runs ([Iterating development workflows with Codex](https://developers.openai.com/cookbook/examples/codex/iterating-development-workflows-with-codex)).
 - Manus tripartite. Split across `task_plan.md`, `findings.md`, and `progress.md`. Rewriting the todo list ["recites objectives into the end of the context"](../../context-engineering/goal-recitation.md), so the plan doubles as attention bias ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus); [planning-with-files](https://github.com/OthmanAdi/planning-with-files)).
 
 Pick by team size: Ralph for solo iteration, Codex for long-horizon runs, Manus for phase and findings separation.
@@ -131996,6 +132085,8 @@ Persistence without invalidation is actively harmful. Claude Code issue [#13740]
 - Use `supersedes:` / `superseded-by:` frontmatter for a machine-readable chain.
 - Add a CI staleness check that fails when a plan references missing code paths.
 - Treat drift as a pager event. Prassanna's "chain-of-thought that was correct at turn ten becomes actively misleading at turn sixty" applies to persisted plans ([Agent Drift](https://prassanna.io/blog/agent-drift/)).
+
+The tooling will not do this for you. OpenAI's Codex cookbook notes that only `AGENTS.md` is recognized by Codex, and the rest of its file layout is convention ([Iterating development workflows with Codex](https://developers.openai.com/cookbook/examples/codex/iterating-development-workflows-with-codex)). Files Codex ignores go stale silently, so archiving stays a team habit.
 
 ## When not to use
 
@@ -138690,7 +138781,7 @@ Source: https://agentpatterns.ai/tools/copilot/copilot-cli-byok-local-models/
 
 # Copilot CLI BYOK and Local Model Support
 
-> Connect Copilot CLI to your own model provider — Ollama, Azure OpenAI, Anthropic, or any OpenAI-compatible endpoint — for cost control, data residency compliance, and fully air-gapped workflows.
+> Connect Copilot CLI to your own model provider — Ollama, Azure OpenAI, Anthropic, or any OpenAI-compatible endpoint — for cost control and air-gapped workflows.
 
 Released April 7, 2026, Copilot CLI BYOK lets you replace GitHub-hosted model routing with your own provider ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)). Four environment variables configure it.
 
@@ -138745,6 +138836,12 @@ GitHub login is optional with BYOK. With only provider credentials, you run the 
 ## Model requirements
 
 Any model must support tool calling and streaming. GitHub recommends a 128k context window for complex tasks. All built-in sub-agents (explore, task, code-review) inherit the provider configuration automatically — there is no per-agent routing ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)).
+
+## Ollama in JetBrains is a separate surface
+
+Everything above is Copilot CLI. GitHub Copilot for JetBrains reached BYOK on its own track: OpenAI-compatible custom endpoints with API keys arrived July 14, 2026 ([GitHub Changelog](https://github.blog/changelog/2026-07-14-github-copilot-for-jetbrains-expands-byok-capabilities/)), and Ollama joined as a named provider on August 11, 2026, with "provider configuration and model selection throughout the JetBrains experience" ([GitHub Changelog](https://github.blog/changelog/2026-08-11-copilot-memory-and-ollama-in-github-copilot-for-jetbrains/)).
+
+Configuration is through the IDE, not the environment variables in the table above. GitHub documents no `COPILOT_OFFLINE` equivalent for JetBrains, so do not assume the CLI's air-gapping guarantee carries over. The same August release also brought [Copilot Memory](copilot-memory.md) to JetBrains, and that memory pool is cloud-hosted. Whether a local-model session in the IDE still reaches it is not documented either way.
 
 ## Trade-offs
 
@@ -139024,7 +139121,7 @@ Source: https://agentpatterns.ai/tools/copilot/copilot-memory/
 
 # Copilot Memory and Cross-Agent Persistence
 
-> Repository-scoped persistent memory that Copilot builds autonomously from agent interactions, shared across coding agent, code review, and CLI, with citation-based verification and 28-day auto-expiry.
+> Persistent memory that Copilot builds from agent and editor sessions without manual curation, shared across surfaces with citation-based verification and 28-day auto-expiry.
 
 ## How Copilot Memory works
 
@@ -139039,17 +139136,39 @@ Each entry contains four components ([GitHub engineering blog](https://github.bl
 | Citations | Specific code locations (file paths + line numbers) |
 | Reason | Actionable implications for future tasks |
 
-Memories are repository-scoped: write access to create, read access to use ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)).
+The pool holds two kinds of entry, and they carry different scopes. A repository-level fact is "visible to all contributors on the repository"; a user-level preference is "visible only to you, used in your sessions across repositories" ([GitHub changelog, May 2026](https://github.blog/changelog/2026-05-26-copilot-memory-has-more-controls-for-deletion-scope-and-the-copilot-cli/)). Preferences capture "communication style, tool stack, or git conventions", and Business and Enterprise plans gained them in June 2026 ([GitHub changelog, Jun 2026](https://github.blog/changelog/2026-06-02-copilot-memory-supports-user-preferences-for-business-enterprise)). Repository-level facts follow the original access model: write access to create, read access to use ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)).
 
-## Cross-agent sharing
+## Which surfaces share the pool
 
-Three Copilot surfaces share the same memory pool ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)):
+GitHub describes Copilot Memory as "shared across multiple GitHub Copilot surfaces, including Copilot cloud agent, Copilot code review, and Copilot CLI" ([VS Code docs](https://code.visualstudio.com/docs/copilot/agents/memory)). The word is "including": read any count as a snapshot.
 
-- Coding agent — reads and writes memories during code generation
-- Code review — reads and writes memories during PR review
-- CLI — reads and writes memories during terminal interactions
+| Surface | How it participates |
+|---|---|
+| Coding agent | Reads and writes memories during code generation |
+| Code review | Reads and writes memories during PR review |
+| CLI | Reads and writes memories during terminal interactions |
+| VS Code | Repository-scope memory moves into the shared pool once you enable Copilot Memory |
+| JetBrains IDEs | From August 11, 2026, memory "can now retain and recall useful information across agent chat sessions", governed by the Copilot Memory toggle in the Copilot settings portal |
 
-When code review discovers a naming convention violation, that knowledge becomes available to the coding agent on the next task — each agent both contributes to and benefits from the shared knowledge base ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)).
+Sources: [GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/) for coding agent, code review, and CLI; [VS Code docs](https://code.visualstudio.com/docs/copilot/agents/memory) for VS Code; [GitHub changelog, Aug 2026](https://github.blog/changelog/2026-08-11-copilot-memory-and-ollama-in-github-copilot-for-jetbrains/) for JetBrains
+
+When code review discovers a naming convention violation, that knowledge becomes available to the coding agent on the next task ([GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/building-an-agentic-memory-system-for-github-copilot/)).
+
+## What an editor surface adds
+
+An editor contributes only part of what it remembers. VS Code splits memory into three scopes ([VS Code docs](https://code.visualstudio.com/docs/copilot/agents/memory)):
+
+| Scope | Persistence | Default storage |
+|---|---|---|
+| User | Across all workspaces and conversations; the first 200 lines load into context at the start of every session | Local |
+| Repository | Across conversations in the current workspace | Local, until you enable Copilot Memory |
+| Session | Cleared when the conversation ends | Local |
+
+"When you enable Copilot Memory, repository memory is stored in Copilot Memory instead, so it's shared across Copilot surfaces" ([VS Code docs](https://code.visualstudio.com/docs/copilot/agents/memory)). User and session memory stay on your machine.
+
+The mechanism is unchanged. What changes is where entries come from: the three original surfaces write from autonomous agent runs, and an editor writes from a human-driven conversation. No one curates the content either way. The capture itself is consented. A permission prompt states which of the two scopes above an entry will land in before it is stored ([GitHub changelog, May 2026](https://github.blog/changelog/2026-05-26-copilot-memory-has-more-controls-for-deletion-scope-and-the-copilot-cli/)).
+
+JetBrains is documented more thinly. Its changelog says nothing about scopes, expiry, or citation verification on that surface ([GitHub changelog, Aug 2026](https://github.blog/changelog/2026-08-11-copilot-memory-and-ollama-in-github-copilot-for-jetbrains/)), so treat the VS Code scope model as a guide to editor behavior rather than a specification of it.
 
 ## Citation-based verification and self-healing
 
@@ -139078,21 +139197,27 @@ Both results were statistically significant (p < 0.00001).
 |------|--------|--------|
 | Jan 15, 2026 | Public preview, opt-in for all paid plans | [GitHub changelog](https://github.blog/changelog/2026-01-15-agentic-memory-for-github-copilot-is-in-public-preview/) |
 | Mar 4, 2026 | Enabled by default for Pro and Pro+ individual users | [GitHub changelog](https://github.blog/changelog/2026-03-04-copilot-memory-now-on-by-default-for-pro-and-pro-users-in-public-preview/) |
+| May 26, 2026 | Repository-level off switch, preference-versus-fact permission prompt, `/memory` commands in the CLI | [GitHub changelog](https://github.blog/changelog/2026-05-26-copilot-memory-has-more-controls-for-deletion-scope-and-the-copilot-cli/) |
 | Jun 2, 2026 | User preferences supported for Business and Enterprise plans | [GitHub changelog](https://github.blog/changelog/2026-06-02-copilot-memory-supports-user-preferences-for-business-enterprise) |
+| Aug 11, 2026 | Memory reaches GitHub Copilot for JetBrains IDEs | [GitHub changelog](https://github.blog/changelog/2026-08-11-copilot-memory-and-ollama-in-github-copilot-for-jetbrains/) |
 
 Developer controls:
 
 - Individual toggle: `github.com/settings/copilot` > Features > Copilot Memory ([GitHub changelog](https://github.blog/changelog/2026-03-04-copilot-memory-now-on-by-default-for-pro-and-pro-users-in-public-preview/))
-- Repository owners: Repository Settings > Copilot > Memory — review and delete stored memories ([GitHub changelog](https://github.blog/changelog/2026-01-15-agentic-memory-for-github-copilot-is-in-public-preview/))
+- Repository owners: Repository Settings > Copilot > Memory — review and delete stored memories one at a time, with each entry's citations shown ([GitHub changelog](https://github.blog/changelog/2026-01-15-agentic-memory-for-github-copilot-is-in-public-preview/))
+- Repository admins: disable Copilot Memory for the whole repository through the existing Copilot feature controls. Repository-level facts stop being stored or read, and facts already stored remain ([GitHub changelog](https://github.blog/changelog/2026-05-26-copilot-memory-has-more-controls-for-deletion-scope-and-the-copilot-cli/))
+- Copilot CLI users: `/memory on`, `/memory off`, and `/memory show`, persisting across sessions ([GitHub changelog](https://github.blog/changelog/2026-05-26-copilot-memory-has-more-controls-for-deletion-scope-and-the-copilot-cli/))
 - Organization/enterprise admins: policy-level enable/disable ([GitHub changelog](https://github.blog/changelog/2026-03-04-copilot-memory-now-on-by-default-for-pro-and-pro-users-in-public-preview/))
+
+Sources conflict on the default state: the March changelog records memory on by default for Pro and Pro+ ([GitHub changelog](https://github.blog/changelog/2026-03-04-copilot-memory-now-on-by-default-for-pro-and-pro-users-in-public-preview/)), while VS Code's documentation calls it "turned off by default and must be enabled" ([VS Code docs](https://code.visualstudio.com/docs/copilot/agents/memory)). Check your own toggle.
 
 ## Comparison with other memory approaches
 
 | Dimension | Copilot Memory | Claude Code Memory | OPENDEV (Research) |
 |-----------|---------------|-------------------|-------------------|
 | Creation | Autonomous from interactions | Human-authored (`CLAUDE.md`) + agent-authored (auto memory) | Agent-authored [episodic summaries](../../patterns/agent-design/episodic-memory-retrieval.md) |
-| Scope | Repository | Project, user, managed policy | Session + cross-session |
-| Sharing | Cross-agent (coding, review, CLI) | Single tool only | Single agent only |
+| Scope | Repository-level facts plus cross-repository user preferences | Project, user, managed policy | Session + cross-session |
+| Sharing | Cross-surface (agents, review, CLI, editors) | Single tool only | Single agent only |
 | Verification | Citation-based, just-in-time | None (manual curation) | None |
 | Expiry | 28-day TTL with use-based renewal | None (manual cleanup) | N/A (research system) |
 | Self-healing | Contradiction detection | No | No |
@@ -139101,7 +139226,7 @@ Sources: [GitHub engineering blog](https://github.blog/ai-and-ml/github-copilot/
 
 ## Example
 
-This example shows how Copilot Memory accumulates knowledge across surfaces without manual curation. Suppose a code review agent finds that your repository's service layer always injects dependencies through the constructor rather than using a service locator. The agent stores a memory entry like:
+Suppose a code review agent finds that your repository's service layer always injects dependencies through the constructor rather than using a service locator. The agent stores a memory entry like:
 
 ```
 Subject: Dependency injection pattern
@@ -139110,15 +139235,14 @@ Citations: src/services/UserService.ts:12, src/services/OrderService.ts:8
 Reason: When generating new service classes, always use constructor injection and add dependencies to the constructor signature
 ```
 
-The next time the coding agent implements a new feature that adds a `NotificationService`, it reads this memory, applies constructor injection automatically, and avoids a code review failure — without being explicitly told about the convention.
+The next time the coding agent adds a `NotificationService`, it reads this memory, applies constructor injection, and avoids a code review failure without being told the convention.
 
-If a refactor later moves `UserService.ts`, the citation becomes stale. When the coding agent next accesses this memory, it checks whether `src/services/UserService.ts:12` still exists and still shows constructor injection. If the file moved but the pattern holds, the agent updates the citation. If the pattern was removed, the agent marks the memory as contradicted and generates a corrected version.
-
-To inspect or delete stored memories for a repository, go to **Repository Settings > Copilot > Memory**. Each entry shows its citations, and you can remove entries one at a time.
+If a refactor moves `UserService.ts`, the citation goes stale. The agent's next access checks whether the cited line still shows constructor injection, then updates the citation if the pattern held or marks the memory contradicted if it did not.
 
 ## Key Takeaways
 
-- Cross-agent sharing is the distinguishing feature: knowledge flows between coding agent, code review, and CLI without developer intervention.
+- Cross-surface sharing is the distinguishing feature. GitHub publishes the participant list with "including", so check `last_reviewed` on any page that enumerates it, this one included.
+- An editor contributes only its repository scope. Auditing what a team has published means auditing repository-level facts, the only entries visible to every contributor, not the user or session memory sitting on each machine.
 - Citation-based just-in-time verification prevents stale memories from degrading agent behavior.
 - 28-day auto-expiry with use-based renewal balances freshness against unbounded growth.
 - Measured impact: 7% increase in PR merge rates for the coding agent (p < 0.00001).
@@ -139130,7 +139254,9 @@ Autonomous memory creation without human curation works against you in several c
 - Security-sensitive repositories: an incorrectly stored memory (for example, "always skip validation for internal services") can propagate to the coding agent and be applied silently, bypassing code review for the violation that created the false memory.
 - Repositories with contested conventions: during a mid-refactor, agents may store memories from the old convention and resist the new one, creating a feedback loop where stale patterns self-reinforce until the memory expires.
 - Teams using explicit context files: organizations that treat `.github/copilot-instructions.md` as the source of truth may find autonomous memories create ambiguity when the two diverge — the instruction file takes precedence, but the agent may still surface the contradicting memory.
-- Multi-repository workflows: memories are repository-scoped, so patterns do not transfer across repos. Teams spanning a monorepo split or separate service repos must rebuild memory in each context.
+- Multi-repository workflows: repository-level facts do not transfer across repos, so teams spanning a monorepo split or separate service repos must rebuild them in each context. Only user-level preferences follow you.
+- Repositories where contributors and agents carry different trust: a repository-level fact is visible to every contributor ([GitHub changelog, May 2026](https://github.blog/changelog/2026-05-26-copilot-memory-has-more-controls-for-deletion-scope-and-the-copilot-cli/)), and an editor surface lets one originate in an interactive chat rather than an audited agent run.
+- Teams that enable the feature account-wide without auditing editor scopes. Switching it on moves repository memory out of local storage and into the shared pool ([VS Code docs](https://code.visualstudio.com/docs/copilot/agents/memory)), publishing workspace notes a developer assumed were private.
 
 ## Related
 
@@ -139140,8 +139266,8 @@ Autonomous memory creation without human curation works against you in several c
 - [Copilot Instructions Convention](copilot-instructions-md-convention.md)
 - [Copilot Coding Agent](coding-agent.md)
 - [Copilot Agent Mode](agent-mode.md)
+- [Unified Sessions View](unified-sessions-view.md)
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
-- [Copilot Spaces](copilot-spaces.md)
 
 ---
 
@@ -142006,6 +142132,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Whole-Codebase Visibility as a Migration Prerequisite](whole-codebase-visibility-migration-prerequisite.md) — Three-condition scoping check (codebase size, multi-repo or cross-VCS scope, discovery-bound shape) that decides whether a large-scale agent-driven migration needs whole-codebase visibility infrastructure or whether agentic search will do
 - [Legacy Code Archaeology: Reconstruct Intent Before Migrating](legacy-code-archaeology.md) — Use a coding agent to excavate an undocumented legacy system's intent — under adversarial forensic prompting and a runnable period-accurate baseline — before modernizing, for the comprehension-first case where no migration blueprint yet exists
 - [Behavioral Specification Elicitation Before Synthesis (SpecFirst)](behavioral-spec-elicitation.md) — Split from-scratch agent builds into a probing agent that emits a bounded behavioral spec and a synthesis agent that implements against it — only where an executable oracle exists
+- [Specification-First Convergence Without a Test Oracle](specification-first-convergence.md) — Freeze a specification audited against the source, generate against it, then audit the code back against the frozen document until two consecutive passes find nothing
 
 ---
 
@@ -151942,6 +152069,7 @@ AES failed the first. The output was an improved meet-in-the-middle attack on a 
 - [Verification-Gated Agent Autonomy via Automated Review](../patterns/agent-design/verification-gated-agent-autonomy.md) — scaling an agent's permission to act to the strength of the review behind it
 - [Deliberate AI-Assisted Learning: Accelerating Skill Acquisition](../human/deliberate-ai-learning.md) — building the domain knowledge this cycle deliberately routes around
 - [Porting a Coding-Agent Harness Beyond Engineering](porting-agent-harness-beyond-engineering.md) — what to do when the harness moves to work that has no oracle at all
+- [Specification-First Convergence Without a Test Oracle](specification-first-convergence.md) — the protocol reported for a large refactor where no oracle existed to gate on
 
 ---
 
@@ -154861,6 +154989,112 @@ Specification size. Larger spec files take longer to compile and consume more of
 - [Multi-Agent RAG Spec-to-Test](../verification/multi-agent-rag-spec-to-test.md)
 - [Spec Complexity Displacement](../patterns/anti-patterns/spec-complexity-displacement.md) — the failure mode when specs become code-adjacent
 - [Bootstrapping Coding Agents](../emerging/bootstrapping-coding-agents.md) — the theoretical extension where the spec alone is sufficient to regenerate the implementation
+
+---
+
+### Specification-First Convergence Without a Test Oracle
+Source: https://agentpatterns.ai/workflows/specification-first-convergence/
+
+# Specification-First Convergence Without a Test Oracle
+
+> With no test to tell right from wrong, freeze a specification as the referent and audit the code against it until two passes find nothing.
+
+Specification-first convergence substitutes a written specification for a missing test oracle. An agent drafts the specification, re-audits it against the real source code until the audits stop producing findings, and freezes it. Code is then generated against that frozen document and audited back against it in fresh sessions until two consecutive passes return zero findings. Correctness is argued from repeated conformance to a fixed referent rather than from a green suite or a human reading the diff.
+
+The evidence is one instrumented case study published with a declared competing interest: the author's company designed and distributes the agent used ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)). Treat it as a protocol worth trying under the conditions below, not a measured success rate.
+
+## The missing-oracle problem
+
+Two failures meet on a large refactor. Review stops scaling first: telemetry across more than 10,000 developers shows AI-assisted work producing 98% more pull requests but 91% longer review times, with delivery metrics flat ([Farrag, 2026](https://arxiv.org/abs/2605.01160v1)). Past a certain change size the case study argues review stops being a quality gate at all, because no reviewer holds the entire dependency graph of such a change in working memory ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)).
+
+Tests would normally take over, and sometimes they cannot. The dominant evaluation paradigm for coding agents assumes an oracle: [SWE-bench](https://arxiv.org/abs/2310.06770) scores a patch by whether it passes a held-out, human-written test suite, so the correct behavior is encoded before the agent starts ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)). In the reported case the goal was that a streaming generation survive the closing of its UI panel and reattach on reopening with no loss or duplication of tokens, across a 717,725-line TypeScript codebase of 3,648 files. No test could be held out, because the behavior did not exist before the change.
+
+## When this applies
+
+Three conditions have to hold together.
+
+No oracle exists for the target behavior. Where a reference implementation, a transpilation source, or a held-out suite is available, use it instead: [oracle-gated delegation](oracle-gated-delegation.md) covers that case and costs far less.
+
+The change is past the size where review works. The reported operation touched 189 files in one commit, 31 of them new ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)).
+
+The specification can be frozen. The argument rests on auditing successive drafts against one unchanging document, so requirements that move during implementation break it: consecutive passes then compare against different referents.
+
+## Three implementation layers
+
+```mermaid
+flowchart TD
+    A[Natural-language request] --> B[Draft specification]
+    B --> C{Audit spec against source}
+    C -->|findings| B
+    C -->|zero findings| D[Freeze specification]
+    D --> E[Generate patches]
+    E --> F[Fix compile and test errors]
+    F --> G{Audit code against frozen spec}
+    G -->|findings| G
+    G -->|two zero-finding passes| H[First human execution]
+```
+
+The case study names five phases (ideate, specify, refine, code, verify), which group into the three loops below. Each phase runs in its own session, so only the artifact crosses the boundary. That is [discrete phase separation](../patterns/agent-design/discrete-phase-separation.md) applied to a refactor, with the specification as the artifact that carries between phases.
+
+### Layer 1: Specification refinement
+
+The agent turns the request into a formal specification, then re-analyzes that specification against the real source code and rewrites it. Fourteen such cycles averaging 35 minutes each produced roughly 85 corrections and expanded scope from 110 to 160 affected files as previously unnoticed dependencies were identified. Cycle 14 returned no findings, so the cycle-13 document became the frozen reference ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)).
+
+### Layer 2: Atomic implementation
+
+Asked to implement the frozen specification, the agent declined the request in its original form, reporting that "a partial implementation would have left the repository in an inconsistent state and violated the specification's atomicity requirement". It proposed a ten-step decomposition; three segments were requested instead and accepted, running 2 hours 21 minutes in total. Compilation, typing, and unit-test failures were corrected in a separate session, a deliberate design choice to keep those signals visible ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)).
+
+### Layer 3: Conformance verification
+
+Fresh sessions compare the code against the frozen document and correct what deviates. This targets architectural conformity, not compilation validity. Seventeen cycles produced 116 code corrections, and across all 31 audit passes 201 defects were corrected before any human ran the code ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)).
+
+## The stopping rule
+
+Verification continued until two consecutive cycles returned zero findings, at cycles 16 and 17. Phase 2 ran end to end without the program being executed once, and the first manual execution came after the seventeenth cycle ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)).
+
+The per-cycle counts are the part worth studying: they do not decay smoothly. Verification cycles produced 10, 12, 9, 21, 2, 7, 8, 13, 6, 3, 3, 4, 4, 4, 10, 0, 0 corrections in order. Cycle 15 turned up ten defects after three consecutive cycles of four.
+
+That matters because the default for iterative loops points the other way. In generate-validate-repair loops driven by an executable check, most achievable gains land in the first three or four rounds, which is why [bounded repair-loop iterations](../verification/bounded-repair-loop-iterations.md) recommends capping there. A four-round cap applied to this verification loop would have stopped with defects still in the code. The referent explains the difference: a repair loop reads a deterministic signal and goes quiet once the signal does, while an audit loop re-samples a model's conformance judgment, which errs in both directions ([Jin and Chen, 2026](https://arxiv.org/abs/2603.00539v1)).
+
+## Why it works
+
+Control moves from after generation to before it, and the referent stays fixed. Each verification session is a fresh context comparing code against a document written and frozen before that code existed, which supplies the external comparison point self-correction otherwise lacks. On reasoning tasks, models correcting their own responses without external feedback struggle to improve and sometimes degrade ([Huang et al., 2024](https://arxiv.org/abs/2310.01798v2)). Freezing the specification is what converts self-review into comparison against something.
+
+The two loops also differ in unit cost, which is why they are separate layers. As the case study puts it, "a defect caught in the specification costs a paragraph to fix, the same defect caught after generation costs a set of interdependent code changes" ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)). Neither loop asks the model to be reliable on any single pass. Repetition against a fixed target is the mechanism.
+
+## Triggers and constraints
+
+Every phase is manual. The operator confirms scope after ideation, relaunches or freezes after each refinement cycle, confirms each implementation segment, and accepts the corrections or stops at two consecutive zero-finding passes ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)). Nothing here runs on a schedule or a push event, and the agent's authority is bounded by the frozen document rather than by a permission list.
+
+Nothing in the protocol depends on a particular tool. It constrains session structure and the referent, so any agent that can hold a long specification in context and run fresh sessions can execute it.
+
+## When this backfires
+
+An oracle is available or cheap to build. Where the goal is pinning current behavior rather than checking it against intent, [regression and characterization testing](../verification/derived-specification-test-generation.md) already treat the running implementation as the oracle, and that referent costs pennies to re-run and survives into every later change. The case study leaned on such a signal itself, running the pre-existing unit suite after the change and reporting no regression ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)), so only the new behavior lacked an oracle.
+
+The audit step is an operation LLMs misjudge. Asked whether an implementation conforms to a natural-language requirement, models frequently misclassify correct code as non-compliant, and more detailed prompting raises the misjudgment rate rather than improving judgement quality ([Jin and Chen, 2026](https://arxiv.org/abs/2603.00539v1)). A zero-finding pass is therefore consistent with a saturated detector as much as with a clean codebase. [Structured two-stage verification](../verification/llm-static-verification-natural-language-requirements.md) is the mitigation: mine discrete checkable rules from the specification, then judge each one in isolation.
+
+The change is small enough to review. Below the size where review stops functioning, 31 audit passes cost more than a colleague reading the diff. The reported three-day operation consumed USD 2,430 in model inference ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)).
+
+The model is weaker than the one characterized. The case study reports a specific frontier model in extended reasoning mode and states that the protocol's behavior with weaker models is not characterized there ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)).
+
+The evidence base is thin, and the paper says so first. Its limitations name a single case, no control condition, self-reported results from the author who designed the tool, a closed-source codebase that cannot be replayed, and a definition of "no bug observed" covering first execution, roughly thirty subsequent sessions, and the automated test suite, which it states is not a proof of absence of latent defects ([Abenhaim, 2026](https://arxiv.org/abs/2608.12440v1)).
+
+## Key takeaways
+
+- Freeze the specification before generating, and audit the code against that frozen document rather than against current intent.
+- Audit the specification against the source code first, because that is where defects are cheapest to remove.
+- Do not carry the three-to-four-round repair-loop cap into an audit loop; the reported correction counts rose again at cycle 15.
+- Two consecutive zero-finding passes is a stopping rule, not a correctness proof, and the conformance judgment underneath it is unreliable.
+- One self-reported case with declared competing interests is grounds to try the protocol on a bounded change, not to adopt it as policy.
+
+## Related
+
+- [Oracle-Gated Delegation Beyond Your Domain Expertise](oracle-gated-delegation.md) — the same delegation question when a decisive mechanical check does exist.
+- [Spec-Driven Development with Spec Kit](spec-driven-development.md) — keeping intent in a document rather than in chat history.
+- [Discrete Phase Separation](../patterns/agent-design/discrete-phase-separation.md) — the single-agent building block each phase here relies on.
+- [LLM Static Verification Against Natural-Language Requirements](../verification/llm-static-verification-natural-language-requirements.md) — structuring the audit step so conformance judgment degrades less.
+- [Bounded Repair-Loop Iterations](../verification/bounded-repair-loop-iterations.md) — the iteration cap this verification loop does not obey.
 
 ---
 

@@ -908,6 +908,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Capability-Pegged Security Re-Scans: Reviewing Unchanged Code When the Scanner Improves](security/capability-pegged-security-rescan.md)
 - [Black-Box Probing in the Agent Build Loop: When It Pays](security/black-box-probe-build-loop.md)
 - [Workspace Topology as an Indirect Injection Attack Vector](security/workspace-topology-injection-attack-vector.md)
+- [Cross-OS Library MicroVM Sandbox for Agent Code (smolvm)](security/smolvm-library-microvm-cross-os-sandbox.md)
 
 ## Testing & Evaluation
 
@@ -1288,6 +1289,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Comment-Triggered Agent Dispatch on Issues and PRs](workflows/comment-triggered-agent-dispatch.md)
 - [Agent-Driven Deployment: What to Delegate and What to Gate](workflows/agent-driven-deployment.md)
 - [Delegating Delivery Stages to GitHub Agent Apps](workflows/agent-apps-delivery-stage-delegation.md)
+- [Specification-First Convergence Without a Test Oracle](workflows/specification-first-convergence.md)
 
 ## Human Factors
 

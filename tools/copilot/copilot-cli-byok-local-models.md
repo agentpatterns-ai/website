@@ -10,12 +10,13 @@ aliases:
   - Copilot CLI local models
   - Copilot CLI offline mode
 applies_to: "copilot@1.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-08-12
 status: current
 ---
+
 # Copilot CLI BYOK and Local Model Support
 
-> Connect Copilot CLI to your own model provider — Ollama, Azure OpenAI, Anthropic, or any OpenAI-compatible endpoint — for cost control, data residency compliance, and fully air-gapped workflows.
+> Connect Copilot CLI to your own model provider — Ollama, Azure OpenAI, Anthropic, or any OpenAI-compatible endpoint — for cost control and air-gapped workflows.
 
 Released April 7, 2026, Copilot CLI BYOK lets you replace GitHub-hosted model routing with your own provider ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)). Four environment variables configure it.
 
@@ -70,6 +71,12 @@ GitHub login is optional with BYOK. With only provider credentials, you run the 
 ## Model requirements
 
 Any model must support tool calling and streaming. GitHub recommends a 128k context window for complex tasks. All built-in sub-agents (explore, task, code-review) inherit the provider configuration automatically — there is no per-agent routing ([GitHub Changelog](https://github.blog/changelog/2026-04-07-copilot-cli-now-supports-byok-and-local-models)).
+
+## Ollama in JetBrains is a separate surface
+
+Everything above is Copilot CLI. GitHub Copilot for JetBrains reached BYOK on its own track: OpenAI-compatible custom endpoints with API keys arrived July 14, 2026 ([GitHub Changelog](https://github.blog/changelog/2026-07-14-github-copilot-for-jetbrains-expands-byok-capabilities/)), and Ollama joined as a named provider on August 11, 2026, with "provider configuration and model selection throughout the JetBrains experience" ([GitHub Changelog](https://github.blog/changelog/2026-08-11-copilot-memory-and-ollama-in-github-copilot-for-jetbrains/)).
+
+Configuration is through the IDE, not the environment variables in the table above. GitHub documents no `COPILOT_OFFLINE` equivalent for JetBrains, so do not assume the CLI's air-gapping guarantee carries over. The same August release also brought [Copilot Memory](copilot-memory.md) to JetBrains, and that memory pool is cloud-hosted. Whether a local-model session in the IDE still reaches it is not documented either way.
 
 ## Trade-offs
 

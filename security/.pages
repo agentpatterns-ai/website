@@ -33,6 +33,7 @@ nav:
       - windows-sandbox-primitives-coding-agents.md
       - wasm-sandbox-agent-code-execution.md
       - workload-keyed-sandbox-selection.md
+      - smolvm-library-microvm-cross-os-sandbox.md
   - "Supply Chain":
       - setup-documentation-install-time-attacks.md
       - slopsquatting-hallucinated-package-names.md
