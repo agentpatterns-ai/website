@@ -8,13 +8,13 @@ tags:
   - human-factors
   - tool-agnostic
   - frameworks
-last_reviewed: 2026-05-27
+last_reviewed: 2026-08-20
 maturity: established
 ---
 
 # Plan Files as Resumable Artifacts
 
-> A plan committed to the repo is a resumable, version-controlled artifact — a pattern that holds for multi-session work, recurring workflows, and cross-functional review, and backfires without a supersession discipline.
+> A plan committed to the repo is a resumable, version-controlled artifact that pays for multi-session, recurring, or cross-functional work, and backfires without a supersession discipline.
 
 ## What a persisted plan file is
 
@@ -35,7 +35,7 @@ Outside these conditions, a disposable in-session plan is cheaper.
 No single convention has won. Three are in active use:
 
 - Ralph single-root. One `IMPLEMENTATION_PLAN.md` at the repo root, one task per iteration, one commit per update. The author "throws it out often", so durability is not the goal ([Huntley on Ralph](https://ghuntley.com/ralph/); [how-to-ralph-wiggum](https://github.com/ghuntley/how-to-ralph-wiggum)).
-- Codex `.agent/PLANS.md`. Referenced from `AGENTS.md`, with the invariant that "it should always be possible to restart from only the ExecPlan." The plan is "fully self-contained": progress, decision log, surprises, and outcomes ([Codex cookbook](https://developers.openai.com/cookbook/articles/codex_exec_plans)).
+- Codex `.agent/PLANS.md`. Referenced from `AGENTS.md`, with the invariant that "it should always be possible to restart from only the ExecPlan." The plan is "fully self-contained": progress, decision log, surprises, and outcomes ([Codex cookbook](https://developers.openai.com/cookbook/articles/codex_exec_plans)). OpenAI's cookbook publishes one worked layout of this shape: `AGENTS.md`, `GOALS.md`, `PLANS.md`, and `PROMPTS.md` at the repo root. A `harness/build/` directory holds one file per development phase, and a `context/` directory collects the context record each phase writes as it runs ([Iterating development workflows with Codex](https://developers.openai.com/cookbook/examples/codex/iterating-development-workflows-with-codex)).
 - Manus tripartite. Split across `task_plan.md`, `findings.md`, and `progress.md`. Rewriting the todo list ["recites objectives into the end of the context"](../../context-engineering/goal-recitation.md), so the plan doubles as attention bias ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus); [planning-with-files](https://github.com/OthmanAdi/planning-with-files)).
 
 Pick by team size: Ralph for solo iteration, Codex for long-horizon runs, Manus for phase and findings separation.
@@ -52,6 +52,8 @@ Persistence without invalidation is actively harmful. Claude Code issue [#13740]
 - Use `supersedes:` / `superseded-by:` frontmatter for a machine-readable chain.
 - Add a CI staleness check that fails when a plan references missing code paths.
 - Treat drift as a pager event. Prassanna's "chain-of-thought that was correct at turn ten becomes actively misleading at turn sixty" applies to persisted plans ([Agent Drift](https://prassanna.io/blog/agent-drift/)).
+
+The tooling will not do this for you. OpenAI's Codex cookbook notes that only `AGENTS.md` is recognized by Codex, and the rest of its file layout is convention ([Iterating development workflows with Codex](https://developers.openai.com/cookbook/examples/codex/iterating-development-workflows-with-codex)). Files Codex ignores go stale silently, so archiving stays a team habit.
 
 ## When not to use
 

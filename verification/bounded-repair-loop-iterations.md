@@ -80,3 +80,4 @@ The load-bearing parts are the low `max_rounds` default and the plateau break. T
 - [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — changes what signal each round acts on rather than how many rounds run, for the performance-optimization case.
 - [Blind Resampling Over Self-Repair in Small Code Models](../loop-engineering/blind-resampling-over-self-repair.md) — asks whether a round should carry the failed attempt at all; below 7B it should not.
 - [Behavior-Partitioned Security Tests as Executable Specs](behavior-partitioned-security-tests.md) — why some rounds are inert rather than low-yield: the visible oracle is silent on whole security behavior families.
+- [Specification-First Convergence Without a Test Oracle](../workflows/specification-first-convergence.md) — a reported audit loop whose per-cycle findings rose again at round 15, so this cap did not transfer.
