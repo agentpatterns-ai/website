@@ -98,3 +98,4 @@ Add a branch-protection rule requiring human review on `crypto/**`. The trailer 
 - [Hooks for Enforcement vs Prompts for Guidance: When to Use Each](hooks-vs-prompts.md) — the general enforcement-surface split this evidence grounds empirically
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the separate failure where rule count, not rule kind, drives non-compliance
 - [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md) — parallel finding that file placement and structure are not the compliance lever
+- [Encoding AI Writing Tells as a Prose Style Contract](ai-writing-tell-catalogue.md) — a worked split of one rule set into the mechanically-enforced half and the review half
