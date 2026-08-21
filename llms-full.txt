@@ -463,6 +463,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Skill File Linting: Which Three Checks to Run First](instructions/skill-file-linting.md)
 - [Personalized vs Generic Agent Skills: Where Effort Pays](instructions/personalized-vs-generic-agent-skills.md)
 - [Public Rules-File Corpora as Evidence](instructions/rules-file-corpus-evidence.md)
+- [Encoding AI Writing Tells as a Prose Style Contract](instructions/ai-writing-tell-catalogue.md)
 
 ## Agent Architecture
 
@@ -1469,6 +1470,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](human/agent-rewrite-ownership-rule.md)
 - [Language Selection Scored on Review Cost](human/language-selection-review-cost.md)
 - [Artifact-Level Accountability Mapping for Agent Workflows](human/artifact-level-accountability-mapping.md)
+- [Stated-Understanding Checks: Asking the Agent to Correct You](human/stated-understanding-checks.md)
 
 ## Anti-Patterns
 
@@ -11152,6 +11154,7 @@ Leveraging existing artifacts — specs, schemas, standards files — as agent i
 - [Frozen Spec File](frozen-spec-file.md) — Write goals, non-goals, constraints, and completion criteria into an immutable file the agent reads but cannot modify, preventing drift across context compaction
 - [Feature List Files](feature-list-files.md) — Maintain a structured JSON file defining every feature with status and acceptance criteria; agents work through it sequentially
 - [Standards as Agent Instructions](standards-as-agent-instructions.md) — A standards file actionable for humans is, verbatim, an instruction file for agents — the same document does both jobs when written precisely
+- [Encoding AI Writing Tells as a Prose Style Contract](ai-writing-tell-catalogue.md) — Adopt a catalog of AI writing tells as a revision standard for all prose, enforce only the entries with a narrow false-positive surface, and write the carve-outs first
 - [Convention Over Configuration for Agent Workflows](convention-over-configuration.md) — Reduce agent errors by encoding decisions into naming conventions, directory structure, and label schemes so agents follow patterns rather than invent them
 - [WRAP Framework for Agent Instructions](wrap-framework-agent-instructions.md) — A four-step checklist for writing agent-ready task descriptions that maximize autonomous execution quality
 - [Agent-Ready Bug Reports for Software Repair Agents](agent-ready-bug-reports.md) — Rank bug report fields by measured effect on an AI repair agent's correct-fix rate; localization and suggested fixes beat human-style reproduction steps
@@ -13925,6 +13928,94 @@ The root file encodes repo-wide enforcement rules (CI commands, naming, prohibit
 - [Evaluating AGENTS.md Context Files](evaluating-agents-md-context-files.md)
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — deterministic enforcement complement to convention-based AGENTS.md instructions
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — why keeping AGENTS.md files short matters
+
+---
+
+### Encoding AI Writing Tells as a Prose Style Contract
+Source: https://agentpatterns.ai/instructions/ai-writing-tell-catalogue/
+
+# Encoding AI Writing Tells as a Prose Style Contract
+
+> A catalog of AI writing tells belongs in the instruction file as a revision standard for all prose, never as an authorship test.
+
+Adopt a tell catalog under two conditions: it governs every piece of prose regardless of who wrote it, and only the entries with a narrow false-positive surface become blocking checks. [Better Tropes](https://github.com/fromfireside/better-tropes) is the reference set, "a catalogue of 49 AI writing tells, each with a plain rewrite", released under CC BY 4.0 with the instruction to "Paste it into a system prompt, a `CLAUDE.md`, a Cursor rule, or an agent skill." Under those conditions it gives reviewers words for an objection that otherwise arrives as taste.
+
+## The layer most style guides skip
+
+A house style guide usually governs word choice: banned marketing verbs, active voice, plain alternatives to Latinate vocabulary. The tell catalog puts 8 of its 49 entries there. The other 41 sit under Sentence Structure, Paragraph Structure, Tone, Formatting, Composition, and Whole-Piece Patterns ([Better Tropes](https://github.com/fromfireside/better-tropes)). Sentence Structure names the shapes reviewers keep noticing without being able to say what they noticed: the "It's Not X - It's Y" antithesis, the rule-of-three cadence, the empty analysis tail (a sentence trailing off into `, ensuring…`), and anaphora.
+
+Scope the claim honestly. Across 284 interpretable linguistic features, outputs from 27 models, and ten text domains, "many previously proposed indicators prove strongly context-dependent, with the exception of measures of lexical richness, which remain robust signals across model families and text domains" ([arXiv:2606.04177v1](https://arxiv.org/abs/2606.04177v1)). The durable authorship signal is lexical. What sentence shape buys is a name for a defect and a rewrite that fixes it.
+
+## Why it works
+
+Model prose converges on a small set of constructions because preference tuning rewards familiarity. Zhang et al. identify "typicality bias in preference data, whereby annotators systematically favor familiar text as a result of well-established findings in cognitive psychology" and show "it plays a central role in mode collapse" ([arXiv:2510.01171v4](https://arxiv.org/abs/2510.01171v4)). Annotators rate the more conventional of two adequate responses higher, and alignment sharpens the output distribution onto those conventions. Sentence architecture is where the sharpening shows, because one page repeats it dozens of times. Stylometry finds the same residue, attributing classification performance to "individual overused words, as well as a greater grammatical standardisation of LLMs with respect to human-written texts" ([arXiv:2507.00838v2](https://arxiv.org/abs/2507.00838v2)).
+
+## What to enforce mechanically
+
+Sort the entries by false-positive surface. How bad a tell reads is the wrong sort key, because it says nothing about whether a check can decide the case. An em-dash count per paragraph, a literal "not only… but also", a trailing `, ensuring` clause, an emoji used as a heading marker: each is a regular expression with a decidable answer, and each belongs in a linter that blocks. Rule-of-three cadence, uniform paragraph rhythm, and heading inflation need a human to read a section and judge it, so they belong in a review rubric and in the instruction file the drafting agent reads. Pasting all 49 into that file spends rule budget on top of everything else it carries ([The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)).
+
+Shipping the judgement half as a blocking check is the expensive mistake. An overload of alerts produces "alert fatigue", where developers "become desensitized to warnings, potentially overlooking critical issues" ([arXiv:2511.10323v1](https://arxiv.org/abs/2511.10323v1)). Wrong findings are not the only ones ignored: across 1,425 Java projects, "contrary to expectations, false positives account for a minor proportion of suppressions" ([arXiv:2311.07482v1](https://arxiv.org/abs/2311.07482v1)). Unclear findings get suppressed too, so advisory severity is the right home for anything a writer cannot resolve in one edit.
+
+## Write the carve-outs before the bans
+
+The authors say "it works unmodified, but it works better tuned to your workflow", because "a technical blog post is not a social post is not a listicle" ([Better Tropes](https://github.com/fromfireside/better-tropes)). On a reference corpus that caveat decides the whole adoption. At least five entries name things the format requires: The Definition Opener, The Restated Heading, The Signposted Conclusion, Heading Inflation, and Invented Concept Labels. A documentation site opens on definitions, restates its heading as a summary line, carries dense retrievable headings, and names the concepts it defines.
+
+Terminology carries the same risk. A ban aimed at inflated abstraction nouns will reach a page about agent harnesses and strip the word "harness". Write the exemption list next to the rule, in the same file the agent reads.
+
+## When this backfires
+
+- Applied to code review. Detection of machine-written code collapses on the mixed case that describes every agent-assisted diff. The CoDet-M4 study's best model scores 98.65 F1 in-domain and 39.36 F1 on code combining human- and machine-written portions, where the authors write "our best model completely fails the task" ([arXiv:2503.13733v2](https://arxiv.org/abs/2503.13733v2)). Scope the contract to prose.
+- Used as an authorship test. Across six experiments, "participants (N = 4,600) were unable to detect self-presentations generated by state-of-the-art AI language models", and their judgments were "hindered by intuitive but flawed heuristics" the authors then show to be "predictable and manipulable" ([arXiv:2206.07271v4](https://arxiv.org/abs/2206.07271v4)). A reviewer treating a tell as evidence of authorship inherits that error rate.
+- Expected to keep firing. The stated deployment is a system prompt, so a model given the catalog stops producing the listed shapes. Their absence then proves nothing, and whatever replaces them is unlisted.
+- Adopted unmodified on a reference corpus. Enforcement without the carve-outs above deletes the definition openers, summary lines, and coined terms the format depends on.
+- Calibrated once. Structural indicators are "strongly context-dependent" across model families ([arXiv:2606.04177v1](https://arxiv.org/abs/2606.04177v1)), so a rule set tuned on one model generation decays against the next.
+
+## Example
+
+Two entries from the same catalog, one mechanical and one not.
+
+The antithesis frame has a literal shape, so one grep finds every instance in a docs tree:
+
+```bash
+grep -rnEi "(is|are|was|were) not (an?|the) [^,.]+, it'?s" docs/
+```
+
+**Before** — a specimen the check catches, carrying a term the word-choice bans must not touch:
+
+> The harness is not a convenience layer, it's a contract between the agent and the repository.
+
+**After** — the positive claim, with "harness" left alone:
+
+> The harness is a contract between the agent and the repository.
+
+Uniform rhythm is the other kind. Three consecutive paragraphs of four medium sentences each read as template slots, and no regular expression separates that from a section where four sentences is the right length. A reviewer settles it in one read; a linter reports a number nobody can act on. Put the first entry in the build and the second in review.
+
+## Key Takeaways
+
+- Adopt the catalog as a standard for all prose in the repository. Scoping it to agent-written text turns a style rule into an authorship claim the evidence does not support.
+- Sort entries by whether a writer can resolve the finding in one edit. That predicts whether a rule survives contact with a review queue better than how serious the tell is.
+- Draft the exemption list in the same commit as the ban, and keep both in the file the drafting agent reads, so the agent never has to guess which technical terms are safe.
+- Budget for recalibration when the drafting model changes, and read a tell that stops firing as evidence the model learned the rule.
+- Preserve the CC BY 4.0 attribution wherever the catalog's text lands, including a system prompt or an instruction file in a private repository.
+
+## Related
+
+- [Standards as Agent Instructions for AI Agent Development](standards-as-agent-instructions.md) — the general case: one precise document serving human reviewers and agents alike
+- [Restraint Rules Need External Enforcement](restraint-rules-need-external-enforcement.md) — why the judgement half of the catalog needs CI or required review rather than a prompt line
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the enforcement mechanism for the mechanically-checkable subset
+- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the rule-count cost of pasting all 49 entries into the file the agent loads
+- [Slop Detectors Fail as Per-Item Review Gates](../verification/slop-detection-as-review-gate.md) — the measured case against treating any of these signals as an authorship gate
+
+## Sources
+
+- [fromfireside/better-tropes](https://github.com/fromfireside/better-tropes) — the 49-entry catalog, its seven sections, its CC BY 4.0 license, and the system-prompt deployment its authors recommend.
+- [arXiv:2510.01171v4](https://arxiv.org/abs/2510.01171v4) — Zhang et al., "Verbalized Sampling: How to Mitigate Mode Collapse and Unlock LLM Diversity".
+- [arXiv:2606.04177v1](https://arxiv.org/abs/2606.04177v1) — El Attar et al., "A Systematic Analysis of Linguistic Features in AI-Generated Text Detection Across Domains and Models".
+- [arXiv:2507.00838v2](https://arxiv.org/abs/2507.00838v2) — Przystalski et al., "Stylometry recognizes human and LLM-generated texts in short samples".
+- [arXiv:2206.07271v4](https://arxiv.org/abs/2206.07271v4) — Jakesch, Hancock, Naaman, "Human heuristics for AI-generated language are flawed".
+- [arXiv:2511.10323v1](https://arxiv.org/abs/2511.10323v1) — Kószó et al., "A Large-Scale Collection Of (Non-)Actionable Static Code Analysis Reports".
+- [arXiv:2311.07482v1](https://arxiv.org/abs/2311.07482v1) — Liargkovas et al., "Quieting the Static: A Study of Static Analysis Alert Suppressions".
+- [arXiv:2503.13733v2](https://arxiv.org/abs/2503.13733v2) — "CoDet-M4: Detecting Machine-Generated Code in Multi-Lingual, Multi-Generator and Multi-Domain Settings".
 
 ---
 
@@ -18521,6 +18612,7 @@ Add a branch-protection rule requiring human review on `crypto/**`. The trailer 
 - [Hooks for Enforcement vs Prompts for Guidance: When to Use Each](hooks-vs-prompts.md) — the general enforcement-surface split this evidence grounds empirically
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the separate failure where rule count, not rule kind, drives non-compliance
 - [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md) — parallel finding that file placement and structure are not the compliance lever
+- [Encoding AI Writing Tells as a Prose Style Contract](ai-writing-tell-catalogue.md) — a worked split of one rule set into the mechanically-enforced half and the review half
 
 ---
 
@@ -33688,6 +33780,7 @@ The agent resolved the navigational ambiguity (which file, which bug) independen
 - [TDD for Agent Development](../../verification/tdd-agent-development.md) — tests as unambiguous executable specification
 - [Issue Requirements Preprocessing](issue-requirements-preprocessing.md) — automated clarification of issue text before execution begins
 - [Semantic Collapse Under Underspecified Prompts](../anti-patterns/semantic-collapse.md) — why you cannot detect underspecification by sampling for output variance: the model collapses onto one confident, wrong reading
+- [Stated-Understanding Checks](../../human/stated-understanding-checks.md) — the reverse direction, where the developer states the assumption and the agent checks it
 
 ---
 
@@ -92503,6 +92596,7 @@ Leading spaces and leading tabs are now the formatter's values, whoever wrote th
 - [Verification Capacity as the Agent Quality Ceiling](verification-capacity-quality-ceiling.md) — why cheap per-item gates matter once generation outpaces review
 - [AI Label as Reviewer Attention Redistribution](../code-review/ai-label-attention-redistribution.md) — what a declared authorship label does to reviewers, measured rather than assumed
 - [Agent-Laundered Bug Reports](../patterns/anti-patterns/agent-laundered-bug-reports.md) — the inbound-queue failure that motivates reaching for a detector
+- [Encoding AI Writing Tells as a Prose Style Contract](../instructions/ai-writing-tell-catalogue.md) — the prose-side use that survives: a revision standard rather than an authorship verdict
 
 ## Sources
 
@@ -117995,6 +118089,7 @@ Source: https://agentpatterns.ai/human/
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](author-to-reviewer-role-inversion.md) — As agents author most code, review overtakes writing as the top developer activity; staff, measure, and budget review capacity as the binding constraint rather than authoring throughput
 - [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](agent-rewrite-ownership-rule.md) — Rewrites drop scope restrictors and emphasis in a measurable direction; the ownership rule that follows, plus the cases where a blanket rule costs more than it saves
 - [Artifact-Level Accountability Mapping for Agent Workflows](artifact-level-accountability-mapping.md) — Audit every workflow event against authority, execution, verification, consequence, and record; the map earns its keep on events the artifact schema records opaquely, chiefly approval
+- [Stated-Understanding Checks: Asking the Agent to Correct You](stated-understanding-checks.md) — State your reading of the system and ask the agent to correct it before it edits; the check informs only when the claim is decidable from the repository, and returns agreement bias when it is not
 
 ---
 
@@ -120252,6 +120347,7 @@ The same team rejects a proposal to apply the model to a one-off prototype. The 
 - [Bottleneck Migration](bottleneck-migration.md) — the empirical mechanism that forces leverage upstream from authorship.
 - [Harness Engineering](../patterns/agent-design/harness-engineering.md) — the verification scaffold that makes the intent-centric posture tractable.
 - [Risk Architecture for AI-Native Engineering Teams](risk-architecture-ai-native-teams.md) — the risk-structure companion: how to reassign ownership, escalation, and assurance once agents act autonomously.
+- [Stated-Understanding Checks](stated-understanding-checks.md) — the in-session move that makes intent legible turn by turn, and the conditions under which the agent's answer is worth anything.
 
 ---
 
@@ -121772,6 +121868,99 @@ Fatigue makes you tired during work. Atrophy makes you less capable between sess
 - [The Bottleneck Migration](bottleneck-migration.md) — review and verification become the scarce resource when code generation is cheap
 - [Developer Control Strategies for AI Agents](developer-control-strategies-ai-agents.md) — structuring delegation boundaries and autonomy levels to preserve oversight
 - [Polya Small Steps](polya-small-steps.md) — incremental problem decomposition that preserves comprehension while delegating
+
+---
+
+### Stated-Understanding Checks: Asking the Agent to Correct You
+Source: https://agentpatterns.ai/human/stated-understanding-checks/
+
+# Stated-Understanding Checks: Asking the Agent to Correct You
+
+> Say what you think the system does and ask the agent to correct you. The answer counts only when the agent can look it up.
+
+A stated-understanding check is a turn where the developer writes out their model of how some part of the system works and asks the coding agent to confirm or correct it, before requesting any edit. Eivind Kjosbakken describes the form as "is my understanding correct: \<present understanding\>" and reports running it 10 to 20 times a day ([Kjosbakken, Towards Data Science](https://towardsdatascience.com/how-to-effectively-align-your-intents-with-claude-code/)). It catches intent drift at the point where correcting it costs a sentence, instead of at review, where it costs a diff.
+
+The check is not reliable by default. An agent asked to rule on a claim it cannot look up will tend to agree with you instead, which is the [yes-man](../patterns/anti-patterns/yes-man-agent.md) failure applied to your own assumptions.
+
+## When the check earns its turn
+
+Run it when all three hold:
+
+- The claim is decidable from the workspace. Which module owns a behavior, whether a job is scheduled or event-driven, what a function returns on the empty case: the agent can open the file and find you wrong.
+- You can state the claim specifically enough to be wrong. Kjosbakken names this limit himself, writing that the technique "requires a minimum level of code understanding because, of course, you have to know how different systems work."
+- You ask before the agent has argued for an approach, rather than after.
+
+Outside those conditions, skip the turn. The reply will carry agreement bias rather than information.
+
+## Which direction the check runs
+
+Two loops close the same gap, and they fail differently.
+
+| Direction | Mechanism | Failure mode |
+|---|---|---|
+| Agent states, you check | Plan mode: "Claude reads files and proposes a plan but makes no edits until you approve" ([Claude Code docs](https://code.claude.com/docs/en/common-workflows)) | You skim the plan and approve a wrong one |
+| You state, agent checks | A stated-understanding check | The agent agrees with a wrong statement |
+
+Plan mode puts a human on the checking side, which takes the model's agreement bias out of the loop and substitutes the reviewer's own attention as the weak point. A stated-understanding check puts a model there instead, adding a channel that can return a confident yes to a false claim. Reach for it on a single fact you need settled before the next turn, and switch to plan mode once the question is large enough to be worth reading a plan about.
+
+## Why it works
+
+Grounding does most of the work. An unstated assumption becomes a proposition the agent can test against files it has read, which is why Kjosbakken's own example resolved as a correction. He expected a cron job, and the agent reported that "the system was not based on a cron job, for example, it was based on a webhook system."
+
+Framing does the rest. This check replaces instructing an agent on the basis of a mental model never said out loud, which is an assertion rather than a question. Dubois and colleagues isolate that variable and find sycophancy "substantially higher in response to non-questions compared to questions", with their mitigation being to convert non-questions into questions before answering ([Dubois et al., arXiv:2602.23971v4](https://arxiv.org/abs/2602.23971v4)). Turning your assumption into a question is the intervention their experiments measure.
+
+Neither mechanism removes the agreement bias. Five state-of-the-art assistants exhibited sycophancy across four free-form generation tasks, a behavior the same authors judge "likely driven in part by human preference judgments favoring sycophantic responses" ([Sharma et al., arXiv:2310.13548v4](https://arxiv.org/abs/2310.13548v4)). The check trades one failure mode for a smaller one.
+
+## When this backfires
+
+- The claim has no answer in the workspace. Design preferences, product intent, and unwritten conventions give the agent nothing to disconfirm against.
+- You state it at length and with confidence. Persuasion rises with the amount of reasoning in the user's turn "even when the conclusion of the reasoning is incorrect", and sycophancy rises with epistemic certainty ([Kim and Khashabi, arXiv:2509.16533v1](https://arxiv.org/abs/2509.16533v1); [Dubois et al., arXiv:2602.23971v4](https://arxiv.org/abs/2602.23971v4)). The detail that makes a claim checkable is the same detail that makes agreement likelier.
+- You correct the agent after it has already committed to an approach. Models endorse a user's counterargument more readily when it arrives as a follow-up than when both readings are put side by side for evaluation ([Kim and Khashabi, arXiv:2509.16533v1](https://arxiv.org/abs/2509.16533v1)).
+- The canonical wording works against you on one axis. Sycophancy "is amplified by I-perspective framing" ([Dubois et al., arXiv:2602.23971v4](https://arxiv.org/abs/2602.23971v4)), and "is my understanding correct" is I-perspective. Ask about the system rather than about your belief: "does the sync run on cron" beats "is my understanding correct that the sync runs on cron."
+- The wrong-answer rate is not negligible. On mathematics and medical datasets, SycEval measured sycophantic behavior in 58.19% of cases across ChatGPT-4o, Claude-Sonnet, and Gemini-1.5-Pro, of which 14.66% was regressive, moving the model from a correct answer to an incorrect one, and the behavior persisted at 78.5% once established ([Fanous et al., arXiv:2502.08177v4](https://arxiv.org/abs/2502.08177v4)). Those are not coding-agent numbers, so read them as the order of magnitude to expect rather than a rate for your repository.
+- The change is small enough to read. A diff is a deterministic oracle with no agreement channel in it, and one round-trip costs more than it saves.
+
+## Example
+
+Weak form, inviting agreement:
+
+```text
+I'm fairly confident the nightly sync is a cron job that reads from the
+staging table, transforms rows, and writes to prod. Is my understanding correct?
+```
+
+Stronger form, forcing a lookup and a choice:
+
+```text
+Is the nightly sync triggered by a cron schedule or by a webhook? Cite the file.
+```
+
+The second version offers no preferred answer to agree with, names an artifact the agent must open, and fits on one line.
+
+## Key Takeaways
+
+- Phrase it as a question about the system rather than about your belief: "does the sync run on cron", not "is my understanding correct that the sync runs on cron".
+- Name the artifact you expect to settle it, and treat any answer that cites no file as unanswered.
+- If what you want confirmed is a preference rather than a lookup, take it to plan mode or to the diff instead.
+- Run the check before the agent commits to an approach. Past that point, restart the turn rather than argue with it.
+- Promote anything you re-check every session into `CLAUDE.md`, where it stops costing a turn.
+
+## Related
+
+- [Intent-Centric Engineering: Oversight Over Authorship](intent-centric-engineering.md) — the operating-model argument for why specifying intent became the leverage point
+- [Interactive Clarification for Underspecified Tasks](../patterns/agent-design/interactive-clarification-underspecified-tasks.md) — the mirrored loop, where the agent asks instead of confirming
+- [Author-to-Reviewer Role Inversion in AI-Assisted Teams](author-to-reviewer-role-inversion.md) — why catching divergence before the diff matters as review becomes the constraint
+- [Developer Control Strategies for AI Agents](developer-control-strategies-ai-agents.md) — the wider set of in-session steering moves
+- [The Yes-Man Agent: Compliance Without Verification](../patterns/anti-patterns/yes-man-agent.md) — the agreement bias this check both exploits and is exposed to
+
+## Sources
+
+- [Kjosbakken, "How to Effectively Align Your Intent with Claude Code", Towards Data Science](https://towardsdatascience.com/how-to-effectively-align-your-intents-with-claude-code/)
+- [Claude Code documentation, "Common workflows"](https://code.claude.com/docs/en/common-workflows)
+- [Dubois et al., "Ask don't tell: Reducing sycophancy in large language models", arXiv:2602.23971v4](https://arxiv.org/abs/2602.23971v4)
+- [Sharma et al., "Towards Understanding Sycophancy in Language Models", arXiv:2310.13548v4](https://arxiv.org/abs/2310.13548v4)
+- [Kim and Khashabi, "Challenging the Evaluator: LLM Sycophancy Under User Rebuttal", arXiv:2509.16533v1](https://arxiv.org/abs/2509.16533v1)
+- [Fanous et al., "SycEval: Evaluating LLM Sycophancy", arXiv:2502.08177v4](https://arxiv.org/abs/2502.08177v4)
 
 ---
 

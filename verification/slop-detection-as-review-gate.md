@@ -94,6 +94,7 @@ Leading spaces and leading tabs are now the formatter's values, whoever wrote th
 - [Verification Capacity as the Agent Quality Ceiling](verification-capacity-quality-ceiling.md) — why cheap per-item gates matter once generation outpaces review
 - [AI Label as Reviewer Attention Redistribution](../code-review/ai-label-attention-redistribution.md) — what a declared authorship label does to reviewers, measured rather than assumed
 - [Agent-Laundered Bug Reports](../patterns/anti-patterns/agent-laundered-bug-reports.md) — the inbound-queue failure that motivates reaching for a detector
+- [Encoding AI Writing Tells as a Prose Style Contract](../instructions/ai-writing-tell-catalogue.md) — the prose-side use that survives: a revision standard rather than an authorship verdict
 
 ## Sources
 

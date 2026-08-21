@@ -94,3 +94,4 @@ The same team rejects a proposal to apply the model to a one-off prototype. The 
 - [Bottleneck Migration](bottleneck-migration.md) — the empirical mechanism that forces leverage upstream from authorship.
 - [Harness Engineering](../patterns/agent-design/harness-engineering.md) — the verification scaffold that makes the intent-centric posture tractable.
 - [Risk Architecture for AI-Native Engineering Teams](risk-architecture-ai-native-teams.md) — the risk-structure companion: how to reassign ownership, escalation, and assurance once agents act autonomously.
+- [Stated-Understanding Checks](stated-understanding-checks.md) — the in-session move that makes intent legible turn by turn, and the conditions under which the agent's answer is worth anything.

@@ -339,6 +339,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Skill File Linting: Which Three Checks to Run First](instructions/skill-file-linting.md)
 - [Personalized vs Generic Agent Skills: Where Effort Pays](instructions/personalized-vs-generic-agent-skills.md)
 - [Public Rules-File Corpora as Evidence](instructions/rules-file-corpus-evidence.md)
+- [Encoding AI Writing Tells as a Prose Style Contract](instructions/ai-writing-tell-catalogue.md)
 
 ## Agent Architecture
 
@@ -1345,6 +1346,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](human/agent-rewrite-ownership-rule.md)
 - [Language Selection Scored on Review Cost](human/language-selection-review-cost.md)
 - [Artifact-Level Accountability Mapping for Agent Workflows](human/artifact-level-accountability-mapping.md)
+- [Stated-Understanding Checks: Asking the Agent to Correct You](human/stated-understanding-checks.md)
 
 ## Anti-Patterns
 
