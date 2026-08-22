@@ -73,3 +73,4 @@ The dominant misattribution is treating a batch-invariance drift as a temperatur
 - [Dominator-Graph Trajectory Invariants](dominator-graph-trajectory-invariants.md)
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md)
 - [Specification-Path Testing: Same Contract, Different History](specification-path-testing.md) — specification path as a further variability source, held constant in this taxonomy
+- [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](multi-run-shuffled-order-evaluation.md) — task order as an orchestration-state variable when the agent writes memory between tasks

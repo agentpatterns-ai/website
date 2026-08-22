@@ -54,6 +54,7 @@ last_reviewed: 2026-05-27
 - [Equivalence Testing for Agent Configuration Changes](equivalence-testing-agent-config-changes.md) — Bound how far a config change could have moved behavior against a margin fixed in advance; a zero-event run states an upper limit computed from n, never an absence
 - [Profile Your Agent Test Suite Against Measured Practice](agent-test-suite-profiling.md) — Label your agent tests by level, objective, data pattern, and assertion target, then compare the distribution against two published baselines showing effort concentrates on deterministic components
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — Report the spread of a result across seeds rather than the favorable run, and treat any accuracy cell pinned at a floor or ceiling as a design fault to fix before drawing a verdict
+- [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](multi-run-shuffled-order-evaluation.md) — Memory-based agents amplify run-to-run variance and inherit a hidden easy-to-hard curriculum from the benchmark's default order; repeat the suite and shuffle before believing a reported gain
 - [Specification-Path Testing: Same Contract, Different History](specification-path-testing.md) — Contract-equivalent requirement histories leave the pass rate flat while flipping which individual tasks succeed; report per-item conditional agreement rather than rate parity
 
 ## Behavioral Testing
