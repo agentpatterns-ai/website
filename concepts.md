@@ -624,6 +624,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Retry, Switch, or Abstain: Supplying a Tool-Recovery Policy at Runtime](patterns/agent-design/retry-switch-abstain-recovery-policy.md)
 - [Situated Harness Layers: Fix at the Layer That Owns It](patterns/agent-design/situated-harness-layers.md)
 - [Generated Programs as Web Agent Action Space](patterns/agent-design/generated-programs-web-agent-action-space.md)
+- [Per-Run Budget Reservation for Coding Agent Model Calls](patterns/agent-design/per-run-budget-reservation.md)
+- [Coordination Channel Policy for Multi-Agent Coding](patterns/multi-agent/coordination-channel-policy.md)
+- [Agent-Client Admission Control for Agentic Traffic](patterns/agent-design/agent-client-admission-control.md)
 
 ## Loop Engineering
 
@@ -1087,6 +1090,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](verification/evidence-bundled-agent-prs.md)
 - [Review-Comment-Derived Benchmarks for Code Review Agents](verification/review-comment-derived-benchmarks.md)
 - [Agent-Authored Eval Suites From Repo Context and Traces](verification/agent-authored-eval-suites.md)
+- [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](verification/multi-run-shuffled-order-evaluation.md)
 
 ## Hooks & Guardrails
 

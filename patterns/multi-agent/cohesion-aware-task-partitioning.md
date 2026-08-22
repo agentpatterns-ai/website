@@ -115,3 +115,4 @@ For most practitioners, the takeaway is the intuition, not the algorithm: keep t
 - [Swarm Migration Pattern](swarm-migration-pattern.md)
 - [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](multi-agent-se-design-patterns.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
+- [Coordination Channel Policy for Multi-Agent Coding](coordination-channel-policy.md)

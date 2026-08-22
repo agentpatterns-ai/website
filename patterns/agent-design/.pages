@@ -123,6 +123,7 @@ nav:
       - trigger-level-agent-intake-gating.md
   - "Reliability":
       - agent-circuit-breaker.md
+      - agent-client-admission-control.md
       - retry-switch-abstain-recovery-policy.md
       - self-healing-production-agent.md
       - advisor-strategy.md
@@ -147,6 +148,7 @@ nav:
       - per-user-supervisor-process.md
       - observation-contract-preservation.md
       - per-call-budget-hints-tool-calls.md
+      - per-run-budget-reservation.md
       - per-tool-extended-reasoning-opt-in.md
       - progressive-spend-threshold-alerting.md
       - reasoning-budget-allocation.md

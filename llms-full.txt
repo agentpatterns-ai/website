@@ -748,6 +748,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Retry, Switch, or Abstain: Supplying a Tool-Recovery Policy at Runtime](patterns/agent-design/retry-switch-abstain-recovery-policy.md)
 - [Situated Harness Layers: Fix at the Layer That Owns It](patterns/agent-design/situated-harness-layers.md)
 - [Generated Programs as Web Agent Action Space](patterns/agent-design/generated-programs-web-agent-action-space.md)
+- [Per-Run Budget Reservation for Coding Agent Model Calls](patterns/agent-design/per-run-budget-reservation.md)
+- [Coordination Channel Policy for Multi-Agent Coding](patterns/multi-agent/coordination-channel-policy.md)
+- [Agent-Client Admission Control for Agentic Traffic](patterns/agent-design/agent-client-admission-control.md)
 
 ## Loop Engineering
 
@@ -1211,6 +1214,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](verification/evidence-bundled-agent-prs.md)
 - [Review-Comment-Derived Benchmarks for Code Review Agents](verification/review-comment-derived-benchmarks.md)
 - [Agent-Authored Eval Suites From Repo Context and Traces](verification/agent-authored-eval-suites.md)
+- [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](verification/multi-run-shuffled-order-evaluation.md)
 
 ## Hooks & Guardrails
 
@@ -20758,12 +20762,13 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 Making agents robust — backpressure, idempotency, cost awareness, error recovery, and self-correction.
 
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — Wrap external tools with per-tool failure-tracking state machines that block calls during degraded states, preventing token waste on retry loops
+- [Agent-Client Admission Control for Agentic Traffic](agent-client-admission-control.md) — Retry budgets, honored 429s, and token-denominated buckets let an agent client throttle itself inside the gap between a burst and the autoscaler's response, for traffic you own and with enforcement still on the server
 - [Retry, Switch, or Abstain: Supplying a Tool-Recovery Policy at Runtime](retry-switch-abstain-recovery-policy.md) — Hand the agent a fallback map and recovery constraints in context so it retries, switches tools, or stops — worth up to 16.8 points of robustness, and only where failures are observable
 - [Self-Healing Production Agent](self-healing-production-agent.md) — A closed-loop pipeline that detects post-deploy regressions, triages causality, and dispatches a sub-agent to open a fix PR — with human review at the merge gate
 - [The Advisor Strategy: Frontier Model as Strategic Advisor](advisor-strategy.md) — Pair a cost-effective executor model with a frontier advisor that provides strategic guidance on hard decisions — within a single API call, no orchestration required
 - [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md) — Automated tooling — type systems, test suites, linters, CI pipelines — creates feedback loops that agents use to self-correct without human intervention
 - [Auto Model Selection: Harness-Driven Routing per Task](auto-model-selection.md) — Vendor-side Auto modes let the harness pick the model per request based on availability, policy, and plan — useful for executor-class work, costly for long sessions and eval-gated CI
-- [Behavioral Drivers of Coding Agent Success and Failure](behavioral-drivers-agent-success.md) — Four observable failure clusters and three behavioral patterns that predict success — derived from trajectory analysis of 19 agents across 8 frameworks and 14 LLMs
+- [Behavioral Drivers of Coding Agent Success and Failure](behavioral-drivers-agent-success.md) — Why agents fail the tasks humans call easy, and the trajectory structure that predicts success — derived from trajectory analysis of 19 agents across 8 frameworks and 14 LLMs
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — Assign competing vendor agents to the same task, collect independent results, and let a human or automated gate select the winner
 - [Dispatch-Time Reasoning Level for Delegated Agents](dispatch-time-reasoning-level.md) — Choosing a delegated agent's reasoning level at hand-off is a one-shot commitment, so select on blast radius, reversibility, and detection cost rather than estimated difficulty
 - [Decoupled Search Grounding: A Vendor-Agnostic Grounding Boundary](decoupled-search-grounding.md) — Lift retrieval out of the reasoning model and into an MCP-compatible gateway so provider, caching, and evidence rendering become independently tunable controls — pays off only when strict output contracts, cacheable query mix, and real multi-vendor routing all hold
@@ -20784,6 +20789,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Observation Contract Preservation](observation-contract-preservation.md) — Tool outputs like presigned URLs and session tokens are contract-bound — preserve their bytes and respect their expiry on the second call, or the chain fails silently
 - [Per-Call Budget Hints on Tool Invocations](per-call-budget-hints-tool-calls.md) — Lift the reasoning or returned-token cap on individual tool calls — narrowly, when the call is infrequent and information-dense — instead of re-tuning the global default
 - [Per-Tool Extended Reasoning Opt-In: Tool-Call-Scoped Budgets](per-tool-extended-reasoning-opt-in.md) — A single tool call opts itself into deeper reasoning via a per-call parameter, leaving the turn's global reasoning effort unchanged for every other step
+- [Per-Run Budget Reservation for Coding Agent Model Calls](per-run-budget-reservation.md) — Reserve the worst-case cost of a model call before making it and refund the unused hold after; the run halts before a request it cannot afford, not after
 - [Progressive Spend Threshold Alerting for Agent Cost Governance](progressive-spend-threshold-alerting.md) — Pair a soft cost cap with progressive alerts at fixed budget percentages so operators get graceful intervention windows before agent work hits a hard cutoff
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate maximum reasoning compute to planning and verification phases, reduced compute to execution — rather than using a fixed level throughout
 - [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — On a fixed budget for a single-shot agentic build, raising reasoning effort buys first-try functional reliability more cost-effectively than adding testing tools or design prompts — under three explicit conditions
@@ -22628,6 +22634,77 @@ Category recognition reduces over-engineering. The [Agentless paper](https://arx
 
 ---
 
+### Agent-Client Admission Control for Agentic Traffic
+Source: https://agentpatterns.ai/patterns/agent-design/agent-client-admission-control/
+
+# Agent-Client Admission Control for Agentic Traffic
+
+> Retry budgets, honored 429s, and cost-denominated buckets let an agent client throttle itself inside the gap between a traffic burst and the autoscaler's response.
+
+Move admission control into the agent client when you ship the client code, the work runs in the background, and the resource you are protecting is your own bill or quota. Under those conditions the client is the only component that can act inside the window where a burst is underway and no extra capacity has arrived. Outside them, server-side enforcement is what protects the service, and client-side pacing costs wall-clock time you do not get back.
+
+## When this applies
+
+| Condition | Why it decides the case |
+|---|---|
+| You ship the client | Client-side budgets are cooperative. They reduce load from callers that run them and stop nothing from callers that do not. |
+| The work is background | Pacing trades latency for error rate. On datasets of 800 requests — up to 1.6 times the planned capacity — measured client-side schemes cut errors by 70.13% to 97.3% and raised total duration by 11.7% to 27.62% ([arXiv:2510.04516v3](https://arxiv.org/abs/2510.04516v3)). |
+| Several callers share one quota | With a shared quota, "clients lack visibility into others' load, causing their retry attempts to potentially fail" ([arXiv:2510.04516v3](https://arxiv.org/abs/2510.04516v3)). |
+| Failure amplifies itself | Retry loops bill for their own dysfunction: 63 confirmed budget-overrun incidents across 21 orchestration frameworks, where "a single retry loop can spend thousands of dollars before an operator notices" ([arXiv:2606.04056v1](https://arxiv.org/abs/2606.04056v1)). |
+
+If the callers are third parties or forked SDKs, treat the client control as an efficiency measure and keep the enforcement on the server.
+
+## What moves into the client
+
+Four controls, each decided before a request leaves the process.
+
+Retry budget. Cap attempts per operation and stop. The originating write-up caps at three attempts ([Chakravarty, 2026](https://towardsdatascience.com/three-generations-of-autoscaling-and-why-agentic-traffic-breaks-all-of-them/)). Contract-bounded execution with a 50K token budget and a maximum of three iterations, measured across 70 LiveCodeBench problems, "achieves 90% token reduction compared to UNCONTRACTED (p=0.0007, paired t-test), with 525× lower variance" ([arXiv:2601.08815v3](https://arxiv.org/abs/2601.08815v3)).
+
+Honor the 429. A rate-limit response carries the wait, and retrying through it cannot succeed. The Claude API returns 429 with a `retry-after` header giving "the number of seconds to wait until you can retry the request. Earlier retries will fail" ([Claude API rate limits](https://platform.claude.com/docs/en/api/rate-limits)).
+
+Admit by cost, not request count. One reasoning chain can outweigh a thousand cheap calls, so a per-session token bucket tracks the resource that actually runs out. The worked example holds 100,000 tokens and refills at 1,000 tokens per second ([Chakravarty, 2026](https://towardsdatascience.com/three-generations-of-autoscaling-and-why-agentic-traffic-breaks-all-of-them/)).
+
+Circuit breaker. Open on sustained failure so a degraded dependency stops absorbing attempts. The same source opens after five failures with a 30-second cooldown, though thresholds belong to the tool's latency profile; the [agent circuit breaker](agent-circuit-breaker.md) pattern owns the state machine and its tuning.
+
+## Why it works
+
+Autoscaling reacts to a lagging signal. "Existing autoscaling policies, often retrofitted from monolithic systems like those in AIBrix and DistServe, rely on lagging indicators such as GPU utilization or coarse-grained request counts", which produces "slow reactions to load spikes" ([arXiv:2512.03416v1](https://arxiv.org/abs/2512.03416v1)). Once the signal does fire, adding capacity has a floor. A cold vLLM instance serving Llama3.2-3B on an H100 measured a "startup latency of 20.32 secs" in a startup process that "is predominantly CPU-bound", so it does not shrink when you buy faster accelerators ([arXiv:2606.07362v3](https://arxiv.org/abs/2606.07362v3)).
+
+Agent traffic arrives inside that gap. Human retries are bounded because people give up and back off out of frustration, while agent retries are programmatic and relentless: without an explicit retry budget, one fault becomes a retry storm. Independent users also smooth out in aggregate by the law of large numbers, where a single trigger fans out into correlated calls with no such smoothing ([Chakravarty, 2026](https://towardsdatascience.com/three-generations-of-autoscaling-and-why-agentic-traffic-breaks-all-of-them/)). Every request sent during the gap is one some client chose to send, which leaves the client as the only actor holding a control surface there. Acting on it is measurable: adaptive client-side token buckets that infer congestion from 429 responses cut errors "by up to 97.3% compared to exponential backoff" ([arXiv:2510.04516v3](https://arxiv.org/abs/2510.04516v3)).
+
+## When this backfires
+
+- Untrusted callers. A client budget protects the service only while every caller runs it, and "server-side enforcement protects the service" ([arXiv:2510.04516v3](https://arxiv.org/abs/2510.04516v3)). Presenting the client control as the protection is a security error.
+- Cost-denominated admission on unpredictable calls. "Token consumption is only known *after* an LLM call completes, not during execution", so a bucket admits against an estimate. Contracts "cannot prevent a single expensive call from exceeding budget"; they prevent the next one ([arXiv:2601.08815v3](https://arxiv.org/abs/2601.08815v3)).
+- Interactive foreground work. The guidance assumes background reasoning that tolerates seconds to minutes. Where a person is waiting, the 11.7% to 27.62% duration increase measured for client-side pacing under overload is the wrong trade ([arXiv:2510.04516v3](https://arxiv.org/abs/2510.04516v3)).
+- One caller, low concurrency. Buckets, breakers, and congestion telemetry pay off in proportion to the number of correlated callers. Against a single vendor API that already returns `retry-after`, honoring the header is the whole pattern.
+- The signal was the real defect. Client-side work is not the only available fix. Replacing the lagging autoscaler signal with a leading one raised SLO attainment from 50–88% to 80–96% at 4–14% lower cost, entirely server-side ([arXiv:2512.03416v1](https://arxiv.org/abs/2512.03416v1)). A team with one signal to change and many clients to patch should change the signal first.
+
+## Example
+
+The Claude API is a working instance of both halves. On the server side it "uses the token bucket algorithm to do rate limiting", and its limits are denominated in input and output tokens per minute alongside requests per minute, so cost is the unit rather than count. It penalizes onset directly too: "a rate of 60 requests per minute (RPM) might be enforced as 1 request per second. Short bursts of requests can exceed the limit and trigger rate limit errors", and a sharp organizational usage increase can trip separate acceleration limits.
+
+The remedy the vendor documents is client-side: "ramp up your traffic gradually and maintain consistent usage patterns" ([Claude API rate limits](https://platform.claude.com/docs/en/api/rate-limits)). Honoring `retry-after`, pacing the ramp, and tracking token spend against the published per-minute ceilings is the caller's whole share of the work.
+
+## Key Takeaways
+
+- The window between burst onset and new capacity is bounded below by cold-start time, and only the caller can act inside it.
+- Client-side controls buy error reduction with wall-clock time, so they suit background agent work rather than interactive sessions.
+- Denominate the budget in tokens, and accept that the bucket stops the next expensive call rather than the current one.
+- Infer congestion from the 429s you are already receiving rather than from a configured rate limit, so the bucket tracks the capacity the server actually has today.
+- Before patching every client, check whether the autoscaler is reading a lagging signal that a leading one would fix.
+
+## Related
+
+- [Agent Circuit Breaker](agent-circuit-breaker.md) — the per-tool failure-tracking state machine this page names as its fourth control
+- [Production Hosting Topology for Self-Hosted Agent SDK Runtimes](agent-sdk-hosting-topology.md) — the server-side half, including which autoscale signal a self-hosted runtime should scale on
+- [WIP=1 and Little's Law: Kanban Throughput Theory for Agent Task Design](wip-1-littles-law-agent-throughput.md) — the queueing identity behind admitting work by capacity rather than by arrival
+- [Tail Control for Agent Workflows](tail-control-for-agent-workflows.md) — bounded loops, per-step timeouts, and graceful degradation for the same failure tail
+- [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](../../loop-engineering/loop-budgeting.md) — budget allocation inside one agent loop, where this page covers admission across a fleet
+- [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md) — a different sense of backpressure: tooling feedback for self-correction, not traffic admission
+
+---
+
 ### Agent-Discoverable Slash Commands
 Source: https://agentpatterns.ai/patterns/agent-design/agent-discoverable-slash-commands/
 
@@ -24456,34 +24533,37 @@ Source: https://agentpatterns.ai/patterns/agent-design/behavioral-drivers-agent-
 
 # Behavioral Drivers of Coding Agent Success and Failure
 
-> Aggregate resolve rates conceal why agents fail. Behavioral trajectory analysis reveals four failure clusters and three patterns that consistently predict success.
+> Aggregate resolve rates conceal why agents fail. On the tasks no agent solves, the agent finds the right file and patches the wrong architectural layer.
 
 ## The resolve rate problem
 
 SWE-bench Verified gives each agent a single percentage. The best agents still fail more than 20% of tasks as of February 2026. The score hides a more useful signal: two agents with identical resolve rates can fail on almost separate sets of tasks, for different reasons.
 
-Analysis of 9,374 trajectories across 19 agents, 8 frameworks, and 14 LLMs on 500 tasks confirms this ([arXiv:2604.02547](https://arxiv.org/abs/2604.02547)). Task heterogeneity is the structural problem: no single agent wins across every task type.
+Analysis of 9,374 trajectories across 19 agents, 8 frameworks, and 14 LLMs on 500 tasks confirms this ([arXiv:2604.02547v1](https://arxiv.org/abs/2604.02547v1)). Task heterogeneity is the structural problem: no single agent wins across every task type.
 
-## Four failure clusters
+## The tasks nobody solves fail at the wrong layer, not the wrong file
 
-Trajectories group into four failure modes:
+Task difficulty is bimodal: of 500 SWE-bench Verified tasks, 55 are never solved by any agent, 416 are contested, and 29 are always solved. Twelve of the never-solved tasks need only a single-file patch of ten changes or fewer, and human annotators labeled them easy ([arXiv:2604.02547v1](https://arxiv.org/abs/2604.02547v1)).
 
-| Cluster | What fails | Diagnostic signal |
-|---------|-----------|-------------------|
-| Reproduction | Cannot reproduce the bug or trigger described behavior | No test written; agent proceeds on assumptions |
-| Localization | Reads the wrong file or function — correct understanding, wrong location | Patch applied to unrelated code; tests pass on wrong surface |
-| Patch generation | Identifies the correct location but produces an incorrect fix | Correct file targeted; implementation breaks adjacent tests |
-| Verification | Applies a plausible patch without confirming it resolves the issue | No test run after patch; PR opened with untested changes |
+Those twelve are the diagnostic set. Comparing each best-performing agent's submitted patch against the gold patch sorts them into three root causes:
 
-Framework-level failures concentrate in reproduction and verification — the first and last steps ([arXiv:2604.02547](https://arxiv.org/abs/2604.02547)). Model capability matters most for localization and patch generation.
+| Root cause | Tasks | What happens |
+|---|---|---|
+| Architectural judgment | 10 of 12 | The agent patches the symptom — the caller, the consumer, the display layer — where the gold patch changes the root: the callee, the producer, the serialization |
+| Behavioral | 1 of 12 | The agent reaches a correct fix and abandons it |
+| Domain knowledge | 1 of 12 | The fix needs knowledge the agent does not have, such as the correct TeX commands |
+
+Localization is not the failure. The best agent found the gold-patch file in 12 of 12 tasks and edited it in 10 of 12, and failed every time regardless ([arXiv:2604.02547v1](https://arxiv.org/abs/2604.02547v1)). Reading the wrong file is not what defeats these tasks; intervening at the wrong architectural layer is.
+
+That reframes what an audit should look for. Twelve tasks is a small diagnostic set and the split is not a general failure taxonomy, but the direction it points is the useful part: a monitor that checks whether the agent opened the right file will pass a run that is already lost.
 
 ## Three behavioral predictors of success
 
-Three patterns correlate with higher resolve rates across agents and frameworks ([arXiv:2604.02547](https://arxiv.org/abs/2604.02547)):
+Three patterns correlate with higher resolve rates across agents and frameworks ([arXiv:2604.02547v1](https://arxiv.org/abs/2604.02547v1)):
 
 ### 1. Exploration before execution
 
-Agents that read related files, trace call chains, and inspect tests before touching the implementation succeed at higher rates. The pattern is `read → read → read → write`, not `read → write`. It comes down to decision ordering, not token count: an agent that understands the call graph before patching makes fewer localization failures.
+Agents that read related files, trace call chains, and inspect tests before touching the implementation succeed at higher rates. The pattern is `read → read → read → write`, not `read → write`. It comes down to decision ordering, not token count. Trajectory length itself is an ambiguous signal — its direction reverses depending on whether you control for agent identity or for task difficulty — while trajectory structure discriminates consistently ([arXiv:2604.02547v1](https://arxiv.org/abs/2604.02547v1)).
 
 ### 2. Post-patch verification loops
 
@@ -24495,14 +24575,16 @@ patch → test → diagnose failure → repatch → test → ...
 
 Frameworks that stop after the first patch prevent this pattern, whatever the model can do.
 
-### 3. Deep context loading
+### 3. No premature patching
 
-Agents that trace imports, read caller context, and inspect adjacent tests do better than agents that read only the file named in the issue. What helps is depth along the relevant call chains, not the volume of files explored.
+The opening strategy — read-first against patch-first — is visible within the first ten steps and correlates with the outcome across every agent in the study. All three dimensions are agent-determined and stable across task complexity: agents run a fixed strategy rather than adapting it to the task in front of them ([arXiv:2604.02547v1](https://arxiv.org/abs/2604.02547v1)).
+
+That stability is what makes the signal usable. A monitor that detects premature patching in the opening steps can flag a run as unlikely to succeed before most of its compute is spent.
 
 ```mermaid
 graph TD
     A[Issue description] --> B[Reproduce / write failing test]
-    B --> C[Localize: read call chain, not just target file]
+    B --> C[Read the call chain: find the layer, not just the file]
     C --> D[Patch]
     D --> E{Tests pass?}
     E -->|No| F[Diagnose failure]
@@ -24512,7 +24594,7 @@ graph TD
 
 ## Framework constrains model behavior
 
-The LLM is the primary driver of both outcome and behavior. Agents sharing an LLM agree on more tasks than agents sharing a framework, and the framework performance gap shrinks each LLM generation ([arXiv:2604.02547](https://arxiv.org/abs/2604.02547)).
+The LLM is the primary driver of both outcome and behavior. Agents sharing an LLM agree on more tasks than agents sharing a framework, and the framework performance gap shrinks each LLM generation ([arXiv:2604.02547v1](https://arxiv.org/abs/2604.02547v1)).
 
 The framework still sets hard limits: without a test-execution step, no model produces a verification loop. Framework prompts shape tactics, though the effect fades with stronger LLMs.
 
@@ -24524,11 +24606,11 @@ Ask these [harness-level](harness-engineering.md) audit questions, since they se
 
 ## Ensemble strategy for task heterogeneity
 
-Combining agents beats picking the best single agent when failure sets do not overlap. Two agents at 60% resolve each, failing on different tasks, cover much more of the task space under oracle selection ([arXiv:2604.02547](https://arxiv.org/abs/2604.02547)).
+Combining agents beats picking the best single agent when failure sets do not overlap. Task-level agreement across agents is low, and DEI reached 34.3% resolution by ensembling open-source agents that individually scored at most 27.3% ([Zhang et al., 2024, arXiv:2408.07060v1](https://arxiv.org/abs/2408.07060v1), as reported in [arXiv:2604.02547v1](https://arxiv.org/abs/2604.02547v1)).
 
 Practical approaches:
 - Majority vote: run three agents and take the most common patch
-- Confidence-weighted: route to a [specialized agent](specialized-agent-roles.md) by task characteristics (reproduction-heavy or localization-heavy)
+- Confidence-weighted: route to a [specialized agent](specialized-agent-roles.md) by task characteristics, such as test demand or how much the issue description specifies
 - Sequential fallback: if A fails its tests, route to B
 
 The gain rises with how much the failure sets diverge. Agents with different frameworks and exploration strategies diverge more than agents sharing a framework with different models.
@@ -24538,15 +24620,15 @@ The gain rises with how much the failure sets diverge. Agents with different fra
 Behavioral-pattern auditing and ensembling have diminishing returns in several conditions:
 
 - LLM gap dominates: when the model is weaker than alternatives, framework tweaks yield less than a model upgrade, so framework auditing is premature.
-- Benchmark divergence: the four clusters come from SWE-bench Verified, which skews toward well-specified single-file bugs. Production tasks (architecture changes, multi-repo work, ambiguous requirements) may have different dominant failure modes.
-- Benchmark integrity: OpenAI retired SWE-bench Verified after finding 59.4% of audited problems had flawed tests, and METR observed reward-hacking in 30%+ of frontier-model runs ([OpenAI, 2026](https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/); [Berkeley RDI, 2026](https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/)). Treat the trajectory-derived clusters as directional, not ground truth.
+- Benchmark divergence: the root-cause split comes from 12 never-solved tasks in SWE-bench Verified, which skews toward well-specified single-file bugs. Production tasks (architecture changes, multi-repo work, ambiguous requirements) may fail for different dominant reasons, and 12 tasks is a narrow base to generalize from.
+- Benchmark integrity: OpenAI retired SWE-bench Verified after finding 59.4% of audited problems had flawed tests, and METR observed reward-hacking in 30%+ of frontier-model runs ([OpenAI, 2026](https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/); [Berkeley RDI, 2026](https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/)). Treat the trajectory-derived findings as directional, not ground truth.
 - Low divergence: agents sharing an LLM with different prompts often have overlapping failure sets, so coverage gains are much smaller than the 60%-overlap example implies.
 
 ## Key Takeaways
 
 - Two agents with identical resolve rates can have non-overlapping failure sets — headline score is an insufficient comparison metric
-- Four failure clusters (reproduction, localization, patch generation, verification) require different responses; most framework failures concentrate at reproduction and verification
-- Three behavioral patterns predict success: exploration before execution, post-patch verification loops, deep context loading along call chains
+- On the 12 never-solved simple-patch tasks, the agent found the gold-patch file 12 times out of 12 and still failed every one: 10 failed on architectural judgment, patching the symptom rather than the root
+- Trajectory structure predicts success where trajectory length does not: gather context before editing, invest in validation, and do not patch early
 - LLM capability is the primary driver of outcome; framework design sets hard limits on which behavioral patterns are structurally possible (no model can produce a verification loop in a framework with no test-execution step) but matters less as LLMs improve
 - Ensembling agents with divergent failure profiles produces higher coverage than optimizing a single agent
 
@@ -36881,6 +36963,126 @@ The `create_deep_agent(model=...)` call site is unchanged. Switching `model="ope
 - [Managed vs Self-Hosted Harness](managed-vs-self-hosted-harness.md) — managed harnesses remove the surface this pattern operates on
 - [Natural Language Tool Selection (NLT)](natural-language-tool-selection.md) — a per-model delta in its own right: prose tool selection helps weak models and hurts structured-optimized ones
 - [Tools as Typed Code Stubs (Programmatic Tool Calling)](programmatic-tool-calling.md) — another per-model delta: whether a model emits valid multiline Python decides whether programmatic tool calling helps or costs 20-plus points
+
+---
+
+### Per-Run Budget Reservation for Coding Agent Model Calls
+Source: https://agentpatterns.ai/patterns/agent-design/per-run-budget-reservation/
+
+# Per-Run Budget Reservation for Coding Agent Model Calls
+
+> Reserve worst-case cost before each model call and refund the unused hold after; the run halts before a call it cannot afford.
+
+Per-run budget reservation is admission control for an agent's next model call: the controller prices each request's worst-case cost, holds that amount against a run-scoped budget, issues the call, and returns the unused portion once the actual cost is known. The check is prospective, so the run refuses a request whose worst case exceeds the remaining balance and the budget is never breached ([OpenAI Cookbook, 2026-08-17](https://developers.openai.com/cookbook/articles/per_run_spending_controller_responses_api)).
+
+## When this pattern applies
+
+Four conditions have to hold together; outside them the controller either misfires or gives false confidence.
+
+- The run has a per-ticket cost target that org- or project-level caps cannot express (support ticket at $0.02, per-user tier with a fixed unit price, per-record batch economics). Open-ended developer sessions do not qualify.
+- The traffic is synchronous, non-streaming, and on the default processing tier. The OpenAI reference explicitly excludes streaming, background (`queued`/`in_progress`) requests, and non-default tiers ([OpenAI Cookbook, 2026-08-17](https://developers.openai.com/cookbook/articles/per_run_spending_controller_responses_api)).
+- Costs are dominated by model tokens. Web search, code interpreter, storage, and regional or long-context surcharges sit outside the controller's ledger.
+- One process holds the run. The reference uses an in-process lock; multi-process or distributed workers need a shared reservation store the shipped pattern does not include.
+
+If any fails, reach for [Progressive Spend Threshold Alerting](progressive-spend-threshold-alerting.md) at the period scope or an [LLM Budget Gateway](../../observability/llm-gateway-per-dimension-budgets.md) at the fleet scope instead.
+
+## How it works
+
+Every request runs three phases against a `RunBudget` object tracking `spent`, `pending`, and `maximum` ([OpenAI Cookbook, 2026-08-17](https://developers.openai.com/cookbook/articles/per_run_spending_controller_responses_api)):
+
+1. Admission. Check that `maximum − spent − pending` covers the next request's worst case; raise `BudgetExceeded` and halt if not.
+2. Reservation. Hold the worst-case cost in `pending`, pricing every input token at the highest applicable rate (ordinary, cached, or cache-write) and every output token at its full rate.
+3. Settlement. Compute the actual charge from returned usage, move it from `pending` to `spent`, and release the difference back to the budget.
+
+The source's worked example reserves $0.0146 for a 1,200-input, 250-output call at the cache-write ceiling. Its sample table prices ordinary input at $4.00/M, cached input at $2.00/M, cache writes at $8.00/M and output at $20.00/M. The call then settles at $0.01 once the response reveals the real mix ([OpenAI Cookbook, 2026-08-17](https://developers.openai.com/cookbook/articles/per_run_spending_controller_responses_api)).
+
+```mermaid
+graph LR
+    A[Next call priced<br/>at worst-case rate] --> B{Reserve<br/>≤ remaining?}
+    B -->|No| C[Halt run<br/>BudgetExceeded]
+    B -->|Yes| D[Hold in pending]
+    D --> E[Issue request]
+    E --> F[Settle: actual → spent<br/>refund delta to budget]
+    F --> A
+```
+
+The controller fails closed in two more places. If actual cost exceeds the reservation, or returned token usage is malformed, the run raises `UncertainCharge` and is permanently blocked: an unverifiable settlement is treated as an overspend, not a soft warning. Sub-cent arithmetic runs on `Fraction`, not floats, because IEEE-754 rounding accumulates across hundreds of settlements at these magnitudes ([OpenAI Cookbook, 2026-08-17](https://developers.openai.com/cookbook/articles/per_run_spending_controller_responses_api)).
+
+## Why it works
+
+The reservation shifts spend control from retrospective observation to a decidable pre-condition. Because the worst-case cost is computed from a pricing table before the request is issued, the balance check answers a yes/no question (can the next request be paid in full at its worst case?) that a post-hoc metering loop cannot answer until after the money has already left. The invariant "cumulative spend ≤ budget" holds by construction of the admission test. Reserving externally against a pricing table also sidesteps the model's own cost blindness: the [BAGEN benchmark](https://arxiv.org/abs/2606.00198v1) trained agents to predict their remaining budget interval and measured coverage capping at 47% after SFT and RL, with correlation between task capability and budget awareness of only r=0.35, so a controller that trusts the model to estimate its own spend has no safety guarantee. The refund step preserves utilization: without it, worst-case reservations compound turn over turn and the effective budget collapses to `maximum / worst-case ratio` after a handful of calls.
+
+## When this backfires
+
+Each entry names a case where the "cannot exceed budget" property either does not hold or costs more than it saves.
+
+- Cache-heavy workloads over-reserve. On the sample rates above, a mix that is 60% cache reads costs $2.80/M input, while the reservation holds the $8.00/M cache-write ceiling — about 2.9x. The multiple tracks the spread between the cached and cache-write rates, so re-derive it from the table you price with. The run stops well before nominal exhaustion, a safety tax to name before shipping against a prompt-caching workload ([OpenAI Cookbook, 2026-08-17](https://developers.openai.com/cookbook/articles/per_run_spending_controller_responses_api)).
+- Streaming, background, and async requests fall outside the scope; their usage settles across events, so the reserve-then-settle contract cannot hold ([OpenAI Cookbook, 2026-08-17](https://developers.openai.com/cookbook/articles/per_run_spending_controller_responses_api)).
+- Hosted tool spend is invisible. Model-token reservation gives false confidence for a run whose money goes to web search, code interpreter, or storage; the controller reports headroom the invoice will not.
+- Open-ended sessions gain little. Without a per-ticket target, [OpenAI's org- and project-level hard spend limits](https://developers.openai.com/api/docs/changelog) (2026-07-22) return `429` at the monthly ceiling with no code in the agent.
+- Multi-process workers break the in-process lock. Two workers on one budget can each pass the admission check and overspend before either settles; a distributed reservation store is required and is not shipped.
+- Pricing tables drift. The reservation is only as correct as the constants; an unpropagated provider price change silently under-reserves and voids the guarantee. Treat pricing as a versioned dependency.
+- Permanent-block semantics can be surprising. After `UncertainCharge` the run is dead, not retryable — appropriate for a support ticket that must not double-bill, less so an interactive session where the operator would rather be asked.
+
+## Relation to adjacent patterns
+
+| Pattern | Scope | Enforcement point |
+|---------|-------|-------------------|
+| Per-run budget reservation (this page) | One agent run | Admission check per model call |
+| [Progressive Spend Threshold Alerting](progressive-spend-threshold-alerting.md) | Billing period | Alerts at percentage thresholds |
+| [Dual-Budget Control for Search Agents](dual-budget-control-search-agents.md) | Inside one run's tool-call and token caps | Per-action VOI scoring |
+| [Per-Call Budget Hints on Tool Invocations](per-call-budget-hints-tool-calls.md) | One tool call | Caller-side ceiling lift |
+| [LLM Budget Gateway](../../observability/llm-gateway-per-dimension-budgets.md) | Fleet across orgs, teams, users | Server-side 429 at chokepoint |
+
+These compose rather than compete. A fleet routes through a budget gateway, an individual run holds a per-run reservation, that run scores its next action with dual-budget VOI, and a specific tool call lifts its ceiling with a per-call hint; each control sits at a different scope.
+
+## Example
+
+The reference implementation walks through a support-ticket agent with a $0.02 per-run budget ([OpenAI Cookbook, 2026-08-17](https://developers.openai.com/cookbook/articles/per_run_spending_controller_responses_api)):
+
+**Before** — no per-run cap, org-level 429 is the only backstop:
+
+```python
+budget = 0.02  # informational only
+for turn in range(max_turns):
+    response = client.responses.create(model="gpt-5", input=messages)
+    total += price(response.usage)  # observed after the fact
+    if total > budget:
+        break  # already overspent by one turn
+```
+
+**After** — reservation before each call, settlement after:
+
+```python
+run_budget = RunBudget(maximum=Fraction("0.02"))
+for turn in range(max_turns):
+    worst_case = price_worst_case(input_tokens, max_output_tokens)
+    run_budget.reserve(worst_case)        # raises BudgetExceeded if unaffordable
+    try:
+        response = client.responses.create(model="gpt-5", input=messages)
+    finally:
+        actual = price_actual(response.usage)
+        run_budget.settle(reserved=worst_case, actual=actual)
+```
+
+On the first response — 1,200 input tokens split 300 ordinary / 400 cached / 500 cache-writes, plus 200 output — the actual settlement is $0.01, leaving $0.01 in the run. The controller then prices the next call's worst case at $0.0146, sees the remaining balance cannot cover it, raises `BudgetExceeded`, and the run halts before the request ([OpenAI Cookbook, 2026-08-17](https://developers.openai.com/cookbook/articles/per_run_spending_controller_responses_api)). The overspend that the "Before" loop absorbed after the fact never happens.
+
+## Key Takeaways
+
+- Per-run reservation is admission control at the per-call boundary: it answers a yes/no question about the next request before issuing it, so the budget is never breached.
+- Worst-case pricing (every input token at the highest applicable rate) is what makes the guarantee hold; the refund step keeps utilization from collapsing under compounded reservations.
+- Reserve externally from a pricing table, not from a model self-estimate. The [BAGEN benchmark](https://arxiv.org/abs/2606.00198v1) measured interval coverage capping at 47% for trained agents, with a capability-awareness correlation of only r=0.35.
+- Fail closed on `UncertainCharge` and use exact arithmetic (`Fraction`, not floats). An unverifiable settlement voids the guarantee.
+- Scope is narrow by construction: synchronous non-streaming Responses API, default tier, model-token costs, single process. Outside that scope, use period-scoped alerts or a fleet gateway.
+- Cache-heavy workloads pay a safety tax. On the source's sample rates a 60%-cached mix reserves about 2.9x its real cost. The multiple moves with the model's own cached-versus-cache-write spread, so derive it before shipping.
+
+## Related
+
+- [Progressive Spend Threshold Alerting for Agent Cost Governance](progressive-spend-threshold-alerting.md) — the period-scoped sibling; alerts inside a billing window versus admission inside one run
+- [Dual-Budget Control for Search Agents](dual-budget-control-search-agents.md) — allocation inside a run's tool-call and token caps; complementary to the per-call reservation
+- [Per-Call Budget Hints on Tool Invocations](per-call-budget-hints-tool-calls.md) — caller-side knob that raises the ceiling on one call; the reservation sees the raised ceiling as the worst case
+- [Centralized LLM Gateway for Per-Dimension Agent Budgets](../../observability/llm-gateway-per-dimension-budgets.md) — the fleet-scope enforcement point that per-run reservation complements at the run scope
+- [Tail Control for Agent Workflows](tail-control-for-agent-workflows.md) — engineering for worst-case behavior; the reservation is the cost-side analogue
 
 ---
 
@@ -55635,6 +55837,7 @@ How agents hand off work, share state, and refine each other's output without a 
 - [Agent Handoff Protocols: Passing Work Between Agents](agent-handoff-protocols.md) — Define explicit contracts between pipeline stages to prevent information loss at handoff points
 - [Lead-to-Teammate Plan-Approval Handshake](lead-teammate-plan-approval-handshake.md) — A teammate runs in read-only plan mode until the lead approves its plan, gating writes on peer review at the cheapest point in the cycle
 - [Forked vs Fresh Subagents: When to Inherit the Parent Conversation](forked-vs-fresh-subagents.md) — Fork when the parent's mental model is an asset the brief cannot reconstruct; start fresh when bias, trifecta exposure, or token budget make inherited context a liability
+- [Coordination Channel Policy for Multi-Agent Coding](coordination-channel-policy.md) — Task shape decides whether agents coordinate through a shared file or peer messages; the same mandate that cuts 42% of output tokens on specification work adds 10% on pipeline work
 - [File-Based Agent Coordination](file-based-agent-coordination.md) — Coordinate parallel agents using lightweight file locks in a shared repository; git merge mechanics enforce task exclusivity without a central orchestrator
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md) — CRDT-based shared state enables lock-free concurrent code generation with zero structural merge conflicts
 - [Pre-Write Change Intent Admission (Claim Plane)](pre-write-change-intent-admission.md) — Workers declare a versioned change intent before coding and a deterministic control plane admits, constrains, or refuses it — moving interference detection ahead of the write, at the cost of frequent serialization
@@ -56571,6 +56774,7 @@ For most practitioners, the takeaway is the intuition, not the algorithm: keep t
 - [Swarm Migration Pattern](swarm-migration-pattern.md)
 - [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](multi-agent-se-design-patterns.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
+- [Coordination Channel Policy for Multi-Agent Coding](coordination-channel-policy.md)
 
 ---
 
@@ -56795,6 +56999,75 @@ After 50 tasks, the long-horizon column for Agent A has updated to Beta(3, 18) �
 - [The Delegation Decision](../agent-design/delegation-decision.md) — whether to delegate at all before choosing where
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) — structural choices that constrain where routing applies
 - [LLM-as-Judge Evaluation](../../workflows/llm-as-judge-evaluation.md) — calibrating the judge that generates the binary success signal driving posterior updates
+
+---
+
+### Coordination Channel Policy for Multi-Agent Coding
+Source: https://agentpatterns.ai/patterns/multi-agent/coordination-channel-policy/
+
+# Coordination Channel Policy for Multi-Agent Coding
+
+> For teams of four or more coding agents, task shape decides the coordination channel: a shared file, or peer messages.
+
+Mandating a shared file for eight coding agents cuts output tokens by about 42% when the work is built around one specification, and raises them by about 10% when it is a pipeline ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)). Same rule, opposite sign. Classify the task before setting the policy.
+
+## When this decision applies
+
+Conditions matter more than the headline:
+
+- Four agents or more. At two agents the mean sustained degree is 0.90 on both task shapes, so there is no repeated messaging to collapse. Every measured effect appears at four and eight agents ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)).
+- Cost is the binding constraint. The file-policy experiment measures output tokens. It reports nothing about whether the team's code passed more tests.
+- Peer messaging already exists. Without it, files are the only channel and there is no policy to set.
+
+## The fan-out test
+
+Count the readers of each fact the team produces. Many consumers per fact means mandate the file; one consumer means leave the policy permissive.
+
+Specification-sharing work has high fan-out: every agent needs the same interface decisions. It builds a dense mesh: mean sustained degree of 5.47 against a possible 7 at eight agents, with a clustering coefficient of 0.81. Pipeline work stays sparse at 2.99 degree and 0.38 clustering ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)).
+
+## Why it works
+
+A message reaches one recipient. A file is written once and read by any number of agents, so the saving scales with how many agents need the same fact. On specification work, peer messaging repeats the spec once per pair, and the file collapses that repetition into a single write. On pipeline work each step's output already has exactly one consumer downstream, and the code file carrying it exists anyway, so a second written channel adds turns without removing repetition ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)). Anthropic reports the same causal story from production, describing persistent artifacts as a way to avoid "token overhead from copying large outputs through conversation history" ([Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system)).
+
+## The messaging curve is an introduction phase
+
+Direct messaging grows close to quadratically between two and eight agents; on the pipeline task the exponent is 1.92. Most of that is one round of introductions. On specification work, 90% of the distinct sender-to-recipient pairs a run will ever use appear within the first 20% of run time at every team size, in one of the two collection sessions. Sustained peer traffic barely grows after that. On the sixteen-step chain, mean messages per run are 21.4, 47.0 and 46.8 at four, eight and sixteen agents, and the slope between eight and sixteen is 0.00 (95% CI [−0.34, 0.34]). Teams change channel instead of talking more: across that step named-peer messages drop to 12.2 per run from 34.6, while broadcasts climb to 34.0 from 12.3 ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)).
+
+## Naming a coordinator buys nothing
+
+Filtering each run's message graph to the channels carrying a disproportionate share of traffic leaves 0 of 1,170 channels at eight agents on specification work, and 2 of 1,077 on pipeline work. In a sealed replication the flat and coordinator teams are level on success (p=0.75 under the mandatory file policy, p=0.53 under the permissive one) ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)). A role named in a prompt does not become a hub in the traffic. That is a claim about labels rather than orchestration: a lead agent holding dispatch control and synthesizing results is a different mechanism ([Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system)), covered in [Orchestrator-Worker](orchestrator-worker.md).
+
+## When this backfires
+
+- Correctness binds instead of cost. On a long-horizon planning task a shared notebook cut hallucinated-detail errors by 18%, and an orchestrator cut errors by up to a further 13.5% within focused sub-areas ([arXiv:2508.12981v1](https://arxiv.org/abs/2508.12981v1)). Where hallucinated detail fails your runs, mandate the artifact whatever the shape.
+- The job mixes shapes. Work with both a shared spec and a sequential handoff pays the pipeline penalty on one half while collecting the specification saving on the other. The two shapes were measured only in isolation.
+- Several agents write the same file. The mechanism assumes write-once-read-many, and concurrent writers turn the channel into a contention point. That is the problem [Worktree Isolation](../../workflows/worktree-isolation.md) and [File-Based Agent Coordination](file-based-agent-coordination.md) address.
+- Your stack differs. All 1,902 graded runs use Claude Code 2.1.x with the model pinned to `claude-sonnet-4-6`, on two synthetic Python tasks graded by fixed test suites ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)).
+- The team is small. Below four agents the effect was not measured, and the mechanism predicts no gain.
+
+## Example
+
+Two eight-agent teams, each writing one Python module.
+
+The first splits a single function's specification four ways: signature, validation, discount, sort order. Every agent needs the others' interface decisions, so fan-out is high. Mandating a shared file here cut output tokens by 36% to 49% across collection sessions ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)).
+
+The second runs a four-step pipeline: parse, validate, aggregate, format. Each step's output feeds exactly one downstream step, and the code file already carries it. The same mandate raised output tokens by about 10% ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)).
+
+## Key Takeaways
+
+- Classify work by fan-out before setting a channel policy. Many readers per fact favors a mandated shared file; one reader per fact does not.
+- The two outcomes are asymmetric: roughly 36% to 49% fewer output tokens when the call is right on specification work, against 10% to 17% more when it is wrong on pipeline work.
+- Treat the result as a cost lever only. Nothing in it says a shared file makes the team's code more correct.
+- Quadratic-looking message growth is a one-time introduction round, and total messaging plateaus by sixteen agents as teams switch to broadcast.
+- Calling one agent the coordinator in its prompt produces no traffic hub and no measured success gain. Give it dispatch control if you want it to lead.
+
+## Related
+
+- [Cohesion-Aware Task Partitioning for Multi-Agent Coding](cohesion-aware-task-partitioning.md) — the upstream decision about whether to fan out at all
+- [The Model Economics of Agent Swarms](model-economics-agent-swarms.md) — how swarm width is priced once decomposability clears
+- [File-Based Agent Coordination](file-based-agent-coordination.md) — files as an exclusivity mechanism rather than a communication channel
+- [Persistent Shared Search Sub-Agent for Output-Token Reuse](persistent-search-subagent.md) — the same write-once-read-many saving applied to repository lookups
+- [Multi-Agent Topology Taxonomy: Centralized, Decentralized, and Hybrid](multi-agent-topology-taxonomy.md) — the coarser topology choice this policy sits inside
 
 ---
 
@@ -57897,6 +58170,7 @@ When agent-03 attempts to push a lock for the same task, git rejects the push wi
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md)
 - [Oracle-Based Task Decomposition](oracle-task-decomposition.md)
 - [Multi-Agent Topology Taxonomy: Centralized, Decentralized, and Hybrid](multi-agent-topology-taxonomy.md)
+- [Coordination Channel Policy for Multi-Agent Coding](coordination-channel-policy.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)
 
 ---
@@ -81128,6 +81402,7 @@ Source: https://agentpatterns.ai/verification/
 - [Equivalence Testing for Agent Configuration Changes](equivalence-testing-agent-config-changes.md) — Bound how far a config change could have moved behavior against a margin fixed in advance; a zero-event run states an upper limit computed from n, never an absence
 - [Profile Your Agent Test Suite Against Measured Practice](agent-test-suite-profiling.md) — Label your agent tests by level, objective, data pattern, and assertion target, then compare the distribution against two published baselines showing effort concentrates on deterministic components
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — Report the spread of a result across seeds rather than the favorable run, and treat any accuracy cell pinned at a floor or ceiling as a design fault to fix before drawing a verdict
+- [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](multi-run-shuffled-order-evaluation.md) — Memory-based agents amplify run-to-run variance and inherit a hidden easy-to-hard curriculum from the benchmark's default order; repeat the suite and shuffle before believing a reported gain
 - [Specification-Path Testing: Same Contract, Different History](specification-path-testing.md) — Contract-equivalent requirement histories leave the pass rate flat while flipping which individual tasks succeed; report per-item conditional agreement rather than rate parity
 
 ## Behavioral Testing
@@ -84545,6 +84820,7 @@ The dominant misattribution is treating a batch-invariance drift as a temperatur
 - [Dominator-Graph Trajectory Invariants](dominator-graph-trajectory-invariants.md)
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md)
 - [Specification-Path Testing: Same Contract, Different History](specification-path-testing.md) — specification path as a further variability source, held constant in this taxonomy
+- [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](multi-run-shuffled-order-evaluation.md) — task order as an orchestration-state variable when the agent writes memory between tasks
 
 ---
 
@@ -89238,6 +89514,69 @@ Treat RAG as a style-grounding mechanism, not a correctness mechanism. A systema
 
 ---
 
+### Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents
+Source: https://agentpatterns.ai/verification/multi-run-shuffled-order-evaluation/
+
+# Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents
+
+> A self-improving agent's reported gain is only believable after several runs under shuffled task orders, with the spread reported next to the mean.
+
+## When this applies
+
+The protocol has purchase under one condition: the agent writes something back between tasks and reads it on later tasks. Textual memory banks, distilled workflow libraries, and any harness that appends to an instruction file mid-stream all qualify. A stateless agent that starts each task from a fixed prompt cannot be affected by task order, and the extra runs buy nothing there beyond the sampling spread that [seed-variance reporting](seed-variance-reporting.md) already covers.
+
+Two further conditions decide whether it is worth the budget: the effect under test is small enough that noise could explain it, and the suite is large enough for a spread to mean something. Ye et al. report that "when using GPT-5-mini as the backbone model, a single run over all 812 WebArena tasks costs around $25", an estimate they base on the no-memory baselines, with memory-based methods adding extra cost the authors expect to be minimal ([2026](https://arxiv.org/abs/2608.18066v1)). On that backbone and that baseline, three runs under each of three orders is near $225 of compute before any variants — a floor, not a budget.
+
+## The protocol
+
+1. Run the full suite at least three times under the default order and record each run separately. Ye et al. used three identical runs per configuration.
+2. Report the best-worst gap alongside the mean, for the baseline and the memory-equipped agent both. The comparison that matters is whether the loop widened the gap.
+3. Re-run the suite under at least one random shuffle of the task order, with the same number of repeats.
+4. Apply a significance test to the mean difference and publish the result even when it is unflattering. The headline gain in the re-evaluation was 1.5% over baseline at p=0.23 by unpaired t-test over three runs ([Ye et al., 2026](https://arxiv.org/abs/2608.18066v1)).
+5. Treat any sign change between the default and shuffled conditions as the finding, not as an outlier to be explained away.
+
+Step 5 is where the re-evaluation landed. That same 1.5% gain under WebArena's shipped order became a 4.5% degradation once the task order was randomized ([Ye et al., 2026](https://arxiv.org/abs/2608.18066v1)).
+
+## Why it works
+
+A memory bank turns an evaluation into a feedback loop rather than a set of independent trials. Each task's outcome is distilled into memory that conditions every later task, so an early deviation propagates into what the agent retrieves next instead of averaging out. Ye et al. observed the consequence directly: "In 17 of the 24 cases, we see an increase in variances", and "in 11 cases the relative increase exceeds 50%" ([Ye et al., 2026](https://arxiv.org/abs/2608.18066v1)). A mechanism that stabilized behavior would move that number the other way.
+
+Task order acts through the same channel in a different direction, because the order decides what enters memory first. The authors identify "environment and task underspecification during memory generation as potential drivers" of the variance, with memory entries recommending API calls that the browser environment cannot execute ([Ye et al., 2026](https://arxiv.org/abs/2608.18066v1)). Seeded with easy successes, memory accumulates executable patterns; seeded with hard failures, it accumulates plausible strategies that misdirect everything downstream.
+
+Benchmark task IDs are not neutral here. The default ordering "may be an artifact of the benchmark construction process, whereby annotators begin with simpler tasks and progressively introduce more challenging ones", and the moving-average pass curves for the no-memory baseline agent "begin with high pass rates (around 75%), which subsequently decline to below 40% once the task ID exceeds 150" ([Ye et al., 2026](https://arxiv.org/abs/2608.18066v1)).
+
+## When this backfires
+
+- The agent carries no state across tasks. Shuffling a stateless suite measures the same distribution twice at triple the cost. Reach for [pass@k and pass^k](pass-at-k-metrics.md) instead.
+- Production order is genuinely fixed and easy-to-hard. Onboarding streams and staged migrations really do escalate, and curriculum ordering is a documented lever in RL post-training rather than only a measurement artifact: an easy-to-hard curriculum "significantly improves the reasoning ability of small LLMs (1.5B to 3B), which otherwise struggle when trained with vanilla RL alone" ([Parashar et al., 2025](https://arxiv.org/abs/2506.06632v3)). Shuffling then reports a number for a stream you will never serve.
+- The suite is small and the budget is thin. Three runs across several orders on a 50-task suite widens the error bar without resolving anything. A reproducibility study of reasoning benchmarks finds that "Bootstrapping over 30 runs substantially stabilizes Pass@1 estimates and should be considered a minimal standard for reliable evaluation" ([Hochlehnert et al., 2025](https://arxiv.org/abs/2504.07086v2)), which also bounds what three runs establish in the re-evaluation itself.
+- The effect is already obvious. A change that moves success by 20 points needs no significance test; this protocol earns its cost in the one-to-three-point band where p=0.23 lives.
+
+Fixing the underlying fragility is harder than detecting it. Adding evaluation rubrics, environment feedback, and a prompt that discourages unsupported actions recovered part of the shuffled-order loss, "a 2.9% improvement over the original RBank method (49.8% → 52.7%)", still short of the 54.8% baseline ([Ye et al., 2026](https://arxiv.org/abs/2608.18066v1)).
+
+## Example
+
+WebArena's GitLab domain shows the reportable shape. Across three baseline runs the best and worst differed by 4.4%; with ReasoningBank attached the gap widened to 7.8% ([Ye et al., 2026](https://arxiv.org/abs/2608.18066v1)). A single-run report shows one number from inside that band and credits its position to the memory bank.
+
+Under the protocol the same comparison reads: baseline 54.8% mean over three WebArena runs; memory-equipped 1.5% higher at p=0.23; variance widened in 17 of 24 cases; 49.8% under one random shuffle ([Ye et al., 2026](https://arxiv.org/abs/2608.18066v1)). That supports a decision. The 1.5% headline does not.
+
+## Key Takeaways
+
+- Run at least three repeats and one shuffled task order before accepting that a memory-based agent improved.
+- Report the best-worst gap next to the mean; a self-improvement loop that widens the gap has bought instability along with any gain.
+- A sign change between the default and shuffled orders means the benchmark's ordering was doing the work.
+- Skip the protocol entirely when no state crosses task boundaries, and check the per-run cost before committing to a multi-order design.
+
+## Related
+
+- [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — the same discipline on the sampling axis, for results that do not accumulate state.
+- [Decomposing Agent Output Variability by Layer](sampling-state-agent-variability-layers.md) — where orchestration-state variance sits relative to token sampling.
+- [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — the metric pair for stateless suites.
+- [Weakest Consistent Learning: What Agent Loops Should Persist](../patterns/agent-design/weakest-consistent-learning.md) — what to write into memory once the loop is measurable.
+- [Agentic Flywheel: Self-Improving Agent Systems](../patterns/agent-design/agentic-flywheel.md) — the loop shape this protocol is meant to keep honest.
+
+---
+
 ### Multi-Turn Conversation Evaluation
 Source: https://agentpatterns.ai/verification/multi-turn-conversation-evaluation/
 
@@ -92144,7 +92483,7 @@ Both numbers came from one instrument, so the range is the result.
 
 Set the band before scoring and treat a cell outside it as a design fault. Braintrust required every accuracy cell between 10% and 90%. Two successive designs failed that rule: a pilot where the adapter scored 0 of 8 on both tasks, and a holdout where both conditions scored 5 of 5 on the treatment task. Each apparent effect came from saturation rather than the contrast ([Braintrust, 2026](https://www.braintrust.dev/blog/rlm-harness-negative-transfer)).
 
-The band belongs to your instrument and is not a constant. A permutation diagnostic for position bias is statistically detectable only inside a roughly 60% to 95% base-accuracy window, and outside it "absence of signal there should be read as not measurable, not unbiased" ([Tamba, arXiv:2607.20864v1](https://arxiv.org/abs/2607.20864v1)).
+The band belongs to your instrument and is not a constant. "Position bias turns out to be statistically detectable only within a roughly 60–95% base-accuracy Goldilocks zone", and above that band "the absence of bias signal in those cells should be read as 'not measurable on this instrument,' not 'model is unbiased'" ([Tamba, arXiv:2607.20864v1](https://arxiv.org/abs/2607.20864v1)).
 
 ## Score the mechanism, not only the outcome
 
@@ -92190,6 +92529,7 @@ Seed 1 alone reads as a confirmed effect. The pair of rows reads as an unstable 
 - [Equivalence Testing for Agent Configuration Changes](equivalence-testing-agent-config-changes.md) — how to get a usable bound from a zero-event arm
 - [Eval Blind Spots](eval-blind-spots.md) — structural gaps in what the harness can observe
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md) — aggregate metrics for run-to-run spread you cannot attribute
+- [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](multi-run-shuffled-order-evaluation.md) — the same reporting discipline when state accumulates across tasks and task order becomes a variable
 
 ---
 
@@ -108978,7 +109318,7 @@ Realized harm counts commands that pass the guard and then succeed in a Docker s
 ## When this backfires
 
 - Adversarial traffic with the judge enabled. The judge over-allows warn-band commands that paraphrase attacks close to its own training distribution, which is how a tier that halves false positives still lets more harm through ([Liu et al., 2026](https://arxiv.org/abs/2607.21642v2)).
-- Stereotyped destructive idioms rather than obfuscated ones. On CVE-derived snippets from Exploit-DB, plain regex beats the whole pipeline on F1 (81.52% against 67.98%), so the AST and rule bank are cost without benefit for that distribution ([Liu et al., 2026](https://arxiv.org/abs/2607.21642v2)).
+- Stereotyped destructive idioms rather than obfuscated ones. On CVE-derived snippets from Exploit-DB, plain regex beats the whole pipeline on F1 (81.52% against 66.33%), so the AST and rule bank are cost without benefit for that distribution ([Liu et al., 2026](https://arxiv.org/abs/2607.21642v2)).
 - Staged multi-command chains. Scoring each command in isolation passes a sequence that is individually benign and collectively an exfiltration, and the paper scopes itself out of session-level hazards.
 - Encoding- and escape-heavy obfuscation. Bounded decoding is the canonicalizer's weakest axis by its own ablation, and vendors report the same limit from the other side: VS Code documents that terminal auto-approvals "use best-effort command parsing and have known limitations with shell aliases, quote concatenation, and complex shell syntax" ([VS Code security](https://code.visualstudio.com/docs/copilot/security)).
 - A tighter false-positive budget than 0.91%. A four-layer static baseline in the same evaluation reaches 0.30% FPR at 0.02 ms for about 13 fewer F1 points ([Liu et al., 2026](https://arxiv.org/abs/2607.21642v2)).

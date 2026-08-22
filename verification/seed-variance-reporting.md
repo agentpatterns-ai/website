@@ -38,7 +38,7 @@ Both numbers came from one instrument, so the range is the result.
 
 Set the band before scoring and treat a cell outside it as a design fault. Braintrust required every accuracy cell between 10% and 90%. Two successive designs failed that rule: a pilot where the adapter scored 0 of 8 on both tasks, and a holdout where both conditions scored 5 of 5 on the treatment task. Each apparent effect came from saturation rather than the contrast ([Braintrust, 2026](https://www.braintrust.dev/blog/rlm-harness-negative-transfer)).
 
-The band belongs to your instrument and is not a constant. A permutation diagnostic for position bias is statistically detectable only inside a roughly 60% to 95% base-accuracy window, and outside it "absence of signal there should be read as not measurable, not unbiased" ([Tamba, arXiv:2607.20864v1](https://arxiv.org/abs/2607.20864v1)).
+The band belongs to your instrument and is not a constant. "Position bias turns out to be statistically detectable only within a roughly 60–95% base-accuracy Goldilocks zone", and above that band "the absence of bias signal in those cells should be read as 'not measurable on this instrument,' not 'model is unbiased'" ([Tamba, arXiv:2607.20864v1](https://arxiv.org/abs/2607.20864v1)).
 
 ## Score the mechanism, not only the outcome
 
@@ -84,3 +84,4 @@ Seed 1 alone reads as a confirmed effect. The pair of rows reads as an unstable 
 - [Equivalence Testing for Agent Configuration Changes](equivalence-testing-agent-config-changes.md) — how to get a usable bound from a zero-event arm
 - [Eval Blind Spots](eval-blind-spots.md) — structural gaps in what the harness can observe
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md) — aggregate metrics for run-to-run spread you cannot attribute
+- [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](multi-run-shuffled-order-evaluation.md) — the same reporting discipline when state accumulates across tasks and task order becomes a variable
