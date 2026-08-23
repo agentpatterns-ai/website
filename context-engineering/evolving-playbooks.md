@@ -87,7 +87,7 @@ On agent benchmarks, evolving playbooks outperform both static prompts and monol
 - Finance: +8.6% average accuracy across financial NER and formula tasks ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618))
 - Adaptation latency: 82.3% reduction versus GEPA, because delta merges are cheaper than full regenerations ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618))
 
-The predecessor framework, Dynamic Cheatsheet, showed the core mechanism: GPT-4o went from 10% to 99% on Game of 24 by reusing discovered solution strategies ([Suzgun et al., 2025](https://arxiv.org/abs/2504.07952)).
+The predecessor framework, Dynamic Cheatsheet, showed the core mechanism: GPT-4o went from 10% to 99% on Game of 24 by reusing discovered solution strategies ([Suzgun et al., 2025](https://arxiv.org/abs/2504.07952v1)).
 
 ## When this backfires
 

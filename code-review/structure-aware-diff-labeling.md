@@ -44,17 +44,17 @@ Decomposing classification into per-hunk labeling plus a whole-patch refinement 
 ## When this backfires
 
 - Mature single-language tooling exists. RefactoringMiner-class static analyzers produce deterministic, reproducible labels for Java refactors at near-zero marginal cost. Trading that for non-deterministic LLM output is a net loss when language coverage is not a requirement.
-- Cost-sensitive PR-level CI. The paper's best-performing model (Gemini-3-Pro-Preview) consumed up to 7.5× more output tokens than the second-best model (Claude Sonnet 4.5) ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). Running this on every PR at scale is expensive, and cheaper models lose meaningful accuracy.
+- Cost-sensitive PR-level CI. The paper's best-performing model (Gemini-3-Pro-Preview) consumed up to 7.5× more output tokens than the second-best model (Claude Sonnet 4.5) ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100v1)). Running this on every PR at scale is expensive, and cheaper models lose meaningful accuracy.
 - Under-represented label types matter most. Performance varies substantially across label types in the paper's evaluation, with external interface, error handling, and log labels suffering more than rename or logic-change labels ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)). A workflow that prioritizes one of those categories is precisely the case where a hybrid with static analysis is required.
 - Deterministic audit trails. Compliance contexts that require reproducible classification cannot tolerate LLM non-determinism. Static analysis — a `RefactoringMiner`-class tool — stays the only viable option.
 - Very large patches. The Refiner runs whole-patch inference, so long diffs blow out the context window and force chunking, which breaks the cross-hunk structural relationship signal the Refiner exists to capture.
-- Headline metrics hide category-level failures. LLM-as-classifier prompts optimized for catching true positives misclassify more false positives, and chain-of-thought reasoning amplifies misjudgement on certain inputs ([arxiv:2601.18844](https://arxiv.org/abs/2601.18844), [arxiv:2508.12358](https://arxiv.org/abs/2508.12358)). The 84/81 paper result is one calibration point, not a Pareto frontier.
+- Headline metrics hide category-level failures. LLM-as-classifier prompts optimized for catching true positives misclassify more false positives, and chain-of-thought reasoning amplifies misjudgement on certain inputs ([arxiv:2601.18844](https://arxiv.org/abs/2601.18844v1), [arxiv:2508.12358](https://arxiv.org/abs/2508.12358v1)). The 84/81 paper result is one calibration point, not a Pareto frontier.
 
-The paper's own recommendation: "a hybrid strategy can be adopted — using LLM-based labeling for most types while relying on static analysis for a small set of critical label types" ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
+The paper's own recommendation: "a hybrid strategy can be adopted — using LLM-based labeling for most types while relying on static analysis for a small set of critical label types" ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100v1)).
 
 ## Example
 
-The paper's benchmark uses patches drawn from SWE-bench Multilingual and SWE-PolyBench supplemented with fabricated patches for label-type coverage. It totals 95 hunks across 13 PRs, mostly Java with Python included to show language-agnostic behavior ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
+The paper's benchmark uses patches drawn from SWE-bench Multilingual and SWE-PolyBench supplemented with fabricated patches for label-type coverage. It totals 95 hunks across 13 PRs, mostly Java with Python included to show language-agnostic behavior ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100v1)).
 
 A representative pipeline shape, per the paper:
 
@@ -71,7 +71,7 @@ Patch (Java + Python files, 12 hunks)
      hunk[3]: Logic Change
 ```
 
-Best result on this benchmark: 84% recall, 81% precision with Gemini-3-Pro-Preview. Relative model rankings shift by label type, so the headline number is not the only signal to plan against ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100)).
+Best result on this benchmark: 84% recall, 81% precision with Gemini-3-Pro-Preview. Relative model rankings shift by label type, so the headline number is not the only signal to plan against ([arxiv:2605.26100](https://arxiv.org/abs/2605.26100v1)).
 
 ## Key Takeaways
 

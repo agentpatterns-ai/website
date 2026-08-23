@@ -46,7 +46,7 @@ Source attribution is "an independent axis for factuality verification" ([arxiv:
 | Unsupported claim | Fails | Fabricated content with no source backing |
 | Cross-source conflation | Passes | Real content; cited the wrong source |
 
-A `serverName`-style allowlist of sources buys nothing here. The source IDs in the trace are correct; the mapping from claim to source is wrong. Other work corroborates this. Across 14 LLMs, inline citations from deep-research agents fail link-accessibility, topical-relevance, and factual-accuracy checks at high rates ([Onweller et al., 2026 — arxiv:2605.06635](https://arxiv.org/abs/2605.06635)), and citation accuracy in popular generative search engines sits near 74% ([VeriCite, arxiv:2510.11394](https://arxiv.org/abs/2510.11394)).
+A `serverName`-style allowlist of sources buys nothing here. The source IDs in the trace are correct; the mapping from claim to source is wrong. Other work corroborates this. Across 14 LLMs, inline citations from deep-research agents fail link-accessibility, topical-relevance, and factual-accuracy checks at high rates ([Onweller et al., 2026 — arxiv:2605.06635](https://arxiv.org/abs/2605.06635v1)), and citation accuracy in popular generative search engines sits near 74% ([VeriCite, arxiv:2510.11394](https://arxiv.org/abs/2510.11394v1)).
 
 ## Why source-aware verification works
 

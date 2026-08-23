@@ -22,7 +22,7 @@ maturity: emerging
 
 Most agent memory systems retrieve only from the task domain where the memories were created. Yet coding tasks across domains share procedural meta-knowledge — iterative workflows, defensive validation, environment navigation — even when they share no algorithms.
 
-Memory Transfer Learning (MTL) pools memories from heterogeneous sources and retrieves regardless of current domain ([Kim et al., 2026](https://arxiv.org/abs/2604.14004)). Across six benchmarks — competitive programming, repository engineering, CLI tasks, scientific replication, ML research — the cross-domain pool lifted average Pass@3 by 3.7% ([Kim et al., 2026, Table 1](https://arxiv.org/abs/2604.14004)).
+Memory Transfer Learning (MTL) pools memories from heterogeneous sources and retrieves regardless of current domain ([Kim et al., 2026](https://arxiv.org/abs/2604.14004v1)). Across six benchmarks — competitive programming, repository engineering, CLI tasks, scientific replication, ML research — the cross-domain pool lifted average Pass@3 by 3.7% ([Kim et al., 2026, Table 1](https://arxiv.org/abs/2604.14004v1)).
 
 ## Abstraction level controls transferability
 
@@ -35,11 +35,11 @@ Four representations span a concrete-to-abstract spectrum ([Kim et al., 2026, §
 | Summary | LLM-generated task summaries | +2.3% | Low |
 | Insight | Title + description + generalizable principle | +3.7% | Lowest — domain-invariant by construction |
 
-Embedding analysis confirms the mechanism: trajectory embeddings cluster tightly by source benchmark, while insight embeddings intermingle — domain-agnostic by construction ([Kim et al., 2026, Figures 4-5](https://arxiv.org/abs/2604.14004)). Within the insight format, task-agnostic insights beat task-specific ones by 1.1% ([Kim et al., 2026, Table 4](https://arxiv.org/abs/2604.14004)).
+Embedding analysis confirms the mechanism: trajectory embeddings cluster tightly by source benchmark, while insight embeddings intermingle — domain-agnostic by construction ([Kim et al., 2026, Figures 4-5](https://arxiv.org/abs/2604.14004v1)). Within the insight format, task-agnostic insights beat task-specific ones by 1.1% ([Kim et al., 2026, Table 4](https://arxiv.org/abs/2604.14004v1)).
 
 ## What actually transfers: meta-knowledge, not code
 
-In cases where zero-shot failed but MTL succeeded, 94.5% of gains came from procedural meta-knowledge, not algorithmic strategy ([Kim et al., 2026, Figure 3](https://arxiv.org/abs/2604.14004)):
+In cases where zero-shot failed but MTL succeeded, 94.5% of gains came from procedural meta-knowledge, not algorithmic strategy ([Kim et al., 2026, Figure 3](https://arxiv.org/abs/2604.14004v1)):
 
 | Category | Share | Example |
 |----------|------|---------|
@@ -51,7 +51,7 @@ In cases where zero-shot failed but MTL succeeded, 94.5% of gains came from proc
 | Other procedural | ~8% | Interaction protocols, input validation, formatting |
 | Algorithmic strategy | ~5.5% | Formulas, data structures, direct programming knowledge |
 
-What transfers is how to work, not what to build. A competitive-programming memory — "create a self-contained test before submitting" — helped solve an unrelated Django ORM bug by transferring methodology, not Python ([Kim et al., 2026, Table 3](https://arxiv.org/abs/2604.14004)).
+What transfers is how to work, not what to build. A competitive-programming memory — "create a self-contained test before submitting" — helped solve an unrelated Django ORM bug by transferring methodology, not Python ([Kim et al., 2026, Table 3](https://arxiv.org/abs/2604.14004v1)).
 
 ## Negative transfer
 
@@ -67,11 +67,11 @@ Misapplied best-practice transfer warps a sound pattern into the wrong setting. 
 
 Performance rises with pool size and source-domain diversity ([Kim et al., 2026, Figure 6](https://arxiv.org/abs/2604.14004)).
 
-Memories transfer across models. Those from GPT-5-mini, DeepSeek V3.2, and Qwen3-Coder transfer to one another. Self-generated memories win by only 0.5 to 1.5% ([Kim et al., 2026, Table 6](https://arxiv.org/abs/2604.14004)).
+Memories transfer across models. Those from GPT-5-mini, DeepSeek V3.2, and Qwen3-Coder transfer to one another. Self-generated memories win by only 0.5 to 1.5% ([Kim et al., 2026, Table 6](https://arxiv.org/abs/2604.14004v1)).
 
 Simple embedding retrieval (text-embedding-3-small, top-3) beat both LLM reranking and adaptive rewriting ([Kim et al., 2026, Table 7](https://arxiv.org/abs/2604.14004)).
 
-MTL used 431 memories — 13x fewer than [AgentKB's](https://arxiv.org/abs/2507.06229) 5,899 — while beating both AgentKB and [ReasoningBank](https://arxiv.org/abs/2509.25140) ([Kim et al., 2026, Table 2](https://arxiv.org/abs/2604.14004)).
+MTL used 431 memories — 13x fewer than [AgentKB's](https://arxiv.org/abs/2507.06229) 5,899 — while beating both AgentKB and [ReasoningBank](https://arxiv.org/abs/2509.25140) ([Kim et al., 2026, Table 2](https://arxiv.org/abs/2604.14004v1)).
 
 ## When this pattern applies
 

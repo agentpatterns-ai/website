@@ -37,7 +37,7 @@ If any precondition is missing, the relevant vector collapses to known single-tu
 
 A payload split into fragments delivered across sequential turns. No single message is harmful in isolation; the harmful state composes in agent memory, plan, or accumulated tool outputs. Per-prompt classifiers evaluate one message's visible features and miss the joint sequence ([Ma et al., 2026](https://arxiv.org/abs/2605.22321); [Lan et al., 2026](https://arxiv.org/abs/2602.13379)).
 
-[MOSAIC-Bench](compositional-vulnerability-induction.md) is the canonical instance: three innocuous engineering tickets compose a known-exploitable vulnerability at 53–86% ASR across nine production coding agents versus 0–20.4% for direct single-prompt requests ([Steinberg and Gal, 2026](https://arxiv.org/abs/2605.03952)). [AgentLAB](https://arxiv.org/abs/2602.16901) catalogs five long-horizon attack types across 28 environments and 644 cases. [AgentSentry](https://arxiv.org/abs/2602.22724) models the same threat as a "temporal causal takeover".
+[MOSAIC-Bench](compositional-vulnerability-induction.md) is the canonical instance: three innocuous engineering tickets compose a known-exploitable vulnerability at 53–86% ASR across nine production coding agents versus 0–20.4% for direct single-prompt requests ([Steinberg and Gal, 2026](https://arxiv.org/abs/2605.03952v1)). [AgentLAB](https://arxiv.org/abs/2602.16901v1) catalogs five long-horizon attack types across 28 environments and 644 cases. [AgentSentry](https://arxiv.org/abs/2602.22724v1) models the same threat as a "temporal causal takeover".
 
 ### Spatial evasion
 
@@ -70,7 +70,7 @@ The vectors compose. A single payload can be fragmented temporally (split across
 
 | Vector | Existing pages | Existing defenses on this site |
 |--------|----------------|-------------------------------|
-| Temporal | [Compositional Vulnerability Induction](compositional-vulnerability-induction.md), [Behavioral Firewall](behavioral-firewall-tool-call-trajectories.md), [Cognitive Poisoning](cognitive-poisoning-tool-feedback.md) | pDFA enforcement reaches 0% ASR on multi-step in structured workflows ([Dang, 2026](https://arxiv.org/abs/2604.26274)); adversarial-pentester reviewer reframing closes most of the staged-ticket gap |
+| Temporal | [Compositional Vulnerability Induction](compositional-vulnerability-induction.md), [Behavioral Firewall](behavioral-firewall-tool-call-trajectories.md), [Cognitive Poisoning](cognitive-poisoning-tool-feedback.md) | pDFA enforcement reaches 0% ASR on multi-step in structured workflows ([Dang, 2026](https://arxiv.org/abs/2604.26274v1)); adversarial-pentester reviewer reframing closes most of the staged-ticket gap |
 | Spatial | [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md), [Indirect Injection Discovery](indirect-injection-discovery.md), [Trojan Hippo](trojan-hippo-memory-attack.md) | Schema-level tool exclusion, isolated fetch context, parsing-stage sanitization |
 | Semantic | [Goal Reframing](goal-reframing-exploitation-trigger.md), [History Anchor Consistency Injection](history-anchor-consistency-injection.md), [Clarification Mode Injection Amplification](clarification-mode-injection-amplification.md) | Plan-then-execute commit; CaMeL control/data flow separation; provenance-aware auditing |
 
@@ -78,7 +78,7 @@ The taxonomy is orthogonal to the [four-layer defender taxonomy](four-layer-agen
 
 ## Why it works
 
-Multi-vector evasion succeeds because per-prompt classifiers score each message's visible features in isolation, not the joint policy implied by the message sequence, the artifact's parsing path, or the latent goal ([Ma et al., 2026 §1](https://arxiv.org/abs/2605.22321); [Steinberg and Gal, 2026](https://arxiv.org/abs/2605.03952)). Each fragment passes the gate; the harmful state composes across surfaces the gate cannot see. The flat attention surface offers no architectural signal distinguishing benign context from concealed instruction ([Greshake et al., 2023](https://arxiv.org/abs/2302.12173)). The 28.3%→52.6% rise is the empirical signal that single-turn screening leaves a structural hole, not a tuning gap.
+Multi-vector evasion succeeds because per-prompt classifiers score each message's visible features in isolation, not the joint policy implied by the message sequence, the artifact's parsing path, or the latent goal ([Ma et al., 2026 §1](https://arxiv.org/abs/2605.22321); [Steinberg and Gal, 2026](https://arxiv.org/abs/2605.03952v1)). Each fragment passes the gate; the harmful state composes across surfaces the gate cannot see. The flat attention surface offers no architectural signal distinguishing benign context from concealed instruction ([Greshake et al., 2023](https://arxiv.org/abs/2302.12173)). The 28.3%→52.6% rise is the empirical signal that single-turn screening leaves a structural hole, not a tuning gap.
 
 ## When this backfires
 
@@ -86,7 +86,7 @@ The three-vector framing is not always the right diagnostic. Four conditions whe
 
 1. One-shot stateless agents. A formatter or extractor with no inter-turn memory has no temporal axis to fragment along. The three-vector grid produces empty cells without insight; standard [single-turn injection analysis](prompt-injection-threat-model.md) is the right primary check.
 2. Closed data pipelines with no external ingestion. Agents that consume only internal, access-controlled sources have no spatial axis surface. Spending reviewer cycles on spatial-evasion benchmarks before the closed boundary is breached inverts the risk priority.
-3. Structured workflows protected by a behavioral firewall. Stable tool catalogs with pDFA enforcement report 0% ASR on multi-step attacks ([Dang, 2026](https://arxiv.org/abs/2604.26274)) — the architecture already forecloses the temporal axis, so three-vector benchmarking measures a closed surface.
+3. Structured workflows protected by a behavioral firewall. Stable tool catalogs with pDFA enforcement report 0% ASR on multi-step attacks ([Dang, 2026](https://arxiv.org/abs/2604.26274v1)) — the architecture already forecloses the temporal axis, so three-vector benchmarking measures a closed surface.
 4. Premature optimization against tail threats. Teams that have not closed plain rule-file injection, credential exposure, or basic indirect injection should fix those first; the marginal-risk reduction from multi-vector benchmarking is lower than the unaddressed single-turn surface ([Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)).
 
 ## Using the taxonomy in an audit

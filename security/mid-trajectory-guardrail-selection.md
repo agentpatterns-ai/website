@@ -22,7 +22,7 @@ maturity: emerging
 
 Most safety benchmarks evaluate guardrails on single-turn outputs. Agentic systems expose a different surface: a sequence of tool calls. Harmful intent can spread across steps, each one benign on its own.
 
-TraceSafe-Bench evaluated 13 LLM-as-a-guard models and 7 specialized guardrails across 1,000+ multi-step trajectories and 12 risk categories — security threats (prompt injection, privacy leaks, parameter manipulation) and operational failures (hallucinations, interface inconsistencies) ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)). Pre-execution guardrail work confirms that trajectory-level detection differs from output filtering ([Pre-Exec Bench, 2025](https://arxiv.org/abs/2510.09781)).
+TraceSafe-Bench evaluated 13 LLM-as-a-guard models and 7 specialized guardrails across 1,000+ multi-step trajectories and 12 risk categories — security threats (prompt injection, privacy leaks, parameter manipulation) and operational failures (hallucinations, interface inconsistencies) ([TraceSafe, 2026](https://arxiv.org/abs/2604.07223)). Pre-execution guardrail work confirms that trajectory-level detection differs from output filtering ([Pre-Exec Bench, 2025](https://arxiv.org/abs/2510.09781v1)).
 
 Single-turn safety benchmarks do not predict guardrail performance here.
 

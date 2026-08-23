@@ -20,7 +20,7 @@ maturity: emerging
 
 > SPOQ composes wave-based dispatch, dual validation gates, a tiered model roster, and Human-as-an-Agent — gains hold only when four conditions are met.
 
-SPOQ ([Carbowitz & Kumar, 2026](https://arxiv.org/abs/2606.03115)) is a full multi-agent pipeline, not a single primitive — it composes four mechanisms (wave-based DAG dispatch, planning + code validation gates, a three-tier Opus/Sonnet/Haiku roster, and a human specialist at decomposition and validation) into one orchestration loop. Reported gains (defects 0.34 → 0.20 automated, 0.47 → 0.03 with HaaA; test pass 91.25% → 99.75%; speedups up to 14.3× in cloud) are real but conditional.
+SPOQ ([Carbowitz & Kumar, 2026](https://arxiv.org/abs/2606.03115v1)) is a full multi-agent pipeline, not a single primitive — it composes four mechanisms (wave-based DAG dispatch, planning + code validation gates, a three-tier Opus/Sonnet/Haiku roster, and a human specialist at decomposition and validation) into one orchestration loop. Reported gains (defects 0.34 → 0.20 automated, 0.47 → 0.03 with HaaA; test pass 91.25% → 99.75%; speedups up to 14.3× in cloud) are real but conditional.
 
 ## When the composition pays
 
@@ -35,13 +35,13 @@ If any condition fails, prefer a strong single-agent loop with deterministic ver
 
 ## The four mechanisms
 
-Wave-based dispatch. A wave assignment `W` maps each task in the DAG to a non-negative integer such that for every dependency `(t_i, t_j)`, `W(t_i) < W(t_j)` ([Definition 3.3, arXiv:2606.03115](https://arxiv.org/abs/2606.03115)). Algorithm 1 iterates zero-in-degree selection. Theorem 3.1 bounds wall-clock by `Σ max_duration(wave_w)`. Critical-path ratios fall in 1.03–1.11 on synthetic DAGs; speedups range 3.25×–14.31× in cloud and stabilize at ~1.4× on a 2-slot hardware-constrained backend. SPOQ assumes the DAG is given — partitioning quality is a precondition.
+Wave-based dispatch. A wave assignment `W` maps each task in the DAG to a non-negative integer such that for every dependency `(t_i, t_j)`, `W(t_i) < W(t_j)` ([Definition 3.3, arXiv:2606.03115](https://arxiv.org/abs/2606.03115v1)). Algorithm 1 iterates zero-in-degree selection. Theorem 3.1 bounds wall-clock by `Σ max_duration(wave_w)`. Critical-path ratios fall in 1.03–1.11 on synthetic DAGs; speedups range 3.25×–14.31× in cloud and stabilize at ~1.4× on a 2-slot hardware-constrained backend. SPOQ assumes the DAG is given — partitioning quality is a precondition.
 
 Dual validation gates. The planning gate runs ten metrics (vision, architecture, decomposition, DAG acyclicity, coverage, phase ordering, scope, success-criteria SMART-ness, risks, integration) at ≥95% aggregate / ≥90% per-metric. The code gate runs ten (syntactic, tests-exist, tests-pass, requirements, SOLID, security, error-handling, scalability, clarity, completeness) at ≥95% / ≥80%. The architecture is a specific instance of [Verify-Gated Completion as Admission Control](verify-gated-completion-admission-control.md) — the same independence and precision requirements apply.
 
 Tiered roster. Three tiers (Table 1): Opus workers execute tasks, Sonnet reviewers run the gates, Haiku investigators triage build failures. Cross-provider mapping in Table 2. The split is cost-asymmetric routing — reasoning-class compute spent where it earns its rate, cheap models on scoring and triage. [Anthropic's research-system data](https://www.anthropic.com/engineering/multi-agent-research-system) reports Opus-orchestrating-Sonnet outperformed single-agent Opus by 90.2% on complex research; tier separation does much of the work.
 
-Human-as-an-Agent. HaaA enters at three points ([Definition 3.4, arXiv:2606.03115](https://arxiv.org/abs/2606.03115)): humans draft epics with ~1–4 hour task scope, participate in the planning gate with override authority, and respond to in-execution consultation requests on ambiguous requirements. This is the largest single lever in the paper: residual defects fall 0.47 → 0.03 and the pass rate rises 96.5% → 99.75%.
+Human-as-an-Agent. HaaA enters at three points ([Definition 3.4, arXiv:2606.03115](https://arxiv.org/abs/2606.03115v1)): humans draft epics with ~1–4 hour task scope, participate in the planning gate with override authority, and respond to in-execution consultation requests on ambiguous requirements. This is the largest single lever in the paper: residual defects fall 0.47 → 0.03 and the pass rate rises 96.5% → 99.75%.
 
 ```mermaid
 graph TD
@@ -63,14 +63,14 @@ Separating producer from validator removes self-judgment bias: LLMs prefer their
 ## When this backfires
 
 - Dense dependency graphs. Wave dispatch returns one wave per task; orchestration cost remains, parallelism gain vanishes ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953)).
-- Coordination overhead exceeds parallelism dividend. [Cemri et al.](https://arxiv.org/abs/2503.13657) measured parallel coordination at up to 21.1% speedup on some tasks and up to 39.4% slowdown on others. Multi-agent communication structures inflate token cost 2×–11.8× over single-chain baselines ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506)). Towards Data Science reports a production post-mortem where migrating to a supervisor-node multi-agent architecture roughly tripled token spend at flat traffic ([The 3x Token Bill We Didn't See Coming](https://towardsdatascience.com/the-3x-token-bill-we-didnt-see-coming/)). It diagnoses supervisor decision tokens plus system prompts, tool schemas, and context duplicated across each sub-agent.
+- Coordination overhead exceeds parallelism dividend. [Cemri et al.](https://arxiv.org/abs/2503.13657) measured parallel coordination at up to 21.1% speedup on some tasks and up to 39.4% slowdown on others. Multi-agent communication structures inflate token cost 2×–11.8× over single-chain baselines ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506v1)). Towards Data Science reports a production post-mortem where migrating to a supervisor-node multi-agent architecture roughly tripled token spend at flat traffic ([The 3x Token Bill We Didn't See Coming](https://towardsdatascience.com/the-3x-token-bill-we-didnt-see-coming/)). It diagnoses supervisor decision tokens plus system prompts, tool schemas, and context duplicated across each sub-agent.
 - Dual gate enforced without precision evidence. A gate at 0.39% blocked precision blocks more valid work than invalid ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)).
 - No human available for HaaA. Without a specialist, teams drop to the automated-only envelope (0.34 → 0.20) and pay the orchestration cost regardless.
 - Single-tier provider access. The tiered roster assumes three model tiers; teams capped to one capability tier lose the cost-asymmetric routing.
 - Small task surface (≤5 files). Up-front graph construction, wave assignment, three-tier scheduling, and dual gates exceed the parallelism gain.
 - Strong single-agent baseline closes the gap. Frontier single-agent systems match multi-agent orchestration on many SE tasks while avoiding the 36.9% inter-agent misalignment failure class ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475); [arXiv:2503.13657](https://arxiv.org/abs/2503.13657)).
 
-The paper's own §7.2 lists 17-repository sample size, Anthropic-only reference implementation, and unquantified human effort as known limitations ([arXiv:2606.03115](https://arxiv.org/abs/2606.03115)).
+The paper's own §7.2 lists 17-repository sample size, Anthropic-only reference implementation, and unquantified human effort as known limitations ([arXiv:2606.03115](https://arxiv.org/abs/2606.03115v1)).
 
 ## Example
 

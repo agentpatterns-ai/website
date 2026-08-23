@@ -60,7 +60,7 @@ A harness can win on either metric alone. The interesting result is parity on ta
 
 Pinning the model fixes its capability; pinning the task fixes the difficulty; the swap leaves the harness as the only varying factor. Variance in pass rate or token consumption then traces to harness orchestration — system prompt, tool set, retry logic, context management. Repeating the measurement across a model fleet does two distinct things. It averages out one model's idiosyncratic interaction with the harness, producing a fleet-mean estimate. And it exposes interaction terms — when per-model deltas disagree in sign or magnitude, the harness contribution is partly an interaction the experiment cannot decompose without a factorial design.
 
-Harness-Bench formalizes this as the attribution argument: agent capability should be reported at the model-harness configuration level rather than attributed to the base model alone — the same controlled-variable logic generalized to 106 sandboxed tasks and 5,194 trajectories ([Harness-Bench](https://arxiv.org/abs/2605.27922)).
+Harness-Bench formalizes this as the attribution argument: agent capability should be reported at the model-harness configuration level rather than attributed to the base model alone — the same controlled-variable logic generalized to 106 sandboxed tasks and 5,194 trajectories ([Harness-Bench](https://arxiv.org/abs/2605.27922v1)).
 
 ## How to run it
 

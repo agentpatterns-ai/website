@@ -26,7 +26,7 @@ The anti-pattern is reasoning about an agent the way you reason about yourself. 
 
 ## Why it fails
 
-Transformer attention is flat: the model does not separate operator instructions from retrieved content, so attacker text in a fetched README competes on equal terms with the system prompt and wins when phrased authoritatively ([Liu et al. 2026](https://arxiv.org/abs/2605.25871); see [Prompt Injection: A First-Class Threat](../../security/prompt-injection-threat-model.md)). AIShellJack — 314 payloads, 70 MITRE ATT&CK techniques — reached 84% success on GitHub Copilot and Cursor via coding-rule files and MCP servers ([Liu et al. 2025](https://arxiv.org/abs/2509.22040)); a meta-analysis across 78 studies reports adaptive attacks exceeding 85% against state-of-the-art defenses ([Maloyan and Namiot 2026](https://arxiv.org/abs/2601.17548)).
+Transformer attention is flat: the model does not separate operator instructions from retrieved content, so attacker text in a fetched README competes on equal terms with the system prompt and wins when phrased authoritatively ([Liu et al. 2026](https://arxiv.org/abs/2605.25871v1); see [Prompt Injection: A First-Class Threat](../../security/prompt-injection-threat-model.md)). AIShellJack — 314 payloads, 70 MITRE ATT&CK techniques — reached 84% success on GitHub Copilot and Cursor via coding-rule files and MCP servers ([Liu et al. 2025](https://arxiv.org/abs/2509.22040)); a meta-analysis across 78 studies reports adaptive attacks exceeding 85% against state-of-the-art defenses ([Maloyan and Namiot 2026](https://arxiv.org/abs/2601.17548v1)).
 
 The mental model misfires in three ways:
 

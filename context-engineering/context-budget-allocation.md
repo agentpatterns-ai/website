@@ -134,4 +134,5 @@ It converts a conditional cost into fixed overhead paid on every task, whether o
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Context Compression Strategies](context-compression-strategies.md)
+- [Long Context vs Retrieval: The Break-Even Decision](long-context-vs-retrieval-break-even.md)
 - [Semantic Density Optimization for Agent Codebases](semantic-density-optimization.md)

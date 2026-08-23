@@ -84,7 +84,7 @@ Summaries that only capture "what happened" without "what matters next" cause [o
 
 Transformer attention runs over all tokens in the window. As context grows, relevant signal competes with accumulated noise (redundant tool outputs, superseded reasoning, resolved errors) and [retrieval precision degrades](context-window-dumb-zone.md). Compression reduces this noise floor. Offloading removes content that is addressable on demand but rarely needed. Summarization distills decision rationale and state into a compact form the model can condition on. The mechanism is selective discarding, not lossy encoding. Artifacts remain on disk, so compaction is non-destructive for recoverable content.
 
-The effect is measurable. One empirical study reports that pruning context to the last five tool call/response pairs, plus summarization, reached 91.6% task completion versus 71% for full-context agents, at a fraction of the tokens and runtime. This supports combining the offload and summarize tiers rather than carrying full history ([Pruning and summarizing context for tool-using agents](https://arxiv.org/abs/2606.10209)).
+The effect is measurable. One empirical study reports that pruning context to the last five tool call/response pairs, plus summarization, reached 91.6% task completion versus 71% for full-context agents, at a fraction of the tokens and runtime. This supports combining the offload and summarize tiers rather than carrying full history ([Pruning and summarizing context for tool-using agents](https://arxiv.org/abs/2606.10209v1)).
 
 ## When this backfires
 
@@ -137,7 +137,7 @@ The summarizer prompt structure maps to the preservation table above: objective,
 
 **Does pruning context improve results, or only cut cost?**
 
-Both, on the available evidence. Pruning context to the last five tool call/response pairs, plus summarization, reached 91.6% task completion against 71% for full-context agents, at a fraction of the tokens and runtime ([Pruning and summarizing context for tool-using agents](https://arxiv.org/abs/2606.10209)). That supports combining the offload and summarize tiers rather than carrying full history.
+Both, on the available evidence. Pruning context to the last five tool call/response pairs, plus summarization, reached 91.6% task completion against 71% for full-context agents, at a fraction of the tokens and runtime ([Pruning and summarizing context for tool-using agents](https://arxiv.org/abs/2606.10209v1)). That supports combining the offload and summarize tiers rather than carrying full history.
 
 **What happens if the compaction threshold is set too low?**
 

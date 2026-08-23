@@ -34,7 +34,7 @@ Game design calls this a compulsion loop: anticipation, action, reward — promp
 
 ## The perception-reality gap
 
-The [METR study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) (July 2025) found developers using AI were 19% slower but believed they were 20% faster — a 40-percentage-point perception gap. Researchers noted developers may use AI "for reasons other than pure productivity." This suggests engagement is rewarding independent of output.
+The [METR study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) (July 2025) found developers using AI took "19% longer" but still believed "AI had sped them up by 20%" — a 39-point perception gap, by subtraction. Researchers noted developers may use AI "for reasons other than pure productivity." This suggests engagement is rewarding independent of output.
 
 An [HBR / UC Berkeley ethnographic study](https://hbr.org/2026/02/ai-doesnt-reduce-work-it-intensifies-it) (~200 employees) found AI "intensifies" work: scope expanded because doing more felt possible, with burnout as a recurring outcome. Prompting felt "closer to chatting than to undertaking a formal task," blurring work and leisure.
 
@@ -60,7 +60,7 @@ The grey literature review found 11% of practitioners abandoned projects when AI
 - Agent-assisted development satisfies all flow conditions, but engagement may be dark flow — compulsive rather than growth-producing
 - Variable ratio reinforcement (unpredictable agent quality) creates the same reward schedule that makes slot machines addictive
 - Friction removal eliminates natural stopping points, creating a compulsion loop of prompt-wait-evaluate
-- The METR study's 40-percentage-point perception gap suggests feeling productive and being productive are decoupled
+- The METR study's 39-point perception gap suggests feeling productive and being productive are decoupled
 - Time-boxing and regular commits create stopping points that natural friction no longer provides
 
 ## Related

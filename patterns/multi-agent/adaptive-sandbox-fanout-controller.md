@@ -109,7 +109,7 @@ The controller is only as good as its signals. Before adopting this pattern, ver
 3. A judge that produces a calibrated confidence score with interpretable margins
 4. Error signature extraction that can cluster failures by root cause
 
-If any of these is unavailable or unreliable, the controller degrades to guessing. A static N with good post-hoc judging ([Fan-Out Synthesis](fan-out-synthesis.md)) may be more practical. The judge-confidence signal in particular is fragile: [Landesberg (2026)](https://arxiv.org/abs/2603.12520) shows pointwise judges with moderate global correlation (r = 0.47) recover only 21% of best-of-N gains, while pairwise judging raises recovery to 61%. Prefer pairwise comparison when you can.
+If any of these is unavailable or unreliable, the controller degrades to guessing. A static N with good post-hoc judging ([Fan-Out Synthesis](fan-out-synthesis.md)) may be more practical. The judge-confidence signal in particular is fragile: [Landesberg (2026)](https://arxiv.org/abs/2603.12520v1) shows pointwise judges with moderate global correlation (r = 0.47) recover only 21% of best-of-N gains, while pairwise judging raises recovery to 61%. Prefer pairwise comparison when you can.
 
 ## Example
 

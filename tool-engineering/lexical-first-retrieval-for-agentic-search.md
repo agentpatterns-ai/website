@@ -25,7 +25,7 @@ maturity: emerging
 
 The reflex choice for retrieval-augmented agents is a dense vector index plus optional reranker. The reasoning was sound when LLMs were weaker: ranking precision had to come from the retriever, because the generator could not discard irrelevant context. Frontier agents in a search loop change that contract. They reformulate queries, read documents in context, and discard non-evidence themselves ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
 
-Pi-Serini tests this directly. The system pairs Pyserini's BM25 with gpt-5.5 in a three-tool agent (retrieve, browse, read), then runs it against BrowseComp-Plus, a controlled 100k-document corpus of 830 deep-research queries. The configuration reaches 83.1% answer accuracy and 94.7% surfaced evidence recall. That beats released search agents built on dense retrievers ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
+Pi-Serini tests this directly. The system pairs Pyserini's BM25 with gpt-5.5 in a three-tool agent (retrieve, browse, read), then runs it against BrowseComp-Plus, a controlled 100k-document corpus of 830 deep-research queries. The configuration reaches 83.1% answer accuracy and 94.7% surfaced evidence recall. That beats released search agents built on dense retrievers ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848v1)).
 
 Two levers do the work:
 
@@ -36,7 +36,7 @@ Both levers are cheap to apply and need no embedding infrastructure.
 
 ## When the default inverts
 
-The same benchmark that hosts Pi-Serini's win shows when it fails. On BrowseComp-Plus, Search-R1 paired with BM25 reaches 3.86% accuracy — the same retriever, a weaker agent. GPT-5 paired with BM25 reaches 55.9%. GPT-5 paired with Qwen3-Embedding-8B reaches 70.1% with fewer search calls ([Chen et al., 2025](https://arxiv.org/abs/2508.06600)).
+The same benchmark that hosts Pi-Serini's win shows when it fails. On BrowseComp-Plus, Search-R1 paired with BM25 reaches 3.86% accuracy — the same retriever, a weaker agent. GPT-5 paired with BM25 reaches 55.9%. GPT-5 paired with Qwen3-Embedding-8B reaches 70.1% with fewer search calls ([Chen et al., 2025](https://arxiv.org/abs/2508.06600v1)).
 
 The pattern: lexical retrieval works when the agent loop can pay the precision cost the retriever no longer pays.
 

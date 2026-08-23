@@ -21,7 +21,7 @@ maturity: emerging
 
 ## What the evidence shows
 
-Akli et al. evaluated 10 LLMs on HumanEval and LiveCodeBench under three prompt-mutation classes — Under-Specification (US), Lexical Vagueness (LV), Syntax/Formatting (SF). Pass@1 dropped 11.8% on HumanEval under US, but only 0.9% on LiveCodeBench. LV and SF showed the same pattern: HumanEval is brittle, LiveCodeBench is near-flat ([Akli et al., 2026](https://arxiv.org/abs/2604.24712)).
+Akli et al. evaluated 10 LLMs on HumanEval and LiveCodeBench under three prompt-mutation classes — Under-Specification (US), Lexical Vagueness (LV), Syntax/Formatting (SF). Pass@1 dropped 11.8% on HumanEval under US, but only 0.9% on LiveCodeBench. LV and SF showed the same pattern: HumanEval is brittle, LiveCodeBench is near-flat ([Akli et al., 2026](https://arxiv.org/abs/2604.24712v1)).
 
 The two benchmarks differ structurally. HumanEval relies on a single docstring. LiveCodeBench layers four largely independent surfaces: natural-language description, an explicit constraints block, sample I/O pairs with explanations, and an input/output format spec. Their summary: "robustness is not a fixed property of LLMs but is highly dependent on prompt structure" ([Akli et al., 2026](https://arxiv.org/html/2604.24712)).
 
@@ -135,3 +135,4 @@ If the constraints block is dropped or the description verb is swapped from "com
 - [Interactive Clarification for Underspecified Tasks](../patterns/agent-design/interactive-clarification-underspecified-tasks.md) — The interactive complement when the agent can ask
 - [CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md) — How prompt perturbation interacts with reasoning at structural anchors
 - [The Task Framing Irrelevance Fallacy](../fallacies/task-framing-irrelevance-fallacy.md) — Why surface framing is not noise the model filters out
+- [Standard-Grounded NFR Specs](standard-grounded-nfr-specification.md) — Grounding a quality requirement in a published model as another way to cut sensitivity to wording

@@ -60,7 +60,7 @@ The two principles above target real weakness classes. CWE-89 (SQL injection) si
 
 ## Progressive disclosure: select relevant principles
 
-Including the full constitution in every prompt degrades compliance. A case study found that injecting 3 to 5 task-relevant principles achieved 96% compliance, compared with 78% for the complete document. Context truncation made the model lose track of distant principles ([Marri, 2026](https://arxiv.org/abs/2602.02584)). This applies the same load-on-demand principle that [progressive disclosure for agent definitions](../patterns/agent-design/progressive-disclosure-agents.md) uses for skills.
+Including the full constitution in every prompt degrades compliance. A case study found that injecting 3 to 5 task-relevant principles achieved 96% compliance, compared with 78% for the complete document. Context truncation made the model lose track of distant principles ([Marri, 2026](https://arxiv.org/abs/2602.02584v1)). This applies the same load-on-demand principle that [progressive disclosure for agent definitions](../patterns/agent-design/progressive-disclosure-agents.md) uses for skills.
 
 ```mermaid
 graph TD
@@ -116,7 +116,7 @@ The constitution pattern works with instruction files already in use:
 
 ## Limitations
 
-The published evidence comes from a single case study: one developer, one AI assistant, one domain (banking microservices). The reported 73% reduction in CWE violations is indicative but not yet independently replicated ([Marri, 2026](https://arxiv.org/abs/2602.02584)).
+The published evidence comes from a single case study: one developer, one AI assistant, one domain (banking microservices). The reported 73% reduction in CWE violations is indicative but not yet independently replicated ([Marri, 2026](https://arxiv.org/abs/2602.02584v1)).
 
 The 16-hour upfront investment is from a single practitioner. Teams with existing security standards can adapt faster. Teams without them will need more time. Whether the same structure works for other domains (embedded systems, frontend applications, data pipelines) is untested.
 

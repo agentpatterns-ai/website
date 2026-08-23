@@ -48,7 +48,7 @@ Three components from [CADMAS-CTX (Qiao, 2026)](https://arxiv.org/abs/2604.17950
 
 ## Convergent evidence
 
-[REDEREF (2026)](https://arxiv.org/abs/2603.13256) arrives at the same Beta-posterior mechanism via Thompson sampling without an explicit taxonomy — 28% fewer tokens, 17% fewer calls, 19% lower time-to-success than uniform random delegation. Convergence on `Beta(α, β)` posteriors plus a calibrated judgment step suggests the mechanism is not a single-benchmark artifact.
+[REDEREF (2026)](https://arxiv.org/abs/2603.13256v1) arrives at the same Beta-posterior mechanism via Thompson sampling without an explicit taxonomy — 28% fewer tokens, 17% fewer calls, 19% lower time-to-success than uniform random delegation. Convergence on `Beta(α, β)` posteriors plus a calibrated judgment step suggests the mechanism is not a single-benchmark artifact.
 
 ## Reported results
 

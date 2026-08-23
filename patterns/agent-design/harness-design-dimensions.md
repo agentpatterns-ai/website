@@ -63,7 +63,7 @@ The implication for design: a single upgrade rarely lands in isolation. Adding m
 
 ## Five archetypes
 
-The same paper groups the 70 projects into five recurring archetypes ([arXiv:2604.18071](https://arxiv.org/abs/2604.18071)):
+The same paper groups the 70 projects into five recurring archetypes ([arXiv:2604.18071](https://arxiv.org/abs/2604.18071v1)):
 
 | Archetype | Profile |
 |-----------|---------|

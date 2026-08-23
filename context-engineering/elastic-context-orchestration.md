@@ -58,8 +58,8 @@ graph TD
 
 Two reported signals support adaptive multi-fidelity retention over uniform accumulation:
 
-- Sub-linear context growth. AgentFold-30B reports context length growing from about 3.5k to 7k tokens across 100 turns, less than doubling, against a 128k window, while raw ReAct grows linearly ([AgentFold, Ye et al., 2025](https://arxiv.org/abs/2510.24699)).
-- BrowseComp results at a fixed parameter class. LongSeeker (Qwen3-30B-A3B base, 10,000 synthesized trajectories) reports 61.5% on BrowseComp and 62.5% on BrowseComp-ZH, against AgentFold's 36.2 / 47.3 and Tongyi DeepResearch's 43.2 / 46.7 at comparable scale ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)). All numbers come from the proposing labs; no third-party replication exists yet.
+- Sub-linear context growth. AgentFold-30B reports context length growing from about 3.5k to 7k tokens across 100 turns, less than doubling, against a 128k window, while raw ReAct grows linearly ([AgentFold, Ye et al., 2025](https://arxiv.org/abs/2510.24699v1)).
+- BrowseComp results at a fixed parameter class. LongSeeker (Qwen3-30B-A3B base, 10,000 synthesized trajectories) reports 61.5% on BrowseComp and 62.5% on BrowseComp-ZH, against AgentFold's 36.2 / 47.3 and Tongyi DeepResearch's 43.2 / 46.7 at comparable scale ([Lu et al., 2026](https://arxiv.org/abs/2605.05191v1)). All numbers come from the proposing labs; no third-party replication exists yet.
 
 Adjacent results in the same literature point the same way: ReSum's external summarizer yields +4.5% over ReAct training-free and +8.2% with GRPO on BrowseComp ([ReSum, Wu et al., 2025](https://arxiv.org/abs/2509.13313)).
 
@@ -69,7 +69,7 @@ Elastic orchestration suits search agents. Four situations fall outside it:
 
 - Short-horizon tasks (about 20 turns or fewer). The five-operation vocabulary adds policy complexity and SFT cost without payoff. Raw ReAct or [tiered compression](context-compression-strategies.md) is cheaper.
 - Code agents with persistent file state. Evidence lives in the files, and aggressive Skip or Delete on tool observations breaks debug loops where the agent needs to [re-read prior outputs](observation-masking.md).
-- Off-the-shelf models with no SFT on the vocabulary. Skip, Snippet, and Rollback are not natural ReAct actions. Models invoke them inconsistently and can regress below the ReAct baseline. LongSeeker reports 10,000-trajectory SFT specifically to teach the operation policy ([Lu et al., 2026](https://arxiv.org/abs/2605.05191)).
+- Off-the-shelf models with no SFT on the vocabulary. Skip, Snippet, and Rollback are not natural ReAct actions. Models invoke them inconsistently and can regress below the ReAct baseline. LongSeeker reports 10,000-trajectory SFT specifically to teach the operation policy ([Lu et al., 2026](https://arxiv.org/abs/2605.05191v1)).
 - Side-effecting tools. Rollback removes context but cannot undo bookings, payments, or writes. See [Rollback-First Design](../patterns/agent-design/rollback-first-design.md) for the separate mechanism that handles world state.
 
 ## Relation to adjacent patterns

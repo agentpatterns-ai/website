@@ -21,7 +21,7 @@ maturity: adopted
 
 ## The gap signature scanning cannot close
 
-Static analysis of skills detects 90.7% of adversarial samples using YARA-style patterns, AST dataflow, and credential regex ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081)). The remaining 2.5% evade both detection and model alignment because the attack is not a payload at all. Document-Driven Implicit Payload Execution (DDIPE) embeds malicious logic as code examples inside skill documentation. The example is syntactically benign and lexically innocent. The agent reproduces the pattern during normal task execution — in-context learning makes the documented example authoritative — and the payload assembles at runtime in the agent's generation.
+Static analysis of skills detects 90.7% of adversarial samples using YARA-style patterns, AST dataflow, and credential regex ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081v1)). The remaining 2.5% evade both detection and model alignment because the attack is not a payload at all. Document-Driven Implicit Payload Execution (DDIPE) embeds malicious logic as code examples inside skill documentation. The example is syntactically benign and lexically innocent. The agent reproduces the pattern during normal task execution — in-context learning makes the documented example authoritative — and the payload assembles at runtime in the agent's generation.
 
 Signatures cannot match what is not in the file — this is the 2.5% residual that evades both static detection and model alignment. The malicious behavior exists only after the agent synthesizes it. Closing this gap requires a check on intent, not syntax.
 
@@ -47,7 +47,7 @@ graph TD
 2. Behavioral inference — a model traces what the code examples and tool invocations would actually accomplish if reproduced verbatim by an agent. AST dataflow surfaces the side effects; semantic analysis names the goal.
 3. Divergence detection — when the declared intent (`"summarise GitHub issues"`) does not match the inferred behavior (`reads ~/.aws/credentials, posts to webhook.site`), the skill fails.
 
-Multi-model consensus reduces adversarial bypass to 1.6% of payloads versus 11.6%–33.5% for single-model alignment alone ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081)). Two independently aligned models evaluating intent-vs-behavior is the runtime version of the same check.
+Multi-model consensus reduces adversarial bypass to 1.6% of payloads versus 11.6%–33.5% for single-model alignment alone ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081v1)). Two independently aligned models evaluating intent-vs-behavior is the runtime version of the same check.
 
 Production tooling that implements this composition: [Cisco AI Defense skill-scanner](https://github.com/cisco-ai-defense/skill-scanner) combines YARA signature engines, AST dataflow, LLM semantic analysis, and a meta-analyzer that filters false positives. The `--use-llm --enable-meta` flags activate the semantic layer; `--fail-on-severity high` gates CI.
 

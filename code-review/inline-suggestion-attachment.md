@@ -50,7 +50,7 @@ Resolution rates varied by agent: Copilot 72.9%, Cursor 67.2%, Codex 54.8% ([arX
 
 ## Why it works
 
-An inline suggestion changes what the comment asks of the developer. Prose requires them to interpret the finding, locate the site, author the edit, and commit it. A suggestion block collapses that to reading a concrete diff and applying it. The GitHub suggestion feature exists for exactly that: it makes "reviewers' feedback more actionable for the submitters" ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835)). Resolution varies with the cost of acting, not persuasiveness ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). The same mechanism corroborates outside agent review: pull requests using human-authored suggestions merged at 76.2% against 65.7% without ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835)).
+An inline suggestion changes what the comment asks of the developer. Prose requires them to interpret the finding, locate the site, author the edit, and commit it. A suggestion block collapses that to reading a concrete diff and applying it. The GitHub suggestion feature exists for exactly that: it makes "reviewers' feedback more actionable for the submitters" ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835v1)). Resolution varies with the cost of acting, not persuasiveness ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). The same mechanism corroborates outside agent review: pull requests using human-authored suggestions merged at 76.2% against 65.7% without ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835v1)).
 
 ## When this backfires
 
@@ -81,5 +81,5 @@ The mechanism is friction removal, so it removes friction from wrong changes jus
 ## Sources
 
 - [arXiv:2607.21997](https://arxiv.org/abs/2607.21997) — Cynthia, Widyasari, Roy, Zhang, Lo (2026): "Go Home Copilot, You're Drunk": Understanding Developer Responses to Agent-Generated Code Review Comments — 54,791 comments collected across 342 Python repositories, 54,713 analyzed from three agents.
-- [arXiv:2502.04835](https://arxiv.org/abs/2502.04835) — Bouraffa, Pham, Maalej (2025): How Do Developers Use Code Suggestions in Pull Request Reviews? — 8,672 suggestions across 2,852 pull requests in 46 projects.
+- [arXiv:2502.04835](https://arxiv.org/abs/2502.04835v1) — Bouraffa, Pham, Maalej (2025): How Do Developers Use Code Suggestions in Pull Request Reviews? — 8,672 suggestions across 2,852 pull requests in 46 projects.
 - [arXiv:2607.03316](https://arxiv.org/abs/2607.03316) — Lin, Liang, Thongtanunam, Tantithamthavorn (2026): Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild.

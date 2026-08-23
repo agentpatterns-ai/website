@@ -39,7 +39,7 @@ The regression rate is monotonic across turns and scales inversely with model st
 
 Frontier models lose a fifth of their correctness over nine turns; weaker open models lose two thirds ([Guo et al., 2026](https://arxiv.org/abs/2606.25747)).
 
-Independent corroboration from a different benchmark and 32 additional models: MT-Sec reports a consistent 20 – 27% drop in "correct and secure" outputs from single-turn to multi-turn settings, even on state-of-the-art models, and notes that single-turn agent scaffoldings transfer poorly to the multi-turn setting ([Mishra et al., 2026](https://arxiv.org/abs/2510.13859)).
+Independent corroboration from a different benchmark and 32 additional models: MT-Sec reports a consistent 20 – 27% drop in "correct and secure" outputs from single-turn to multi-turn settings, even on state-of-the-art models, and notes that single-turn agent scaffoldings transfer poorly to the multi-turn setting ([Mishra et al., 2026](https://arxiv.org/abs/2510.13859v1)).
 
 ## Refinement-type signal
 

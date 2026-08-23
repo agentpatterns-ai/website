@@ -29,7 +29,7 @@ This pattern pays off under specific conditions, not universally:
 - Reading dominates cost. The savings come from files not inspected, so the gain is real only where context-gathering is the expensive part of a task, as in cost- or latency-sensitive workloads.
 - Localized edits are common. The largest redundancy sits on simple tasks — a max-context-first policy scored an [Agent Cognitive Redundancy Ratio](https://arxiv.org/abs/2607.13034) of 22.1 on single-file edits versus 5.4 on repository-wide refactors, so a task mix weighted toward small changes benefits most.
 
-One caveat frames all three: the waste this pattern targets is largely a simulation result. In a real-model check with GPT-4o on the `toml` library, frontier models were "markedly more conservative than simulated worst-case scenarios," inspecting only 1–4 files even when told to read everything first, and E3's savings shrank to 4–18% ([Yin & Feng, arXiv:2607.13034](https://arxiv.org/abs/2607.13034)). Treat it as a discipline for the common case, not a promise of an order-of-magnitude cut on a modern agent.
+One caveat frames all three: the waste this pattern targets is largely a simulation result. In a real-model check with GPT-4o on the `toml` library, frontier models were "markedly more conservative than simulated worst-case scenarios," inspecting only 1–4 files even when told to read everything first, and E3's savings shrank to 4–18% ([Yin & Feng, arXiv:2607.13034](https://arxiv.org/abs/2607.13034v1)). Treat it as a discipline for the common case, not a promise of an order-of-magnitude cut on a modern agent.
 
 ## The E3 loop
 
@@ -43,7 +43,7 @@ graph TD
     E3 --> E2
 ```
 
-- Estimate: read lexical cues in the request plus one optional probe to set an operating point — difficulty, scope, risk, confidence. A phrase like "replace the second icon with the first one's markup" signals a localized edit; "refactor across the codebase" signals repository-wide work ([arXiv:2607.13034](https://arxiv.org/abs/2607.13034)).
+- Estimate: read lexical cues in the request plus one optional probe to set an operating point — difficulty, scope, risk, confidence. A phrase like "replace the second icon with the first one's markup" signals a localized edit; "refactor across the codebase" signals repository-wide work ([arXiv:2607.13034](https://arxiv.org/abs/2607.13034v1)).
 - Execute: run the smallest trajectory likely to pass verification. At the lowest level it edits a single localized site; higher levels reuse cached searches and trace imports to indirect sites.
 - Expand: on a failed check or low confidence, raise the scope one level and replan without restarting — reusing what was already learned, so the search degrades gracefully toward an exhaustive strategy only when the task demands it.
 
@@ -51,12 +51,12 @@ graph TD
 
 Cost scales with the context an agent gathers, and for a localized task most of that context is causally irrelevant to the edit. Reading files that do not affect the edit adds cost without changing the output. The Agent Cognitive Redundancy Ratio makes the gap explicit: ACRR = (C_act − C_min) / C_min, the actual trajectory cost over the oracle-defined minimum-sufficient cost, so an ACRR of 4 means five times the necessary effort was spent ([Yin & Feng, arXiv:2607.13034](https://arxiv.org/abs/2607.13034)).
 
-Starting minimal and expanding only on failure converges to near-oracle cost on common simple tasks while still reaching exhaustive strategies on the rare hard one. On MSE-Bench (121 deterministic code edits), E3 held ACRR at 0.55 versus a max-context-first policy's 12.9 while both solved 100% of tasks, cutting cost 85% and inspected files 92% ([arXiv:2607.13034](https://arxiv.org/abs/2607.13034)). It is the same mechanism behind "start simple, add complexity only when it improves outcomes": pay for capability when a failure names the need, not before.
+Starting minimal and expanding only on failure converges to near-oracle cost on common simple tasks while still reaching exhaustive strategies on the rare hard one. On MSE-Bench (121 deterministic code edits), E3 held ACRR at 0.55 versus a max-context-first policy's 12.9 while both solved 100% of tasks, cutting cost 85% and inspected files 92% ([arXiv:2607.13034](https://arxiv.org/abs/2607.13034v1)). It is the same mechanism behind "start simple, add complexity only when it improves outcomes": pay for capability when a failure names the need, not before.
 
 ## When this backfires
 
 - Hidden coupling a minimal path cannot see. MSE-Bench models indirect edit sites only through import aliases; dynamic dispatch, configuration coupling, and runtime reflection are explicitly unmodeled ([arXiv:2607.13034](https://arxiv.org/abs/2607.13034)). In a codebase full of those, a minimum-viable path edits what it found, passes a weak check, and ships a silently incomplete change.
-- Deceptive wording that hides real scope. The transparent lexical estimator deliberately under-scopes these tasks, and its accuracy fell from 85.1% to 66.9% on held-out paraphrased wording — the agent then pays extra Expand round-trips to recover what a broader first read would have found ([arXiv:2607.13034](https://arxiv.org/abs/2607.13034)).
+- Deceptive wording that hides real scope. The transparent lexical estimator deliberately under-scopes these tasks, and its accuracy fell from 85.1% to 66.9% on held-out paraphrased wording — the agent then pays extra Expand round-trips to recover what a broader first read would have found ([arXiv:2607.13034](https://arxiv.org/abs/2607.13034v1)).
 - Weak or absent verification. Expand needs a failing check to fire. When verification is weak, under-scoping produces a confidently-wrong minimal edit with nothing to trigger the correction — the [trust-without-verify](../anti-patterns/trust-without-verify.md) surface.
 - Modern agents that already read conservatively. The simulated 12.9 ACRR does not appear in frontier models, which inspect few files by default, so the pattern's payoff on a current agent is a modest trim, not the headline reduction.
 

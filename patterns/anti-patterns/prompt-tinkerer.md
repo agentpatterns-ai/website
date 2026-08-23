@@ -24,7 +24,7 @@ Each time an agent makes a recurring mistake, the prompt grows: another sentence
 
 ## Why prompts fail at enforcement
 
-A prompt is not a contract. Instructions compete with each other, with context, and with the model's training distribution. [IFScale across 20 frontier models](https://arxiv.org/abs/2507.11538) found compliance drops to 68% at high instruction densities, with patterns ranging from threshold decay to exponential collapse. [ManyIFEval](https://arxiv.org/abs/2509.21051) calls this the "curse of instructions": all-rule compliance falls as per-rule accuracy raised to the rule count.
+A prompt is not a contract. Instructions compete with each other, with context, and with the model's training distribution. [IFScale across 20 frontier models](https://arxiv.org/abs/2507.11538v1) found compliance drops to 68% at high instruction densities, with patterns ranging from threshold decay to exponential collapse. [ManyIFEval](https://arxiv.org/abs/2509.21051v1) calls this the "curse of instructions": all-rule compliance falls as per-rule accuracy raised to the rule count.
 
 Adding "IMPORTANT:" or "NEVER do X" applies social emphasis to a system with no concept of social emphasis. Each new prohibition dilutes attention for the existing ones. A hook blocks a write regardless of what the model attended to.
 

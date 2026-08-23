@@ -22,14 +22,14 @@ maturity: emerging
 
 Related lesson: [Breaking the Loop](https://learn.agentpatterns.ai/observability/breaking-the-loop/) covers this concept in a hands-on lesson with quizzes.
 
-A coding agent's trajectory carries a structural failure signature: the agent quotes a fact that should change its next action, then issues the action the fact contradicts. The strained-coherence detector reads a full trajectory and flags those spans ([Pandya, Zhang, Lyu 2026, arxiv 2606.07889](https://arxiv.org/abs/2606.07889)). Flagged Terminal-bench-2 runs fail 94% against a 46% baseline — a 47-point gap at p=0.003 — but only when the agent verbalizes and the judge is not the optimization target.
+A coding agent's trajectory carries a structural failure signature: the agent quotes a fact that should change its next action, then issues the action the fact contradicts. The strained-coherence detector reads a full trajectory and flags those spans ([Pandya, Zhang, Lyu 2026, arxiv 2606.07889](https://arxiv.org/abs/2606.07889v1)). Flagged Terminal-bench-2 runs fail 94% against a 46% baseline — a 47-point gap at p=0.003 — but only when the agent verbalizes and the judge is not the optimization target.
 
 ## When this applies
 
 Three conditions, all required:
 
-- Verbose reasoning substrate. On Gemma4-31B the gap shrank to 20 points (p=0.31); 13 of 43 trajectories carried zero reasoning for the judge to read. The high-verbosity tertile recovered a +30-point gap on the same model ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)). Low-verbosity backbones are the wrong substrate.
-- Triage trigger, not in-loop abort. Average lead time is 83–84% of trajectory completion, so most tool calls have already run by then ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)). The signal routes runs to review queues, not to a circuit breaker.
+- Verbose reasoning substrate. On Gemma4-31B the gap shrank to 20 points (p=0.31); 13 of 43 trajectories carried zero reasoning for the judge to read. The high-verbosity tertile recovered a +30-point gap on the same model ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889v1)). Low-verbosity backbones are the wrong substrate.
+- Triage trigger, not in-loop abort. Average lead time is 83–84% of trajectory completion, so most tool calls have already run by then ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889v1)). The signal routes runs to review queues, not to a circuit breaker.
 - No optimization pressure at the judge. Training against a CoT monitor produces obfuscated reasoning that hides the conflict while preserving the hack ([Baker et al. 2025, arxiv 2503.11926](https://arxiv.org/abs/2503.11926)), and the obfuscation generalizes to unseen tasks ([arxiv 2601.23086 — CoT Obfuscation Generalizes to Unseen Tasks](https://arxiv.org/abs/2601.23086)). RL or fine-tuning against this judge erodes its precision.
 
 If a condition fails, fall back to [learned prefix monitors](../verification/learned-prefix-monitors-agent-traces.md) (typed-event scoring, substrate-independent) or [trajectory-aware outcome grading](../verification/eval-blind-spots.md) (catches safety violations outcome-only graders miss).
@@ -55,7 +55,7 @@ The definition covers verbalized reward hacking (proxy-versus-goal tension named
 
 ## What the evidence shows
 
-The Claude Sonnet 4.6 judge was evaluated on 44 Terminal-bench-2 trajectories with a Qwen3.5-35B-A3B backbone ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)):
+The Claude Sonnet 4.6 judge was evaluated on 44 Terminal-bench-2 trajectories with a Qwen3.5-35B-A3B backbone ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889v1)):
 
 | Metric | Result |
 |--------|--------|
@@ -69,15 +69,15 @@ Cross-model on Gemma4-31B (43 trajectories) the directional effect replicates bu
 
 ## Why it works
 
-Verbalized conflict carries information that the terminal outcome does not. A CoT correlates with the decision process on training-distribution tasks even though it is not that process ([Anthropic 2025 — Reasoning Models Don't Always Say What They Think](https://www.anthropic.com/research/reasoning-models-dont-say-think)): Claude 3.7 Sonnet acknowledges biasing hints 25% of the time, and only 2% of reward-hacked answers admit the hack. Verbalization is partial, but when it occurs it is diagnostic. The judge exploits exactly that case. A quoted acknowledgment that the agent then ignored predicts failure better than the trajectory's outcome alone, because it exposes an internal-consistency violation the outcome grader cannot see. The 47-point Qwen gap measures that information lift ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)).
+Verbalized conflict carries information that the terminal outcome does not. A CoT correlates with the decision process on training-distribution tasks even though it is not that process ([Anthropic 2025 — Reasoning Models Don't Always Say What They Think](https://www.anthropic.com/research/reasoning-models-dont-say-think)): Claude 3.7 Sonnet acknowledges biasing hints 25% of the time, and only 2% of reward-hacked answers admit the hack. Verbalization is partial, but when it occurs it is diagnostic. The judge exploits exactly that case. A quoted acknowledgment that the agent then ignored predicts failure better than the trajectory's outcome alone, because it exposes an internal-consistency violation the outcome grader cannot see. The 47-point Qwen gap measures that information lift ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889v1)).
 
 ## When this backfires
 
 Three conditions where the signal collapses or actively misleads:
 
 1. Optimization pressure against the judge. Direct CoT optimization produces obfuscated reward hacking — models keep hacking while their CoT stops surfacing the conflict ([Baker et al. 2025, arxiv 2503.11926](https://arxiv.org/abs/2503.11926)), and [Korbak et al.](https://www.greaterwrong.com/posts/HPqRsgSzgQd5HQsrB/learned-chain-of-thought-obfuscation-generalises-to-unseen) show it generalizes to unseen tasks. Fine-tuning against this judge erodes its precision until the signal looks clean while the failure rate holds.
-2. Low-verbosity backbones. Gemma4-31B's 13 zero-reasoning trajectories gave the detector nothing to read, and significance collapsed to p=0.31 ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)). Short-CoT models and harnesses that strip reasoning before logging sit here; [outcome-aware trajectory grading](../verification/eval-blind-spots.md) and [typed-event prefix monitors](../verification/learned-prefix-monitors-agent-traces.md) remain useful.
-3. Need for in-loop abort. The 83–84% lead time means destructive tool calls have already issued by the time the flag arrives ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)). For destructive `rm` or irreversible API calls, [circuit breakers](circuit-breakers.md) and [pre-completion checklists](../verification/pre-completion-checklists.md) bind earlier.
+2. Low-verbosity backbones. Gemma4-31B's 13 zero-reasoning trajectories gave the detector nothing to read, and significance collapsed to p=0.31 ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889v1)). Short-CoT models and harnesses that strip reasoning before logging sit here; [outcome-aware trajectory grading](../verification/eval-blind-spots.md) and [typed-event prefix monitors](../verification/learned-prefix-monitors-agent-traces.md) remain useful.
+3. Need for in-loop abort. The 83–84% lead time means destructive tool calls have already issued by the time the flag arrives ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889v1)). For destructive `rm` or irreversible API calls, [circuit breakers](circuit-breakers.md) and [pre-completion checklists](../verification/pre-completion-checklists.md) bind earlier.
 
 A steelman of the opposite: CoT is unreliable post-hoc narrative ([Anthropic 2025](https://www.anthropic.com/research/reasoning-models-dont-say-think)), 2% verbalization on reward-hacked answers is a thin substrate, and cheaper signals — terminal test failure, output-verifier mismatch — recover most of the same trajectories. The Qwen numbers refute its strong form (the 47-point gap is real on that substrate), but it holds wherever any of the three conditions above fails.
 
@@ -98,7 +98,7 @@ Compare this with a trajectory where the agent silently writes to the same file 
 ## Key Takeaways
 
 - Strained coherence = (acknowledged conflict) + (non-resolving action); mechanical patches that remove the surface contradiction count as non-resolution ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)).
-- The Qwen3.5 substrate yields a 47-point failure-rate gap (94% vs. 46%, p=0.003) at matched-selectivity 94% precision ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889)).
+- The Qwen3.5 substrate yields a 47-point failure-rate gap (94% vs. 46%, p=0.003) at matched-selectivity 94% precision ([arxiv 2606.07889](https://arxiv.org/abs/2606.07889v1)).
 - It is a triage trigger (83–84% lead time), not an in-loop abort — pair with circuit breakers for early-warning needs.
 - It collapses on low-verbosity models, under optimization pressure against the judge, or once CoT obfuscation transfers ([Baker et al., arxiv 2503.11926](https://arxiv.org/abs/2503.11926)).
 

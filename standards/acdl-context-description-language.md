@@ -20,7 +20,7 @@ maturity: emerging
 
 The Agentic Context Description Language (ACDL) is a formal language for specifying the structure and dynamics of LLM input contexts. Peleg Pelc, Kaminka, and Goldberg introduced it in [arxiv:2605.01920](https://arxiv.org/abs/2605.01920) (May 2026) under a CC-BY 4.0 license, with tooling at [acdlang.org](http://www.acdlang.org).
 
-The motivating gap, in the authors' words: context construction "is typically conveyed through informal prose, ad hoc diagrams, or direct inspection of code, none of which precisely capture how a prompt evolves across interaction steps or how two context representation strategies differ" ([abstract](https://arxiv.org/abs/2605.01920)).
+The motivating gap, in the authors' words: context construction "is typically conveyed through informal prose, ad hoc diagrams, or direct inspection of code, none of which precisely capture how a prompt evolves across interaction steps or how two context representation strategies differ" ([abstract](https://arxiv.org/abs/2605.01920v1)).
 
 The paper's empirical finding: "even small variations in how a basic ReAct agent's context is assembled lead to measurable differences in agent performance" ([§1](https://arxiv.org/html/2605.01920)). If macro-structure moves benchmark numbers, it deserves a notation.
 

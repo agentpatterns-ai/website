@@ -32,7 +32,7 @@ graph LR
     H --> I[Human review of flagged items]
 ```
 
-Stage 1 is the rule miner. The LLM reads the requirements document and emits two outputs: a list of discrete, individually checkable rules ("the password reset endpoint must invalidate all prior session tokens"), and a list of statements it cannot reduce to rules — vague quality attributes, contradictions between paragraphs, missing actors ([Zhou et al., 2026](https://arxiv.org/abs/2605.17926)). The second list is the early-warning channel. Half the value of the stage is exposing what the spec leaves unsaid.
+Stage 1 is the rule miner. The LLM reads the requirements document and emits two outputs: a list of discrete, individually checkable rules ("the password reset endpoint must invalidate all prior session tokens"), and a list of statements it cannot reduce to rules — vague quality attributes, contradictions between paragraphs, missing actors ([Zhou et al., 2026](https://arxiv.org/abs/2605.17926v1)). The second list is the early-warning channel. Half the value of the stage is exposing what the spec leaves unsaid.
 
 Stage 2 is the code auditor. The LLM evaluates each extracted rule against the implementation in isolation. The auditor sees one rule and the relevant code surface, not the entire spec. The structured intermediate representation is the load-bearing constraint. It reduces the context the auditor must hold, which is the mechanism the experience report credits for reduced hallucination ([Zhou et al., 2026](https://arxiv.org/abs/2605.17926)).
 

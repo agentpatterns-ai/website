@@ -28,7 +28,7 @@ The discipline is conditional. Three things decide whether it returns anything.
 
 | Condition | Why it matters |
 |---|---|
-| The library is large enough for selection to fail | Agent performance degrades "by up to 21% when scaling from a small set of helpful skills to a 202-skill library" ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)). Below roughly 30 candidates, retrieval precision holds and there is nothing to recover ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275)). |
+| The library is large enough for selection to fail | Agent performance degrades "by up to 21% when scaling from a small set of helpful skills to a 202-skill library" ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)). Below roughly 30 candidates, retrieval precision holds and there is nothing to recover ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275v1)). |
 | Several people author into the same library | A shared construction standard is what keeps descriptions from colliding across authors who never read each other's files. |
 | Something automated checks the result | Guidance alone does not change practice. Across 238 real-world skills, "over 99% of SKILL.md files contain at least one skill smell", and once introduced they "rarely disappear as skills evolve" ([Gao et al., 2026](https://arxiv.org/abs/2607.01456)). |
 
@@ -49,11 +49,11 @@ Testing transfers "only in a qualified form" — a language model executes the s
 
 ## Two questions for choosing the mechanism
 
-A skill is one of several ways to shape agent behavior, alongside memory files, slash commands, subagents, external tools, and hooks. "Two questions separate them: who decides that the mechanism runs, and what guarantee it provides" ([Destefanis, 2026](https://arxiv.org/abs/2607.25032)).
+A skill is one of several ways to shape agent behavior, alongside memory files, slash commands, subagents, external tools, and hooks. "Two questions separate them: who decides that the mechanism runs, and what guarantee it provides" ([Destefanis, 2026](https://arxiv.org/abs/2607.25032v1)).
 
 The first asks who holds the trigger — the model matching a description, the user naming it, or the runtime firing on an event. The second asks what you get when it runs: advice the model may follow, or a guarantee it cannot skip.
 
-The resulting rule is short. "If a step depends on judgement, varies with context, or encodes domain procedure, put it in a skill. If a step must happen every time the triggering event occurs, put it in a hook" ([Destefanis, 2026](https://arxiv.org/abs/2607.25032)). Both axes generalize past that pair — a subagent buys context isolation, a slash command moves the trigger to the user — which makes the questions portable where a [tool-specific decision tree](../tools/claude/extension-points.md) is not.
+The resulting rule is short. "If a step depends on judgement, varies with context, or encodes domain procedure, put it in a skill. If a step must happen every time the triggering event occurs, put it in a hook" ([Destefanis, 2026](https://arxiv.org/abs/2607.25032v1)). Both axes generalize past that pair — a subagent buys context isolation, a slash command moves the trigger to the user — which makes the questions portable where a [tool-specific decision tree](../tools/claude/extension-points.md) is not.
 
 ## Why it works
 
@@ -64,7 +64,7 @@ Single responsibility works through selection interference, not code hygiene. An
 - Guidance without a detector. Best-practice advice is already near-universally violated ([Gao et al., 2026](https://arxiv.org/abs/2607.01456)); adding another standard without an automated check changes nothing.
 - Optimizing the token budget first. Shortening bodies targets a channel measured as indistinguishable from zero, leaving the dominant loss untouched ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)).
 - Small libraries. Under roughly 30 candidates the degradation single responsibility protects against has not started ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275)), so the discipline costs attention and returns nothing.
-- Reading a passed evaluation as a runtime guarantee. Fuzzing 402 marketplace skills found 120 (29.9%) violate their own declared specifications on benign inputs ([SEFZ, 2026](https://arxiv.org/abs/2605.13044)). A well-structured declaration is not an enforced one.
+- Reading a passed evaluation as a runtime guarantee. Fuzzing 402 marketplace skills found 120 (29.9%) violate their own declared specifications on benign inputs ([SEFZ, 2026](https://arxiv.org/abs/2605.13044v1)). A well-structured declaration is not an enforced one.
 - Fast-moving domains. The authoring investment binds a snapshot of a tool or API; skills over churning surfaces go stale faster than the discipline pays back.
 
 The strongest case against the framing is that skills are prompts, not programs: a probabilistic selector chooses them and a non-deterministic interpreter runs them, so low coupling cannot be checked and single responsibility cannot be enforced. That case holds wherever the analogy has no measurement behind it. It fails for single responsibility, where the selection channel is measured directly.

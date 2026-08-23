@@ -19,15 +19,15 @@ maturity: emerging
 
 > Coding agents generating tests quit early and skip complex branches, so coverage stays shallow exactly where the hard-to-test logic lives.
 
-Lazy generation is when a coding agent tasked with writing tests "prematurely terminate[s] tasks and systematically avoid[s] complex programmatic logic, resulting in inadequate code coverage" ([SCATE, arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). The agent reports the job done; the branches it skipped are the ones that most needed a test.
+Lazy generation is when a coding agent tasked with writing tests "prematurely terminate[s] tasks and systematically avoid[s] complex programmatic logic, resulting in inadequate code coverage" ([SCATE, arxiv 2607.08983](https://arxiv.org/abs/2607.08983v1)). The agent reports the job done; the branches it skipped are the ones that most needed a test.
 
 ## What it looks like
 
-The agent announces tests are "generated and verified," but execution "prematurely terminates," leaving branch coverage "stalled at a mere 31%" in the SCATE authors' Gemini-cli run ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). Agents "naturally gravitate toward simple methods and straight-line execution paths," so the untested remainder is not random — it concentrates on the deeply nested, dependency-heavy code where bugs hide. The tell is a self-report of completion that a coverage tool contradicts: the transcript says done, the branch-coverage number says half the decision points never ran.
+The agent announces tests are "generated and verified," but execution "prematurely terminates," leaving branch coverage "stalled at a mere 31%" in the SCATE authors' Gemini-cli run ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983v1)). Agents "naturally gravitate toward simple methods and straight-line execution paths," so the untested remainder is not random — it concentrates on the deeply nested, dependency-heavy code where bugs hide. The tell is a self-report of completion that a coverage tool contradicts: the transcript says done, the branch-coverage number says half the decision points never ran.
 
 ## Why it happens
 
-The agent must "understand source code, including complex control flows and extensive external dependencies, within a limited context window" ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). High internal complexity raises "the reasoning burden on the LLM," and external coupling "complicates environment setup and dependency mocking." Under a bounded context window the path of least resistance is to cover the simple, dependency-free methods and stop. The shortfall therefore lands systematically on the complex branches, not evenly across the file.
+The agent must "understand source code, including complex control flows and extensive external dependencies, within a limited context window" ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983v1)). High internal complexity raises "the reasoning burden on the LLM," and external coupling "complicates environment setup and dependency mocking." Under a bounded context window the path of least resistance is to cover the simple, dependency-free methods and stop. The shortfall therefore lands systematically on the complex branches, not evenly across the file.
 
 ## Distinguish from adjacent failures
 
@@ -44,7 +44,7 @@ Lazy generation is the inverse of abstraction bloat — too little test coverage
 
 ## What to do instead
 
-Treat coverage of complex branches as a supervised gate rather than the agent's word. SCATE watches three signals during generation — line coverage, branch coverage, and `missed_complexity` (uncovered method entries and decision points) — and re-prompts the agent on the specific gaps ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). That supervision lifted Gemini-cli branch coverage by 30.9% over the unsupervised baseline, to 74.7%, at $0.693 per class ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983)). Budget for the loop instead of assuming the agent finishes the hard cases on its own.
+Treat coverage of complex branches as a supervised gate rather than the agent's word. SCATE watches three signals during generation — line coverage, branch coverage, and `missed_complexity` (uncovered method entries and decision points) — and re-prompts the agent on the specific gaps ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983v1)). That supervision lifted Gemini-cli branch coverage by 30.9% over the unsupervised baseline, to 74.7%, at $0.693 per class ([arxiv 2607.08983](https://arxiv.org/abs/2607.08983v1)). Budget for the loop instead of assuming the agent finishes the hard cases on its own.
 
 ## Example
 

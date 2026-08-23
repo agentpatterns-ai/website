@@ -61,7 +61,7 @@ compiled_pipeline = optimizer.compile(pipeline, trainset=train_examples)
 
 The main benefit over per-prompt optimization is joint optimization. Take a pipeline of router → worker → verifier. Optimizing each prompt in isolation ignores how one module's output affects the modules downstream. DSPy optimizes all prompts at once against a single end-to-end metric. It accepts a change that hurts the router's instructions if that change improves the pipeline's final score.
 
-The foundational paper ([Khattab et al., 2023, arxiv 2310.03714](https://arxiv.org/abs/2310.03714)) reports GPT-3.5 and llama2-13b-chat pipelines beating standard few-shot prompting by 25%+ and 65%+ respectively across multi-hop retrieval and question-answering benchmarks. It also reports 5–46% improvements over expert-written prompt chains.
+The foundational paper ([Khattab et al., 2023, arxiv 2310.03714](https://arxiv.org/abs/2310.03714v1)) reports GPT-3.5 and llama2-13b-chat pipelines beating standard few-shot prompting by 25%+ and 65%+ respectively across multi-hop retrieval and question-answering benchmarks. It also reports 5–46% improvements over expert-written prompt chains.
 
 ## Limitations
 

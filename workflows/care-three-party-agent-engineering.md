@@ -94,7 +94,7 @@ The methodology's overhead is real: artifact authoring, gate reviews, and helper
 
 - SME knowledge sits outside the engineering team. The three-party structure has nothing to gate against if the developer is the domain expert. CARE's mechanism is the same as classical requirements engineering — externalizing decisions into reviewable artifacts to surface tacit assumptions — applied to LLM agents.
 - Verification stakes are high. Phase 5's versioned benchmarks justify the upstream artifact discipline. For low-stakes assistants, a simple eval set will converge faster.
-- The domain has stable ground truth. The CARE authors flag benchmark sensitivity, leakage, and overfitting to "iterative refinement of artifacts and prompts to the benchmark distribution" as threats to validity ([§5, Ramachandran et al. 2026](https://arxiv.org/abs/2604.28043)). Domains without stable ground truth iterate against a moving target.
+- The domain has stable ground truth. The CARE authors flag benchmark sensitivity, leakage, and overfitting to "iterative refinement of artifacts and prompts to the benchmark distribution" as threats to validity ([§5, Ramachandran et al. 2026](https://arxiv.org/abs/2604.28043v1)). Domains without stable ground truth iterate against a moving target.
 
 ## When it backfires
 

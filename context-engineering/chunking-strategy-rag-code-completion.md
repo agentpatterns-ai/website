@@ -22,7 +22,7 @@ maturity: emerging
 
 ## The counter-intuitive result
 
-Practitioner guides recommend chunking code along function or class boundaries to preserve semantic units, citing the failure mode where a sliding window cuts a function mid-body and severs its return type from the call site ([Stack Overflow, 2024](https://stackoverflow.blog/2024/12/27/breaking-up-is-hard-to-do-chunking-in-rag-applications/)). A controlled empirical study running 864 settings across four chunking strategies, four retrievers, five generators, and nine parameter configurations on RepoEval and CrossCodeEval reports the opposite. Function chunking underperforms every other strategy by 3.57-5.64 percentage points on RepoEval, with Cliff's delta of -1.0, and never lands on the cost-quality Pareto frontier ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)).
+Practitioner guides recommend chunking code along function or class boundaries to preserve semantic units, citing the failure mode where a sliding window cuts a function mid-body and severs its return type from the call site ([Stack Overflow, 2024](https://stackoverflow.blog/2024/12/27/breaking-up-is-hard-to-do-chunking-in-rag-applications/)). A controlled empirical study running 864 settings across four chunking strategies, four retrievers, five generators, and nine parameter configurations on RepoEval and CrossCodeEval reports the opposite. Function chunking underperforms every other strategy by 3.57-5.64 percentage points on RepoEval, with Cliff's delta of -1.0, and never lands on the cost-quality Pareto frontier ([Wu et al., 2026](https://arxiv.org/abs/2605.04763v1)).
 
 The other three strategies (Declaration, Sliding Window, and cAST) produce statistically indistinguishable results across retriever-generator pairs. Sliding Window and cAST dominate the Pareto frontier on both benchmarks; Declaration sits just behind on cost-quality.
 
@@ -55,7 +55,7 @@ The mechanism generalizes: retrieval works best when chunk size matches the gran
 
 ## The larger lever: context length
 
-Strategy choice among the non-function options changes outcomes by a few percentage points. Doubling cross-file context length from 2,048 to 8,192 tokens delivers up to 4.2 percentage points of improvement on the same benchmarks ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)). That gain is larger than the gap between Sliding Window/cAST and Declaration. Chunk size itself has a weaker, non-monotonic effect: bigger is not consistently better, and the optimum varies by retriever.
+Strategy choice among the non-function options changes outcomes by a few percentage points. Doubling cross-file context length from 2,048 to 8,192 tokens delivers up to 4.2 percentage points of improvement on the same benchmarks ([Wu et al., 2026](https://arxiv.org/abs/2605.04763v1)). That gain is larger than the gap between Sliding Window/cAST and Declaration. Chunk size itself has a weaker, non-monotonic effect: bigger is not consistently better, and the optimum varies by retriever.
 
 Allocate optimization effort accordingly: pick any non-function strategy, then spend the remaining budget extending cross-file context length within the model's effective range (see [Context Window Dumb Zone](context-window-dumb-zone.md) for the upper bound).
 
@@ -84,7 +84,7 @@ The controlled study's finding is qualified by task shape and repository structu
 
 ## Example
 
-The controlled study reports that on RepoEval, switching from function chunking to any of Declaration, Sliding Window, or cAST gives a 3.57–5.64 pp lift in completion quality, while doubling cross-file context from 2,048 to 8,192 tokens gives up to 4.2 pp on top of that ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)). A retrieval pipeline that ships function chunking with 2k context is leaving roughly two independent levers on the table.
+The controlled study reports that on RepoEval, switching from function chunking to any of Declaration, Sliding Window, or cAST gives a 3.57–5.64 pp lift in completion quality, while doubling cross-file context from 2,048 to 8,192 tokens gives up to 4.2 pp on top of that ([Wu et al., 2026](https://arxiv.org/abs/2605.04763v1)). A retrieval pipeline that ships function chunking with 2k context is leaving roughly two independent levers on the table.
 
 Before — function chunking, 2k context (the dominated configuration):
 

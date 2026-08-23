@@ -21,7 +21,7 @@ When an AI repair agent picks up an issue, the report stops being documentation 
 
 ## What raises the correct-fix rate
 
-Rank report content by its measured effect on whether the agent's patch passes, not by what a human triager would value. Across 433 SWE-bench Verified issues and 87 repair agents, the fields with the strongest positive association were ([What Makes a Good Bug Report for an AI Agent?](https://arxiv.org/abs/2607.07593)):
+Rank report content by its measured effect on whether the agent's patch passes, not by what a human triager would value. Across 433 SWE-bench Verified issues and 87 repair agents, the fields with the strongest positive association were ([What Makes a Good Bug Report for an AI Agent?](https://arxiv.org/abs/2607.07593v1)):
 
 | Report content | Odds of a resolved issue |
 |----------------|--------------------------|
@@ -37,7 +37,7 @@ So write the report to narrow the agent's search. Name the file or function you 
 
 ## Shorter is better
 
-Length works against the agent. A one-standard-deviation rise in report length was associated with 51% lower odds of resolution ([What Makes a Good Bug Report for an AI Agent?](https://arxiv.org/abs/2607.07593)). Padding a report with every possible detail buries the high-signal cues. Cut background that does not point at the fix.
+Length works against the agent. A one-standard-deviation rise in report length was associated with 51% lower odds of resolution ([What Makes a Good Bug Report for an AI Agent?](https://arxiv.org/abs/2607.07593v1)). Padding a report with every possible detail buries the high-signal cues. Cut background that does not point at the fix.
 
 ## Why it works
 

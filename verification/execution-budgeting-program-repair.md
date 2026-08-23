@@ -18,7 +18,7 @@ maturity: emerging
 
 > Cap how often a repair agent runs tests — frontier models converge with far fewer executions than they reflexively perform.
 
-Execution budgeting reframes the test run in a generate-run-revise loop as a resource the agent spends, not a reflex it fires. A two-stage study of 7,745 SWE-bench Verified agent traces and 3,000 controlled repair attempts across four execution paradigms finds that frontier commercial agents (Claude Code, Codex, OpenCode) execute tests an average of 8.8 times per task, with a range of 2 to 19. Prohibiting execution entirely drops the resolve rate by only about 1.25 percentage points — a statistically non-significant change against a large token and wall-clock saving ([Lin et al., 2026](https://arxiv.org/abs/2606.26978)).
+Execution budgeting reframes the test run in a generate-run-revise loop as a resource the agent spends, not a reflex it fires. A two-stage study of 7,745 SWE-bench Verified agent traces and 3,000 controlled repair attempts across four execution paradigms finds that frontier commercial agents (Claude Code, Codex, OpenCode) execute tests an average of 8.8 times per task, with a range of 2 to 19. Prohibiting execution entirely drops the resolve rate by only about 1.25 percentage points — a statistically non-significant change against a large token and wall-clock saving ([Lin et al., 2026](https://arxiv.org/abs/2606.26978v1)).
 
 ## When this pattern applies
 

@@ -24,6 +24,7 @@ Core concepts that define context engineering as a practice and establish the st
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) — Only put non-discoverable information in agent instruction files; if the agent can find it in the codebase, let it find it
 - [Instruction-Guided Code Completion](instruction-guided-code-completion.md) — Functional correctness and instruction adherence are independent capabilities; explicit implementation constraints and model selection close the gap
 - [Re-Auditing Context Engineering Across Model Generations](generation-scoped-context-engineering.md) — Context-engineering best practices are model-generation-dependent; a capability jump lets you delete guardrails the new model no longer needs while keeping the security-critical ones
+- [Coding-Agent Working-Set Coverage (Coherence Debt)](coherence-debt-working-set.md) — Repository-scale coding agents fail when the coupled facts an upcoming edit needs are neither in active context nor in parametric memory; availability decides the outcome, not distance
 
 ## Attention & Positioning
 
@@ -107,6 +108,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Component-Wise RAG Prioritization](rag-component-prioritization-software-engineering.md) — A 21+ model component-wise empirical study finds retriever choice dominates generator choice for SE-task RAG, and BM25 is robust across code generation, summarization, and repair — under specific conditions
 - [LLM-Driven Logical Retrieval](llm-driven-logical-retrieval.md) — When the agent LLM is frontier-capable, letting it emit AND/OR/NOT Boolean queries against an inverted index matches an agentic hybrid baseline at 41× lower indexing cost — under specific lexical-overlap conditions
 - [Exhaustive Retrieval for Listing Questions](exhaustive-retrieval-for-listing-questions.md) — When the correct answer is every matching passage, ranked top-k truncates silently; the completeness signal you hold decides whether an enumeration loop earns its cost
+- [Long Context vs Retrieval: The Break-Even Decision](long-context-vs-retrieval-break-even.md) — Feeding a whole corpus into a million-token window buys answer completeness at roughly sixteen times the per-query cost, so corpus size and query volume decide, not token price
 - [Hypothetical Classification for Large Label Vocabularies](hypothetical-classification.md) — Let the model invent a label that does not exist, then resolve it to the nearest real one by embedding; the unguided form lost to plain retrieval on both published benchmarks
 - [Compositional Skill Routing](compositional-skill-routing.md) — Decompose a query into atomic sub-tasks, retrieve one skill per sub-task, then compose the plan — earns its cost only above hundreds of skills, where decomposition quality caps the system
 - [Skill Loadout Curation for Coding Agents](skill-loadout-curation.md) — Curate the skills and MCP servers an agent loads before a session; above roughly 30 skills the gain comes from removing colliding descriptions, not from saving tokens

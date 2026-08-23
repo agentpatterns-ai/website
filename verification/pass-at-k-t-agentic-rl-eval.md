@@ -24,7 +24,7 @@ Agentic tool use breaks that assumption. Agents interleave reasoning with tool c
 
 ## The two-dimensional metric
 
-PASS@(k,T) jointly varies sampling budget *k* and interaction depth *T* [Source: [Zhai et al., *Does RL Expand the Capability Boundary of LLM Agents? A PASS@(k,T) Analysis*](https://arxiv.org/abs/2604.14877)]. For each (k, T) cell: sample *k* trajectories with at most *T* interaction rounds each, count success as ≥1 trajectory correct.
+PASS@(k,T) jointly varies sampling budget *k* and interaction depth *T* [Source: [Zhai et al., *Does RL Expand the Capability Boundary of LLM Agents? A PASS@(k,T) Analysis*](https://arxiv.org/abs/2604.14877v1)]. For each (k, T) cell: sample *k* trajectories with at most *T* interaction rounds each, count success as ≥1 trajectory correct.
 
 ```mermaid
 graph TD

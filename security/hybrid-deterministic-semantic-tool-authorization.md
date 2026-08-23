@@ -59,7 +59,7 @@ Structural checks pass a clean call to an unrelated tool. Two stages add intent 
 1. Task extraction emits a concise natural-language description of the user's objective from the conversation. Separating extraction from matching keeps raw conversation off the authorization server.
 2. Task-tool matching classifies whether each requested tool [aligns with the task](task-scope-security-boundary.md). Mismatches deny; matches proceed to deterministic checks.
 
-This extends Task-Based Access Control (TBAC) ([El Helou et al., 2025](https://arxiv.org/abs/2510.26702)) to multi-turn use, handling "clarification exchanges, tangential information, and conversational drifts" without re-prompting.
+This extends Task-Based Access Control (TBAC) ([El Helou et al., 2025](https://arxiv.org/abs/2510.26702v1)) to multi-turn use, handling "clarification exchanges, tangential information, and conversational drifts" without re-prompting.
 
 ## What the empirical numbers buy you
 

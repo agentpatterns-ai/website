@@ -57,7 +57,7 @@ Some novel conventions the agent cannot discover from the codebase: an unfamilia
 This result is narrower than it looks. Three boundaries matter:
 
 - Coding agents on SWE-bench only. General prompt engineering still favors positive directives. Anthropic's docs advise ["Tell Claude what to do instead of what not to do"](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices) for clarity and format control. The coding-agent finding is a specialization, not a reversal.
-- Rule sets under about 50 rules. The no-degradation window ends there. Beyond it, the compliance ceiling dominates: frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
+- Rule sets under about 50 rules. The no-degradation window ends there. Beyond it, the compliance ceiling dominates: frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1)).
 - Complementary, not superseding. [AGENTS.md](../standards/agents-md.md) benchmarks found tool-specific commands and non-inferable constraints produce the largest behavior change ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). These are positive directives that still work where they supply information the agent cannot infer.
 
 The synthesis: write negative constraints for failure modes the agent already knows how to avoid; write positive directives only for information the agent cannot reach any other way.
@@ -100,7 +100,7 @@ The negative rules reshape the agent's search by removing known failure branches
 
 - Non-coding tasks. The paper measures SWE-bench success only. Extrapolating guardrails-over-guidance to chat assistants, classification, or tool-dispatch pipelines is unsupported by this evidence.
 - Prescriptive output format. Commit-message schemas, file-naming conventions, and API response structures need positive specification. A negative-only rule set cannot define required structure.
-- Above the compliance ceiling. The 50-rule no-degradation window is narrower than many production CLAUDE.md files. At high instruction densities, compliance degrades regardless of polarity: frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
+- Above the compliance ceiling. The 50-rule no-degradation window is narrower than many production CLAUDE.md files. At high instruction densities, compliance degrades regardless of polarity: frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1)).
 - Must-never-fail constraints. Critical prohibitions belong in hooks or CI gates, not instruction text. An instruction asks; a hook requires.
 
 ## Key Takeaways

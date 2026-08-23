@@ -36,7 +36,7 @@ Episodic memory stores sequences of events with outcomes, the same raw material 
 | Temporal structure | None | Ordered steps with causal links |
 | Value signal | Relevance | Relevance + outcome (success/failure) |
 
-The distinction matters because recurring problems rarely need just the answer -- they need the path to the answer. An agent that recalls "last time I saw this stack trace, I tried patching the config first and it failed because the issue was in the dependency, then I pinned the version and it resolved" makes better first moves than one that only knows "this service uses pinned dependencies." Research on subtask-level memory for software engineering agents confirms that episode-based retrieval outperforms instance-level baselines across diverse backbones on SWE-bench Verified ([Structurally Aligned Subtask-Level Memory, arxiv 2602.21611](https://arxiv.org/abs/2602.21611)).
+The distinction matters because recurring problems rarely need just the answer -- they need the path to the answer. An agent that recalls "last time I saw this stack trace, I tried patching the config first and it failed because the issue was in the dependency, then I pinned the version and it resolved" makes better first moves than one that only knows "this service uses pinned dependencies." Research on subtask-level memory for software engineering agents confirms that episode-based retrieval outperforms instance-level baselines across diverse backbones on SWE-bench Verified ([Structurally Aligned Subtask-Level Memory, arxiv 2602.21611](https://arxiv.org/abs/2602.21611v1)).
 
 ## Episode structure
 

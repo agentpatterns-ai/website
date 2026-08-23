@@ -72,7 +72,7 @@ Four rules govern brief writing:
 - Complete acceptance criteria — every brief lists concrete, testable criteria. Each criterion is independently verifiable.
 - Explicit scope boundaries — state what is out of scope to prevent gold-plating.
 
-This is the upstream complement to [issue requirements preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md): the brief is the structured input the executor receives, written before the executor opens its first context window. The REAgent paper measures a 17.40% lift in resolution rate when the executor reconstructs structured requirements at run time ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861)) — a triage-skill brief moves that work upstream and out of the executor's context budget.
+This is the upstream complement to [issue requirements preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md): the brief is the structured input the executor receives, written before the executor opens its first context window. The REAgent paper measures a 17.40% lift in resolution rate when the executor reconstructs structured requirements at run time ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861v1)) — a triage-skill brief moves that work upstream and out of the executor's context budget.
 
 ## Out-of-scope as institutional memory
 

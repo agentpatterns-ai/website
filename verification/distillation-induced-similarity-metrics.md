@@ -24,7 +24,7 @@ maturity: emerging
 
 Cross-vendor routing and ensembling assume vendor diversity buys behavioral diversity. Distillation breaks that assumption: a student trained on a teacher's trajectories inherits the teacher's non-mandatory preferences (when to verify after writing, which optional tools to invoke) alongside task capability. Benchmark scores measure success rate, not behavioral overlap, so the inheritance is invisible at the leaderboard layer.
 
-Yang et al. propose two metrics that isolate non-mandatory behavior, evaluated across 18 models from 8 providers on τ-Bench against Claude Sonnet 4.5 (thinking) ([arxiv.org/abs/2604.21255](https://arxiv.org/abs/2604.21255)) — τ-Bench is the substrate (Yao et al., [arxiv.org/abs/2406.12045](https://arxiv.org/abs/2406.12045)).
+Yang et al. propose two metrics that isolate non-mandatory behavior, evaluated across 18 models from 8 providers on τ-Bench against Claude Sonnet 4.5 (thinking) ([arxiv.org/abs/2604.21255v1](https://arxiv.org/abs/2604.21255v1)) — τ-Bench is the substrate (Yao et al., [arxiv.org/abs/2406.12045v1](https://arxiv.org/abs/2406.12045v1)).
 
 ## Response Pattern Similarity (RPS)
 
@@ -48,7 +48,7 @@ Three findings matter most for routing decisions:
 - Cross-family convergence happens. Kimi-K2 (thinking) reaches 82.6% SnodeS and 94.7% SdepS against Claude Sonnet 4.5, exceeding Anthropic's own Opus 4.1 on the same metrics. Vendor boundaries do not protect against convergence when a teacher's traces have leaked into a student's training pipeline.
 - RPS and AGS are not redundant. Pearson r = 0.491 between them — verbal style and tool-invocation choices capture distinct dimensions, so routing decisions need both.
 
-A controlled distillation experiment isolates the mechanism: fine-tuning Qwen2.5-14B-Instruct on Sonnet 4.5 trajectories via LoRA shifted AGS toward the teacher (+0.13) and away from a control (−0.05), while a graph-edit-distance baseline rose equally toward both — the AGS decomposition picks up teacher-specific transfer that simpler graph metrics miss ([arxiv.org/abs/2604.21255](https://arxiv.org/abs/2604.21255)).
+A controlled distillation experiment isolates the mechanism: fine-tuning Qwen2.5-14B-Instruct on Sonnet 4.5 trajectories via LoRA shifted AGS toward the teacher (+0.13) and away from a control (−0.05), while a graph-edit-distance baseline rose equally toward both — the AGS decomposition picks up teacher-specific transfer that simpler graph metrics miss ([arxiv.org/abs/2604.21255v1](https://arxiv.org/abs/2604.21255v1)).
 
 ## When the metrics apply
 

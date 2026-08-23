@@ -45,7 +45,7 @@ A composite score combines several dimensions so no one signal dominates:
 
 ## Why it works
 
-Per-turn attention is the scarce resource, and arrival order has no relationship to marginal value. Pure FIFO produces head-of-line blocking — a high-value program waits behind low-value calls. [Autellix](https://arxiv.org/abs/2502.13965) identifies this as the dominant inefficiency in LLM-agent workloads and reports 4–15× program-throughput gains at equivalent latency from program-aware priority scheduling. A composite score reorders the queue so each turn pays back more of the goal; the mechanism is attention-budget allocation under head-of-line blocking, not "agents need lists".
+Per-turn attention is the scarce resource, and arrival order has no relationship to marginal value. Pure FIFO produces head-of-line blocking — a high-value program waits behind low-value calls. [Autellix](https://arxiv.org/abs/2502.13965v1) identifies this as the dominant inefficiency in LLM-agent workloads and reports 4–15× program-throughput gains at equivalent latency from program-aware priority scheduling. A composite score reorders the queue so each turn pays back more of the goal; the mechanism is attention-budget allocation under head-of-line blocking, not "agents need lists".
 
 ## When this backfires
 
@@ -78,7 +78,7 @@ The `waiting_turns` term is the aging mitigation; without it, an issue with low 
 - Prioritization is a different decision from routing (who) and scheduling (when) — name it as its own concern so teams can encode urgency, value, and dependency signals into the loop.
 - The pattern earns its complexity when attention is scarce, the backlog is long, value spread is wide, and ranking signals are estimable. Otherwise FIFO plus lane isolation is correct — Block's agent-task-queue is the worked example of that choice.
 - Composite scores beat single signals; aging beats pure priority; re-rank on state change, not per turn.
-- Head-of-line blocking on the attention budget is the mechanism the pattern attacks; [Autellix](https://arxiv.org/abs/2502.13965) reports 4–15× program-throughput gains from program-aware priority over FIFO.
+- Head-of-line blocking on the attention budget is the mechanism the pattern attacks; [Autellix](https://arxiv.org/abs/2502.13965v1) reports 4–15× program-throughput gains from program-aware priority over FIFO.
 
 ## Related
 

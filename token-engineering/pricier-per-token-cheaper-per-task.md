@@ -33,7 +33,7 @@ Cognition ran 3,000 evaluation sessions on the FrontierCode 1.1 benchmark with F
 
 Read the bottom two rows first. Without a sidekick, the 2x per-token premium lands as a 32% higher bill, exactly as the price table predicts. The inversion appears only in the top two rows, where each lead can hand work to a cheaper model. So the finding is not that expensive models are secretly cheap. It is that a delegating harness moves the cost ordering far enough to cross over, and a plain loop does not.
 
-Treat these as vendor-reported figures. Cognition sells Devin and the [Fusion architecture](https://cognition.com/blog/devin-fusion) credited for the result, no public harness reproduces the run, and a separate study measured a 23.8 percentage-point score spread across six harnesses on identical tasks and model backends ([Harness-Bench, arXiv:2605.27922](https://arxiv.org/abs/2605.27922)). Carry the method across to your own setup, not the numbers.
+Treat these as vendor-reported figures. Cognition sells Devin and the [Fusion architecture](https://cognition.com/blog/devin-fusion) credited for the result, no public harness reproduces the run, and a separate study measured a 23.8 percentage-point score spread across six harnesses on identical tasks and model backends ([Harness-Bench, arXiv:2605.27922](https://arxiv.org/abs/2605.27922v1)). Carry the method across to your own setup, not the numbers.
 
 ## Why it works
 

@@ -21,7 +21,7 @@ maturity: established
 
 Human reviewers excel at judgment. Agents excel at checklists. The agent handles the first pass — style consistency, type correctness, test coverage gaps, security patterns, naming conventions — while humans focus on design, architecture fit, and scalability.
 
-This works by reallocating attention. Take repetitive pattern-matching off the human review queue, and reviewers can focus on architecture. An interview study of 20 engineers reports that engagement with AI-assisted review is distinct from peer review along cognitive, emotional, and behavioral dimensions ([arXiv:2501.02092](https://arxiv.org/abs/2501.02092)).
+This works by reallocating attention. Take repetitive pattern-matching off the human review queue, and reviewers can focus on architecture. An interview study of 20 engineers reports that engagement with AI-assisted review is distinct from peer review along cognitive, emotional, and behavioral dimensions ([arXiv:2501.02092](https://arxiv.org/abs/2501.02092v1)).
 
 ## How it works
 
@@ -59,7 +59,7 @@ Agents over-flag — surfacing style issues in generated code and flagging inten
 
 ## When this backfires
 
-Dropping the human is the failure with the hardest number attached. An empirical study of 3,109 PRs found CRA-only review achieves a 45% merge rate against 68% for human-involved review, and 12 of 13 CRAs studied averaged signal ratios below 60% ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). Require at least one human approval.
+Dropping the human is the failure with the hardest number attached. An empirical study of 3,109 PRs found CRA-only review achieves a 45% merge rate against 68% for human-involved review, and 12 of 13 CRAs studied averaged signal ratios below 60% ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196v1)). Require at least one human approval.
 
 Size breaks it differently. A diff past the context limit gets truncated, and what comes back is generic comment spread thinly over the fragments the agent did see. Keep PRs small — see [agent-driven PR slicing](agent-driven-pr-slicing.md).
 
@@ -67,7 +67,7 @@ Self-review is subtler. A reviewer running in the same session validates the ass
 
 Accountability decays without a failing signal. Treat agent approval as sufficient and architectural debt accumulates exactly where the agent cannot see it, because nobody is answerable for design any more.
 
-Calibration decides whether any of this gets used at all. AI suggestions are adopted at 16.6% against 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)), and an untuned prompt depresses adoption even for findings that are correct.
+Calibration decides whether any of this gets used at all. AI suggestions are adopted at 16.6% against 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911v1)), and an untuned prompt depresses adoption even for findings that are correct.
 
 ## Example
 
@@ -129,7 +129,7 @@ Run several. For specialized domains, separate security, performance, and style 
 
 **What false-positive rate should I expect, and how does it affect adoption?**
 
-False positives run 5–15% for well-configured tools and higher when poorly tuned ([Graphite](https://graphite.com/guides/ai-code-review-false-positives)). Adoption tracks that calibration: AI suggestions are taken up at 16.6% against 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)), and untuned prompts depress adoption even for correct findings. Specify what to ignore, and set severity thresholds so low-severity output stays optional.
+False positives run 5–15% for well-configured tools and higher when poorly tuned ([Graphite](https://graphite.com/guides/ai-code-review-false-positives)). Adoption tracks that calibration: AI suggestions are taken up at 16.6% against 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911v1)), and untuned prompts depress adoption even for correct findings. Specify what to ignore, and set severity thresholds so low-severity output stays optional.
 
 ## Key Takeaways
 

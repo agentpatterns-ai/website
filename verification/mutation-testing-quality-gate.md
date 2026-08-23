@@ -49,7 +49,7 @@ graph TD
 
 ## Production existence proof: Meta ACH
 
-Meta's Automated Compliance Hardening applied this loop across 7 platforms and [10,795 Android Kotlin classes, generating 9,095 mutants and 571 hardening tests; engineers accepted 73% of the generated tests, with 36% judged privacy-relevant](https://arxiv.org/abs/2501.12862). Equivalent-mutant detection is the central practical bottleneck: ACH uses a separate LLM agent for the classification, [boosting mutant precision from 0.79 to 0.95 with preprocessing](https://arxiv.org/abs/2501.12862). The abstract notes ACH can harden code "against any type of regression" — privacy was the first deployment, not the constraint.
+Meta's Automated Compliance Hardening applied this loop across 7 platforms and [10,795 Android Kotlin classes, generating 9,095 mutants and 571 hardening tests; engineers accepted 73% of the generated tests, with 36% judged privacy-relevant](https://arxiv.org/abs/2501.12862v1). Equivalent-mutant detection is the central practical bottleneck: ACH uses a separate LLM agent for the classification, [boosting mutant precision from 0.79 to 0.95 with preprocessing](https://arxiv.org/abs/2501.12862v1). The abstract notes ACH can harden code "against any type of regression" — privacy was the first deployment, not the constraint.
 
 ## When this backfires
 
@@ -118,4 +118,6 @@ The agent adds three targeted tests; the mutation tool reruns and confirms all 1
 - [Anti-Reward-Hacking](anti-reward-hacking.md) — designing rubrics agents cannot game by surface metrics
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — the changed-line coverage gate whose assertion-free blind spot mutation testing closes
 - [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](bug-discriminating-validation-evidence.md) — the same discrimination question asked against the real reported defect rather than a synthetic mutant
+- [Code Health as a Signal for Agent-Generated Test Quality](code-health-agent-generated-tests.md) — why the maintainability of the code under test shows up in mutation score and not in coverage
 - [Audit Your Test Suite With an Agent, Then Certify Each Flag](certified-agent-test-suite-auditing.md) — measures adequacy against real accepted-but-buggy code instead of synthetic mutants, at a much higher cost per unit
+- [Mutation Testing for LLM Judges: Scoring an Evaluator on Injected Defects](mutation-testing-llm-judges.md) — the same operator machinery aimed one level up, at whether an evaluator notices a defect on a task with no ground truth

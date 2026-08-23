@@ -18,7 +18,7 @@ maturity: emerging
 
 # Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions
 
-> The permission framework drives overeager-action rates more than the base model: identical Sonnet-4.6 weights span 1.1% to 27.7% across harnesses ([Qu et al., 2026](https://arxiv.org/abs/2605.18583)).
+> The permission framework drives overeager-action rates more than the base model: identical Sonnet-4.6 weights span 1.1% to 27.7% across harnesses ([Qu et al., 2026](https://arxiv.org/abs/2605.18583v1)).
 
 Learn it hands-on with [Permissions & Safety Boundaries](https://learn.agentpatterns.ai/harness-engineering/permissions-and-safety-boundaries/), a guided lesson with quizzes.
 
@@ -54,7 +54,7 @@ Sonnet-4.6 alone ranges from 1.1% (in OpenHands) to 27.7% (in Claude Code's perm
 
 ## Why it works
 
-LLMs encode authorization as text patterns, not durable representations of intent. Given a "Scope of consent" block, the model pattern-matches candidate actions against literal phrases like "do not delete files outside the working directory." Stripping the block raises overeager rates 11.9–17.2 percentage points across models; on Claude Code paired scenarios, from 0.0% to 17.1% ([Qu et al., 2026](https://arxiv.org/abs/2605.18583)).
+LLMs encode authorization as text patterns, not durable representations of intent. Given a "Scope of consent" block, the model pattern-matches candidate actions against literal phrases like "do not delete files outside the working directory." Stripping the block raises overeager rates 11.9–17.2 percentage points across models; on Claude Code paired scenarios, from 0.0% to 17.1% ([Qu et al., 2026](https://arxiv.org/abs/2605.18583v1)).
 
 Ask-to-continue frameworks do not improve inference. They place a deterministic checkpoint between proposal and execution, so the pattern-matching weakness becomes inert: a proposal cannot become an effect without a separate consent event. The model still misjudges scope; the harness denies it the chance to act.
 
@@ -69,7 +69,7 @@ The recommendation is wrong, or unmeasurable, in these conditions:
 - Deterministic narrow allowlist covers the surface. An exact-command whitelist (`Bash(npm test)`, `Edit(./src/**)`) matches ask-to-continue at zero interruption cost. Permissive is not the only alternative.
 - High-frequency headless automation. CI loops, scheduled refactors, and `-p` runs cannot pause for approval, so ask-to-continue collapses to bypass-or-abort.
 - Approval fatigue dominates. When users rubber-stamp every prompt, the framework provides paper safety. Practitioner reports describe about 93% acceptance rates on conservative defaults, and the cognitive cost of 20-minute-plus focus recovery per interruption is not free ([Approval Fatigue Is an Agent Security Bug](https://www.developersdigest.tech/blog/approval-fatigue-agent-security-bug)).
-- Benchmark validity caveat. The 5.4–27.7% absolute numbers come from a single benchmark whose authors flag measurement-validity concerns with prompt-encoded scope. The relative ranking holds; absolute rates may not transfer ([Qu et al., 2026](https://arxiv.org/abs/2605.18583)).
+- Benchmark validity caveat. The 5.4–27.7% absolute numbers come from a single benchmark whose authors flag measurement-validity concerns with prompt-encoded scope. The relative ranking holds; absolute rates may not transfer ([Qu et al., 2026](https://arxiv.org/abs/2605.18583v1)).
 
 ## Example
 
@@ -111,8 +111,8 @@ The deletion of `auth-credentials.bak` now requires a separate consent event the
 
 ## Key Takeaways
 
-- Permission framework (ask-to-continue vs permissive) moves overeager-action rates by >25 percentage points on a single model; base-model differences inside one framework move at most 15.9 ([Qu et al., 2026](https://arxiv.org/abs/2605.18583)).
-- The mechanism is pattern-matching on consent declarations, not scope inference — stripping the declaration raises overeager rates by 11.9–17.2 percentage points across models ([Qu et al., 2026](https://arxiv.org/abs/2605.18583)).
+- Permission framework (ask-to-continue vs permissive) moves overeager-action rates by >25 percentage points on a single model; base-model differences inside one framework move at most 15.9 ([Qu et al., 2026](https://arxiv.org/abs/2605.18583v1)).
+- The mechanism is pattern-matching on consent declarations, not scope inference — stripping the declaration raises overeager rates by 11.9–17.2 percentage points across models ([Qu et al., 2026](https://arxiv.org/abs/2605.18583v1)).
 - Classifier-based gating reduces but does not eliminate the failure: Anthropic's Auto Mode leaves 17% of real overeager actions undetected ([Anthropic Engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)).
 - Choose the framework before you tune the model when the agent has write access to native state, real credentials, or shared remote resources.
 - A hermetic sandbox or deterministic narrow allowlist neutralizes the framework distinction — for those workloads, contain blast radius and accept the rate.

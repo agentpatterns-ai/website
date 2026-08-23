@@ -42,7 +42,7 @@ tools:
   - WebSearch
 ```
 
-File scope decides which files the agent can touch. An agent working on `docs/` has no business in `.github/workflows/`. Worktrees provide hard filesystem boundaries.
+File scope decides which files the agent can touch. An agent working on `docs/` has no business in `.github/workflows/`. Worktrees keep each agent's edits inside its own tree, but they do not restrict what the process can reach; see [Treating a Worktree as a Safety Boundary](../patterns/anti-patterns/worktree-as-safety-boundary.md).
 
 Permission mode sets how the agent interacts with the human. Claude Code permission modes ([docs](https://code.claude.com/docs/en/permissions)):
 
@@ -97,7 +97,7 @@ Scoping also bounds per-action damage but does not bound time-integrated damage 
 
 - Every unnecessary permission is potential blast radius — remove it
 - Tool restrictions in agent frontmatter are enforced by the runtime, not the model — the `tools` field controls what the runtime exposes, not what the model requests ([docs](https://code.claude.com/docs/en/sub-agents))
-- Worktrees provide filesystem containment for file-writing agents
+- Worktrees keep each file-writing agent's edits in its own tree; process reach needs a sandbox on top
 - Decompose broad-scope agents into narrow-scope chains to reduce per-agent attack surface
 - Audit before deployment; remove permissions justified only by convenience
 

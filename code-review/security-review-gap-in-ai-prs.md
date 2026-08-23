@@ -24,7 +24,7 @@ Rabbi et al. (EASE 2026) filtered 33,000+ agent-authored PRs from GitHub Copilot
 
 ## Six CWEs account for 80% of weaknesses
 
-Across 853 vulnerability findings in 104 PRs, six categories dominate ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965)):
+Across 853 vulnerability findings in 104 PRs, six categories dominate ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965v1)):
 
 | CWE | Description | Share |
 |---|---|---|
@@ -39,7 +39,7 @@ LLM-generated regexes reproduce polynomial-backtracking patterns from their trai
 
 ## Flawed patches still merge
 
-Of 675 security-related PRs, 52.4% merged, 32.4% closed unmerged, 15.1% remained open. 15.4% contained detected CWEs. Review does not filter them out ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965)). Of 219 rejections, only 1.8% cited distrust in AI-written code. Most were procedural:
+Of 675 security-related PRs, 52.4% merged, 32.4% closed unmerged, 15.1% remained open. 15.4% contained detected CWEs. Review does not filter them out ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965v1)). Of 219 rejections, only 1.8% cited distrust in AI-written code. Most were procedural:
 
 | Reason | Share |
 |---|---|
@@ -52,7 +52,7 @@ Of 675 security-related PRs, 52.4% merged, 32.4% closed unmerged, 15.1% remained
 | Code style / formatting | 3.7% (new category) |
 | Distrust in AI-written code | 1.8% |
 
-Reviewers reject on inactivity, test gaps, and style, not on SAST-detectable CWEs. The authors call this an imbalance where "serious flaws pass review while minor issues cause rejection" ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965)).
+Reviewers reject on inactivity, test gaps, and style, not on SAST-detectable CWEs. The authors call this an imbalance where "serious flaws pass review while minor issues cause rejection" ([arXiv:2604.19965](https://arxiv.org/abs/2604.19965v1)).
 
 ## Commit message quality stops predicting acceptance
 
@@ -66,7 +66,7 @@ Pseudo-R² of 0.23 on the logistic regression confirms limited predictive power.
 
 ## Why review heuristics fail on agent PRs
 
-Reviewer proxies (message care, test scaffolding, change size, contributor history) assume a careful author produces careful code. Agent PRs break the link: a CI-passing patch with a detailed message still ships a polynomial regex. A regression on 33,596 agent-authored PRs shows reviewer engagement as the strongest single merge predictor ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441); see [Agent-Authored PR Integration](agent-authored-pr-integration.md)), a social signal that under-weights security analysis.
+Reviewer proxies (message care, test scaffolding, change size, contributor history) assume a careful author produces careful code. Agent PRs break the link: a CI-passing patch with a detailed message still ships a polynomial regex. A regression on 33,596 agent-authored PRs shows reviewer engagement as the strongest single merge predictor ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441v1); see [Agent-Authored PR Integration](agent-authored-pr-integration.md)), a social signal that under-weights security analysis.
 
 ## What to change
 
@@ -117,4 +117,4 @@ A human-PR heuristic approves on a detailed commit message, passing tests, and c
 - [Siddiq et al., ICPC 2024](https://s2e-lab.github.io/preprints/icpc24-preprint.pdf) — mechanism behind CWE-1333 dominance
 - [OWASP ReDoS](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS)
 - [arXiv:2507.15003](https://arxiv.org/abs/2507.15003) — AIDev dataset corroboration
-- [arXiv:2602.19441](https://arxiv.org/abs/2602.19441) — reviewer engagement as the strongest single merge predictor (regression on 33,596 agent-authored PRs)
+- [arXiv:2602.19441](https://arxiv.org/abs/2602.19441v1) — reviewer engagement as the strongest single merge predictor (regression on 33,596 agent-authored PRs)

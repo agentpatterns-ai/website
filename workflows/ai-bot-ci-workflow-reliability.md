@@ -21,7 +21,7 @@ maturity: emerging
 
 ## The measurement
 
-A 2026 MSR Mining Challenge study analyzed 61,837 GitHub Actions workflow runs from 2,355 public repositories. It linked each run to a pull request authored by one of five agents: Claude, Devin, Cursor, Copilot, or Codex ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)). The runs come from the AIDev dataset ([arXiv:2602.09185](https://arxiv.org/abs/2602.09185)), which aggregates 932,791 agentic PRs across 116,211 repositories.
+A 2026 MSR Mining Challenge study analyzed 61,837 GitHub Actions workflow runs from 2,355 public repositories. It linked each run to a pull request authored by one of five agents: Claude, Devin, Cursor, Copilot, or Codex ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334v1)). The runs come from the AIDev dataset ([arXiv:2602.09185](https://arxiv.org/abs/2602.09185v1)), which aggregates 932,791 agentic PRs across 116,211 repositories.
 
 | Agent | Workflow Runs | Success Rate |
 |-------|--------------:|-------------:|
@@ -31,7 +31,7 @@ A 2026 MSR Mining Challenge study analyzed 61,837 GitHub Actions workflow runs f
 | Cursor | 3,031 | 72.39% |
 | Claude | 37 | 64.86% |
 
-Differences across agents are statistically significant (p<0.01). Copilot shows 7.53x higher odds of workflow success than Claude and 4.05x higher odds than Devin ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)).
+Differences across agents are statistically significant (p<0.01). Copilot shows 7.53x higher odds of workflow success than Claude and 4.05x higher odds than Devin ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334v1)).
 
 ## What the spread means and does not
 
@@ -39,7 +39,7 @@ The 29-point gap between Codex (94.44%) and Claude (64.86%) is real in the datas
 
 Sample-size asymmetry. Devin and Copilot contribute 94% of the runs; Claude contributes 37 and Codex contributes 180. A success rate computed on 37 runs is indicative, not authoritative. The confidence interval is wide enough that Claude's "true" rate could overlap with Cursor's.
 
-Public-repo selection. The dataset covers only public GitHub repositories. The paper notes that findings may not generalize to "private or enterprise CI/CD environments, which typically involve more complex workflows" ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334)). Enterprise CI uses self-hosted runners, stricter gates, and custom orchestration not represented here.
+Public-repo selection. The dataset covers only public GitHub repositories. The paper notes that findings may not generalize to "private or enterprise CI/CD environments, which typically involve more complex workflows" ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334v1)). Enterprise CI uses self-hosted runners, stricter gates, and custom orchestration not represented here.
 
 Attribution noise for low-volume agents. A separate fingerprinting study of the same five agents achieved 97.2% overall F1, but Claude Code alone scored 0.67 F1 with 57% recall ([arXiv:2601.17406](https://arxiv.org/html/2601.17406)). Some PRs labeled "Claude" in the reliability study may be misattributed. Misattribution dominates more heavily where the labeled population is smallest.
 
@@ -106,6 +106,6 @@ Do not port these numbers into private-repo decisions. The selection bias is lar
 ## Sources
 
 - [arXiv:2604.18334](https://arxiv.org/abs/2604.18334) — Shah, Habib, Hussain, Ghafoor, Bangash (LUMS, 2026): "Reliability of AI Bots Footprints in GitHub Actions CI/CD Workflows" — MSR 2026 Mining Challenge
-- [arXiv:2602.09185](https://arxiv.org/abs/2602.09185) — Li et al.: AIDev dataset (932,791 agentic PRs, 116,211 repos) — underlying dataset
+- [arXiv:2602.09185](https://arxiv.org/abs/2602.09185v1) — Li et al.: AIDev dataset (932,791 agentic PRs, 116,211 repos) — underlying dataset
 - [arXiv:2601.17413](https://arxiv.org/html/2601.17413v1) — "When AI Agents Touch CI/CD Configurations" — CI/CD-specific edits compare equally to non-CI/CD edits
 - [arXiv:2601.17406](https://arxiv.org/html/2601.17406) — "Fingerprinting AI Coding Agents on GitHub" — per-agent attribution F1 scores

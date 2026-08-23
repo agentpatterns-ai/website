@@ -66,7 +66,7 @@ The failure mode is a signal mismatch. The agent's feedback loop optimizes for f
 
 - Run security checks on the diff, not the full codebase, to keep loop latency manageable
 - Store the baseline SAST report at loop start; compare each iteration against the baseline, not global zero
-- Treat security regressions as loop-breaking failures that surface to the human, not as feedback for the agent to self-correct — [SCAFFOLD-CEGIS](https://arxiv.org/abs/2603.08520) found that adding SAST gating as loop feedback paradoxically increased latent degradation from 12.5% to 20.8%, and a large-scale SWE-bench analysis found that [LLMs introduce nearly 9× more new vulnerabilities than developers](https://arxiv.org/abs/2507.02976) when patching real-world issues
+- Treat security regressions as loop-breaking failures that surface to the human, not as feedback for the agent to self-correct — [SCAFFOLD-CEGIS](https://arxiv.org/abs/2603.08520v1) found that adding SAST gating as loop feedback paradoxically increased latent degradation from 12.5% to 20.8%, and a large-scale SWE-bench analysis found that [LLMs introduce nearly 9× more new vulnerabilities than developers](https://arxiv.org/abs/2507.02976) when patching real-world issues
 
 ## Example
 

@@ -37,7 +37,7 @@ graph TD
     F --> B
 ```
 
-The loop is self-reinforcing. [Pullflow's analysis](https://pullflow.com/blog/when-code-reviews-go-too-far/) describes the mechanism: excessive review scope pushes developers to batch changes, inflating PR size and compounding delay. [arXiv:2602.19441](https://arxiv.org/abs/2602.19441) finds larger changes reduce merge likelihood in agent-authored PRs, and [CodeRabbit's 2026 report](https://www.coderabbit.ai/blog/2025-was-the-year-of-ai-speed-2026-will-be-the-year-of-ai-quality) finds AI-generated code contains 1.7x more issues than human-written code — making each added line more expensive to review.
+The loop is self-reinforcing. [Pullflow's analysis](https://pullflow.com/blog/when-code-reviews-go-too-far/) describes the mechanism: excessive review scope pushes developers to batch changes, inflating PR size and compounding delay. [arXiv:2602.19441](https://arxiv.org/abs/2602.19441v1) finds larger changes reduce merge likelihood in agent-authored PRs, and [CodeRabbit's 2026 report](https://www.coderabbit.ai/blog/2025-was-the-year-of-ai-speed-2026-will-be-the-year-of-ai-quality) finds AI-generated code contains 1.7x more issues than human-written code — making each added line more expensive to review.
 
 ## Mitigations
 

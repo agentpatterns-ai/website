@@ -23,9 +23,9 @@ Reach for this technique when three conditions hold: you author a trusted [Model
 
 ## The taint problem in MCP servers
 
-A taint-style vulnerability occurs when an untrusted tool argument propagates through the server's code and triggers a security violation at a sink. An empirical study of 53 MCP-server vulnerabilities across 45 servers found taint-style flaws make up 81.13% of them — command injection alone is 50.94%, with path traversal, SSRF, and SQL injection filling out the rest ([Shi et al., 2026](https://arxiv.org/abs/2607.07461)).
+A taint-style vulnerability occurs when an untrusted tool argument propagates through the server's code and triggers a security violation at a sink. An empirical study of 53 MCP-server vulnerabilities across 45 servers found taint-style flaws make up 81.13% of them — command injection alone is 50.94%, with path traversal, SSRF, and SQL injection filling out the rest ([Shi et al., 2026](https://arxiv.org/abs/2607.07461v1)).
 
-These flaws are slow to fix. A patch touches 203.6 lines, 5.5 functions, and 3.3 files on average; fixed vulnerabilities take 37.3 days, and unpatched ones stay exposed for 92.3 days ([Shi et al., 2026](https://arxiv.org/abs/2607.07461)). Meanwhile the metadata that could warn a calling model says nothing: only 7.00% of tool descriptions and 1.83% of parameter descriptions across 1,856 tools carry any security information ([Shi et al., 2026](https://arxiv.org/abs/2607.07461)).
+These flaws are slow to fix. A patch touches 203.6 lines, 5.5 functions, and 3.3 files on average; fixed vulnerabilities take 37.3 days, and unpatched ones stay exposed for 92.3 days ([Shi et al., 2026](https://arxiv.org/abs/2607.07461v1)). Meanwhile the metadata that could warn a calling model says nothing: only 7.00% of tool descriptions and 1.83% of parameter descriptions across 1,856 tools carry any security information ([Shi et al., 2026](https://arxiv.org/abs/2607.07461v1)).
 
 ## What to write in the description
 
@@ -40,7 +40,7 @@ The paper's SpellSmith method adds one more step at the client: a reflection sta
 
 ## Why it works
 
-MCP metadata gives a calling model minimal constraints on tool inputs, so a model generating arguments has no signal that a value is dangerous ([Shi et al., 2026](https://arxiv.org/abs/2607.07461)). Naming the tainted parameter, the capability, and the CWE supplies that missing context, so the model can decline or narrow a misuse it would otherwise produce. On an evaluation of 792 malicious prompts against GPT-4o, this cut attack success from 56.61% to 0.04% at the trial level ([Shi et al., 2026](https://arxiv.org/abs/2607.07461)). The mitigation lives in metadata, so it ships without a code change — the reason it is worth reaching for against a 37-day code fix.
+MCP metadata gives a calling model minimal constraints on tool inputs, so a model generating arguments has no signal that a value is dangerous ([Shi et al., 2026](https://arxiv.org/abs/2607.07461v1)). Naming the tainted parameter, the capability, and the CWE supplies that missing context, so the model can decline or narrow a misuse it would otherwise produce. On an evaluation of 792 malicious prompts against GPT-4o, this cut attack success from 56.61% to 0.04% at the trial level ([Shi et al., 2026](https://arxiv.org/abs/2607.07461v1)). The mitigation lives in metadata, so it ships without a code change — the reason it is worth reaching for against a 37-day code fix.
 
 ## When this backfires
 
@@ -49,7 +49,7 @@ The guarantee is guidance to a model, not enforcement, so several conditions bre
 - The server is untrusted. SpellSmith assumes a trusted provider ([Shi et al., 2026](https://arxiv.org/abs/2607.07461)). Against a malicious server the same `description` field is the [tool-poisoning](tool-invocation-attack-surface.md) channel, so description text becomes an attack surface rather than a defense.
 - You treat it as the fix. The taint path from argument to sink still exists in code. A capable jailbreak, or any caller that reaches the server endpoint directly, hits the sink with no model in the loop. Descriptions cannot [grant or deny authority](authority-confusion-untrusted-context.md) — that is the metadata-non-authority invariant ([Liu, 2026](https://arxiv.org/abs/2606.29073)).
 - The client model follows instructions weakly. The result was measured on GPT-4o alone; a less capable or differently tuned model reads the same guidance less reliably ([Shi et al., 2026](https://arxiv.org/abs/2607.07461)).
-- The false confidence costs you. Leaning on descriptions while the code stays vulnerable is worse than knowing the taint path is open. The paper found 9.8% of code-level fixes remain exploitable even after patching, which argues for deterministic [input validation at the sink](improper-output-handling-downstream-sinks.md), not prompting the model to behave ([Shi et al., 2026](https://arxiv.org/abs/2607.07461)).
+- The false confidence costs you. Leaning on descriptions while the code stays vulnerable is worse than knowing the taint path is open. The paper found 9.8% of code-level fixes remain exploitable even after patching, which argues for deterministic [input validation at the sink](improper-output-handling-downstream-sinks.md), not prompting the model to behave ([Shi et al., 2026](https://arxiv.org/abs/2607.07461v1)).
 
 ## Example
 
@@ -83,7 +83,7 @@ The added text gives the calling model the context to decline `../../etc/passwd`
 
 ## Key Takeaways
 
-- Taint-style flaws — untrusted arguments reaching a sink — are 81.13% of studied MCP-server vulnerabilities and take weeks to patch ([Shi et al., 2026](https://arxiv.org/abs/2607.07461)).
+- Taint-style flaws — untrusted arguments reaching a sink — are 81.13% of studied MCP-server vulnerabilities and take weeks to patch ([Shi et al., 2026](https://arxiv.org/abs/2607.07461v1)).
 - A security-aware description names the tainted parameters, the sensitive capability, the CWE risk, and an invocation policy, so a calling model can refuse misuse.
 - It ships the same day with no code change, which is its whole appeal against a 37-day, multi-file code fix.
 - It is guidance, not enforcement: it fails against an untrusted server, a direct non-model caller, or a weak client model.

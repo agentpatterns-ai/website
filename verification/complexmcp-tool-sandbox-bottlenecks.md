@@ -84,7 +84,7 @@ Reproducible but bounded:
 
 Treat the bottlenecks as design hypotheses to test against your own toolset, not universal agent claims.
 
-Adjacent benchmarks corroborate the shape. [τ-bench](https://arxiv.org/abs/2406.12045) reports SOTA function-calling agents under 50% and "quite inconsistent" on tool-agent-user tasks (over-confidence and defeatism without MCP). [MCP-Bench](https://arxiv.org/abs/2508.20453) wires 250 tools across 28 servers and finds retrieval breaks down on fuzzy instructions without explicit tool names (the same saturation dynamic).
+Adjacent benchmarks corroborate the shape. [τ-bench](https://arxiv.org/abs/2406.12045v1) reports SOTA function-calling agents under 50% and "quite inconsistent" on tool-agent-user tasks (over-confidence and defeatism without MCP). [MCP-Bench](https://arxiv.org/abs/2508.20453v1) wires 250 tools across 28 servers and finds retrieval breaks down on fuzzy instructions without explicit tool names (the same saturation dynamic).
 
 ## Example
 

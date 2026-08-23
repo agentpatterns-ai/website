@@ -32,7 +32,7 @@ Both worsen as task length increases.
 
 ## The ESAA pattern
 
-[arXiv:2602.23193](https://arxiv.org/abs/2602.23193) presents the Event Sourcing for Autonomous Agents (ESAA) pattern, applying [Fowler's event sourcing model](https://martinfowler.com/eaaDev/EventSourcing.html) to LLM agents, validated in two case studies including a 50-task clinical dashboard built by 4 concurrent heterogeneous LLMs. The author has published a runnable MIT-licensed reference implementation, [`esaa-core`](https://github.com/elzobrito/esaa-core) (Python). The file layout, CLI, and state machine below are drawn from it.
+[arXiv:2602.23193](https://arxiv.org/abs/2602.23193v1) presents the Event Sourcing for Autonomous Agents (ESAA) pattern, applying [Fowler's event sourcing model](https://martinfowler.com/eaaDev/EventSourcing.html) to LLM agents, validated in two case studies including a 50-task clinical dashboard built by 4 concurrent heterogeneous LLMs. The author has published a runnable MIT-licensed reference implementation, [`esaa-core`](https://github.com/elzobrito/esaa-core) (Python). The file layout, CLI, and state machine below are drawn from it.
 
 The pattern applies event sourcing to agent execution:
 

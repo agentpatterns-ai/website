@@ -18,7 +18,7 @@ maturity: emerging
 
 ## Where the bugs live
 
-Islam, Raza, and Wardat mined 930 buggy instances from Stack Overflow (665), GitHub (180), and HuggingFace (85) ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699), EASE 2026). In the AgentDefect benchmark (37 runtime-executable), up to 19 bugs localize to the tools component.
+Islam, Raza, and Wardat mined 930 buggy instances from Stack Overflow (665), GitHub (180), and HuggingFace (85) ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699v1), EASE 2026). In the AgentDefect benchmark (37 runtime-executable), up to 19 bugs localize to the tools component.
 
 ```mermaid
 pie title AgentDefect component distribution (n=37)
@@ -66,7 +66,7 @@ HuggingFace skews to external-resource changes, GitHub to parameter and version 
 
 ## Root cause: framework version churn
 
-Framework churn drives a large share of these fixes. LangChain shipped 55+ versions in 2024 and 45+ in 2025 ([LangChain releases](https://github.com/langchain-ai/langchain/releases)). LlamaIndex shipped 140+ then 60+ ([LlamaIndex releases](https://github.com/run-llama/llama_index/releases)). Each version can break signatures, module paths, or API contracts. `Change Version` and `Install Library` fixes dominate GitHub because upstream releases break downstream code between deploys, and LLM training data lags current APIs — a structural limit on autonomous repair. 60.1% of Stack Overflow bugs in the corpus involve LangChain or LlamaIndex directly ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699)).
+Framework churn drives a large share of these fixes. LangChain shipped 55+ versions in 2024 and 45+ in 2025 ([LangChain releases](https://github.com/langchain-ai/langchain/releases)). LlamaIndex shipped 140+ then 60+ ([LlamaIndex releases](https://github.com/run-llama/llama_index/releases)). Each version can break signatures, module paths, or API contracts. `Change Version` and `Install Library` fixes dominate GitHub because upstream releases break downstream code between deploys, and LLM training data lags current APIs — a structural limit on autonomous repair. 60.1% of Stack Overflow bugs in the corpus involve LangChain or LlamaIndex directly ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699v1)).
 
 ## SelfHeal: retrieval-augmented repair
 
@@ -92,9 +92,9 @@ Both agents use two tools: internal fix rules (the 23 patterns) and external web
 | Claude Sonnet 4 | 56.76% | 89.19% | $0.0759 | 43.4 |
 | GPT-5.2 | 54.05% | 89.19% | $0.0492 | 41.8 |
 
-Against baselines, SelfHeal/Gemini at 59.46% beats zero-shot Sonnet 4 (40.54%) by +18.92 pp and SWE-Agent/GPT-5.2 (37.84%) by +21.62 pp ([arxiv 2604.17699 §6](https://arxiv.org/abs/2604.17699)).
+Against baselines, SelfHeal/Gemini at 59.46% beats zero-shot Sonnet 4 (40.54%) by +18.92 pp and SWE-Agent/GPT-5.2 (37.84%) by +21.62 pp ([arxiv 2604.17699 §6](https://arxiv.org/abs/2604.17699v1)).
 
-Ablations confirm external knowledge is not optional in fast-churning frameworks: removing internal fix rules drops the rate 18.92 pp, removing web search 13.51 pp ([arxiv 2604.17699 §6.3](https://arxiv.org/abs/2604.17699)).
+Ablations confirm external knowledge is not optional in fast-churning frameworks: removing internal fix rules drops the rate 18.92 pp, removing web search 13.51 pp ([arxiv 2604.17699 §6.3](https://arxiv.org/abs/2604.17699v1)).
 
 ## Practical implications
 

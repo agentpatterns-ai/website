@@ -33,7 +33,7 @@ A "fast iteration" preference shortens timeouts on resilience tests; a "low-cost
 
 A stored "I value low cost" is indistinguishable from an in-prompt "minimize cost" once attended to. The mechanism is attention competition under semantic similarity: when a tool's parameters share surface keywords with a memory entry — "configure," "deploy," "test" — that entry gets attended to despite no causal bearing on the task, and the model incorporates its preference exactly as it would an in-prompt instruction ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)).
 
-The effect is large and broad. Across seven frontier models, biased memories raised deflection scores by up to +3.6 points on a 1-5 scale, across 105 MEMDRIFT scenarios spanning five bias dimensions and seven domains. A scan of verified MCP servers identified 608 vulnerable tool parameters ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)). Prompt-based relevance instructions and memory filters reduce drift but do not eliminate it on any model class tested.
+The effect is large and broad. Across seven frontier models, biased memories raised deflection scores by up to +3.6 points on a 1-5 scale, across 105 MEMDRIFT scenarios spanning five bias dimensions and seven domains. A scan of verified MCP servers identified 608 vulnerable tool parameters ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941v1)). Prompt-based relevance instructions and memory filters reduce drift but do not eliminate it on any model class tested.
 
 ## Example
 
@@ -53,7 +53,7 @@ No instruction in the current prompt asked for these. The "fast iteration" prefe
 
 ## Remediation
 
-The paper frames the gap as needing "specialized safeguards addressing memory management and tool-call generation" ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)). Practical mitigations:
+The paper frames the gap as needing "specialized safeguards addressing memory management and tool-call generation" ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941v1)). Practical mitigations:
 
 - Scope personality memory by task domain. Tag preference entries with the domains they apply to, and do not surface "fast iteration" during security work.
 - Constrain tool parameters at the schema level. A required-reviewers field that cannot drop below the policy minimum cannot be steered.
@@ -69,12 +69,12 @@ The anti-pattern framing vanishes when any of the three conditions is removed:
 - Fully-constrained tool surfaces — if every parameter is dictated by the user's literal request, bias has no slack to exploit.
 - Strict task-conditional retrieval — namespacing preferences by domain shrinks the drift surface, though it does not eliminate it ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)).
 
-Scoped correctly, personality memory pays off: [MAPLE](https://arxiv.org/abs/2602.13258) reports a 14.6% personalization-score gain, and [MEMENTO](https://arxiv.org/abs/2505.16348) shows episodic memory delivering both personalization and in-context learning. The lesson is not "avoid personality memory" — it is "do not let it leak into tool calls in unrelated domains."
+Scoped correctly, personality memory pays off: [MAPLE](https://arxiv.org/abs/2602.13258v1) reports a 14.6% personalization-score gain, and [MEMENTO](https://arxiv.org/abs/2505.16348) shows episodic memory delivering both personalization and in-context learning. The lesson is not "avoid personality memory" — it is "do not let it leak into tool calls in unrelated domains."
 
 ## Key Takeaways
 
 - Personality biases in persistent memory act as implicit steering vectors on tool-call parameters, even when the current task is unrelated to the stored preference.
-- The drift is real, large, and present across seven frontier models — up to +3.6 deflection points on a 1-5 scale, with 608 vulnerable tool parameters identified in verified MCP servers ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)).
+- The drift is real, large, and present across seven frontier models — up to +3.6 deflection points on a 1-5 scale, with 608 vulnerable tool parameters identified in verified MCP servers ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941v1)).
 - Prompt-based relevance instructions and memory filters reduce but do not eliminate the drift — "just tell the model to ignore it" is not a sufficient defense.
 - The failure requires three conditions: persistent personality memory, tool parameters with semantic slack, and naive retrieval. Miss any one and the agent is not vulnerable.
 - Treat personality memory and stable factual memory as different classes — preferences need scoped retrieval; facts do not.

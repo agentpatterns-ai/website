@@ -22,7 +22,7 @@ maturity: emerging
 
 A behavioral firewall converts a record of safe tool-call traces into a parameterized deterministic finite automaton (pDFA) that defines permitted tool sequences, sequential contexts, and parameter bounds. Every runtime tool call must traverse a transition the automaton accepts; anything off-path is rejected before reaching the tool ([Dang, 2026](https://arxiv.org/abs/2604.26274)).
 
-The mechanism shifts expensive policy synthesis offline. The runtime gateway performs an O(1) state-transition lookup per call, which is why the approach reaches 2.2 ms per-call latency in the published evaluation — roughly 3.7x faster than [AEGIS](https://arxiv.org/abs/2603.12621), a stateless pre-execution scanner ([Dang, 2026](https://arxiv.org/abs/2604.26274)).
+The mechanism shifts expensive policy synthesis offline. The runtime gateway performs an O(1) state-transition lookup per call, which is why the approach reaches 2.2 ms per-call latency in the published evaluation — roughly 3.7x faster than [AEGIS](https://arxiv.org/abs/2603.12621v1), a stateless pre-execution scanner ([Dang, 2026](https://arxiv.org/abs/2604.26274v1)).
 
 ## How it works
 
@@ -57,15 +57,15 @@ Evaluated on Agent Security Bench (ASB) — 10 scenarios, ~400 tools, 27 attack/
 | Per-call latency | 2.2 ms | ~8.1 ms |
 | Benign task failure rate | 2.0% | — |
 
-Source: [Dang, 2026](https://arxiv.org/abs/2604.26274). Latency comparison computed from the reported 3.7x speedup.
+Source: [Dang, 2026](https://arxiv.org/abs/2604.26274v1). Latency comparison computed from the reported 3.7x speedup.
 
 The 0% ASR on multi-step attacks is the structural reason to prefer this approach over stateless content scanners in narrow, repeatable workflows. Stateless scanners evaluate each call in isolation; multi-step obfuscation distributes harmful intent across calls that each look benign — the same gap [mid-trajectory guardrails](mid-trajectory-guardrail-selection.md) address with a model-based check.
 
 ## The parameter-whitelist requirement
 
-Sequence enforcement is necessary but not sufficient. Against 1,000 algorithmically spliced exfiltration payloads, only 1.4% matched valid structural paths — but the 14 surviving paths required end-to-end string parameter guards to fail (0 successes, 95% CI [0%, 23.2%]) ([Dang, 2026](https://arxiv.org/abs/2604.26274)).
+Sequence enforcement is necessary but not sufficient. Against 1,000 algorithmically spliced exfiltration payloads, only 1.4% matched valid structural paths — but the 14 surviving paths required end-to-end string parameter guards to fail (0 successes, 95% CI [0%, 23.2%]) ([Dang, 2026](https://arxiv.org/abs/2604.26274v1)).
 
-Without continuous parameter-bound enforcement, synonym-substitution attacks reach an 18% evasion rate by varying string values within a permitted shape ([Dang, 2026](https://arxiv.org/abs/2604.26274)). Exact-match whitelisting of sensitive string parameters bears the final defensive load — sequences contain the attack surface, but unwhitelisted parameters remain a hole.
+Without continuous parameter-bound enforcement, synonym-substitution attacks reach an 18% evasion rate by varying string values within a permitted shape ([Dang, 2026](https://arxiv.org/abs/2604.26274v1)). Exact-match whitelisting of sensitive string parameters bears the final defensive load — sequences contain the attack surface, but unwhitelisted parameters remain a hole.
 
 ## When it fits
 

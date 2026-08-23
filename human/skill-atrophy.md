@@ -27,7 +27,7 @@ AI output differs in one critical way: it is non-deterministic. Code can compile
 | Study | Design | Key finding |
 |-------|--------|-------------|
 | [Anthropic (Shen & Tamkin, 2026)](https://www.anthropic.com/research/AI-assistance-coding-skills) | RCT, 52 junior engineers | AI-assisted group scored ~17 pp lower on comprehension quizzes (50% vs 67%). Debugging showed steepest decline. Speed gain negligible. |
-| [METR (Becker et al., 2025)](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | RCT, 16 experienced OSS developers | AI made developers 19% slower, yet they estimated they were 20% faster — a ~39-point perception gap. |
+| [METR (Becker et al., 2025)](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | RCT, 16 experienced OSS developers | AI made developers take 19% longer, yet they estimated they were 20% faster — a ~39-point gap between the two figures. |
 
 The METR perception gap compounds the problem: developers cannot self-diagnose capability loss.
 

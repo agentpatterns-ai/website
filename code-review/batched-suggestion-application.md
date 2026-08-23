@@ -44,7 +44,7 @@ Apply the same discipline at the PR surface. Cluster on `(rule × severity × fi
 
 ## Failure modes
 
-Rubber-stamp risk. [Empirical data on 278,790 AI-reviewed PRs](https://arxiv.org/abs/2603.15911) shows AI suggestions adopted at 16.6% versus 56.5% for humans, with "over half of unadopted suggestions from AI agents are either incorrect or addressed through alternative fixes." A meaningful fraction should not be applied at all. Batch-apply makes it cheaper to act on the mechanical majority — and cheaper to apply the wrong ones if boundaries are loose.
+Rubber-stamp risk. [Empirical data on 278,790 AI-reviewed PRs](https://arxiv.org/abs/2603.15911v1) shows AI suggestions adopted at 16.6% versus 56.5% for humans, with "over half of unadopted suggestions from AI agents are either incorrect or addressed through alternative fixes." A meaningful fraction should not be applied at all. Batch-apply makes it cheaper to act on the mechanical majority — and cheaper to apply the wrong ones if boundaries are loose.
 
 Audit-trail collapse. One commit applying 30 fixes loses the per-finding decision trail compliance reviewers need. Fix this by structuring the commit message as a per-finding manifest with alert IDs.
 

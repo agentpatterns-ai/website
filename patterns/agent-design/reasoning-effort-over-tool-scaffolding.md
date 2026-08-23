@@ -19,7 +19,7 @@ maturity: emerging
 
 > On an agentic generation task with headroom below the model's ceiling, raising reasoning effort buys first-try reliability more cheaply than adding tools.
 
-Apply this when you have a fixed budget for a single-shot agentic build and are deciding where to spend it: on deeper reasoning, or on extra capabilities like browser-based testing tools and design-oriented system prompts. In an observational study of 90 independent runs building one application from one detailed spec, the reasoning axis moved reliability and the capability axis did not ([Mehta, 2026](https://arxiv.org/abs/2607.02436)). The gain is real only under three conditions, below.
+Apply this when you have a fixed budget for a single-shot agentic build and are deciding where to spend it: on deeper reasoning, or on extra capabilities like browser-based testing tools and design-oriented system prompts. In an observational study of 90 independent runs building one application from one detailed spec, the reasoning axis moved reliability and the capability axis did not ([Mehta, 2026](https://arxiv.org/abs/2607.02436v1)). The gain is real only under three conditions, below.
 
 ## When it applies
 
@@ -41,21 +41,21 @@ The dials that add capability improved the thing they touched — visuals, tool 
 
 ## Why it works
 
-Extra reasoning effort is test-time compute: the model spends more forward passes exploring the solution space and reconciling the spec's functional requirements before it emits code, so it catches criteria a shallow pass drops. Tools add capability surface but do not improve the planning pass that decides whether the emitted code satisfies the spec on the first try — which is why the reliability gain concentrates on the reasoning axis ([Mehta, 2026](https://arxiv.org/abs/2607.02436)). This is consistent with independent tool-use studies: one systematic evaluation found tool access yielded "little consistent aggregate improvement," with 93–96% of tool-solved problems also solved without tools ([Guo et al., 2026](https://arxiv.org/abs/2606.02357)).
+Extra reasoning effort is test-time compute: the model spends more forward passes exploring the solution space and reconciling the spec's functional requirements before it emits code, so it catches criteria a shallow pass drops. Tools add capability surface but do not improve the planning pass that decides whether the emitted code satisfies the spec on the first try — which is why the reliability gain concentrates on the reasoning axis ([Mehta, 2026](https://arxiv.org/abs/2607.02436v1)). This is consistent with independent tool-use studies: one systematic evaluation found tool access yielded "little consistent aggregate improvement," with 93–96% of tool-solved problems also solved without tools ([Guo et al., 2026](https://arxiv.org/abs/2606.02357v1)).
 
 ## When this backfires
 
 Spending on reasoning effort is the wrong call when:
 
 - The model is already at the ceiling. Frontier models in the study clustered near the rubric maximum, so once that headroom is spent, extra effort adds cost and latency for little gain ([Mehta, 2026](https://arxiv.org/abs/2607.02436)).
-- The failure is task-framing, not reasoning. Coding agents propose undesirable changes in 35–65% of no-change tasks; that action bias is a framing problem more compute does not fix ([Gloaguen et al., 2026](https://arxiv.org/abs/2605.07769)).
+- The failure is task-framing, not reasoning. Coding agents propose undesirable changes in 35–65% of no-change tasks; that action bias is a framing problem more compute does not fix ([Gloaguen et al., 2026](https://arxiv.org/abs/2605.07769v1)).
 - The bottleneck is the environment. The study's 44% first-attempt container-deployment failure rate is a scaffolding gap; a testing tool, not more thinking, is the lever there.
 - The path is latency-sensitive. Reasoning tokens add wall-clock time in proportion to their length, so applying maximum effort indiscriminately is its own [anti-pattern](../anti-patterns/reasoning-overuse.md).
 
 ## Key Takeaways
 
 - On a fixed budget for a single-shot agentic build, try the reasoning dial before adding tools or design prompts.
-- In the study, High to xHigh raised first-try-perfect runs from 28% to 89% for 9–29% more cost; a testing tool added 42–68% cost with no reliability gain ([Mehta, 2026](https://arxiv.org/abs/2607.02436)).
+- In the study, High to xHigh raised first-try-perfect runs from 28% to 89% for 9–29% more cost; a testing tool added 42–68% cost with no reliability gain ([Mehta, 2026](https://arxiv.org/abs/2607.02436v1)).
 - The gain is real only while the model has headroom below its ceiling.
 - Reasoning effort does not fix task-framing failures ([Gloaguen et al., 2026](https://arxiv.org/abs/2605.07769)) or environment failures.
 - The evidence is a single observational study — treat the numbers as directional, not settled.

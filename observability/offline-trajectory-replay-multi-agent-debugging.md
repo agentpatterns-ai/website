@@ -57,7 +57,7 @@ Production workflows usually have final-answer labels but no per-node ground tru
 
 ## Why it works
 
-Replay freezes upstream LLM stochasticity. In a 5-node DAG, end-to-end re-runs re-roll the dice on nodes 1 to 4 on every prompt edit, so a 5-point accuracy shift could come from any of them. Replaying against a captured trajectory pins those outputs and isolates the variable to the node you actually edited. PROTEA reports this loop moved document-inspection accuracy from 64.3% to 83.9% on a 5-node DAG and conversational recommendation Hit@5 from 0.30 to 0.38 on a 6-node DAG ([arxiv 2605.18032](https://arxiv.org/abs/2605.18032)). Per-node overlays turn "the final answer was wrong" into "node k scored 0.4 while the others scored above 0.8", the signal a prompt edit can target.
+Replay freezes upstream LLM stochasticity. In a 5-node DAG, end-to-end re-runs re-roll the dice on nodes 1 to 4 on every prompt edit, so a 5-point accuracy shift could come from any of them. Replaying against a captured trajectory pins those outputs and isolates the variable to the node you actually edited. PROTEA reports this loop moved document-inspection accuracy from 64.3% to 83.9% on a 5-node DAG and conversational recommendation Hit@5 from 0.30 to 0.38 on a 6-node DAG ([arxiv 2605.18032](https://arxiv.org/abs/2605.18032v1)). Per-node overlays turn "the final answer was wrong" into "node k scored 0.4 while the others scored above 0.8", the signal a prompt edit can target.
 
 ## When this backfires
 

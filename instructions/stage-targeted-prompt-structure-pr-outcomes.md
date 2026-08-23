@@ -17,7 +17,7 @@ maturity: emerging
 
 > Prompt structure splits into Specificity, Context, and Verification — each moves a different pull request stage; diagnose the failing stage, then raise that dimension.
 
-A stage-based study of 265 manually validated developer-ChatGPT interactions extracted from self-admitted AI-assisted pull requests found that prompt structure does not have a single "quality" axis — its effects split across three dimensions that each dominate a different stage of the human-LLM-PR pipeline ([Sserunjogi, Ogenrwot & Businge, 2026](https://arxiv.org/abs/2606.19644)). Apply this only when the human is driving generation through prompts; in agent-loop mode, the harness mediates context regardless of the initial prompt (see When this backfires below).
+A stage-based study of 265 manually validated developer-ChatGPT interactions extracted from self-admitted AI-assisted pull requests found that prompt structure does not have a single "quality" axis — its effects split across three dimensions that each dominate a different stage of the human-LLM-PR pipeline ([Sserunjogi, Ogenrwot & Businge, 2026](https://arxiv.org/abs/2606.19644v1)). Apply this only when the human is driving generation through prompts; in agent-loop mode, the harness mediates context regardless of the initial prompt (see When this backfires below).
 
 ## The three dimensions
 
@@ -51,7 +51,7 @@ Each dimension addresses a different bottleneck in the same pipeline, which is w
 
 Specificity narrows the model's solution space at generation time. Fewer candidate completions match the constraints, so the first response is closer to actionable code and you have less to discard.
 
-Context gives the model fallback evidence across several surfaces: codebase pointers, requirements, neighbors. When one surface is incomplete, the others still carry signal, so the output embeds into the existing system rather than being merely correct in isolation. The same independent-surfaces mechanism produces the 11.8% vs 0.9% robustness gap between HumanEval (one docstring) and LiveCodeBench (four independent specification layers) measured by [Akli et al. (2026)](https://arxiv.org/abs/2604.24712) and documented in [Multi-Layer Specification Redundancy](multi-layer-specification-redundancy.md).
+Context gives the model fallback evidence across several surfaces: codebase pointers, requirements, neighbors. When one surface is incomplete, the others still carry signal, so the output embeds into the existing system rather than being merely correct in isolation. The same independent-surfaces mechanism produces the 11.8% vs 0.9% robustness gap between HumanEval (one docstring) and LiveCodeBench (four independent specification layers) measured by [Akli et al. (2026)](https://arxiv.org/abs/2604.24712v1) and documented in [Multi-Layer Specification Redundancy](multi-layer-specification-redundancy.md).
 
 Verification cues let you cheaply tell a usable response from a plausible-but-wrong one. Adoption rises without raising generation cost because the evaluation step gets cheaper, not the generation step.
 
@@ -63,7 +63,7 @@ The framework was measured on single-shot, human-driven ChatGPT-PR interactions.
 - More Context can hurt past the attention sweet spot. Stuffing Context past the model's effective attention triggers lost-in-the-middle and [context rot](https://www.understandingai.org/p/context-rot) — extra Context starts degrading Adoption rather than helping it. Strategic curation beats volume.
 - Structural controls beat prompt structure when both are available. When a hook, type check, or test suite can deterministically catch the failure mode the Verification dimension is trying to encode, the structural control dominates. See [Hooks vs Prompts](hooks-vs-prompts.md) and the [Prompt Tinkerer Anti-Pattern](../patterns/anti-patterns/prompt-tinkerer.md) — endless prompt refinement is a recognized failure mode when the problem is structural.
 - Throwaway exploration. Three-dimension prompt overhead is wasted when the goal is to discover whether an approach is feasible at all — there is no PR to integrate into.
-- High-density instruction stacks hit the compliance ceiling. Stacking many independent specification layers across all three dimensions pushes the prompt past the [instruction-compliance ceiling](instruction-compliance-ceiling.md) (~68% at high densities per [IFScale](https://arxiv.org/abs/2507.11538)); marginal structure starts being silently ignored regardless of which dimension you raise.
+- High-density instruction stacks hit the compliance ceiling. Stacking many independent specification layers across all three dimensions pushes the prompt past the [instruction-compliance ceiling](instruction-compliance-ceiling.md) (~68% at high densities per [IFScale](https://arxiv.org/abs/2507.11538v1)); marginal structure starts being silently ignored regardless of which dimension you raise.
 
 ## Example
 

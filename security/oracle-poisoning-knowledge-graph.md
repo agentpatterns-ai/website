@@ -118,7 +118,7 @@ A private code KG built at CI time from your own monorepo has no surface. A shar
 
 ## Relationship to adjacent attacks
 
-Retrieval-side poisoning is analogous: [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md) finds 24.4%-81.9% attack success across four RAG architectures under [PoisonedRAG (Zou et al., USENIX Security 2025)](https://www.usenix.org/system/files/usenixsecurity25-zou-poisonedrag.pdf). Graph-theoretic edit localization via centrality is in [A Few Words Can Distort Graphs (arxiv:2508.04276)](https://arxiv.org/html/2508.04276). Memory-side counterparts: [MemoryGraft (arxiv:2512.16962)](https://arxiv.org/abs/2512.16962), [AgentPoison (arxiv:2407.12784)](https://arxiv.org/abs/2407.12784). All share the mechanism — the agent trusts tool-delivered facts more than inline ones — and differ only in the carrier data structure.
+Retrieval-side poisoning is analogous: [RAG Architecture as a Poisoning Robustness Decision](rag-architecture-poisoning-robustness.md) finds 24.4%-81.9% attack success across four RAG architectures under [PoisonedRAG (Zou et al., USENIX Security 2025)](https://www.usenix.org/system/files/usenixsecurity25-zou-poisonedrag.pdf). Graph-theoretic edit localization via centrality is in [A Few Words Can Distort Graphs (arxiv:2508.04276)](https://arxiv.org/html/2508.04276). Memory-side counterparts: [MemoryGraft (arxiv:2512.16962)](https://arxiv.org/abs/2512.16962v1), [AgentPoison (arxiv:2407.12784)](https://arxiv.org/abs/2407.12784v1). All share the mechanism — the agent trusts tool-delivered facts more than inline ones — and differ only in the carrier data structure.
 
 ## Example
 

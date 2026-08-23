@@ -63,7 +63,7 @@ The same mechanism underlies typed-debt detection at library scale: SkillOps req
 - Compliance overload. The added field surface raises the rule count a model must honor. The [instruction compliance ceiling](instruction-compliance-ceiling.md) shows compliance degrades as rule count grows — more fields can produce more omission errors, not fewer.
 - Library-level debt. Contractual fields multiply the surface where redundant clones, stale dependencies, and type mismatches accumulate. The library needs its own detectors and named actions ([SkillOps, arXiv:2605.13716](https://arxiv.org/abs/2605.13716)).
 
-In the SEFZ study, 29.9% of 402 deployed `SKILL.md` files silently violated their own declared natural-language rules on benign inputs ([arXiv:2605.13044](https://arxiv.org/abs/2605.13044)). Restructuring those rules into named fields does not, on its own, make them honored at runtime.
+In the SEFZ study, 29.9% of 402 deployed `SKILL.md` files silently violated their own declared natural-language rules on benign inputs ([arXiv:2605.13044](https://arxiv.org/abs/2605.13044v1)). Restructuring those rules into named fields does not, on its own, make them honored at runtime.
 
 ## Where it sits in the stack
 

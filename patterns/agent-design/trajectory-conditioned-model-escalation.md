@@ -40,7 +40,7 @@ Description-only routing is capped by an information-theoretic Bayes-error floor
 
 ## When this backfires
 
-- High-signal task descriptions. When the prompt already separates easy from hard — uniform issue templates, tight repro steps — the trajectory adds nothing and the `K` exploratory turns are wasted overhead. The paper is explicit that the gain "vanishes when the prompt already determines the optimal choice" ([SWE-Router](https://arxiv.org/abs/2607.00053)).
+- High-signal task descriptions. When the prompt already separates easy from hard — uniform issue templates, tight repro steps — the trajectory adds nothing and the `K` exploratory turns are wasted overhead. The paper is explicit that the gain "vanishes when the prompt already determines the optimal choice" ([SWE-Router](https://arxiv.org/abs/2607.00053v1)).
 - Correlated failure modes. When the weak and strong models fail on the same tasks, no routing decision recovers the strong model's wins; combining models hits a co-failure ceiling ([When Combining Language Models Help, arxiv 2606.27288](https://arxiv.org/abs/2606.27288)).
 - Rework that outruns the saving. A weak model's "almost right" output can trigger retries and debugging that cost more than one clean frontier call, so per-call price drops while total token yield collapses ([Model Routing for Coding Agents](https://getunblocked.com/blog/model-routing-coding-agents/)).
 - Latency-sensitive loops. Paying `K` weak-model turns plus value-head inference before every escalation adds serial latency an interactive user feels.

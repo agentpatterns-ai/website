@@ -19,19 +19,19 @@ maturity: emerging
 
 ## Scope and caveats
 
-Patterns come from [Schön et al., 2026](https://arxiv.org/abs/2605.04835) (PROMISE 2026), which analyzed 169 commits and 440 files from the DevGPT dataset — ChatGPT (GPT-3.5 / GPT-4), July to August 2023.
+Patterns come from [Schön et al., 2026](https://arxiv.org/abs/2605.04835v1) (PROMISE 2026), which analyzed 169 commits and 440 files from the DevGPT dataset — ChatGPT (GPT-3.5 / GPT-4), July to August 2023.
 
 The result is qualified, not universal:
 
-- Single-repo concentration: 143 of 169 commits come from one project (`tisztamo/Junior`) ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)).
+- Single-repo concentration: 143 of 169 commits come from one project (`tisztamo/Junior`) ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)).
 - Adoption-biased sample: DevGPT only captures commits where developers shared the ChatGPT link. Rejected conversations are absent ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)).
-- Refactoring-only: not ambient completion (~10% useful raw inference, see [Suggestion Gating](suggestion-gating.md)) and not AI review feedback (16.6% adoption per [arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
+- Refactoring-only: not ambient completion (~10% useful raw inference, see [Suggestion Gating](suggestion-gating.md)) and not AI review feedback (16.6% adoption per [arxiv:2603.15911](https://arxiv.org/abs/2603.15911v1)).
 
 Read the patterns as a vocabulary for modification work, not as proof that suggestions are reliable.
 
 ## The headline
 
-Token Match Rate density concentrates above 0.9 — most refactored files closely mirror the suggestion, and developers typically reach the goal in 1 to 4 prompts ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)). Of 190 manually inspected datapoints, 96 showed any modification.
+Token Match Rate density concentrates above 0.9 — most refactored files closely mirror the suggestion, and developers typically reach the goal in 1 to 4 prompts ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)). Of 190 manually inspected datapoints, 96 showed any modification.
 
 Refactoring activity distribution ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)):
 
@@ -94,7 +94,7 @@ graph LR
 Two axes explain them ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)):
 
 - Context completeness — full-file context drives pattern 1; partial context drives pattern 3.
-- Refactor complexity — simple transformations land in pattern 1 or 2; complex transformations (logic split, restructure) trigger patterns 4 and 5 because, as the authors note, "more complex suggestions often cause errors or add unwanted behavior" that requires more substantial modification ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)).
+- Refactor complexity — simple transformations land in pattern 1 or 2; complex transformations (logic split, restructure) trigger patterns 4 and 5 because, as the authors note, "more complex suggestions often cause errors or add unwanted behavior" that requires more substantial modification ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)).
 
 ## Implications for practice
 
@@ -116,11 +116,11 @@ The same prompt and the same suggestion can produce any of these depending on pr
 
 ## Key Takeaways
 
-- Most committed ChatGPT refactors in the [DevGPT dataset](https://arxiv.org/abs/2605.04835) are adopted with high similarity, but 51% of inspected datapoints show some modification — modification is the norm at the boundary, not the exception
+- Most committed ChatGPT refactors in the [DevGPT dataset](https://arxiv.org/abs/2605.04835v1) are adopted with high similarity, but 51% of inspected datapoints show some modification — modification is the norm at the boundary, not the exception
 - The five patterns (complete adoption, remove erroneous parts, integration adjustments, structural redesign, structure preservation with content disregard) are driven by prompt context completeness and refactor complexity, not LLM capability per se
 - Findings are qualified by single-repo concentration (143 of 169 commits) and adoption bias (rejected conversations excluded) — generalization requires explicit conditions
 - Full-file context in the prompt is correlated with pattern 1; partial context is correlated with pattern 3
-- The result does not extend to AI-generated review feedback (16.6% adoption — [arxiv:2603.15911](https://arxiv.org/abs/2603.15911)) or to ambient code completion (~10% useful raw inference — see [Suggestion Gating](suggestion-gating.md))
+- The result does not extend to AI-generated review feedback (16.6% adoption — [arxiv:2603.15911](https://arxiv.org/abs/2603.15911v1)) or to ambient code completion (~10% useful raw inference — see [Suggestion Gating](suggestion-gating.md))
 
 ## Related
 

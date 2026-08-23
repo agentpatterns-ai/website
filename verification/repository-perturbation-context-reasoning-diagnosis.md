@@ -39,7 +39,7 @@ graph LR
     C --> E[66.8% → 25.3%<br/>average agent score]
 ```
 
-Average agent performance falls from 66.8% on the source task to 25.3% on RepoMirage-Extend's explicit-task formulation — a 41.5-point gap that the paper attributes to "exploration drift," where agents access broader repository context but fail to convert it into effective structural information ([Li et al., 2026](https://arxiv.org/abs/2605.26177)).
+Average agent performance falls from 66.8% on the source task to 25.3% on RepoMirage-Extend's explicit-task formulation — a 41.5-point gap that the paper attributes to "exploration drift," where agents access broader repository context but fail to convert it into effective structural information ([Li et al., 2026](https://arxiv.org/abs/2605.26177v1)).
 
 ## Why it works
 
@@ -59,7 +59,7 @@ Perturbation diagnostics over-predict failure or measure the wrong thing under s
 
 Other sources of inflated scores also confound it. Test-suite inadequacy lets 31.08% of accepted patches pass because the tests cannot reject incorrect or incomplete solutions ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289)) — a gap that remains even after perturbation removes shortcut leakage.
 
-A second confound cuts the other way. Meaning-preserving perturbations degrade LLM accuracy even on tasks with no multi-file context to reason about — answer-flip rates of 28.8–45.1% are reported on semantically equivalent arithmetic variants ([Fragile Reasoning, 2026](https://arxiv.org/abs/2604.01639)). Part of RepoMirage's drop is therefore generic surface-form brittleness rather than invalidated shortcuts, inflating the attributed share. The lower-bound framing holds only if you net out brittleness with a no-context perturbation baseline; without one, the drop conflates two effects.
+A second confound cuts the other way. Meaning-preserving perturbations degrade LLM accuracy even on tasks with no multi-file context to reason about — answer-flip rates of 28.8–45.1% are reported on semantically equivalent arithmetic variants ([Fragile Reasoning, 2026](https://arxiv.org/abs/2604.01639v1)). Part of RepoMirage's drop is therefore generic surface-form brittleness rather than invalidated shortcuts, inflating the attributed share. The lower-bound framing holds only if you net out brittleness with a no-context perturbation baseline; without one, the drop conflates two effects.
 
 ## Composing with the sibling family
 
@@ -89,7 +89,7 @@ The example numbers are illustrative; the methodology is the load-bearing contri
 ## Key Takeaways
 
 - Repository perturbation isolates context reasoning from issue-resolution scores by invalidating surface-token shortcuts while preserving the reference solution path.
-- The published average drop is 41.5 points (66.8% → 25.3%) on RepoMirage-Extend — a lower bound on the shortcut share of agents' headline numbers ([Li et al., 2026](https://arxiv.org/abs/2605.26177)).
+- The published average drop is 41.5 points (66.8% → 25.3%) on RepoMirage-Extend — a lower bound on the shortcut share of agents' headline numbers ([Li et al., 2026](https://arxiv.org/abs/2605.26177v1)).
 - The diagnostic is most informative when training-set overlap with the benchmark is plausible and the production environment exposes the agent to unfamiliar repositories.
 - It is the wrong tool for shallow-multi-file codebases, proprietary surfaces with no contamination risk, or teams without an oracle to verify semantics preservation.
 - Compose it with trajectory decomposition and intermediate-context metrics rather than treating it as a replacement — each probes the same gap with different cost and sensitivity.

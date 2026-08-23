@@ -22,7 +22,7 @@ maturity: adopted
 
 ## The coordination overhead problem
 
-Multi-agent code generation systems often miss the parallel speedups they expect, because coordination overhead eats the gains. Agents have to share state by passing messages, acquiring locks, and resolving conflicts. That coordination cost can exceed the time parallelism saves. [arXiv:2510.18893](https://arxiv.org/abs/2510.18893) (CodeCRDT) tests this across 600 trials.
+Multi-agent code generation systems often miss the parallel speedups they expect, because coordination overhead eats the gains. Agents have to share state by passing messages, acquiring locks, and resolving conflicts. That coordination cost can exceed the time parallelism saves. [arXiv:2510.18893](https://arxiv.org/abs/2510.18893v1) (CodeCRDT) tests this across 600 trials.
 
 ## CRDT-based shared state
 

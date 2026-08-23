@@ -34,6 +34,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — Positive directives outperform negative instructions in agent compliance, especially as instruction count grows
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — On SWE-bench, negative constraints are the only individually beneficial rule type; positive directives actively hurt — and rules work through context priming, not instruction specificity
 - [Restraint Rules Need External Enforcement](restraint-rules-need-external-enforcement.md) — Agents comply with rules that add work and never with rules that stop it; additive rules belong in the auto-loaded instruction file, restraint rules in CI or required review
+- [Do Not Price the Rules in Your Agent Instruction File](enforcement-information-paradox.md) — Naming a penalty beside a rule can lower compliance with it, because a stated price turns a prohibition into an affordable option
 - [Security Knowledge Priming for Code Generation (SPARK)](security-knowledge-priming.md) — A brief task-relevant CWE cue in the prompt activates the model's latent security knowledge — supplementary to mechanical scanners, not a replacement
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md) — Exclusions and constraints eliminate entire classes of mistakes more efficiently than equivalent positive guidance
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — Rules generalize; examples anchor — knowing when to use each determines whether agents interpret your intent or invent their own
@@ -88,6 +89,7 @@ Leveraging existing artifacts — specs, schemas, standards files — as agent i
 - [Multi-Layer Specification Redundancy as a Robustness Budget](multi-layer-specification-redundancy.md) — Independent specification layers absorb prompt noise that would otherwise degrade code-generation correctness; prose repetition and brittle terminology do not
 - [Stage-Targeted Prompt Structure for Pull Request Outcomes](stage-targeted-prompt-structure-pr-outcomes.md) — Specificity, Context, and Verification each move a different stage of the LLM-assisted PR pipeline — diagnose which stage is failing, then raise that dimension
 - [Ubiquitous Language for AI Plans](ubiquitous-language-for-ai-plans.md) — A maintained domain glossary plus ADRs anchors agent plans in existing code so plans, source, and prompt share one vocabulary
+- [Standard-Grounded NFR Specs: Quality Up, Correctness Flat](standard-grounded-nfr-specification.md) — Grounding a non-functional requirement in a published quality model cuts static defect density and wording variance, but leaves correctness flat and hurts error handling
 
 ## Governance & Maintenance
 

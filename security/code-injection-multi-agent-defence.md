@@ -75,7 +75,7 @@ Context isolation: passing a structured AST instead of raw source removes the me
 ## When this backfires
 
 - Low-risk internal pipelines: a trusted-contributor pipeline faces little injection risk, so the latency and cost of a four-agent chain buy no security gain.
-- Semantic injection vectors: the architecture targets code-level injection. The [arXiv:2602.19547 study (CIBER)](https://arxiv.org/abs/2602.19547) shows natural-language injection reaches 14.1% higher attack success than explicit code injection, and code-review-focused agents miss this surface entirely.
+- Semantic injection vectors: the architecture targets code-level injection. The [arXiv:2602.19547 study (CIBER)](https://arxiv.org/abs/2602.19547v1) shows natural-language injection reaches 14.1% higher attack success than explicit code injection, and code-review-focused agents miss this surface entirely.
 - Security agent as a high-value target: without context isolation, poisoning the security agent inverts its role. The paper's own data shows this raises attack success to 71.95%, worse than the coder-reviewer-tester baseline.
 - False-positive friction: high-recall tuning flags legitimate code. Practitioners then route around strict gates with bypasses or lower strictness, which drops resilience below the simpler configuration.
 

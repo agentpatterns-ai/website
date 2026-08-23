@@ -25,13 +25,13 @@ This is the inverse of [premature completion](../anti-patterns/premature-complet
 
 ## The gap it closes
 
-Agents are weak at recognizing infeasibility. The FeasiGen study constructed infeasible tasks by masking the tools consistently required for success, then measured how often agents kept going: false-continue rates reached up to 73.9% across nine evaluated models, described as "substantially weak infeasibility detection ability" ([Cheng et al., arXiv:2605.28532](https://arxiv.org/abs/2605.28532)). The blind spot is independently corroborated from a different angle — Ambig-SWE found "models struggle to distinguish between well-specified and underspecified instructions" without explicit prompting ([Vijayvargiya et al., arXiv:2502.13069](https://arxiv.org/abs/2502.13069)).
+Agents are weak at recognizing infeasibility. The FeasiGen study constructed infeasible tasks by masking the tools consistently required for success, then measured how often agents kept going: false-continue rates reached up to 73.9% across nine evaluated models, described as "substantially weak infeasibility detection ability" ([Cheng et al., arXiv:2605.28532](https://arxiv.org/abs/2605.28532v1)). The blind spot is independently corroborated from a different angle — Ambig-SWE found "models struggle to distinguish between well-specified and underspecified instructions" without explicit prompting ([Vijayvargiya et al., arXiv:2502.13069](https://arxiv.org/abs/2502.13069)).
 
 ## Why it works
 
 Agents are trained mostly on successful trajectories where the needed tools exist. So their continue/halt policy learns to keep planning and calling tools toward a goal, with no signal that a required capability is absent from the environment. When a critical tool is removed, the continue-token keeps firing: the agent reasons about how to reach the goal without ever checking whether the goal is reachable with the present toolset ([Cheng et al., arXiv:2605.28532](https://arxiv.org/abs/2605.28532)).
 
-A feasibility gate works because feasibility is a cheap, up-front, observable predicate — task requirements versus the tool manifest — that can short-circuit an expensive open-ended loop before it starts. The same study reports that multi-agent architectures "significantly reduce erroneous execution under infeasible conditions," indicating the judgment improves when a separate reviewer evaluates feasibility rather than the doing agent itself ([Cheng et al., arXiv:2605.28532](https://arxiv.org/abs/2605.28532)).
+A feasibility gate works because feasibility is a cheap, up-front, observable predicate — task requirements versus the tool manifest — that can short-circuit an expensive open-ended loop before it starts. The same study reports that multi-agent architectures "significantly reduce erroneous execution under infeasible conditions," indicating the judgment improves when a separate reviewer evaluates feasibility rather than the doing agent itself ([Cheng et al., arXiv:2605.28532](https://arxiv.org/abs/2605.28532v1)).
 
 ## How to apply it
 
@@ -49,7 +49,7 @@ A feasibility gate works because feasibility is a cheap, up-front, observable pr
 ## Key Takeaways
 
 - Feasibility awareness halts a task the current tools cannot satisfy *before* the agent spends a long chain on it — an up-front, environment-grounded gate, not a mid-run reaction.
-- Agents are bad at this natively: false-continue rates up to 73.9% on tasks made infeasible by masking critical tools ([arXiv:2605.28532](https://arxiv.org/abs/2605.28532)).
+- Agents are bad at this natively: false-continue rates up to 73.9% on tasks made infeasible by masking critical tools ([arXiv:2605.28532](https://arxiv.org/abs/2605.28532v1)).
 - It is the inverse of premature completion: failing to stop on the impossible, rather than stopping too early on the possible.
 - Externalize the feasibility judgment to a separate evaluator; the doing agent's policy is biased toward continuing.
 - The dominant failure is over-abstention — a false-negative gate abandons solvable work, so calibrate before trusting the halt.

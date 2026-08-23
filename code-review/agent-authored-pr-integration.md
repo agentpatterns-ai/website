@@ -18,7 +18,7 @@ maturity: established
 
 ## The finding
 
-[arXiv:2602.19441](https://arxiv.org/abs/2602.19441) — "When AI Teammates Meet Code Review: Collaboration Signals Shaping the Integration of Agent-Authored Pull Requests" (Nachuma & Zibran, MSR 2026) — analyzes 33,596 agent-authored PRs across 2,807 repositories with logistic regression. It covers 5 agents: Claude Code, OpenAI Codex, Devin, GitHub Copilot, and Cursor. The overall merge rate is 71.5% (95% CI: [0.710, 0.720]). Merge rates vary by agent from 43.0% (Copilot) to 82.6% (OpenAI Codex), with Devin at 53.8%.
+[arXiv:2602.19441](https://arxiv.org/abs/2602.19441v1) — "When AI Teammates Meet Code Review: Collaboration Signals Shaping the Integration of Agent-Authored Pull Requests" (Nachuma & Zibran, MSR 2026) — analyzes 33,596 agent-authored PRs across 2,807 repositories with logistic regression. It covers 5 agents: Claude Code, OpenAI Codex, Devin, GitHub Copilot, and Cursor. The overall merge rate is 71.5% (95% CI: [0.710, 0.720]). Merge rates vary by agent from 43.0% (Copilot) to 82.6% (OpenAI Codex), with Devin at 53.8%.
 
 The study uses repository-clustered standard errors. Functional correctness is necessary but not enough for merge. Once a change is viable, collaboration dynamics determine the outcome.
 
@@ -70,7 +70,7 @@ Optimizing for reviewer engagement assumes reviewers are available and their exp
 - design disagreement without recourse: the dominant failure mode (10 of 30 failed PRs) is architectural divergence. If an agent cannot propose an alternative design, no review loop resolves the disagreement.
 - reviewer abandonment after queueing: a long time-to-first-review helps only when reviewers eventually engage. If they abandon a queued PR, wait time becomes noise. Large diffs compound this risk, which [agent-driven PR slicing](agent-driven-pr-slicing.md) is meant to reduce.
 - CRA-only review: the pattern assumes human reviewers with discretionary merge authority. Repositories reviewed only by automated agents show much lower merge rates (45% against 68%).
-- high comment volume as a correction signal: each extra reviewer comment decreases agentic-PR merge odds by 2.8% (against +2.7% for human PRs), read as required corrections rather than productive alignment ([arXiv:2601.18749](https://arxiv.org/abs/2601.18749)). Related work reports 1 to 10% ghosting after feedback ([arXiv:2601.00753](https://arxiv.org/abs/2601.00753)).
+- high comment volume as a correction signal: each extra reviewer comment decreases agentic-PR merge odds by 2.8% (against +2.7% for human PRs), read as required corrections rather than productive alignment ([arXiv:2601.18749](https://arxiv.org/abs/2601.18749v1)). Related work reports 1 to 10% ghosting after feedback ([arXiv:2601.00753](https://arxiv.org/abs/2601.00753)).
 
 ## Example
 

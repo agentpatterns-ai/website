@@ -61,7 +61,7 @@ Sub-agents provide isolated context windows for retrieval-heavy tasks. A coordin
 
 On-demand retrieval adds latency. Multi-step retrieval chains (search, then read, then search again) can slow throughput. Preloading eliminates that latency at the cost of [context budget](context-budget-allocation.md).
 
-Latency is not the only downside. Retrieval quality is a second failure mode: when the retriever surfaces irrelevant chunks, accuracy drops rather than improves — one study saw accuracy fall [from 75% to below 40% as a corpus grew from 54 to 1,128 documents](https://arxiv.org/abs/2606.11350) because dense similarity search returned semantically similar but contextually wrong results. On-demand retrieval only preserves budget for reasoning when what it returns is correct; a noisy retriever spends budget on distractors and degrades the very reasoning it was meant to protect.
+Latency is not the only downside. Retrieval quality is a second failure mode: when the retriever surfaces irrelevant chunks, accuracy drops rather than improves — one study saw accuracy fall [from 75% to below 40% as a corpus grew from 54 to 1,128 documents](https://arxiv.org/abs/2606.11350v1) because dense similarity search returned semantically similar but contextually wrong results. On-demand retrieval only preserves budget for reasoning when what it returns is correct; a noisy retriever spends budget on distractors and degrades the very reasoning it was meant to protect.
 
 The right balance depends on task structure:
 
@@ -118,7 +118,7 @@ Preload when a document is accessed repeatedly throughout a task, since re-fetch
 
 **Why can on-demand retrieval hurt accuracy instead of improving it?**
 
-Retrieval quality is a separate failure mode from latency: when a retriever surfaces irrelevant chunks, accuracy drops rather than improves. One study found accuracy fell [from 75% to below 40% as a corpus grew from 54 to 1,128 documents](https://arxiv.org/abs/2606.11350), because dense similarity search returned semantically similar but contextually wrong results. On-demand retrieval only helps when what it returns is correct.
+Retrieval quality is a separate failure mode from latency: when a retriever surfaces irrelevant chunks, accuracy drops rather than improves. One study found accuracy fell [from 75% to below 40% as a corpus grew from 54 to 1,128 documents](https://arxiv.org/abs/2606.11350v1), because dense similarity search returned semantically similar but contextually wrong results. On-demand retrieval only helps when what it returns is correct.
 
 **Why does preloading large amounts of context hurt reasoning quality?**
 

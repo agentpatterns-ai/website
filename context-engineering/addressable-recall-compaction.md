@@ -21,7 +21,7 @@ maturity: emerging
 
 Reach for addressable recall when your agent loses specific details it already saw. Keep every tool observation verbatim in an append-only store keyed by a stable identifier. When the window fills, swap the observation in the transcript for a compact citation and let the agent ask for the record back by ID. [Summarization and masking](context-compression-strategies.md) make the loss permanent; addressing makes it reversible.
 
-Addressable Recall Compaction (ARC), the named form of this pattern, backs a narrow claim: it scored 99.00% exact-answer accuracy on a needle-in-a-haystack task against 79.57% for a similarity-retrieval baseline, running Qwen3-8B at a 16k window. On the LongBench-v2 hard subset, which needs synthesis rather than lookup, that same 8B setup scored 27.47% against 25.83% ([Dang et al., arxiv 2607.25066](https://arxiv.org/abs/2607.25066)). Treat the Qwen3 figures as the shape of the effect, not a claim about frontier models — the authors scope their evaluation to that family.
+Addressable Recall Compaction (ARC), the named form of this pattern, backs a narrow claim: it scored 99.00% exact-answer accuracy on a needle-in-a-haystack task against 79.57% for a similarity-retrieval baseline, running Qwen3-8B at a 16k window. On the LongBench-v2 hard subset, which needs synthesis rather than lookup, that same 8B setup scored 27.47% against 25.83% ([Dang et al., arxiv 2607.25066](https://arxiv.org/abs/2607.25066v1)). Treat the Qwen3 figures as the shape of the effect, not a claim about frontier models — the authors scope their evaluation to that family.
 
 ## What the citation carries
 
@@ -45,7 +45,7 @@ The second half is exactness. An identifier resolves to one record, so recovery 
 ## When this backfires
 
 - Reasoning-bound tasks. The margin falls from 19 points on verbatim recall to under 2 points on LongBench-v2 hard, because perfect recall still permits faulty reasoning ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
-- Tight recall budgets. At the smallest ablated budget ARC scored 26.05% against a structured-state baseline's 27.01% on Qwen3-8B — stub overhead consumed the budget it was meant to protect ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
+- Tight recall budgets. At the smallest ablated budget ARC scored 26.05% against a structured-state baseline's 27.01% on Qwen3-8B — stub overhead consumed the budget it was meant to protect ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066v1)).
 - Models that never call recall. StructMemEval found agents handle structured memory reliably only when explicitly instructed, and "do not always recognize the memory structure when not prompted to do so" ([arxiv 2602.11243](https://arxiv.org/abs/2602.11243)). Unprompted, the store becomes write-only.
 - Latency-sensitive loops. Every dereference is another turn and another inference. Anthropic notes that just-in-time loading is slower than pre-processing data up front ([Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 - Dialogue-shaped history. Similarity retrieval sometimes wins there, and the ARC authors describe explicit and implicit recall as complementary rather than competing ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).

@@ -25,7 +25,7 @@ The label-and-prompt effect lands cleanly in three conditions: reviewers see one
 
 ## The measured effect
 
-A Wizard-of-Oz eye-tracking study of 32 software engineers across 20 European organizations (average 7.0 years of experience) reviewed four Python files (avg 77 lines, pre-ChatGPT cutoff) with and without an LLM label that included a timestamp and the originating prompt ([arXiv:2606.26505](https://arxiv.org/abs/2606.26505)):
+A Wizard-of-Oz eye-tracking study of 32 software engineers across 20 European organizations (average 7.0 years of experience) reviewed four Python files (avg 77 lines, pre-ChatGPT cutoff) with and without an LLM label that included a timestamp and the originating prompt ([arXiv:2606.26505](https://arxiv.org/abs/2606.26505v1)):
 
 | Signal | Direction | Magnitude |
 |--------|-----------|-----------|
@@ -35,11 +35,11 @@ A Wizard-of-Oz eye-tracking study of 32 software engineers across 20 European or
 | Reviewers adjusting evaluation criteria | — | 37.5% (n=12) |
 | Reviewers using the prompt during review | — | 43.75% (n=14) |
 
-The fixation effect is credible (95% CI [0.09, 0.56]) and scales with code complexity. The saccade-length non-effect is the constraint: "the presence of an LLM-label does not change the length of saccades" — "shorter saccades indicate more detailed inspection" ([arXiv:2606.26505 §Results](https://arxiv.org/abs/2606.26505)). Extra time at the label goes into more passes of the same scanning pattern, not deeper inspection.
+The fixation effect is credible (95% CI [0.09, 0.56]) and scales with code complexity. The saccade-length non-effect is the constraint: "the presence of an LLM-label does not change the length of saccades" — "shorter saccades indicate more detailed inspection" ([arXiv:2606.26505 §Results](https://arxiv.org/abs/2606.26505v1)). Extra time at the label goes into more passes of the same scanning pattern, not deeper inspection.
 
 ## Two prompt-usage patterns
 
-The 43.75% who reached for the prompt split into two qualitatively distinct gaze patterns ([arXiv:2606.26505 §Interview Analysis](https://arxiv.org/abs/2606.26505)):
+The 43.75% who reached for the prompt split into two qualitatively distinct gaze patterns ([arXiv:2606.26505 §Interview Analysis](https://arxiv.org/abs/2606.26505v1)):
 
 - Requirement validation (n=5) — back-and-forth gaze between prompt and code, treating the prompt as the contract and checking the code against it.
 - Documentation support (n=7) — label-first reading then code inspection, treating the prompt as an entry point into the change's intent.
@@ -56,7 +56,7 @@ The technique reduces to three moves a team can wire into the review surface:
 
 ## Why it works
 
-Explicitly labeling code as LLM-generated flags the region as warranting verification, so reviewers spend longer fixating on it (+33–60%) and a substantial minority adjust their evaluation strategy — toward logical-correctness criteria for 37.5%, and toward prompt-guided review for 43.75% ([arXiv:2606.26505 §Results](https://arxiv.org/abs/2606.26505)). The label and the prompt together act as a category prior that summons existing review skills more deliberately. The mechanism is attention redistribution, not skill acquisition: the same reviewer applies the same scanning pattern over more time, which is why total fixation time rises while saccade-length thoroughness stays flat.
+Explicitly labeling code as LLM-generated flags the region as warranting verification, so reviewers spend longer fixating on it (+33–60%) and a substantial minority adjust their evaluation strategy — toward logical-correctness criteria for 37.5%, and toward prompt-guided review for 43.75% ([arXiv:2606.26505 §Results](https://arxiv.org/abs/2606.26505v1)). The label and the prompt together act as a category prior that summons existing review skills more deliberately. The mechanism is attention redistribution, not skill acquisition: the same reviewer applies the same scanning pattern over more time, which is why total fixation time rises while saccade-length thoroughness stays flat.
 
 ## When this backfires
 
@@ -92,7 +92,7 @@ A reviewer following the documentation-support pattern reads the prompt, accepts
 
 ## Key Takeaways
 
-- Labeling code as LLM-generated and surfacing the prompt raises fixation time +33% on simple code and +60% on complex code in a one-shot lab study ([arXiv:2606.26505](https://arxiv.org/abs/2606.26505)).
+- Labeling code as LLM-generated and surfacing the prompt raises fixation time +33% on simple code and +60% on complex code in a one-shot lab study ([arXiv:2606.26505](https://arxiv.org/abs/2606.26505v1)).
 - Saccade length — the eye-tracking proxy for inspection thoroughness — stays flat across both conditions (95% CI [-0.07, 0.10]).
 - 37.5% of reviewers adjust evaluation criteria and 43.75% use the prompt during review, splitting into requirement-validation (n=5) and documentation-support (n=7) gaze patterns with opposite review-quality implications.
 - The lab effect compresses or inverts under high agent-PR volume, habituated reviewer pools, the documentation-support gaze pattern, dampened reviewer sentiment, and positive priors toward LLMs.

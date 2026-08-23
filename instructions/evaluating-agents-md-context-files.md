@@ -28,7 +28,7 @@ Two studies evaluated AGENTS.md-style context files on real coding benchmarks:
 | Lulla et al. (2026) | 10 repos, 124 PRs | AGENTS.md present: -28.6% runtime, -16.6% output tokens, completion rates unchanged |
 | AIDev (2026) | Agentic PRs across many projects | Context files do not reliably improve merge rate: 27.7% of projects improved ≥20% while 26.35% degraded |
 
-One study measures success, the other efficiency. A third, PR-level study reaches the same conclusion from the merge-rate angle: an [AIDev empirical analysis](https://arxiv.org/abs/2606.13449) found instruction and context files do not reliably improve agentic-PR merge rate. Roughly as many projects degraded (26.35%) as improved by 20% or more (27.7%). Context files can make agents faster, but not more reliably successful.
+One study measures success, the other efficiency. A third, PR-level study reaches the same conclusion from the merge-rate angle: an [AIDev empirical analysis](https://arxiv.org/abs/2606.13449v1) found instruction and context files do not reliably improve agentic-PR merge rate. Roughly as many projects degraded (26.35%) as improved by 20% or more (27.7%). Context files can make agents faster, but not more reliably successful.
 
 ## Why auto-generated files fail
 

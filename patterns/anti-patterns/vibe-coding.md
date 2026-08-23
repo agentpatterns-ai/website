@@ -57,7 +57,7 @@ Novel functionality. When the task requires discovering APIs, designing data str
 
 Review at scale. AI generates thousands of lines per session. [CodeRabbit found](https://www.coderabbit.ai/blog/code-review-best-practices-for-vibe-coding) that AI-generated code is "notoriously verbose" with pointless loops and imaginary functions, and that large PRs defeat meaningful review. PRs of 10,000 lines or more guarantee that reviewers miss critical issues.
 
-Productivity expectations. A [METR randomized controlled trial](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found that experienced developers were 19% slower with AI tools, despite predicting they would be 24% faster. Rejected generations still consume review time.
+Productivity expectations. A [METR randomized controlled trial](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) found that experienced developers took 19% longer with AI tools, despite predicting they would be 24% faster. Rejected generations still consume review time.
 
 Safeguard removal. When AI output trips linters or tests, the easiest path is removing the safeguard rather than fixing the code, which deletes the guardrail that correctly flagged dangerous code.
 

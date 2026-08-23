@@ -46,8 +46,8 @@ Attention scarcity is the second half. Transformers require "every token to atte
 ## When this backfires
 
 - Exploratory work in unfamiliar code. Naming files you guessed at anchors the agent on the wrong ones. Anthropic carves this out: vague prompts are useful "when you're exploring and can afford to course-correct" ([Best practices](https://code.claude.com/docs/en/best-practices)).
-- Tasks whose specification is already redundant. Across 10 models, removing a single explicit constraint cost 11.8% pass@1 on HumanEval but only 0.9% on LiveCodeBench, where descriptions, constraints, formats, and examples overlap ([When Prompt Under-Specification Improves Code Correctness](https://arxiv.org/abs/2604.24712)).
-- Precise wording that primes the wrong solution. In the same study the fail-to-pass and pass-to-fail ratio was near balanced at 0.89 for under-specification, because "domain-specific vocabulary, identifier names, and constraint lines prime models toward memorized but incorrect solutions". Constraint removal fixed incorrect input parsing in 39% of the cases where it helped ([arxiv 2604.24712](https://arxiv.org/abs/2604.24712)).
+- Tasks whose specification is already redundant. Across 10 models, removing a single explicit constraint cost 11.8% pass@1 on HumanEval but only 0.9% on LiveCodeBench, where descriptions, constraints, formats, and examples overlap ([When Prompt Under-Specification Improves Code Correctness](https://arxiv.org/abs/2604.24712v1)).
+- Precise wording that primes the wrong solution. In the same study the fail-to-pass and pass-to-fail ratio was near balanced at 0.89 for under-specification, because "domain-specific vocabulary, identifier names, and constraint lines prime models toward memorized but incorrect solutions". Constraint removal fixed incorrect input parsing in 39% of the cases where it helped ([arxiv 2604.24712](https://arxiv.org/abs/2604.24712v1)).
 - One-line changes. Front-loading has its own cost: "Plan mode is useful, but also adds overhead… If you could describe the diff in one sentence, skip the plan" ([Best practices](https://code.claude.com/docs/en/best-practices)).
 - Sessions dominated by a different driver. Opus left as the default, a session never cleared, repeated cache misses, or agent teams that "use approximately 7x more tokens than standard sessions when teammates run in plan mode" all outweigh phrasing ([Manage costs effectively](https://code.claude.com/docs/en/costs)). Measure before you tune wording — see [Token-Cost Profiling for Always-On Workflows](token-cost-profiling-always-on-workflows.md).
 
@@ -79,7 +79,7 @@ Note what the second version does not do. It does not restate the project's test
 - Name the target, state the stop condition, bound exploration, and state constraints the agent would otherwise find by trial
 - Retrieval cost compounds because the full conversation is re-sent every turn, and attention degrades as the window grows ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents))
 - Selecting which requirements to state beat stating all of them by 3.8% accuracy at 43% fewer tokens ([What Prompts Don't Say](https://arxiv.org/abs/2505.13360))
-- On richly-specified tasks, removing a constraint cost only 0.9% pass@1 and helped about as often as it hurt ([arxiv 2604.24712](https://arxiv.org/abs/2604.24712))
+- On richly-specified tasks, removing a constraint cost only 0.9% pass@1 and helped about as often as it hurt ([arxiv 2604.24712](https://arxiv.org/abs/2604.24712v1))
 - Check the bigger levers first — model choice, session hygiene, and team size move more than phrasing
 
 ## Related

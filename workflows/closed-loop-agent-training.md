@@ -78,7 +78,7 @@ Train the target model on validated trajectories. The training approach matters:
 | Direct Preference Optimization (DPO) | Learns from ranked pairs | 500-1,000 + preference pairs |
 | Trajectory-level RL (e.g., GRPO) | Rewards complete workflows, not tokens | 500-1,000 + reward signal |
 
-Trajectory-level reinforcement learning -- applying group-relative advantages across complete agent episodes rather than individual tokens -- yields roughly 10% higher execution accuracy than token-level approaches on EnterpriseLab's benchmarks ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630)); the size of the gap in other settings will depend on task complexity and tool-set size.
+Trajectory-level reinforcement learning -- applying group-relative advantages across complete agent episodes rather than individual tokens -- yields roughly 10% higher execution accuracy than token-level approaches on EnterpriseLab's benchmarks ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630v1)); the size of the gap in other settings will depend on task complexity and tool-set size.
 
 ## Evidence: small models matching frontier performance
 
@@ -97,11 +97,11 @@ The core mechanism is distribution alignment: training trajectories come from th
 
 Trajectory-level optimization amplifies this further ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630)). Token-level fine-tuning rewards correct individual tokens but is indifferent to whether the overall tool-call sequence succeeds. Trajectory-level RL (GRPO, PPO with episode-level rewards) directly optimizes for complete workflow success, which better matches the evaluation criterion and suppresses locally-plausible but globally-failing call sequences.
 
-The "match frontier" result holds within the trained tool distribution. Counter-evidence cautions against over-reading it: standard fine-tuning leaves small models weak at generalizing to tools they did not see during training -- both genuinely new tools and upgraded versions of familiar ones ([He et al., 2025](https://arxiv.org/abs/2502.18990)). That limit is precisely what the incremental re-training loop below exists to manage: rather than expecting one checkpoint to generalize to schema changes for free, the pattern regenerates trajectories whenever the tool set shifts. Treat the parity claim as bounded to the schemas you actually train on, not as evidence that an 8B model has acquired tool-use competence that transfers to arbitrary unseen tools.
+The "match frontier" result holds within the trained tool distribution. Counter-evidence cautions against over-reading it: standard fine-tuning leaves small models weak at generalizing to tools they did not see during training -- both genuinely new tools and upgraded versions of familiar ones ([He et al., 2025](https://arxiv.org/abs/2502.18990v1)). That limit is precisely what the incremental re-training loop below exists to manage: rather than expecting one checkpoint to generalize to schema changes for free, the pattern regenerates trajectories whenever the tool set shifts. Treat the parity claim as bounded to the schemas you actually train on, not as evidence that an 8B model has acquired tool-use competence that transfers to arbitrary unseen tools.
 
 ## Schema evolution: incremental re-training
 
-The closed loop pays off when tool schemas change -- which they always do. When 30% of API schemas were modified in EnterpriseLab's evaluation, incremental training on just 200 additional trajectories (synthesized from the updated schemas) recovered 95% of original performance ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630)) -- a result measured across the 15 enterprise domains in the study, and one that larger or more heterogeneous schema diffs would not necessarily match.
+The closed loop pays off when tool schemas change -- which they always do. When 30% of API schemas were modified in EnterpriseLab's evaluation, incremental training on just 200 additional trajectories (synthesized from the updated schemas) recovered 95% of original performance ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630v1)) -- a result measured across the 15 enterprise domains in the study, and one that larger or more heterogeneous schema diffs would not necessarily match.
 
 The re-training workflow:
 

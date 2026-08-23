@@ -91,3 +91,4 @@ The right-hand column applies all four mitigations below: scope (one tracker), l
 - [Context Budget Allocation](../../context-engineering/context-budget-allocation.md) — the budget framing this anti-pattern violates at the extension boundary.
 - [MCP Eager vs JIT Loading](../../tool-engineering/mcp-eager-vs-jit-loading.md) — the lazy-load mitigation as a tool-engineering decision.
 - [Assuming Loaded Skills Stay Enforced in Long Contexts](assuming-loaded-skills-stay-enforced.md) — a single loaded skill silently sheds its own requirements as the trajectory grows, a failure that appears even without a second conflicting extension.
+- [Skill Over-Trust](skill-over-trust.md) — attributing a failure or cost regression to one installed skill by re-running the task with it withheld.

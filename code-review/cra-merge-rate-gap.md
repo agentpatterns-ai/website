@@ -19,7 +19,7 @@ maturity: emerging
 
 ## The evidence
 
-An empirical study of 3,109 PRs from the AIDev dataset (HuggingFace-hosted repositories) measures how reviewer composition affects merge outcomes ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). The study sorts each PR by reviewer type — CRA-only, human-only, or mixed — and tracks the merge rate.
+An empirical study of 3,109 PRs from the AIDev dataset (HuggingFace-hosted repositories) measures how reviewer composition affects merge outcomes ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196v1)). The study sorts each PR by reviewer type — CRA-only, human-only, or mixed — and tracks the merge rate.
 
 | Reviewer Composition | Merge Rate |
 |----------------------|-----------|
@@ -27,7 +27,7 @@ An empirical study of 3,109 PRs from the AIDev dataset (HuggingFace-hosted repos
 | Human-dominated mixed | 67.99% |
 | CRA-only | 45.20% |
 
-The 23-point merge rate gap contradicts industry claims that CRAs can manage 80% of open source PRs without human involvement ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)).
+The 23-point merge rate gap contradicts industry claims that CRAs can manage 80% of open source PRs without human involvement ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196v1)).
 
 ## Why CRA-only reviews underperform
 
@@ -40,13 +40,13 @@ The study introduces a signal ratio metric: the fraction of CRA comments that ar
 - 60 to 79%: more signal than noise
 - 80 to 100%: mostly actionable
 
-Among closed CRA-only PRs, 60.2% fall into the 0 to 30% band. Across 13 CRAs studied, 12 show average signal ratios below 60% ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)).
+Among closed CRA-only PRs, 60.2% fall into the 0 to 30% band. Across 13 CRAs studied, 12 show average signal ratios below 60% ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196v1)).
 
 When most comments are noise, developers stop acting on them. PRs stall and are abandoned.
 
 ### Adoption rate baseline
 
-This finding matches adoption rate data from a separate study of 278,790 code reviews: developers adopt AI suggestions at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)). Low adoption follows from a low signal ratio — if most comments are not actionable, most comments are not adopted. The same low uptake appears at the level of individual comments in [agentic review comment acceptance](agentic-review-comment-acceptance.md).
+This finding matches adoption rate data from a separate study of 278,790 code reviews: developers adopt AI suggestions at 16.6% versus 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911v1)). Low adoption follows from a low signal ratio — if most comments are not actionable, most comments are not adopted. The same low uptake appears at the level of individual comments in [agentic review comment acceptance](agentic-review-comment-acceptance.md).
 
 ## What mixed composition recovers
 

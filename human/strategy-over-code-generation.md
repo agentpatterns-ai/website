@@ -16,7 +16,7 @@ maturity: adopted
 
 ## The evidence
 
-Over 80% of ML projects fail to deliver business value — twice the rate of traditional IT projects ([Prause, 2026](https://arxiv.org/abs/2601.01839)). This persists despite AI assistants increasing code production speed by 50–55% ([Peng et al., 2023](https://arxiv.org/abs/2302.06590)). The bottleneck is not code generation. It is strategic alignment.
+Over 80% of ML projects fail to deliver business value — twice the rate of traditional IT projects ([Prause, 2026](https://arxiv.org/abs/2601.01839v1)). This persists despite AI assistants increasing code production speed by 50–55% ([Peng et al., 2023](https://arxiv.org/abs/2302.06590v1)). The bottleneck is not code generation. It is strategic alignment.
 
 Prause (2026) surveyed 150 data scientists. The study used Structural Equation Modeling to identify four interdependent success factors and to quantify how they cascade:
 
@@ -34,7 +34,7 @@ flowchart LR
     style SU fill:#5c1a1a,stroke:#a22d2d,color:#fff
 ```
 
-All paths significant at p<0.001 except Success paths (p<0.05). Model fit: CFI=0.959, RMSEA=0.050 ([Prause, 2026](https://arxiv.org/abs/2601.01839)).
+All paths significant at p<0.001 except Success paths (p<0.05). Model fit: CFI=0.959, RMSEA=0.050 ([Prause, 2026](https://arxiv.org/abs/2601.01839v1)).
 
 ## The four factors
 
@@ -84,7 +84,7 @@ The study also measures ML projects broadly, not AI coding agents specifically �
 
 ## Key Takeaways
 
-- AI agents increase code velocity 50–55% but cannot compensate for unclear goals — the 80% ML failure rate persists ([Prause, 2026](https://arxiv.org/abs/2601.01839))
+- AI agents increase code velocity 50–55% but cannot compensate for unclear goals — the 80% ML failure rate persists ([Prause, 2026](https://arxiv.org/abs/2601.01839v1))
 - Success cascades: organizational support → strategy → process → ecosystem → outcomes; skipping upstream factors undermines everything downstream
 - Process without ecosystem backfires (β=-0.199) — structured review of agent output requires automated infrastructure to be effective
 - Strategy is the highest-leverage intervention: it has both direct effect on success and indirect effects through every other factor

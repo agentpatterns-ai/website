@@ -58,7 +58,7 @@ The paper's reference implementation uses LangGraph, but the pattern is framewor
 
 ## Why it works
 
-The causal mechanism is purely about where state lives, not about model reasoning. A stateless loop encodes the experimental record in the message transcript. The inference call must re-process that transcript every turn, and the provider re-bills the full prefix on each call. A stateful loop encodes the same record in a typed object outside the prompt and exposes it through tools. Per-call input is bounded by the working set the current step touches, not by cumulative history. The asymptotic effect (`O(N²) → O(N)`) is a direct consequence of decoupling the experimental record from the transcript ([Jabbarvaziri, 2026](https://arxiv.org/abs/2606.14945)). The 90% and 52% reductions are the gap between a quadratic and a linear cost curve at finite iteration counts, not optimizations on top of the same architecture.
+The causal mechanism is purely about where state lives, not about model reasoning. A stateless loop encodes the experimental record in the message transcript. The inference call must re-process that transcript every turn, and the provider re-bills the full prefix on each call. A stateful loop encodes the same record in a typed object outside the prompt and exposes it through tools. Per-call input is bounded by the working set the current step touches, not by cumulative history. The asymptotic effect (`O(N²) → O(N)`) is a direct consequence of decoupling the experimental record from the transcript ([Jabbarvaziri, 2026](https://arxiv.org/abs/2606.14945v1)). The 90% and 52% reductions are the gap between a quadratic and a linear cost curve at finite iteration counts, not optimizations on top of the same architecture.
 
 ## When this backfires
 

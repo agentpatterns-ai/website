@@ -62,7 +62,7 @@ Decentralized memory works because it separates write contention from retrieval 
 
 ## Reported numbers
 
-DecentMem reports up to +23.8% accuracy over the strongest centralized-memory baseline, +52.5% over no-memory systems, and a 49% token reduction. These results span AutoGen, DyLAN, and AgentNet on Qwen3 (4B/8B/14B) and Gemma4 (E2B/E4B) backbones, across five math, code, QA, and embodied benchmarks ([Hao, Long, Zhao 2026](https://arxiv.org/abs/2605.22721)). These are preprint numbers, and unreplicated. Treat the architecture as defensible, but not the numbers as load-bearing.
+DecentMem reports up to +23.8% accuracy over the strongest centralized-memory baseline, +52.5% over no-memory systems, and a 49% token reduction. These results span AutoGen, DyLAN, and AgentNet on Qwen3 (4B/8B/14B) and Gemma4 (E2B/E4B) backbones, across five math, code, QA, and embodied benchmarks ([Hao, Long, Zhao 2026](https://arxiv.org/abs/2605.22721v1)). These are preprint numbers, and unreplicated. Treat the architecture as defensible, but not the numbers as load-bearing.
 
 ## What coordination actually remains
 

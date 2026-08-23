@@ -111,7 +111,7 @@ Separating generation from verification lets the model focus on checking each re
 
 ## Whether intent amplification helps
 
-Contrastive decoding — comparing logits from a full prompt against an intent-masked version — shows up to 71% improvement in constraint adherence ([Fang et al., 2026](https://arxiv.org/abs/2602.00066)), building on classifier-free guidance adapted from image generation ([Sanchez et al., 2023](https://arxiv.org/abs/2306.17806)).
+Contrastive decoding — comparing logits from a full prompt against an intent-masked version — shows up to 71% improvement in constraint adherence ([Fang et al., 2026](https://arxiv.org/abs/2602.00066v1)), building on classifier-free guidance adapted from image generation ([Sanchez et al., 2023](https://arxiv.org/abs/2306.17806v1)).
 
 These methods require token-level logit access, so they apply only to open-weight models (vLLM, llama.cpp). If you use a closed-source API, you cannot change the decoding behavior. The mitigations above work with any model.
 

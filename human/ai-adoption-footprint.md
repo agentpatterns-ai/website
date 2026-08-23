@@ -69,7 +69,7 @@ Platform teams should know which segment they serve. A tool that "serves everyon
 
 ### Measurement without self-reporting bias
 
-METR found a 39-point perception gap — developers estimated they were 20% faster while running 19% slower ([METR](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Adoption surveys inherit this. Observable proxies work better:
+METR reports developers taking 19% longer while still estimating they were 20% faster — a 39-point gap between the two figures ([METR](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Adoption surveys inherit this. Observable proxies work better:
 
 - Tool telemetry distribution: per-engineer agent invocations or tokens consumed. A segmented org shows a heavy-tailed histogram, not a normal curve.
 - Workflow depth signals: project-level config files (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules`), custom skill or hook definitions — artifacts chat users do not produce.

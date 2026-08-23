@@ -54,7 +54,7 @@ The LLM runs only when no feasible path exists: every candidate tool unavailable
 
 ## Results
 
-Testing across 19 scenarios and three graph topologies (linear pipeline, dependency DAG, parallel fan-out), the Self-Healing Router achieves a [93% reduction in LLM control-plane calls](https://arxiv.org/abs/2603.01548) compared to a ReAct baseline — 9 aggregate LLM calls versus 123 — with equivalent task correctness.
+Testing across 19 scenarios and three graph topologies (linear pipeline, dependency DAG, parallel fan-out), the Self-Healing Router achieves a [93% reduction in LLM control-plane calls](https://arxiv.org/abs/2603.01548v1) compared to a ReAct baseline — 9 aggregate LLM calls versus 123 — with equivalent task correctness.
 
 Every failure is either a logged reroute or an explicit escalation — the silent-failure mode of static workflows is eliminated without paying the inference cost of LLM-directed recovery.
 

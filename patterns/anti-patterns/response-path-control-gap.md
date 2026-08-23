@@ -46,7 +46,7 @@ The client-side mitigations they tested helped partly, never fully. Execution al
 
 ## Why it works
 
-Nothing binds the response your agent consumes to the response the provider produced. No provider enforces cryptographic integrity between client and upstream model ([Xie et al. 2026](https://arxiv.org/abs/2606.16358)), and clients "cannot independently distinguish honest mediation from route substitution, hidden fallback, stream manipulation, or forged provenance" ([Wang and Tian 2026](https://arxiv.org/abs/2606.22560)). The permission gate therefore sits downstream of the tampering and inspects an artifact the attacker authored. Tightening the gate raises the bar on presentation, which is what the polished injection levels are built to clear.
+Nothing binds the response your agent consumes to the response the provider produced. No provider enforces cryptographic integrity between client and upstream model ([Xie et al. 2026](https://arxiv.org/abs/2606.16358v1)), and clients "cannot independently distinguish honest mediation from route substitution, hidden fallback, stream manipulation, or forged provenance" ([Wang and Tian 2026](https://arxiv.org/abs/2606.22560v1)). The permission gate therefore sits downstream of the tampering and inspects an artifact the attacker authored. Tightening the gate raises the bar on presentation, which is what the polished injection levels are built to clear.
 
 ## When this backfires
 

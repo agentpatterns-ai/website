@@ -19,7 +19,7 @@ maturity: emerging
 
 > Organizing an agent's markdown memory tree roughly halves retrieval cost on large stores and changes nothing measurable about answer quality.
 
-Asking an agent to keep its markdown memory tidy buys a cheaper read, not a better answer. The first systematic study of filesystem-based memory compared organized stores against a verbatim dump, splitting the system into three roles: a management agent that files incoming content, a search agent that answers queries against the store, and an execution agent that runs tasks from retrieved skills. Organization more than halved per-query search cost on the largest store, 1.6 cents against 3.9, but "correctness has no shape that wins everywhere" ([Zhou et al., 2026](https://arxiv.org/abs/2607.26637)). Budget the work as a cost optimization and judge it on cost.
+Asking an agent to keep its markdown memory tidy buys a cheaper read, not a better answer. The first systematic study of filesystem-based memory compared organized stores against a verbatim dump, splitting the system into three roles: a management agent that files incoming content, a search agent that answers queries against the store, and an execution agent that runs tasks from retrieved skills. Organization more than halved per-query search cost on the largest store, 1.6 cents against 3.9, but "correctness has no shape that wins everywhere" ([Zhou et al., 2026](https://arxiv.org/abs/2607.26637v1)). Budget the work as a cost optimization and judge it on cost.
 
 ## When organizing pays
 
@@ -29,7 +29,7 @@ The store has to be large. The saving appeared on the two densest stores, 137 KB
 
 A capable model has to do the managing. Adherence to the taxonomy eroded as most stores grew, and only the strongest management agent held the contract across a full accumulation run ([Zhou et al., 2026](https://arxiv.org/abs/2607.26637)). A weak manager gives you the bill without the structure.
 
-You have to keep paying. Curation cost stayed flat per episode and never amortized, about $10 to $11 per 140 tasks against zero for an append-only episode log ([Zhou et al., 2026](https://arxiv.org/abs/2607.26637)).
+You have to keep paying. Curation cost stayed flat per episode and never amortized, about $10 to $11 per 140 tasks against zero for an append-only episode log ([Zhou et al., 2026](https://arxiv.org/abs/2607.26637v1)).
 
 ## Why it works
 
@@ -37,13 +37,13 @@ Structure buys selective reading, not a smaller store: organized stores make sev
 
 ## Match the memory form to the model that reads it
 
-The most actionable result concerns form, not layout. In the skill setting a weak execution agent did better on synthesized guidance than on raw logs, 76.4% against 66.4%. A strong execution agent reversed that: the verbatim episode log led at 87.1%, with curated skills second at 82.1% ([Zhou et al., 2026](https://arxiv.org/abs/2607.26637)).
+The most actionable result concerns form, not layout. In the skill setting a weak execution agent did better on synthesized guidance than on raw logs, 76.4% against 66.4%. A strong execution agent reversed that: the verbatim episode log led at 87.1%, with curated skills second at 82.1% ([Zhou et al., 2026](https://arxiv.org/abs/2607.26637v1)).
 
 Synthesis discards detail. A weaker consumer cannot recover it from a raw trajectory and gains from having it pre-digested; a stronger one can, and loses by being handed someone else's summary. Choose the form by which model reads the store, not by which looks tidier. [Memory synthesis from execution logs](memory-synthesis-execution-logs.md) covers the distillation side.
 
 ## Organization style says more about the model than the content
 
-Given the same stream and instruction, three management models produced 122, 2, and 105 files, with cross-reference counts from 7 to 233, while correctness stayed in an unsystematic 66.7% to 73.8% band. The harness moves the shape as much as the model does, which is direct evidence for treating [memory as a property of the harness](harness-memory-coupling.md): holding instruction and backbone fixed, a shell tool set produced 36 files where a restricted file-operations set produced 45, and "changing the tool set alone reshapes the store as strongly as swapping the model" ([Zhou et al., 2026](https://arxiv.org/abs/2607.26637)). Pin the tools as deliberately as you pin the model.
+Given the same stream and instruction, three management models produced 122, 2, and 105 files, with cross-reference counts from 7 to 233, while correctness stayed in an unsystematic 66.7% to 73.8% band. The harness moves the shape as much as the model does, which is direct evidence for treating [memory as a property of the harness](harness-memory-coupling.md): holding instruction and backbone fixed, a shell tool set produced 36 files where a restricted file-operations set produced 45, and "changing the tool set alone reshapes the store as strongly as swapping the model" ([Zhou et al., 2026](https://arxiv.org/abs/2607.26637v1)). Pin the tools as deliberately as you pin the model.
 
 ## When this backfires
 

@@ -26,7 +26,7 @@ The condition that governs this technique: the recovery window is narrow and fai
 
 ## The three phases
 
-A study of 1,794 valid CLI coding-agent trajectories (filtered from 3,843 runs across seven frontier models, with over 63,000 annotated steps) measured the shape of failure directly ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510)):
+A study of 1,794 valid CLI coding-agent trajectories (filtered from 3,843 runs across seven frontier models, with over 63,000 annotated steps) measured the shape of failure directly ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510v1)):
 
 - Onset is early. The decisive error has a median onset of 7 execution steps, inside the first quarter of a failed run (median length 27 steps).
 - Signals lag. Observable failure symptoms emerge a median of about 10 steps after the decisive error — the first visible failure lands near step 16. The run looks healthy while it is already diverging.
@@ -36,13 +36,13 @@ After lock-in, agents rarely stop: only 18% terminate, while 82% continue unprod
 
 ## Why it works
 
-Failures become unrecoverable through error propagation. The dominant failure class is epistemic: the agent misuses information it already has (57.9% of errors), and the single largest type is a false premise (30.7%). The agent adopts an unverified assumption — reading `sudo: not found` as a permissions problem rather than a missing program — then reasons consistently on top of it ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510)). Because each later step is taken to be coherent with that premise, every subsequent action extends rather than corrects the error. The wrong foundation is laid early and symptoms surface late, so validation has to move earlier than final-outcome checks to catch it in time. Responding to a signal is what separates outcomes: 92% of successful trajectories act on at least one error signal, against only 37% of failed ones.
+Failures become unrecoverable through error propagation. The dominant failure class is epistemic: the agent misuses information it already has (57.9% of errors), and the single largest type is a false premise (30.7%). The agent adopts an unverified assumption — reading `sudo: not found` as a permissions problem rather than a missing program — then reasons consistently on top of it ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510v1)). Because each later step is taken to be coherent with that premise, every subsequent action extends rather than corrects the error. The wrong foundation is laid early and symptoms surface late, so validation has to move earlier than final-outcome checks to catch it in time. Responding to a signal is what separates outcomes: 92% of successful trajectories act on at least one error signal, against only 37% of failed ones.
 
 Independent trajectory analysis corroborates the early-signal finding — a coding agent's opening strategy, reading first versus patching first, is observable within the first 10 steps and correlates with the final outcome across agents ([behavioral drivers of coding-agent success](behavioral-drivers-agent-success.md)).
 
 ## When this backfires
 
-- No specification at monitoring time. The dominant spec-relative failures (false premise, specification neglect) are only 12 to 15% detectable without the task requirements, rising to 22 to 32% when they are supplied ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510)). A monitor without the spec mostly cannot catch them, so the process framing buys little.
+- No specification at monitoring time. The dominant spec-relative failures (false premise, specification neglect) are only 12 to 15% detectable without the task requirements, rising to 22 to 32% when they are supplied ([Zhao et al., 2026](https://arxiv.org/abs/2607.09510v1)). A monitor without the spec mostly cannot catch them, so the process framing buys little.
 - Irreversible external side effects. Where actions hit external services — deploys, pushes, API writes — checkpoint-restore cannot undo them. Intervening before lock-in then degrades to aborting, not recovering; pair it with [rollback-first design](rollback-first-design.md).
 - Naive real-time detection. The paper's own monitors reach 82% precision on locked-in runs but only 3.7 to 8.7% lead time before lock-in, so a detector reacting to symptoms fires too late. Front-load premise validation instead of trusting live symptom-watching.
 - Short or trivial tasks. When failure is immediate and obvious from the final output, the onset-evolution-recovery apparatus adds annotation and monitoring overhead with no gain over a simple completion check.

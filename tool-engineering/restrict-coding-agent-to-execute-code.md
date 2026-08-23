@@ -23,8 +23,8 @@ Modern coding agents expose several tool surfaces at once: native file primitive
 
 Reach for a single `execute_code` tool — a persistent Python-plus-Bash REPL keyed by working directory, with the native built-ins disallowed — when the work is computation-shaped:
 
-- Data engineering, ML, and algorithmic tasks that compute over a workspace rather than editing many source files. On the Artifact computation suite, `code_only` cut cost 24.6% for Claude Code (p=7.37e-14) and trended 6.7% cheaper for Codex CLI ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)).
-- Agents whose native edit surface is not a strong advantage. On SWE-bench Mini, `code_only` cut Codex CLI cost 19.9% (p=2.02e-9) — restricting the surface was significantly cheaper there ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)).
+- Data engineering, ML, and algorithmic tasks that compute over a workspace rather than editing many source files. On the Artifact computation suite, `code_only` cut cost 24.6% for Claude Code (p=7.37e-14) and trended 6.7% cheaper for Codex CLI ([Yang et al., 2026](https://arxiv.org/abs/2607.10569v1)).
+- Agents whose native edit surface is not a strong advantage. On SWE-bench Mini, `code_only` cut Codex CLI cost 19.9% (p=2.02e-9) — restricting the surface was significantly cheaper there ([Yang et al., 2026](https://arxiv.org/abs/2607.10569v1)).
 
 Across the four regime-by-agent cells, the single-tool surface was cheaper than, or statistically tied with, the cheaper of its tool-rich rivals in three of four — significantly in two ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)). Because solve rate holds constant, narrowing is a defensible default for computation work rather than a bet against capability.
 
@@ -36,9 +36,9 @@ A single REPL keyed by the working directory lets the agent batch several operat
 
 Keep the native Edit and Write tools when the work is modification-shaped and the agent already has a strong editor:
 
-- Diff-style modification tasks on a strong native editor. On SWE-bench Mini with Claude Code, `code_only` ran 14.4% costlier (p=0.120, not significant) because every file change had to be written as a Python script instead of a native edit — a fixed verbosity of about 3,992 tokens plus an output-token penalty that scaled with edit volume (Spearman ρ=0.488) ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)). Purpose-built agent-computer interfaces exist precisely because they "significantly enhance an agent's ability to create and edit code files" ([Yang et al., 2024](https://arxiv.org/abs/2405.15793)); discarding that surface has a cost.
-- Low-solve-rate task pools. The Claude Code cost gap localized to failed and split instances; on unanimous-pass runs it collapsed from 14.4% to 4.1%. Edit-friction compounds with the cost of long doomed trajectories on instances no surface can solve ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)).
-- Restriction that is only prompt-enforced. The Codex savings held under soft, prompt-level restriction with under 1% audited leakage back to the native patch tool — behavioral compliance, not a hard harness flag. Both the cost result and any isolation assumption stay conditional on that compliance ([Yang et al., 2026](https://arxiv.org/abs/2607.10569)).
+- Diff-style modification tasks on a strong native editor. On SWE-bench Mini with Claude Code, `code_only` ran 14.4% costlier (p=0.120, not significant) because every file change had to be written as a Python script instead of a native edit — a fixed verbosity of about 3,992 tokens plus an output-token penalty that scaled with edit volume (Spearman ρ=0.488) ([Yang et al., 2026](https://arxiv.org/abs/2607.10569v1)). Purpose-built agent-computer interfaces exist precisely because they "significantly enhance an agent's ability to create and edit code files" ([Yang et al., 2024](https://arxiv.org/abs/2405.15793)); discarding that surface has a cost.
+- Low-solve-rate task pools. The Claude Code cost gap localized to failed and split instances; on unanimous-pass runs it collapsed from 14.4% to 4.1%. Edit-friction compounds with the cost of long doomed trajectories on instances no surface can solve ([Yang et al., 2026](https://arxiv.org/abs/2607.10569v1)).
+- Restriction that is only prompt-enforced. The Codex savings held under soft, prompt-level restriction with under 1% audited leakage back to the native patch tool — behavioral compliance, not a hard harness flag. Both the cost result and any isolation assumption stay conditional on that compliance ([Yang et al., 2026](https://arxiv.org/abs/2607.10569v1)).
 
 ## Example
 

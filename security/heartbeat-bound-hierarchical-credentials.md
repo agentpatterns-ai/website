@@ -54,7 +54,7 @@ Stopping the parent's heartbeat is the revocation event. There is no status list
 
 ## Reported results
 
-The paper evaluates HBHC against OAuth 2.0 introspection, OCSP, and W3C Status Lists. It reports a 90x reduction in zombie window over OAuth 2.0, 0.26 ms full authentication in Rust, more than 18,000 verifications per second, stable per-verification latency from 10 to 10,000 agents, 0.71% end-to-end overhead on GPT-4o-mini tool calls, zero post-revocation tool calls under prompt-injection bypass, and cascading revocation across a 49-agent four-level hierarchy. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704)
+The paper evaluates HBHC against OAuth 2.0 introspection, OCSP, and W3C Status Lists. It reports a 90x reduction in zombie window over OAuth 2.0, 0.26 ms full authentication in Rust, more than 18,000 verifications per second, stable per-verification latency from 10 to 10,000 agents, 0.71% end-to-end overhead on GPT-4o-mini tool calls, zero post-revocation tool calls under prompt-injection bypass, and cascading revocation across a 49-agent four-level hierarchy. [Source: arXiv 2605.20704](https://arxiv.org/abs/2605.20704v1)
 
 The 90x figure is over OAuth 2.0 specifically. SPIFFE-style rotation collapses zombie windows by implicit expiry, so the relevant baseline depends on what the deployment runs today.
 

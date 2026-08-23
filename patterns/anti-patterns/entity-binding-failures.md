@@ -23,15 +23,15 @@ status: current
 
 You evaluate an agent on whether it selects the correct tool and produces valid arguments, and you treat a green tool-selection score as proof the action was correct. It is not. "Email Alex about the launch" can select `send_email` flawlessly and still reach the wrong Alex, attach the wrong launch doc, or land in the wrong thread. Tool correctness and entity correctness are separate axes, and only one of them is on your dashboard.
 
-The gap is measured. Across 60 diagnostic tasks, 5 model backends, and 6 tool-use methods (1,800 runs over email, calendar, documents, customer records, and issue tracking), action-oriented baselines hit 0.0% wrong-tool error yet still produced wrong-entity actions in 24.0-26.0% of runs ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)). The failure concentrates where references are ambiguous: temporal calendar tasks ("tomorrow's sync") run 90-100% wrong-entity for baselines, and true-ambiguity tasks reach 92-100% unsafe execution. Unambiguous tasks sit at 0% ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)).
+The gap is measured. Across 60 diagnostic tasks, 5 model backends, and 6 tool-use methods (1,800 runs over email, calendar, documents, customer records, and issue tracking), action-oriented baselines hit 0.0% wrong-tool error yet still produced wrong-entity actions in 24.0-26.0% of runs ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531v1)). The failure concentrates where references are ambiguous: temporal calendar tasks ("tomorrow's sync") run 90-100% wrong-entity for baselines, and true-ambiguity tasks reach 92-100% unsafe execution. Unambiguous tasks sit at 0% ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531v1)).
 
-Adding a retriever does not close it. Surfacing candidate entities to the model still leaves it guessing — a semantic filter scores 24.0% and entity retrieval 26.0%, statistically level with the naive baseline ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)).
+Adding a retriever does not close it. Surfacing candidate entities to the model still leaves it guessing — a semantic filter scores 24.0% and entity retrieval 26.0%, statistically level with the naive baseline ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531v1)).
 
 ## Why it works
 
 Three causes drive wrong-entity actions ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)). Retrieval insufficiency: listing candidates does not force the agent to verify which one binds, so it commits to the top match whether or not that match is unique. Temporal-context dependency: references lean on implicit time reasoning (latest version, nearest meeting) that agents infer poorly. Underspecified references: instructions assume background ("the launch doc") that metadata cannot recover. The insight is that organizing the decision space, through better tools or better search, adds no binding-verification step. Safe action needs an explicit resolve-then-confirm precondition, not a better retriever.
 
-The mitigations that work make binding a gate. Entity-resolution preconditions declare which entity types a tool needs before it can fire. Confidence-gated binding requires the top candidate to clear an absolute threshold and beat the runner-up by a margin — the `clear_margin()` check in the example below — so near-ties defer instead of guessing. Clarification under ambiguity asks a targeted question with distinguishing metadata, and provenance tracking records the evidence behind each binding for audit. Together these drove wrong-entity actions to 0.0% ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)).
+The mitigations that work make binding a gate. Entity-resolution preconditions declare which entity types a tool needs before it can fire. Confidence-gated binding requires the top candidate to clear an absolute threshold and beat the runner-up by a margin — the `clear_margin()` check in the example below — so near-ties defer instead of guessing. Clarification under ambiguity asks a targeted question with distinguishing metadata, and provenance tracking records the evidence behind each binding for audit. Together these drove wrong-entity actions to 0.0% ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531v1)).
 
 ## Example
 
@@ -61,7 +61,7 @@ The gate fires only when the binding is ambiguous, and it presents distinguishin
 
 ## When this backfires
 
-Making every binding a gate is not free. The same methods that drove wrong-entity actions to zero cut direct task success from ~74-75% to 26-32% through conservative deferral ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)). Gate selectively:
+Making every binding a gate is not free. The same methods that drove wrong-entity actions to zero cut direct task success from ~74-75% to 26-32% through conservative deferral ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531v1)). Gate selectively:
 
 - Reversible or draft-only actions (draft an email, open a doc) where a wrong entity is caught and undone cheaply — a final human confirm beats a per-binding gate and keeps completion high.
 - Small, deduplicated, single-tenant entity spaces with no name collisions — unambiguous tasks already sit at 0% wrong-entity, so the gate never fires but still adds latency.
@@ -71,7 +71,7 @@ Reserve confidence-gated binding for high-risk, irreversible actions on ambiguou
 
 ## Key Takeaways
 
-- Tool correctness and entity correctness are separate axes. A 0% wrong-tool score coexists with 24-26% wrong-entity actions ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531)).
+- Tool correctness and entity correctness are separate axes. A 0% wrong-tool score coexists with 24-26% wrong-entity actions ([Suresh Babu & Indukuri, 2026](https://arxiv.org/abs/2606.30531v1)).
 - Retrieval does not fix binding. Surfacing candidates leaves the agent guessing; the fix is an explicit resolve-then-confirm precondition, not a better search.
 - The failure concentrates on ambiguous references — temporal ("tomorrow's sync") and name collisions — and vanishes on unambiguous ones.
 - Binding gates carry a completion cost (task success ~74% → 26-32%); reserve them for high-risk, irreversible actions.

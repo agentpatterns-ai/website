@@ -26,7 +26,7 @@ In propose-evaluate-revise loops — kernel generation, hyperparameter search, c
 
 ## Why it fails where the prior is weak
 
-- The acceptance rule barely matters; the prior carries the load. Simulated annealing, parallel investigators, and a second model give no benefit over greedy hill climbing while costing 2 to 3x more evaluations across four optimization tasks ([Yitao Li, "Greedy Is a Strong Default"](https://arxiv.org/abs/2603.27415)).
+- The acceptance rule barely matters; the prior carries the load. Simulated annealing, parallel investigators, and a second model give no benefit over greedy hill climbing while costing 2 to 3x more evaluations across four optimization tasks ([Yitao Li, "Greedy Is a Strong Default"](https://arxiv.org/abs/2603.27415v1)).
 - LLMs show three reliable failure modes under feedback: greediness, frequency bias, and a knowing-doing gap. They can describe what to explore while still sampling the prior's mode. RL fine-tuning on self-generated chain-of-thought reduces but does not eliminate the bias ([Schmied et al., "LLMs are Greedy Agents"](https://arxiv.org/abs/2504.16078)).
 - Training on optimal exploration makes agents greedier. Models supervised on UCB and Thompson Sampling demonstrations beat their teacher on average reward by abandoning exploration earlier, at the cost of catastrophic early failures ([Chen et al., "When Greedy Wins"](https://arxiv.org/abs/2509.24923)).
 - Returns decay roughly exponentially across iterations until the loop plateaus. Compute past the plateau is waste ([Bhattacharjee et al.](https://arxiv.org/abs/2411.19043)).

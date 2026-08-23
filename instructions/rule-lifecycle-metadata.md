@@ -17,7 +17,7 @@ maturity: adopted
 
 > Tagging each rule with its source, applicability, and expiry condition turns the rule-budget audit from a counting exercise into a pruning exercise.
 
-The [instruction compliance ceiling](instruction-compliance-ceiling.md) makes pruning non-optional — even frontier models drop to 68% accuracy at high instruction densities ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). But the ceiling argument only tells you that you must cut, not what to cut. Without an explicit retirement signal per rule, every audit defaults to "leave it in, just in case." Surfaces grow but never shrink.
+The [instruction compliance ceiling](instruction-compliance-ceiling.md) makes pruning non-optional — even frontier models drop to 68% accuracy at high instruction densities ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1)). But the ceiling argument only tells you that you must cut, not what to cut. Without an explicit retirement signal per rule, every audit defaults to "leave it in, just in case." Surfaces grow but never shrink.
 
 The fix is per-rule lifecycle metadata: every rule declares its origin, its scope, and the condition under which removing it is safe.
 

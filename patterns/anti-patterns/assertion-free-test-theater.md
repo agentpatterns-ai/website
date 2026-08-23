@@ -21,7 +21,7 @@ maturity: emerging
 
 ## The pattern
 
-An assertion-free test file calls the changed function, sometimes wraps the call in a try/except, and never checks the result. The patch ships a `test_*` file beside the production change; CI counts the file; the merge gate is satisfied. No behavioral verification happened. In the largest empirical study to date, [80.2% of agent-authored test patches contained weak or no explicit oracle signals](https://arxiv.org/abs/2606.18168) — across 86,156 test-file patches from 33,596 pull requests in 2,807 GitHub repositories, covering OpenAI Codex, GitHub Copilot, Devin, Cursor, and Claude Code.
+An assertion-free test file calls the changed function, sometimes wraps the call in a try/except, and never checks the result. The patch ships a `test_*` file beside the production change; CI counts the file; the merge gate is satisfied. No behavioral verification happened. In the largest empirical study to date, [80.2% of agent-authored test patches contained weak or no explicit oracle signals](https://arxiv.org/abs/2606.18168v1) — across 86,156 test-file patches from 33,596 pull requests in 2,807 GitHub repositories, covering OpenAI Codex, GitHub Copilot, Devin, Cursor, and Claude Code.
 
 The defect is not the test file. The defect is the merge gate that reads "test file present" as "behavior verified." Once that gate exists, an agent optimizing against it correctly emits the cheapest output that passes — a smoke test, a call-only stub, or a try/except that swallows everything ([Banik et al. 2026](https://arxiv.org/abs/2606.18168)).
 
@@ -35,7 +35,7 @@ Banik et al. classify test patches against an eight-category taxonomy that colla
 | Weak oracle | Generic `assertTrue(x)`, `assertNotNull(x)`, truthiness checks | Crash plus broad truthiness — boundary and value checks absent |
 | Strong oracle | Specific value, boundary, or state checks tied to expected behavior | Direct behavioral verification |
 
-After controlling for agent type, PR size, repo popularity, task type, and language, strong-oracle patches merge at higher rates (odds ratio 1.28, p < 0.001) ([Banik et al. 2026](https://arxiv.org/abs/2606.18168)). Raw pre-adjustment numbers can run the other way — which is exactly why presence-based dashboards make the gap invisible. The fix is oracle-aware grading, not file counting.
+After controlling for agent type, PR size, repo popularity, task type, and language, strong-oracle patches merge at higher rates (odds ratio 1.28, p < 0.001) ([Banik et al. 2026](https://arxiv.org/abs/2606.18168v1)). Raw pre-adjustment numbers can run the other way — which is exactly why presence-based dashboards make the gap invisible. The fix is oracle-aware grading, not file counting.
 
 ## Why it happens
 
@@ -63,7 +63,7 @@ The trap is sharpest when (a) the merge gate is automated, (b) the file's claime
 
 ## Key Takeaways
 
-- File-presence quality gates overstate verification by roughly five-fold when 80.2% of agent-authored test patches carry weak or no oracle signal ([Banik et al. 2026](https://arxiv.org/abs/2606.18168)).
+- File-presence quality gates overstate verification by roughly five-fold when 80.2% of agent-authored test patches carry weak or no oracle signal ([Banik et al. 2026](https://arxiv.org/abs/2606.18168v1)).
 - The strong-oracle merge advantage (OR 1.28) only surfaces after controlling for confounders — presence-based dashboards systematically hide the gap.
 - The defect is the gate's predicate, not the agent's output; an agent optimizing against "tests exist" correctly emits the cheapest passing output.
 - Smoke-only and import-ping tests are legitimate; the trap is *grading* them as behavioral verification, not writing them.

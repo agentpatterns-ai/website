@@ -26,7 +26,7 @@ An empirical study measured how AI-generated and human-authored files diverge af
 
 AI-generated files receive roughly half the commit frequency of human-authored files in the first month, with activity declining further over the subsequent two months. The magnitude of each modification is also smaller — fewer lines touched per commit ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)).
 
-A line-level replication on a separate AIDev sample finds the same direction with statistical significance: AI-authored lines have a 16% lower hazard of modification (HR = 0.842, p < 0.001) and a 15.8 percentage-point lower modification rate ([arXiv:2601.16809](https://arxiv.org/abs/2601.16809)).
+A line-level replication on a separate AIDev sample finds the same direction with statistical significance: AI-authored lines have a 16% lower hazard of modification (HR = 0.842, p < 0.001) and a 15.8 percentage-point lower modification rate ([arXiv:2601.16809](https://arxiv.org/abs/2601.16809v1)).
 
 ### Modification mix
 
@@ -53,7 +53,7 @@ The second reading has separate support. A study of 302,600 AI-authored commits 
 
 ## Why the mix shifts to features
 
-The Sawada et al. paper offers one reading: "generated files may lack sufficient coverage of requirements" — agents under-deliver on scope, leaving humans to add the missing capability after merge ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)). This fits the wider pattern that agents skew simpler. Codex-assisted PRs change cyclomatic complexity 9.1% of the time, against 23.3% for human PRs ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
+The Sawada et al. paper offers one reading: "generated files may lack sufficient coverage of requirements" — agents under-deliver on scope, leaving humans to add the missing capability after merge ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)). This fits the wider pattern that agents skew simpler. Codex-assisted PRs change cyclomatic complexity 9.1% of the time, against 23.3% for human PRs ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003v1)).
 
 ## Practical implications
 
@@ -63,7 +63,7 @@ Do not read low commit frequency as a quality signal. Two mechanisms produce the
 
 Audit for missing scope, not just bugs. Feature additions dominate post-merge maintenance, so ask "what did the agent leave out?" rather than "what did it get wrong?"
 
-Modification timing tracks organizational factors. Predicting when AI-authored code gets touched scores Macro F1 = 0.285 on textual features alone. Review depth, ownership, and comprehension shape timing more than code structure does ([arXiv:2601.16809](https://arxiv.org/abs/2601.16809)).
+Modification timing tracks organizational factors. Predicting when AI-authored code gets touched scores Macro F1 = 0.285 on textual features alone. Review depth, ownership, and comprehension shape timing more than code structure does ([arXiv:2601.16809](https://arxiv.org/abs/2601.16809v1)).
 
 ## Key Takeaways
 
@@ -81,7 +81,7 @@ The 6-month observation window and the 100-repository AIDev sample limit how far
 - Highly specified ticket workflows: narrow, fully specified tasks (for example, "implement this DTO") where low post-merge modification reflects spec stability, not avoidance or quality
 - Closed-loop AI authoring and maintenance: pipelines where an agent both writes and maintains code (for example, agentic refactor jobs on cron) collapse the human-versus-agent maintenance split and invalidate the 83/17 ratio
 
-One caveat on that last context: routing maintenance back to agents does not make the lower-volume reading safe. Agents introduce fewer breaking changes when generating new code (3.45% against 7.40% for humans) but more during maintenance — 6.72% on refactoring, 9.35% on chore changes — a "Confidence Trap" where highly confident agentic PRs still break callers ([arXiv:2603.27524](https://arxiv.org/abs/2603.27524)).
+One caveat on that last context: routing maintenance back to agents does not make the lower-volume reading safe. Agents introduce fewer breaking changes when generating new code (3.45% against 7.40% for humans) but more during maintenance — 6.72% on refactoring, 9.35% on chore changes — a "Confidence Trap" where highly confident agentic PRs still break callers ([arXiv:2603.27524](https://arxiv.org/abs/2603.27524v1)).
 
 ## Related
 

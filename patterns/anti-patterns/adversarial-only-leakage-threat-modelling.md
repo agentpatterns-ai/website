@@ -22,7 +22,7 @@ maturity: emerging
 
 ## The pattern
 
-This anti-pattern scopes agent data-leakage defenses to adversarial exfiltration — prompt injection, jailbreaks, malicious MCP tools — and assumes a benign user with a benign request poses no leakage risk. The threat model lists injection classifiers, egress allowlists for known-bad destinations, and tool-call sandboxing. It does not model the agent itself oversharing while completing a legitimate task. A joint Singapore AI Safety Institute and Korea AI Safety Institute evaluation across 12 realistic scenarios (customer support, DevOps, business automation) found that none of three frontier agents achieved fully correct and fully safe execution across all tasks; "successful task completion often coincided with data-handling failures" ([Baek et al. 2026](https://arxiv.org/abs/2606.17114)).
+This anti-pattern scopes agent data-leakage defenses to adversarial exfiltration — prompt injection, jailbreaks, malicious MCP tools — and assumes a benign user with a benign request poses no leakage risk. The threat model lists injection classifiers, egress allowlists for known-bad destinations, and tool-call sandboxing. It does not model the agent itself oversharing while completing a legitimate task. A joint Singapore AI Safety Institute and Korea AI Safety Institute evaluation across 12 realistic scenarios (customer support, DevOps, business automation) found that none of three frontier agents achieved fully correct and fully safe execution across all tasks; "successful task completion often coincided with data-handling failures" ([Baek et al. 2026](https://arxiv.org/abs/2606.17114v1)).
 
 The study names five failure patterns, all benign-task behaviors rather than attacks:
 
@@ -34,15 +34,15 @@ The study names five failure patterns, all benign-task behaviors rather than att
 | Excessive data collection | Agent pulls a whole folder when a single file would have answered the request |
 | Access boundary violations | Sharing a full Google Drive folder when scope was one document |
 
-Source for all five: [Baek et al. 2026](https://arxiv.org/abs/2606.17114). A corroborating large-scale audit reports data-over-exposure on 57.07% of cross-tool function-call paths across 6,675 real-world agent tools ([Lin et al. 2026](https://arxiv.org/abs/2603.07557)).
+Source for all five: [Baek et al. 2026](https://arxiv.org/abs/2606.17114v1). A corroborating large-scale audit reports data-over-exposure on 57.07% of cross-tool function-call paths across 6,675 real-world agent tools ([Lin et al. 2026](https://arxiv.org/abs/2603.07557v1)).
 
 ## Why it works
 
-The model judges content sensitivity but not task necessity or recipient authorization. LLMs detect that a string is a salary or a credit-card number, yet in complex multi-tool tasks "often fail to determine which data should not be exposed" given the recipient and the task ([Zharmagambetov et al. 2025](https://arxiv.org/abs/2503.09780)). Tools widen the gap: they return broad outputs without considering task-specific necessity, and the model processes them coarsely ([Lin et al. 2026](https://arxiv.org/abs/2603.07557)).
+The model judges content sensitivity but not task necessity or recipient authorization. LLMs detect that a string is a salary or a credit-card number, yet in complex multi-tool tasks "often fail to determine which data should not be exposed" given the recipient and the task ([Zharmagambetov et al. 2025](https://arxiv.org/abs/2503.09780)). Tools widen the gap: they return broad outputs without considering task-specific necessity, and the model processes them coarsely ([Lin et al. 2026](https://arxiv.org/abs/2603.07557v1)).
 
 Adversarial-only defenses check whether an instruction is hostile or whether a destination is known-bad. Neither check fires when a benign request causes oversharing through a legitimate tool to a legitimate-looking recipient. AGENTDAM finds GPT-4, Llama-3, and Claude agents inadvertently using unnecessary sensitive information in benign tasks ([Zharmagambetov et al. 2025](https://arxiv.org/abs/2503.09780)).
 
-Cross-tool inference compounds the problem: individually non-sensitive fragments compose into sensitive disclosures. Tools-Orchestration Privacy Risk reaches an average 88.6% leakage rate across six frontier LLMs. Prompt-only mitigations add about 2.7 H-score points, while supervised fine-tuning plus DPO adds about 16.2 ([Wang et al. 2026](https://arxiv.org/abs/2512.16310)). The signature behavior: agents sanitize email content (strip budget figures) while still sending to an unauthorized recipient — content-aware, audience-blind ([Baek et al. 2026](https://arxiv.org/abs/2606.17114)).
+Cross-tool inference compounds the problem: individually non-sensitive fragments compose into sensitive disclosures. Tools-Orchestration Privacy Risk reaches an average 88.6% leakage rate across six frontier LLMs. Prompt-only mitigations add about 2.7 H-score points, while supervised fine-tuning plus DPO adds about 16.2 ([Wang et al. 2026](https://arxiv.org/abs/2512.16310)). The signature behavior: agents sanitize email content (strip budget figures) while still sending to an unauthorized recipient — content-aware, audience-blind ([Baek et al. 2026](https://arxiv.org/abs/2606.17114v1)).
 
 ## When this backfires
 
@@ -52,7 +52,7 @@ The anti-pattern is the exclusion of benign-leakage modeling, not the adversaria
 - Intra-team agents acting under uniform trust: recipient allowlists, data-minimization prompts, and output scopes add latency and refusal rates that may exceed the harm avoided.
 - For low-trust user populations, adversarial defenses stay primary; benign-leakage controls are additive, not a replacement.
 
-The empirical signal cuts against adversarial-only modeling for any agent with broad tool access and mixed-audience tasks. Agents with adversarial defenses nominally engaged still failed every benign scenario; 88.6% TOP-R holds across models with prompt-injection training; 57% DOE holds across the real-world tool corpus ([Baek et al. 2026](https://arxiv.org/abs/2606.17114); [Wang et al. 2026](https://arxiv.org/abs/2512.16310); [Lin et al. 2026](https://arxiv.org/abs/2603.07557)).
+The empirical signal cuts against adversarial-only modeling for any agent with broad tool access and mixed-audience tasks. Agents with adversarial defenses nominally engaged still failed every benign scenario; 88.6% TOP-R holds across models with prompt-injection training; 57% DOE holds across the real-world tool corpus ([Baek et al. 2026](https://arxiv.org/abs/2606.17114v1); [Wang et al. 2026](https://arxiv.org/abs/2512.16310); [Lin et al. 2026](https://arxiv.org/abs/2603.07557v1)).
 
 ## Example
 

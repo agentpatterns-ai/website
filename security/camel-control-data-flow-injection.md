@@ -71,7 +71,7 @@ a successful injection in a tool output cannot redirect the agent to call unauth
 
 Task completion: CaMeL solves 77% of AgentDojo tasks with provable security, versus 84% for an undefended system — a 7 percentage point cost for architectural security guarantees. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
 
-Latency: The dual-LLM design roughly doubles model invocations. When the Q-LLM processes complex artifacts, latency can exceed 10 seconds — too slow for interactive applications. [Source: [Tallam & Miller, 2025](https://arxiv.org/abs/2505.22852)]
+Latency: The dual-LLM design roughly doubles model invocations. When the Q-LLM processes complex artifacts, latency can exceed 10 seconds — too slow for interactive applications. [Source: [Tallam & Miller, 2025](https://arxiv.org/abs/2505.22852v1)]
 
 Residual risk: CaMeL does not protect against text-to-text attacks. An injected email can instruct the Q-LLM to produce a misleading summary, which the P-LLM then acts on. The structural guarantee covers tool invocation; it does not cover the semantic content of Q-LLM outputs. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
 

@@ -43,7 +43,7 @@ Effects 3 and 4 overturn the assumption that more plan, earlier plan, is always 
 
 ## Why compliance fails without reminders
 
-Adjacent work documents how compliance decays. Agents drift from the goal as context grows, and pattern-matching gets more likely with it. All tested models drift to some degree. The best case held near-perfect adherence only up to about 100,000 tokens under specific conditions ([Arike et al., 2025](https://arxiv.org/abs/2505.02709)). Instruction fade-out is a separate, documented failure mode that event-driven system reminders are built to counter ([Bui, 2026](https://arxiv.org/abs/2603.05344)).
+Adjacent work documents how compliance decays. Agents drift from the goal as context grows, and pattern-matching gets more likely with it. All tested models drift to some degree. The best case held near-perfect adherence only up to about 100,000 tokens under specific conditions ([Arike et al., 2025](https://arxiv.org/abs/2505.02709v1)). Instruction fade-out is a separate, documented failure mode that event-driven system reminders are built to counter ([Bui, 2026](https://arxiv.org/abs/2603.05344)).
 
 Re-injecting the plan as the context lengthens pushes it back into the high-attention recency zone. This is the same structural defense that [goal recitation](../../context-engineering/goal-recitation.md) uses for objectives and [critical instruction repetition](../../instructions/critical-instruction-repetition.md) uses for hard constraints.
 

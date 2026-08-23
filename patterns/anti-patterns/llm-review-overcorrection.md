@@ -32,7 +32,7 @@ A review agent acting as sole authority blocks correct code from merging. The fa
 
 ## Why LLMs overcorrect
 
-The [arXiv:2603.00539](https://arxiv.org/abs/2603.00539) taxonomy of false rejections shows four categories account for 87.2% of cases: Logic Error (48.2%), Added Requirement (14.1%), Boundary Error (13.2%), and Misread Specification (11.7%). Across all four, the model constructs a plausible critique without a falsifiable counterexample — hallucinating constraints, asserting failure modes it cannot demonstrate, or reading a stricter spec than the one given.
+The [arXiv:2603.00539](https://arxiv.org/abs/2603.00539v1) taxonomy of false rejections shows four categories account for 87.2% of cases: Logic Error (48.2%), Added Requirement (14.1%), Boundary Error (13.2%), and Misread Specification (11.7%). Across all four, the model constructs a plausible critique without a falsifiable counterexample — hallucinating constraints, asserting failure modes it cannot demonstrate, or reading a stricter spec than the one given.
 
 [Turpin et al. (2023)](https://arxiv.org/abs/2305.04388) explain the amplification: chain-of-thought explanations often rationalize a predisposed answer rather than derive one. Forcing a reasoning chain before the verdict locks the model into its initial misread — each step anchors rejection instead of reconsidering the premise. Binary prompts avoid this commitment.
 

@@ -52,7 +52,7 @@ Under LLM-as-orchestrator, the equivalent diagram would carry `M`, `A`, and `B` 
 
 Three mechanisms explain why a program-controlled harness cuts token cost and improves stability when the preconditions hold.
 
-Token amplification disappears. An LLM-controlled orchestrator pays full context on every step, even mechanical ones — instructions, tool registry, prior calls, and reasoning traces. A program-controlled harness calls the model only at the steps that need one, replacing N full-context turns with K << N targeted prompts. [Lwin and Kumar's controlled study of COBOL-to-Python](https://arxiv.org/abs/2605.09894) measured up to 3.5x token reduction, holding model, prompt, and source constant and varying only execution control.
+Token amplification disappears. An LLM-controlled orchestrator pays full context on every step, even mechanical ones — instructions, tool registry, prior calls, and reasoning traces. A program-controlled harness calls the model only at the steps that need one, replacing N full-context turns with K << N targeted prompts. [Lwin and Kumar's controlled study of COBOL-to-Python](https://arxiv.org/abs/2605.09894v1) measured up to 3.5x token reduction, holding model, prompt, and source constant and varying only execution control.
 
 Variance collapses to the model call. Every LLM-controlled decision point adds a stochastic branch, so the outcome distribution widens multiplicatively across steps. Fixing branches in code collapses that distribution to the variance of the model call itself. This is why worst-case stability improves without average-case accuracy dropping ([Lwin & Kumar, 2026](https://arxiv.org/abs/2605.09894)).
 
@@ -97,7 +97,7 @@ Each LLM call sees only the field it is choosing for, the application data, and 
 
 - Hand control flow back to the program when the workflow shape is enumerable, per-step uncertainty is contained, and the orchestration cost amortizes across runs — three preconditions that frame this as a conditional pattern, not a universal recommendation ([Qi et al., 2026](https://arxiv.org/abs/2606.15874)).
 - The mechanism is token amplification and variance collapse, plus the call-tree context shape that decouples context length from sequence length — not "LLMs are bad at orchestration."
-- Empirical anchor: up to 3.5x lower token cost and improved worst-case robustness with comparable accuracy on COBOL-to-Python under deterministic orchestration ([Lwin & Kumar, 2026](https://arxiv.org/abs/2605.09894)); stability gains on long visual operation sequences in the call-tree case study.
+- Empirical anchor: up to 3.5x lower token cost and improved worst-case robustness with comparable accuracy on COBOL-to-Python under deterministic orchestration ([Lwin & Kumar, 2026](https://arxiv.org/abs/2605.09894v1)); stability gains on long visual operation sequences in the call-tree case study.
 - The pattern backfires on open-ended exploration, one-off jobs, evolving workflows, and tasks with no stable call-tree abstraction — match the orchestration strategy to the task structure, not to fashion.
 - Iterative LLM-controlled scaffolds still lead the [SWE-bench Verified Agentic Coding leaderboard](https://llm-stats.com/benchmarks/swe-bench-verified-(agentic-coding)) on open-ended repair; the inversion's win is cost and variance, not raw accuracy.
 

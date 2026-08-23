@@ -62,7 +62,7 @@ The dashed line is load-bearing: `s` flows into the planner but is blocked from 
 
 Authority confusion succeeds because untrusted data and trusted control flow share the model's context. The planner cannot reliably partition "what informed me" from "what authorized me." Moving authority upstream of the planner makes the partition mechanical instead of behavioral. The issuer of `α` is fixed before any runtime content is read, so an injected instruction in a web page or tool output cannot promote itself to issuer ([Qin et al., 2026](https://arxiv.org/abs/2605.28914)).
 
-The architectural delta is measurable. Carrying the same policy as a system-prompt instruction reduces attack success on AgentTrap only 22% to 17%. Enforcing it at the dispatch layer with the normalized fields above reaches 4% — a roughly 5x gap that isolates harness enforcement from behavioral instruction ([Qin et al., 2026](https://arxiv.org/abs/2605.28914)). On Sonnet-4.6, the same harness drops attack success from 36.3% (undefended) to 5.5% while preserving 76.0% utility on DTAP-150, versus 52.0% for ARGUS and 42.0% for MELON.
+The architectural delta is measurable. Carrying the same policy as a system-prompt instruction reduces attack success on AgentTrap only 22% to 17%. Enforcing it at the dispatch layer with the normalized fields above reaches 4% — a roughly 5x gap that isolates harness enforcement from behavioral instruction ([Qin et al., 2026](https://arxiv.org/abs/2605.28914v1)). On Sonnet-4.6, the same harness drops attack success from 36.3% (undefended) to 5.5% while preserving 76.0% utility on DTAP-150, versus 52.0% for ARGUS and 42.0% for MELON.
 
 ## When this backfires
 
@@ -108,7 +108,7 @@ The authority context `α` was issued by the user at task start with `scope = {r
 - Authority confusion is the failure where untrusted runtime context, by appearing in the conversation, ends up authorizing a side-effecting tool call rather than merely informing reasoning about one.
 - Operationalize the fix at the dispatch layer: every step carries a normalized `(capability, target, effect, source)` and is checked against an authority context `α` whose issuer is fixed at task start.
 - Step-level authority may narrow the task-level authority but never expand it — this monotonicity is what prevents an injected instruction from promoting itself to issuer.
-- Behavioral enforcement (the same policy in a system prompt) reduces attack success only 22% → 17%; dispatch-layer enforcement reaches 4% on the same benchmark ([Qin et al., 2026](https://arxiv.org/abs/2605.28914)).
+- Behavioral enforcement (the same policy in a system prompt) reduces attack success only 22% → 17%; dispatch-layer enforcement reaches 4% on the same benchmark ([Qin et al., 2026](https://arxiv.org/abs/2605.28914v1)).
 - Skip the pattern when a hermetic runner already bounds harm, when tools hide side effects below dispatch, or when headless throughput makes `ask`/`inspect` unreachable.
 
 ## Related

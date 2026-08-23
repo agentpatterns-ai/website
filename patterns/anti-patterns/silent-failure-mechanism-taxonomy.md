@@ -21,14 +21,14 @@ maturity: emerging
 
 > In unattended multi-component agent runtimes, classify silent failures by mechanism — not by location — so one defense covers every job at once.
 
-A silent failure is one whose error signal never reaches a human in actionable form. An eight-week field study of one production personal-assistant runtime — 40 scheduled jobs, 8 providers, a tool-governance proxy, a memory plane, 4,286 unit tests, 827 governance checks — documented 22 incidents containing at least 28 silent-failure instances and proposed a five-mechanism cut: environment and platform quirks (A), design-assumption mismatch (B), error swallowing and dilution (C), chained hallucination and fabrication (D), operational omission and forensic blind spots (E) ([Wu, arxiv 2606.14589](https://arxiv.org/abs/2606.14589)).
+A silent failure is one whose error signal never reaches a human in actionable form. An eight-week field study of one production personal-assistant runtime — 40 scheduled jobs, 8 providers, a tool-governance proxy, a memory plane, 4,286 unit tests, 827 governance checks — documented 22 incidents containing at least 28 silent-failure instances and proposed a five-mechanism cut: environment and platform quirks (A), design-assumption mismatch (B), error swallowing and dilution (C), chained hallucination and fabrication (D), operational omission and forensic blind spots (E) ([Wu, arxiv 2606.14589](https://arxiv.org/abs/2606.14589v1)).
 
 ## When this applies
 
 The taxonomy is load-bearing only under three conditions:
 
 - Unattended runs. Silence spans of 13 hours to 60 days ([Wu §Fig 4](https://arxiv.org/html/2606.14589v1)) are for scheduled jobs and memory-mediated chains, not interactive sessions where the next user utterance bounds the silence.
-- Multi-component runtime with seams. The longest-lived failures lived "in the seams between components, where no test runs" ([Wu](https://arxiv.org/abs/2606.14589)) — scheduler, memory store, governance proxy, providers. A monolithic harness has fewer seams.
+- Multi-component runtime with seams. The longest-lived failures lived "in the seams between components, where no test runs" ([Wu](https://arxiv.org/abs/2606.14589v1)) — scheduler, memory store, governance proxy, providers. A monolithic harness has fewer seams.
 - A trace store and intervention path exist. Without enough telemetry to attribute a failure to a mechanism, the classes are unactionable. Ship a [two-axis run-vs-task dashboard](run-status-vs-task-status-confusion.md) first.
 
 Deterministic CI, short interactive sessions, and single-agent harnesses without persistence do not pay off the overhead — the [pre-completion checklist](../../verification/pre-completion-checklists.md) and [loop detection](../../observability/loop-detection.md) primitives already cover them.
@@ -43,7 +43,7 @@ Deterministic CI, short interactive sessions, and single-agent harnesses without
 | D | Chained hallucination / "fail-plausible" | A Unicode-surrogate error was captured into a log cache; the downstream LLM composed a confident "Hugging Face platform crisis" analysis and pushed it to the user as routine analysis ([Wu §D1](https://arxiv.org/html/2606.14589v1)) |
 | E | Operational omission / forensic blind spot | A reserved-file mute in a logging path; no record existed for postmortem to consult ([Wu](https://arxiv.org/abs/2606.14589)) |
 
-Class D is the qualitative novelty. The other four are silent. In D, "the LLM transforms it into fluent, plausible narrative delivered to the user" ([Wu](https://arxiv.org/abs/2606.14589)) — fluent misinformation instead of silence, a worse mode than no signal at all. A second logged example: a system alert persisted into chat history. Hours later the model instructed the user to grant Full Disk Access to a cron binary in macOS System Preferences as fabricated remediation ([Wu §D2](https://arxiv.org/html/2606.14589v1)).
+Class D is the qualitative novelty. The other four are silent. In D, "the LLM transforms it into fluent, plausible narrative delivered to the user" ([Wu](https://arxiv.org/abs/2606.14589v1)) — fluent misinformation instead of silence, a worse mode than no signal at all. A second logged example: a system alert persisted into chat history. Hours later the model instructed the user to grant Full Disk Access to a cron binary in macOS System Preferences as fabricated remediation ([Wu §D2](https://arxiv.org/html/2606.14589v1)).
 
 ## Why it works
 
@@ -54,7 +54,7 @@ Silent-failure mechanisms recur across unrelated jobs because they exploit gener
 - Single-case-study generalization. The study is n=1: "one system, one host OS, one operator pair, eight weeks" ([Wu §8](https://arxiv.org/html/2606.14589v1)). The 5-class shape is plausible. The frequencies are not population estimates and the latency distribution is right-censored — failures silent at study end are absent by construction. Treat the five classes as a working enumeration to force attribution through, not a closed schema.
 - Operator-as-annotator confirmation bias. Wu reports "classification was performed by the system's two operators without independent annotation; we report no κ and acknowledge confirmation-bias risk". Independent annotation on a different runtime may yield a different cut.
 - Mechanism proliferation. A neighboring entropy-principle paper argues silent failure is governed by a unified physical law (S(t) = S₀·e^(αt) across 22 intrinsic properties in 6 lifecycle layers), not a discrete mechanism set ([Liu, arxiv 2606.08162](https://arxiv.org/abs/2606.08162)). Stacking taxonomies — Wu's five classes, Li's six signals ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365); compare [failure-aware observability](../../observability/failure-aware-observability-multi-agent.md)), the entropy lens — multiplies vocabularies without adding defensive power. Pick the lens that maps to the next defense you can ship.
-- Detection-channel asymmetry undermines automation. ~70% of silent failures in Wu's study were caught by human observation, not by the 4,286 unit tests or 827 governance checks ([Wu](https://arxiv.org/abs/2606.14589)). A team that reads "5-class taxonomy" as "add 5 alert classes" and walks away has not ported the load-bearing finding. Retrospective audit showed 0% preventable ex-ante but 87% blockable as regressions — the win is mechanism-level regression scanners, not mechanism-level alerts.
+- Detection-channel asymmetry undermines automation. ~70% of silent failures in Wu's study were caught by human observation, not by the 4,286 unit tests or 827 governance checks ([Wu](https://arxiv.org/abs/2606.14589v1)). A team that reads "5-class taxonomy" as "add 5 alert classes" and walks away has not ported the load-bearing finding. Retrospective audit showed 0% preventable ex-ante but 87% blockable as regressions — the win is mechanism-level regression scanners, not mechanism-level alerts.
 
 ## Example
 
