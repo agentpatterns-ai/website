@@ -29,7 +29,7 @@ This applies wherever a model's self-reported or implied confidence is the main 
 ## The failure mode
 
 - Confidence overshoots security by a wide margin. On self-contained security tasks, expected calibration error (the gap between stated confidence and true accuracy) reaches 0.46–0.48 for GPT-4o-mini and 0.41–0.42 for Qwen3-Coder-Next; even the best-calibrated model tested, Gemini-2.0-Flash, sits at 0.25–0.26 ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159)).
-- High confidence routinely rides on insecure code. At confidence of 0.8 or above, output is still insecure 33.9% of the time for GPT-4o-mini and 38.3% for Qwen3-Coder-Next ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159)).
+- High confidence routinely rides on insecure code. At confidence of 0.8 or above, output is still insecure 33.9% of the time for GPT-4o-mini and 38.3% for Qwen3-Coder-Next ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159v1)).
 - The problem is not a toy artifact. Across 100+ models on 80 tasks, models chose the insecure coding path 45% of the time, with no improvement over time even as functional correctness rose ([Veracode 2025 GenAI Code Security Report](https://www.veracode.com/blog/genai-code-security-report/)).
 
 ## Why it works (the mechanism)
@@ -41,8 +41,8 @@ Verbalized and token-probability confidence come from the same generative distri
 The corrective rule — never let model confidence stand in for independent verification — has real limits:
 
 - Confidence is useful as a relative triage signal: it can rank which outputs a human should review first. The same study that condemns confidence-as-gate endorses confidence-as-triage ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159)).
-- Repository-level, multi-file contexts are where the gate fails hardest — false trust in high-confidence insecure code rises to 70–90%, so self-contained benchmarks understate the risk and any threshold tuned on them will not transfer ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159)).
-- Automated repair loops do not rescue it: models flag risky samples but cannot fix them, with roughly 0% success on vulnerabilities that need an insecure API swapped for a secure one, plus over 60% functional breakage ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159)).
+- Repository-level, multi-file contexts are where the gate fails hardest — false trust in high-confidence insecure code rises to 70–90%, so self-contained benchmarks understate the risk and any threshold tuned on them will not transfer ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159v1)).
+- Automated repair loops do not rescue it: models flag risky samples but cannot fix them, with roughly 0% success on vulnerabilities that need an insecure API swapped for a secure one, plus over 60% functional breakage ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159v1)).
 
 ## Mitigations
 
@@ -63,7 +63,7 @@ Agent output:
   Self-assessment: "This is secure. Confidence: 0.92."
 ```
 
-The confidence is 0.92, the code runs, so the pipeline auto-approves. It ships an insecure deserialization sink — the high-confidence-yet-insecure case that lands 33–38% of the time above the 0.8 threshold ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159)).
+The confidence is 0.92, the code runs, so the pipeline auto-approves. It ships an insecure deserialization sink — the high-confidence-yet-insecure case that lands 33–38% of the time above the 0.8 threshold ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159v1)).
 
 After, with confidence used only to triage and an independent gate deciding:
 
@@ -83,7 +83,7 @@ The confidence still orders the review queue, but the deserialization finding �
 
 - A model's confidence in its own code does not track whether the code is secure; calibration error reaches 0.46–0.48 on tested models ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159)).
 - Roughly a third of high-confidence (≥0.8) outputs are still insecure — a confidence threshold is not a security gate ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159)).
-- The gap widens in real multi-file codebases, where false trust rises to 70–90%, so benchmark-tuned thresholds do not transfer ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159)).
+- The gap widens in real multi-file codebases, where false trust rises to 70–90%, so benchmark-tuned thresholds do not transfer ([Siddiq et al., 2026](https://arxiv.org/abs/2606.31159v1)).
 - Industry-scale testing agrees: models pick the insecure path 45% of the time and are not improving ([Veracode 2025](https://www.veracode.com/blog/genai-code-security-report/)).
 - Use confidence to prioritize human review; gate deployed paths on independent scanning plus human review of sensitive code.
 

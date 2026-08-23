@@ -46,7 +46,7 @@ The four signals that practitioner sources converge on ([Merge.dev — LLM Routi
 
 ## Why It Works
 
-The framework is cognitive offloading over the eight routing pages, not new mechanism. The cost mechanism each row exploits is already proven: [FrugalGPT](https://arxiv.org/abs/2305.05176) reports LLM cascade routing can match GPT-4 with up to 98% cost reduction, or improve accuracy by 4% at equivalent cost. The framework's contribution is matching each row to its dominant signal so the practitioner picks once instead of reading every routing page in sequence and stacking patterns blindly — the failure mode the [Pattern Selection Map](../patterns/selection-map.md) exists to defuse for patterns generally.
+The framework is cognitive offloading over the eight routing pages, not new mechanism. The cost mechanism each row exploits is already proven: [FrugalGPT](https://arxiv.org/abs/2305.05176v1) reports LLM cascade routing can match GPT-4 with up to 98% cost reduction, or improve accuracy by 4% at equivalent cost. The framework's contribution is matching each row to its dominant signal so the practitioner picks once instead of reading every routing page in sequence and stacking patterns blindly — the failure mode the [Pattern Selection Map](../patterns/selection-map.md) exists to defuse for patterns generally.
 
 The selection logic itself has a quantitative grounding. [Triage (arxiv 2604.07494)](https://arxiv.org/abs/2604.07494) gives the explicit feasibility condition for tier routing: the light-tier pass rate on the routed tasks must exceed the inter-tier cost ratio. Below that threshold, rework costs more than the savings. That is the same threshold every row in the matrix implicitly assumes.
 

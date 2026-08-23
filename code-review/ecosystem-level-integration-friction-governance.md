@@ -30,9 +30,9 @@ Outside these conditions (single-agent repos, low PR volume, regulated codebases
 
 ## The finding
 
-A multi-level analysis of 33,596 agent-authored PRs across 2,807 repositories (≥100 stars) covering Claude Code, OpenAI Codex, Devin, GitHub Copilot, and Cursor finds that the repository intraclass-correlation coefficient (ICC) for agent contributions is 0.30 versus 0.16 for matched human contributions on resolution latency. Other friction constructs widen the asymmetry: deliberation latency 0.43 vs. 0.21 and changes-requested 0.54 vs. 0.41 ([arXiv:2606.28235](https://arxiv.org/abs/2606.28235)).
+A multi-level analysis of 33,596 agent-authored PRs across 2,807 repositories (≥100 stars) covering Claude Code, OpenAI Codex, Devin, GitHub Copilot, and Cursor finds that the repository intraclass-correlation coefficient (ICC) for agent contributions is 0.30 versus 0.16 for matched human contributions on resolution latency. Other friction constructs widen the asymmetry: deliberation latency 0.43 vs. 0.21 and changes-requested 0.54 vs. 0.41 ([arXiv:2606.28235](https://arxiv.org/abs/2606.28235v1)).
 
-The full population is 930,292 agent PRs across 116,211 repositories, joining the [AIDev](https://arxiv.org/abs/2507.15003) and [AgenticFlict](https://arxiv.org/abs/2604.03551) datasets. Integration friction is defined as the effort of integrating a contribution into a codebase that other contributors are concurrently changing, measured across seven constructs grouped into timing, effort, contention, and outcome.
+The full population is 930,292 agent PRs across 116,211 repositories, joining the [AIDev](https://arxiv.org/abs/2507.15003v1) and [AgenticFlict](https://arxiv.org/abs/2604.03551) datasets. Integration friction is defined as the effort of integrating a contribution into a codebase that other contributors are concurrently changing, measured across seven constructs grouped into timing, effort, contention, and outcome.
 
 ## Why it works
 
@@ -55,7 +55,7 @@ Russo's framework names four interventions that follow from the variance decompo
 - Greenfield repos: with no concurrent contributors, integration friction by definition cannot accumulate; the thesis applies only to repos with active concurrent change.
 - As a vendor lock-in justification: treating the ICC as license to standardize on one agent inverts the recommendation.
 
-Per-agent assessment remains a complementary signal — agent merge rates range 43% (Copilot) to 82.6% (Codex) in the same population ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441)) — so layer repo-level tempo and routing on top of per-agent quality choices. Repository rules are also bypassable when text-based ([arXiv:2603.26487](https://arxiv.org/abs/2603.26487)); pair the dashboard with mechanically enforceable controls (CI gates, merge-queue policy, branch protection).
+Per-agent assessment remains a complementary signal — agent merge rates range 43% (Copilot) to 82.6% (Codex) in the same population ([arXiv:2602.19441](https://arxiv.org/abs/2602.19441v1)) — so layer repo-level tempo and routing on top of per-agent quality choices. Repository rules are also bypassable when text-based ([arXiv:2603.26487](https://arxiv.org/abs/2603.26487)); pair the dashboard with mechanically enforceable controls (CI gates, merge-queue policy, branch protection).
 
 ## Key Takeaways
 
@@ -76,7 +76,7 @@ Per-agent assessment remains a complementary signal — agent merge rates range 
 ## Sources
 
 - [arXiv:2606.28235](https://arxiv.org/abs/2606.28235) — Russo (2026): "Govern the Repository, Not the Agent: Measuring Ecosystem-Level Risk in AI-Native Software" — ICC + integration-friction methodology
-- [arXiv:2507.15003](https://arxiv.org/abs/2507.15003) — AIDev dataset (456K agent-authored PRs)
+- [arXiv:2507.15003](https://arxiv.org/abs/2507.15003v1) — AIDev dataset (456K agent-authored PRs)
 - [arXiv:2604.03551](https://arxiv.org/abs/2604.03551) — AgenticFlict: 27.67% merge-conflict rate across 142K agent PRs
 - [arXiv:2602.19441](https://arxiv.org/abs/2602.19441) — Nachuma & Zibran (MSR 2026): per-agent merge-rate variation in the same population
 - [arXiv:2509.16941](https://arxiv.org/abs/2509.16941) — SWE-Bench Pro: documented limits of per-agent benchmarks

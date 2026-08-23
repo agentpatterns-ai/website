@@ -21,7 +21,7 @@ maturity: emerging
 
 ## The evidence
 
-ConvCodeWorld, an ICLR 2025 benchmark for conversational code generation, tested 16 LLMs across 9 feedback combinations. The central finding: DeepSeek-Coder-6.7B with expert verbal feedback achieved 82.8% Recall, exceeding GPT-4o's single-turn 50.8% — a 6.7B parameter model outperforming a frontier model through iterative feedback alone ([Han et al., ICLR 2025](https://arxiv.org/abs/2502.19852)).
+ConvCodeWorld, an ICLR 2025 benchmark for conversational code generation, tested 16 LLMs across 9 feedback combinations. The central finding: DeepSeek-Coder-6.7B with expert verbal feedback achieved 82.8% Recall, exceeding GPT-4o's single-turn 50.8% — a 6.7B parameter model outperforming a frontier model through iterative feedback alone ([Han et al., ICLR 2025](https://arxiv.org/abs/2502.19852v1)).
 
 This is not an isolated result. LangChain improved Terminal Bench 2.0 scores from 52.8% to 66.5% through pure harness changes — no model change ([LangChain](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). LLMloop's five automated feedback loops raised pass@10 from 76.2% to 90.2% ([Ravi et al., ICSME 2025](https://arxiv.org/html/2603.23613v1)).
 
@@ -111,7 +111,7 @@ Path B produces higher success rates at lower cost: the model did not change, th
 
 ## Key Takeaways
 
-- A 6.7B model with expert feedback outperforms GPT-4o without feedback — feedback loop quality is a stronger lever than model scale ([Han et al., ICLR 2025](https://arxiv.org/abs/2502.19852)).
+- A 6.7B model with expert feedback outperforms GPT-4o without feedback — feedback loop quality is a stronger lever than model scale ([Han et al., ICLR 2025](https://arxiv.org/abs/2502.19852v1)).
 - Feedback types form a hierarchy: compilation < execution < expert verbal. Invest in the richest feedback your harness can provide.
 - Match feedback types to the model's training — do not assume generalization across unfamiliar feedback formats.
 - Feedback has limits: models resist correction on high-confidence reasoning errors, where a model upgrade still beats more feedback turns ([Jiang et al., 2025](https://arxiv.org/abs/2506.11930)).

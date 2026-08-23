@@ -35,11 +35,11 @@ graph LR
 
 ### 1. Contextual grounding
 
-Externalize tacit knowledge into structured documents that agents read. The hackathon case in Zigler's paper produced ten planning documents totaling 9,386 words — including API exploration notes, competitive analysis, and "an extended dictation on pedagogical design philosophy drawn from the practitioner's teaching experience" ([Zigler, 2026](https://arxiv.org/abs/2605.05400)). The artifacts here are CLAUDE.md/AGENTS.md-style instruction files plus domain-specific notes. The goal is to convert expert judgment into something agents can act on. This is the same elicitation problem covered by [encoding tacit knowledge](encoding-tacit-knowledge.md) — MEP wires it to the front of a single project rather than to a long-running improvement loop.
+Externalize tacit knowledge into structured documents that agents read. The hackathon case in Zigler's paper produced ten planning documents totaling 9,386 words — including API exploration notes, competitive analysis, and "an extended dictation on pedagogical design philosophy drawn from the practitioner's teaching experience" ([Zigler, 2026](https://arxiv.org/abs/2605.05400v1)). The artifacts here are CLAUDE.md/AGENTS.md-style instruction files plus domain-specific notes. The goal is to convert expert judgment into something agents can act on. This is the same elicitation problem covered by [encoding tacit knowledge](encoding-tacit-knowledge.md) — MEP wires it to the front of a single project rather than to a long-running improvement loop.
 
 ### 2. Collaborative specification
 
-Human-agent dialogue produces design artifacts capturing screens, interactions, data flows, quality standards, and — critically — the why behind each decision. The pattern: "the practitioner describes intent, the agent proposes details, the practitioner accepts, rejects, or modifies" ([Zigler, 2026](https://arxiv.org/abs/2605.05400)). This is the same loop formalized by [spec-driven development with Spec Kit](spec-driven-development.md), with one emphasis: the spec must capture rationale, not just behavior, so concurrent agents can make aligned micro-decisions without supervision.
+Human-agent dialogue produces design artifacts capturing screens, interactions, data flows, quality standards, and — critically — the why behind each decision. The pattern: "the practitioner describes intent, the agent proposes details, the practitioner accepts, rejects, or modifies" ([Zigler, 2026](https://arxiv.org/abs/2605.05400v1)). This is the same loop formalized by [spec-driven development with Spec Kit](spec-driven-development.md), with one emphasis: the spec must capture rationale, not just behavior, so concurrent agents can make aligned micro-decisions without supervision.
 
 ### 3. Task decomposition
 
@@ -47,7 +47,7 @@ Convert the specification into structured, dependency-aware task records. The pa
 
 ## Context fluency
 
-Zigler names the underlying skill 'context fluency' — "the ability to create rich, structured context that AI agents can act on" — with four components: decomposition (parallelizable tasks), specification (what and why), constraint definition (what to exclude or defer), and domain encoding (externalizing tacit knowledge) ([Zigler, 2026](https://arxiv.org/abs/2605.05400)). Anthropic's 2026 Agentic Coding Trends Report frames context engineering as the dominant skill shift for AI-assisted developers ([Anthropic, 2026](https://resources.anthropic.com/hubfs/2026%20Agentic%20Coding%20Trends%20Report.pdf)). MEP is one concrete way to put that skill to work.
+Zigler names the underlying skill 'context fluency' — "the ability to create rich, structured context that AI agents can act on" — with four components: decomposition (parallelizable tasks), specification (what and why), constraint definition (what to exclude or defer), and domain encoding (externalizing tacit knowledge) ([Zigler, 2026](https://arxiv.org/abs/2605.05400v1)). Anthropic's 2026 Agentic Coding Trends Report frames context engineering as the dominant skill shift for AI-assisted developers ([Anthropic, 2026](https://resources.anthropic.com/hubfs/2026%20Agentic%20Coding%20Trends%20Report.pdf)). MEP is one concrete way to put that skill to work.
 
 ## When MEP pays off
 
@@ -66,7 +66,7 @@ The paper's evidence is a single hackathon, a single practitioner, no control gr
 - Evolving requirements. Static specs drift from implementation. Augment Code argues that a stale spec misleads agents more dangerously than a stale design doc misleads humans, because agents execute the plan confidently without flagging divergence ([Augment Code, 2026](https://www.augmentcode.com/blog/what-spec-driven-development-gets-wrong)). MEP needs an explicit replan gate, not a frozen spec.
 - Single-agent sequential work. The methodology's payoff scales with concurrent agents needing shared ground-truth. A solo agent doing one task at a time can use lighter patterns — the [plan-first loop](plan-first-loop.md) provides most of the alignment benefit at a fraction of the preparation tax.
 
-The paper also acknowledges the operator-expertise confound: "we cannot separate the methodology's contribution from operator expertise" ([Zigler, 2026, §6.1](https://arxiv.org/abs/2605.05400)). Treat MEP as a synthesis of established practices (instruction files, spec-driven dialogue, structured task graphs), not a validated multiplier in its own right.
+The paper also acknowledges the operator-expertise confound: "we cannot separate the methodology's contribution from operator expertise" ([Zigler, 2026, §6.1](https://arxiv.org/abs/2605.05400v1)). Treat MEP as a synthesis of established practices (instruction files, spec-driven dialogue, structured task graphs), not a validated multiplier in its own right.
 
 ## Example
 

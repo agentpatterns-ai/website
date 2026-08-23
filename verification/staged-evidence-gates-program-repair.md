@@ -48,7 +48,7 @@ graph TD
 
 Each gate is one evidence channel. The retrieval scaffold grounds generation in repository context to cut invalid candidates upstream, subject to the [skill retrieval realism gap](eval-blind-spots.md). The compile gate filters edits that do not type-check or parse — the dominant class of invalid edits at near-zero cost. The target-test gate confirms the originally failing test recovers before paying for a full regression pass.
 
-The [EviACT framework](https://arxiv.org/abs/2605.27238) instantiates exactly this staging and reports a 1.6–6.0 percentage-point resolve-rate gain over comparable baselines and 70.1–88.6% lower API cost where cost data exists ([Meng et al., 2026](https://arxiv.org/abs/2605.27238)).
+The [EviACT framework](https://arxiv.org/abs/2605.27238v1) instantiates exactly this staging and reports a 1.6–6.0 percentage-point resolve-rate gain over comparable baselines and 70.1–88.6% lower API cost where cost data exists ([Meng et al., 2026](https://arxiv.org/abs/2605.27238v1)).
 
 ## Why it works
 

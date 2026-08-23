@@ -20,7 +20,7 @@ maturity: emerging
 
 ## The waste problem
 
-JetBrains measured its completion pipeline: only 31% of inferences produce a shown suggestion, and 31% of those get accepted — [~10% useful output from raw inference](https://arxiv.org/abs/2601.20223). Every unwanted suggestion interrupts flow and erodes trust. This mirrors the [alert fatigue dynamic](../code-review/signal-over-volume-in-ai-review.md) in AI code review: when signal-to-noise drops, developers ignore the signal.
+JetBrains measured its completion pipeline: only 31% of inferences produce a shown suggestion, and 31% of those get accepted — [~10% useful output from raw inference](https://arxiv.org/abs/2601.20223v1). Every unwanted suggestion interrupts flow and erodes trust. This mirrors the [alert fatigue dynamic](../code-review/signal-over-volume-in-ai-review.md) in AI code review: when signal-to-noise drops, developers ignore the signal.
 
 ## How gating works
 

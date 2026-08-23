@@ -25,7 +25,7 @@ MeanCache (2025) finds that repeated queries make up about 31% of production LLM
 
 Semantic caching replaces exact string matching with embedding-based similarity. Two queries count as equivalent when their embeddings pass a similarity threshold, whatever the surface phrasing.
 
-One production deployment handling more than 10,000 natural-language-to-code queries reaches a 67% cache hit rate this way. ([arXiv:2601.11687](https://arxiv.org/abs/2601.11687))
+One production deployment handling more than 10,000 natural-language-to-code queries reaches a 67% cache hit rate this way. ([arXiv:2601.11687](https://arxiv.org/abs/2601.11687v1))
 
 ### Dual-threshold mechanism
 
@@ -47,7 +47,7 @@ GPTCache is a production-ready open-source implementation. It supports pluggable
 
 Semantic caching cuts cost for repeat queries. Intent-driven filtering cuts cost for every query, whether it hits the cache or misses.
 
-Classify the intent of the incoming query, then include only the schemas, tools, or documents that match it. A query about inventory analytics gets only inventory schemas; payment schemas are left out. This cuts tokens by 40–60% with no loss of accuracy. ([arXiv:2601.11687](https://arxiv.org/abs/2601.11687))
+Classify the intent of the incoming query, then include only the schemas, tools, or documents that match it. A query about inventory analytics gets only inventory schemas; payment schemas are left out. This cuts tokens by 40–60% with no loss of accuracy. ([arXiv:2601.11687](https://arxiv.org/abs/2601.11687v1))
 
 Anthropic's just-in-time [context engineering](../../context-engineering/context-engineering.md) pattern applies the same idea in the architecture: agents keep lightweight references to available context and load only what they need at runtime. ([Anthropic: Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents))
 

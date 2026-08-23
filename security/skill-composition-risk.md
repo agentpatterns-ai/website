@@ -45,11 +45,11 @@ graph TD
     style X fill:#b60205,color:#fff
 ```
 
-Per-skill review samples each skill in isolation. Emergent risks across activated execution paths are out-of-distribution by construction ([Xie et al., 2026](https://arxiv.org/abs/2606.15242)). [SkillVetBench (Hossain et al., 2026)](https://arxiv.org/abs/2606.00925) measures the detection-side gap: static and signature-based scanners miss up to 89% of malicious behavior because threats emerge from "natural-language instructions, multicomponent logic, or cross-component interactions" invisible to per-skill analysis.
+Per-skill review samples each skill in isolation. Emergent risks across activated execution paths are out-of-distribution by construction ([Xie et al., 2026](https://arxiv.org/abs/2606.15242v1)). [SkillVetBench (Hossain et al., 2026)](https://arxiv.org/abs/2606.00925v1) measures the detection-side gap: static and signature-based scanners miss up to 89% of malicious behavior because threats emerge from "natural-language instructions, multicomponent logic, or cross-component interactions" invisible to per-skill analysis.
 
 ## Registry-scale confirmation
 
-[Wang et al. (2026)](https://arxiv.org/abs/2606.00448) ran SkillReact on 1,520 ClawHub skills — 211,575 individually-safe pairs. Of those pairs, 22.25% trigger forbidden capability patterns under union. Human-in-the-loop calibration shows about 18.2% of automated flags are genuine compositional risks, which projects to about 8,600 truly risky unique pairs in one registry. This independent measurement uses a different registry and a different method, and it lands in the same regime as the SCR-Bench numbers.
+[Wang et al. (2026)](https://arxiv.org/abs/2606.00448v1) ran SkillReact on 1,520 ClawHub skills — 211,575 individually-safe pairs. Of those pairs, 22.25% trigger forbidden capability patterns under union. Human-in-the-loop calibration shows about 18.2% of automated flags are genuine compositional risks, which projects to about 8,600 truly risky unique pairs in one registry. This independent measurement uses a different registry and a different method, and it lands in the same regime as the SCR-Bench numbers.
 
 ## Distinguishing SCR from adjacent threats
 
@@ -72,11 +72,11 @@ Path-aware composition vetting carries real cost and breaks under specific regim
 
 - Internal mirrors with single-author skills. When one team authors every skill, composition risk is bounded by the team's threat model, and runtime isolation plus code review captures it. Path-aware static vetting adds cost without yield.
 - Tiny skill libraries (under about 10 skills). The pair space is small enough to enumerate by hand or by eye, so an automated path-aware gate is overkill.
-- High false-positive cost without human triage. SkillReact's automated forbidden-pattern check flags 77.8% as false positives before human calibration ([Wang et al., 2026](https://arxiv.org/abs/2606.00448)). Auto-blocking flagged compositions without a triage step produces vetting paralysis.
+- High false-positive cost without human triage. SkillReact's automated forbidden-pattern check flags 77.8% as false positives before human calibration ([Wang et al., 2026](https://arxiv.org/abs/2606.00448v1)). Auto-blocking flagged compositions without a triage step produces vetting paralysis.
 - Static-only posture. Static composition checks catch CapFlow but not TrustLift. The upstream endorsement skill is correctly an endorsement, and the harm is the downstream model treating it as evidence. Pair it with runtime defenses like [Monotonic Capability Attenuation](monotonic-capability-attenuation.md) and the [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md).
 - One skill per task harnesses. When the harness enforces fresh context per skill invocation with no cross-skill output flow, the SCR threat model does not apply. The cost of that constraint is loss of legitimate composition.
 
-The SCR paper concludes that "isolated artifact vetting is structurally insufficient" ([Xie et al., 2026](https://arxiv.org/abs/2606.15242)). Path-aware vetting is a triage filter on top of runtime controls, not a replacement for them.
+The SCR paper concludes that "isolated artifact vetting is structurally insufficient" ([Xie et al., 2026](https://arxiv.org/abs/2606.15242v1)). Path-aware vetting is a triage filter on top of runtime controls, not a replacement for them.
 
 ## Example
 
@@ -90,9 +90,9 @@ Each skill is benign under isolated review. Skill A reads private repo content b
 
 ## Key Takeaways
 
-- Three named failure modes — CapFlow (capability flow), TrustLift (trust transfer), AuthBlur (authorization confusion) — measure attack success at 33.6%, 96.5%+, and 71.8% relative respectively across ten production backends ([Xie et al., 2026](https://arxiv.org/abs/2606.15242)).
+- Three named failure modes — CapFlow (capability flow), TrustLift (trust transfer), AuthBlur (authorization confusion) — measure attack success at 33.6%, 96.5%+, and 71.8% relative respectively across ten production backends ([Xie et al., 2026](https://arxiv.org/abs/2606.15242v1)).
 - The mechanism is measurement locality: per-skill review samples in isolation, so multi-skill emergent risks are out-of-distribution; in-context learning across the composed prompt fuses upstream output into downstream skills as authoritative context.
-- Independent registry-scale evidence from 1,520 ClawHub skills lands in the same regime: 22.25% of individually-safe pairs trigger forbidden capability unions; calibrated to 18.2% genuine after human review ([Wang et al., 2026](https://arxiv.org/abs/2606.00448)).
+- Independent registry-scale evidence from 1,520 ClawHub skills lands in the same regime: 22.25% of individually-safe pairs trigger forbidden capability unions; calibrated to 18.2% genuine after human review ([Wang et al., 2026](https://arxiv.org/abs/2606.00448v1)).
 - SCR is distinct from skill supply-chain poisoning (no artifact is malicious), from compositional vulnerability induction (no vulnerable code is emitted), and from permission laundering (some modes have no permission to attenuate).
 - Path-aware vetting is a triage filter, not a runtime guarantee. Pair it with capability attenuation, deny-by-default egress, and human-in-the-loop confirmation on consequential calls.
 - Inapplicable regimes: single-author internal mirrors, libraries under ~10 skills, harnesses that disallow multi-skill composition.

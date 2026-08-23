@@ -23,7 +23,7 @@ maturity: emerging
 
 You ask an agent to implement a function, then ask the same agent to write tests for that implementation. The suite runs green and you treat that as proof the code is correct. It is not. Once the model sees the implementation before writing the tests, the tests encode the same wrong assumptions the code does, so a faulty implementation and its tests agree and the bug stays hidden.
 
-An empirical study across five models (GPT-5-mini, GPT-4.1-mini, DeepSeek-V4, Claude Haiku, Llama 3.3) and three benchmarks (HumanEval+, MBPP, BigCodeBench) measured the cost: tests generated from the task description alone detected 25% of injected faults, but tests generated after the model saw the faulty code detected only 14% — an ~11.7% absolute drop, significant at p < 0.05 ([Konstantinou, Tambon & Papadakis, 2026](https://arxiv.org/abs/2607.05139)). Chain-of-Thought and Chain-of-Verification prompting did not recover the loss.
+An empirical study across five models (GPT-5-mini, GPT-4.1-mini, DeepSeek-V4, Claude Haiku, Llama 3.3) and three benchmarks (HumanEval+, MBPP, BigCodeBench) measured the cost: tests generated from the task description alone detected 25% of injected faults, but tests generated after the model saw the faulty code detected only 14% — an ~11.7% absolute drop, significant at p < 0.05 ([Konstantinou, Tambon & Papadakis, 2026](https://arxiv.org/abs/2607.05139v1)). Chain-of-Thought and Chain-of-Verification prompting did not recover the loss.
 
 ## Symptoms
 

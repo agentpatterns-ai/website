@@ -48,7 +48,7 @@ Size and conflict are affirmatively ruled out within the tested envelope. Positi
 
 ## What did move compliance
 
-The largest measured effect was within-session: each additional function the agent generated lowered the odds of compliance by roughly 5.6% per step (OR = 0.944), non-monotonic across the range. It reproduced on a second TypeScript codebase and on Opus 4.6 at matched CLI configuration, but it surfaced during analysis rather than being pre-specified. Compliance also varied systematically across the five coding tasks ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
+The largest measured effect was within-session: each additional function the agent generated lowered the odds of compliance by roughly 5.6% per step (OR = 0.944), non-monotonic across the range. It reproduced on a second TypeScript codebase and on Opus 4.6 at matched CLI configuration, but it surfaced during analysis rather than being pre-specified. Compliance also varied systematically across the five coding tasks ([McMillan, 2026](https://arxiv.org/abs/2605.10039v1)).
 
 ```mermaid
 graph TD
@@ -84,7 +84,7 @@ Both can hold: ceiling effects exist at extreme rule counts, but the structural 
 The null is conditional on the tested envelope. The recommendation to stop rearranging files breaks down when:
 
 - Total content already exceeds the compliance ceiling. Cutting content (which incidentally changes file size) does help — but the mechanism is rule-count reduction, not file structure ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
-- Sessions run long. The within-session ~5.6%-per-function compliance decay means a 30-function session degrades regardless of file structure. Mitigation is session segmentation ([McMillan, 2026](https://arxiv.org/abs/2605.10039)).
+- Sessions run long. The within-session ~5.6%-per-function compliance decay means a 30-function session degrades regardless of file structure. Mitigation is session segmentation ([McMillan, 2026](https://arxiv.org/abs/2605.10039v1)).
 - The stack is not TypeScript. Results replicated on two TypeScript codebases; whether they generalize to Python, Go, or polyglot codebases is unconfirmed.
 - The model is newer than Opus 4.7. Sonnet 4.6 and Opus 4.6 anchor the result; Opus 4.7 was reported descriptively under a CLI-version confound.
 - "Restructure" actually means "delete". Many practitioner success stories describe restructuring that incidentally cut hundreds of lines. That intervention works — through the rule-count mechanism, not the structural one.

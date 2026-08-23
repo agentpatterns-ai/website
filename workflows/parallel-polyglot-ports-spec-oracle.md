@@ -16,7 +16,7 @@ maturity: emerging
 
 > Generate multiple AI-paired ports from one executable spec and treat divergence as a signal that the spec under-specifies behavior — not as a fault-tolerance vote.
 
-This workflow pairs an AI coding assistant with a precise executable specification, then has it generate independent ports in different languages or runtimes. Where two ports disagree on observable behavior, the spec is either ambiguous or wrong — and that is the only correctness signal the parallel implementations reliably produce. Jason Hickey reports five ports of a vector-illustration application (Rust, Swift, OCaml, Python, browser) generated from a shared 23,000-line YAML spec in about 120 evening hours by a single developer ([Hickey, 2026](https://arxiv.org/abs/2606.07828)).
+This workflow pairs an AI coding assistant with a precise executable specification, then has it generate independent ports in different languages or runtimes. Where two ports disagree on observable behavior, the spec is either ambiguous or wrong — and that is the only correctness signal the parallel implementations reliably produce. Jason Hickey reports five ports of a vector-illustration application (Rust, Swift, OCaml, Python, browser) generated from a shared 23,000-line YAML spec in about 120 evening hours by a single developer ([Hickey, 2026](https://arxiv.org/abs/2606.07828v1)).
 
 ## When to use it
 

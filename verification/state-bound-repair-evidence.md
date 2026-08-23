@@ -19,7 +19,7 @@ maturity: emerging
 
 > Bind every test result to the code state that produced it, and preserve the last verified candidate, so revision cannot destroy a correct patch.
 
-A generate-test-revise loop can find a correct patch and then throw it away. Across 900 forced-revision trajectories over 30 HumanEval repairs, current correctness fell from 0.820 after one revision to 0.673 after two while cumulative ever-correct rose to 0.847; 16.0% of trajectories held a correct patch and lost it by revision three ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)). Finding the answer, retaining it, verifying it, and submitting it are four separate obligations. A bare loop implements only the first.
+A generate-test-revise loop can find a correct patch and then throw it away. Across 900 forced-revision trajectories over 30 HumanEval repairs, current correctness fell from 0.820 after one revision to 0.673 after two while cumulative ever-correct rose to 0.847; 16.0% of trajectories held a correct patch and lost it by revision three ([Gao et al., 2026](https://arxiv.org/abs/2607.24604v1)). Finding the answer, retaining it, verifying it, and submitting it are four separate obligations. A bare loop implements only the first.
 
 ## When this earns its cost
 
@@ -45,16 +45,16 @@ This is a different lever from its neighbors: [bounded repair-loop iterations](b
 
 ## Why it works
 
-A test result records the code hash, suite hash, and execution that produced it. When that code hash no longer matches the current state, the trace still reports true input and output facts — but about a different program, while reading to the model as a description of the code in front of it. The report "contains valid input/output facts, but falsely asserts that they describe the current code" ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)). Rejecting or refreshing evidence whenever the hashes diverge removes a persuasive but wrong input, rather than asking the model to notice the mismatch. In a prespecified 14B replication over frozen common states, stale traces harmed 34 of 135 correct starts against 4 of 135 with current traces — a 22.2-point increase, task-cluster 95% confidence interval [8.9, 37.0], exact Holm p=0.0337 ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)). Replay showed state binding intercepting every stale-condition harm at both model sizes.
+A test result records the code hash, suite hash, and execution that produced it. When that code hash no longer matches the current state, the trace still reports true input and output facts — but about a different program, while reading to the model as a description of the code in front of it. The report "contains valid input/output facts, but falsely asserts that they describe the current code" ([Gao et al., 2026](https://arxiv.org/abs/2607.24604v1)). Rejecting or refreshing evidence whenever the hashes diverge removes a persuasive but wrong input, rather than asking the model to notice the mismatch. In a prespecified 14B replication over frozen common states, stale traces harmed 34 of 135 correct starts against 4 of 135 with current traces — a 22.2-point increase, task-cluster 95% confidence interval [8.9, 37.0], exact Holm p=0.0337 ([Gao et al., 2026](https://arxiv.org/abs/2607.24604v1)). Replay showed state binding intercepting every stale-condition harm at both model sizes.
 
 ## When this backfires
 
 - Repository-scale work with a low acceptance floor. Over 24 bugs and four coder stacks, the base model produced five accepted completions and the contract produced zero; the joint intersection-union test failed ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)). An admission boundary can zero out liveness before it prevents any harm.
-- Small models on single-file benchmarks are where the effect was measured, and mostly not significantly: all six 7B contrasts and five of six 14B contrasts were nonsignificant after Holm correction, and the 30 HumanEval tasks may sit in training data ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)).
+- Small models on single-file benchmarks are where the effect was measured, and mostly not significantly: all six 7B contrasts and five of six 14B contrasts were nonsignificant after Holm correction, and the 30 HumanEval tasks may sit in training data ([Gao et al., 2026](https://arxiv.org/abs/2607.24604v1)).
 - Weak oracles. Only oracle-covered properties are preserved ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)), so a preserved checkpoint that passes an under-specified suite preserves an overfitted patch as faithfully as a correct one.
 - Loops where iteration genuinely pays. Self-feedback refinement improves outputs by roughly 20% absolute on average across seven tasks with no evidence binding ([Madaan et al., 2023](https://arxiv.org/abs/2303.17651)). Repetition is not inherently destructive; stale inputs are.
 
-The reference implementation carries the same caution: it passes 35 deterministic failure-injection cases, but the authors state it is "an executable specification and conformance artifact, not evidence of improved repair competence or calibrated verifier dependence" ([Gao et al., 2026](https://arxiv.org/abs/2607.24604)).
+The reference implementation carries the same caution: it passes 35 deterministic failure-injection cases, but the authors state it is "an executable specification and conformance artifact, not evidence of improved repair competence or calibrated verifier dependence" ([Gao et al., 2026](https://arxiv.org/abs/2607.24604v1)).
 
 ## Example
 

@@ -52,13 +52,13 @@ Component effects are not independent: query processing helps some retrievers mo
 
 The generator can only reason about the tokens it sees. If the retriever misses the relevant function definition, error type, or test fixture, the generator cannot recover it — retrieval recall bounds generator accuracy from above. A stronger generator does nothing for documents that were never retrieved.
 
-The companion chunking study shows the same pattern: doubling cross-file context length from 2k to 8k tokens delivers more accuracy gain than picking among non-dominated chunking strategies ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)). Retrieval-side levers dominate.
+The companion chunking study shows the same pattern: doubling cross-file context length from 2k to 8k tokens delivers more accuracy gain than picking among non-dominated chunking strategies ([Wu et al., 2026](https://arxiv.org/abs/2605.04763v1)). Retrieval-side levers dominate.
 
 ## Why BM25 holds up on SE tasks
 
 SE retrieval queries — function names, identifiers, error messages, API symbols — share heavy lexical overlap with target documents. BM25's term-frequency signal is strong precisely when that overlap is high. Dense embeddings add value when surface forms diverge (natural-language queries against code, semantic paraphrases), but in SE-task retrieval the corpus structure often closes the term gap already ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
 
-Independent agentic-search evidence agrees: a tuned BM25 paired with a frontier agent reaches 83.1% answer accuracy on BrowseComp-Plus, outperforming dense-retriever search agents ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
+Independent agentic-search evidence agrees: a tuned BM25 paired with a frontier agent reaches 83.1% answer accuracy on BrowseComp-Plus, outperforming dense-retriever search agents ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848v1)).
 
 ## Prioritization order
 
@@ -84,7 +84,7 @@ graph TD
 
 The Ke et al. findings are conditional. The opposite prioritization — generator-first, dense-retriever default — wins under these conditions:
 
-- Sub-frontier generators: weaker generators cannot compensate for retrieval-rank noise. On BrowseComp-Plus, Search-R1 + BM25 reaches 3.86% accuracy while GPT-5 + Qwen3-Embedding-8B reaches 70.1% ([Chen et al., 2025](https://arxiv.org/abs/2508.06600)). With a constrained generator budget, dense retrieval shifts the precision burden off the agent.
+- Sub-frontier generators: weaker generators cannot compensate for retrieval-rank noise. On BrowseComp-Plus, Search-R1 + BM25 reaches 3.86% accuracy while GPT-5 + Qwen3-Embedding-8B reaches 70.1% ([Chen et al., 2025](https://arxiv.org/abs/2508.06600v1)). With a constrained generator budget, dense retrieval shifts the precision burden off the agent.
 - Natural-language-to-code retrieval: when queries are user-typed descriptions ("deduplicate a list while preserving order") and target documents are identifiers (`unique_ordered`), the lexical signal collapses. Dense retrieval bridges the term gap. BM25 does not.
 - Drifting corpora: BM25's tuned `b` and `k1` parameters age with the codebase. Post-refactor, post-rename, or in fast-moving repos, dense embeddings re-index without parameter retuning.
 - Open-domain or non-SE workloads: the Ke et al. result is specific to SE corpora with high identifier-query overlap. It does not transfer to general QA, multilingual retrieval, or RAG over prose.

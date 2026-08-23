@@ -26,7 +26,7 @@ maturity: established
 
 Multi-agent decomposition shortens critical-path computation when subtasks run in parallel. But each cross-partition dependency forces a context transfer that is not free. Yang et al. (2026) formalize this as graph partitioning over the code-dependency graph: the wall-clock cost of an N-agent run is `max(per-partition compute) + Σ(cross-partition context transfers)` ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953)).
 
-If you choose partitions poorly, the second term dominates. Pugachev (2025) measures exactly this across 600 multi-agent coding trials: parallel coordination reaches up to 21.1% speedup on some tasks but up to 39.4% slowdown on others ([arXiv:2510.18893](https://arxiv.org/abs/2510.18893)). Inter-agent communication structures inflate token consumption 2×–11.8× over single-chain baselines ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506)).
+If you choose partitions poorly, the second term dominates. Pugachev (2025) measures exactly this across 600 multi-agent coding trials: parallel coordination reaches up to 21.1% speedup on some tasks but up to 39.4% slowdown on others ([arXiv:2510.18893](https://arxiv.org/abs/2510.18893v1)). Inter-agent communication structures inflate token consumption 2×–11.8× over single-chain baselines ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506v1)).
 
 So the pattern is a decision rule: partition by cohesion, or do not partition at all.
 
@@ -57,7 +57,7 @@ The Infomap step does the heavy lifting. It treats the directed dependency graph
 
 Hub isolation handles a separate failure mode. One highly-connected file (a base class, a shared utility, a central type) would otherwise be pulled into every community by the random walk, defeating partitioning. Isolating hubs first lets the community step see the natural structure of the rest of the graph.
 
-Reported envelope on 1,028 repository-level tasks (1,010 DevEval + 18 CodeProjectEval): +14.0% pass rate on CodeProjectEval (34.1% vs 20.1% sequential), +11.3% on DevEval (68.1% vs 56.8%), 1.81×–2.10× wall-clock speedup, and 28%–35% API cost reduction versus sequential and naive file-per-agent baselines ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953)).
+Reported envelope on 1,028 repository-level tasks (1,010 DevEval + 18 CodeProjectEval): +14.0% pass rate on CodeProjectEval (34.1% vs 20.1% sequential), +11.3% on DevEval (68.1% vs 56.8%), 1.81×–2.10× wall-clock speedup, and 28%–35% API cost reduction versus sequential and naive file-per-agent baselines ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953v1)).
 
 ## When this backfires
 
@@ -66,7 +66,7 @@ The pattern is not universal. The authors document the primary failure mode; thr
 - Near-complete coupling — when nearly every file depends on every other, Infomap returns a single community and "execution degrades to sequential", offering no latency advantage over the sequential baseline ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953)). The partitioning step then adds overhead without payoff.
 - Static-analysis blind spots — the evaluation is Python-only and uses static dependency analysis. Codebases heavy in dynamic dispatch, plugin registries, reflection, or runtime dependency injection hide edges static analysis misses; partitions look clean while parallel workers collide at runtime. Statically-typed languages with strong cross-module type contracts (Rust, Go, TypeScript) sit in a related blind spot — a type change in one file forces edits in every dependent, but the graph understates that coupling.
 - Small task surface — for a feature touching three to five files, the up-front cost of building the graph, running community detection, and scheduling exceeds the parallelism gain. An [Orchestrator-Worker](orchestrator-worker.md) lead agent that reads the affected files ad hoc reaches the same partition with no algorithmic overhead.
-- Dense communication regardless of partition — independent measurement shows multi-agent communication structures inflating token cost 2×–11.8× over a single chain ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506)), and parallel coordination producing up to 39.4% slowdowns where coordination overhead exceeds the parallelism dividend ([arXiv:2510.18893](https://arxiv.org/abs/2510.18893)). If the task lacks a sparse dependency cut, no partitioning algorithm rescues it.
+- Dense communication regardless of partition — independent measurement shows multi-agent communication structures inflating token cost 2×–11.8× over a single chain ([arXiv:2410.02506](https://arxiv.org/abs/2410.02506v1)), and parallel coordination producing up to 39.4% slowdowns where coordination overhead exceeds the parallelism dividend ([arXiv:2510.18893](https://arxiv.org/abs/2510.18893v1)). If the task lacks a sparse dependency cut, no partitioning algorithm rescues it.
 
 The decision rule: estimate dependency density before [fanning out](sub-agents-fan-out.md). If the natural partition cut is dense, run sequentially. Only fan out when the cut is sparse.
 
@@ -85,7 +85,7 @@ Worker 5: notifications/email.py
 Worker 6: notifications/sms.py
 ```
 
-Workers 1 and 2 modify shared `auth/` state; workers 3 and 4 share `billing/` types. The partition cuts straight through cohesive modules, so every worker pair triggers context transfers. On CodeProjectEval this baseline scored 20.1% pass rate ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953)).
+Workers 1 and 2 modify shared `auth/` state; workers 3 and 4 share `billing/` types. The partition cuts straight through cohesive modules, so every worker pair triggers context transfers. On CodeProjectEval this baseline scored 20.1% pass rate ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953v1)).
 
 After — cohesion-aware partitioning:
 
@@ -95,7 +95,7 @@ Agent 2: billing/ (invoice.py + charge.py — same community)
 Agent 3: notifications/ (email.py + sms.py — same community)
 ```
 
-Infomap keeps tightly-coupled files in one agent's context; the only cross-agent edges are sparse cross-module imports. Same physical parallelism, materially less context transfer. On CodeProjectEval this lifted pass rate to 34.1% with 2.10× speedup and 35% API cost reduction ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953)).
+Infomap keeps tightly-coupled files in one agent's context; the only cross-agent edges are sparse cross-module imports. Same physical parallelism, materially less context transfer. On CodeProjectEval this lifted pass rate to 34.1% with 2.10× speedup and 35% API cost reduction ([arXiv:2606.00953](https://arxiv.org/abs/2606.00953v1)).
 
 For most practitioners, the takeaway is the intuition, not the algorithm: keep tightly-coupled files in one agent's context, cut across natural module boundaries, and isolate central utilities.
 

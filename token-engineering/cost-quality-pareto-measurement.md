@@ -55,11 +55,11 @@ One axis per plot. Mixing surfaces collapses configurations that win on one task
 
 Two findings recur across published Pareto sweeps and constrain how to read the plot.
 
-The frontier is sparse. Across 21,730 agent rollouts spanning nine models and nine benchmarks ($40,000 spend), HAL reports that less than one-third of tested models sit on the frontier for a given benchmark on average, and the most costly models are rarely Pareto-optimal ([HAL, arXiv:2510.11977](https://arxiv.org/abs/2510.11977)). A Q2 2026 cross-vendor study of 20 frontier models tracked across OpenRouter found that only six sat on the joint cost/quality/speed Pareto frontier — fourteen were dominated on every dimension by a cheaper or faster sibling, yet most still shipped production traffic ([Digital Applied — AI Model Efficient Frontier Q2 2026](https://www.digitalapplied.com/blog/ai-model-performance-vs-price-efficient-frontier-q2)). The implication: choosing on intuition overspends by reflex.
+The frontier is sparse. Across 21,730 agent rollouts spanning nine models and nine benchmarks ($40,000 spend), HAL reports that less than one-third of tested models sit on the frontier for a given benchmark on average, and the most costly models are rarely Pareto-optimal ([HAL, arXiv:2510.11977](https://arxiv.org/abs/2510.11977v1)). A Q2 2026 cross-vendor study of 20 frontier models tracked across OpenRouter found that only six sat on the joint cost/quality/speed Pareto frontier — fourteen were dominated on every dimension by a cheaper or faster sibling, yet most still shipped production traffic ([Digital Applied — AI Model Efficient Frontier Q2 2026](https://www.digitalapplied.com/blog/ai-model-performance-vs-price-efficient-frontier-q2)). The implication: choosing on intuition overspends by reflex.
 
-Higher reasoning effort frequently lowers accuracy. HAL: increased reasoning-token budget reduced accuracy in 21 of 36 model x benchmark settings tested ([HAL, arXiv:2510.11977](https://arxiv.org/abs/2510.11977)). Reasoning is a knob with its own Pareto sweep — the cheapest effort tier that holds quality is the default, not the highest one.
+Higher reasoning effort frequently lowers accuracy. HAL: increased reasoning-token budget reduced accuracy in 21 of 36 model x benchmark settings tested ([HAL, arXiv:2510.11977](https://arxiv.org/abs/2510.11977v1)). Reasoning is a knob with its own Pareto sweep — the cheapest effort tier that holds quality is the default, not the highest one.
 
-Kapoor et al.'s headline result on HumanEval: a simple warming-strategy baseline matched the LATS architecture's accuracy at roughly 2% of LATS's cost ([arXiv:2407.01502](https://arxiv.org/abs/2407.01502)). The Pareto frame is what makes that gap legible — without it, LATS's accuracy looks like a win.
+Kapoor et al.'s headline result on HumanEval: a simple warming-strategy baseline matched the LATS architecture's accuracy at roughly 2% of LATS's cost ([arXiv:2407.01502](https://arxiv.org/abs/2407.01502v1)). The Pareto frame is what makes that gap legible — without it, LATS's accuracy looks like a win.
 
 ## Why it works
 
@@ -97,7 +97,7 @@ Two findings the bill alone would have hidden: Opus-medium-effort is dominated �
 - USD per successful task is the right cost axis. Effective Tokens (`m × (input + 0.1 × cache_read + 4 × output)`) is the production-ready intermediate; convert to USD for the plot ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/improving-token-efficiency-in-github-agentic-workflows/)).
 - One quality axis per plot — test pass rate for code, task pass rate for multi-step agents, field accuracy for extraction; rubric/judge scores carry their own variance and need it measured first.
 - Frontiers are sparse in practice — HAL finds the most costly models rarely Pareto-optimal; only a third of tested configurations sit on the frontier on average ([HAL, arXiv:2510.11977](https://arxiv.org/abs/2510.11977)).
-- Increased reasoning effort lowered accuracy in 21 of 36 HAL settings — sweep effort too, never assume monotone ([HAL, arXiv:2510.11977](https://arxiv.org/abs/2510.11977)).
+- Increased reasoning effort lowered accuracy in 21 of 36 HAL settings — sweep effort too, never assume monotone ([HAL, arXiv:2510.11977](https://arxiv.org/abs/2510.11977v1)).
 - Single-run sweeps inflate accuracy and cost estimates by up to 8.7% / 88% — average over multiple runs per cell or apply explicit bias correction ([Capability Frontier, arXiv:2606.26836](https://arxiv.org/html/2606.26836v1)).
 
 ## Related

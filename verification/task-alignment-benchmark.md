@@ -31,7 +31,7 @@ Neither is task-aligned. Selectivity — connecting an environmental instruction
 
 ## What TAB measures
 
-TAB is an 89-task suite derived from Terminal-Bench 2.1 ([Merrill et al., 2026](https://arxiv.org/abs/2601.11868)), the parent benchmark scoring command-line completion. Each task is underspecified: the user prompt alone is not enough. The missing information is planted as a cue inside an environmental artifact, alongside a plausible but irrelevant distractor. ([Mavali et al., 2026](https://arxiv.org/abs/2605.12233))
+TAB is an 89-task suite derived from Terminal-Bench 2.1 ([Merrill et al., 2026](https://arxiv.org/abs/2601.11868v1)), the parent benchmark scoring command-line completion. Each task is underspecified: the user prompt alone is not enough. The missing information is planted as a cue inside an environmental artifact, alongside a plausible but irrelevant distractor. ([Mavali et al., 2026](https://arxiv.org/abs/2605.12233v1))
 
 The scoring decomposes capability into two axes standard benchmarks combine:
 
@@ -41,11 +41,11 @@ The scoring decomposes capability into two axes standard benchmarks combine:
 | Distraction resistance | Did the agent decline to follow the irrelevant instruction? |
 | Task alignment | Both — pass only if the agent followed the cue and ignored the distractor |
 
-Reported on ten frontier agents: GPT-5.5 scores 73% on Terminal-Bench but 23% on TAB alignment (85% cue use, 27% distraction resistance). Claude Opus 4.7 scores 70% on Terminal-Bench and 72% on TAB alignment (77% cue use, 94% distraction resistance). Gemini 3.1 Pro reaches 53% capability with only 9% alignment. Capability rank does not predict alignment rank — a leaderboard-topping agent on Terminal-Bench can be the worst-aligned agent on TAB. ([Mavali et al., 2026](https://arxiv.org/abs/2605.12233))
+Reported on ten frontier agents: GPT-5.5 scores 73% on Terminal-Bench but 23% on TAB alignment (85% cue use, 27% distraction resistance). Claude Opus 4.7 scores 70% on Terminal-Bench and 72% on TAB alignment (77% cue use, 94% distraction resistance). Gemini 3.1 Pro reaches 53% capability with only 9% alignment. Capability rank does not predict alignment rank — a leaderboard-topping agent on Terminal-Bench can be the worst-aligned agent on TAB. ([Mavali et al., 2026](https://arxiv.org/abs/2605.12233v1))
 
 ## Current defenses suppress the signal along with the noise
 
-TAB also evaluated six prompt-injection defenses — SIC, PromptArmor, Spotlighting, RUP, Firewall, Task Shield. Every defense reduced distractor execution. Every defense also reduced cue use by a comparable amount. The reported worst case: SIC on GPT-5.4 mini drops distractor execution from 65% to 3% — and drops task capability from 36% to 1%. The sanitizer removed necessary information alongside hostile directives. ([Mavali et al., 2026](https://arxiv.org/abs/2605.12233))
+TAB also evaluated six prompt-injection defenses — SIC, PromptArmor, Spotlighting, RUP, Firewall, Task Shield. Every defense reduced distractor execution. Every defense also reduced cue use by a comparable amount. The reported worst case: SIC on GPT-5.4 mini drops distractor execution from 65% to 3% — and drops task capability from 36% to 1%. The sanitizer removed necessary information alongside hostile directives. ([Mavali et al., 2026](https://arxiv.org/abs/2605.12233v1))
 
 The architectural defenses in [Designing Agents to Resist Prompt Injection](../security/prompt-injection-resistant-agent-design.md) produce the same trade-off by construction: a quarantined or context-minimized LLM cannot use a cue it never sees. Selectivity is a different capability than suppression, and current external defense layers do not deliver it.
 

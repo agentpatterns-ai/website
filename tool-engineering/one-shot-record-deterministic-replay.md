@@ -23,7 +23,7 @@ maturity: emerging
 
 ## The problem with reasoning on every cron tick
 
-Periodic agent workloads — hourly monitoring, daily reports, scheduled triage — run the same task against shifting inputs. The token bill scales with the schedule. Stochastic reasoning also re-introduces failures the prior run already solved. Wang et al. reported a 99% token reduction by replacing repeated reasoning with deterministic replay of a single recorded plan ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237)). The general record, summarize, and replay paradigm began as a check-function-guarded framework ([AgentRR, 2025](https://arxiv.org/abs/2505.17716)). The periodic-task specialization swaps the check function for parameterized templates.
+Periodic agent workloads — hourly monitoring, daily reports, scheduled triage — run the same task against shifting inputs. The token bill scales with the schedule. Stochastic reasoning also re-introduces failures the prior run already solved. Wang et al. reported a 99% token reduction by replacing repeated reasoning with deterministic replay of a single recorded plan ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237v1)). The general record, summarize, and replay paradigm began as a check-function-guarded framework ([AgentRR, 2025](https://arxiv.org/abs/2505.17716v1)). The periodic-task specialization swaps the check function for parameterized templates.
 
 ## The mechanism
 
@@ -41,7 +41,7 @@ graph TD
     H -->|No LLM call| F
 ```
 
-Reported results: 93.3%-99.98% monthly token reduction and 8.7x lower execution latency on periodic tasks at 5-minute to 24-hour intervals ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237)).
+Reported results: 93.3%-99.98% monthly token reduction and 8.7x lower execution latency on periodic tasks at 5-minute to 24-hour intervals ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237v1)).
 
 ## Why it works on periodic tasks specifically
 
@@ -108,7 +108,7 @@ engine.add_precondition(lambda: github_api_reachable() and slack_channel_exists(
 
 ## Key Takeaways
 
-- One-shot record and deterministic replay collapses periodic agent token cost by removing the LLM from the replay path; reported reductions reach 99% on cron-style workloads ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237)).
+- One-shot record and deterministic replay collapses periodic agent token cost by removing the LLM from the replay path; reported reductions reach 99% on cron-style workloads ([Good to Go: The LOOP Skill Engine, 2026](https://arxiv.org/abs/2605.14237v1)).
 - The pattern is a specialization of general LLM record-and-replay ([AgentRR, 2025](https://arxiv.org/abs/2505.17716)), narrowed to periodic tasks so the check-function guard can be replaced by template parameterization.
 - Three preconditions: stable tool DAG across runs, idempotent or transactional tools, stable upstream APIs. All three must hold; one violation produces silent replay failure.
 

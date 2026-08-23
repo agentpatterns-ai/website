@@ -86,7 +86,7 @@ Skip it when:
 - The deterministic envelope already matches the task tightly (one-shot agents, single-purpose subagents). The added inference cost buys nothing.
 - Conversations legitimately span unrelated tasks; [task extraction](hybrid-deterministic-semantic-tool-authorization.md) either over-restricts or fragments.
 - Tool catalogs change faster than the semantic model's knowledge of "what each tool legitimately does" — staleness causes rolling false positives.
-- Latency budgets are tight: a [pDFA firewall](behavioral-firewall-tool-call-trajectories.md) runs at ~2.2 ms per call ([2604.26274](https://arxiv.org/abs/2604.26274)); a two-stage semantic evaluation does not.
+- Latency budgets are tight: a [pDFA firewall](behavioral-firewall-tool-call-trajectories.md) runs at ~2.2 ms per call ([2604.26274](https://arxiv.org/abs/2604.26274v1)); a two-stage semantic evaluation does not.
 
 ## Example
 

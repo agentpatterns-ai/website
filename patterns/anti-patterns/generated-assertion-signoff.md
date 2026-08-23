@@ -26,20 +26,20 @@ An agent augments code with generated assertions or postconditions, often with a
 
 ## The measured gap
 
-A controlled experiment with 86 Python programmers judging 260 generated postcondition assertions found the asymmetry: developers judged correct assertions at 73.9% accuracy but incorrect ones at only 49.0% — near chance ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)). The odds of correctly judging a correct assertion were nearly three times the odds for an incorrect one (OR=2.94, p<0.001). Confidence stayed uniformly high across both cases (about 3.98–4.14 out of 5, no significant difference), so the reviewer's own certainty carries no signal about which judgments are wrong ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)).
+A controlled experiment with 86 Python programmers judging 260 generated postcondition assertions found the asymmetry: developers judged correct assertions at 73.9% accuracy but incorrect ones at only 49.0% — near chance ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885v1)). The odds of correctly judging a correct assertion were nearly three times the odds for an incorrect one (OR=2.94, p<0.001). Confidence stayed uniformly high across both cases (about 3.98–4.14 out of 5, no significant difference), so the reviewer's own certainty carries no signal about which judgments are wrong ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885v1)).
 
-Natural-language explanations do not rescue the gate. They gave no overall accuracy benefit, and under-specified explanations actively reduced accuracy versus exact ones (OR=0.58, p=0.037) while raising confidence versus no comment (4.25 vs 3.99, p=0.005) — more perceived understanding without real comprehension ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)).
+Natural-language explanations do not rescue the gate. They gave no overall accuracy benefit, and under-specified explanations actively reduced accuracy versus exact ones (OR=0.58, p=0.037) while raising confidence versus no comment (4.25 vs 3.99, p=0.005) — more perceived understanding without real comprehension ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885v1)).
 
 ## Why it works
 
-The failure has three cited causes: an acceptance bias toward AI-generated specifications, a cognitive-demand asymmetry in which confirming correct logic is easier than detecting incorrect logic, and a clause-comparison heuristic where reviewers match assertion clauses against the docstring — which breaks for implications (OR=0.69) and element-property assertions (OR=0.66) ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)). The confidence inflation from a plausible-but-weak explanation is automation-induced complacency: a confident-looking rationale shifts attention away from independent cross-checking, an effect present in novices and experts alike ([Parasuraman and Manzey 2010](https://journals.sagepub.com/doi/10.1177/0018720810376055)). Warning reviewers does not close it — in a separate study, people failed to catch critical flaws in AI output even when told the AI errs and paid to find mistakes ([Kabir et al. 2025](https://arxiv.org/abs/2508.06484)).
+The failure has three cited causes: an acceptance bias toward AI-generated specifications, a cognitive-demand asymmetry in which confirming correct logic is easier than detecting incorrect logic, and a clause-comparison heuristic where reviewers match assertion clauses against the docstring — which breaks for implications (OR=0.69) and element-property assertions (OR=0.66) ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885v1)). The confidence inflation from a plausible-but-weak explanation is automation-induced complacency: a confident-looking rationale shifts attention away from independent cross-checking, an effect present in novices and experts alike ([Parasuraman and Manzey 2010](https://journals.sagepub.com/doi/10.1177/0018720810376055)). Warning reviewers does not close it — in a separate study, people failed to catch critical flaws in AI output even when told the AI errs and paid to find mistakes ([Kabir et al. 2025](https://arxiv.org/abs/2508.06484v1)).
 
 ## When this backfires
 
 Treating sign-off as a weak gate is not the same as treating it as worthless — and the finding has boundaries.
 
 - Reviewers were right 73.9% of the time on correct assertions. Where generated checks are usually correct and the cost of a rare false accept is low, light sign-off can be cheaper than the failure it prevents.
-- The study used single-function HumanEval stimuli, US-recruited participants, and short review windows of about 95–115 seconds ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)). Multi-function code, longer review, richer IDE context, and other populations were not tested — do not over-generalize the exact numbers.
+- The study used single-function HumanEval stimuli, US-recruited participants, and short review windows of about 95–115 seconds ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885v1)). Multi-function code, longer review, richer IDE context, and other populations were not tested — do not over-generalize the exact numbers.
 - Where the assertions are actually executed — run against a reference implementation, mutation-tested, or gated by CI — verification no longer rests on reviewer judgment, so the miscalibration matters less.
 
 ## Example
@@ -63,7 +63,7 @@ Keep the human read for intent, but make correctness the machine's job: run the 
 
 ## Key Takeaways
 
-- Human sign-off on generated assertions is asymmetric: about 74% accurate on correct assertions, near chance (49%) on incorrect ones ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885)).
+- Human sign-off on generated assertions is asymmetric: about 74% accurate on correct assertions, near chance (49%) on incorrect ones ([Kaufman et al. 2026](https://arxiv.org/abs/2607.08885v1)).
 - Reviewer confidence is flat across right and wrong judgments, so certainty is no signal — the gate cannot self-diagnose.
 - Natural-language explanations do not help and, when under-specified, lower accuracy while raising confidence.
 - Do not treat reviewer approval as verification; back it with executable checks — reference comparison, mutation testing, or CI — for the cases that matter.

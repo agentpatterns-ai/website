@@ -26,7 +26,7 @@ Learn it hands-on: [The Chunk That Wasn't Yours](https://learn.agentpatterns.ai/
 
 Vector and lexical retrieval rank by similarity, BM25, or hybrid scoring. None of these signals know who the requester is. When tenants share an index, "most relevant chunk" and "chunk this tenant may see" are independent properties. The highest-scoring document for tenant A may belong to tenant B.
 
-In the OGX evaluation ([Arceo and Narsing, 2026](https://arxiv.org/abs/2605.05287)), ungated retrieval leaked cross-tenant data in 98 to 100% of probes. The failure is structural, not a model defect. The embedding worked; it had no view into policy.
+In the OGX evaluation ([Arceo and Narsing, 2026](https://arxiv.org/abs/2605.05287v1)), ungated retrieval leaked cross-tenant data in 98 to 100% of probes. The failure is structural, not a model defect. The embedding worked; it had no view into policy.
 
 ```mermaid
 graph TD

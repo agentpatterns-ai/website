@@ -45,13 +45,13 @@ Extract parameters before lookup and partition the cache key on them:
 cache_key = embedding(query) + parsed(temporal) + parsed(asset_id) + parsed(sensor)
 ```
 
-Lookup then matches similarity within a parameter bucket, never across buckets. The benchmark reports 30.6x median speedup on hits ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630)), but the real win is eliminating a false-positive class plain caches cannot avoid at any threshold. This complements the dual-threshold mechanism in [Semantic Caching for Multi-Agent Code Systems](../multi-agent/semantic-caching-multi-agent.md): the dual threshold tunes precision-recall on the embedding axis; parameter keying partitions the lookup space.
+Lookup then matches similarity within a parameter bucket, never across buckets. The benchmark reports 30.6x median speedup on hits ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630v1)), but the real win is eliminating a false-positive class plain caches cannot avoid at any threshold. This complements the dual-threshold mechanism in [Semantic Caching for Multi-Agent Code Systems](../multi-agent/semantic-caching-multi-agent.md): the dual threshold tunes precision-recall on the embedding axis; parameter keying partitions the lookup space.
 
 ### 2. Disk-backed tool-discovery cache
 
 Each new session pays for `mcp/listTools` across every connected server plus planner-side relevance scoring. That output is deterministic on a given server set, so repeated discovery is pure overhead.
 
-Persist it on disk, keyed by server-set hash and planner version; invalidate when either changes. Combined with mechanism 3, this cuts median end-to-end latency ~40% (1.67x) on AssetOpsBench ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630)). The host-level alternative is Claude Code's `alwaysLoad`, which pins servers into the system-prompt prefix at zero per-session cost ([MCP alwaysLoad](../../tool-engineering/mcp-eager-vs-jit-loading.md)). Disk-backing wins when the server set is too large for unconditional residence — tool selection degrades past 30-50 visible tools ([Tool search tool docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)).
+Persist it on disk, keyed by server-set hash and planner version; invalidate when either changes. Combined with mechanism 3, this cuts median end-to-end latency ~40% (1.67x) on AssetOpsBench ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630v1)). The host-level alternative is Claude Code's `alwaysLoad`, which pins servers into the system-prompt prefix at zero per-session cost ([MCP alwaysLoad](../../tool-engineering/mcp-eager-vs-jit-loading.md)). Disk-backing wins when the server set is too large for unconditional residence — tool selection degrades past 30-50 visible tools ([Tool search tool docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)).
 
 ### 3. Dependency-aware parallel step execution
 

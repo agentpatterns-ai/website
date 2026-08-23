@@ -20,7 +20,7 @@ maturity: emerging
 
 > Semantic fuzzing turns each natural-language skill guardrail into a reachability goal over an execution trace, surfacing benign-input violations that static review and prompt-injection defenses miss.
 
-Agent skills bundle instructions, optional scripts, and embedded safety constraints ([Agent Skills standard](../standards/agent-skills-standard.md)); the agent interprets guardrail semantics at runtime. SEFZ found 120 of 402 deployed OpenClaw skills (29.9%) silently violate their own rules on benign inputs — 26 previously unknown and exploitable in production ([arXiv:2605.13044](https://arxiv.org/abs/2605.13044)). A separate study of 31,132 marketplace skills found 26.1% carry at least one vulnerability; script-bundling skills are 2.12× more vulnerable than instruction-only skills ([arXiv:2601.10338](https://arxiv.org/abs/2601.10338)).
+Agent skills bundle instructions, optional scripts, and embedded safety constraints ([Agent Skills standard](../standards/agent-skills-standard.md)); the agent interprets guardrail semantics at runtime. SEFZ found 120 of 402 deployed OpenClaw skills (29.9%) silently violate their own rules on benign inputs — 26 previously unknown and exploitable in production ([arXiv:2605.13044](https://arxiv.org/abs/2605.13044v1)). A separate study of 31,132 marketplace skills found 26.1% carry at least one vulnerability; script-bundling skills are 2.12× more vulnerable than instruction-only skills ([arXiv:2601.10338](https://arxiv.org/abs/2601.10338v1)).
 
 ## A failure class distinct from prompt injection
 
@@ -45,7 +45,7 @@ graph LR
     D -.->|missing gate| E
 ```
 
-A violation is a benign input whose trace witnesses such a path. The oracle is deterministic — no LLM judge — and the goal doubles as a graded reward: near-misses steer mutation ([arXiv:2605.13044 §IV–V](https://arxiv.org/abs/2605.13044)). A Thompson Sampling bandit concentrates LLM mutation on productive operator–goal pairs; ablating semantic mutation costs ~53% of discovery, the bandit ~35%, goal-proximity feedback ~29% ([arXiv:2605.13044 §VII.B](https://arxiv.org/abs/2605.13044)).
+A violation is a benign input whose trace witnesses such a path. The oracle is deterministic — no LLM judge — and the goal doubles as a graded reward: near-misses steer mutation ([arXiv:2605.13044 §IV–V](https://arxiv.org/abs/2605.13044v1)). A Thompson Sampling bandit concentrates LLM mutation on productive operator–goal pairs; ablating semantic mutation costs ~53% of discovery, the bandit ~35%, goal-proximity feedback ~29% ([arXiv:2605.13044 §VII.B](https://arxiv.org/abs/2605.13044v1)).
 
 ## Six recurring pitfalls
 

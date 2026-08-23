@@ -87,7 +87,7 @@ Osmani identifies four warning signs of atrophy in practice:
 3. Weakened architecture thinking — handing system design decisions to the model rather than reasoning through tradeoffs.
 4. Diminished recall — being unable to write basic implementations in languages you use daily.
 
-The METR study adds a particularly troubling data point: developers using AI estimated they were 20% faster, when they were actually 19% slower — a 39-point perception gap. You cannot correct for atrophy you cannot detect ([METR developer productivity study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)).
+The METR study adds a particularly troubling data point: developers using AI estimated they were 20% faster, when they were actually taking 19% longer — a 39-point gap between the two figures. You cannot correct for atrophy you cannot detect ([METR developer productivity study](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)).
 
 This is the central paradox of the transition. Moving from coder to builder requires maintaining enough coding skill to evaluate what the AI produces. Delegate too aggressively and you lose the ability to supervise the delegation.
 
@@ -147,7 +147,7 @@ The profession is differentiating, not dying. The deciding question is what kind
 
 - The coder/builder split is an identity question, not a competence ranking — both orientations can thrive if practitioners consciously relocate their rigor.
 - The production bottleneck has migrated: code generation accelerated ~2x, but review capacity stayed flat, shifting where quality work actually happens.
-- Skill atrophy is self-concealing: developers in the METR study estimated they were 20% faster while actually running 19% slower — you cannot correct for degradation you cannot detect.
+- Skill atrophy is self-concealing: developers in the METR study estimated they were 20% faster while actually taking 19% longer — you cannot correct for degradation you cannot detect.
 - Rigor relocation means applying engineering discipline to the harness — constraint design, verification systems, and intent specification — rather than to the code the AI produces.
 - The most durable career investments are architectural judgment, review discipline, and deliberate manual practice, because these are the skills required to supervise AI output.
 

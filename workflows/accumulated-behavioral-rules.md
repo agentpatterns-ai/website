@@ -58,7 +58,7 @@ flowchart LR
 4. Automated validation checks that the rule set stays internally consistent as it grows.
 5. The next session loads the file, so the agent now self-detects that error class.
 
-The accumulation curve is logarithmic, not linear: the frequent error classes get covered early, and new rules arrive more slowly as coverage saturates ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)). In the reported deployment the rule set grew from 5 to 18 behavioral rules over four weeks, alongside language standards and a 15-item self-review checklist, reaching roughly 4,809 words — under 5% of a 128K-token context window ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)).
+The accumulation curve is logarithmic, not linear: the frequent error classes get covered early, and new rules arrive more slowly as coverage saturates ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091v1)). In the reported deployment the rule set grew from 5 to 18 behavioral rules over four weeks, alongside language standards and a 15-item self-review checklist, reaching roughly 4,809 words — under 5% of a 128K-token context window ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091v1)).
 
 ## The rule schema
 
@@ -74,7 +74,7 @@ Traceability is what lets you retire a rule later: when you can see which commen
 
 ## Why it works
 
-The mechanism is retention, not intelligence. Codifying each accepted correction as a rule the agent loads every session gives it a persistent, growing set of error classes it can check itself against before submitting, with no model-weight change ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)). Because the rules live in a shared version-controlled file rather than one session's memory, a correction learned in one repository transfers to others: in the reported deployment, 60% of knowledge-transfer events crossed a repository, tool, or task-type boundary ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091)). The self-review checklist is the enforcement surface — it turns a passive rule into an active pre-submission gate, the same move as an [agent self-review loop](../code-review/agent-self-review-loop.md) running checks on its own output before a human sees it.
+The mechanism is retention, not intelligence. Codifying each accepted correction as a rule the agent loads every session gives it a persistent, growing set of error classes it can check itself against before submitting, with no model-weight change ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091v1)). Because the rules live in a shared version-controlled file rather than one session's memory, a correction learned in one repository transfers to others: in the reported deployment, 60% of knowledge-transfer events crossed a repository, tool, or task-type boundary ([arXiv 2607.13091](https://arxiv.org/abs/2607.13091v1)). The self-review checklist is the enforcement surface — it turns a passive rule into an active pre-submission gate, the same move as an [agent self-review loop](../code-review/agent-self-review-loop.md) running checks on its own output before a human sees it.
 
 ## When this backfires
 

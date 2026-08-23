@@ -21,7 +21,7 @@ maturity: emerging
 
 ## The semantic-readiness gap
 
-An OpenAPI document that passes `openapi-validator` can still fail an agent. Lima, Pinheiro, and Menezes audited 16 production APIs (~600 endpoints) being prepared for [Model Context Protocol](../standards/mcp-protocol.md) exposure and found that "[structural validity within microservice environments does not guarantee semantic readiness for agent-based consumption](https://arxiv.org/abs/2605.14312)"; enriching descriptions alone moved [task success from ~70% to ~90%](https://arxiv.org/abs/2605.14312).
+An OpenAPI document that passes `openapi-validator` can still fail an agent. Lima, Pinheiro, and Menezes audited 16 production APIs (~600 endpoints) being prepared for [Model Context Protocol](../standards/mcp-protocol.md) exposure and found that "[structural validity within microservice environments does not guarantee semantic readiness for agent-based consumption](https://arxiv.org/abs/2605.14312v1)"; enriching descriptions alone moved [task success from ~70% to ~90%](https://arxiv.org/abs/2605.14312v1).
 
 Adjacent work agrees. [AutoMCP reached 99.9% tool-call success only after averaging 19 lines of spec edits per API, up from a 76.5% baseline](https://arxiv.org/abs/2507.16044). [Stainless documents Notion requiring an undeclared `Notion-Version` header, and APIs declaring auth on 5 of 24 endpoints when all 24 need it](https://www.stainless.com/blog/lessons-from-openapi-to-mcp-server-conversion).
 
@@ -46,7 +46,7 @@ Five [REST smells](https://arxiv.org/abs/2605.14312) describe how the endpoint d
 | RESPONSE | Inconsistent schemas, undocumented status codes, missing error shapes |
 | SECURITY | Missing or unclear authentication and authorization definitions |
 
-Prevalence in the Hermes corpus skewed heavily: [100% of endpoints had RESPONSE smells, 90% LAZY, 88% INPUT, 68% SECURITY, 53% PATH or METHOD](https://arxiv.org/abs/2605.14312). This is the default state of human-targeted documentation when an agent is the reader.
+Prevalence in the Hermes corpus skewed heavily: [100% of endpoints had RESPONSE smells, 90% LAZY, 88% INPUT, 68% SECURITY, 53% PATH or METHOD](https://arxiv.org/abs/2605.14312v1). This is the default state of human-targeted documentation when an agent is the reader.
 
 ## Why each category matters
 
@@ -59,7 +59,7 @@ OpenAPI was written for developers with implicit context — codebase, Slack, ti
 
 ## Scenario-first triage
 
-A 2,450-finding report is unactionable. The Hermes study itself pivoted to selective adaptation: [estimated effort dropped from 385 to 42 engineering hours — an 89% reduction — by fixing only endpoints needed for defined automation scenarios](https://arxiv.org/abs/2605.14312).
+A 2,450-finding report is unactionable. The Hermes study itself pivoted to selective adaptation: [estimated effort dropped from 385 to 42 engineering hours — an 89% reduction — by fixing only endpoints needed for defined automation scenarios](https://arxiv.org/abs/2605.14312v1).
 
 MCP practice agrees. [GitHub Copilot and Block cut tool counts by 60-93% before agents became reliable](https://dev.to/aws-heroes/mcp-tool-design-why-your-ai-agent-is-failing-and-how-to-fix-it-40fc); [Speakeasy's guidance is to "autogenerate the groundwork from OpenAPI, then curate"](https://www.speakeasy.com/mcp/tool-design/generate-mcp-tools-from-openapi).
 

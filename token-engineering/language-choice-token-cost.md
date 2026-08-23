@@ -21,7 +21,7 @@ Treat a per-language token multiplier as a diagnostic, not a language-selection 
 
 ## What the measurement shows
 
-[Wu, Anderson and Guha](https://arxiv.org/abs/2607.22807) ran five models across Python, Java, Rust and OCaml on MiniLCB — 100 problems sampled from LiveCodeBench v6's 499 language-agnostic tasks, 2,000 agent sessions in total. They fitted linear mixed-effects models with language as a fixed effect and problem identity as a random effect, so the ratios below are difficulty-controlled.
+[Wu, Anderson and Guha](https://arxiv.org/abs/2607.22807v1) ran five models across Python, Java, Rust and OCaml on MiniLCB — 100 problems sampled from LiveCodeBench v6's 499 language-agnostic tasks, 2,000 agent sessions in total. They fitted linear mixed-effects models with language as a fixed effect and problem identity as a random effect, so the ratios below are difficulty-controlled.
 
 | Language vs Python | Range across the five models |
 |---|---|
@@ -29,7 +29,7 @@ Treat a per-language token multiplier as a diagnostic, not a language-selection 
 | Rust | 1.07x – 1.57x |
 | Java | 0.85x – 1.34x |
 
-The direction is not uniform. Java is the only language that can come out cheaper than Python — Gemma writes it at 0.85x — and several Rust results are not statistically significant ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). So "lower-resource costs more" is a tendency, not a law you can assume for your stack.
+The direction is not uniform. Java is the only language that can come out cheaper than Python — Gemma writes it at 0.85x — and several Rust results are not statistically significant ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807v1)). So "lower-resource costs more" is a tendency, not a law you can assume for your stack.
 
 Accuracy barely moves with language, with Gemma on OCaml the exception ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). That makes this a cost lever rather than a capability one — the same shape as [code cleanliness](code-cleanliness-agent-cost-lever.md), which cut tokens without changing pass rate.
 
@@ -37,13 +37,13 @@ This is the difficulty-controlled per-task view. For the complementary project-l
 
 ## Why it works
 
-The agent burns tokens failing to compile, not thinking harder. On OCaml, 92% of failed intermediate solutions are compile-time errors and only 8% are wrong answers, so the agent rarely gets far enough to learn whether its algorithm was right ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). Escape from the loop is a language-learning event: "fix bug" accounts for 60% of breakthrough transitions, the moment the agent finally names a concrete OCaml-specific type error and the unchanged algorithm passes. Gemma looped on stuck states 1,196 times, 31% of them byte-identical rewrites.
+The agent burns tokens failing to compile, not thinking harder. On OCaml, 92% of failed intermediate solutions are compile-time errors and only 8% are wrong answers, so the agent rarely gets far enough to learn whether its algorithm was right ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807v1)). Escape from the loop is a language-learning event: "fix bug" accounts for 60% of breakthrough transitions, the moment the agent finally names a concrete OCaml-specific type error and the unchanged algorithm passes. Gemma looped on stuck states 1,196 times, 31% of them byte-identical rewrites.
 
 Two secondary behaviors add tokens. Agents prototype in Python before translating — Qwen spent 12 turns on one problem in Python before writing OCaml, and Sonnet spent 23 turns on another ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). Agents also plan inside code comments rather than in prose.
 
 Upstream, the cause is training-data scarcity. Code LLMs produce strong results on well-represented languages such as Python, Java and JavaScript, and struggle on low-resource languages with limited training data ([Joel et al., arXiv:2410.03981](https://arxiv.org/abs/2410.03981)).
 
-The shape of the overspend inverts by language, which is what makes the multiplier a diagnostic. Gemma spends 3,554 median output tokens polishing an already-passing Python solution against 1,173 for OCaml ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). Python spend is cosmetic churn after success; OCaml spend is compile churn before it. Those two failure modes need different fixes.
+The shape of the overspend inverts by language, which is what makes the multiplier a diagnostic. Gemma spends 3,554 median output tokens polishing an already-passing Python solution against 1,173 for OCaml ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807v1)). Python spend is cosmetic churn after success; OCaml spend is compile churn before it. Those two failure modes need different fixes.
 
 ## When this backfires
 
@@ -77,8 +77,8 @@ Rewriting the service in Python to capture at most 1.57x would trade a bounded t
 
 ## Key Takeaways
 
-- At matched difficulty, coding agents spend 1.28x–1.69x more tokens in OCaml than Python and 1.07x–1.57x more in Rust; Java ranges 0.85x–1.34x and can be cheaper than Python ([Wu et al., 2026](https://arxiv.org/abs/2607.22807))
-- The mechanism is compile-error looping, not deeper reasoning — 92% of failed OCaml snapshots are compile-time errors ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807))
+- At matched difficulty, coding agents spend 1.28x–1.69x more tokens in OCaml than Python and 1.07x–1.57x more in Rust; Java ranges 0.85x–1.34x and can be cheaper than Python ([Wu et al., 2026](https://arxiv.org/abs/2607.22807v1))
+- The mechanism is compile-error looping, not deeper reasoning — 92% of failed OCaml snapshots are compile-time errors ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807v1))
 - Accuracy is largely unaffected by language, so this is a cost lever and not a capability one ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807))
 - Problem difficulty dominates token variance (ICC 0.80–0.97), and within-task variance reaches 30x on repository-scale benchmarks — both larger than the language effect ([arXiv:2604.22750](https://arxiv.org/abs/2604.22750))
 - Act on the diagnosis, not the multiplier: a fast typechecker in the loop, verbatim compiler diagnostics, and idiom examples in context attack the mechanism without changing language

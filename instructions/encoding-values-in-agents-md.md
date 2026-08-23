@@ -48,7 +48,7 @@ graph TD
     F --> G[Documented value,<br>unchanged behavior]
 ```
 
-Frontier models top out at roughly 68% accuracy at 500 simultaneous instructions, and earlier instructions are satisfied more reliably than later ones — primacy effects peak around 150–200 instructions ([Jaroslawicz et al. — How Many Instructions Can LLMs Follow at Once?](https://arxiv.org/abs/2507.11538)). A "be accessible" sentence in a 500-line AGENTS.md inherits both penalties. Gloaguen et al. add a direct cost: verbose AGENTS.md files reduce task success and add about 20% inference cost on SWE-bench Lite and AGENTbench ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)).
+Frontier models top out at roughly 68% accuracy at 500 simultaneous instructions, and earlier instructions are satisfied more reliably than later ones — primacy effects peak around 150–200 instructions ([Jaroslawicz et al. — How Many Instructions Can LLMs Follow at Once?](https://arxiv.org/abs/2507.11538v1)). A "be accessible" sentence in a 500-line AGENTS.md inherits both penalties. Gloaguen et al. add a direct cost: verbose AGENTS.md files reduce task success and add about 20% inference cost on SWE-bench Lite and AGENTbench ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)).
 
 ## Verification, not prose
 
@@ -137,7 +137,7 @@ The "after" version contains the same values commitments. The difference is that
 - [Wei et al. — Agent READMEs: An Empirical Study of Context Files for Agentic Coding](https://arxiv.org/abs/2511.12884) — 2,303 context files; functional categories dominate, security/performance under 15%
 - [Liu et al. — Context Engineering for AI Agents in Open-Source Software](https://arxiv.org/abs/2510.21413) — 466 OSS repos; five writing styles; no explicit ethical, accessibility, fairness, or tone instructions found
 - [Gloaguen et al. — Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?](https://arxiv.org/abs/2602.11988) — verbose context files reduce success and add ~20% cost
-- [Jaroslawicz et al. — How Many Instructions Can LLMs Follow at Once?](https://arxiv.org/abs/2507.11538) — frontier models top out at 68% at 500 instructions; primacy bias peaks around 150–200 instructions
+- [Jaroslawicz et al. — How Many Instructions Can LLMs Follow at Once?](https://arxiv.org/abs/2507.11538v1) — frontier models top out at 68% at 500 instructions; primacy bias peaks around 150–200 instructions
 - [Zhang et al. — Do Agent Rules Shape or Distort? Guardrails Beat Guidance in Coding Agents](https://arxiv.org/abs/2604.11088) — negative constraints help, positive directives hurt; ground for the verification-not-prose recommendation
 - [Treude et al. — Operationalizing Ethics for AI Agents: How Developers Encode Values into Repository Context Files](https://arxiv.org/abs/2605.05584) — vision paper; finds developers already embed fairness/accessibility/sustainability/tone/privacy guidance, but defers whether agents adhere to it
 

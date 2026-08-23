@@ -38,7 +38,7 @@ Cross-verification checks each artifact pair against the others: spec versus gra
 
 ## Reported effectiveness
 
-On ScienceAgentBench, BenchGuard surfaced 12 author-confirmed issues, including fatal errors that rendered tasks unsolvable. On the BIXBench Verified-50 subset — a hand-curated, expert-reviewed slice — it matched 83.3% of expert-identified issues exactly and caught defects that the prior human review had missed. A full audit of 50 complex bioinformatics tasks cost under USD 15. [Source: [BenchGuard (arxiv 2604.24955)](https://arxiv.org/abs/2604.24955)]
+On ScienceAgentBench, BenchGuard surfaced 12 author-confirmed issues, including fatal errors that rendered tasks unsolvable. On the BIXBench Verified-50 subset — a hand-curated, expert-reviewed slice — it matched 83.3% of expert-identified issues exactly and caught defects that the prior human review had missed. A full audit of 50 complex bioinformatics tasks cost under USD 15. [Source: [BenchGuard (arxiv 2604.24955)](https://arxiv.org/abs/2604.24955v1)]
 
 The cost figure matters: at that price the audit is cheaper than one engineer-hour, so it can sit as a routine pre-publication step rather than a one-off study.
 
@@ -54,9 +54,9 @@ The pattern only holds under these conditions:
 
 ## Example
 
-BenchGuard's deployment on BIXBench Verified-50 shows the workflow end-to-end. BIXBench Verified-50 is a 50-task bioinformatics subset that domain experts had already hand-curated. BenchGuard cross-verified each task's artifacts through structured LLM protocols and produced a candidate-flag set. Expert reviewers then confirmed which flags were genuine. The audit matched 83.3% of the expert-identified issues exactly and surfaced defects the prior human review had missed, for under USD 15 in total compute. [Source: [BenchGuard (arxiv 2604.24955)](https://arxiv.org/abs/2604.24955)]
+BenchGuard's deployment on BIXBench Verified-50 shows the workflow end-to-end. BIXBench Verified-50 is a 50-task bioinformatics subset that domain experts had already hand-curated. BenchGuard cross-verified each task's artifacts through structured LLM protocols and produced a candidate-flag set. Expert reviewers then confirmed which flags were genuine. The audit matched 83.3% of the expert-identified issues exactly and surfaced defects the prior human review had missed, for under USD 15 in total compute. [Source: [BenchGuard (arxiv 2604.24955)](https://arxiv.org/abs/2604.24955v1)]
 
-The same paper's deployment on ScienceAgentBench produced 12 author-confirmed issues — including fatal errors that rendered tasks unsolvable. In both cases the loop is: auditor LLM proposes candidates → benchmark authors or experts confirm → benchmark is patched before scores are reported. [Source: [BenchGuard (arxiv 2604.24955)](https://arxiv.org/abs/2604.24955)]
+The same paper's deployment on ScienceAgentBench produced 12 author-confirmed issues — including fatal errors that rendered tasks unsolvable. In both cases the loop is: auditor LLM proposes candidates → benchmark authors or experts confirm → benchmark is patched before scores are reported. [Source: [BenchGuard (arxiv 2604.24955)](https://arxiv.org/abs/2604.24955v1)]
 
 ## Key Takeaways
 

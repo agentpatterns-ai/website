@@ -19,11 +19,11 @@ maturity: emerging
 
 ## The evidence
 
-An empirical study of 278,790 code review conversations across 300 GitHub projects (2022-2025) quantifies how AI and human reviewers differ ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
+An empirical study of 278,790 code review conversations across 300 GitHub projects (2022-2025) quantifies how AI and human reviewers differ ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911v1)).
 
 ### Adoption rate gap
 
-Human suggestions are adopted 56.5% of the time versus 16.6% for AI — a 39.9 percentage point gap. Over half of unadopted AI suggestions are incorrect or addressed through alternative developer fixes ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). AI review output requires triage before a developer acts on it.
+Human suggestions are adopted 56.5% of the time versus 16.6% for AI — a 39.9 percentage point gap. Over half of unadopted AI suggestions are incorrect or addressed through alternative developer fixes ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911v1)). AI review output requires triage before a developer acts on it.
 
 ### Complexity cost
 
@@ -31,11 +31,11 @@ Adopted AI suggestions produce larger increases in cyclomatic complexity (+0.085
 
 ### Verbosity and focus
 
-AI agents produce 29.6 tokens per line of code reviewed versus 4.1 for humans — a 7x difference ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). Over 95% of AI comments target code improvement or defect detection ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). Humans spread across understanding questions (17-31%), knowledge transfer (4-6%), testing feedback, and social communication ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)). AI review misses mentoring, architectural questioning, and team knowledge sharing.
+AI agents produce 29.6 tokens per line of code reviewed versus 4.1 for humans — a 7x difference ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911v1)). Over 95% of AI comments target code improvement or defect detection ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911v1)). Humans spread across understanding questions (17-31%), knowledge transfer (4-6%), testing feedback, and social communication ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911v1)). AI review misses mentoring, architectural questioning, and team knowledge sharing.
 
 ### Conversation dynamics
 
-85-87% of AI-initiated reviews end without follow-up discussion, with 7.1-25.8% rejection rates versus 0.9-7.8% for human conversations. Reviews of AI-generated code require 11.8% more review rounds than human-written code ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911)).
+85-87% of AI-initiated reviews end without follow-up discussion, with 7.1-25.8% rejection rates versus 0.9-7.8% for human conversations. Reviews of AI-generated code require 11.8% more review rounds than human-written code ([arxiv:2603.15911](https://arxiv.org/abs/2603.15911v1)).
 
 ## Structuring the collaboration
 

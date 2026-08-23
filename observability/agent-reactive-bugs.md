@@ -18,7 +18,7 @@ last_reviewed: 2026-07-20
 
 > Agent-reactive bugs surface only when a specific model output meets harness code that mishandles it — reading either component alone never explains them.
 
-An agent-reactive (AR) bug is a failure that appears only when the model emits a particular output and the surrounding harness code handles that output badly. The model output looks syntactically fine on its own, and the harness code has no defect on well-formed input, so inspecting either side in isolation never reveals the fault. The first empirical study of the class found 255 confirmed AR bugs across Codex, Gemini-CLI, LangChain, and CrewAI — about 8.4% of actively-discussed issues in those projects ([Chen et al., 2026](https://arxiv.org/abs/2607.15684)).
+An agent-reactive (AR) bug is a failure that appears only when the model emits a particular output and the surrounding harness code handles that output badly. The model output looks syntactically fine on its own, and the harness code has no defect on well-formed input, so inspecting either side in isolation never reveals the fault. The first empirical study of the class found 255 confirmed AR bugs across Codex, Gemini-CLI, LangChain, and CrewAI — about 8.4% of actively-discussed issues in those projects ([Chen et al., 2026](https://arxiv.org/abs/2607.15684v1)).
 
 The practical consequence: when you triage an agent failure, the useful unit of evidence is the paired trace — the model output next to the harness reaction it provoked — not the model or the harness examined alone.
 
@@ -32,9 +32,9 @@ Three harness responsibilities parse and act on model output, and each is a plac
 
 ## How to recognize one
 
-The study groups AR bugs by symptom and by the model behavior that triggers them. Silent errors dominate the symptoms: 108 of 255 (42%) produce fluent, plausible, wrong output with no exception or warning. Crashes account for 71 (28%), raw error-in-output for 34, retry loops for 33, and hangs for 9 ([Chen et al., 2026](https://arxiv.org/abs/2607.15684)).
+The study groups AR bugs by symptom and by the model behavior that triggers them. Silent errors dominate the symptoms: 108 of 255 (42%) produce fluent, plausible, wrong output with no exception or warning. Crashes account for 71 (28%), raw error-in-output for 34, retry loops for 33, and hangs for 9 ([Chen et al., 2026](https://arxiv.org/abs/2607.15684v1)).
 
-The triggers are model-side but the failure is harness-side. The most common are task-instruction non-compliance (67 cases), unexpected tool arguments (62), and message-template conflict (49), followed by immature harness interfaces, statement fabrication, empty responses, context overflow, and tool hallucination ([Chen et al., 2026](https://arxiv.org/abs/2607.15684)). Instruction non-compliance and statement fabrication surface as silent errors more than 80% of the time, which is why they are the hardest to catch.
+The triggers are model-side but the failure is harness-side. The most common are task-instruction non-compliance (67 cases), unexpected tool arguments (62), and message-template conflict (49), followed by immature harness interfaces, statement fabrication, empty responses, context overflow, and tool hallucination ([Chen et al., 2026](https://arxiv.org/abs/2607.15684v1)). Instruction non-compliance and statement fabrication surface as silent errors more than 80% of the time, which is why they are the hardest to catch.
 
 ## The diagnostic move
 

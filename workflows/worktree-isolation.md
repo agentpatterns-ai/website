@@ -39,6 +39,8 @@ The [Claude Code worktrees workflow documentation](https://code.claude.com/docs/
 - Contained failures, so a bad agent output affects only its worktree
 - A separate branch per agent that captures its changes for review
 
+These guarantees are about where an agent's edits land. They say nothing about what its process can reach, and treating the two as one control is its own failure mode: see [Treating a Worktree as a Safety Boundary](../patterns/anti-patterns/worktree-as-safety-boundary.md).
+
 ## Parallelism
 
 Worktrees let agents work at the same time without coordination overhead. An agent refactoring authentication and an agent adding a new feature can run in parallel, because they work in separate directories.

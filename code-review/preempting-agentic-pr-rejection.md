@@ -19,7 +19,7 @@ maturity: emerging
 
 ## The rejection taxonomy
 
-Across 3,225 fix pull requests from Copilot, Devin, Cursor, and Claude in the AIDev dataset, 46.41% were rejected. A qualitative two-rater study of a representative 306-PR sample (95% CI, Cohen's κ = 0.605) sorts the reasons into four categories and 14 specific causes ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)).
+Across 3,225 fix pull requests from Copilot, Devin, Cursor, and Claude in the AIDev dataset, 46.41% were rejected. A qualitative two-rater study of a representative 306-PR sample (95% CI, Cohen's κ = 0.605) sorts the reasons into four categories and 14 specific causes ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468v1)).
 
 | Category | Share of sample | Specific reasons (share of sample) |
 |----------|-----------------|------------------------------------|
@@ -29,7 +29,7 @@ Across 3,225 fix pull requests from Copilot, Devin, Cursor, and Claude in the AI
 | Technical Issues | 7.2% | CI failure 6.9%, Breaking change 0.3% |
 | Unclassified | 49.3% | No explicit reviewer rationale in the PR thread |
 
-The unclassified bucket is large because rejected agent-authored PRs often lack reviewer feedback. A companion study of 654 rejected PRs across five agents finds that 67.9% of rejections carry no explicit reviewer comment ([arXiv:2602.04226](https://arxiv.org/abs/2602.04226)).
+The unclassified bucket is large because rejected agent-authored PRs often lack reviewer feedback. A companion study of 654 rejected PRs across five agents finds that 67.9% of rejections carry no explicit reviewer comment ([arXiv:2602.04226](https://arxiv.org/abs/2602.04226v1)).
 
 ## What the categories mean for preemption
 
@@ -43,14 +43,14 @@ The three practices above do not touch Inactivity or Provider-Related rejections
 
 ## Why it works
 
-Reviewers reject implementation-bucket fixes because the agent ignored unwritten team conventions that it could not infer from the issue text alone: style rules, architectural choices, "we don't use library X here," and test expectations. Encoding those conventions in the instruction file gives the agent the same implicit knowledge a new human contributor would learn from a senior engineer's pre-PR review. The paper names this mechanism in its Implications section: developers should "provide guidance on how to perform the fix or provide guidance on what approaches are not acceptable in the agent instruction file" ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)). The mechanism matches the [Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) anti-pattern: agents fail when the team's conventions are nowhere in the artifacts the agent reads.
+Reviewers reject implementation-bucket fixes because the agent ignored unwritten team conventions that it could not infer from the issue text alone: style rules, architectural choices, "we don't use library X here," and test expectations. Encoding those conventions in the instruction file gives the agent the same implicit knowledge a new human contributor would learn from a senior engineer's pre-PR review. The paper names this mechanism in its Implications section: developers should "provide guidance on how to perform the fix or provide guidance on what approaches are not acceptable in the agent instruction file" ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468v1)). The mechanism matches the [Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) anti-pattern: agents fail when the team's conventions are nowhere in the artifacts the agent reads.
 
 ## When this backfires
 
 Preemption prompts target only the Implementation and Technical-Issue buckets, roughly 17 percentage points of the rejection rate. The remaining 30 or so points either resist prompt intervention or need workflow-side changes:
 
 - Greenfield or single-purpose repos without an established convention set: the instruction file has nothing to encode beyond generic advice, and authoring it costs more than the rejections it prevents.
-- Silent-reject reviewers: 67.9% of rejected PRs carry no reviewer feedback ([arXiv:2602.04226](https://arxiv.org/abs/2602.04226)), so instructions cannot address rejection reasons the reviewer never states.
+- Silent-reject reviewers: 67.9% of rejected PRs carry no reviewer feedback ([arXiv:2602.04226](https://arxiv.org/abs/2602.04226v1)), so instructions cannot address rejection reasons the reviewer never states.
 - Inactivity rejections (17.3% of the sample): reviewer attention and triage cadence drive these, so preemption shifts only the workflow side.
 - Provider-side rejections (agent failure 7.5%, rate limit 1.0%): no prompt can stop the agent from going down or running out of quota.
 - Low-priority and Superseded fixes: a task-routing problem. A better fix does not change the outcome, because the issue should not have gone to an agent at all. See [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) for the productivity-paradox framing.
@@ -102,6 +102,6 @@ The Approach-hints and Approaches-to-avoid blocks target Implementation Issues; 
 ## Sources
 
 - [arXiv:2606.13468](https://arxiv.org/abs/2606.13468) — Abujadallah, Arabat, Sayagh (2026): "Understanding the Rejection of Fixes Generated by Agentic Pull Requests — Insights from the AIDev Dataset" (MSR '26)
-- [arXiv:2602.04226](https://arxiv.org/abs/2602.04226) — companion study of 654 rejected PRs across five agents: 67.9% lack reviewer feedback; seven rejection modes occur only in agent-authored PRs
+- [arXiv:2602.04226](https://arxiv.org/abs/2602.04226v1) — companion study of 654 rejected PRs across five agents: 67.9% lack reviewer feedback; seven rejection modes occur only in agent-authored PRs
 - [arXiv:2507.15003](https://arxiv.org/abs/2507.15003) — AIDev dataset paper, the upstream source for both studies
 - [arXiv:2602.00164](https://arxiv.org/pdf/2602.00164) — companion empirical study with a 65% merge rate on a different sample, illustrating the sample-dependence of the headline figure

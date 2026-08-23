@@ -22,7 +22,7 @@ Related lesson: [The Package That Doesn't Exist](https://learn.agentpatterns.ai/
 
 ## The finding
 
-Wang et al. (May 2026) evaluated 10 LLMs on PinTrace, a 1,000-task Python benchmark drawn from Stack Overflow, checking every generated `requirements.txt`, `pyproject.toml`, and inline `pip install` against the National Vulnerability Database ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279)):
+Wang et al. (May 2026) evaluated 10 LLMs on PinTrace, a 1,000-task Python benchmark drawn from Stack Overflow, checking every generated `requirements.txt`, `pyproject.toml`, and inline `pip install` against the National Vulnerability Database ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279v1)):
 
 - 36.70%-55.70% of tasks include at least one library at a version with a known CVE.
 - All ten models converge on the same small set of risky releases — the failure is systemic, not per-model.
@@ -38,7 +38,7 @@ Specification rate depends on what the model is asked to produce ([arXiv:2605.06
 | Direct prompt ("install X to do Y") | 26.83%-95.18% |
 | Manifest file (`requirements.txt`, `pyproject.toml`) | 6.45%-59.19% |
 
-Manifest files — the surface that actually controls reproducible installs — get versions least often. A study of Developer-ChatGPT conversations found version constraints in only 9% of exchanges, almost always at the user's prompting ([arXiv:2401.16340](https://arxiv.org/abs/2401.16340)).
+Manifest files — the surface that actually controls reproducible installs — get versions least often. A study of Developer-ChatGPT conversations found version constraints in only 9% of exchanges, almost always at the user's prompting ([arXiv:2401.16340](https://arxiv.org/abs/2401.16340v1)).
 
 ## Severity and disclosure cutoff
 
@@ -120,7 +120,7 @@ The model picked the version of each library that dominates Stack Overflow tutor
 
 ## Key Takeaways
 
-- 36.7%-55.7% of LLM-specified library versions carry a known CVE; 62.75%-74.51% of those CVEs are Critical or High severity ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279))
+- 36.7%-55.7% of LLM-specified library versions carry a known CVE; 62.75%-74.51% of those CVEs are Critical or High severity ([arXiv:2605.06279](https://arxiv.org/abs/2605.06279v1))
 - 72.27%-91.37% of the vulnerable versions had CVEs disclosed before the model's training cutoff — the prior is permanently behind the threat landscape
 - All 10 models tested converge on the same risky releases — this is a training-distribution effect, not a per-model defect; switching models does not help
 - Treat agent-written manifests as a hint, not a source of truth — validate against `pip-audit`, Dependabot, or a curated mirror as a blocking CI gate
@@ -138,7 +138,7 @@ The model picked the version of each library that dominates Stack Overflow tutor
 ## Sources
 
 - [arXiv:2605.06279](https://arxiv.org/abs/2605.06279) — Wang et al. (May 2026): "Correct Code, Vulnerable Dependencies: A Large Scale Measurement Study of LLM-Specified Library Versions"
-- [arXiv:2401.16340](https://arxiv.org/abs/2401.16340) — Versions appear in only 9% of Developer-ChatGPT conversations
+- [arXiv:2401.16340](https://arxiv.org/abs/2401.16340v1) — Versions appear in only 9% of Developer-ChatGPT conversations
 - [arXiv:2503.17181](https://arxiv.org/abs/2503.17181) — Library-preference bias, NumPy overuse in up to 45% of cases
 - [GitHub Docs — Dependabot security updates](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-security-updates)
 - [Renovate — Dependency Pinning](https://docs.renovatebot.com/dependency-pinning/)

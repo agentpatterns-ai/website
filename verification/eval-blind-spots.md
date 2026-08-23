@@ -41,7 +41,7 @@ The held-out test gap is a measurement protocol. You author two suites: a valida
 
 Three preconditions must hold or the gap tells you nothing:
 
-- Long task horizon. The gap grows ~28 percentage points per tenfold code-size increase across SpecBench's 30 systems-level tasks (JSON parser to OS kernel). For sub-1K-LOC PR-sized work, the expected gap stays within measurement noise. [Source: [SpecBench](https://arxiv.org/abs/2605.21384)]
+- Long task horizon. The gap grows ~28 percentage points per tenfold code-size increase across SpecBench's 30 systems-level tasks (JSON parser to OS kernel). For sub-1K-LOC PR-sized work, the expected gap stays within measurement noise. [Source: [SpecBench](https://arxiv.org/abs/2605.21384v1)]
 - Stable, frozen specification. You author both suites against the same natural-language spec, without adding requirements during iteration. Drifting specs make gap comparisons across versions meaningless. [Source: [SpecBench Appendix A](https://arxiv.org/html/2605.21384)]
 - Held-out suite outside the agent's tool surface. Modern agents read repo state. If `T_test` lives in the workspace, the protocol degrades to no holdout. EvilGenie hides tests by removing 30% of test cases (up to 10) without telling the agent. [Source: [EvilGenie (Zhao & Riedl, 2026)](https://arxiv.org/abs/2511.21654)]
 
@@ -144,7 +144,7 @@ graph TD
 
 The degradation is not gradual: precision drops faster than pool size grows because near-duplicate and misleading near-match density increases with scale. Take a skill written for "deploying a Python Flask app to AWS ECS" and retrieve it for a "deploy a FastAPI service to AWS ECS" query: it contains correct structural knowledge but wrong specifics, and the agent uses it anyway.
 
-Query-specific skill refinement recovers a substantial portion of the lost performance when the retrieved skill is relevantly related but not precisely matched. The technique adapts the retrieved skill to the actual query — stripping irrelevant sections, substituting correct specifics — before the main agent uses it. Validation on Terminal-Bench 2.0 showed Claude Opus 4.6 pass rate improving from 57.7% to 65.5% with refinement applied, a 7.8 pp gain over baseline that survives realistic retrieval. [Source: [arxiv.org/abs/2604.04323](https://arxiv.org/abs/2604.04323)] Full details are in the companion repository at [github.com/UCSB-NLP-Chang/Skill-Usage](https://github.com/UCSB-NLP-Chang/Skill-Usage).
+Query-specific skill refinement recovers a substantial portion of the lost performance when the retrieved skill is relevantly related but not precisely matched. The technique adapts the retrieved skill to the actual query — stripping irrelevant sections, substituting correct specifics — before the main agent uses it. Validation on Terminal-Bench 2.0 showed Claude Opus 4.6 pass rate improving from 57.7% to 65.5% with refinement applied, a 7.8 pp gain over baseline that survives realistic retrieval. [Source: [arxiv.org/abs/2604.04323v1](https://arxiv.org/abs/2604.04323v1)] Full details are in the companion repository at [github.com/UCSB-NLP-Chang/Skill-Usage](https://github.com/UCSB-NLP-Chang/Skill-Usage).
 
 | Retrieval situation | Action |
 |---------------------|--------|
@@ -166,7 +166,7 @@ A code-changing commit produces three kinds of test work, formalized by TEBench,
 - Test-Stale — still passes but no longer validates the updated behavior; the developer revises it
 - Test-Missing — new behavior has no corresponding test; the developer adds one
 
-In TEBench's 314 tasks across 10 Defects4J projects, 69.7% carry multiple labels and 14.3% exhibit all three. TEBench evaluated seven configurations across Claude Code, Codex CLI, and OpenCode (six base models including Sonnet 4.6, ChatGPT 5.3 Codex, GLM-5, DeepSeek-V3.2). All converge on identification F1 of 45.7%–49.4%. The same Sonnet 4.6 differs by only 1.2 points across Claude Code and OpenCode — the bottleneck is the task formulation, not the model. [Source: [TEBench §4.1, Table 5](https://arxiv.org/abs/2605.06125)]
+In TEBench's 314 tasks across 10 Defects4J projects, 69.7% carry multiple labels and 14.3% exhibit all three. TEBench evaluated seven configurations across Claude Code, Codex CLI, and OpenCode (six base models including Sonnet 4.6, ChatGPT 5.3 Codex, GLM-5, DeepSeek-V3.2). All converge on identification F1 of 45.7%–49.4%. The same Sonnet 4.6 differs by only 1.2 points across Claude Code and OpenCode — the bottleneck is the task formulation, not the model. [Source: [TEBench §4.1, Table 5](https://arxiv.org/abs/2605.06125v1)]
 
 | Configuration | Overall F1 | Test-Stale F1 |
 |---------------|-----------:|--------------:|
@@ -194,7 +194,7 @@ Independent co-evolution research reaches the same diagnosis: execution signals 
 
 ### Test-Stale's collapse in mixed-type tasks and the methodology fix
 
-Test-Stale averages ~36% F1, over 20 points below Test-Breaking, and the drop propagates into mixed tasks. F1 by type composition, averaged across the seven configurations: [Source: [TEBench §4.3, Table 7](https://arxiv.org/abs/2605.06125)]
+Test-Stale averages ~36% F1, over 20 points below Test-Breaking, and the drop propagates into mixed tasks. F1 by type composition, averaged across the seven configurations: [Source: [TEBench §4.3, Table 7](https://arxiv.org/abs/2605.06125v1)]
 
 | Type composition | N | Identification F1 |
 |---|---:|---:|
@@ -205,9 +205,9 @@ Test-Stale averages ~36% F1, over 20 points below Test-Breaking, and the drop pr
 | Stale + Missing | 105 | 34.8% |
 | Stale-only | 33 | 33.1% |
 
-When Stale enters the combination, F1 collapses — except when Missing enters too, because Missing's explicit "behavior was added" signal partially compensates for Stale's signal absence. Even when agents identify the right tests, patches diverge from developer updates: executability runs 87.7%–99.2% but token-Jaccard similarity to ground truth is only 36.4%–70.9%. A 99% executable patch can still embed assertion shapes that diverge from developer intent. [Source: [TEBench §4.2, Table 6](https://arxiv.org/abs/2605.06125)]
+When Stale enters the combination, F1 collapses — except when Missing enters too, because Missing's explicit "behavior was added" signal partially compensates for Stale's signal absence. Even when agents identify the right tests, patches diverge from developer updates: executability runs 87.7%–99.2% but token-Jaccard similarity to ground truth is only 36.4%–70.9%. A 99% executable patch can still embed assertion shapes that diverge from developer intent. [Source: [TEBench §4.2, Table 6](https://arxiv.org/abs/2605.06125v1)]
 
-The methodology fix is a harness change, not a model upgrade: prompt for proactive semantic review (enumerate behavior changes from the diff and challenge each passing test against the new behavior), add coverage-delta gates (unchanged coverage on changed code is a Stale or Missing signal), and decouple termination from "all tests pass" — replace it with explicit per-type completion checks. Scope caveat: results are Java + Defects4J + Maven + JaCoCo and may not transfer to dynamic or I/O-heavy code; the 47% ceiling is the natural-run number, not a tuned upper bound. [Source: [TEBench §3.1, §6](https://arxiv.org/abs/2605.06125)]
+The methodology fix is a harness change, not a model upgrade: prompt for proactive semantic review (enumerate behavior changes from the diff and challenge each passing test against the new behavior), add coverage-delta gates (unchanged coverage on changed code is a Stale or Missing signal), and decouple termination from "all tests pass" — replace it with explicit per-type completion checks. Scope caveat: results are Java + Defects4J + Maven + JaCoCo and may not transfer to dynamic or I/O-heavy code; the 47% ceiling is the natural-run number, not a tuned upper bound. [Source: [TEBench §3.1, §6](https://arxiv.org/abs/2605.06125v1)]
 
 ## Example
 

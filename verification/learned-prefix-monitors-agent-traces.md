@@ -61,7 +61,7 @@ Reported AUPRC across four benchmarks [Source: [Huang et al., *PrefixGuard*](htt
 
 Average lift over raw-text baselines: +0.137 AUPRC.
 
-The headline AUPRC is not the deciding number. The authors flag it: "strong ranking does not imply deployment utility: WebArena ranks well yet fails to support low-false-alarm alerts" [Source: [Huang et al., *PrefixGuard*](https://arxiv.org/abs/2605.06455)]. A monitor with AUPRC 0.9 can still be unusable if precision-at-recall sits where the false-alarm rate exceeds the review budget.
+The headline AUPRC is not the deciding number. The authors flag it: "strong ranking does not imply deployment utility: WebArena ranks well yet fails to support low-false-alarm alerts" [Source: [Huang et al., *PrefixGuard*](https://arxiv.org/abs/2605.06455v1)]. A monitor with AUPRC 0.9 can still be unusable if precision-at-recall sits where the false-alarm rate exceeds the review budget.
 
 ## Where learned monitors beat deterministic guardrails
 

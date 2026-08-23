@@ -34,7 +34,7 @@ Across 21 models from 1.5B to 32B (including o4-mini), headline drops on their R
 | Reward | ~40% | Metadata steering the choice (descriptions, cost annotations) |
 | Transition | ~30% | What happens after the call (HTTP errors, timeouts, malformed responses) |
 
-Scale alone does not close these gaps — a 32B model has the same profile shape as a 1.5B model, only translated [Source: [Zhou et al., 2026](https://arxiv.org/abs/2605.11928)].
+Scale alone does not close these gaps — a 32B model has the same profile shape as a 1.5B model, only translated [Source: [Zhou et al., 2026](https://arxiv.org/abs/2605.11928v1)].
 
 ## The four POMDP components
 
@@ -56,7 +56,7 @@ Two MCP servers with the same tool name freeze the OpenAI Agents SDK — it rais
 
 Perturbations to the metadata that guides tool selection: misleading descriptions, response-time annotations nudging toward worse options, adversarial suffixes or abbreviated names.
 
-This is the largest drop (~40%) [Source: [Zhou et al., 2026](https://arxiv.org/abs/2605.11928)]. Tool descriptions are part of the prompt, so a misleading description is an injected instruction steering selection.
+This is the largest drop (~40%) [Source: [Zhou et al., 2026](https://arxiv.org/abs/2605.11928v1)]. Tool descriptions are part of the prompt, so a misleading description is an injected instruction steering selection.
 
 ### Transition — runtime failures after the call
 
@@ -72,7 +72,7 @@ Reward and transition robustness must be designed. A 40% drop on reward-relevant
 
 ## What domain randomization buys you
 
-Domain randomization, training on perturbed inputs so the real distribution falls inside the trained envelope, is the standard sim-to-real recipe from robotics ([Tobin et al., 2017](https://arxiv.org/abs/1703.06907)). [Zhou et al. (2026)](https://arxiv.org/abs/2605.11928) adapt it as ToolRL-DR: a 3B Qwen2.5 backbone trained with GRPO on 3,984 trajectories across the 16 statically-augmentable perturbation types. Transition perturbations are excluded, because they only happen at runtime.
+Domain randomization, training on perturbed inputs so the real distribution falls inside the trained envelope, is the standard sim-to-real recipe from robotics ([Tobin et al., 2017](https://arxiv.org/abs/1703.06907v1)). [Zhou et al. (2026)](https://arxiv.org/abs/2605.11928v1) adapt it as ToolRL-DR: a 3B Qwen2.5 backbone trained with GRPO on 3,984 trajectories across the 16 statically-augmentable perturbation types. Transition perturbations are excluded, because they only happen at runtime.
 
 ToolRL-DR-Full retains ~75% of clean accuracy under perturbation and closes ~27% of the transition gap without training on transition perturbations — RL on adversarial static inputs induces a persistent retry policy that transfers.
 

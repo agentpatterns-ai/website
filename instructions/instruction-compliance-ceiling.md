@@ -26,7 +26,7 @@ Learn it hands-on: [The Ceiling guided lesson with quizzes](https://learn.agentp
 
 ## The constraint
 
-Instruction sets have a compliance ceiling. Below it, agents follow rules with reasonable precision. Above it, compliance degrades: first imprecisely (modification errors), then not at all (omission errors). Attention distribution — not agent choice — picks which rules get dropped. Even frontier models reach only 68% accuracy at high instruction densities ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
+Instruction sets have a compliance ceiling. Below it, agents follow rules with reasonable precision. Above it, compliance degrades: first imprecisely (modification errors), then not at all (omission errors). Attention distribution — not agent choice — picks which rules get dropped. Even frontier models reach only 68% accuracy at high instruction densities ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1)).
 
 Design instruction sets to stay well below the ceiling. Stating a rule does not guarantee the agent follows it.
 
@@ -59,7 +59,7 @@ Place critical rules first. Do not rely on the agent finding an important rule a
 
 ## Model variation
 
-The compliance ceiling varies by model type. IFScale benchmarking across 20 frontier models identifies three degradation patterns ([IFScale, 2025](https://arxiv.org/abs/2507.11538)):
+The compliance ceiling varies by model type. IFScale benchmarking across 20 frontier models identifies three degradation patterns ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1)):
 
 - Reasoning models (extended thinking): threshold-style — compliance holds until a point, then drops
 - Standard models: roughly linear degradation as rule count grows
@@ -121,7 +121,7 @@ Modification errors happen first: the agent follows a rule's intent but not its 
 
 **Does the compliance ceiling apply the same way to every model?**
 
-No. IFScale benchmarking across 20 frontier models found three distinct degradation patterns: reasoning models hold compliance until a threshold then drop sharply, standard models degrade roughly linearly as rule count grows, and smaller models show steeper curves with earlier failure onset ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). An instruction set that works reliably on one model can fail on another.
+No. IFScale benchmarking across 20 frontier models found three distinct degradation patterns: reasoning models hold compliance until a threshold then drop sharply, standard models degrade roughly linearly as rule count grows, and smaller models show steeper curves with earlier failure onset ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1)). An instruction set that works reliably on one model can fail on another.
 
 **Can splitting instructions into skills and hooks make things worse?**
 

@@ -17,7 +17,7 @@ maturity: emerging
 
 > Cognitive style shapes how developers converse with Copilot — tailoring per-developer configuration only pays back when team size and tool maturity offset the maintenance cost.
 
-A mixed-methods think-aloud study of 27 developers using GitHub Copilot chat identifies five interaction modes and ten underlying needs mapped to problem-solving style and experience ([Richards et al., ICSME 2026](https://arxiv.org/abs/2606.19216)). A single default Copilot/Cursor/Claude Code configuration is implicitly tuned for one cognitive style and silently underperforms for the others.
+A mixed-methods think-aloud study of 27 developers using GitHub Copilot chat identifies five interaction modes and ten underlying needs mapped to problem-solving style and experience ([Richards et al., ICSME 2026](https://arxiv.org/abs/2606.19216v1)). A single default Copilot/Cursor/Claude Code configuration is implicitly tuned for one cognitive style and silently underperforms for the others.
 
 ## Scope and caveats
 
@@ -60,7 +60,7 @@ Persona configuration shifts the input distribution to match each developer's na
 
 Configuration overhead is fixed; the productivity payoff scales with cognitive-style variance. Five conditions where the trade goes the wrong way:
 
-- Small teams (under about 5 active developers). The cognitive-style variance [Richards et al.](https://arxiv.org/abs/2606.19216) measure across 27 strangers is largely absent in a tight team self-selected for one methodology. Shared default plus opt-out wins on total cost of ownership.
+- Small teams (under about 5 active developers). The cognitive-style variance [Richards et al.](https://arxiv.org/abs/2606.19216v1) measure across 27 strangers is largely absent in a tight team self-selected for one methodology. Shared default plus opt-out wins on total cost of ownership.
 - Tools changing rapidly. When the assistant moves from copilot to autonomous agent in 6 to 12 months — current state for Claude Code, Codex, Cursor — copilot-era taxonomies misfire on agent-mode work ([Chen et al., 2026](https://arxiv.org/abs/2507.08149)).
 - Onboarding new developers. Defaulting a new hire into someone else's persona speeds up style alignment but masks whether they'd have developed a more effective style on their own. Pair with [Deliberate AI-Assisted Learning](deliberate-ai-learning.md).
 - Regulated codebases. Per-developer persona drift breaks traceability — which persona, owned by whom, produced which change — at the audit boundary. Single-persona orgs trade productivity for auditability and may be right to.

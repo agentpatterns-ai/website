@@ -55,13 +55,13 @@ The framing matters. The [self-critique paradox](https://snorkel.ai/blog/the-sel
 
 [Ta et al. (2026)](https://arxiv.org/abs/2604.27233) evaluate the pattern on two tool-calling benchmarks:
 
-- [BFCL](https://arxiv.org/abs/2604.27233) (single-turn): +5.5% on irrelevance detection — the reviewer is most useful for catching tool calls that should not have fired at all.
-- [τ2-Bench](https://arxiv.org/abs/2506.07982) (multi-turn, dual-control): +7.1% — the reviewer's value grows with turn count and state complexity.
+- [BFCL](https://arxiv.org/abs/2604.27233v1) (single-turn): +5.5% on irrelevance detection — the reviewer is most useful for catching tool calls that should not have fired at all.
+- [τ2-Bench](https://arxiv.org/abs/2506.07982v1) (multi-turn, dual-control): +7.1% — the reviewer's value grows with turn count and state complexity.
 
 Two findings constrain deployment:
 
-1. Reviewer model choice dominates. Swapping GPT-4o for o3-mini changed the benefit-to-risk ratio from 2.1:1 to 3:1 without touching the base agent ([Ta et al., 2026](https://arxiv.org/abs/2604.27233)). A reviewer that shares the base agent's training distribution inherits its blind spots — [blind-spot research](https://arxiv.org/abs/2507.02778) measured a 64.5% rate when models reviewed their own outputs.
-2. Prompt optimization compounds. Applying [GEPA](gepa-reflective-prompt-evolution.md) to the reviewer prompt added +1.5–2.8% on top of the model swap ([Ta et al., 2026](https://arxiv.org/abs/2604.27233)). You can tune the reviewer independently of the base agent.
+1. Reviewer model choice dominates. Swapping GPT-4o for o3-mini changed the benefit-to-risk ratio from 2.1:1 to 3:1 without touching the base agent ([Ta et al., 2026](https://arxiv.org/abs/2604.27233v1)). A reviewer that shares the base agent's training distribution inherits its blind spots — [blind-spot research](https://arxiv.org/abs/2507.02778) measured a 64.5% rate when models reviewed their own outputs.
+2. Prompt optimization compounds. Applying [GEPA](gepa-reflective-prompt-evolution.md) to the reviewer prompt added +1.5–2.8% on top of the model swap ([Ta et al., 2026](https://arxiv.org/abs/2604.27233v1)). You can tune the reviewer independently of the base agent.
 
 ## When to apply
 

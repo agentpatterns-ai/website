@@ -41,7 +41,7 @@ Routing lookups through one persistent searcher cuts output volume on two axes:
 - Deduplication: a region the searcher has [already covered](semantic-caching-multi-agent.md) is described once, not once per agent.
 - Distillation: the searcher returns file-location references instead of full contents, so each response is shorter.
 
-The expensive axis (output) shrinks while the cheap axis that gets removed is the cached input re-reads. So total cost drops without changing task outcomes. On SWE-Bench Verified, this cut per-episode GPU energy by roughly 25% at equivalent task performance ([Cho et al., 2026](https://arxiv.org/abs/2605.27787)).
+The expensive axis (output) shrinks while the cheap axis that gets removed is the cached input re-reads. So total cost drops without changing task outcomes. On SWE-Bench Verified, this cut per-episode GPU energy by roughly 25% at equivalent task performance ([Cho et al., 2026](https://arxiv.org/abs/2605.27787v1)).
 
 This is the inverse coordination move to [fan-out](sub-agents-fan-out.md). Fan-out isolates each worker's input context but leaves every worker re-exploring. The shared searcher centralizes exploration to remove redundant output.
 
@@ -73,7 +73,7 @@ In several of these cases the cheaper alternative is per-agent observation maski
 
 ## Key Takeaways
 
-- Output tokens cost 30–1,000x input or cached tokens; redundant output is where multi-agent cost concentrates ([Cho et al., 2026](https://arxiv.org/abs/2605.27787)).
+- Output tokens cost 30–1,000x input or cached tokens; redundant output is where multi-agent cost concentrates ([Cho et al., 2026](https://arxiv.org/abs/2605.27787v1)).
 - One persistent searcher deduplicates exploration and returns location references, attacking output volume at both the duplication and verbosity axes.
 - Reported result: ~25% lower per-episode GPU energy at equal SWE-Bench Verified performance.
 - The benefit is conditional — large repos, high overlap, output-dominated work; otherwise the searcher is overhead or a bottleneck.

@@ -28,7 +28,7 @@ Two orchestration strategies sit at opposite ends of a control axis:
 
 [Anthropic's workflows-versus-agents framing](https://www.anthropic.com/engineering/building-effective-agents) describes the same split: workflows orchestrate LLMs through predefined code paths; agents let LLMs direct their own processes. The guidance is simple. Default to workflows for well-defined tasks, and reserve agents for when you cannot predict the required steps.
 
-The empirical case for deterministic orchestration on structured tasks comes from [Lwin and Kumar's controlled study](https://arxiv.org/abs/2605.09894) of COBOL-to-Python modernization. Holding constant models, prompts, tools, and source programs — varying only execution control — deterministic orchestration achieved comparable computational accuracy, improved worst-case robustness across repeated runs, and reduced token consumption by up to 3.5x across multiple models.
+The empirical case for deterministic orchestration on structured tasks comes from [Lwin and Kumar's controlled study](https://arxiv.org/abs/2605.09894v1) of COBOL-to-Python modernization. Holding constant models, prompts, tools, and source programs — varying only execution control — deterministic orchestration achieved comparable computational accuracy, improved worst-case robustness across repeated runs, and reduced token consumption by up to 3.5x across multiple models.
 
 ## When the pattern applies
 
@@ -52,7 +52,7 @@ graph TD
 
 Two mechanisms explain the cost and robustness gap.
 
-The first is token amplification. An LLM-controlled orchestrator consumes context — instructions, tool registry, prior tool calls, reasoning traces — on every step, even when the step is mechanical. A deterministic orchestrator invokes the model only on steps that need one, replacing N full-context turns with K << N targeted prompts. The 3.5x token reduction reported by [Lwin and Kumar](https://arxiv.org/abs/2605.09894) is consistent with this mechanism.
+The first is token amplification. An LLM-controlled orchestrator consumes context — instructions, tool registry, prior tool calls, reasoning traces — on every step, even when the step is mechanical. A deterministic orchestrator invokes the model only on steps that need one, replacing N full-context turns with K << N targeted prompts. The 3.5x token reduction reported by [Lwin and Kumar](https://arxiv.org/abs/2605.09894v1) is consistent with this mechanism.
 
 The second is variance reduction. LLM-controlled orchestration introduces a stochastic branch at every decision point — which tool, what arguments, when to stop. These compound across steps, widening the outcome distribution. Fixing branches in code collapses that distribution to the variance of the model call itself, which is why worst-case robustness improves without average-case accuracy dropping.
 
@@ -109,7 +109,7 @@ In the LLM-controlled equivalent, the model decides whether to parse first, when
 
 - Encode orchestration in code when the workflow shape is stable and runs many times; reserve LLM control for genuinely open-ended tasks
 - The mechanism is token amplification and variance reduction, not "LLMs are bad at orchestration" — the model is still load-bearing for the translation step
-- Empirical evidence: comparable accuracy, improved worst-case robustness, up to 3.5x lower tokens on COBOL-to-Python ([Lwin & Kumar, 2026](https://arxiv.org/abs/2605.09894))
+- Empirical evidence: comparable accuracy, improved worst-case robustness, up to 3.5x lower tokens on COBOL-to-Python ([Lwin & Kumar, 2026](https://arxiv.org/abs/2605.09894v1))
 - The pattern breaks on heterogeneous corpora, evolving workflows, mid-execution discovery, and one-off jobs — match orchestration strategy to task structure, not to fashion
 - For exploratory or open-ended tasks, [Anthropic recommends LLM-controlled agents](https://www.anthropic.com/engineering/building-effective-agents); the two strategies are complementary, not competing
 

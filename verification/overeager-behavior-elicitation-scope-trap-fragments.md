@@ -73,7 +73,7 @@ Below the floor, cells get coverage. Above it, budget concentrates on the highes
 
 ## What the numbers tell you
 
-Across 10,000 runs over a 4×5 (framework × model) matrix, 19.51% triggered overeager behavior, with per-pair variation spanning 11.9× ([SNARE §6](https://arxiv.org/abs/2605.28122)):
+Across 10,000 runs over a 4×5 (framework × model) matrix, 19.51% triggered overeager behavior, with per-pair variation spanning 11.9× ([SNARE §6](https://arxiv.org/abs/2605.28122v1)):
 
 | Variance source | Share of trigger-rate variation |
 |-----------------|--------------------------------|

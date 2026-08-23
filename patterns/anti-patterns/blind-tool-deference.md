@@ -22,7 +22,7 @@ status: current
 
 ## The anti-pattern
 
-You expect an LLM agent to exercise judgment over a callable tool: pick the right one, weigh the answer against context, and override it when other signals disagree. Test that with a frozen GNN exposed as a tool to a ReAct-style agent on node classification (ogbn-arxiv, replicated on WikiCS), and agreement with the raw tool output sits at 97.6-99.2% across 5 seeds. The agent collapses into a "GNN parrot" that bypasses its own reasoning ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)).
+You expect an LLM agent to exercise judgment over a callable tool: pick the right one, weigh the answer against context, and override it when other signals disagree. Test that with a frozen GNN exposed as a tool to a ReAct-style agent on node classification (ogbn-arxiv, replicated on WikiCS), and agreement with the raw tool output sits at 97.6-99.2% across 5 seeds. The agent collapses into a "GNN parrot" that bypasses its own reasoning ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476v1)).
 
 The capability sweep breaks intuition. On Qwen2.5 from 1.5B to 7B, agreement rises from 0.60 to 0.98 — stronger backbones defer more, not less ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)). "Use a bigger model to get better tool judgment" fails here.
 
@@ -43,7 +43,7 @@ graph LR
     style D fill:#b60205,color:#fff
 ```
 
-The author-stated limit closes the loop: "reliable selective invocation looks limited by available information, not merely router design" ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)). The agent cannot judge what it has no second source for.
+The author-stated limit closes the loop: "reliable selective invocation looks limited by available information, not merely router design" ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476v1)). The agent cannot judge what it has no second source for.
 
 ## Example
 
@@ -90,7 +90,7 @@ The pattern is a problem specifically when (a) the tool has known unreliability 
 
 ## Key Takeaways
 
-- Wrapping a deterministic tool in an LLM agent does not add a judgment layer. Empirical agreement on a GNN-tool setup is 97.6-99.2%; treat the agent as a narrator, not a reviewer ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)).
+- Wrapping a deterministic tool in an LLM agent does not add a judgment layer. Empirical agreement on a GNN-tool setup is 97.6-99.2%; treat the agent as a narrator, not a reviewer ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476v1)).
 - Capability scaling makes deference worse, not better — agreement climbs from 0.60 to 0.98 across 1.5B → 7B. A bigger backbone is not the fix ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)).
 - Verification needs an orthogonal signal. If nothing in scope could contradict the tool, add a second source or a calibrated confidence stream — prompting the agent to "be critical" of a tool it has no way to disagree with is performance, not safety.
 - The same shape applies to linters, type checkers, SAST scanners, and classifier sub-agents — anywhere a confident structured return reaches an agent without a second source.

@@ -18,7 +18,7 @@ maturity: emerging
 
 Related lesson: [Configuration Smells in AGENTS.md](https://learn.agentpatterns.ai/anti-patterns/configuration-smells/) — this concept features in a hands-on lesson with quizzes.
 
-CLAUDE.md, AGENTS.md, and `.cursorrules` are documentation. They describe code elements, paths, and conventions to a downstream reader, and they decay the same way every other documentation artifact decays as code evolves around them. Treude & Baltes (June 2026) call this drift context rot. They retargeted an off-the-shelf README/wiki consistency checker at AI configuration files in 356 repositories, and it flagged stale code element references in 23% of them ([arxiv 2606.09090](https://arxiv.org/abs/2606.09090)).
+CLAUDE.md, AGENTS.md, and `.cursorrules` are documentation. They describe code elements, paths, and conventions to a downstream reader, and they decay the same way every other documentation artifact decays as code evolves around them. Treude & Baltes (June 2026) call this drift context rot. They retargeted an off-the-shelf README/wiki consistency checker at AI configuration files in 356 repositories, and it flagged stale code element references in 23% of them ([arxiv 2606.09090](https://arxiv.org/abs/2606.09090v1)).
 
 ## Disambiguation
 
@@ -39,7 +39,7 @@ Severity compounds. A human reads a stale reference in a README and notices it. 
 
 ## Why it works (the remediation mechanism)
 
-The Treude & Baltes contribution is mechanistic. AI configuration artifacts are documentation in function, so the consistency tooling studied for decades against READMEs, code comments, API docs, and architecture descriptions applies unchanged when retargeted at the new file glob ([arxiv 2606.09090](https://arxiv.org/abs/2606.09090)). Existing checkers parse code element references out of the artifact and verify each still resolves against the current codebase — failing CI on a stale reference the same way a unit test fails on a broken contract. The 23%-of-356-repos result is the load-bearing evidence that the technique transfers.
+The Treude & Baltes contribution is mechanistic. AI configuration artifacts are documentation in function, so the consistency tooling studied for decades against READMEs, code comments, API docs, and architecture descriptions applies unchanged when retargeted at the new file glob ([arxiv 2606.09090](https://arxiv.org/abs/2606.09090v1)). Existing checkers parse code element references out of the artifact and verify each still resolves against the current codebase — failing CI on a stale reference the same way a unit test fails on a broken contract. The 23%-of-356-repos result is the load-bearing evidence that the technique transfers.
 
 ## When this backfires
 
@@ -65,11 +65,11 @@ Six weeks later: `src/auth/` was rewritten as `src/identity/`, `verifyToken()` w
 
 After — code-element references treated as a consistency contract:
 
-The shape Treude & Baltes apply in [the paper](https://arxiv.org/abs/2606.09090) is a CI step that parses code element references out of the configuration artifact, verifies each resolves against the current codebase, and fails the build on a miss — the same mechanism a README/wiki consistency checker uses, retargeted at the `CLAUDE.md` / `AGENTS.md` file glob. The fix when the check fails is mechanical: rename the references when the code moves, before the agent ever loads the stale file. The paper validates this shape against 356 repos; an in-project implementation is a small parser plus an existence check, not a new tool category.
+The shape Treude & Baltes apply in [the paper](https://arxiv.org/abs/2606.09090v1) is a CI step that parses code element references out of the configuration artifact, verifies each resolves against the current codebase, and fails the build on a miss — the same mechanism a README/wiki consistency checker uses, retargeted at the `CLAUDE.md` / `AGENTS.md` file glob. The fix when the check fails is mechanical: rename the references when the code moves, before the agent ever loads the stale file. The paper validates this shape against 356 repos; an in-project implementation is a small parser plus an existence check, not a new tool category.
 
 ## Key Takeaways
 
-- CLAUDE.md and AGENTS.md are documentation; they decay like documentation. The empirical rate is 23% of repos in a 356-repo sample carrying stale code element references ([arxiv 2606.09090](https://arxiv.org/abs/2606.09090)).
+- CLAUDE.md and AGENTS.md are documentation; they decay like documentation. The empirical rate is 23% of repos in a 356-repo sample carrying stale code element references ([arxiv 2606.09090](https://arxiv.org/abs/2606.09090v1)).
 - Existing README/API-doc consistency checkers retarget cleanly at AI configuration artifacts — the underlying problem is decades old.
 - "Context rot" is overloaded — this page is about artifact drift, not in-context-window attention degradation; do not conflate them.
 - Minimization is a complementary remediation: configs that contain no code references cannot rot. Consider stripping over policing where the file is verbose for no compliance gain.

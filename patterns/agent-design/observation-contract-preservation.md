@@ -19,7 +19,7 @@ maturity: emerging
 
 > An *observation contract* is tool output an external system later validates by exact bytes or expiry — preserve it verbatim or the chain breaks silently.
 
-An observation contract is any tool output that an external system will later validate by exact bytes, by a timestamp, or by a one-use rule. When the agent reasons about the artifact instead of carrying it verbatim, the second call breaks — even if every individual step looks correct in isolation. The benchmark that defines the term, [ContractBench](https://arxiv.org/abs/2605.17281), found no frontier model clears 80% on contract preservation across 38 evaluated models, with the best score 77.8% (Claude Opus 4.6).
+An observation contract is any tool output that an external system will later validate by exact bytes, by a timestamp, or by a one-use rule. When the agent reasons about the artifact instead of carrying it verbatim, the second call breaks — even if every individual step looks correct in isolation. The benchmark that defines the term, [ContractBench](https://arxiv.org/abs/2605.17281v1), found no frontier model clears 80% on contract preservation across 38 evaluated models, with the best score 77.8% (Claude Opus 4.6).
 
 ## When this pattern applies
 
@@ -46,7 +46,7 @@ The two are independent — a model that hands back the exact URL can still call
 
 Three controls preserve contracts across an LLM turn:
 
-1. Mark contract-bound fields in the tool description. Name the contract explicitly — `presigned_url (opaque, expires 15m, use verbatim)` — and the model is more likely to carry it untouched. ContractBench found that feeding the failure-class label back as an in-context signal lifts paired-failure performance by +7.1 pp on GPT-5.1 ([ContractBench paper](https://arxiv.org/abs/2605.17281)).
+1. Mark contract-bound fields in the tool description. Name the contract explicitly — `presigned_url (opaque, expires 15m, use verbatim)` — and the model is more likely to carry it untouched. ContractBench found that feeding the failure-class label back as an in-context signal lifts paired-failure performance by +7.1 pp on GPT-5.1 ([ContractBench paper](https://arxiv.org/abs/2605.17281v1)).
 2. Quote artifacts in tool I/O, not in prose. Reference fields by key (`response.url`) in plans, and only emit the bytes inside the next tool call's argument slot. Reasoning-tuned models hallucinate tool outputs more often than base models ([Yin et al., 2025](https://arxiv.org/abs/2510.22977)).
 3. Stamp issuance time. Capture `issued_at` next to the artifact so the agent can reason about freshness. Without an explicit timestamp, long-horizon chains and context compaction strip the original time and the agent calls past expiry.
 
@@ -63,7 +63,7 @@ graph LR
 
 ## Why it works
 
-Contract failures are mechanical, not capability-bound. [ContractBench](https://arxiv.org/abs/2605.17281) attributes failure to two causes. First, tokenization and re-emission normalize byte-level fields (URL-encoding, whitespace, smart quotes, base64 padding) breaking signatures even when the model intends to copy verbatim. Second, long-horizon reasoning loses the issuance timestamp, so the freshness check has no anchor and the agent calls past expiry. The +7.1 pp lift from feeding failure-class labels back in-context is direct evidence the model can preserve contracts when told the field is contract-bound, but does not infer this from generic descriptions. The same paper documents non-monotonic scaling across the GPT-5 family, where agentic post-training can erode compliance through sycophancy-driven regression. Bigger is not safer. Explicit labels are.
+Contract failures are mechanical, not capability-bound. [ContractBench](https://arxiv.org/abs/2605.17281v1) attributes failure to two causes. First, tokenization and re-emission normalize byte-level fields (URL-encoding, whitespace, smart quotes, base64 padding) breaking signatures even when the model intends to copy verbatim. Second, long-horizon reasoning loses the issuance timestamp, so the freshness check has no anchor and the agent calls past expiry. The +7.1 pp lift from feeding failure-class labels back in-context is direct evidence the model can preserve contracts when told the field is contract-bound, but does not infer this from generic descriptions. The same paper documents non-monotonic scaling across the GPT-5 family, where agentic post-training can erode compliance through sycophancy-driven regression. Bigger is not safer. Explicit labels are.
 
 ## When this backfires
 

@@ -27,7 +27,7 @@ Developers underestimate this for three reasons.
 
 They test in clean environments. Evaluation uses curated inputs. Indirect injection arrives through retrieval paths that tests rarely exercise — a README, a search result, a database record.
 
-They treat system prompt instructions as security controls. "Ignore external instructions" is a preference, not a control. A meta-analysis of 78 studies found that adaptive attacks exceed 85% success against the best current defenses. ([Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548))
+They treat system prompt instructions as security controls. "Ignore external instructions" is a preference, not a control. A meta-analysis of 78 studies found that adaptive attacks exceed 85% success against the best current defenses. ([Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548v1))
 
 They confuse capability with safety. Correct behavior in normal operation says nothing about behavior under adversarial input. Helpfulness and injection resistance are independent.
 

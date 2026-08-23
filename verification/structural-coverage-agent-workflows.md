@@ -58,7 +58,7 @@ graph TD
     G --> C
 ```
 
-The budget is bounded. Scenarios witnessed 54 of 75 allowed-tool obligations (72%) and 36 of 48 delegation obligations (75%). Unwitnessed obligations are not always bugs. They may mark dead spec, infeasible edges, or unrealizable scenarios. Triage them; do not fail the build on them. (All figures: [arXiv:2605.26521](https://arxiv.org/abs/2605.26521).)
+The budget is bounded. Scenarios witnessed 54 of 75 allowed-tool obligations (72%) and 36 of 48 delegation obligations (75%). Unwitnessed obligations are not always bugs. They may mark dead spec, infeasible edges, or unrealizable scenarios. Triage them; do not fail the build on them. (All figures: [arXiv:2605.26521](https://arxiv.org/abs/2605.26521v1).)
 
 ## Independent corroboration
 

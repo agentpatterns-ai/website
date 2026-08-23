@@ -45,7 +45,7 @@ The axios attack of 2026-03-31 is the empirical demonstration: malicious version
 
 `npm install <pkg>` writes `^<version>` to `package.json` unless you set `save-exact=true` in `.npmrc`. This has been the npm default since the 1.x era ([npm config — `save-prefix`](https://docs.npmjs.com/cli/v11/using-npm/config#save-prefix); [bytearcher: semver caret explainer](https://bytearcher.com/articles/semver-explained-why-theres-a-caret-in-my-package-json/)). Agents that shell out to `npm install`, or that copy from Stack Overflow and tutorial training data, inherit that default. The same reflex appears for tilde in Composer and for unbounded ranges in older `pip` snippets.
 
-Compounding the issue: AI assistants specify a version in only ~9% of Developer-ChatGPT conversations and 6.45–59.19% of manifest tasks ([arXiv:2401.16340](https://arxiv.org/abs/2401.16340); [arXiv:2605.06279](https://arxiv.org/abs/2605.06279)). When they do, they reach for the install-command default. Lockfile commits are also frequently missing from agent-authored PRs, leaving CI to resolve fresh.
+Compounding the issue: AI assistants specify a version in only ~9% of Developer-ChatGPT conversations and 6.45–59.19% of manifest tasks ([arXiv:2401.16340](https://arxiv.org/abs/2401.16340v1); [arXiv:2605.06279](https://arxiv.org/abs/2605.06279v1)). When they do, they reach for the install-command default. Lockfile commits are also frequently missing from agent-authored PRs, leaving CI to resolve fresh.
 
 ## What to change
 
@@ -61,7 +61,7 @@ Compounding the issue: AI assistants specify a version in only ~9% of Developer-
 ## When this backfires
 
 - Libraries and SDKs. Exact pins in a published library's manifest propagate conflicting constraints to every consumer. Renovate documents this case explicitly: `rangeStrategy=widen` for libraries, `rangeStrategy=pin` for applications ([Renovate docs](https://docs.renovatebot.com/dependency-pinning/)). Apply this pattern to applications only.
-- Very large transitive graphs. He, Vasilescu and Kästner's FSE 2025 study simulated dependency resolutions across the npm registry over a 12-month window. It found that pinning direct dependencies is ineffective against malicious transitive updates for projects with ≥498 direct+transitive dependencies — 26% of GitHub repositories in their dataset ([arXiv:2502.06662](https://arxiv.org/abs/2502.06662)). At this scale, pinning the manifest does not close the attack surface. Pair the pattern with `min-release-age`, a curated mirror, or scanner-as-MCP-server gating ([Scanner-as-MCP-Server](scanner-as-mcp-server.md)) to cover the transitive frontier.
+- Very large transitive graphs. He, Vasilescu and Kästner's FSE 2025 study simulated dependency resolutions across the npm registry over a 12-month window. It found that pinning direct dependencies is ineffective against malicious transitive updates for projects with ≥498 direct+transitive dependencies — 26% of GitHub repositories in their dataset ([arXiv:2502.06662](https://arxiv.org/abs/2502.06662v1)). At this scale, pinning the manifest does not close the attack surface. Pair the pattern with `min-release-age`, a curated mirror, or scanner-as-MCP-server gating ([Scanner-as-MCP-Server](scanner-as-mcp-server.md)) to cover the transitive frontier.
 - No bump-bot in the loop. Exact pins without Dependabot or Renovate age silently — the manifest stops tracking upstream security patches and accumulates known CVEs ([LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md)). The exact-pin recommendation requires the auto-update feedback loop to be net-positive.
 - Throwaway prototypes. Lockfile-enforced installs and pin-everything discipline add friction for code that never leaves a laptop. The pattern targets deployable applications, not scratch scripts.
 - Ecosystems with strong default lockfile discipline. `cargo` ships `Cargo.lock` discipline. `uv add` already writes a resolved entry to `uv.lock`. When the install command (`cargo build --locked`, `uv sync`) already enforces the lockfile, the agent's range in the manifest is harmless. The fix here is "commit and enforce the lockfile" — not "rewrite the manifest".
@@ -108,7 +108,7 @@ The next `npm install <pkg>` an agent runs writes `1.12.0`, not `^1.12.0`. CI in
 - Agents emit `^` ranges because `npm install` writes `^` by default — fix the default with `save-exact=true` in project `.npmrc`, not page-by-page in manifests ([npm config docs](https://docs.npmjs.com/cli/v11/using-npm/config#save-prefix)).
 - The trust boundary needs both halves: exact pin in the manifest and lockfile-enforced install (`npm ci`, `uv sync`, `cargo build --locked`). Either alone leaks ([Sourcegraph](https://sourcegraph.com/blog/dependency-prefix-supply-chain-risk); [npm docs — `npm ci`](https://docs.npmjs.com/cli/v11/commands/npm-ci)).
 - The pattern applies to applications with a bump-bot wired. Libraries and bot-less repos are the documented failure modes — Renovate recommends `widen` for libraries, and the [LLM-Pinned Library Versions](llm-pinned-vulnerable-versions.md) failure is pinning without bumping.
-- Pinning is not enough on its own at scale: He et al. (FSE 2025) found it ineffective against transitive attacks for 26% of GitHub repos. Pair it with `min-release-age` or a curated mirror for the transitive frontier ([arXiv:2502.06662](https://arxiv.org/abs/2502.06662)).
+- Pinning is not enough on its own at scale: He et al. (FSE 2025) found it ineffective against transitive attacks for 26% of GitHub repos. Pair it with `min-release-age` or a curated mirror for the transitive frontier ([arXiv:2502.06662](https://arxiv.org/abs/2502.06662v1)).
 - This is the range-vs-exact axis. The orthogonal axis — exact pins that point at CVE-bearing versions because the training prior preferred them — is [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md). A hardened pipeline addresses both.
 
 ## Related
@@ -124,12 +124,12 @@ The next `npm install <pkg>` an agent runs writes `1.12.0`, not `^1.12.0`. CI in
 ## Sources
 
 - [Sourcegraph: "Dependency prefixes are a supply chain risk: let's fix them"](https://sourcegraph.com/blog/dependency-prefix-supply-chain-risk) (2026-05-22) — primary thesis on range prefixes as a trust-boundary problem
-- [arXiv:2502.06662 — He, Vasilescu, Kästner: "Pinning Is Futile" (FSE 2025)](https://arxiv.org/abs/2502.06662) — counter-finding: pinning ineffective against transitive attacks for ≥498-dep projects (26% of GitHub repos)
+- [arXiv:2502.06662 — He, Vasilescu, Kästner: "Pinning Is Futile" (FSE 2025)](https://arxiv.org/abs/2502.06662v1) — counter-finding: pinning ineffective against transitive attacks for ≥498-dep projects (26% of GitHub repos)
 - [Renovate — Should you Pin your JavaScript Dependencies?](https://docs.renovatebot.com/dependency-pinning/) — codifies the application-vs-library split (`rangeStrategy=pin` vs `widen`)
 - [OWASP NPM Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/NPM_Security_Cheat_Sheet.html) — independent confirmation of `save-exact` + `npm ci` recommendation
 - [Echo Effect: Axios Supply Chain Attack](https://www.echoeffect.net/blog/axios-npm-supply-chain-attack) — empirical case study, 2026-03-31 three-hour exposure window
 - [TurboDocx: The Axios Supply Chain Attack](https://www.turbodocx.com/blog/axios-npm-supply-chain-attack-how-to-protect-your-projects) — corroborating post-mortem
-- [arXiv:2605.06279 — Wang et al.: LLM library-version specification rates](https://arxiv.org/abs/2605.06279) — 6.45–59.19% of manifest tasks pin a version at all
-- [arXiv:2401.16340 — Versions appear in only ~9% of Developer-ChatGPT conversations](https://arxiv.org/abs/2401.16340)
+- [arXiv:2605.06279 — Wang et al.: LLM library-version specification rates](https://arxiv.org/abs/2605.06279v1) — 6.45–59.19% of manifest tasks pin a version at all
+- [arXiv:2401.16340 — Versions appear in only ~9% of Developer-ChatGPT conversations](https://arxiv.org/abs/2401.16340v1)
 - [npm CLI docs — `npm ci`](https://docs.npmjs.com/cli/v11/commands/npm-ci) — lockfile-enforcing install command semantics
 - [npm CLI docs — `save-prefix` config](https://docs.npmjs.com/cli/v11/using-npm/config#save-prefix) — default prefix is `^` since the 1.x era

@@ -76,7 +76,7 @@ The rule-based variant runs detectors with "nearly zero library-time LLM calls" 
 
 ## Reported results
 
-On ALFWorld (185 instances, three seeds), SkillOps reaches 79.5% standalone success, +8.8 points over the strongest baseline. As a plug-in it adds +0.68 to +2.90 points; at a 2000-skill library it held 80.5% while baselines degraded. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
+On ALFWorld (185 instances, three seeds), SkillOps reaches 79.5% standalone success, +8.8 points over the strongest baseline. As a plug-in it adds +0.68 to +2.90 points; at a 2000-skill library it held 80.5% while baselines degraded. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716v1)]
 
 Those gains are method-conditional. The paper finds retrieval-only agents benefit most, LLM-planning agents stay flat, and self-repairing agents may conflict with external maintenance: when a honing loop like SkillWeaver would recover a degraded skill at execution, library-time maintenance may retire that candidate first, so the strategies fight. Library-time repair is not strictly superior — match the maintenance layer to how the agent recovers. [Source: [SkillOps arxiv:2605.13716](https://arxiv.org/abs/2605.13716)]
 

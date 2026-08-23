@@ -22,7 +22,7 @@ maturity: established
 
 Adding "think step by step" to a code-gen prompt is often treated as strictly additive. Empirical work on prompt perturbation shows that assumption fails in measurable ways.
 
-Liu et al. tested four code LLMs on MHPP and BigCodeBench with seven perturbation types at character, word, and sentence levels. Their summary: "CoT is not universally beneficial for code generation robustness; its value depends on how perturbations interact with structurally sensitive anchors." [Source: [Liu et al., *Structural Anchors and Reasoning Fragility*, 2026](https://arxiv.org/abs/2604.12214)]
+Liu et al. tested four code LLMs on MHPP and BigCodeBench with seven perturbation types at character, word, and sentence levels. Their summary: "CoT is not universally beneficial for code generation robustness; its value depends on how perturbations interact with structurally sensitive anchors." [Source: [Liu et al., *Structural Anchors and Reasoning Fragility*, 2026](https://arxiv.org/abs/2604.12214v1)]
 
 Concrete results from the same study: [Source: [Liu et al., §5](https://arxiv.org/html/2604.12214)]
 

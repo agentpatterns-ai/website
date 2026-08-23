@@ -18,7 +18,7 @@ maturity: emerging
 
 > LLM self-review of its own code modernization misses ~31.7% of silent semantic drift, and the miss rate does not improve with model capability.
 
-Self-review by the producing model is not a reliable safety check for code modernization. Across 1,980 Python 2→3 attempts on 11 production LLMs, self-review missed 31.7% of behavior-changing outputs. That includes cases where the same model articulated the exact Py2/Py3 semantic distinction that broke the code, then certified it as preserving behavior ([Reddy et al., arXiv:2605.21537](https://arxiv.org/abs/2605.21537)).
+Self-review by the producing model is not a reliable safety check for code modernization. Across 1,980 Python 2→3 attempts on 11 production LLMs, self-review missed 31.7% of behavior-changing outputs. That includes cases where the same model articulated the exact Py2/Py3 semantic distinction that broke the code, then certified it as preserving behavior ([Reddy et al., arXiv:2605.21537](https://arxiv.org/abs/2605.21537v1)).
 
 ## The pattern
 
@@ -26,7 +26,7 @@ Modernization agents typically generate the migrated code, then ask the same mod
 
 ## Why it fails
 
-The primary study measured drift in 39.7% of attempts on "semantic-trap" snippets — Py2 code where naive modernization changes observable behavior — versus 7.0% on controls. On drift cases, asking the producing model to verify its own output caught only 68.3% ([Reddy et al., arXiv:2605.21537](https://arxiv.org/abs/2605.21537)).
+The primary study measured drift in 39.7% of attempts on "semantic-trap" snippets — Py2 code where naive modernization changes observable behavior — versus 7.0% on controls. On drift cases, asking the producing model to verify its own output caught only 68.3% ([Reddy et al., arXiv:2605.21537](https://arxiv.org/abs/2605.21537v1)).
 
 Three findings make this structural, not a model-quality gap:
 
@@ -65,7 +65,7 @@ def migrate(snippet: str, model) -> str:
     raise ValueError("Self-review rejected migration")
 ```
 
-The same model that produced `migrated` certifies it. On semantic-trap snippets this misses 31.7% of drift cases ([Reddy et al., arXiv:2605.21537](https://arxiv.org/abs/2605.21537)).
+The same model that produced `migrated` certifies it. On semantic-trap snippets this misses 31.7% of drift cases ([Reddy et al., arXiv:2605.21537](https://arxiv.org/abs/2605.21537v1)).
 
 After — independent verifier plus behavioral test:
 

@@ -35,7 +35,7 @@ ShareLock works in three steps ([Zhao et al., 2026](https://arxiv.org/abs/2606.2
 | Distribute | Evaluate the polynomial at n points; embed each value as numeric metadata (tool_id, checksum fields) in a separate tool description | Inert numeric fields with normal entropy |
 | Trigger | Push a server update that adds an EnvSetup tool disguised as initialization; the trigger asks the LLM to collect t shares and apply Lagrange interpolation | A new tool that looks like routine setup |
 
-In experiments using (t=2, n=5) across four scenarios — travel (94.5%), coding (92.0%), finance (96.0%), office (94.0%) — the attack reached an overall 94.1% attack success rate at three attempts against Gemini-2.5-Flash, DeepSeek-V3.1/V3.2, and Qwen3-235B-Thinking through Cherry Studio (v1.5.11) and Cline (v3.35.0) MCP clients ([Zhao et al., 2026](https://arxiv.org/abs/2606.27027)).
+In experiments using (t=2, n=5) across four scenarios — travel (94.5%), coding (92.0%), finance (96.0%), office (94.0%) — the attack reached an overall 94.1% attack success rate at three attempts against Gemini-2.5-Flash, DeepSeek-V3.1/V3.2, and Qwen3-235B-Thinking through Cherry Studio (v1.5.11) and Cline (v3.35.0) MCP clients ([Zhao et al., 2026](https://arxiv.org/abs/2606.27027v1)).
 
 ## Why detection fails
 

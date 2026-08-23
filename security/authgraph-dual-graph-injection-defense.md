@@ -19,7 +19,7 @@ maturity: emerging
 
 > A dual-graph defense compares a clean authorization graph from user intent against an execution-trace provenance graph; structural divergence flags injection-driven tool calls.
 
-Use this defense when an agent calls tools on attacker-controllable observations and the deployment can absorb a 4.23× token and 1.87× latency overhead for a 1–2% residual attack success rate ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)). It does not cover same-observation pollution, multi-agent handoffs, or adaptive attacks on the LLM-judged layers — all covered below.
+Use this defense when an agent calls tools on attacker-controllable observations and the deployment can absorb a 4.23× token and 1.87× latency overhead for a 1–2% residual attack success rate ([Wang et al., 2026](https://arxiv.org/abs/2605.26497v1)). It does not cover same-observation pollution, multi-agent handoffs, or adaptive attacks on the LLM-judged layers — all covered below.
 
 ## How it works
 
@@ -57,7 +57,7 @@ graph LR
 
 ## Why it works
 
-The authorization graph carries no channel capacity from untrusted input. The Planner LLM sees only the user prompt and tool catalog, never a tool return, document, or inter-agent message — the paper's Property 1, "information-theoretic independence of any injected content" ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)). That gives the Checker a contamination-free reference, so divergence points to the only side that sees attacker content. Single-graph defenses like [ARGUS influence auditing](provenance-aware-decision-auditing.md) lack this baseline. They must trace per-span trust through the graph the attacker can perturb ([Weng et al., 2026](https://arxiv.org/abs/2605.03378)).
+The authorization graph carries no channel capacity from untrusted input. The Planner LLM sees only the user prompt and tool catalog, never a tool return, document, or inter-agent message — the paper's Property 1, "information-theoretic independence of any injected content" ([Wang et al., 2026](https://arxiv.org/abs/2605.26497v1)). That gives the Checker a contamination-free reference, so divergence points to the only side that sees attacker content. Single-graph defenses like [ARGUS influence auditing](provenance-aware-decision-auditing.md) lack this baseline. They must trace per-span trust through the graph the attacker can perturb ([Weng et al., 2026](https://arxiv.org/abs/2605.03378)).
 
 ## Where it sits on the security-utility frontier
 
@@ -71,7 +71,7 @@ On AgentDojo (GPT-4o-mini) ([Wang et al., 2026](https://arxiv.org/abs/2605.26497
 | Progent | 0.02 | 0.64 |
 | DRIFT | 0.03 | 0.52 |
 
-On AgentDyn (dynamic tasks), AuthGraph holds 0.02 ASR / 0.37 UR while CaMeL collapses to 0.00 UR — strict control/data separation cannot accommodate runtime tool extension ([Wang et al., 2026](https://arxiv.org/abs/2605.26497)). Overhead: 4.61 s latency (1.87×) and 47.4 K tokens/task (4.23× the 11.2 K baseline) — cheaper than CaMeL's 9.21×, above Progent's 1.61×.
+On AgentDyn (dynamic tasks), AuthGraph holds 0.02 ASR / 0.37 UR while CaMeL collapses to 0.00 UR — strict control/data separation cannot accommodate runtime tool extension ([Wang et al., 2026](https://arxiv.org/abs/2605.26497v1)). Overhead: 4.61 s latency (1.87×) and 47.4 K tokens/task (4.23× the 11.2 K baseline) — cheaper than CaMeL's 9.21×, above Progent's 1.61×.
 
 ## When this backfires
 
@@ -82,7 +82,7 @@ The authors list four boundary conditions ([Wang et al., 2026](https://arxiv.org
 - Liberal replan whitelists. `replan_allowed_tools` opens a controlled trust boundary. An attacker can compose harmful sequences entirely inside the whitelist — the Checker sees nothing extra, but the attack completes. Keep whitelists narrow.
 - Cost-bounded workloads. The 4.23× token and 1.87× latency cost rules out high-throughput or low-cost agents. For fixed-action flows, the [action-selector pattern](action-selector-pattern.md) covers the same risk at near-zero overhead.
 
-Two further caveats: defenses scored on fixed attack suites degrade under adaptive pressure ([Nasr et al., 2025](https://arxiv.org/abs/2510.09023)), and L2/L3 are LLM-judged — themselves an adaptive attack surface — so treat the 0.01–0.02 ASR as a ceiling. And Plan-Then-Execute "does not prevent prompt injections contained in the user prompt itself" ([Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)); an attacker-influenced user prompt (relayed instructions, public-channel voice transcription) makes the authorization graph unclean and collapses the design to single-graph auditing.
+Two further caveats: defenses scored on fixed attack suites degrade under adaptive pressure ([Nasr et al., 2025](https://arxiv.org/abs/2510.09023v1)), and L2/L3 are LLM-judged — themselves an adaptive attack surface — so treat the 0.01–0.02 ASR as a ceiling. And Plan-Then-Execute "does not prevent prompt injections contained in the user prompt itself" ([Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)); an attacker-influenced user prompt (relayed instructions, public-channel voice transcription) makes the authorization graph unclean and collapses the design to single-graph auditing.
 
 ## Example
 

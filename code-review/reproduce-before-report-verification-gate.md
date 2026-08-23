@@ -35,7 +35,7 @@ Claude Code's `/code-review ultra` (aliased from `/ultrareview`) names this in i
 
 ## Why it works
 
-A reproduction is harder to fake than a judgment. A reviewer can hallucinate a defect with no external grounding. A verifier that must produce a reproduction cannot: it either runs or it does not. Multi-agent verification with conditionally independent agents in [CodeX-Verify](https://arxiv.org/abs/2511.16708) improved accuracy from 32.8% to 72.4%, and measured reviewer-pair correlations of 0.05 to 0.25 confirm non-overlapping error populations. The pattern generalizes. Agent-as-a-Judge frames tool-augmented verification against real-world observations as the structural fix for LLM-as-a-Judge's "shallow single-pass reasoning, and the inability to verify assessments against real-world observations" ([Agent-as-a-Judge survey, arXiv:2601.05111](https://arxiv.org/abs/2601.05111)).
+A reproduction is harder to fake than a judgment. A reviewer can hallucinate a defect with no external grounding. A verifier that must produce a reproduction cannot: it either runs or it does not. Multi-agent verification with conditionally independent agents in [CodeX-Verify](https://arxiv.org/abs/2511.16708) improved accuracy from 32.8% to 72.4%, and measured reviewer-pair correlations of 0.05 to 0.25 confirm non-overlapping error populations. The pattern generalizes. Agent-as-a-Judge frames tool-augmented verification against real-world observations as the structural fix for LLM-as-a-Judge's "shallow single-pass reasoning, and the inability to verify assessments against real-world observations" ([Agent-as-a-Judge survey, arXiv:2601.05111](https://arxiv.org/abs/2601.05111v1)).
 
 ## Silent drop is the default
 

@@ -47,7 +47,7 @@ The corrector receives code without conversation history. This isolation is the 
 
 ## Reported results
 
-On AppWorld ([Trivedi et al., 2024](https://arxiv.org/abs/2407.18901)) with Qwen3-8B on a 24 GB GPU ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465)):
+On AppWorld ([Trivedi et al., 2024](https://arxiv.org/abs/2407.18901v1)) with Qwen3-8B on a 24 GB GPU ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465)):
 
 | Configuration | Baseline | Scaffolded |
 |---|---|---|
@@ -55,7 +55,7 @@ On AppWorld ([Trivedi et al., 2024](https://arxiv.org/abs/2407.18901)) with Qwen
 | AWQ 4-bit (32K context) | 3.0% | 5.9% |
 | Difficulty-1 tasks (FP16) | 15.8% | 26.3% |
 
-The scaffolded 8B surpassed DeepSeek-Coder 33B Instruct (7.1% on FP16) from the original AppWorld evaluation ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465)). Absolute completion remains far below GPT-4o's ~49% on AppWorld normal tasks ([Trivedi et al., 2024](https://arxiv.org/abs/2407.18901)) — the result is a small-model competitiveness gain, not a production threshold.
+The scaffolded 8B surpassed DeepSeek-Coder 33B Instruct (7.1% on FP16) from the original AppWorld evaluation ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465)). Absolute completion remains far below GPT-4o's ~49% on AppWorld normal tasks ([Trivedi et al., 2024](https://arxiv.org/abs/2407.18901v1)) — the result is a small-model competitiveness gain, not a production threshold.
 
 ## Why it works
 

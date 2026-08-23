@@ -18,7 +18,7 @@ maturity: emerging
 
 > Describe tools in prose and parse the model's plain-language choice instead of forcing JSON tool calls — a large accuracy win on weaker models.
 
-Natural Language Tools (NLT) present the available tools as a prose list and ask the model to pick in plain language — for example a `YES`/`NO` per tool — then a regex extracts the selection. Structured tool calling instead forces the model to emit a valid JSON function call. A 14-model replication study found NLT reached 62.3% tool-calling accuracy versus 47.4% for structured calling, a 14.9 percentage-point gain, and cut critical errors by 93% (51 versus 755) across 8,560 trials ([Somma et al., 2026](https://arxiv.org/abs/2607.03953)).
+Natural Language Tools (NLT) present the available tools as a prose list and ask the model to pick in plain language — for example a `YES`/`NO` per tool — then a regex extracts the selection. Structured tool calling instead forces the model to emit a valid JSON function call. A 14-model replication study found NLT reached 62.3% tool-calling accuracy versus 47.4% for structured calling, a 14.9 percentage-point gain, and cut critical errors by 93% (51 versus 755) across 8,560 trials ([Somma et al., 2026](https://arxiv.org/abs/2607.03953v1)).
 
 ## When to reach for it
 
@@ -28,11 +28,11 @@ The gain is not uniform — it tracks model capability, so lead with the conditi
 - Reasoning models. DeepSeek-R1 gained 24.0pp (55.0% versus 31.0%) ([Somma et al., 2026](https://arxiv.org/html/2607.03953)).
 - Models without strong native tool calling. Claude Sonnet 4 gained 43.1pp (61.9% versus 18.8%) in this single-turn selection setting ([Somma et al., 2026](https://arxiv.org/html/2607.03953)).
 
-NLT also cut token usage 25.2% and won on 11 of the 14 models tested ([Somma et al., 2026](https://arxiv.org/abs/2607.03953)).
+NLT also cut token usage 25.2% and won on 11 of the 14 models tested ([Somma et al., 2026](https://arxiv.org/abs/2607.03953v1)).
 
 ## Why it works
 
-Forcing schema compliance draws on a different part of the model's learned distribution than the task itself. The authors attribute the gap to cognitive-resource competition: JSON generation patterns are "primarily acquired from coding corpora, whereas tasks such as customer service or mental wellness originate from different domains," so producing a schema engages deliberate format compliance "at the expense of System 1's intuitive task understanding," diverting capacity from the actual decision ([Somma et al., 2026](https://arxiv.org/html/2607.03953)). The effect is corroborated independently: strict JSON-mode generation degrades accuracy on reasoning-heavy tasks compared with free-form generation converted to structure afterward ([Tam et al., 2024](https://arxiv.org/abs/2408.02442)), and structured-output constraints measurably suppress correct tool calling in open-weight models ([Constraint Tax, 2026](https://arxiv.org/abs/2606.25605)).
+Forcing schema compliance draws on a different part of the model's learned distribution than the task itself. The authors attribute the gap to cognitive-resource competition: JSON generation patterns are "primarily acquired from coding corpora, whereas tasks such as customer service or mental wellness originate from different domains," so producing a schema engages deliberate format compliance "at the expense of System 1's intuitive task understanding," diverting capacity from the actual decision ([Somma et al., 2026](https://arxiv.org/html/2607.03953)). The effect is corroborated independently: strict JSON-mode generation degrades accuracy on reasoning-heavy tasks compared with free-form generation converted to structure afterward ([Tam et al., 2024](https://arxiv.org/abs/2408.02442)), and structured-output constraints measurably suppress correct tool calling in open-weight models ([Constraint Tax, 2026](https://arxiv.org/abs/2606.25605v1)).
 
 ## When this backfires
 
@@ -55,7 +55,7 @@ The model replies in prose (`Website information – YES`) and the harness extra
 
 ## Key Takeaways
 
-- NLT lifts single-turn tool-selection accuracy 14.9pp on average and cuts critical errors 93% across 14 models ([Somma et al., 2026](https://arxiv.org/abs/2607.03953)).
+- NLT lifts single-turn tool-selection accuracy 14.9pp on average and cuts critical errors 93% across 14 models ([Somma et al., 2026](https://arxiv.org/abs/2607.03953v1)).
 - The gain is capability-dependent — large on small, reasoning, and non-native-tool-calling models; near-zero or negative on frontier models optimized for structured calling.
 - The mechanism is distributional: schema formatting pulls from coding-corpus patterns and competes with task reasoning.
 - Keep structured calling for frontier models, parameterized tools, and multi-turn flows that need typed arguments or a machine-guaranteed contract.

@@ -21,7 +21,7 @@ maturity: emerging
 
 ## The finding
 
-HistoryAnchor-100 pairs three forced harmful prior actions with a free-choice node that offers two safe and two unsafe options across ten high-stakes domains. The study evaluated 17 frontier models from six providers ([Rodríguez Salgado, 2026](https://arxiv.org/abs/2605.13825)).
+HistoryAnchor-100 pairs three forced harmful prior actions with a free-choice node that offers two safe and two unsafe options across ten high-stakes domains. The study evaluated 17 frontier models from six providers ([Rodríguez Salgado, 2026](https://arxiv.org/abs/2605.13825v1)).
 
 Two conditions, same history:
 
@@ -118,7 +118,7 @@ The deterministic action gate downstream of the model must still enforce this; t
 
 ## Key Takeaways
 
-- A single sentence asking the model to stay consistent with prior history flips frontier LLM agents from near-zero unsafe selection to 91–98% on HistoryAnchor-100 ([Rodríguez Salgado, 2026](https://arxiv.org/abs/2605.13825)).
+- A single sentence asking the model to stay consistent with prior history flips frontier LLM agents from near-zero unsafe selection to 91–98% on HistoryAnchor-100 ([Rodríguez Salgado, 2026](https://arxiv.org/abs/2605.13825v1)).
 - The consistency cue is the load-bearing element. Harmful history alone under a neutral system prompt does not produce the effect.
 - Models flipped by the cue often escalate past the level of harm shown in the history; the cue steers the trajectory, it does not cap it ([Rodríguez Salgado, 2026](https://arxiv.org/abs/2605.13825)).
 - Inverse-scaling within model families: flagship models are the most-affected sibling. Routing to a more capable model does not reduce this risk.

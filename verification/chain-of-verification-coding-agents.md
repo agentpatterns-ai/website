@@ -46,7 +46,7 @@ The original CoVe paper does not evaluate code tasks ([Dhuliawala et al., 2023](
 | Citation, version, fact in commentary | Factored CoVe | Use |
 | Cross-file refactor consistency | Factored CoVe over the change set | Use |
 
-The discipline matches ConVerTest, which integrates factored CoVe with external test execution (dual execution agreement) and reports +39% test validity, +28% line coverage, and +18% mutation scores over baselines on BigCodeBench and LBPP ([Taherkhani et al., 2026](https://arxiv.org/abs/2602.10522)). The gains come from CoVe paired with an external oracle, not CoVe alone.
+The discipline matches ConVerTest, which integrates factored CoVe with external test execution (dual execution agreement) and reports +39% test validity, +28% line coverage, and +18% mutation scores over baselines on BigCodeBench and LBPP ([Taherkhani et al., 2026](https://arxiv.org/abs/2602.10522v1)). The gains come from CoVe paired with an external oracle, not CoVe alone.
 
 ## Why it works
 

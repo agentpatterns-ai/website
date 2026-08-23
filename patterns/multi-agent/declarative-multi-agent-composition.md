@@ -30,7 +30,7 @@ A declarative definition captures what an agent is (model, tools, memory) withou
 
 ## The define-and-compose pattern
 
-The [AutoGen Studio research](https://arxiv.org/abs/2408.15247) (EMNLP 2024) drew on more than 200,000 installations and 135 user-reported issues. It identified define-and-compose as the most common way developers author workflows across multi-agent tooling.
+The [AutoGen Studio research](https://arxiv.org/abs/2408.15247v1) (EMNLP 2024) drew on more than 200,000 installations and 135 user-reported issues. It identified define-and-compose as the most common way developers author workflows across multi-agent tooling.
 
 The pattern has two phases.
 

@@ -59,7 +59,7 @@ graph TD
 
 ## Scale qualifies, does not eliminate
 
-The All-In gap shrinks with model strength — 32% at 8B, 19% at 70B, ~0% at Claude Haiku — but All-In still never beats the best subset at any tested scale ([Liu, 2026](https://arxiv.org/abs/2605.05716)). Frontier models tolerate over-stacking. They do not benefit from it.
+The All-In gap shrinks with model strength — 32% at 8B, 19% at 70B, ~0% at Claude Haiku — but All-In still never beats the best subset at any tested scale ([Liu, 2026](https://arxiv.org/abs/2605.05716v1)). Frontier models tolerate over-stacking. They do not benefit from it.
 
 The scaffold is the dominant factor, so it is also the dominant way to lose. Harness changes alone swing Terminal Bench 2.0 by 14 points with no model swap ([LangChain harness engineering](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). On SWE-bench Pro the scaffold produces a 22+ point swing versus ~1 point for model swaps ([particula.tech on scaffolding](https://particula.tech/blog/agent-scaffolding-beats-model-upgrades-swe-bench)).
 
@@ -97,7 +97,7 @@ agent = Agent(
 # F1 = 0.233 on HotpotQA, p=0.023 vs All-In (Liu, 2026)
 ```
 
-Removing four components — Planning, Memory, Self-Reflection, Retrieval — lifted F1 by 32%. The win is not a clever combination. It is removing the components that disrupted 84% and 68% of CCI tasks (Planning and Memory) ([Liu, 2026](https://arxiv.org/abs/2605.05716)).
+Removing four components — Planning, Memory, Self-Reflection, Retrieval — lifted F1 by 32%. The win is not a clever combination. It is removing the components that disrupted 84% and 68% of CCI tasks (Planning and Memory) ([Liu, 2026](https://arxiv.org/abs/2605.05716v1)).
 
 ## How to avoid it
 

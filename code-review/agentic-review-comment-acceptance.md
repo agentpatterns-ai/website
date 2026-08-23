@@ -24,7 +24,7 @@ Rejections are driven by suggestion validity, not comment count. The study attri
 
 Not all comment types fare equally. Agentic reviews concentrated more on functional concerns than on evolvability-related comments, yet the evolvability comments carried higher invalidity rates ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). The agent is on firmer ground flagging what breaks than judging what is "cleaner."
 
-Low comment-level uptake is not unique to this tool. A separate study of 278,790 code reviews found developers adopt AI suggestions at 16.6% against 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911)), and a signal-ratio study found 12 of 13 code-review agents average below 60% actionable comments ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196)). The reception gap is a property of current agentic review, not one vendor.
+Low comment-level uptake is not unique to this tool. A separate study of 278,790 code reviews found developers adopt AI suggestions at 16.6% against 56.5% for human suggestions ([arXiv:2603.15911](https://arxiv.org/abs/2603.15911v1)), and a signal-ratio study found 12 of 13 code-review agents average below 60% actionable comments ([arXiv:2604.03196](https://arxiv.org/abs/2604.03196v1)). The reception gap is a property of current agentic review, not one vendor.
 
 ## Two practical levers
 
@@ -65,5 +65,5 @@ Optimizing for acceptance rate is the wrong target in several conditions:
 ## Sources
 
 - [arXiv:2607.03316](https://arxiv.org/abs/2607.03316) — Lin, Liang, Thongtanunam, Tantithamthavorn (2026): "Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild" — 31,073 comment/feedback pairs, 10,191 PRs, 239 repositories.
-- [arXiv:2604.03196](https://arxiv.org/abs/2604.03196) — Chowdhury et al. (2026): code-review-agent signal-ratio study; 12 of 13 CRAs below 60% actionable.
-- [arXiv:2603.15911](https://arxiv.org/abs/2603.15911) — 278,790 code reviews: AI suggestion adoption 16.6% versus 56.5% for human suggestions.
+- [arXiv:2604.03196](https://arxiv.org/abs/2604.03196v1) — Chowdhury et al. (2026): code-review-agent signal-ratio study; 12 of 13 CRAs below 60% actionable.
+- [arXiv:2603.15911](https://arxiv.org/abs/2603.15911v1) — 278,790 code reviews: AI suggestion adoption 16.6% versus 56.5% for human suggestions.

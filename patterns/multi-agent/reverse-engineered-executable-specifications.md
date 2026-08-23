@@ -60,7 +60,7 @@ The Prometheus contribution is running specification inference after the fact �
 
 ## Reported results and contamination caveat
 
-Prometheus reports a 93.97% correct patch rate (639/680) on Defects4J and a 74.4% "Rescue Rate" — bugs fixed by the spec-first pipeline that a strong baseline agent could not ([Wang & Huang, 2026](https://arxiv.org/abs/2604.17464)). Defects4J-family benchmarks leak into foundation-model training data. LessLeak-Bench found up to 4.9× Pass@1 inflation on leaked APPS samples, and SWE-rebench measured an 18.4-point gap between SWE-bench Verified and decontaminated fresh tasks for DeepSeek-V3 ([Zhou et al., 2025](https://arxiv.org/abs/2502.06215); [Badertdinov et al., 2025](https://arxiv.org/abs/2505.20411)). Treat the architectural contribution (spec inference as a first-class stage) as the transferable finding, not the percentage.
+Prometheus reports a 93.97% correct patch rate (639/680) on Defects4J and a 74.4% "Rescue Rate" — bugs fixed by the spec-first pipeline that a strong baseline agent could not ([Wang & Huang, 2026](https://arxiv.org/abs/2604.17464v1)). Defects4J-family benchmarks leak into foundation-model training data. LessLeak-Bench found up to 4.9× Pass@1 inflation on leaked APPS samples, and SWE-rebench measured an 18.4-point gap between SWE-bench Verified and decontaminated fresh tasks for DeepSeek-V3 ([Zhou et al., 2025](https://arxiv.org/abs/2502.06215v1); [Badertdinov et al., 2025](https://arxiv.org/abs/2505.20411)). Treat the architectural contribution (spec inference as a first-class stage) as the transferable finding, not the percentage.
 
 ## When this pattern helps
 

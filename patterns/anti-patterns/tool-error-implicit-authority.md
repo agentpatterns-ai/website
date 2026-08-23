@@ -23,7 +23,7 @@ status: current
 
 ## The anti-pattern
 
-A bespoke agentic workflow treats tool output as untrusted but treats tool error messages as a trusted diagnostic channel — it filters returns, gates [downstream sinks](../../security/improper-output-handling-downstream-sinks.md), and routes stderr, exception payloads, and MCP error frames into the assistant context unfiltered. VATS shows the asymmetry across Gemini 3.1 Pro, GPT-5.5, GLM-5.1, and Qwen3-Coder: error-path injection triples the success rate of standard indirect prompt injection (IPI) and reaches up to 100% compliance in controlled evaluations ([Patel & Pai, 2026](https://arxiv.org/abs/2606.07992)).
+A bespoke agentic workflow treats tool output as untrusted but treats tool error messages as a trusted diagnostic channel — it filters returns, gates [downstream sinks](../../security/improper-output-handling-downstream-sinks.md), and routes stderr, exception payloads, and MCP error frames into the assistant context unfiltered. VATS shows the asymmetry across Gemini 3.1 Pro, GPT-5.5, GLM-5.1, and Qwen3-Coder: error-path injection triples the success rate of standard indirect prompt injection (IPI) and reaches up to 100% compliance in controlled evaluations ([Patel & Pai, 2026](https://arxiv.org/abs/2606.07992v1)).
 
 The same surface appears in production-MCP threat catalogs — error-stream poisoning sits alongside tool-description poisoning and rug-pull updates ([StackOne, 2026](https://www.stackone.com/blog/prompt-injection-mcp-10-examples/); [OWASP MCP Tool Poisoning](https://owasp.org/www-community/attacks/MCP_Tool_Poisoning)). VATS is the systematic-mutation proof that the category is exploitable, not a one-off finding.
 
@@ -100,7 +100,7 @@ The anti-pattern label is over-broad in five cases:
 ## Key Takeaways
 
 - Tool error messages are a distinct attack surface — the implicit-authority asymmetry between trusted "system diagnostic" framing and untrusted free-form content is the load-bearing failure ([Patel & Pai, 2026](https://arxiv.org/abs/2606.07992)).
-- Error-path injection triples ordinary IPI success and reaches up to 100% compliance across four frontier models tested with VATS ([Patel & Pai, 2026](https://arxiv.org/abs/2606.07992)).
+- Error-path injection triples ordinary IPI success and reaches up to 100% compliance across four frontier models tested with VATS ([Patel & Pai, 2026](https://arxiv.org/abs/2606.07992v1)).
 - Structural positioning — sandwiching attacker instructions inside error context — is the single strongest mutation dimension across all tested models ([Patel & Pai, 2026](https://arxiv.org/abs/2606.07992)).
 - Apply the same content filter, structural separation, and authority-context check to the error stream as to tool output — bespoke agentic workflows without these guardrails inherit the full risk.
 - Architectural defenses ([Action-Selector](../../security/action-selector-pattern.md), [CaMeL](../../security/camel-control-data-flow-injection.md)) eliminate the surface by construction where they fit; choose them over per-frame filtering when the tool catalog allows it.

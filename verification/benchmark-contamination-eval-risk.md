@@ -24,7 +24,7 @@ Models trained on large internet corpora end up seeing benchmark data. When a mo
 
 SWE-rebench quantified this for coding agents: DeepSeek-V3 scores 39.7% on SWE-bench Verified but only 21.3% on decontaminated fresh tasks — an 18.4 percentage point gap attributable to contamination. GPT-4.1 shows a similar pattern: 31.1% on older tasks versus 26.7% on newer ones. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
 
-The problem extends beyond SWE-bench. LessLeak-Bench audited 83 software engineering benchmarks and found leakage ratios ranging from under 1% to 100%. StarCoder-7b achieved Pass@1 4.9x higher on leaked samples than on non-leaked samples in the APPS benchmark. [Source: [LessLeak-Bench](https://arxiv.org/abs/2502.06215)]
+The problem extends beyond SWE-bench. LessLeak-Bench audited 83 software engineering benchmarks and found leakage ratios ranging from under 1% to 100%. StarCoder-7b achieved Pass@1 4.9x higher on leaked samples than on non-leaked samples in the APPS benchmark. [Source: [LessLeak-Bench](https://arxiv.org/abs/2502.06215v1)]
 
 Teams that rely on published benchmark scores for upgrade decisions risk picking a model that memorized the test set over one that generalizes better to real-world tasks.
 

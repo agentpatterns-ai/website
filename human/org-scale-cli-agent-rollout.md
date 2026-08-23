@@ -22,7 +22,7 @@ Rolling out command-line coding agents across an organization runs on two separa
 
 ## What the evidence licenses
 
-The strongest single number from the study — a +24.0% lift in merged pull requests per engineer per day (95% CI +14.5% to +33.7%) — is observational, not a controlled experiment ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)). Treat it as a directional signal under these conditions, not as settled proof of productivity:
+The strongest single number from the study — a +24.0% lift in merged pull requests per engineer per day (95% CI +14.5% to +33.7%) — is observational, not a controlled experiment ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418v1)). Treat it as a directional signal under these conditions, not as settled proof of productivity:
 
 - Merged PRs are an imperfect proxy. The authors state the metric rewards "small, frequent PRs" and can "miss quality costs such as added complexity." A PR-count lift can reflect finer slicing, not more delivered value.
 - The lift is a population association, not a per-engineer cause. The authors read their dose-response "as an association, not a cause," and cannot rule out that similar engineers cluster together (homophily).
@@ -32,13 +32,13 @@ So the defensible claim is narrow: a rollout can move a concrete output metric. 
 
 ## Seed adoption, then measure retention separately
 
-First use spread primarily through social exposure, not demographics. An engineer whose reporting-chain peers already used the CLI agent had much higher odds of trying it: skip-level peers above 25% adoption gave +216% odds, direct-manager use +82%, and reviewer peers at 25% adoption +54% ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)). Seed the rollout where that visibility is highest — managers, reviewers, and dense sub-teams — rather than spraying licenses evenly.
+First use spread primarily through social exposure, not demographics. An engineer whose reporting-chain peers already used the CLI agent had much higher odds of trying it: skip-level peers above 25% adoption gave +216% odds, direct-manager use +82%, and reviewer peers at 25% adoption +54% ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418v1)). Seed the rollout where that visibility is highest — managers, reviewers, and dense sub-teams — rather than spraying licenses evenly.
 
-Retention runs on a different lever. Sustained use tracked baseline coding activity, not social exposure: engineers shipping 2+ PRs a week had roughly a +31% retention advantage ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)). Prior IDE Copilot users showed the trap directly — they tried the CLI more (+83%) but retained worse (−12% to −15%), because they had a familiar tool to fall back on. Measure trials and sustained use as two numbers; a seat-count spike that decays is the failure this separation catches, the same way [cohort segmentation](cohort-segmentation-copilot-usage-metrics.md) recovers phases an aggregate number hides.
+Retention runs on a different lever. Sustained use tracked baseline coding activity, not social exposure: engineers shipping 2+ PRs a week had roughly a +31% retention advantage ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418v1)). Prior IDE Copilot users showed the trap directly — they tried the CLI more (+83%) but retained worse (−12% to −15%), because they had a familiar tool to fall back on. Measure trials and sustained use as two numbers; a seat-count spike that decays is the failure this separation catches, the same way [cohort segmentation](cohort-segmentation-copilot-usage-metrics.md) recovers phases an aggregate number hides.
 
 ## Why it works
 
-Adoption spreads socially because CLI agent use is visible along reporting chains: peers, reviewers, and managers produce shared, observable outputs that lower a colleague's uncertainty about whether the tool is worth trying, and the skip-level effect (+216%) is the strongest such signal ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)). Retention works through repetition instead — engineers with high baseline PR activity have enough coding occasions for the tool to demonstrate value early and become habitual, which is why baseline activity predicts staying while social exposure does not. This is also why senior ICs adopted more (+22%) and junior ICs less (−13% to −14%): senior developers could break work into agent-sized chunks and judge when output was sub-optimal, a prerequisite for early demonstrated value.
+Adoption spreads socially because CLI agent use is visible along reporting chains: peers, reviewers, and managers produce shared, observable outputs that lower a colleague's uncertainty about whether the tool is worth trying, and the skip-level effect (+216%) is the strongest such signal ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418v1)). Retention works through repetition instead — engineers with high baseline PR activity have enough coding occasions for the tool to demonstrate value early and become habitual, which is why baseline activity predicts staying while social exposure does not. This is also why senior ICs adopted more (+22%) and junior ICs less (−13% to −14%): senior developers could break work into agent-sized chunks and judge when output was sub-optimal, a prerequisite for early demonstrated value.
 
 ## When this backfires
 
@@ -74,7 +74,7 @@ The seat-count view calls a rollout that lost 44% of users at the retention gate
 
 ## Key Takeaways
 
-- Adoption and retention have different drivers: first use spreads through visible peer and reporting-chain use (skip-level +216%); sustained use tracks baseline coding activity (2+ PRs/week ≈ +31% retention) ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418)).
+- Adoption and retention have different drivers: first use spreads through visible peer and reporting-chain use (skip-level +216%); sustained use tracks baseline coding activity (2+ PRs/week ≈ +31% retention) ([Murphy-Hill et al., arXiv:2607.01418](https://arxiv.org/abs/2607.01418v1)).
 - Seed where visibility is highest — managers, reviewers, dense sub-teams — not evenly across seats.
 - Measure trials and sustained use as two numbers; prior IDE users try more (+83%) but retain worse (−12% to −15%).
 - The +24% merged-PR lift is observational and proxy-based; pair it with a quality signal (review time, revert rate) before treating it as productivity — an RCT elsewhere found a 19% slowdown ([METR, 2025-07-10](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)).

@@ -45,7 +45,7 @@ In all other open-weight self-hosted configurations, validate empirically before
 
 ## Mitigations
 
-The paper proposes Transparent Two-Pass Execution: decouple tool invocation from schema-constrained generation. Pass 1 runs without the response grammar so tool-call tokens remain reachable. Pass 2 applies the schema only to the final response, after tool results return ([arxiv:2606.25605](https://arxiv.org/abs/2606.25605)). Alternatives: extend the schema to reserve the tool-call branch, or evaluate tool calling and structured output separately before combining them. Add a tool-invocation-rate metric next to schema-compliance metrics so Constraint Priority Inversion is detectable in monitoring.
+The paper proposes Transparent Two-Pass Execution: decouple tool invocation from schema-constrained generation. Pass 1 runs without the response grammar so tool-call tokens remain reachable. Pass 2 applies the schema only to the final response, after tool results return ([arxiv:2606.25605](https://arxiv.org/abs/2606.25605v1)). Alternatives: extend the schema to reserve the tool-call branch, or evaluate tool calling and structured output separately before combining them. Add a tool-invocation-rate metric next to schema-compliance metrics so Constraint Priority Inversion is detectable in monitoring.
 
 ## Example
 

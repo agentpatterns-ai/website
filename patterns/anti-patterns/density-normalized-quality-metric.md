@@ -20,7 +20,7 @@ maturity: emerging
 
 > A density-normalized quality metric falls when AI adoption inflates the denominator faster than smells grow — the ratio reports code growth, not improvement.
 
-Density-normalized quality metrics — architectural smells per KLOC, warnings per file, complexity per method — appear to fall after a team adopts AI coding assistants. Platform teams cite the drop as evidence the tools improve code. A 151-repo causal study of Java codebases found the apparent improvement is arithmetic: smell counts stay flat (+1.1%, p = 0.82) while lines of code grow +12.8% (p = 0.003), mechanically producing the headline −6.7% density figure (p = 0.004) without a single architectural defect being removed ([Larsen & Moghaddam, 2026, *arxiv:2606.13298*](https://arxiv.org/abs/2606.13298)).
+Density-normalized quality metrics — architectural smells per KLOC, warnings per file, complexity per method — appear to fall after a team adopts AI coding assistants. Platform teams cite the drop as evidence the tools improve code. A 151-repo causal study of Java codebases found the apparent improvement is arithmetic: smell counts stay flat (+1.1%, p = 0.82) while lines of code grow +12.8% (p = 0.003), mechanically producing the headline −6.7% density figure (p = 0.004) without a single architectural defect being removed ([Larsen & Moghaddam, 2026, *arxiv:2606.13298*](https://arxiv.org/abs/2606.13298v1)).
 
 ## The pattern
 
@@ -28,7 +28,7 @@ The metric ships as a single ratio — `smell_count / loc`, `warnings / files`, 
 
 ## Why it fails
 
-A causal estimator can hold everything else constant and the ratio still misleads, because the denominator is part of the treatment. The Larsen & Moghaddam study used a staggered difference-in-differences design with the Borusyak imputation estimator across 1,811 monthly Arcan snapshots of 74 agentic-AI-adopting Java repos against 77 propensity-matched controls; pre-trends were flat (Wald p = 0.90) and wild cluster bootstrap, Lee bounds, and stale-observation checks all held ([Larsen & Moghaddam, 2026](https://arxiv.org/abs/2606.13298)). The clean design still cannot rescue the ratio. The authors warn directly: "density-normalized outcomes can mislead when treatment affects system size."
+A causal estimator can hold everything else constant and the ratio still misleads, because the denominator is part of the treatment. The Larsen & Moghaddam study used a staggered difference-in-differences design with the Borusyak imputation estimator across 1,811 monthly Arcan snapshots of 74 agentic-AI-adopting Java repos against 77 propensity-matched controls; pre-trends were flat (Wald p = 0.90) and wild cluster bootstrap, Lee bounds, and stale-observation checks all held ([Larsen & Moghaddam, 2026](https://arxiv.org/abs/2606.13298v1)). The clean design still cannot rescue the ratio. The authors warn directly: "density-normalized outcomes can mislead when treatment affects system size."
 
 An independent MSR '26 DiD study of Cursor adoption finds the symmetric shape from the opposite side: a "statistically significant, large, but transient" velocity gain paired with a "substantial and persistent" rise in static-analysis warnings and complexity ([Wang et al., 2025, *arxiv:2511.04427*](https://arxiv.org/abs/2511.04427)). Both papers triangulate to: AI grows the codebase faster than it grows architectural debt, and reports that frame that as a quality win are reading the denominator.
 

@@ -21,7 +21,7 @@ maturity: emerging
 
 ## The unsolvable problem
 
-Prompt injection has no parameterized-query equivalent -- the instruction and data boundary in LLMs is implicit. A meta-analysis of 78 studies (2021--2026) shows attack success rates above 85% against the strongest known defenses. [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)] No single defense works. Only defense-in-depth is viable.
+Prompt injection has no parameterized-query equivalent -- the instruction and data boundary in LLMs is implicit. A meta-analysis of 78 studies (2021--2026) shows attack success rates above 85% against the strongest known defenses. [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548v1)] No single defense works. Only defense-in-depth is viable.
 
 ## The core principle
 
@@ -142,7 +142,7 @@ Even if a malicious PR contains injected instructions, the agent lacks the tools
 
 **Can prompt injection be fully solved?**
 
-No. LLMs have no parameterized-query equivalent, because the boundary between instruction and data is implicit, and a meta-analysis of 78 studies from 2021 to 2026 found attack success rates above 85% against the strongest known defenses. [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548)] No single defense works, so only defense-in-depth is viable.
+No. LLMs have no parameterized-query equivalent, because the boundary between instruction and data is implicit, and a meta-analysis of 78 studies from 2021 to 2026 found attack success rates above 85% against the strongest known defenses. [Source: [Maloyan and Namiot, 2026](https://arxiv.org/abs/2601.17548v1)] No single defense works, so only defense-in-depth is viable.
 
 **What does "provable" resistance actually guarantee?**
 

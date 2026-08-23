@@ -52,13 +52,13 @@ If all three hold, the cause is structural over-squashing rather than ambiguous 
 
 ## Where it triggers
 
-Shehata and Li (2026) mapped the Attention Stability Boundary empirically across 9K trajectories on MultiWOZ 2.2. On the hardest tier — a semantic-hijacked 3-hop multi-fact synthesis task — vanilla ReAct on GPT-5.4 collapsed to 0.1% success ([Shehata & Li, 2026](https://arxiv.org/abs/2604.24512)). The agent crosses the boundary when:
+Shehata and Li (2026) mapped the Attention Stability Boundary empirically across 9K trajectories on MultiWOZ 2.2. On the hardest tier — a semantic-hijacked 3-hop multi-fact synthesis task — vanilla ReAct on GPT-5.4 collapsed to 0.1% success ([Shehata & Li, 2026](https://arxiv.org/abs/2604.24512v1)). The agent crosses the boundary when:
 
 - Histories are long enough for cumulative weight to dominate.
 - Mid-task updates contradict, rather than extend, prior constraints.
 - Retrieval results inject content that semantically resembles the contradicted instruction.
 
-Independent work confirms the wider pattern: sequences over 100K tokens show goal drift across model families, mostly through inaction ([Arike et al., 2025](https://arxiv.org/abs/2505.02709)); models deprioritize initial instructions as history grows, even when those instructions remain in context ([Bui, 2026 §3.2](https://arxiv.org/abs/2603.05344)).
+Independent work confirms the wider pattern: sequences over 100K tokens show goal drift across model families, mostly through inaction ([Arike et al., 2025](https://arxiv.org/abs/2505.02709v1)); models deprioritize initial instructions as history grows, even when those instructions remain in context ([Bui, 2026 §3.2](https://arxiv.org/abs/2603.05344)).
 
 ## Mitigations on a spectrum
 
@@ -83,7 +83,7 @@ Choose this tier only after you have measured the lighter mitigations and found 
 
 ## The grounding paradox
 
-Heavy mitigations can overshoot. Shehata and Li (2026) report a Procedural Integrity audit at 98.8% adherence that reveals a Grounding Paradox: high-stability models fail by refusing to generate output under retrieval-reasoning contamination — the agent holds its ground so firmly it stops responding to legitimate updates ([Shehata & Li, 2026](https://arxiv.org/abs/2604.24512)). Verify that the failure has been removed, not relocated.
+Heavy mitigations can overshoot. Shehata and Li (2026) report a Procedural Integrity audit at 98.8% adherence that reveals a Grounding Paradox: high-stability models fail by refusing to generate output under retrieval-reasoning contamination — the agent holds its ground so firmly it stops responding to legitimate updates ([Shehata & Li, 2026](https://arxiv.org/abs/2604.24512v1)). Verify that the failure has been removed, not relocated.
 
 ## Where the latch does not fire
 

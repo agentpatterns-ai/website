@@ -65,7 +65,7 @@ The decomposer outputs two things for each sub-question: the sub-question text a
 
 Each sub-question filters to its declared `schema_types` before semantic scoring. The system ranks the type-filtered candidates, then merges them across parallel sub-question searches. Typed filtering is the main source of precision gain; semantic scoring runs on an already-narrowed candidate set.
 
-The decomposer's ability to map an informal query onto the right schema types bounds the precision gain. [Multi-Agent GraphRAG (Maslej et al., 2025; arXiv:2511.08274)](https://arxiv.org/abs/2511.08274) finds schema-aware querying strongly model-dependent: its strongest model reached 77.23% average accuracy while weaker models trailed far behind. The same study reports that compositional queries (disjunctions, symmetric relations) and multi-intent questions stay hard regardless of typing. Mis-typed sub-questions filter to the wrong candidate set, so the filter's precision is no better than the model doing the typing.
+The decomposer's ability to map an informal query onto the right schema types bounds the precision gain. [Multi-Agent GraphRAG (Maslej et al., 2025; arXiv:2511.08274)](https://arxiv.org/abs/2511.08274v1) finds schema-aware querying strongly model-dependent: its strongest model reached 77.23% average accuracy while weaker models trailed far behind. The same study reports that compositional queries (disjunctions, symmetric relations) and multi-intent questions stay hard regardless of typing. Mis-typed sub-questions filter to the wrong candidate set, so the filter's precision is no better than the model doing the typing.
 
 ## When to use
 

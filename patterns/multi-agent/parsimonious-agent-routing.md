@@ -48,7 +48,7 @@ graph TD
 
 ## Reported results
 
-Uno-Orchestra reports 77.0% macro pass@1 on a 13-benchmark suite spanning math, code, knowledge, long-context, and agentic tool-use — about 16 points above the strongest workflow baseline at roughly an order-of-magnitude lower per-query cost ([Uno-Orchestra, 2026](https://arxiv.org/abs/2605.05007)). Treat as a single-paper claim pending independent replication; the cost reduction depends on a worker roster that includes cheap leaf models.
+Uno-Orchestra reports 77.0% macro pass@1 on a 13-benchmark suite spanning math, code, knowledge, long-context, and agentic tool-use — about 16 points above the strongest workflow baseline at roughly an order-of-magnitude lower per-query cost ([Uno-Orchestra, 2026](https://arxiv.org/abs/2605.05007v1)). Treat as a single-paper claim pending independent replication; the cost reduction depends on a worker roster that includes cheap leaf models.
 
 ## Convergent evidence
 

@@ -67,7 +67,7 @@ The fixed token budget is load-bearing — without the evictor the cache grows m
 
 Re-entry into the same large context is the dominant cost driver for recurring agent workloads — each session otherwise re-pays for discovery. A constant-sized artifact amortizes that discovery across sessions, and the fixed token budget stops it from crowding out task-specific context. PEEK cuts cost for repeated re-entry by skipping re-discovery. It does not improve reasoning, and it does not replace retrieval or tool design.
 
-In the PEEK paper's evaluation, the cache improved long-context reasoning and information-aggregation tasks by 6.3–34.0% and in-context learning by 6.0–14.0%, against [ACE](evolving-playbooks.md) — the strongest prior framework for evolving prompts. It also cut iterations by 93–145 and cost by 1.7–5.8×, and results held across models and architectures, including OpenAI Codex. These numbers come from one team's evaluation and are not yet independently replicated; treat them as a directional signal. ([Gu et al., 2026](https://arxiv.org/abs/2605.19932))
+In the PEEK paper's evaluation, the cache improved long-context reasoning and information-aggregation tasks by 6.3–34.0% and in-context learning by 6.0–14.0%, against [ACE](evolving-playbooks.md) — the strongest prior framework for evolving prompts. It also cut iterations by 93–145 and cost by 1.7–5.8×, and results held across models and architectures, including OpenAI Codex. These numbers come from one team's evaluation and are not yet independently replicated; treat them as a directional signal. ([Gu et al., 2026](https://arxiv.org/abs/2605.19932v1))
 
 ## When this backfires
 

@@ -30,7 +30,7 @@ A retrieved memory suggests an action that no longer fits the task in front of t
 - Propagation: later steps build on the wrong first step. Persistent exposure to the bad memory does more harm than a single early injection.
 - Recovery: the agent rarely course-corrects. Conflicting-memory trajectories realign only 7 to 15% of the time, against 27 to 42% for helpful memory.
 
-Compliance stays high and roughly constant across models (63 to 72%), but success after complying collapses to 17 to 31%. On the WebArena memory-sensitive subset, persistent conflicting memory cut success by up to 20.8 points; on MemTrapBench the strongest model tested dropped 26.0 points ([Chen et al., 2026](https://arxiv.org/abs/2607.10608)).
+Compliance stays high and roughly constant across models (63 to 72%), but success after complying collapses to 17 to 31%. On the WebArena memory-sensitive subset, persistent conflicting memory cut success by up to 20.8 points; on MemTrapBench the strongest model tested dropped 26.0 points ([Chen et al., 2026](https://arxiv.org/abs/2607.10608v1)).
 
 ## Why it works
 
@@ -66,7 +66,7 @@ policy: retry-on-fail
   attempt 2: retry with helpful memory only if attempt 1 failed
 ```
 
-Retry-on-fail closed 96 to 101% of the schedule-oracle gap on MemTrapBench, beating always-inject. A softer fix — prefixing memory with a "verify before acting" warning — cut conflicting damage by 17.2 points but also cut the gains from helpful memory by 11.0 points, making the agent uniformly less compliant rather than more discerning ([Chen et al., 2026](https://arxiv.org/abs/2607.10608)).
+Retry-on-fail closed 96 to 101% of the schedule-oracle gap on MemTrapBench, beating always-inject. A softer fix — prefixing memory with a "verify before acting" warning — cut conflicting damage by 17.2 points but also cut the gains from helpful memory by 11.0 points, making the agent uniformly less compliant rather than more discerning ([Chen et al., 2026](https://arxiv.org/abs/2607.10608v1)).
 
 ## Key Takeaways
 

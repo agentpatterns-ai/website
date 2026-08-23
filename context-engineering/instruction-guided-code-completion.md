@@ -24,7 +24,7 @@ Developers routinely specify implementation constraints: a specific algorithm, a
 C3-Bench results show most models treat scale instructions as suggestions.
 Even advanced proprietary models score as low as 7% on scale-control tasks, while implementation-control adherence reaches only 50 to 60% for top proprietary models.
 
-C3-Bench (arxiv [2601.15879](https://arxiv.org/abs/2601.15879)) is the first benchmark to measure this gap directly, testing 2,195 Python tasks across two instruction categories.
+C3-Bench (arxiv [2601.15879](https://arxiv.org/abs/2601.15879v1)) is the first benchmark to measure this gap directly, testing 2,195 Python tasks across two instruction categories.
 
 ## Two types of completion instructions
 

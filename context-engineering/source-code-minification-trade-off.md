@@ -17,7 +17,7 @@ maturity: emerging
 
 Related lesson: [Measure Before You Optimize](https://learn.agentpatterns.ai/context-engineering/measure-before-you-optimize/) — this concept features in a hands-on lesson with quizzes.
 
-Source code minification (removing comments, collapsing whitespace, shortening identifiers, and stripping docstrings) is a measured trade-off. On SWE-bench Verified with GPT-5-mini and the DirectSolve state-in-context agent, cumulative minification cut average input tokens 42% (from ~90,500 to ~52,800 per task) while dropping pass@1 resolution rate from 50.0% to 38.0% — a 12-percentage-point absolute regression, ~24% of baseline ([Hrubec & Cito, 2026](https://arxiv.org/abs/2606.01326)). The technique is viable when a workload can absorb accuracy loss for token savings; it is the wrong default for production agents that land code.
+Source code minification (removing comments, collapsing whitespace, shortening identifiers, and stripping docstrings) is a measured trade-off. On SWE-bench Verified with GPT-5-mini and the DirectSolve state-in-context agent, cumulative minification cut average input tokens 42% (from ~90,500 to ~52,800 per task) while dropping pass@1 resolution rate from 50.0% to 38.0% — a 12-percentage-point absolute regression, ~24% of baseline ([Hrubec & Cito, 2026](https://arxiv.org/abs/2606.01326v1)). The technique is viable when a workload can absorb accuracy loss for token savings; it is the wrong default for production agents that land code.
 
 ## Apply only under these conditions
 
@@ -43,9 +43,9 @@ The headline 42% / -12pp figure is the cumulative effect of all four applied tog
 
 ## Why it works
 
-Source code carries information through two channels: structural (AST, control flow) and lexical (identifiers, comments, docstrings). Minification strips the lexical channel on the assumption that structure carries the meaning. Independent measurement contradicts that assumption: removing the naming channel "severely degrades intent-level tasks" and causes "consistent reductions on execution tasks that should depend only on structure," because current LLMs use identifier names as a primary semantic channel rather than a redundant gloss on the AST ([Liu et al., 2025](https://arxiv.org/abs/2510.03178)).
+Source code carries information through two channels: structural (AST, control flow) and lexical (identifiers, comments, docstrings). Minification strips the lexical channel on the assumption that structure carries the meaning. Independent measurement contradicts that assumption: removing the naming channel "severely degrades intent-level tasks" and causes "consistent reductions on execution tasks that should depend only on structure," because current LLMs use identifier names as a primary semantic channel rather than a redundant gloss on the AST ([Liu et al., 2025](https://arxiv.org/abs/2510.03178v1)).
 
-The token savings are real, but the lost channel forces a compensating cost. A controlled experiment on log-format compression showed the same dynamic: aggressive compression cut input tokens 17% but raised total session cost 67%, because the model spent reasoning tokens reconstructing what was removed ([Ustynov, 2026](https://arxiv.org/abs/2604.07502)). On SWE-bench the lost capacity surfaces as failed tasks rather than longer chains, but the underlying mechanism is the same — minification trades a readable channel for token savings, and the channel was load-bearing.
+The token savings are real, but the lost channel forces a compensating cost. A controlled experiment on log-format compression showed the same dynamic: aggressive compression cut input tokens 17% but raised total session cost 67%, because the model spent reasoning tokens reconstructing what was removed ([Ustynov, 2026](https://arxiv.org/abs/2604.07502v1)). On SWE-bench the lost capacity surfaces as failed tasks rather than longer chains, but the underlying mechanism is the same — minification trades a readable channel for token savings, and the channel was load-bearing.
 
 ## When this backfires
 
@@ -89,7 +89,7 @@ The decoupled measurement reveals which side of the Pareto frontier the workload
 
 ## Key Takeaways
 
-- Cumulative source-code minification cuts SWE-bench Verified input tokens 42% but drops pass@1 resolution rate from 50% to 38% on GPT-5-mini with the DirectSolve agent ([Hrubec & Cito, 2026](https://arxiv.org/abs/2606.01326)).
+- Cumulative source-code minification cuts SWE-bench Verified input tokens 42% but drops pass@1 resolution rate from 50% to 38% on GPT-5-mini with the DirectSolve agent ([Hrubec & Cito, 2026](https://arxiv.org/abs/2606.01326v1)).
 - The 12-percentage-point absolute regression is a ~24% relative drop in solved tasks — unacceptable for production code-modification agents.
 - LLMs use identifier names as a primary semantic channel; stripping them removes load-bearing input, not redundant gloss ([Liu et al., 2025](https://arxiv.org/abs/2510.03178)).
 - Token savings are real but a compensating cost surfaces — either as failed tasks or as extra reasoning tokens reconstructing what was removed ([Ustynov, 2026](https://arxiv.org/abs/2604.07502)).

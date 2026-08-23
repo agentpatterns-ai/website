@@ -19,7 +19,7 @@ maturity: emerging
 
 > Splitting the TDD cycle between human and agent has four shapes, each trading throughput against how much of the implementation your tests reach.
 
-A TDD cycle has two halves — writing the test and writing the production code — and each half goes to a human or an agent. That gives four interaction models: solo, collaborative, fully automated, and agentic. An exploratory study of the four found that agentic workflows produce functionally correct production code fastest, that collaborative workflows produce better-organized test suites, and that "the choice of interaction model should depend on the development objective" ([Mock and Russo, 2026](https://arxiv.org/abs/2607.22406)).
+A TDD cycle has two halves — writing the test and writing the production code — and each half goes to a human or an agent. That gives four interaction models: solo, collaborative, fully automated, and agentic. An exploratory study of the four found that agentic workflows produce functionally correct production code fastest, that collaborative workflows produce better-organized test suites, and that "the choice of interaction model should depend on the development objective" ([Mock and Russo, 2026](https://arxiv.org/abs/2607.22406v1)).
 
 ## Why the interaction model matters
 
@@ -51,15 +51,15 @@ The ladder is tool-agnostic. The study ran the collaborative rung on a general-p
 
 The study behind this comparison is exploratory, and three conditions bound what it supports.
 
-The sample is small and so is the task. Sixteen IT professionals took part, split nine solo and seven collaborative, working for 40 minutes on a `TextFormatter` class that centers one word and then two words in a line. The authors state the tasks "did not require understanding complex APIs or class structures" and that the sample size "may reduce the statistical power of the comparisons involving human participants" ([Mock and Russo, 2026](https://arxiv.org/abs/2607.22406)).
+The sample is small and so is the task. Sixteen IT professionals took part, split nine solo and seven collaborative, working for 40 minutes on a `TextFormatter` class that centers one word and then two words in a line. The authors state the tasks "did not require understanding complex APIs or class structures" and that the sample size "may reduce the statistical power of the comparisons involving human participants" ([Mock and Russo, 2026](https://arxiv.org/abs/2607.22406v1)).
 
 The arms did not run the same models. The collaborative and fully automated workflows used GPT-3.5 Turbo through its API, while the agentic workflow ran MetaGPT X configured with ChatGPT 5 and Claude Sonnet 4 ([Mock and Russo, 2026](https://arxiv.org/abs/2607.22406)). The agentic arm's speed advantage is therefore confounded with a two-generation model gap, and so is the collaborative arm's test-quality advantage.
 
-Test quality here means structure and coverage, not defect detection. A comparison of LLM-generated and human-written unit tests on real Python bugs found human tests scored higher on line coverage (88.5% against 84.8%) and branch coverage (82.1% against 75.2%) while detecting 17.2% of faults against the LLM suite's 69%, and concluded that coverage is an insufficient proxy for fault-detection capability ([Vathana et al., 2026](https://arxiv.org/abs/2606.08588)). A better-organized suite is not automatically a suite that catches more bugs.
+Test quality here means structure and coverage, not defect detection. A comparison of LLM-generated and human-written unit tests on real Python bugs found human tests scored higher on line coverage (88.5% against 84.8%) and branch coverage (82.1% against 75.2%) while detecting 17.2% of faults against the LLM suite's 69%, and concluded that coverage is an insufficient proxy for fault-detection capability ([Vathana et al., 2026](https://arxiv.org/abs/2606.08588v1)). A better-organized suite is not automatically a suite that catches more bugs.
 
 ## Why it works
 
-The cost of full autonomy is structural rather than behavioral. In TDD the test suite derives from the functional specification, so its reach is bounded by what the specification asks for. Anything the implementer adds beyond that — extra guard clauses, input normalization, defensive branches — sits outside the suite by construction. Mock and Russo state this directly for the agentic case: agents "may also introduce additional implementation decisions that are not explicitly required by the functional specifications, resulting in untested decision points" ([Mock and Russo, 2026](https://arxiv.org/abs/2607.22406)).
+The cost of full autonomy is structural rather than behavioral. In TDD the test suite derives from the functional specification, so its reach is bounded by what the specification asks for. Anything the implementer adds beyond that — extra guard clauses, input normalization, defensive branches — sits outside the suite by construction. Mock and Russo state this directly for the agentic case: agents "may also introduce additional implementation decisions that are not explicitly required by the functional specifications, resulting in untested decision points" ([Mock and Russo, 2026](https://arxiv.org/abs/2607.22406v1)).
 
 Keeping a human on the test-writing half does not make the human a better test author. It constrains scope. Specification and implementation come from different parties, so unrequested behavior has to survive a review round before it enters the codebase. That is the same reasoning behind [test-driven agent development](../verification/tdd-agent-development.md), where the test file is the contract the agent implements against.
 
@@ -85,7 +85,7 @@ Gating the test-writing half on a human costs more than it returns under several
 - Reviewer time is the scarce resource. Collaborative TDD puts a human in every iteration, so the cost lands on each cycle rather than once at the end.
 - Nobody reviews the extra branches. The untested-decision-point cost is only avoidable if someone inspects what the agent added beyond the specification.
 
-Automating the test half does not rescue you either. Most LLM-generated Python test suites in one assessment contained at least one error or test smell, with assertion errors making up 64% of errors and lack of cohesion of test cases the most common smell at 41% ([Alves et al., 2025](https://arxiv.org/abs/2506.14297)).
+Automating the test half does not rescue you either. Most LLM-generated Python test suites in one assessment contained at least one error or test smell, with assertion errors making up 64% of errors and lack of cohesion of test cases the most common smell at 41% ([Alves et al., 2025](https://arxiv.org/abs/2506.14297v1)).
 
 ## Example
 

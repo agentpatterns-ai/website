@@ -42,7 +42,7 @@ Each memory entry is a structured triple `(z, d, e)`:
 - `d` — a structured description with objective and mechanism-level keywords (the retrieval anchor)
 - `e` — an abstracted experience with instance-specific noise removed (file paths and variable names stripped)
 
-Abstraction matters. Raw trajectory storage yields +1.2 pp, while LLM-abstracted entries deliver +3.9 pp, because abstraction distills transferable insights and drops ungeneralizable artifacts. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
+Abstraction matters. Raw trajectory storage yields +1.2 pp, while LLM-abstracted entries deliver +3.9 pp, because abstraction distills transferable insights and drops ungeneralizable artifacts. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611v1))
 
 ## Two-stage retrieval
 
@@ -63,13 +63,13 @@ Stage 1 hard-filters by category `z`, removing cross-phase entries before rankin
 
 Transition prediction runs through the system prompt. The agent predicts its current category and writes a structured description as it reasons. The system prompt drives this, so you need no separate orchestrator. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
 
-Early sessions are sparse. The first ~200 instances produce a slight dip (−1 pp) from retrieval overhead on thin pools. Gains accelerate with density, reaching +9 to 10 pp after 300+ instances. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
+Early sessions are sparse. The first ~200 instances produce a slight dip (−1 pp) from retrieval overhead on thin pools. Gains accelerate with density, reaching +9 to 10 pp after 300+ instances. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611v1))
 
-The approach is model-agnostic. Results hold across model families, and Gemini 2.5 Pro sees +6.8 pp. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611))
+The approach is model-agnostic. Results hold across model families, and Gemini 2.5 Pro sees +6.8 pp. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611v1))
 
 ## Results
 
-Subtask-level memory improves mean Pass@1 by +4.7 pp on SWE-bench Verified over unaligned baselines. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611)) The broader principle — retrieval granularity should match reasoning granularity — is independently supported by dual-layer episodic-semantic memory work, where granular logs plus abstract concept synthesis outperform flat retrieval on multi-hop tasks. ([arXiv:2601.02744](https://arxiv.org/abs/2601.02744))
+Subtask-level memory improves mean Pass@1 by +4.7 pp on SWE-bench Verified over unaligned baselines. ([arXiv:2602.21611](https://arxiv.org/abs/2602.21611v1)) The broader principle — retrieval granularity should match reasoning granularity — is independently supported by dual-layer episodic-semantic memory work, where granular logs plus abstract concept synthesis outperform flat retrieval on multi-hop tasks. ([arXiv:2601.02744](https://arxiv.org/abs/2601.02744))
 
 ## Relation to scope-based memory
 

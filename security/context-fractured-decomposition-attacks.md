@@ -35,7 +35,7 @@ CFD exploits three structural properties:
 | Cross-instance reuse | Artifacts persist across agent instances and workflow stages — payload staged in one session triggers in another. |
 | Untracked provenance | The defender at the trigger site cannot tell whether a benign-looking artifact carries attacker-influenced spans. |
 
-CFD raises attack success rate by up to 28.3 percentage points over state-of-the-art multi-turn baselines, even against strong single-turn judges ([Lin et al., 2026](https://arxiv.org/abs/2606.09084)).
+CFD raises attack success rate by up to 28.3 percentage points over state-of-the-art multi-turn baselines, even against strong single-turn judges ([Lin et al., 2026](https://arxiv.org/abs/2606.09084v1)).
 
 ## Why it works
 

@@ -18,17 +18,17 @@ maturity: adopted
 
 > Gate an agent's pull request on the test coverage of its changed lines instead of trusting that the agent tested its own diff.
 
-Compute coverage over only the lines a pull request adds or edits, then block the merge when that number falls below a threshold. This makes the agent's own diff the coverage obligation, rather than the whole-repository percentage that a large existing suite already inflates. The gate exists because agents do not reliably test what they change: across 4,882 agent-authored PRs in the AIDev dataset, agents included a test change in only 49.6% of PRs that touched code under test, and existing tests executed 61.5% of changed lines in Java but just 27.0% in Python ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057)).
+Compute coverage over only the lines a pull request adds or edits, then block the merge when that number falls below a threshold. This makes the agent's own diff the coverage obligation, rather than the whole-repository percentage that a large existing suite already inflates. The gate exists because agents do not reliably test what they change: across 4,882 agent-authored PRs in the AIDev dataset, agents included a test change in only 49.6% of PRs that touched code under test, and existing tests executed 61.5% of changed lines in Java but just 27.0% in Python ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057v1)).
 
 ## The empirical case
 
-The study covered five agents — Codex, Copilot, Cursor, Claude Code, and Devin — across 532 Java and 4,350 Python PRs ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057)). Three findings drive the gate:
+The study covered five agents — Codex, Copilot, Cursor, Claude Code, and Devin — across 532 Java and 4,350 Python PRs ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057v1)). Three findings drive the gate:
 
 - Half of code-touching PRs ship no test change at all (49.6% include one).
 - 64.8% of Python PRs have no changed line executed by any existing test.
 - Error paths are the worst blind spot: try/catch blocks were missed at 86.0% in Java and 81.0% in Python.
 
-Adding tests does not close the gap on its own. When Java agents wrote tests they still deleted more than they added (82 deleted versus 31, a 2.6× ratio), and 74.8% of the new tests Python agents added failed to cover the agent's own changed lines ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057)). A whole-repo coverage number hides all of this; a per-diff number surfaces it.
+Adding tests does not close the gap on its own. When Java agents wrote tests they still deleted more than they added (82 deleted versus 31, a 2.6× ratio), and 74.8% of the new tests Python agents added failed to cover the agent's own changed lines ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057v1)). A whole-repo coverage number hides all of this; a per-diff number surfaces it.
 
 ## How to apply it
 
@@ -65,7 +65,7 @@ An agent opens a PR adding a `refund()` path. The suite passes and whole-repo co
 ## Key Takeaways
 
 - Scope the coverage metric to the PR's changed lines; a whole-repo percentage hides an untested diff behind a large existing suite.
-- The gate is justified empirically: agents test under half of code-touching PRs, and existing tests cover 27.0% of changed Python lines ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057)).
+- The gate is justified empirically: agents test under half of code-touching PRs, and existing tests cover 27.0% of changed Python lines ([arXiv:2607.18057](https://arxiv.org/abs/2607.18057v1)).
 - Block on deleted tests too — test deletion is an agent path to a green build.
 - Coverage proves execution, not assertion; pair the gate with mutation testing or branch coverage so it resists assertion-free gaming.
 - Exempt trivial diffs deliberately rather than lowering the threshold for everyone.

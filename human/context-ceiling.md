@@ -28,7 +28,7 @@ Expert architects carry hundreds of interconnected constraints simultaneously --
 
 AI capability maps inversely to the [complexity of context required](../context-engineering/context-engineering.md). Standard engineering tasks, well-documented, pattern-matchable, and bounded in scope, succeed reliably. Expert architecture tasks, requiring simultaneous awareness of organizational, regulatory, and technical context, fail systematically.
 
-This is not theoretical. A METR RCT (2025) measured 16 experienced developers across 246 tasks -- they were 19% slower with AI assistance yet predicted a 24% speedup and believed they had achieved a 20% speedup ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Noy and Zhang (2023) found AI raised overall productivity 40%, but lower-performing workers benefited disproportionately while top performers saw diminishing returns.
+This is not theoretical. A METR RCT (2025) measured 16 experienced developers across 246 tasks -- they took 19% longer with AI assistance yet predicted a 24% speedup and believed they had achieved a 20% speedup ([METR, 2025](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)). Noy and Zhang (2023) found AI raised overall productivity 40%, but lower-performing workers benefited disproportionately while top performers saw diminishing returns.
 
 ```mermaid
 graph LR
@@ -55,7 +55,7 @@ The architect's real work is navigating corner cases: a regulatory exception tha
 
 Liu et al. (2023) found LLMs exhibit a U-shaped attention curve: performance degrades when relevant information is in the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)). Chroma (2025) tested all 18 frontier models and found every one degrades as input length grows ([Chroma Research](https://research.trychroma.com/context-rot)). Effective capacity is substantially below advertised window size, and both find degradation begins well before the nominal limit is reached.
 
-Du et al. (2025) found performance drops 13.9 to 85% as input length increases even when all relevant information is retrieved and all distractors are removed -- sheer input length degrades performance independent of retrieval quality ([arXiv](https://arxiv.org/abs/2510.05381)). Better retrieval cannot fix the ceiling.
+Du et al. (2025) found performance drops 13.9 to 85% as input length increases even when all relevant information is retrieved and all distractors are removed -- sheer input length degrades performance independent of retrieval quality ([arXiv](https://arxiv.org/abs/2510.05381v1)). Better retrieval cannot fix the ceiling.
 
 ### Enterprise codebases exceed even theoretical limits
 

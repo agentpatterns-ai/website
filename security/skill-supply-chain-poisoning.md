@@ -26,7 +26,7 @@ Coding agents extend behavior by retrieving skills at runtime — a Markdown doc
 
 Document-Driven Implicit Payload Execution (DDIPE) weaponizes that trust. Instead of explicit commands like "exfiltrate credentials" (which alignment blocks at 0% under strong defenses), DDIPE hides malicious logic inside code examples and configuration templates. The agent reproduces those examples during normal task execution — the payload runs without an explicit instruction.
 
-Across four agent frameworks (Claude Code, OpenHands, Codex, Gemini CLI) and five models, DDIPE achieves 11.6%–33.5% bypass rates where explicit injection achieves 0%. Of 1,070 adversarial skills across 15 MITRE ATT&CK categories, 2.5% evaded both static detection and model alignment ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081)).
+Across four agent frameworks (Claude Code, OpenHands, Codex, Gemini CLI) and five models, DDIPE achieves 11.6%–33.5% bypass rates where explicit injection achieves 0%. Of 1,070 adversarial skills across 15 MITRE ATT&CK categories, 2.5% evaded both static detection and model alignment ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081v1)).
 
 ## Why skills are a distinct attack surface
 
@@ -91,7 +91,7 @@ Lock skills to audited versions with immutable content hashes — never version 
 
 ### 4. Multi-model verification at runtime
 
-Only 1.6% of adversarial payloads bypass all tested models simultaneously, and removing architectural guardrails amplifies one model's execution rate by 11.3× while leaving another unchanged ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081)). Run skill execution through two independent models and require consensus on tool-call patterns; layers interact asymmetrically, so test the combination before relying on it.
+Only 1.6% of adversarial payloads bypass all tested models simultaneously, and removing architectural guardrails amplifies one model's execution rate by 11.3× while leaving another unchanged ([arxiv 2604.03081](https://arxiv.org/abs/2604.03081v1)). Run skill execution through two independent models and require consensus on tool-call patterns; layers interact asymmetrically, so test the combination before relying on it.
 
 ### 5. Least-privilege execution
 

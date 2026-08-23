@@ -100,7 +100,7 @@ Week 4 onward: when you find yourself adding the same instruction again and agai
 
 ## Keep it short
 
-Target under 200 lines per file. Every line consumes context budget before the agent starts working on your actual task. Long instruction files reduce adherence — instruction-following accuracy degrades as instruction density increases, with even leading frontier models achieving only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538)).
+Target under 200 lines per file. Every line consumes context budget before the agent starts working on your actual task. Long instruction files reduce adherence — instruction-following accuracy degrades as instruction density increases, with even leading frontier models achieving only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1)).
 
 When you outgrow 200 lines:
 

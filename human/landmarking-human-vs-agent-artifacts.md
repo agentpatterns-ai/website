@@ -18,13 +18,13 @@ maturity: emerging
 
 > Landmarking is a team-agreed convention marking which repository artifacts are written for people to understand and which exist only as agent context.
 
-Developers working with coding agents already invent these conventions privately. Elle O'Brien's contextual inquiry of scientific programmers found participants improvising personal schemes for marking which artifacts carry meaning for a human reader, and warns that "because each landmarking strategy is individually determined, conventions fragment across teams" ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)). The technique is to make that scheme explicit and shared.
+Developers working with coding agents already invent these conventions privately. Elle O'Brien's contextual inquiry of scientific programmers found participants improvising personal schemes for marking which artifacts carry meaning for a human reader, and warns that "because each landmarking strategy is individually determined, conventions fragment across teams" ([O'Brien, 2026](https://arxiv.org/abs/2607.25975v1)). The technique is to make that scheme explicit and shared.
 
 ## When it pays back
 
 Three conditions carry the overhead; outside them it is waste:
 
-- More than one person reads the repository. The payoff is a second reader who needs to know where to spend comprehension effort. Solo exploratory work has none: O'Brien reports her own mental model breaking on exploratory analysis, ending in "committing haphazardly and without any real documentation" ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)).
+- More than one person reads the repository. The payoff is a second reader who needs to know where to spend comprehension effort. Solo exploratory work has none: O'Brien reports her own mental model breaking on exploratory analysis, ending in "committing haphazardly and without any real documentation" ([O'Brien, 2026](https://arxiv.org/abs/2607.25975v1)).
 - The team's tooling is heterogeneous. A git-trailer convention is unusable by a colleague working through a chatbot, which is how roughly three quarters of the scientific programmers she surveyed work ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)).
 - The code outlives the session, so someone will return after the transcript is gone.
 
@@ -49,13 +49,13 @@ Back it with something mechanical, because a social convention alone is weakly f
 
 ## Why it works
 
-Review attention is scarce and routed by signals, so a shared readership marker concentrates comprehension effort on the artifacts carrying decision context. What gets lost without one is the decision shadow — "the constraints, rejected alternatives, and forward-looking context that shaped the decision", which a diff discards by construction ([Stetsenko, 2026](https://arxiv.org/abs/2603.15566)). Each of O'Brien's schemes preserves that shadow somewhere and tells its inventor where to look; sharing it extends the routing to everyone else ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)). The evidence is a position argument from four cases and a survey of over 800 scientific programmers, not a controlled study.
+Review attention is scarce and routed by signals, so a shared readership marker concentrates comprehension effort on the artifacts carrying decision context. What gets lost without one is the decision shadow — "the constraints, rejected alternatives, and forward-looking context that shaped the decision", which a diff discards by construction ([Stetsenko, 2026](https://arxiv.org/abs/2603.15566v1)). Each of O'Brien's schemes preserves that shadow somewhere and tells its inventor where to look; sharing it extends the routing to everyone else ([O'Brien, 2026](https://arxiv.org/abs/2607.25975v1)). The evidence is a position argument from four cases and a survey of over 800 scientific programmers, not a controlled study.
 
 ## When this backfires
 
-- Voluntary marking goes unfollowed. Across 14,300 commits in 7,393 repositories, 95.2% showed AI usage but only 29.5% disclosed it, ranging from 80.5% for one tool to 9.0% for another ([Kraishan, 2025](https://arxiv.org/abs/2512.00867)). A partial map reads as a complete one.
-- Disclosure costs whoever complies: explicit attribution drew 23% more questions and 21% more comments, though sentiment stayed neutral ([Kraishan, 2025](https://arxiv.org/abs/2512.00867)).
-- Marks drift from the code. Inconsistent annotation changes are "around 1.5 times more likely to lead to a bug-introducing commit than consistent changes" ([Radmanesh et al., 2024](https://arxiv.org/abs/2409.10781)). A stale "agent context only" marker is worse than none.
+- Voluntary marking goes unfollowed. Across 14,300 commits in 7,393 repositories, 95.2% showed AI usage but only 29.5% disclosed it, ranging from 80.5% for one tool to 9.0% for another ([Kraishan, 2025](https://arxiv.org/abs/2512.00867v1)). A partial map reads as a complete one.
+- Disclosure costs whoever complies: explicit attribution drew 23% more questions and 21% more comments, though sentiment stayed neutral ([Kraishan, 2025](https://arxiv.org/abs/2512.00867v1)).
+- Marks drift from the code. Inconsistent annotation changes are "around 1.5 times more likely to lead to a bug-introducing commit than consistent changes" ([Radmanesh et al., 2024](https://arxiv.org/abs/2409.10781v1)). A stale "agent context only" marker is worse than none.
 - The agent tier is still load-bearing. Labeling an artifact as agent context does not stop agents acting on it; it only lowers the human review bar on something that still runs. Where policy already requires human review of AI-assisted contributions ([Hora and Robbes, 2026](https://arxiv.org/abs/2605.16706)), a "nobody reviews this tier" rule conflicts with it.
 - The convention is not portable. Strategies "are not necessarily interoperable" across collaborators, and what an agent recovers differs sharply between an unlimited and a constrained token budget ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)).
 
@@ -75,7 +75,7 @@ The social half is the sentence the team agrees and commits, adapted from the me
 - Landmarking marks which repository artifacts are written for human understanding and which exist as agent context; the value is in the convention being shared, not in any one scheme.
 - Four schemes observed in practice: commit message as journal, merged diff as the unit, spec-driven review, and chat log plus growing script ([O'Brien, 2026](https://arxiv.org/abs/2607.25975)).
 - It pays back with multiple readers, heterogeneous tooling, and code that outlives the session; it is overhead in solo exploratory work.
-- Back the convention with mechanism — `linguist-generated` suppression, review policy, CI — because voluntary disclosure ran at 29.5% against 95.2% actual AI usage ([Kraishan, 2025](https://arxiv.org/abs/2512.00867)).
+- Back the convention with mechanism — `linguist-generated` suppression, review policy, CI — because voluntary disclosure ran at 29.5% against 95.2% actual AI usage ([Kraishan, 2025](https://arxiv.org/abs/2512.00867v1)).
 - Stale marks are worse than absent ones: inconsistent annotations precede bug-introducing commits about 1.5 times more often ([Radmanesh et al., 2024](https://arxiv.org/abs/2409.10781)).
 
 ## Related

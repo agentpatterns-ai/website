@@ -62,7 +62,7 @@ If adding one new instruction requires adding three others to handle its edge ca
 
 ## Why it works
 
-Instruction-tuned models generalize from principle-level guidance. They apply stated reasoning to novel inputs rather than pattern-matching enumerated cases. A heuristic like "treat authentication code as high-risk" activates the model's existing knowledge of session and token effects, knowledge that would take dozens of rules to approximate. Enumerated rules also consume context budget. [Instruction-count scaling research](https://arxiv.org/abs/2507.11538) shows accuracy degrades as the number of simultaneous instructions grows: even the best frontier models reach only 68% accuracy at a density of 500 instructions. Altitude trades case coverage for generalizability and context efficiency.
+Instruction-tuned models generalize from principle-level guidance. They apply stated reasoning to novel inputs rather than pattern-matching enumerated cases. A heuristic like "treat authentication code as high-risk" activates the model's existing knowledge of session and token effects, knowledge that would take dozens of rules to approximate. Enumerated rules also consume context budget. [Instruction-count scaling research](https://arxiv.org/abs/2507.11538v1) shows accuracy degrades as the number of simultaneous instructions grows: even the best frontier models reach only 68% accuracy at a density of 500 instructions. Altitude trades case coverage for generalizability and context efficiency.
 
 ## When this backfires
 
@@ -125,7 +125,7 @@ Enumerate for fixed-schema extraction in regulated formats such as FHIR, EDI, or
 
 **Does altitude affect anything besides edge-case coverage?**
 
-Yes — context budget. Enumerated rules consume it, and accuracy degrades as the number of simultaneous instructions grows: even the best frontier models reach only 68% accuracy at a density of 500 instructions ([instruction-count scaling research](https://arxiv.org/abs/2507.11538)). Principle-level guidance also activates knowledge the model already holds, so one heuristic can replace dozens of rules approximating it.
+Yes — context budget. Enumerated rules consume it, and accuracy degrades as the number of simultaneous instructions grows: even the best frontier models reach only 68% accuracy at a density of 500 instructions ([instruction-count scaling research](https://arxiv.org/abs/2507.11538v1)). Principle-level guidance also activates knowledge the model already holds, so one heuristic can replace dozens of rules approximating it.
 
 ## Related
 

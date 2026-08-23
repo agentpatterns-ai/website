@@ -81,3 +81,4 @@ The generic self-check asks the agent to rebuild the validation set it just fail
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — the independent-verification fix as a standing practice.
 - [Artifact-Only Verification Hides Skipped Skill Steps](artifact-only-verification.md) — the measurement counterpart: steps skipped even in a short context, where the artifact checks stay green.
 - [Agent Extension Conflicts](agent-extension-conflicts.md) — how loaded skills interact and degrade under context-budget contention.
+- [Skill Over-Trust](skill-over-trust.md) — the other single-skill failure: a topically matched skill displaces task requirements instead of shedding its own.

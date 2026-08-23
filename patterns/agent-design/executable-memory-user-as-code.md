@@ -27,11 +27,11 @@ Use executable memory only when at least one row applies:
 
 | Workload signal | Why code beats retrieval |
 |---|---|
-| Aggregate queries — count, sum, group-by, top-k, time-window filter | Retrieval forces the LLM to reduce across passages; a Python function does it deterministically. UaC reports 99% accuracy across 100 aggregate cases against 43% for MemMachine and 6% for Mem0 ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707)). |
+| Aggregate queries — count, sum, group-by, top-k, time-window filter | Retrieval forces the LLM to reduce across passages; a Python function does it deterministically. UaC reports 99% accuracy across 100 aggregate cases against 43% for MemMachine and 6% for Mem0 ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707v1)). |
 | Rule enforcement — drug-allergy conflicts, dietary constraints, scheduling rules | Rules become predicates that fire at decision time, not optional context the model may ignore. |
 | Contradiction-sensitive history — preferences that change, conflicting facts across sessions | The append-only log preserves every prior fact. Checkpoint generation can encode contradictions as explicit `if`/`elif` arbitration rather than leaving which version surfaces to chance. |
 
-On the LOCOMO conversation-recall benchmark, which is pure "what did the user say" retrieval, text-based systems beat code-as-memory: MemMachine reaches 91.69% ([Yang et al. 2026 — arXiv:2604.04853](https://arxiv.org/abs/2604.04853)), Memobase 75.78% ([Memobase LOCOMO benchmark](https://github.com/memodb-io/memobase/blob/main/docs/experiments/locomo-benchmark/README.md)), against UaC's 78.8% ([Li 2026](https://arxiv.org/abs/2606.16707)). The pattern complements retrieval-based memory ([Agent Memory Patterns](agent-memory-patterns.md)), not replaces it.
+On the LOCOMO conversation-recall benchmark, which is pure "what did the user say" retrieval, text-based systems beat code-as-memory: MemMachine reaches 91.69% ([Yang et al. 2026 — arXiv:2604.04853](https://arxiv.org/abs/2604.04853v1)), Memobase 75.78% ([Memobase LOCOMO benchmark](https://github.com/memodb-io/memobase/blob/main/docs/experiments/locomo-benchmark/README.md)), against UaC's 78.8% ([Li 2026](https://arxiv.org/abs/2606.16707v1)). The pattern complements retrieval-based memory ([Agent Memory Patterns](agent-memory-patterns.md)), not replaces it.
 
 ## How the two phases work
 
@@ -50,7 +50,7 @@ The checkpoint is the performance property. A model rewrites the log as typed Py
 
 ## Why it works
 
-UaC's structured retrieval matches its full-context upper bound at 100% across all record sizes ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707)) — the lift is not "better retrieval." It comes from converting an aggregation that the LLM does unreliably (multi-step arithmetic across retrieved passages) into a function call the model executes reliably. The log preserves the temporal ordering aggregates need; a retrieval system that compresses the past loses it.
+UaC's structured retrieval matches its full-context upper bound at 100% across all record sizes ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707v1)) — the lift is not "better retrieval." It comes from converting an aggregation that the LLM does unreliably (multi-step arithmetic across retrieved passages) into a function call the model executes reliably. The log preserves the temporal ordering aggregates need; a retrieval system that compresses the past loses it.
 
 ## When this backfires
 
@@ -59,7 +59,7 @@ UaC's structured retrieval matches its full-context upper bound at 100% across a
 - Weak code-generation models. Checkpoint passes running on small open-weights chat models produce dataclasses with silent type errors that surface only at agent-query time. A broken checkpoint emits zero facts; a noisy embedding still returns plausibly-relevant material.
 - Regulated decision support (HIPAA-covered clinical, SOC 2 / SOX financial calc, FDA Software-as-a-Medical-Device). The checkpoint is code that runs against user data. Compliance has seen retrieval indexes; it has not seen model-authored Python deciding what counts as a drug-allergy conflict. The log is auditable; the checkpoint introduces a new artifact class.
 - Contradiction-heavy domains without explicit resolution rules. The paper acknowledges that checkpoints can encode conflicting rules with no automatic arbitration — execution order (first-match wins) is the default tie-break ([Li 2026](https://arxiv.org/abs/2606.16707)). The model silently picks a winner the user did not approve.
-- Workloads that fit in one context window. Full Context + Python REPL matches UaC at 100% on aggregates ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707)) — if history fits in context the checkpoint earns nothing.
+- Workloads that fit in one context window. Full Context + Python REPL matches UaC at 100% on aggregates ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707v1)) — if history fits in context the checkpoint earns nothing.
 
 ## Example
 
@@ -99,7 +99,7 @@ The agent calls `check_drug_interaction("ibuprofen", lunch, user)` and gets a de
 - Executable memory uses an append-only log (nothing discarded) plus a periodic code checkpoint (typed dataclasses + rule functions) — the log is the safety property, the checkpoint is the performance property.
 - It dominates retrieval on aggregate, rule-enforcement, and contradiction-sensitive queries (see table above).
 - It loses to text retrieval on plain recall — treat the pattern as a complement to a retrieval index, not a replacement: code path for aggregates and rules, index for "what did the user say about X."
-- Skip the pattern when the user history fits in one context window — Full Context + Python REPL matches UaC at 100% on aggregates with no checkpoint cost ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707)).
+- Skip the pattern when the user history fits in one context window — Full Context + Python REPL matches UaC at 100% on aggregates with no checkpoint cost ([Li 2026, Table 3](https://arxiv.org/abs/2606.16707v1)).
 
 ## Related
 

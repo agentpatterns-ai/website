@@ -89,13 +89,13 @@ SELF-DISCOVER outperforms fixed reasoning strategies through three mechanisms id
 
 The gains are not uniform: algorithmic tasks see only moderate improvement, while world-knowledge and multi-step planning tasks (T4D: +29pp over CoT) benefit most. Computational errors remain outside the framework's reach.
 
-The "explicit structure helps" claim is also contested. An instance-level reproduction, iSelf-Discover ([Gunasekara & Ratnayake, 2025](https://arxiv.org/abs/2507.03347)), found that unstructured reasoning plans consistently beat structured ones — by up to 18.90% relative on MATH, with zero-shot unstructured variants exceeding five-shot structured ones. The takeaway is that the per-task-type composition step, not the JSON rigidity, likely carries the benefit. Forcing reasoning into a fixed structure can cost accuracy when the task does not need it.
+The "explicit structure helps" claim is also contested. An instance-level reproduction, iSelf-Discover ([Gunasekara & Ratnayake, 2025](https://arxiv.org/abs/2507.03347v1)), found that unstructured reasoning plans consistently beat structured ones — by up to 18.90% relative on MATH, with zero-shot unstructured variants exceeding five-shot structured ones. The takeaway is that the per-task-type composition step, not the JSON rigidity, likely carries the benefit. Forcing reasoning into a fixed structure can cost accuracy when the task does not need it.
 
 ## Compute trade-offs
 
 Stage 1 costs 3 additional LLM calls (Select, Adapt, Implement) per task type. After that, each instance costs one inference call — the same as plain CoT, with no extra overhead per instance.
 
-The meaningful comparison is against CoT-Self-Consistency (multiple CoT passes per instance): SELF-DISCOVER needs 10–40x fewer inference calls while exceeding CoT-SC accuracy ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)). Stage 1 overhead is pure cost for a one-off task type, but amortizes quickly across any recurring one.
+The meaningful comparison is against CoT-Self-Consistency (multiple CoT passes per instance): SELF-DISCOVER needs 10–40x fewer inference calls while exceeding CoT-SC accuracy ([Wang et al., 2024](https://arxiv.org/abs/2402.03620v1)). Stage 1 overhead is pure cost for a one-off task type, but amortizes quickly across any recurring one.
 
 ## Key Takeaways
 

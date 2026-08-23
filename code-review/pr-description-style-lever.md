@@ -20,7 +20,7 @@ maturity: emerging
 
 A study of 5 AI coding agents across the AIDev dataset found significant variation in PR description structure. That variation correlated with reviewer engagement and merge rates, partly independent of code quality ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084)).
 
-Merge rates by agent: OpenAI Codex 82.6%, Cursor 65.22%, Claude Code 59.0%, Devin 53.76%, GitHub Copilot 43.0%. All cross-agent differences were significant at p<0.001 ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), Table 4).
+Merge rates by agent: OpenAI Codex 82.6%, Cursor 65.22%, Claude Code 59.0%, Devin 53.76%, GitHub Copilot 43.0%. All cross-agent differences were significant at p<0.001 ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084v1), Table 4).
 
 ## Structural differences across agents
 
@@ -34,7 +34,7 @@ The study identifies systematic per-agent patterns ([arXiv:2602.17084](https://a
 | Devin | Frequent commit splits; structured commit history |
 | GitHub Copilot | Extensive reviewer discussion generated; lowest merge rate |
 
-Copilot generated the most reviewer discussion but had the lowest merge rate. The outcome to optimize is review churn, not the volume of engagement. Time-to-completion also varied sharply: Codex took about 0.02 hours, Copilot 13.0 hours ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084), Table 4). Effect sizes: comments-per-PR ε²=0.280 (medium-to-large); reviewer sentiment V=0.128.
+Copilot generated the most reviewer discussion but had the lowest merge rate. The outcome to optimize is review churn, not the volume of engagement. Time-to-completion also varied sharply: Codex took about 0.02 hours, Copilot 13.0 hours ([arXiv:2602.17084](https://arxiv.org/abs/2602.17084v1), Table 4). Effect sizes: comments-per-PR ε²=0.280 (medium-to-large); reviewer sentiment V=0.128.
 
 ## The configuration mechanism
 

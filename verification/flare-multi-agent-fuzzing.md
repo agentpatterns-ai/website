@@ -119,7 +119,7 @@ Source access required. FLARE reads MAS source code to extract agent specificati
 
 Non-determinism limits reproducibility. A path you discover in one fuzzing run may not reproduce reliably. Failure cases need [deterministic replay harnesses](../observability/offline-trajectory-replay-multi-agent-debugging.md) (seeded or mocked LLM responses) to work as stable regression tests.
 
-Long runtimes exclude CI. FLARE reached 96.9% inter-agent and 91.1% intra-agent coverage across 16 open-source applications ([arXiv:2604.05289](https://arxiv.org/abs/2604.05289)), but sessions run for hours. Schedule fuzzing as periodic or pre-release, not a blocking gate.
+Long runtimes exclude CI. FLARE reached 96.9% inter-agent and 91.1% intra-agent coverage across 16 open-source applications ([arXiv:2604.05289](https://arxiv.org/abs/2604.05289v1)), but sessions run for hours. Schedule fuzzing as periodic or pre-release, not a blocking gate.
 
 Coverage saturation is a moving target. Adding an agent or message type expands the interaction space, invalidating prior saturation claims. Re-run after any architectural change.
 

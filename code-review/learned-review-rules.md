@@ -21,7 +21,7 @@ maturity: established
 
 A first-generation review agent treats every PR as a fresh start. It flags the same false positives your team has dismissed dozens of times, misses patterns your codebase convention already handles, and produces a noise-to-signal ratio that degrades trust. This includes the systematic [overcorrection bias](../patterns/anti-patterns/llm-review-overcorrection.md), where LLMs misclassify correct code as non-compliant. The agent does not learn.
 
-The cause is feedback disposal: when a developer dismisses a comment or accepts a fix, that signal is discarded. The agent behaves the same way on the next PR as it did on the first. An [empirical study of 278,790 code review conversations across 300 open-source projects](https://arxiv.org/abs/2603.15911) found that teams adopt AI agent suggestions at a much lower rate than suggestions from human reviewers. The gap persists in part because agents cannot adjust their defaults to team-specific dismissal patterns.
+The cause is feedback disposal: when a developer dismisses a comment or accepts a fix, that signal is discarded. The agent behaves the same way on the next PR as it did on the first. An [empirical study of 278,790 code review conversations across 300 open-source projects](https://arxiv.org/abs/2603.15911v1) found that teams adopt AI agent suggestions at a much lower rate than suggestions from human reviewers. The gap persists in part because agents cannot adjust their defaults to team-specific dismissal patterns.
 
 ## The pattern
 

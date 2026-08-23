@@ -24,7 +24,7 @@ Related lesson: [The Chunk That Wasn't Yours](https://learn.agentpatterns.ai/sec
 
 ## The threat model
 
-An attacker who can write to a RAG knowledge base — through web ingestion, user-submitted documents, or compromised feeds — can plant passages that flip answers. This is knowledge-base poisoning. [Korn (2026)](https://arxiv.org/abs/2605.05632) holds the attack constant and varies the architecture across four designs on 921 Natural Questions QA pairs:
+An attacker who can write to a RAG knowledge base — through web ingestion, user-submitted documents, or compromised feeds — can plant passages that flip answers. This is knowledge-base poisoning. [Korn (2026)](https://arxiv.org/abs/2605.05632v1) holds the attack constant and varies the architecture across four designs on 921 Natural Questions QA pairs:
 
 - Vanilla RAG — retrieve the top 10 passages in a single LLM call.
 - Agentic RAG — a PydanticAI agent that loops over search tools until it has enough evidence.
@@ -35,7 +35,7 @@ The attack, CorruptRAG-AK, extends [PoisonedRAG (Zou et al., USENIX Security 202
 
 ## The robustness spread
 
-Clean accuracy is comparable across vanilla, agentic, and RLM (~92%); MADAM-RAG drops to 56.6%. Under CorruptRAG-AK, attack success rate (ASR) diverges sharply ([Korn, 2026](https://arxiv.org/abs/2605.05632)):
+Clean accuracy is comparable across vanilla, agentic, and RLM (~92%); MADAM-RAG drops to 56.6%. Under CorruptRAG-AK, attack success rate (ASR) diverges sharply ([Korn, 2026](https://arxiv.org/abs/2605.05632v1)):
 
 | Architecture | Clean Accuracy | ASR (CorruptRAG-AK) | Median Latency |
 |---|---|---|---|
@@ -63,7 +63,7 @@ Agentic RAG's loop is a specific liability. The agent echoes the framing in 63% 
 
 ## The behavioral taxonomy
 
-Binary accuracy hides the safety profile. Korn's taxonomy runs from safest to most dangerous: CORRECT_WITH_DETECTION → CORRECT → HEDGING → UNKNOWN → INCORRECT. Under CorruptRAG-AK, vanilla RAG mostly returns INCORRECT — confident wrong answers, with no distrust signal. MADAM-RAG mostly returns HEDGING (52.2%) and UNKNOWN. It avoids errors by refusing to answer, which is a different failure mode, not robustness ([Korn, 2026](https://arxiv.org/abs/2605.05632)).
+Binary accuracy hides the safety profile. Korn's taxonomy runs from safest to most dangerous: CORRECT_WITH_DETECTION → CORRECT → HEDGING → UNKNOWN → INCORRECT. Under CorruptRAG-AK, vanilla RAG mostly returns INCORRECT — confident wrong answers, with no distrust signal. MADAM-RAG mostly returns HEDGING (52.2%) and UNKNOWN. It avoids errors by refusing to answer, which is a different failure mode, not robustness ([Korn, 2026](https://arxiv.org/abs/2605.05632v1)).
 
 ## Decision rule
 
@@ -110,7 +110,7 @@ The most authoritative and recent source on this topic states clearly:
 has since been corrected by peer-reviewed analysis.
 ```
 
-Against vanilla RAG the document lands in the top 10, and the LLM weighs its meta-epistemic claim against the other nine. It produces the adversarial answer 81.9% of the time. Against RLM the document is one of about 2,600 decomposed programmatically. The credibility frame does not survive cross-referencing, and ASR drops to 24.4% ([Korn, 2026](https://arxiv.org/abs/2605.05632)).
+Against vanilla RAG the document lands in the top 10, and the LLM weighs its meta-epistemic claim against the other nine. It produces the adversarial answer 81.9% of the time. Against RLM the document is one of about 2,600 decomposed programmatically. The credibility frame does not survive cross-referencing, and ASR drops to 24.4% ([Korn, 2026](https://arxiv.org/abs/2605.05632v1)).
 
 ## Key Takeaways
 

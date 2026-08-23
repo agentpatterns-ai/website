@@ -30,7 +30,7 @@ This is distinct from [benchmark contamination](benchmark-contamination-eval-ris
 
 ## The ROME recipe
 
-ROME (Red-team Orchestrated Multi-agent Evolution) starts from 100 source trajectories drawn from R-Judge and produces 300 rewritten instances along three axes ([Zhang & Zhu, 2026](https://arxiv.org/abs/2605.03242)):
+ROME (Red-team Orchestrated Multi-agent Evolution) starts from 100 source trajectories drawn from R-Judge and produces 300 rewritten instances along three axes ([Zhang & Zhu, 2026](https://arxiv.org/abs/2605.03242v1)):
 
 ```mermaid
 graph TD

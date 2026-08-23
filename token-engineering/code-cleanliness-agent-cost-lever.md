@@ -19,7 +19,7 @@ Cleaner code lowers token use and navigation hops for coding agents, without cha
 
 ## The empirical result
 
-Trivedi and Schmitt (SonarSource, 2026) built six pairs of Java repositories — Apache Commons BCEL, Netflix Genie, and four others. Each pair shares architecture, dependencies, and external behavior but differs on SonarQube Cloud rule violations and cognitive complexity scores. They ran Claude Code across 33 tasks per repository, 660 trials in total. They built the pairs in both directions, degrading clean code and cleaning messy code, so the result is not an artifact of one starting direction ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049)).
+Trivedi and Schmitt (SonarSource, 2026) built six pairs of Java repositories — Apache Commons BCEL, Netflix Genie, and four others. Each pair shares architecture, dependencies, and external behavior but differs on SonarQube Cloud rule violations and cognitive complexity scores. They ran Claude Code across 33 tasks per repository, 660 trials in total. They built the pairs in both directions, degrading clean code and cleaning messy code, so the result is not an artifact of one starting direction ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049v1)).
 
 | Metric | Clean vs messy | Direction |
 |--------|----------------|-----------|
@@ -31,7 +31,7 @@ The pass-rate finding matters as much as the cost finding. Agents do not fail mo
 
 ## Why it works
 
-Lower cognitive complexity and fewer rule violations let the agent find the relevant code from file and function names on the first try. So it spends fewer turns working out where logic lives ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049)). Token budget spent on irrelevant files is token budget not spent on reasoning — the same mechanism Anthropic's context-engineering work identifies for harness design and just-in-time loading ([Anthropic — Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). The 34% file-revisitation drop measures this navigation efficiency directly; the 7-8% token saving follows from it.
+Lower cognitive complexity and fewer rule violations let the agent find the relevant code from file and function names on the first try. So it spends fewer turns working out where logic lives ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049v1)). Token budget spent on irrelevant files is token budget not spent on reasoning — the same mechanism Anthropic's context-engineering work identifies for harness design and just-in-time loading ([Anthropic — Effective Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). The 34% file-revisitation drop measures this navigation efficiency directly; the 7-8% token saving follows from it.
 
 The study measures cleanliness as SonarQube Cloud rule violations plus cognitive complexity scores ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049)) — both measurable in CI, neither subjective. The page does not extend to claims about naming, comments, or architectural coherence, which the study did not isolate.
 
@@ -41,10 +41,10 @@ The inference also runs the other way. At the Future of Software Development Ret
 
 The minimal-pair study compared agents on already-clean versus already-messy code. It did not measure the engineering cost of moving a codebase from messy to clean, which is where the recommendation breaks down in practice:
 
-- The cleanup costs more than it saves: a 7-8% token reduction on $100/seat/month is roughly $7-8/month per developer. Twenty engineer-hours of refactoring to shave that off a single module pays back over years, not weeks. The study did not measure cleanup return on investment ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049)) — for a per-step measurement protocol that does, see [Measuring Refactoring Payback in Tokens](refactoring-payback-in-tokens.md).
-- Small or tightly-scoped codebases gain little: where every relevant file already fits in context, file-revisit count is bounded by file count. A 34% reduction on three revisits is meaningless ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049)).
+- The cleanup costs more than it saves: a 7-8% token reduction on $100/seat/month is roughly $7-8/month per developer. Twenty engineer-hours of refactoring to shave that off a single module pays back over years, not weeks. The study did not measure cleanup return on investment ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049v1)) — for a per-step measurement protocol that does, see [Measuring Refactoring Payback in Tokens](refactoring-payback-in-tokens.md).
+- Small or tightly-scoped codebases gain little: where every relevant file already fits in context, file-revisit count is bounded by file count. A 34% reduction on three revisits is meaningless ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049v1)).
 - Agents re-introduce mess: a longitudinal MSR 2026 study of 806 Cursor-adopting repositories versus 1,380 controls found static-analysis warnings rise ~30% and code complexity rises ~42% after adoption, persisting six-plus months and surviving any velocity gains ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427)). Cleaning a codebase for agent ergonomics without continuous quality gates is a treadmill — the same agents that benefit from cleanliness erode it.
-- Cognitive complexity is a partial proxy: SonarQube cognitive complexity measures intra-function branching depth, not cross-cutting concerns, hidden global state, or naming inconsistency. The 7-8% headline may underweight or overweight different aspects of cleanliness depending on the codebase's actual pathology ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049)).
+- Cognitive complexity is a partial proxy: SonarQube cognitive complexity measures intra-function branching depth, not cross-cutting concerns, hidden global state, or naming inconsistency. The 7-8% headline may underweight or overweight different aspects of cleanliness depending on the codebase's actual pathology ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049v1)).
 - Larger cost levers are available: 7-8% token reduction sits below the variance of model-version pricing changes and well below what context engineering, prompt caching, or moving from a frontier to a mid-tier model can deliver. Treating cleanliness as the primary cost lever inverts the value chain.
 
 The defensible position is narrow. Maintainability investment you would make anyway — linters, complexity budgets, refactoring time — also benefits agent runs as a measurable side effect. Cleaning up for the agent specifically requires the navigation cost to be a top-three line item in your agent spend.
@@ -75,7 +75,7 @@ Path A is the posture to take. Capture the cost lever from work the team would d
 
 ## Key Takeaways
 
-- Cleaner code does not change agent pass rate but reduces token use by 7-8% and file revisitations by 34% on a controlled minimal-pair study ([Trivedi & Schmitt, 2026](https://arxiv.org/abs/2605.20049))
+- Cleaner code does not change agent pass rate but reduces token use by 7-8% and file revisitations by 34% on a controlled minimal-pair study ([Trivedi & Schmitt, 2026](https://arxiv.org/abs/2605.20049v1))
 - The mechanism is navigation efficiency — fewer hops to locate the right file, fewer tokens spent disambiguating
 - The cost lever is real but small; cleanup justified specifically for agent ergonomics rarely pays back within a year
 - Pair the cleanliness side-effect with quality gates that prevent agents from re-introducing complexity, otherwise the savings decay ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427))
@@ -89,3 +89,4 @@ Path A is the posture to take. Capture the cost lever from work the team would d
 - [Agent-Generated Code Maintenance Asymmetry](../code-review/agent-code-maintenance-asymmetry.md) — the maintenance footprint that determines whether your cleanup decays or holds
 - [Comprehension Debt from AI-Generated Code Velocity](../patterns/anti-patterns/comprehension-debt.md) — the human-side debt that maintainability metrics do not capture
 - [Measuring Refactoring Payback in Tokens](refactoring-payback-in-tokens.md) — the replay protocol that measures the cleanup return on investment this study left open
+- [Code Health as a Signal for Agent-Generated Test Quality](../verification/code-health-agent-generated-tests.md) — the uncontrolled study whose much larger token gap this page's minimal-pair design bounds

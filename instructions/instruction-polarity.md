@@ -126,5 +126,6 @@ Not by itself. Positive instructions still suffer the lost-in-the-middle effect,
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md)
 - [Critical Instruction Repetition: Exploiting Primacy and Recency Bias](critical-instruction-repetition.md)
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
+- [Do Not Price the Rules in Your Agent Instruction File](enforcement-information-paradox.md) — the adjacent framing choice: naming a penalty alongside a rule can lower compliance with it
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md)
 - [Standards as Agent Instructions](standards-as-agent-instructions.md)

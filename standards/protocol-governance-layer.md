@@ -19,7 +19,7 @@ maturity: emerging
 
 > Interoperability protocols like MCP and A2A coordinate agent tasks but cannot express governance — voting, escalation, or audit — so build that separately.
 
-Agent interoperability protocols standardize task-oriented coordination — identity, capability discovery, tool access, and message exchange — but they do not encode governance. If you are building a multi-agent fleet that must make collective decisions under governance constraints, you implement membership, voting, dissent preservation, human escalation, and audit out-of-band, on a layer above the protocol. A 2026 gap analysis scored five protocols (MCP, A2A, ACP, ANP, ERC-8004) against a six-dimension governance taxonomy and found every one scored at most 2 of 12 possible points ([Governance Gaps in Agent Interoperability Protocols](https://arxiv.org/abs/2606.31498)).
+Agent interoperability protocols standardize task-oriented coordination — identity, capability discovery, tool access, and message exchange — but they do not encode governance. If you are building a multi-agent fleet that must make collective decisions under governance constraints, you implement membership, voting, dissent preservation, human escalation, and audit out-of-band, on a layer above the protocol. A 2026 gap analysis scored five protocols (MCP, A2A, ACP, ANP, ERC-8004) against a six-dimension governance taxonomy and found every one scored at most 2 of 12 possible points ([Governance Gaps in Agent Interoperability Protocols](https://arxiv.org/abs/2606.31498v1)).
 
 ## The six governance dimensions
 
@@ -49,7 +49,7 @@ graph TD
 
 ## Why it works
 
-The protocols coordinate well because they standardized the primitives of a single request between two parties — discover a capability, delegate a task, track its lifecycle, collect a result ([A2A specification](https://a2a-protocol.org/latest/specification/); [Model Context Protocol](https://modelcontextprotocol.io)). Governance is a property of a group deciding over time, not of one exchange: a quorum, a preserved minority view, a replayable history. That is a different unit of analysis the protocols never modeled, which is why the paper calls governance "a missing architectural layer above current interoperability standards, not a missing feature within them" ([arxiv 2606.31498](https://arxiv.org/abs/2606.31498)). Separating the layers is the same move as putting routing above the link layer: a distinct concern over a distinct object.
+The protocols coordinate well because they standardized the primitives of a single request between two parties — discover a capability, delegate a task, track its lifecycle, collect a result ([A2A specification](https://a2a-protocol.org/latest/specification/); [Model Context Protocol](https://modelcontextprotocol.io)). Governance is a property of a group deciding over time, not of one exchange: a quorum, a preserved minority view, a replayable history. That is a different unit of analysis the protocols never modeled, which is why the paper calls governance "a missing architectural layer above current interoperability standards, not a missing feature within them" ([arxiv 2606.31498](https://arxiv.org/abs/2606.31498v1)). Separating the layers is the same move as putting routing above the link layer: a distinct concern over a distinct object.
 
 ## When this backfires
 

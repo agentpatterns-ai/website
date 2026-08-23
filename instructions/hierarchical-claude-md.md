@@ -132,7 +132,7 @@ No. Files such as `./api/CLAUDE.md` belong to the Project scope rather than sitt
 
 **Does splitting rules across more files reduce the compliance risk of having many rules?**
 
-No. Spreading instructions over several files does not lower the total instruction load the model must hold: even frontier models keep only 68% accuracy at the highest density tested, 500 simultaneous instructions, regardless of how many files that count is spread across ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). Trim rules rather than add more files.
+No. Spreading instructions over several files does not lower the total instruction load the model must hold: even frontier models keep only 68% accuracy at the highest density tested, 500 simultaneous instructions, regardless of how many files that count is spread across ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1)). Trim rules rather than add more files.
 
 **Does linking to other docs instead of embedding them cut token cost?**
 
@@ -156,7 +156,7 @@ Hierarchical loading cuts context noise by separating instructions structurally.
 Hierarchical scoping helps only when each file stays concise and consistent. A single root file is better in these conditions:
 
 - Conflicting instructions across files: Claude Code concatenates all loaded CLAUDE.md files, and the [Claude Code memory docs](https://code.claude.com/docs/en/memory#write-effective-instructions) note that "if two rules contradict each other, Claude may pick one arbitrarily." A stale subdirectory file that contradicts updated root conventions silently wins for agent sessions in that directory.
-- Compliance degradation at scale: splitting instructions across files does not lower the total instruction load — even frontier models hold only 68% accuracy at the highest instruction density tested, 500 simultaneous instructions, regardless of how many files that count is spread across ([IFScale, 2025](https://arxiv.org/abs/2507.11538); see also [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)). Trim rules rather than add more files.
+- Compliance degradation at scale: splitting instructions across files does not lower the total instruction load — even frontier models hold only 68% accuracy at the highest instruction density tested, 500 simultaneous instructions, regardless of how many files that count is spread across ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1); see also [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)). Trim rules rather than add more files.
 - Maintenance fragmentation: when a shared convention changes, you must update every directory-level file that documents it. File renames leave CLAUDE.md behind while the root references the old path.
 - Small, uniform projects: a single team working on one codebase gains nothing from extra files and pays the cost of keeping them in sync.
 

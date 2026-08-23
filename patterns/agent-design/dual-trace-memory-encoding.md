@@ -31,7 +31,7 @@ The agent commits to contextual detail at encoding time, not retrieval. Retrieva
 
 ## What the benchmark shows
 
-On LongMemEval-S (4,575 sessions, 500 recall questions), dual-trace encoding reached 73.7% accuracy against a fact-only baseline of 53.5% — a +20.2 percentage-point gain, 95% CI [+12.1, +29.3], p < 0.0001 ([Stern & Nadel, 2026](https://arxiv.org/abs/2604.12948)). The gain concentrates in cross-session categories:
+On LongMemEval-S (4,575 sessions, 500 recall questions), dual-trace encoding reached 73.7% accuracy against a fact-only baseline of 53.5% — a +20.2 percentage-point gain, 95% CI [+12.1, +29.3], p < 0.0001 ([Stern & Nadel, 2026](https://arxiv.org/abs/2604.12948v1)). The gain concentrates in cross-session categories:
 
 | Category | Gain over fact-only |
 |----------|---------------------|
@@ -90,7 +90,7 @@ The pattern does not pay off for:
 
 ## Caveats
 
-The published evidence is one paper on one benchmark with no independent replication. The headline +20pp comes from a synthetic long-memory benchmark; transfer to production workloads is plausible but unproven. The paper sketches a coding-agent architecture with "preliminary pilot validation" — treat that transfer as preliminary until further evidence lands ([Stern & Nadel, 2026](https://arxiv.org/abs/2604.12948)).
+The published evidence is one paper on one benchmark with no independent replication. The headline +20pp comes from a synthetic long-memory benchmark; transfer to production workloads is plausible but unproven. The paper sketches a coding-agent architecture with "preliminary pilot validation" — treat that transfer as preliminary until further evidence lands ([Stern & Nadel, 2026](https://arxiv.org/abs/2604.12948v1)).
 
 Retrieval token cost matches the fact-only baseline. Write-time cost — the LLM call that generates the scene trace — is a real addition and should factor into the decision to encode.
 

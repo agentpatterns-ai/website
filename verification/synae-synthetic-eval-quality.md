@@ -22,7 +22,7 @@ SynAE is a quality-measurement layer for synthetic eval datasets that test multi
 
 ## When the framework applies
 
-Four preconditions must hold: a real production-trace reference exists, the agent is multi-turn and tool-calling, the synthetic set is large enough for distributional metrics (Vendi Score and embedding precision/recall are unstable on small samples), and you can absorb the judge cost. Validity scoring runs 450+ LLM-as-judge calls per dataset at F1 = 0.86 against humans ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
+Four preconditions must hold: a real production-trace reference exists, the agent is multi-turn and tool-calling, the synthetic set is large enough for distributional metrics (Vendi Score and embedding precision/recall are unstable on small samples), and you can absorb the judge cost. Validity scoring runs 450+ LLM-as-judge calls per dataset at F1 = 0.86 against humans ([arxiv.org/abs/2605.22564v1](https://arxiv.org/abs/2605.22564v1)).
 
 If any fails, a [golden query pair](golden-query-pairs-regression.md) or [incident-derived regression](incident-to-eval-synthesis.md) suite gives a stable signal more cheaply.
 
@@ -36,7 +36,7 @@ Three orthogonal axes apply to each of four trace components — task instructio
 | Fidelity | How close is the synthetic distribution to the real one? | Key Node Dependency, embedding precision/recall, downstream task-difficulty distance |
 | Diversity | How much of the real-data spread does the synthetic set cover? | Vendi Score, Attribute Diversity |
 
-A set can score high on one axis and fail another. The decomposition exists because the authors found "no single metric is sufficient to fully characterize synthetic data quality" ([arxiv.org/abs/2605.22564](https://arxiv.org/abs/2605.22564)).
+A set can score high on one axis and fail another. The decomposition exists because the authors found "no single metric is sufficient to fully characterize synthetic data quality" ([arxiv.org/abs/2605.22564v1](https://arxiv.org/abs/2605.22564v1)).
 
 ## Why it works
 

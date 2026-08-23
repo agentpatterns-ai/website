@@ -16,21 +16,21 @@ maturity: emerging
 
 > Cross-framework signal semantics: a behavioral signal that predicts success in one framework can predict failure in another. Re-measure borrowed signals in your own harness.
 
-Cross-framework signal semantics is the property that operational rules extracted from one agent framework — "test step follows code modification", "short error cascades", "compact trajectories" — often carry different or opposite meaning in another. A 64,380-run analysis across 126 agent configurations spanning 43 frameworks found that on error rate, 47 configurations resolve more issues when the rate is lower while 48 resolve more when it is higher ([Ma et al., 2026](https://arxiv.org/abs/2605.18332)). Five other continuous features and three of seven binary patterns from prior software-engineering agent literature showed the same directional disagreement.
+Cross-framework signal semantics is the property that operational rules extracted from one agent framework — "test step follows code modification", "short error cascades", "compact trajectories" — often carry different or opposite meaning in another. A 64,380-run analysis across 126 agent configurations spanning 43 frameworks found that on error rate, 47 configurations resolve more issues when the rate is lower while 48 resolve more when it is higher ([Ma et al., 2026](https://arxiv.org/abs/2605.18332v1)). Five other continuous features and three of seven binary patterns from prior software-engineering agent literature showed the same directional disagreement.
 
 ## The 47-vs-48 result
 
 The main finding is a coin flip on direction:
 
-- Error rate: 47 configurations succeed more often when their error rate is low; 48 succeed more often when it is high ([Ma et al., 2026](https://arxiv.org/abs/2605.18332))
-- Framework over LLM choice: framework explains 64% of the between-configuration variance for mean turns; LLM choice explains 10% ([Ma et al., 2026](https://arxiv.org/abs/2605.18332))
+- Error rate: 47 configurations succeed more often when their error rate is low; 48 succeed more often when it is high ([Ma et al., 2026](https://arxiv.org/abs/2605.18332v1))
+- Framework over LLM choice: framework explains 64% of the between-configuration variance for mean turns; LLM choice explains 10% ([Ma et al., 2026](https://arxiv.org/abs/2605.18332v1))
 - Wide scope of disagreement: five other continuous features and three of seven binary patterns from prior software-engineering agent literature show the same directional split ([Ma et al., 2026](https://arxiv.org/abs/2605.18332))
 
 A behavioral rule mined from one framework's runs is not a finding about agents in general. It is a finding about that framework, set by its scaffolding, tools, and error-handling.
 
 ## Why it works
 
-Framework choices — which tools are exposed, how observations are formatted, how the agent-computer interface scaffolds turns — shape the trajectory more than the backing LLM does ([Ma et al., 2026](https://arxiv.org/abs/2605.18332)). "Short error cascades correlate with success" emerges because in framework A the harness short-circuits errors and only successful runs reach the cascade-length metric, while in framework B the harness lets errors compound and successful runs accumulate longer cascades. Identical signal, opposite data-generating process. The 64% framework versus 10% LLM variance for mean turns measures this mechanism directly ([Ma et al., 2026](https://arxiv.org/abs/2605.18332)). The SWE-agent paper named the same effect from the design side: "the design of the ACI can impact agents' behavior and performance" ([Yang et al., 2024](https://arxiv.org/abs/2405.15793)).
+Framework choices — which tools are exposed, how observations are formatted, how the agent-computer interface scaffolds turns — shape the trajectory more than the backing LLM does ([Ma et al., 2026](https://arxiv.org/abs/2605.18332v1)). "Short error cascades correlate with success" emerges because in framework A the harness short-circuits errors and only successful runs reach the cascade-length metric, while in framework B the harness lets errors compound and successful runs accumulate longer cascades. Identical signal, opposite data-generating process. The 64% framework versus 10% LLM variance for mean turns measures this mechanism directly ([Ma et al., 2026](https://arxiv.org/abs/2605.18332v1)). The SWE-agent paper named the same effect from the design side: "the design of the ACI can impact agents' behavior and performance" ([Yang et al., 2024](https://arxiv.org/abs/2405.15793)).
 
 ## How to apply it
 

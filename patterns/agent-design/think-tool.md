@@ -23,7 +23,7 @@ Related lesson: [Reasoning Budget — The Sandwich](https://learn.agentpatterns.
 
 The think tool fires between tool calls — after the agent receives a tool's output, before it decides what to do next. It differs from extended thinking, which reasons before the first generation token. Extended thinking is pre-action. The think tool is mid-stream: it fires after the agent has observed new information from the environment.
 
-[Anthropic's think tool post](https://www.anthropic.com/engineering/claude-think-tool) reports a 54% relative improvement over baseline on the [τ-Bench](https://arxiv.org/abs/2406.12045) airline domain benchmark, from adding the think tool plus tuned prompting. That is a large effect for a structural change that adds no new capabilities.
+[Anthropic's think tool post](https://www.anthropic.com/engineering/claude-think-tool) reports a 54% relative improvement over baseline on the [τ-Bench](https://arxiv.org/abs/2406.12045v1) airline domain benchmark, from adding the think tool plus tuned prompting. That is a large effect for a structural change that adds no new capabilities.
 
 ## When it helps
 
@@ -44,7 +44,7 @@ The tool only fires when the model chooses to use it. If the task is simple or t
 
 ## Why it works
 
-Separating observation from action-selection forces implicit state into the context as text. A model that must immediately emit the next tool call carries unverified interpretations of the previous output in the residual stream. The think call turns those interpretations into tokens, so the model can check policy constraints and weigh candidate next steps before committing. This is the same mechanism as chain-of-thought prompting ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)), applied at the inter-tool boundary. That is why [τ-Bench](https://arxiv.org/abs/2406.12045) airline tasks gained 54% while its retail domain — with lighter constraints — gained only 3.7%.
+Separating observation from action-selection forces implicit state into the context as text. A model that must immediately emit the next tool call carries unverified interpretations of the previous output in the residual stream. The think call turns those interpretations into tokens, so the model can check policy constraints and weigh candidate next steps before committing. This is the same mechanism as chain-of-thought prompting ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)), applied at the inter-tool boundary. That is why [τ-Bench](https://arxiv.org/abs/2406.12045v1) airline tasks gained 54% while its retail domain — with lighter constraints — gained only 3.7%.
 
 ## Token budget
 

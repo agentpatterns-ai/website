@@ -36,12 +36,12 @@ The marker must be emitted by trusted harness code the model cannot author. A ta
 
 ## Why it works
 
-Prompt injection succeeds because trusted control flow and untrusted data share one context window, and the model cannot reliably tell which tokens are instructions. A reliable, continuous provenance signal restores that partition. Microsoft's spotlighting work demonstrates the causal link: marking untrusted input to signal its source cut indirect-injection attack success from greater than 50% to below 2% on GPT-family models ([Hines et al., 2024](https://arxiv.org/abs/2403.14720)). Stamping non-human events applies the same signal to the exact message class a fabricated approval would imitate, so the forged consent carries a standing non-authoritative marker the agent is instructed not to obey.
+Prompt injection succeeds because trusted control flow and untrusted data share one context window, and the model cannot reliably tell which tokens are instructions. A reliable, continuous provenance signal restores that partition. Microsoft's spotlighting work demonstrates the causal link: marking untrusted input to signal its source cut indirect-injection attack success from greater than 50% to below 2% on GPT-family models ([Hines et al., 2024](https://arxiv.org/abs/2403.14720v1)). Stamping non-human events applies the same signal to the exact message class a fabricated approval would imitate, so the forged consent carries a standing non-authoritative marker the agent is instructed not to obey.
 
 ## When this backfires
 
 - In-band marker with no structural backing: if the "not user input" tag is text in a channel the attacker can write, an injection spoofs or strips it through role-tag spoofing or delimiter collision. The tag must come from harness code, backed by a provenance field the model cannot forge.
-- The model overrides the soft signal: a marker reduces but never eliminates injection. Adaptive attacks that manipulate context rather than injection vocabulary reach 96.7% attack success, so a marker is never the last line of defense ([Abdelnabi et al., 2026](https://arxiv.org/abs/2605.17634)).
+- The model overrides the soft signal: a marker reduces but never eliminates injection. Adaptive attacks that manipulate context rather than injection vocabulary reach 96.7% attack success, so a marker is never the last line of defense ([Abdelnabi et al., 2026](https://arxiv.org/abs/2605.17634v1)).
 - Genuinely human-free pipelines: if the harness gates authority-bearing actions on real human input but the run is designed to be fully autonomous, the gate becomes a hard block. Such actions must be pre-authorized out of band, or disallowed — never approved in-transcript.
 - Over-marking dilutes the signal: stamping every line erodes salience and adds context noise. Mark the events that structurally resemble a human turn — notifications, tool results, background events — not every token.
 

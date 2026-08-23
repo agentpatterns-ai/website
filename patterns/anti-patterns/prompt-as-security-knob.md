@@ -30,7 +30,7 @@ This applies wherever prompt quality, instruction files, or security-tagged prom
 
 Three independent results converge:
 
-- Adversarial prompt collapse. [Tessa et al. (2026)](https://arxiv.org/abs/2601.07084) ran three secure code generators (SVEN, SafeCoder, PromSec) under semantic-preserving perturbations. The true secure-and-functional rate fell to 3–17%, and analyzers overstated security by 7–21x (37–60% of "secure"-labeled outputs were non-functional).
+- Adversarial prompt collapse. [Tessa et al. (2026)](https://arxiv.org/abs/2601.07084v1) ran three secure code generators (SVEN, SafeCoder, PromSec) under semantic-preserving perturbations. The true secure-and-functional rate fell to 3–17%, and analyzers overstated security by 7–21x (37–60% of "secure"-labeled outputs were non-functional).
 - Word-level changes are the dominant axis. [Liu et al. (2025)](https://arxiv.org/abs/2506.07942) found word-level perturbations beat character- and sentence-level on HumanEval/MBPP. A synonym swap shifts the local token distribution enough to flip the top-1 choice on a security-relevant token.
 - Prompt normativity governs the defect rate. [Wang et al. (2025/2026)](https://arxiv.org/abs/2510.22944) found that against CWE-BENCH-PYTHON, insecure generation rises markedly as prompt normativity drops. CoT and self-correction close some of the gap, never all.
 
@@ -51,7 +51,7 @@ The rule is also necessary-but-not-sufficient: prompt hardening measurably impro
 ## Mitigations
 
 - Treat prompt quality and security verification as separate concerns. Invest in prompt hardening for its own gains (CoT, self-correction, security-tagged instructions per [Wang et al., 2025/2026](https://arxiv.org/abs/2510.22944)), but never let it substitute for output-side verification.
-- Gate agent diffs to deployed paths on independent SAST. Analyzers overstate security ([Tessa et al., 2026](https://arxiv.org/abs/2601.07084) — 7–21x on CodeQL "secure" labels), so add dynamic analysis or fuzzing for high-value paths.
+- Gate agent diffs to deployed paths on independent SAST. Analyzers overstate security ([Tessa et al., 2026](https://arxiv.org/abs/2601.07084v1) — 7–21x on CodeQL "secure" labels), so add dynamic analysis or fuzzing for high-value paths.
 - Require human review for sensitive paths: auth, crypto, deserialization, query construction, and file I/O across trust boundaries. Engineers accept most insecure suggestions in representative tasks ([augmentedswe.com synthesis, 2025](https://www.augmentedswe.com/p/ai-code-review-security)), so make the review deliberate.
 - Do not trust iterative "improve this code" loops to close security gaps. Vulnerabilities persist and often increase across self-improvement loops ([Security Degradation in Iterative AI Code Generation, 2025](https://arxiv.org/abs/2506.11022)).
 
@@ -93,7 +93,7 @@ jobs:
 - A single-word prompt change can flip generated code from secure to vulnerable; the prompt is never a security guarantee ([Tessa et al., 2026](https://arxiv.org/abs/2601.07084)).
 - Word-level perturbations are the dominant failure axis — more disruptive than sentence-level rephrasing ([Liu et al., 2025](https://arxiv.org/abs/2506.07942)).
 - Prompt hardening (CoT, self-correction, security-tagged instructions) improves average safety but never closes the adversarial-perturbation gap ([Wang et al., 2025/2026](https://arxiv.org/abs/2510.22944)).
-- Static analyzers overestimate security by 7–21x; gate sensitive paths on independent SAST plus human review, not on prompt rules alone ([Tessa et al., 2026](https://arxiv.org/abs/2601.07084)).
+- Static analyzers overestimate security by 7–21x; gate sensitive paths on independent SAST plus human review, not on prompt rules alone ([Tessa et al., 2026](https://arxiv.org/abs/2601.07084v1)).
 - The rule is skippable only on throwaway code with no production path; everywhere else, treat prompt quality and output verification as orthogonal.
 
 ## Related

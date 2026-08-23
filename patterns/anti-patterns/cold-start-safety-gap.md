@@ -23,7 +23,7 @@ maturity: established
 
 Many deployments treat an agent's safety posture as a fixed property of the model — the same across turns, independent of conversation depth. So they trust a single evaluation (a turn-1 jailbreak test, a static red-team) to generalize to the whole session.
 
-Sun, Liu, & Weng (2026) measure this assumption and find it false. Across 7 open-source models from 4 families on the SODA benchmark (Safety Over Depth for Agents — 400 threats across 16 environments covering financial fraud, data destruction, privacy violations, infrastructure sabotage, and professional harm), refusal of harmful requests improves by 9–52% as the count of preceding benign agentic tasks grows from zero to twenty ([Sun et al. 2026](https://arxiv.org/abs/2606.07867)). Same model, same request, same harness — only depth changes.
+Sun, Liu, & Weng (2026) measure this assumption and find it false. Across 7 open-source models from 4 families on the SODA benchmark (Safety Over Depth for Agents — 400 threats across 16 environments covering financial fraud, data destruction, privacy violations, infrastructure sabotage, and professional harm), refusal of harmful requests improves by 9–52% as the count of preceding benign agentic tasks grows from zero to twenty ([Sun et al. 2026](https://arxiv.org/abs/2606.07867v1)). Same model, same request, same harness — only depth changes.
 
 The anti-pattern is not "agents are unsafe at the start." It is treating a depth-dependent property as depth-independent, then setting red-team coverage, gate placement, and threat-model scope as if the per-turn refusal rate were constant.
 
@@ -83,7 +83,7 @@ The deployment fix is not "trust the depth-20 number." It is to measure refusal 
 
 ## Key Takeaways
 
-- Agent refusal rates are depth-dependent: 9–52% gap between turn 1 and turn 20 on the SODA benchmark across 7 open-source models ([Sun et al. 2026](https://arxiv.org/abs/2606.07867)).
+- Agent refusal rates are depth-dependent: 9–52% gap between turn 1 and turn 20 on the SODA benchmark across 7 open-source models ([Sun et al. 2026](https://arxiv.org/abs/2606.07867v1)).
 - The driver is representational — benign agentic turns shift hidden states into a safety-aligned region; the agent learns nothing new.
 - A 5–10 task benign warm-up closes most of the gap at low utility cost; user-task turns matter more than agent responses.
 - The mitigation is structurally identical to a many-shot prefix and can be inverted by attacker-controlled warm-up content — populate it from a trusted source.

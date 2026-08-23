@@ -21,7 +21,7 @@ maturity: emerging
 
 ## The review burden shift
 
-Agentic coding tools shift work from writing to reviewing. When an agent generates a PR, reviewers must examine code they will ultimately delete — dead code, over-engineered helpers, spec-mismatched implementations. [arXiv:2602.17091](https://arxiv.org/abs/2602.17091) shows AI-generated PRs contain a notable portion of functions deleted during review, with deletion reasons producing distinct structural characteristics predictable at AUC 87.1%. Reviewers are spending time on code a pre-filter could have flagged first.
+Agentic coding tools shift work from writing to reviewing. When an agent generates a PR, reviewers must examine code they will ultimately delete — dead code, over-engineered helpers, spec-mismatched implementations. [arXiv:2602.17091](https://arxiv.org/abs/2602.17091v1) shows AI-generated PRs contain a notable portion of functions deleted during review, with deletion reasons producing distinct structural characteristics predictable at AUC 87.1%. Reviewers are spending time on code a pre-filter could have flagged first.
 
 ## Deletion reason categories (author-derived taxonomy)
 
@@ -37,7 +37,7 @@ Each bucket calls for a different remediation signal sent back to the agent.
 
 ## Why it works
 
-Structural metrics expose scope overreach before a reviewer reads a single line. [arXiv:2602.17091](https://arxiv.org/abs/2602.17091) found the strongest predictors of deletion are method name length (word count), total lines of code, and Halstead volume — all proxies for "more was generated than the task required." A function with a long descriptive name and high Halstead volume encodes more conceptual surface area than a focused one. That excess surface area is what reviewers remove. The model reaches AUC 87.1% using only these static, syntax-level features — it needs no semantic understanding of the spec to flag probable deletions.
+Structural metrics expose scope overreach before a reviewer reads a single line. [arXiv:2602.17091](https://arxiv.org/abs/2602.17091v1) found the strongest predictors of deletion are method name length (word count), total lines of code, and Halstead volume — all proxies for "more was generated than the task required." A function with a long descriptive name and high Halstead volume encodes more conceptual surface area than a focused one. That excess surface area is what reviewers remove. The model reaches AUC 87.1% using only these static, syntax-level features — it needs no semantic understanding of the spec to flag probable deletions.
 
 ## Applying predictive pre-flagging
 

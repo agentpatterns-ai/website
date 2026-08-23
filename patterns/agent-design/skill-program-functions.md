@@ -25,12 +25,12 @@ Skill Program Functions (PFs) replace advisory skill text with runtime predicate
 
 | Condition | Why it matters |
 |----------|----------------|
-| Baseline failure rate is high on the target task | On high-success trajectories, false positives disrupt more wins than they rescue — a 0.94-AUROC failure detector caused a 26 pp performance collapse on high-success tasks ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338)) |
+| Baseline failure rate is high on the target task | On high-success trajectories, false positives disrupt more wins than they rescue — a 0.94-AUROC failure detector caused a 26 pp performance collapse on high-success tasks ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338v1)) |
 | Each PF can clear a per-function pilot eval | Vasudev et al. recommend a ~50-task pilot per intervention because intervention quality varies independently of detection accuracy |
 | The skill domain is stable | A PF binds the intervention to a snapshot of failure modes; tool, model, or task drift makes the predicate fire on states that are no longer failures |
 | The corrective action is idempotent under retry | PFs fire mid-loop, not at loop boundaries — the action must be safe to repeat |
 
-Under these conditions, HASP reports up to 25% gain on web-search and 30.4% on math reasoning over baselines including ReAct and Search-R1 ([Liu et al., 2026](https://arxiv.org/abs/2605.17734)).
+Under these conditions, HASP reports up to 25% gain on web-search and 30.4% on math reasoning over baselines including ReAct and Search-R1 ([Liu et al., 2026](https://arxiv.org/abs/2605.17734v1)).
 
 ## What a program function is
 
@@ -44,7 +44,7 @@ The same library applies at inference time, during post-training as structured s
 
 ## Why it works
 
-Moving the trigger from instruction-following to a runtime predicate removes two error sources: instruction fade-out over long contexts ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)) and the compliance ceiling — frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538)). Neither applies to a Python predicate.
+Moving the trigger from instruction-following to a runtime predicate removes two error sources: instruction fade-out over long contexts ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)) and the compliance ceiling — frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1)). Neither applies to a Python predicate.
 
 The gain comes from removing model judgment from the trigger, not the corrective content — so the disruption-recovery framework still bounds it: a perfect trigger firing on a path the agent would have rescued anyway degrades performance ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338)).
 
@@ -60,8 +60,8 @@ PFs are the third leg of the skill–loop–intervention stack. Skill as Knowled
 
 ## When this backfires
 
-- Baseline success is already high. Vasudev et al. measured 0 to −26pp degradation on high-success tasks even with a 0.94-AUROC failure detector; +2.8pp gains were limited to high-failure benchmarks like ALFWorld ([arxiv 2602.03338](https://arxiv.org/abs/2602.03338)).
-- No eval harness for per-PF rollout. Each PF needs its own ~50-task pilot. "The primary value of our framework is identifying when not to intervene" ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338)).
+- Baseline success is already high. Vasudev et al. measured 0 to −26pp degradation on high-success tasks even with a 0.94-AUROC failure detector; +2.8pp gains were limited to high-failure benchmarks like ALFWorld ([arxiv 2602.03338](https://arxiv.org/abs/2602.03338v1)).
+- No eval harness for per-PF rollout. Each PF needs its own ~50-task pilot. "The primary value of our framework is identifying when not to intervene" ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338v1)).
 - Skill domain drifts. A PF binds the trigger to a snapshot of failure conditions. Tool, model, or task-type shifts make the predicate fire on states that are no longer failures.
 - Non-idempotent corrective actions. PFs fire mid-loop, not at loop boundaries — action-modification PFs must be safe under retry.
 - Below the compliance-ceiling threshold. When the skill library fits in a static system prompt without saturating the [instruction compliance ceiling](../../instructions/instruction-compliance-ceiling.md), advisory text plus deterministic hooks captures the value at lower cost.
@@ -122,7 +122,7 @@ The PF should still pass a per-function pilot eval — a sample of 50 trajectori
 
 - Skill Program Functions move the *trigger* for skill-derived intervention out of the model and into runtime code, eliminating instruction fade-out and the compliance ceiling for that decision
 - The gain is conditional: high baseline failure rate, per-PF pilot eval, stable skill domain, and idempotent corrective actions — outside this region intervention degrades performance
-- A 0.94-AUROC failure detector can still cause a 26pp performance collapse on high-success tasks ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338)); detection accuracy is not intervention value
+- A 0.94-AUROC failure detector can still cause a 26pp performance collapse on high-success tasks ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338v1)); detection accuracy is not intervention value
 - PFs are the third leg of the skill–loop–intervention stack, not a replacement for [Skill as Knowledge](../../tool-engineering/skill-as-knowledge.md) — keep the skill text as the source of truth and generate the PF from it
 
 ## Related

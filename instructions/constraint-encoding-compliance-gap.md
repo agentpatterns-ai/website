@@ -80,7 +80,7 @@ Compact headers are token-efficient and compliance-neutral, but the trade-off is
 - Token savings do not matter at low volume — a single-use prompt has no busy agent loop to amortize the saved tokens across.
 - Ambiguity grows at the edges: compressing a rule like `max-lines: 50` into a bare key-value pair forces the model to infer intent on unusual inputs, while the prose form ("Keep the implementation under 50 lines") leaves less room for misreading.
 - Counter-intuitive constraints stay unsolved either way — see [Constraint Degradation](constraint-degradation-code-generation.md) for the lever that actually moves them.
-- The neutrality result is scoped to constraint blocks inside a coding prompt. Broader prompt-format work found that format can move task performance by up to 40% on smaller models, while larger models hold steadier ([He et al., 2024](https://arxiv.org/abs/2411.10541)). Do not extend encoding neutrality beyond the constraint-satisfaction setting.
+- The neutrality result is scoped to constraint blocks inside a coding prompt. Broader prompt-format work found that format can move task performance by up to 40% on smaller models, while larger models hold steadier ([He et al., 2024](https://arxiv.org/abs/2411.10541v1)). Do not extend encoding neutrality beyond the constraint-satisfaction setting.
 
 ## Key Takeaways
 
@@ -98,3 +98,4 @@ Compact headers are token-efficient and compliance-neutral, but the trade-off is
 - [Prompt Compression](../context-engineering/prompt-compression.md) — reduce token cost of all instruction content
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — move constraints that must not fail to deterministic enforcement outside the prompt
 - [Negative Space Instructions](negative-space-instructions.md) — ban-list and exclusion constraints as a complement to positive compliance requirements
+- [Standard-Grounded NFR Specs](standard-grounded-nfr-specification.md) — the same JSON-versus-prose neutrality for quality requirements, plus what enriching the content does buy

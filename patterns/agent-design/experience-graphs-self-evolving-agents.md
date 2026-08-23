@@ -46,13 +46,13 @@ Edges connect concrete trajectories to the meta-cognitions they support or contr
 
 ## Why it works
 
-Experience graphs work because they decouple two things flat memory conflates: the trajectory (what was tried) and the abstracted principle (why it worked or failed). Liu et al. (2025) report that ablating the weighted edges between query, transition path, and meta-cognition removes most of the gain. The operative variable is the interpretable, trainable link, not graph topology ([arxiv 2511.07800v1](https://arxiv.org/html/2511.07800v1)). G-Memory grounds the mechanism in organizational memory theory: explicit relational structure lets distilled insight from one task generalize to another ([arxiv 2506.07398](https://arxiv.org/abs/2506.07398)). EXG frames this as the difference between "ad hoc reflection limited to single-task correction" and "scalable and transferable self-evolving agent behavior" ([Jin et al., 2026](https://arxiv.org/abs/2605.17721)).
+Experience graphs work because they decouple two things flat memory conflates: the trajectory (what was tried) and the abstracted principle (why it worked or failed). Liu et al. (2025) report that ablating the weighted edges between query, transition path, and meta-cognition removes most of the gain. The operative variable is the interpretable, trainable link, not graph topology ([arxiv 2511.07800v1](https://arxiv.org/html/2511.07800v1)). G-Memory grounds the mechanism in organizational memory theory: explicit relational structure lets distilled insight from one task generalize to another ([arxiv 2506.07398](https://arxiv.org/abs/2506.07398)). EXG frames this as the difference between "ad hoc reflection limited to single-task correction" and "scalable and transferable self-evolving agent behavior" ([Jin et al., 2026](https://arxiv.org/abs/2605.17721v1)).
 
 Empirically:
 
 - G-Memory reports up to 20.89% improvement in embodied-action success rate and 10.12% in knowledge-QA accuracy across five benchmarks and three MAS frameworks ([arxiv 2506.07398](https://arxiv.org/abs/2506.07398)).
 - Trainable Graph Memory reports +9.3% inference improvement on an 8B model and +25.8% on a 4B model. Memory trained only on HotpotQA transfers to six out-of-domain datasets ([arxiv 2511.07800v1](https://arxiv.org/html/2511.07800v1)).
-- EXG reports "more favorable performance-efficiency trade-offs than reflection- and memory-based baselines" on code generation and reasoning benchmarks ([arxiv 2605.17721](https://arxiv.org/abs/2605.17721)).
+- EXG reports "more favorable performance-efficiency trade-offs than reflection- and memory-based baselines" on code generation and reasoning benchmarks ([arxiv 2605.17721](https://arxiv.org/abs/2605.17721v1)).
 
 ## When this backfires
 

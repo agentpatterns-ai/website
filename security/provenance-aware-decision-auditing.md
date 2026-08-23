@@ -67,7 +67,7 @@ The authors evaluated ARGUS on AgentLure across 4 domains (Banking, Travel, Work
 The authors flag two boundary conditions ([Weng et al., 2026](https://arxiv.org/abs/2605.03378)):
 
 - Forged carriers — when the entire untrusted document is fabricated, such as a wholly fake invoice or a poisoned RAG chunk with no benign reference, ArgumentGrounder has no benign span to anchor against. Carrier integrity is an explicit assumption, not something the defense provides.
-- Inter-agent contagion under adaptive attack — ASR climbs from 2.5% to 15.0% on this vector when the attacker has white-box access. Inter-agent messages start at the lowest base trust (0.3), but heavy reliance on agent handoffs remains the weakest line. Broader adaptive-attack work confirms that defenses evaluated against static strings tend to fail under optimization-based pressure ([Nasr et al., 2025](https://arxiv.org/abs/2510.09023)), so treat the published ASR as a ceiling rather than a stable bound.
+- Inter-agent contagion under adaptive attack — ASR climbs from 2.5% to 15.0% on this vector when the attacker has white-box access. Inter-agent messages start at the lowest base trust (0.3), but heavy reliance on agent handoffs remains the weakest line. Broader adaptive-attack work confirms that defenses evaluated against static strings tend to fail under optimization-based pressure ([Nasr et al., 2025](https://arxiv.org/abs/2510.09023v1)), so treat the published ASR as a ceiling rather than a stable bound.
 
 For fixed-action agents or workflows that never accumulate cross-turn context, the [action-selector pattern](action-selector-pattern.md) or a stateless [behavioral firewall](behavioral-firewall-tool-call-trajectories.md) cover the same risk at lower runtime cost.
 

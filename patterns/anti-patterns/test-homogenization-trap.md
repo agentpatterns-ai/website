@@ -40,9 +40,9 @@ Combine human-authored edge cases with LLM-generated structural tests. Human tes
 
 Use differential analysis. Compare failed submissions against corrected ones to surface specific error patterns, then aim tests at them — [SAGA's dual strategy of analyzing correct solutions alongside failures](https://arxiv.org/abs/2507.06920).
 
-Apply mutation-guided test generation. [Meta's ACH system uses mutation testing to guide LLMs toward generating tests that catch currently undetected faults](https://arxiv.org/abs/2501.12862) rather than re-covering known paths. Engineers accepted 73% of the generated tests. See [Mutation Testing as a Quality Gate](../../verification/mutation-testing-quality-gate.md) for the full loop and failure conditions.
+Apply mutation-guided test generation. [Meta's ACH system uses mutation testing to guide LLMs toward generating tests that catch currently undetected faults](https://arxiv.org/abs/2501.12862v1) rather than re-covering known paths. Engineers accepted 73% of the generated tests. See [Mutation Testing as a Quality Gate](../../verification/mutation-testing-quality-gate.md) for the full loop and failure conditions.
 
-Combine testing methods. [Property-based testing and example-based testing each achieved 68.75% bug detection independently; combining both improved detection to 81.25%](https://arxiv.org/abs/2510.25297). Different methods expose different blind spots.
+Combine testing methods. [Property-based testing and example-based testing each achieved 68.75% bug detection independently; combining both improved detection to 81.25%](https://arxiv.org/abs/2510.25297v1). Different methods expose different blind spots.
 
 Measure test quality, not just coverage. Four metrics separate effective suites from homogenized ones: Detection Rate, Verifier Accuracy, Distinct Error Pattern Coverage, and normalized AUC. [High verifier accuracy with low error-pattern coverage catches common bugs while missing rare-but-critical failure modes.](https://arxiv.org/abs/2507.06920)
 

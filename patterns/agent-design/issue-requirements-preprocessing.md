@@ -118,7 +118,7 @@ Preprocessing adds latency and an extra model call. The cost-benefit inverts in 
 ## Key Takeaways
 
 - Issue descriptions routinely omit or ambiguate information that agents need — preprocessing is not redundant
-- A 17.40% average improvement in resolved issues is achievable by structuring requirements before patch generation ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861))
+- A 17.40% average improvement in resolved issues is achievable by structuring requirements before patch generation ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861v1))
 - Test-based quality signals (even imperfect ones) outperform model-based requirement scoring
 - The structured attribute schema (background, reproduction steps, expected/actual behavior, solution location) serves as a practical issue-writing checklist for developers
 - Iterative requirement refinement with counterexample tracking avoids repeating failed refinement strategies

@@ -19,7 +19,7 @@ maturity: adopted
 
 > A browser the agent drives is a stateful action space: every step can fail silently, drift, or blow the observation budget.
 
-Give an agent a browser it drives only when the task's control flow genuinely depends on what the page returns. That condition excludes most web automation. An analysis of all 860 WebArena tasks found 81.28% completable "with a purely programmatic plan, without any runtime LLM subroutine", and none requiring runtime replanning ([Piet et al., arXiv:2605.14290](https://arxiv.org/abs/2605.14290)). Where a script expresses the task, write the script. It is deterministic and reviewable in a diff. It also bounds what untrusted content can do: page text "may influence values or branches inside a predefined execution graph, but it cannot redefine the user task."
+Give an agent a browser it drives only when the task's control flow genuinely depends on what the page returns. That condition excludes most web automation. An analysis of all 860 WebArena tasks found 81.28% completable "with a purely programmatic plan, without any runtime LLM subroutine", and none requiring runtime replanning ([Piet et al., arXiv:2605.14290](https://arxiv.org/abs/2605.14290v1)). Where a script expresses the task, write the script. It is deterministic and reviewable in a diff. It also bounds what untrusted content can do: page text "may influence values or branches inside a predefined execution graph, but it cannot redefine the user task."
 
 Past that gate, the browser becomes an action space rather than a document. Three design decisions carry it.
 
@@ -39,7 +39,7 @@ The proposed remedy decouples observation from action. Re-read the page only whe
 
 ## Assert after every state-changing step
 
-The characteristic long-horizon failure is silent divergence, not a visible error. A failure-attribution study over 3,100 trajectories found agents that "fail to detect error signal and believe the environment state has changed, continuing to issue follow-up commands that depend on the nonexistent state change" ([Wang et al., arXiv:2604.11978](https://arxiv.org/abs/2604.11978)).
+The characteristic long-horizon failure is silent divergence, not a visible error. A failure-attribution study over 3,100 trajectories found agents that "fail to detect error signal and believe the environment state has changed, continuing to issue follow-up commands that depend on the nonexistent state change" ([Wang et al., arXiv:2604.11978](https://arxiv.org/abs/2604.11978v1)).
 
 Make the check a tool call with its own pass or fail result, not a prose instruction the model may skip. Playwright MCP ships assertion primitives for this: `browser_verify_element_visible`, `browser_verify_text_visible`, and `browser_verify_list_visible` ([testing and assertions](https://playwright.dev/mcp/tools/assertions)). Assert against the structured snapshot rather than a screenshot, the same trade-off that governs [making observability legible to agents](../../observability/observability-legible-to-agents.md).
 
@@ -47,11 +47,11 @@ Make the check a tool call with its own pass or fail result, not a prose instruc
 
 Element refs remove an estimation step. The model names a symbol instead of guessing a pixel. Playwright's own comparison records ref targeting as exact and deterministic, against coordinates that are approximate and break on layout change, at roughly 200 to 400 tokens per snapshot versus 3,000 to 5,000 for a screenshot ([Playwright MCP snapshots](https://playwright.dev/mcp/snapshots)). Removing the estimate removes the error class where a click resolves but lands on the wrong target.
 
-Assertions change when a failure becomes observable. The same study notes that planning and interaction errors "often arise early, propagate through downstream actions, and can convert recoverable local mistakes into irreversible trajectory-level failures" ([arXiv:2604.11978](https://arxiv.org/abs/2604.11978)). An assertion moves detection to the step that caused the divergence. The failure mode is measured; the size of the improvement from asserting is not.
+Assertions change when a failure becomes observable. The same study notes that planning and interaction errors "often arise early, propagate through downstream actions, and can convert recoverable local mistakes into irreversible trajectory-level failures" ([arXiv:2604.11978](https://arxiv.org/abs/2604.11978v1)). An assertion moves detection to the step that caused the divergence. The failure mode is measured; the size of the improvement from asserting is not.
 
 ## When this backfires
 
-- The task is expressible as a fixed plan. The loop then pays injection surface, latency, and per-step tokens for adaptivity it never exercises — the case for 81.28% of measured WebArena tasks ([arXiv:2605.14290](https://arxiv.org/abs/2605.14290)).
+- The task is expressible as a fixed plan. The loop then pays injection surface, latency, and per-step tokens for adaptivity it never exercises — the case for 81.28% of measured WebArena tasks ([arXiv:2605.14290](https://arxiv.org/abs/2605.14290v1)).
 - The page encodes state visually. Accessibility trees carry roles and names, not rendering, so canvas apps and charts push you back to screenshots and coordinates ([vision mode](https://playwright.dev/mcp/vision-mode)).
 - The browser holds an authenticated session reaching unrelated origins. Agentic browsers "frequently violate SOP, both in benign settings and under attacks" ([Wang et al., arXiv:2606.14027](https://arxiv.org/abs/2606.14027)). Brave demonstrated a hidden page comment steering an agent to harvest a one-time password from the user's logged-in mail and exfiltrate it, "without any further user input" ([Brave](https://brave.com/blog/comet-prompt-injection/)). A driven browser turns a read surface into an act-with-credentials surface, closing the [lethal trifecta](../../security/lethal-trifecta-threat-model.md).
 - Irreversible actions sit inside the action space. Submit Order and Confirm Transfer have no undo, and benchmarks grade happy-path completion rather than recovery from selector drift, modals, expired sessions, or rate-limit cliffs ([Future AGI](https://futureagi.com/blog/evaluating-browser-use-agents-2026)).

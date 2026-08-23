@@ -29,7 +29,7 @@ The value is conditional. Reach for it when all of these hold:
 - Reviewer bandwidth, not generation speed, is the constraint you are optimizing. Pomona's adopting team capped output at one PR per day and its survey found engineers willing to review two to three agent PRs per week ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). The loop only works if human review keeps pace.
 - Your goal is a higher acceptance rate for agent-authored changes, not faster merges. Agents outpace humans on speed but their PRs are accepted less often — a trust and utility gap ([AIDev, arXiv:2507.15003](https://arxiv.org/abs/2507.15003)). Small, obviously-correct diffs are how you close that gap.
 
-If you expect the loop to make merges faster because the diffs are small, stop: a study of 845,316 GitHub PRs plus 401,790 Gerrit and Phabricator reviews found PR size has no relationship with time-to-merge ([Do Small Code Changes Merge Faster?, arXiv:2203.05045](https://arxiv.org/abs/2203.05045)). The gain is acceptance, not velocity. See [when this backfires](#when-this-backfires).
+If you expect the loop to make merges faster because the diffs are small, stop: a study of 845,316 GitHub PRs plus 401,790 Gerrit and Phabricator reviews found PR size has no relationship with time-to-merge ([Do Small Code Changes Merge Faster?, arXiv:2203.05045](https://arxiv.org/abs/2203.05045v1)). The gain is acceptance, not velocity. See [when this backfires](#when-this-backfires).
 
 ## The scan-then-repair loop
 
@@ -61,7 +61,7 @@ The Repair skill takes the top backlog item, generates a targeted change, valida
 
 ## Why it works
 
-A small, single-purpose diff lets a reviewer confirm correctness quickly and with little scepticism, so the change stays mergeable even during high-workload weeks. Pomona reports the effect directly: 25 of 32 merged PRs drew no reviewer comments beyond the mandatory review, and 28 of 32 needed no follow-up commits ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). The causal lever is reviewer cognitive load and trust, not merge latency. That distinction matters because size does not move time-to-merge in the large-scale data ([arXiv:2203.05045](https://arxiv.org/abs/2203.05045)), while agent PRs specifically suffer a lower acceptance rate ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)). Keeping each agent change small and obviously-correct recovers the acceptance that large agent diffs lose.
+A small, single-purpose diff lets a reviewer confirm correctness quickly and with little scepticism, so the change stays mergeable even during high-workload weeks. Pomona reports the effect directly: 25 of 32 merged PRs drew no reviewer comments beyond the mandatory review, and 28 of 32 needed no follow-up commits ([arXiv:2606.06752](https://arxiv.org/abs/2606.06752)). The causal lever is reviewer cognitive load and trust, not merge latency. That distinction matters because size does not move time-to-merge in the large-scale data ([arXiv:2203.05045](https://arxiv.org/abs/2203.05045v1)), while agent PRs specifically suffer a lower acceptance rate ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003v1)). Keeping each agent change small and obviously-correct recovers the acceptance that large agent diffs lose.
 
 ## When this backfires
 

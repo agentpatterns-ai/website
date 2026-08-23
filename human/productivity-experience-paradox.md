@@ -20,7 +20,7 @@ status: current
 
 ## The paradox
 
-A six-month longitudinal study of professional engineers found that productivity and experience move in opposite directions under AI assistance ([Vella & Blincoe, 2026](https://arxiv.org/abs/2605.23135)). The study ran an initial survey of 158 engineers and re-surveyed a matched cohort of 95 six months later. At both points, about 82% reported spending less time writing code and about 84% reported a productivity improvement. Yet the share reporting a worsened experience on at least one dimension nearly doubled, from 14% to 27%. People still felt productive while the subjective experience of the work degraded. The authors name this the productivity-experience paradox.
+A six-month longitudinal study of professional engineers found that productivity and experience move in opposite directions under AI assistance ([Vella & Blincoe, 2026](https://arxiv.org/abs/2605.23135v1)). The study ran an initial survey of 158 engineers and re-surveyed a matched cohort of 95 six months later. At both points, about 82% reported spending less time writing code and about 84% reported a productivity improvement. Yet the share reporting a worsened experience on at least one dimension nearly doubled, from 14% to 27%. People still felt productive while the subjective experience of the work degraded. The authors name this the productivity-experience paradox.
 
 ## Supervisory engineering work
 
@@ -48,7 +48,7 @@ An engineer adopts an assistant and ships noticeably more. Most new code is gene
 
 ## Key Takeaways
 
-- A longitudinal study found productivity perceptions held (~84%) while worsened-experience reports nearly doubled (14% → 27%) over six months ([Vella & Blincoe, 2026](https://arxiv.org/abs/2605.23135))
+- A longitudinal study found productivity perceptions held (~84%) while worsened-experience reports nearly doubled (14% → 27%) over six months ([Vella & Blincoe, 2026](https://arxiv.org/abs/2605.23135v1))
 - The driver is supervisory engineering work — directing and verifying AI output replaces hands-on creation
 - Flow declines and cognitive load rises even as feedback loops improve
 - Velocity metrics capture the gain and hide the cost; measure developer experience explicitly

@@ -204,6 +204,7 @@ Rubric scoring identifies what failed; observability data helps locate where. Fa
 
 ## Related
 
+- [Detecting Self-Preference in a Single LLM Judge](../verification/judge-self-preference-detection.md)
 - [Incremental Verification: Check at Each Step, Not at the End](../verification/incremental-verification.md)
 - [Layered Accuracy Defense](../verification/layered-accuracy-defense.md)
 - [Simulation and Replay Testing for Agent Workflows](simulation-replay-testing.md)

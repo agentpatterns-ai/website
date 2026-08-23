@@ -17,7 +17,7 @@ maturity: established
 
 ## The finding
 
-The AIDev dataset gives the first large-scale picture of agent-authored PRs in real projects. It covers 456,535 pull requests from five autonomous coding agents (OpenAI Codex, Devin, GitHub Copilot, Cursor, Claude Code) across 61,453 repositories ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
+The AIDev dataset gives the first large-scale picture of agent-authored PRs in real projects. It covers 456,535 pull requests from five autonomous coding agents (OpenAI Codex, Devin, GitHub Copilot, Cursor, Claude Code) across 61,453 repositories ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003v1)).
 
 The headline numbers show a paradox. Agents are much faster, but they get less code merged.
 
@@ -64,7 +64,7 @@ Tooling vendors are responding to the same fixed-reviewer-capacity problem. Line
 
 The AIDev study blames the acceptance gap on structural and contextual factors. Agent PRs cluster around simpler tasks that reviewers may deprioritize. Agents also lack the ambient project context that shapes which changes are worth making at a given moment. They cannot see unwritten priorities — roadmap direction, or [tribal knowledge](../patterns/anti-patterns/implicit-knowledge-problem.md) about which subsystems are frozen. So they optimize for correctness in a local scope rather than relevance across the broader work queue ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003)).
 
-A second study of agent-authored fixes adds failure-mode detail. Reviewers rejected 46.41% of the studied fixes, and the authors sort the reasons into a taxonomy of 14 rejection reasons across four categories ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468)). That taxonomy points reviewers at the specific ways agent fixes fail, not just the aggregate shortfall.
+A second study of agent-authored fixes adds failure-mode detail. Reviewers rejected 46.41% of the studied fixes, and the authors sort the reasons into a taxonomy of 14 rejection reasons across four categories ([arXiv:2606.13468](https://arxiv.org/abs/2606.13468v1)). That taxonomy points reviewers at the specific ways agent fixes fail, not just the aggregate shortfall.
 
 ## When this backfires
 
@@ -113,10 +113,10 @@ Not on its own. A study of 1,210 merged agent-generated bug-fix PRs found that m
 
 ## Sources
 
-- [arXiv:2507.15003](https://arxiv.org/abs/2507.15003) — Li, Zhang & Hassan (2025): "The Rise of AI Teammates in SE 3.0" — AIDev dataset of 456K agent-authored PRs
+- [arXiv:2507.15003](https://arxiv.org/abs/2507.15003v1) — Li, Zhang & Hassan (2025): "The Rise of AI Teammates in SE 3.0" — AIDev dataset of 456K agent-authored PRs
 - [arXiv:2604.03551](https://arxiv.org/abs/2604.03551) — "AgenticFlict: A Large-Scale Dataset of Merge Conflicts in AI Coding Agent Pull Requests on GitHub" — 27.67% conflict rate across 142K agent PRs
 - [arXiv:2601.20109](https://arxiv.org/abs/2601.20109) — "Beyond Bug Fixes: An Empirical Investigation of Post-Merge Code Quality Issues in Agent-Generated Pull Requests" — merge success does not reliably reflect post-merge code quality
-- [arXiv:2606.13468](https://arxiv.org/abs/2606.13468) — empirical study of agent-authored fixes: 46.41% rejected, with a taxonomy of 14 rejection reasons across four categories
+- [arXiv:2606.13468](https://arxiv.org/abs/2606.13468v1) — empirical study of agent-authored fixes: 46.41% rejected, with a taxonomy of 14 rejection reasons across four categories
 - [Agentic Code Review (Addy Osmani)](https://addyo.substack.com/p/agentic-code-review) — review becomes the highest-value engineering skill as agent output volume rises
 - [GitHub Changelog: pull request limits](https://github.blog/changelog/2026-08-06-set-pull-request-limits-at-the-organization-level) — GitHub adds organization-level pull request limits (2026-08-06)
 

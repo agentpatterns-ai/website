@@ -21,7 +21,7 @@ maturity: emerging
 
 An Infinite Agentic Loop (IAL) is an execution failure in which an agentic feedback path repeatedly triggers costly or state-growing actions without an effective stopping bound ([When Agents Do Not Stop, arXiv 2607.01641](https://arxiv.org/abs/2607.01641)). It is not an ordinary program loop. A `for` loop terminates on a deterministic predicate you can read in the source; an agentic loop continues on non-deterministic runtime outputs — model decisions, tool results, external state, exceptions — and its feedback path spans wrappers, configuration, and runtime dispatch rather than one syntactic block. So a visible exit condition can sit outside the actual feedback path and never gate it, while messages and workflow state grow every iteration.
 
-The failure amplifies a single request into long-running model and tool execution. Across 6,549 real-world agent repositories, one detector confirmed 68 IALs in 47 distinct projects at 91.9% precision; 95.6% caused API cost exhaustion and model denial of service, and 27.9% exhausted the context window ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641)).
+The failure amplifies a single request into long-running model and tool execution. Across 6,549 real-world agent repositories, one detector confirmed 68 IALs in 47 distinct projects at 91.9% precision; 95.6% caused API cost exhaustion and model denial of service, and 27.9% exhausted the context window ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641v1)).
 
 ## The six shapes
 
@@ -36,7 +36,7 @@ The same study cut confirmed IALs into six patterns by observed share ([arXiv 26
 | Message reentry without bounds | 10.3% | Messages re-enter the queue and re-trigger processing |
 | Runner/delegation/evaluator cycles | 7.4% | A delegation or evaluator hands work back indefinitely |
 
-Every confirmed failure shared one root cause — a missing strong bound. The common near-misses were tool-controlled retry logic (41.2%), model-dependent termination (38.2%), and bounds placed outside the actual feedback path (30.9%) ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641)).
+Every confirmed failure shared one root cause — a missing strong bound. The common near-misses were tool-controlled retry logic (41.2%), model-dependent termination (38.2%), and bounds placed outside the actual feedback path (30.9%) ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641v1)).
 
 ## Why it works
 
@@ -71,14 +71,14 @@ The counted path is now the one that loops, and an empty-result run ends in an e
 ## Key Takeaways
 
 - An Infinite Agentic Loop is a feedback path that fires costly or state-growing actions with no effective bound — distinct from a program loop because its continuation is controlled by model, tool, and framework outputs, not a code predicate.
-- The failure is common and expensive: 68 confirmed IALs across 47 projects, with 95.6% causing API cost exhaustion and model denial of service ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641)).
+- The failure is common and expensive: 68 confirmed IALs across 47 projects, with 95.6% causing API cost exhaustion and model denial of service ([arXiv 2607.01641](https://arxiv.org/abs/2607.01641v1)).
 - Six shapes cover the field — retry, tool-call, multi-agent chat, workflow, message reentry, and delegation cycles — and every confirmed case shared one root cause: a missing strong bound.
 - Place the bound on the actual feedback path at the runtime scope where it is created; a cap on the wrong wrapper looks safe and never fires.
 - Bounds sized below the real work envelope backfire as premature termination — pair a cap with a wind-down step and size it against the workload.
 
 ## Sources
 
-- Anonymous, [When Agents Do Not Stop: Uncovering Infinite Agentic Loops in LLM Agents](https://arxiv.org/abs/2607.01641) (2026) — defines IALs, the six-pattern taxonomy, and the IAL-Scan detector; 6,549-repo study with 68 confirmed failures across 47 projects at 91.9% precision.
+- Anonymous, [When Agents Do Not Stop: Uncovering Infinite Agentic Loops in LLM Agents](https://arxiv.org/abs/2607.01641v1) (2026) — defines IALs, the six-pattern taxonomy, and the IAL-Scan detector; 6,549-repo study with 68 confirmed failures across 47 projects at 91.9% precision.
 - Anthropic, [Define Outcomes — Managed Agents](https://platform.claude.com/docs/en/managed-agents/define-outcomes) (2026) — the outcome iteration cap (`max_iterations` default 3, maximum 20) and the `max_iterations_reached` one-final-revision wind-down.
 
 ## Related

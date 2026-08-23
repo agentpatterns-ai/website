@@ -24,7 +24,7 @@ maturity: emerging
 
 The pattern only holds under all four conditions:
 
-- Frontier-capable agent LLM, able to plan multi-hop questions and author well-formed Boolean expressions. Weaker generators collapse — Search-R1 paired with BM25 reaches 3.86% on BrowseComp-Plus against the same retriever a frontier agent uses to reach 83.1% ([Chen et al., 2025](https://arxiv.org/abs/2508.06600); [Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
+- Frontier-capable agent LLM, able to plan multi-hop questions and author well-formed Boolean expressions. Weaker generators collapse — Search-R1 paired with BM25 reaches 3.86% on BrowseComp-Plus against the same retriever a frontier agent uses to reach 83.1% ([Chen et al., 2025](https://arxiv.org/abs/2508.06600v1); [Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848v1)).
 - Lexical-overlap-rich corpus — multi-hop QA over Wikipedia-style text, code, docs, log lines, where queries and target documents share surface forms. It weakens when one concept has many surface forms with no shared tokens.
 - Construction cost matters — the index is rebuilt often, or indexing budget is constrained. A static, one-time index amortizes hybrid's build cost to zero, which erases the 41× indexing-cost advantage reported below.
 - Hallucination on unanswerable queries is tracked — the Boolean "no match" gives a sharper unanswerable signal than a low cosine score.
@@ -56,7 +56,7 @@ Retrieval runs in two phases. Boolean logic picks the eligible document set, the
 | Medium-scale accuracy (HotpotQA / 2WikiMultiHopQA / MuSiQue avg.) | 0.784 | 0.807 | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
 | KILT Wikipedia accuracy | 0.717 | 0.716 | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
 | KILT throughput (16 concurrent) | 152.5 QPS | 66.6 QPS | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
-| KILT mean latency | 74.9 ms | 230.5 ms | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
+| KILT mean latency | 74.9 ms | 230.5 ms | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1) |
 | Index construction time | 1.27 h | 52.02 h | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
 | Hallucination rate (answer-unavailable) | 0.083 | 0.128 | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
 
@@ -72,7 +72,7 @@ This fits a broader retrieval-side-dominance trend: retriever choice exerts more
 
 ## When this backfires
 
-- Sub-frontier generator — weaker LLMs cannot plan Boolean decompositions. The same BM25 index that supports 83.1% under a frontier agent supports 3.86% under Search-R1 on BrowseComp-Plus ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848); [Chen et al., 2025](https://arxiv.org/abs/2508.06600)). The pattern is a precision-cost migration, not a free optimization.
+- Sub-frontier generator — weaker LLMs cannot plan Boolean decompositions. The same BM25 index that supports 83.1% under a frontier agent supports 3.86% under Search-R1 on BrowseComp-Plus ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848v1); [Chen et al., 2025](https://arxiv.org/abs/2508.06600v1)). The pattern is a precision-cost migration, not a free optimization.
 - Semantic-gap queries — natural-language paraphrases against identifier-heavy documents ("deduplicate while preserving order" → `unique_ordered`) have near-zero lexical overlap. Logical operators cannot bridge that without a thesaurus or expansion step.
 - Synonym-heavy corpora — medical, legal, multilingual, and consumer-product corpora where one concept has many surface forms. BM25's insensitivity to synonymy is well documented, so agents author speculative `OR` chains to compensate.
 - Static-index, query-rate-dominated workloads — when the index is built once and serves billions of queries, the 41× build-time win amortizes to zero and the medium-scale 2.3-point gap dominates.
@@ -119,14 +119,14 @@ agent:
     - '"event_loop" AND asyncio NOT "twisted"'
 ```
 
-The "after" configuration trades about 2 accuracy points (only at medium scale; it matches at large scale) for a 42× reduction in nightly build time and a roughly 3× latency win at the query path. You keep frontier LLM authoring; the migration is the retrieval interface, not the agent. Re-evaluate hallucination rate on a held-out unanswerable-query set before committing — the 0.083 versus 0.128 hallucination delta is the second load-bearing benefit beyond raw cost ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
+The "after" configuration trades about 2 accuracy points (only at medium scale; it matches at large scale) for a 42× reduction in nightly build time and a roughly 3× latency win at the query path. You keep frontier LLM authoring; the migration is the retrieval interface, not the agent. Re-evaluate hallucination rate on a held-out unanswerable-query set before committing — the 0.083 versus 0.128 hallucination delta is the second load-bearing benefit beyond raw cost ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1)).
 
 ## Key Takeaways
 
 - LogicalRAG moves retrieval precision from the index to the query author: a frontier LLM emits AND/OR/NOT and field-scoped queries against a plain inverted index ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
-- The pattern matches an agentic hybrid baseline at KILT-scale Wikipedia (0.717 vs. 0.716) and trails it on medium-scale multi-hop QA (0.784 vs. 0.807); the win is cost (41× faster indexing) and hallucination rate (0.083 vs. 0.128), not raw accuracy ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
+- The pattern matches an agentic hybrid baseline at KILT-scale Wikipedia (0.717 vs. 0.716) and trails it on medium-scale multi-hop QA (0.784 vs. 0.807); the win is cost (41× faster indexing) and hallucination rate (0.083 vs. 0.128), not raw accuracy ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1)).
 - Evaluate this pattern by checking hallucination rate on answer-unavailable queries specifically — that is where its gap over hybrid concentrates ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
-- Benchmark your specific agent model on Boolean decomposition before switching — Search-R1 + BM25 collapses to 3.86% where a frontier agent reaches 83.1% on the same index ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848); [Chen et al., 2025](https://arxiv.org/abs/2508.06600)).
+- Benchmark your specific agent model on Boolean decomposition before switching — Search-R1 + BM25 collapses to 3.86% where a frontier agent reaches 83.1% on the same index ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848v1); [Chen et al., 2025](https://arxiv.org/abs/2508.06600v1)).
 - When corpora have high lexical overlap, weight retriever choice over generator upgrades — the broader SE-task RAG evidence shows retriever choice dominates outcomes there ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
 
 ## Related

@@ -23,7 +23,7 @@ maturity: emerging
 
 A traditional interactive debugger exposes `step`, `next`, `print var`, `continue` — primitives sized for a human watching state evolve one statement at a time. An LLM agent driving the same interface pays a fixed per-turn cost (latency, context manipulation, output tokens) for every step. Stepping through a 200-line function is 200 turns of high-overhead, low-information interaction. The budget runs out before the agent localizes the fault, and agents fall into stepping loops that produce no patch.
 
-[Xiang et al. (FSE 2026)](https://arxiv.org/abs/2604.24212) document the failure mode directly: traditional interactive debuggers' "low-level, line-by-line interaction paradigm turns out to be cost-inefficient for LLM-based agents, leading to exhausted budgets and unproductive loops." Their Agent-centric Debugging Interface (ADI) replaces the unit of interaction with the function frame and the unit of state with a single trace covering the frame's entire lifetime.
+[Xiang et al. (FSE 2026)](https://arxiv.org/abs/2604.24212v1) document the failure mode directly: traditional interactive debuggers' "low-level, line-by-line interaction paradigm turns out to be cost-inefficient for LLM-based agents, leading to exhausted budgets and unproductive loops." Their Agent-centric Debugging Interface (ADI) replaces the unit of interaction with the function frame and the unit of state with a single trace covering the frame's entire lifetime.
 
 ## Granularity matched to the consumer
 
@@ -46,9 +46,9 @@ graph TD
 
 ## Evidence
 
-On SWE-bench Verified, a basic agent equipped with ADI resolved 63.8% of tasks at an average cost of USD 1.28 per task with Claude-Sonnet-3.7, slightly outperforming the heavily optimized Claude-Tools agent. Plugged into existing SOTA agents as a drop-in component, ADI delivered +6.2% to +18.5% on resolved tasks ([Xiang et al., 2026](https://arxiv.org/abs/2604.24212)).
+On SWE-bench Verified, a basic agent equipped with ADI resolved 63.8% of tasks at an average cost of USD 1.28 per task with Claude-Sonnet-3.7, slightly outperforming the heavily optimized Claude-Tools agent. Plugged into existing SOTA agents as a drop-in component, ADI delivered +6.2% to +18.5% on resolved tasks ([Xiang et al., 2026](https://arxiv.org/abs/2604.24212v1)).
 
-The mechanism replicates outside program-repair agents. [Hutter and Pradel (2026)](https://arxiv.org/abs/2602.06593) introduce AgentStepper for debugging the development agents themselves and frame the same conclusion: "debugging software development agents requires a higher level of abstraction that raises the level from low-level implementation details to high-level agent actions." A user study took bug-identification success from 17% to 60% under the higher-abstraction interface — different artifact, same granularity-matching mechanism.
+The mechanism replicates outside program-repair agents. [Hutter and Pradel (2026)](https://arxiv.org/abs/2602.06593v1) introduce AgentStepper for debugging the development agents themselves and frame the same conclusion: "debugging software development agents requires a higher level of abstraction that raises the level from low-level implementation details to high-level agent actions." A user study took bug-identification success from 17% to 60% under the higher-abstraction interface — different artifact, same granularity-matching mechanism.
 
 ## Why function-level beats line-level for agents
 
@@ -108,7 +108,7 @@ This mirrors the surgical-edit profile from the [precise debugging benchmark](..
 
 - Line-by-line debuggers were sized for humans; LLM agents pay a fixed per-turn cost that makes line stepping economically infeasible at SWE-bench scale.
 - A function-level interface — one frame per turn, full lifetime trace per frame, call-graph-level navigation — raises the information-per-token ratio enough to flip the cost-effectiveness verdict.
-- ADI on SWE-bench Verified: 63.8% resolved at $1.28/task, beating the highly tuned Claude-Tools agent and lifting SOTA agents by 6.2-18.5% as a drop-in plug-in ([Xiang et al., 2026](https://arxiv.org/abs/2604.24212)).
+- ADI on SWE-bench Verified: 63.8% resolved at $1.28/task, beating the highly tuned Claude-Tools agent and lifting SOTA agents by 6.2-18.5% as a drop-in plug-in ([Xiang et al., 2026](https://arxiv.org/abs/2604.24212v1)).
 - The granularity-matching mechanism is the same one [ACI](agent-computer-interface.md) demonstrated for editors and search: re-expose the tool at the consumer's decision unit, not the upstream system's primitive.
 - Failure conditions: bugs hidden inside long frames, concurrency timing, runtimes without trace infrastructure, and bugs the model can fix from source alone without any debugger turn.
 

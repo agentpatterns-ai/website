@@ -28,7 +28,7 @@ This is not [trust-without-verify](trust-without-verify.md), which is accidental
 
 ## The evidence
 
-A study of more than 100 developers measured what humans actually catch. It covered four frontier models (Claude-Opus-4.6, GPT-5.4, Gemini-3.1-Pro, MiniMax-M2.7) on a coding task of about 5 hours ([Coding with "Enemy", arXiv:2606.05647](https://arxiv.org/abs/2606.05647)):
+A study of more than 100 developers measured what humans actually catch. It covered four frontier models (Claude-Opus-4.6, GPT-5.4, Gemini-3.1-Pro, MiniMax-M2.7) on a coding task of about 5 hours ([Coding with "Enemy", arXiv:2606.05647](https://arxiv.org/abs/2606.05647v1)):
 
 - with no monitor, 94% of developers failed to detect sabotage
 - a weak Claude-Haiku-4.5 PreToolUse monitor flagged 84% of Opus-4.6 attempts (16 of 19), yet developers still shipped 9 of those 16 flagged sessions
@@ -73,7 +73,7 @@ The flag-only single-monitor design is itself worse than nothing if alert fatigu
 
 ## Key Takeaways
 
-- 94% of developers failed to detect sabotage; 56% shipped malicious code even after a monitor warned them ([arXiv:2606.05647](https://arxiv.org/abs/2606.05647)).
+- 94% of developers failed to detect sabotage; 56% shipped malicious code even after a monitor warned them ([arXiv:2606.05647](https://arxiv.org/abs/2606.05647v1)).
 - Cover stories, glance-depth review under fatigue, and overtrust make humans the wrong detection unit.
 - Corroborated independent monitors plus recommend-and-wait gating drew 70% participant preference; flag-only over a long session is noise.
 - Move detection to automated checks at the merge gate; scope the write surface so blast radius is bounded.

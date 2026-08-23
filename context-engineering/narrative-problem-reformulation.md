@@ -34,7 +34,7 @@ graph LR
 
 ## What the evidence shows
 
-Across 11 models (Gemini-2.5-Flash, GPT-4.1-mini, Claude-3.5-Haiku, DeepSeek-Coder 6.7B and V2-Lite, Llama-3.1 8B, Gemma-2 9B/27B, Qwen-2.5-Coder 7B/32B, Mistral-Small 24B), the authors report an average 18.7% gain in zero-shot pass@10 ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631)). Per-benchmark results:
+Across 11 models (Gemini-2.5-Flash, GPT-4.1-mini, Claude-3.5-Haiku, DeepSeek-Coder 6.7B and V2-Lite, Llama-3.1 8B, Gemma-2 9B/27B, Qwen-2.5-Coder 7B/32B, Mistral-Small 24B), the authors report an average 18.7% gain in zero-shot pass@10 ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631v1)). Per-benchmark results:
 
 | Benchmark | Baseline pass@10 | Narrative pass@10 | Delta |
 |-----------|------------------|-------------------|-------|
@@ -44,13 +44,13 @@ Across 11 models (Gemini-2.5-Flash, GPT-4.1-mini, Claude-3.5-Haiku, DeepSeek-Cod
 
 The gain concentrates on harder competitive-programming problems, not on well-structured textbook tasks. HumanEval — where problem statements are already short and separable — shows the smallest delta.
 
-The authors report that benefits "depend on narrative coherence and genre alignment": replacing aligned genres (fantasy adventure, sci-fi exploration, mathematical mystery) with incongruent ones (administrative, legal, memorial) produces a significant performance drop ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631)). The gain requires a narrative that matches the problem's algorithmic shape; added tokens alone do not produce it.
+The authors report that benefits "depend on narrative coherence and genre alignment": replacing aligned genres (fantasy adventure, sci-fi exploration, mathematical mystery) with incongruent ones (administrative, legal, memorial) produces a significant performance drop ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631v1)). The gain requires a narrative that matches the problem's algorithmic shape; added tokens alone do not produce it.
 
 ## Why it works
 
 Code LLMs are measurably fragile to surface framing. Independent work on LLM4Code robustness characterizes this as "reasoning fragility" concentrated at reasoning-to-code, symbolic-commitment, and algorithmic-articulation points ([Liu et al., 2026](https://arxiv.org/abs/2604.12214)). Perturbing the input shifts which algorithms the model selects and where it commits implementation errors — in both directions.
 
-StoryCoder's stated mechanism: co-locating task, constraints, and examples in a coherent narrative reduces the structural reconstruction cost the model would otherwise pay. That front-loads algorithmic commitment before code generation begins ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631)). This aligns with the broader finding that explicit structural scaffolds outperform free-form prose in code generation: Structured CoT with sequence/branch/loop placeholders beats plain CoT by up to 13.79% in Pass@1 ([Li et al., arxiv:2305.06599](https://arxiv.org/abs/2305.06599)). Narrative reformulation applies the scaffolding insight at the input layer rather than the reasoning layer. The [Task Framing Irrelevance Fallacy](../fallacies/task-framing-irrelevance-fallacy.md) page documents the same underlying sensitivity.
+StoryCoder's stated mechanism: co-locating task, constraints, and examples in a coherent narrative reduces the structural reconstruction cost the model would otherwise pay. That front-loads algorithmic commitment before code generation begins ([arxiv:2604.14631](https://arxiv.org/abs/2604.14631v1)). This aligns with the broader finding that explicit structural scaffolds outperform free-form prose in code generation: Structured CoT with sequence/branch/loop placeholders beats plain CoT by up to 13.79% in Pass@1 ([Li et al., arxiv:2305.06599](https://arxiv.org/abs/2305.06599)). Narrative reformulation applies the scaffolding insight at the input layer rather than the reasoning layer. The [Task Framing Irrelevance Fallacy](../fallacies/task-framing-irrelevance-fallacy.md) page documents the same underlying sensitivity.
 
 ## When it helps
 
@@ -67,7 +67,7 @@ Four failure conditions, from the paper's limitations and adjacent robustness li
 
 - Simple, well-formed problems. HumanEval shows the smallest gains; prompts that already separate task, constraints, and examples gain little.
 - Pass@1 agent harnesses. The paper foregrounds pass@10. An agent that commits on the first candidate may pay full reformulation cost for a much smaller benefit; per-model pass@1 deltas are not reported at the same prominence.
-- Smaller base-model code LLMs. Adding structure to smaller code LLMs can consistently hurt. CodeLlama-13B pass@1 on MHPP dropped from 17.1% to 8.1% when CoT was added ([Liu et al., 2026](https://arxiv.org/abs/2604.12214)). Narrative reformulation has not been evaluated against that failure class.
+- Smaller base-model code LLMs. Adding structure to smaller code LLMs can consistently hurt. CodeLlama-13B pass@1 on MHPP dropped from 17.1% to 8.1% when CoT was added ([Liu et al., 2026](https://arxiv.org/abs/2604.12214v1)). Narrative reformulation has not been evaluated against that failure class.
 - Latency-sensitive interactive loops. Reformulation is a mandatory pre-call; two serial inference passes on the critical path cannot be parallelized.
 
 Measure before adopting. Run an A/B on the target model and task distribution comparing both pass@1 and pass@k. See [pass@k and pass^k Metrics](../verification/pass-at-k-metrics.md) for the measurement framework.

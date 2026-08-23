@@ -19,7 +19,7 @@ maturity: established
 
 ## The failure surface
 
-A controlled study of 240 Rust samples produced these results. The study covered three LLMs (Gemini 2.5 Pro, GPT-4o, DeepSeek Coder), two AEAD ciphers, four prompt strategies, and ten samples each ([Elsayed et al., 2026](https://arxiv.org/abs/2604.27001)):
+A controlled study of 240 Rust samples produced these results. The study covered three LLMs (Gemini 2.5 Pro, GPT-4o, DeepSeek Coder), two AEAD ciphers, four prompt strategies, and ten samples each ([Elsayed et al., 2026](https://arxiv.org/abs/2604.27001v1)):
 
 | Metric | Result |
 |---|---|
@@ -112,7 +112,7 @@ Any `false` in the build-gate or crypto-analyzer rows should block merge regardl
 
 ## Key Takeaways
 
-- LLM-generated cryptographic code compiled in only 23.3% of 240 controlled samples; 57% of the compiled code contained crypto-specific vulnerabilities ([Elsayed et al., 2026](https://arxiv.org/abs/2604.27001)).
+- LLM-generated cryptographic code compiled in only 23.3% of 240 controlled samples; 57% of the compiled code contained crypto-specific vulnerabilities ([Elsayed et al., 2026](https://arxiv.org/abs/2604.27001v1)).
 - General SAST does not catch crypto invariant violations — pair every crypto code path with a rule-based crypto analyzer.
 - Chain-of-thought prompting was ~5× worse than zero-shot for crypto generation; reverse the usual CoT default for these prompts.
 - Constrain agents to vetted high-level AEAD APIs and require human cryptographer review for any raw-primitive code.

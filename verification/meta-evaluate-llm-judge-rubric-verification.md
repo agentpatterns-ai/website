@@ -72,4 +72,6 @@ There is also a floor case the measurement itself reveals: if the best judge you
 - [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md) — aggregating judge-graded per-trace findings, which assumes the judge is reliable enough to aggregate.
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — when to combine outcome checks with LLM rubric graders in the first place.
 - [Homogeneous Debate Panels as a Groundedness Quality Lever](../patterns/anti-patterns/homogeneous-debate-panel-groundedness.md) — why scaling one judge into a same-model panel does not substitute for meta-evaluating it.
+- [Detecting Self-Preference in a Single LLM Judge](judge-self-preference-detection.md) — the conditional error this aggregate calibration averages away, and the stratified ablation that surfaces it.
 - [Behavior Specs: Grading the Trajectory, Not the Result](behavior-specs.md) — a written standard a judge grades trajectories against, which only pays off once that judge has been meta-evaluated.
+- [Mutation Testing for LLM Judges: Scoring an Evaluator on Injected Defects](mutation-testing-llm-judges.md) — the label-free screening proxy to reach for when the human labels this page depends on are the cost you cannot pay.

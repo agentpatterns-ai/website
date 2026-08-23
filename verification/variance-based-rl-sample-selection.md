@@ -84,7 +84,7 @@ The approach extends Prioritized Experience Replay ([Schaul et al., ICLR 2016](h
 Variance-based exclusion is not always the right call. It underperforms alternatives in three conditions:
 
 - Always-wrong samples can still carry signal: [RL-ZVP (No Prompt Left Behind, ICLR 2026)](https://arxiv.org/abs/2509.21880) extracts learning from zero-variance prompts through entropy-guided advantage shaping, beating GRPO baselines that filter them out by up to 8.61 points on math benchmarks.
-- Low rollout counts misclassify borderline samples: with 3 to 5 runs, samples near the learnability boundary often get tagged zero-variance by chance, the same boundary that curriculum approaches like [VCRL](https://arxiv.org/abs/2509.19803) target on purpose. Raise the rollout count or pair filtering with a difficulty schedule.
+- Low rollout counts misclassify borderline samples: with 3 to 5 runs, samples near the learnability boundary often get tagged zero-variance by chance, the same boundary that curriculum approaches like [VCRL](https://arxiv.org/abs/2509.19803v1) target on purpose. Raise the rollout count or pair filtering with a difficulty schedule.
 - Paired sampling beats variance heuristics: [Beyond Variance (Feb 2026)](https://arxiv.org/abs/2602.03452) shows that pairing a hard-but-solvable prompt with an easy-but-brittle one, without any variance filter, improves AIME 2025 Pass@8 from 16.8 to 22.2 over variance-selected GRPO.
 
 The case study still holds when rollout cost dominates the GPU budget and the training stack cannot use zero-variance signal. Outside those conditions, treat variance filtering as one option, not the default.

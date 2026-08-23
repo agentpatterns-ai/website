@@ -21,7 +21,7 @@ maturity: emerging
 
 ## What was measured
 
-Dente, Satriani, and Papotti construct a benchmark of greenfield backend tasks under a fixed API contract, then layer structural requirements — architectural patterns, database backends, ORM mappings — on top. As structural requirements accumulate, capable configurations lose roughly 30 percentage points in assertion pass rate moving from baseline to fully specified tasks ([Dente et al., 2026](https://arxiv.org/abs/2605.06445)).
+Dente, Satriani, and Papotti construct a benchmark of greenfield backend tasks under a fixed API contract, then layer structural requirements — architectural patterns, database backends, ORM mappings — on top. As structural requirements accumulate, capable configurations lose roughly 30 percentage points in assertion pass rate moving from baseline to fully specified tasks ([Dente et al., 2026](https://arxiv.org/abs/2605.06445v1)).
 
 ```mermaid
 graph LR
@@ -67,7 +67,7 @@ Decompose multi-file generation across turns. A one-shot prompt for routes, mode
 
 ## Key Takeaways
 
-- Multi-file backend tasks exhibit a ~30 percentage point assertion pass rate drop as structural constraints accumulate beyond the bare API contract ([Dente et al., 2026](https://arxiv.org/abs/2605.06445))
+- Multi-file backend tasks exhibit a ~30 percentage point assertion pass rate drop as structural constraints accumulate beyond the bare API contract ([Dente et al., 2026](https://arxiv.org/abs/2605.06445v1))
 - Convention-heavy frameworks (FastAPI, Django) take a larger hit than minimal frameworks (Flask) — invariant density correlates with decay
 - Data-layer defects — query composition errors, ORM runtime violations — dominate the failure surface; contract assertions alone miss them
 - The mechanism is the same as prompt-level constraint degradation: too many simultaneous invariants exceed the model's reliable constraint budget

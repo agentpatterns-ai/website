@@ -21,7 +21,7 @@ maturity: adopted
 
 ## The action-space problem
 
-A flat tool catalog forces the planner to select 1-of-N at every turn. Selection accuracy degrades as N grows: [LongFuncEval (2025)](https://arxiv.org/abs/2505.10570) reports 7–85% accuracy drops as tool catalogs expand, driven by the [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)) — correct tools become harder to locate among distractors. At hundreds of tools, a single planner cannot reliably reason about which combination achieves the goal.
+A flat tool catalog forces the planner to select 1-of-N at every turn. Selection accuracy degrades as N grows: [LongFuncEval (2025)](https://arxiv.org/abs/2505.10570v1) reports 7–85% accuracy drops as tool catalogs expand, driven by the [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)) — correct tools become harder to locate among distractors. At hundreds of tools, a single planner cannot reliably reason about which combination achieves the goal.
 
 ## The pattern
 
@@ -43,7 +43,7 @@ graph TD
 
 The planner's action space shrinks from N leaf tools to K agent tools (K ≪ N). Each sub-agent then faces a small local catalog where selection accuracy is high. This is the core proposal of [HTAA (Huang et al., 2026)](https://arxiv.org/abs/2604.10917), which pairs the agentization step with Asymmetric Planner Adaptation — a trajectory-based fine-tuning method that aligns the planner's expected invocation signature with the new agent tools through backward reconstruction and forward refinement.
 
-The authors report — against flat baselines — "higher task success rates, shorter tool calling trajectories, and significantly reduced context overhead" on public benchmarks, plus production deployment at a ride-hailing platform that "substantially reduces manual validation effort and operational cost" ([source](https://arxiv.org/abs/2604.10917)).
+The authors report — against flat baselines — "higher task success rates, shorter tool calling trajectories, and significantly reduced context overhead" on public benchmarks, plus production deployment at a ride-hailing platform that "substantially reduces manual validation effort and operational cost" ([source](https://arxiv.org/abs/2604.10917v1)).
 
 ## Positioning versus adjacent patterns
 
@@ -60,7 +60,7 @@ Agentization is intermediate between consolidation (collapses the leaves) and fu
 
 ## Why it works
 
-Agentization reduces the effective action space visible to the top-level planner at each decision. [Anthropic's advanced tool use benchmarks](https://www.anthropic.com/engineering/advanced-tool-use) show the same mechanism at work in a different form: deferring tools until search lifts Opus 4.5 from 79.5% to 88.1% selection accuracy — the model chooses among 3–5 surfaced tools rather than the full catalog. Agentization achieves the smaller-surface effect statically, at design time, instead of dynamically per request. The asymmetric adaptation training step closes the gap that static grouping alone leaves open: without it, the planner invokes the agent tool with the signature it learned on flat catalogs ([HTAA, 2026](https://arxiv.org/abs/2604.10917)).
+Agentization reduces the effective action space visible to the top-level planner at each decision. [Anthropic's advanced tool use benchmarks](https://www.anthropic.com/engineering/advanced-tool-use) show the same mechanism at work in a different form: deferring tools until search lifts Opus 4.5 from 79.5% to 88.1% selection accuracy — the model chooses among 3–5 surfaced tools rather than the full catalog. Agentization achieves the smaller-surface effect statically, at design time, instead of dynamically per request. The asymmetric adaptation training step closes the gap that static grouping alone leaves open: without it, the planner invokes the agent tool with the signature it learned on flat catalogs ([HTAA, 2026](https://arxiv.org/abs/2604.10917v1)).
 
 ## When this backfires
 

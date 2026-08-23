@@ -64,7 +64,7 @@ The repo map is still query-shaped (PageRank personalization weights files being
 
 ## Reported results
 
-In the AOCI paper's evaluation across 4 projects, 3 LLMs, and 6 context conditions (2,160 evaluations), AOCI ranked second only to a theoretical upper-bound oracle. On 19 industrial tasks across 5 systems, AOCI produced zero final-state defects. Mainstream agent-based tools introduced defects in 12 tasks and consumed 4 to 130x more tokens (p < 0.001). The performance gap widens with task complexity. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421))
+In the AOCI paper's evaluation across 4 projects, 3 LLMs, and 6 context conditions (2,160 evaluations), AOCI ranked second only to a theoretical upper-bound oracle. On 19 industrial tasks across 5 systems, AOCI produced zero final-state defects. Mainstream agent-based tools introduced defects in 12 tasks and consumed 4 to 130x more tokens (p < 0.001). The performance gap widens with task complexity. ([Liu et al., 2026](https://arxiv.org/abs/2605.02421v1))
 
 These figures come from one team's evaluation and are not yet independently replicated. Treat them as a directional signal, not a settled benchmark.
 

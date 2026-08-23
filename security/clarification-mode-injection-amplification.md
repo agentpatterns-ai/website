@@ -16,7 +16,7 @@ maturity: emerging
 
 # Clarification Mode Amplifies Prompt Injection
 
-> Clarification mode opens a high-trust channel injected content exploits, amplifying prompt-injection success from 1–11% to 24–63% across frontier models ([ASPI, 2026](https://arxiv.org/abs/2605.17324)).
+> Clarification mode opens a high-trust channel injected content exploits, amplifying prompt-injection success from 1–11% to 24–63% across frontier models ([ASPI, 2026](https://arxiv.org/abs/2605.17324v1)).
 
 ## Core concept
 
@@ -26,7 +26,7 @@ This is not a reason to stop asking clarifying questions. Uncertainty-aware clar
 
 ## How it works
 
-The ASPI benchmark (728 task-attack scenarios, four frontier models) measures attack success rate (ASR) in two configurations: standard execution versus the same agent extended with an ask_user clarification tool. The ASR jump is the amplification effect ([ASPI, 2026](https://arxiv.org/abs/2605.17324)):
+The ASPI benchmark (728 task-attack scenarios, four frontier models) measures attack success rate (ASR) in two configurations: standard execution versus the same agent extended with an ask_user clarification tool. The ASR jump is the amplification effect ([ASPI, 2026](https://arxiv.org/abs/2605.17324v1)):
 
 | Model | Standard ASR | Clarification ASR |
 |-------|--------------|-------------------|
@@ -38,7 +38,7 @@ The ASPI benchmark (728 task-attack scenarios, four frontier models) measures at
 
 Agents in clarification mode show "TASK_AND_ATTACK" behavior: they fold injected instructions into task context instead of rejecting them. Judges mark responses "CONFUSED or PERSUADED" when adversarial content is treated as legitimate task data ([ASPI, 2026](https://arxiv.org/abs/2605.17324)). Claude-Opus-4.7 is the one tested model that holds the gap closed — the property is model-specific, not architectural.
 
-Read the absolute ASRs as a lower bound, not a calibrated production rate. ASPI constructs ambiguity synthetically via single-slot removal — one missing argument, one clarification round — which the authors note "may not capture the full range of real-world underspecification"; they conclude the reported rates "likely underestimate the vulnerability that would arise in more complex, naturalistic settings" ([ASPI, 2026](https://arxiv.org/abs/2605.17324)). The direction of the amplification holds. In a multi-turn, multi-slot production agent the magnitude is plausibly worse, not better.
+Read the absolute ASRs as a lower bound, not a calibrated production rate. ASPI constructs ambiguity synthetically via single-slot removal — one missing argument, one clarification round — which the authors note "may not capture the full range of real-world underspecification"; they conclude the reported rates "likely underestimate the vulnerability that would arise in more complex, naturalistic settings" ([ASPI, 2026](https://arxiv.org/abs/2605.17324v1)). The direction of the amplification holds. In a multi-turn, multi-slot production agent the magnitude is plausibly worse, not better.
 
 ## Why it works
 
@@ -48,7 +48,7 @@ This is the same failure mode that makes clarification useful on benign inputs �
 
 ## Defenses
 
-ASPI evaluates two lightweight defenses against Gemini-3-Flash's 35.7% baseline ([ASPI, 2026](https://arxiv.org/abs/2605.17324)):
+ASPI evaluates two lightweight defenses against Gemini-3-Flash's 35.7% baseline ([ASPI, 2026](https://arxiv.org/abs/2605.17324v1)):
 
 - Prompt guard (segment-level filter scanning both user and tool messages while preserving benign clarification content) → 27.0% ASR
 - Tool filter (ask_user-aware restriction firing before agent action while maintaining clarification ability) → 23.9% ASR

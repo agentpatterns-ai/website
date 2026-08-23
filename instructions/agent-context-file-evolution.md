@@ -32,7 +32,7 @@ If those conditions hold, the file is configuration code, not documentation, and
 
 ## The two-loop discipline
 
-The Chatlatanagulchai data exposes one specific failure mode: monotonic accretion. Developers respond to drift by adding new instructions, almost never by removing stale ones. Combined with the [Instruction Compliance Ceiling](instruction-compliance-ceiling.md) (compliance degrades as rule count grows; even frontier models hit only 68% accuracy at high instruction densities — [IFScale, 2025](https://arxiv.org/abs/2507.11538)), unbounded growth turns each new rule into a reduction in agent compliance, not an addition.
+The Chatlatanagulchai data exposes one specific failure mode: monotonic accretion. Developers respond to drift by adding new instructions, almost never by removing stale ones. Combined with the [Instruction Compliance Ceiling](instruction-compliance-ceiling.md) (compliance degrades as rule count grows; even frontier models hit only 68% accuracy at high instruction densities — [IFScale, 2025](https://arxiv.org/abs/2507.11538v1)), unbounded growth turns each new rule into a reduction in agent compliance, not an addition.
 
 The maintenance loop therefore has two halves that must run together:
 

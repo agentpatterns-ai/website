@@ -22,9 +22,9 @@ maturity: emerging
 
 ## Why single-pass elicitation under-reports
 
-One frontier model that plans and executes an attack in a single trajectory produces a narrow distribution. 81% of Opus 4.6-elicited attacks fall into 2 of 5 technical tiers, and 64% share identical structural templates ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)). The broader red-teaming literature reports the same shape: attacker models mode-collapse even with explicit diversity rewards, so single-pass elicitation under-samples the attack space ([Lee et al., 2024](https://arxiv.org/abs/2405.18540)). Splitting the task surfaces the long tail.
+One frontier model that plans and executes an attack in a single trajectory produces a narrow distribution. 81% of Opus 4.6-elicited attacks fall into 2 of 5 technical tiers, and 64% share identical structural templates ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684v1)). The broader red-teaming literature reports the same shape: attacker models mode-collapse even with explicit diversity rewards, so single-pass elicitation under-samples the attack space ([Lee et al., 2024](https://arxiv.org/abs/2405.18540)). Splitting the task surfaces the long tail.
 
-An Opus-4.5 monitor catches 94.9% of single-pass attacks but only 60.3% of full-pipeline attacks against the same 2,644-trajectory benchmark ([MonitoringBench](https://arxiv.org/abs/2605.09684)) — that gap is the under-reporting.
+An Opus-4.5 monitor catches 94.9% of single-pass attacks but only 60.3% of full-pipeline attacks against the same 2,644-trajectory benchmark ([MonitoringBench](https://arxiv.org/abs/2605.09684v1)) — that gap is the under-reporting.
 
 This is distinct from [controlled benchmark rewriting](controlled-benchmark-rewriting-safety-judgment.md) (rewriting existing trajectories) and [RL-trained automated red teamers](../security/rl-automated-red-teamers.md) (training one end-to-end attacker). Decomposition addresses a third gap: the conceive-execute trade-off within one prompt.
 
@@ -35,7 +35,7 @@ Attack construction has two demands that compete for one context budget:
 - Conceive: generate novel attack ideas that escape mode-collapsed templates.
 - Execute: produce a tool-call trajectory that completes the side task without surface cues the monitor detects.
 
-A frontier model prompted to do both falls back on familiar templates and over-cues the execution with explicit malicious phrasing. Reconnaissance agents that generate strategy without execution pressure produce lower catch rates (73.5 to 82.7%) than the single-pass baseline (94.9%) against Opus 4.5 ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)).
+A frontier model prompted to do both falls back on familiar templates and over-cues the execution with explicit malicious phrasing. Reconnaissance agents that generate strategy without execution pressure produce lower catch rates (73.5 to 82.7%) than the single-pass baseline (94.9%) against Opus 4.5 ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684v1)).
 
 ## The three-stage pipeline
 
@@ -65,9 +65,9 @@ Attacks refined against three development monitors (GPT-5 Nano, GPT-5, Claude Op
 | Reconnaissance-agent strategy, no refinement | 73.5-82.7% |
 | Full pipeline (strategy + execution + refinement) | 60.3% |
 
-The 34.6-point spread is the conceive-execute gap — same monitor, same threat model, same models, different elicitation method. Weaker monitors (GPT-5-tier and below) show steeper cliffs. The 60.3% Opus 4.5 figure is the upper bound of detection in this setting, not a floor ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)).
+The 34.6-point spread is the conceive-execute gap — same monitor, same threat model, same models, different elicitation method. Weaker monitors (GPT-5-tier and below) show steeper cliffs. The 60.3% Opus 4.5 figure is the upper bound of detection in this setting, not a floor ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684v1)).
 
-Stepwise monitors expose a separate problem: a per-action false-positive rate calibrated at 1% compounds to 6.7 to 17.4% at the trajectory level ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684)). Independent work on weak-to-strong monitoring sees the same pattern — true-positive rate is hard to hold at low false-positive rate, and monitor scaffolding matters more than the model itself ([Bhatt et al., 2025](https://arxiv.org/abs/2508.19461)). Reporting only the per-action rate understates production noise.
+Stepwise monitors expose a separate problem: a per-action false-positive rate calibrated at 1% compounds to 6.7 to 17.4% at the trajectory level ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684v1)). Independent work on weak-to-strong monitoring sees the same pattern — true-positive rate is hard to hold at low false-positive rate, and monitor scaffolding matters more than the model itself ([Bhatt et al., 2025](https://arxiv.org/abs/2508.19461v1)). Reporting only the per-action rate understates production noise.
 
 ## When this applies
 

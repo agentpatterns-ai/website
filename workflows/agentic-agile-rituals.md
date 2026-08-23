@@ -46,7 +46,7 @@ The adapted DoD has two numbers, not one:
 
 The "before implementation" ordering is load-bearing. Microsoft's adaptation replaces the prompt-session exit ("ends when the developer feels satisfied") with a contract: each story carries "specific, testable conditions that must be true when this story is complete", so work ends "when a contract is fulfilled" rather than on feel ([Microsoft Developer Blog](https://developer.microsoft.com/blog/agentic-agile-why-agent-development-needs-agile-not-just-prompts)). Wiring those testable conditions to eval thresholds is the agentic step. This mirrors the [Sprint Contracts](../patterns/agent-design/sprint-contracts.md) discipline of locking the rubric before the generator runs — pre-commitment prevents post-hoc rationalization.
 
-Long-horizon work needs a stricter version. Software-engineering pass rates dropped from 0.90 to 0.44 as task horizon grew, and "capability and reliability rankings diverge substantially, with multi-rank inversions at long horizons" — pass@1 is structurally inadequate for production agent features ([arXiv 2603.29231: Beyond pass@1](https://arxiv.org/abs/2603.29231)).
+Long-horizon work needs a stricter version. Software-engineering pass rates dropped from 0.90 to 0.44 as task horizon grew, and "capability and reliability rankings diverge substantially, with multi-rank inversions at long horizons" — pass@1 is structurally inadequate for production agent features ([arXiv 2603.29231: Beyond pass@1](https://arxiv.org/abs/2603.29231v1)).
 
 ### 2. Acceptance criteria = pass rate + negative constraints
 
@@ -56,7 +56,7 @@ Negative constraints map onto spec-violation detection. AgentPex extracts behavi
 
 ### 3. Retrospectives on trace corpora, not outcomes
 
-Outcome-only retros miss the signal. "Failed trajectories consistently exceed successful ones in length and exhibit greater variability"; agents pinpoint problem files 72–81% of the time even in failures but struggle on the fix ([arXiv 2511.00197: Code Agent Trajectories](https://arxiv.org/abs/2511.00197)). Retro signal lives in trace shape and persistence — length distributions, tool-call sequences, recovery patterns — not in the pass/fail bit.
+Outcome-only retros miss the signal. "Failed trajectories consistently exceed successful ones in length and exhibit greater variability"; agents pinpoint problem files 72–81% of the time even in failures but struggle on the fix ([arXiv 2511.00197: Code Agent Trajectories](https://arxiv.org/abs/2511.00197v1)). Retro signal lives in trace shape and persistence — length distributions, tool-call sequences, recovery patterns — not in the pass/fail bit.
 
 Scrum.org's adaptation for mixed human-agent teams shifts the retro role split: the agent reviews session files, git commit logs, and PR history to surface trace-level improvement areas; humans review collaboration health and decide which failure patterns are worth a prompt or harness change ([Scrum.org](https://www.scrum.org/resources/blog/how-run-sprint-retrospective-when-half-your-team-ai-agents)). This pairs directly with [Traces Need Feedback to Power Learning](../observability/traces-need-feedback-to-power-learning.md) — without verdict-labeled traces the retro produces trajectories nobody can act on.
 

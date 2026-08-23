@@ -21,7 +21,7 @@ maturity: adopted
 
 Coverage-guided fuzzing finds memory corruption bugs, logic errors, and edge-case crashes in library code. The constraint is harness authoring: hand-written glue code that turns fuzzer byte streams into valid API call sequences. A correct harness requires understanding parameter constraints, call ordering, and state initialization — work that can take a long time per API.
 
-[arXiv:2603.08616](https://arxiv.org/abs/2603.08616) demonstrates that a five-agent system using coverage feedback can automate harness generation for Java libraries, achieving a median 26% improvement in branch coverage over OSS-Fuzz baselines at a cost of $3.20 and ~10 minutes per harness.
+[arXiv:2603.08616](https://arxiv.org/abs/2603.08616v1) demonstrates that a five-agent system using coverage feedback can automate harness generation for Java libraries, achieving a median 26% improvement in branch coverage over OSS-Fuzz baselines at a cost of $3.20 and ~10 minutes per harness.
 
 ## How coverage feedback guides iteration
 

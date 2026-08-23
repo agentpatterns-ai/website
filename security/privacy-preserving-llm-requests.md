@@ -19,7 +19,7 @@ maturity: emerging
 
 > Privacy-preserving LLM requests combine local routing with redact-and-rephrase, cutting PII leakage to 0.6% while leaving 31% of proprietary code exposed.
 
-Coding agents and LLM-powered tools send prompts to cloud APIs that may log, retain, or train on request content. Organization-level DLP and TLS protect transport and egress. Neither protects the content of the prompt itself. An empirical evaluation across 1,300 labeled samples compared eight techniques on leakage, utility, latency, and cost ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)).
+Coding agents and LLM-powered tools send prompts to cloud APIs that may log, retain, or train on request content. Organization-level DLP and TLS protect transport and egress. Neither protects the content of the prompt itself. An empirical evaluation across 1,300 labeled samples compared eight techniques on leakage, utility, latency, and cost ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064v1)).
 
 ## The eight techniques
 
@@ -60,7 +60,7 @@ The client restores placeholders in the response before the agent acts on it. Th
 
 ## Measured leakage
 
-Across 500 test prompts against the combined pipeline ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)):
+Across 500 test prompts against the combined pipeline ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064v1)):
 
 | Content class | Combined leak rate | Exact leaks |
 |---------------|--------------------|-------------|
@@ -78,7 +78,7 @@ The evaluation reports that no single technique dominates. Each has a characteri
 - Rephrasing (C) — heavy rephrasing degrades task utility when exact wording matters (code, legal text, structured output), and paraphrase models themselves are cloud-hosted in many deployments.
 - Differential-privacy noise (H) — calibrated noise damages generation quality for tasks where token-level precision matters. The compute–privacy–utility tradeoff is characterized for DP language models ([arXiv:2501.18914](https://arxiv.org/abs/2501.18914)).
 
-Composing A+B+C reduces leakage further but does not eliminate it — the 31.3% proprietary-code residual is the empirical floor reported for the combined pipeline ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)).
+Composing A+B+C reduces leakage further but does not eliminate it — the 31.3% proprietary-code residual is the empirical floor reported for the combined pipeline ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064v1)).
 
 ## Scope limits for production use
 
@@ -98,7 +98,7 @@ Treat the redaction pipeline as a layer, not a seal. For PII this is adequate fo
 
 A developer agent handles two tasks in the same session. The first is a customer-support summary from a ticket containing names and emails. The second is a refactor of an internal authentication module.
 
-For the first, the client router sees tractable text and invokes the redactor: emails become `{{EMAIL_1}}`, names become `{{NAME_1}}`, and the surrounding prose is rephrased. The cloud LLM returns a summary referencing the placeholders; the client restores them before the agent posts the summary. Residual PII leak risk is 0.6% ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064)).
+For the first, the client router sees tractable text and invokes the redactor: emails become `{{EMAIL_1}}`, names become `{{NAME_1}}`, and the surrounding prose is rephrased. The cloud LLM returns a summary referencing the placeholders; the client restores them before the agent posts the summary. Residual PII leak risk is 0.6% ([arXiv:2604.12064](https://arxiv.org/abs/2604.12064v1)).
 
 For the second, the router detects proprietary code patterns. Even with placeholder substitution of internal function names, the call graph and module boundaries leak through — the 31.3% residual applies. The agent routes the refactor task to a locally-hosted code model instead, trading some capability for a closed egress path.
 

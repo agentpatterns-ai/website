@@ -36,7 +36,7 @@ Each control is deterministic. It holds even when the model misbehaves, because 
 
 Constraints shrink the space a reviewer has to reason over. Restricting what an agent can access, where it can reach, and how its code must be shaped reduces the set of possible behaviors — and therefore the set of possible misbehaviors — the reviewer must consider. A reviewer inspecting a constrained artifact works over a smaller hypothesis space, so even a weak model catches more. The substrate does the constraining, not the reviewer, so review effort per unit of agent output stays bounded as output grows.
 
-A controlled experiment measured this directly. A small reviewer model (Gemma 4 e4b) inspected a Python codebase seeded with 11 backdoors. Detection recall rose from 54.5% for an unconstrained agent with no tools to 90.9% once substrate constraints and a roughly 200-line command-line review tool were added, with the substrate and the tool contributing independently ([Winninger, 2026](https://arxiv.org/abs/2607.02389)). The gain is largest in languages that offer few default guarantees, such as Python; the same principles extend to memory-safe languages like Rust, where the compiler already supplies part of the substrate ([Winninger, 2026](https://arxiv.org/abs/2607.02389)).
+A controlled experiment measured this directly. A small reviewer model (Gemma 4 e4b) inspected a Python codebase seeded with 11 backdoors. Detection recall rose from 54.5% for an unconstrained agent with no tools to 90.9% once substrate constraints and a roughly 200-line command-line review tool were added, with the substrate and the tool contributing independently ([Winninger, 2026](https://arxiv.org/abs/2607.02389v1)). The gain is largest in languages that offer few default guarantees, such as Python; the same principles extend to memory-safe languages like Rust, where the compiler already supplies part of the substrate ([Winninger, 2026](https://arxiv.org/abs/2607.02389v1)).
 
 ## When this backfires
 
@@ -53,7 +53,7 @@ For flaws that live within permitted operations — subtle logic errors and busi
 
 - Reuse the controls that already manage human teams: access control, network policy, and tooling-enforced conventions apply directly to coding agents.
 - Constraints make oversight scale because they shrink the reviewer's hypothesis space, so a small, cheap reviewer catches more.
-- In one experiment, substrate plus a ~200-line review tool lifted a small reviewer's backdoor recall from 54.5% to 90.9%, the two contributing independently ([Winninger, 2026](https://arxiv.org/abs/2607.02389)).
+- In one experiment, substrate plus a ~200-line review tool lifted a small reviewer's backdoor recall from 54.5% to 90.9%, the two contributing independently ([Winninger, 2026](https://arxiv.org/abs/2607.02389v1)).
 - The substrate is cheaper in tokens than agentic scaffolding, but it is necessary rather than sufficient — pair it with semantic review for threats inside permitted operations.
 
 ## Related

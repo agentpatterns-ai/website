@@ -27,7 +27,7 @@ A staged pipeline runs two models against every step:
 
 Confident steps execute autonomously and the agent resumes from the updated state. Uncertain steps surface to an operator who either accepts the suggestion or supplies a correction. Both responses become new training labels for the critic.
 
-[Borovkov et al. (2026)](https://arxiv.org/abs/2604.23855) deployed this design over an enterprise BPM platform and reported, in production, that it "automated 45% of sessions and reduced average handling time by 39% without degrading support quality level," reaching selective automation within two weeks for new processes.
+[Borovkov et al. (2026)](https://arxiv.org/abs/2604.23855v1) deployed this design over an enterprise BPM platform and reported, in production, that it "automated 45% of sessions and reduced average handling time by 39% without degrading support quality level," reaching selective automation within two weeks for new processes.
 
 ```mermaid
 graph LR

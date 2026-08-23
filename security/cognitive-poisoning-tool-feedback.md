@@ -21,7 +21,7 @@ maturity: emerging
 
 ## The attack class
 
-Cognitive poisoning spreads the malicious payload across the trajectory state, not into a single tool response. The tool's interface and metadata look benign, and its first responses pass content filters. Harm activates only when the agent's accumulated trajectory state lines up with a final executable action whose parameters satisfy the required_all, required_any, and forbidden conditions. As the originating work puts it: "the attack succeeds not because one message is obviously malicious, but because the trajectory has shaped the agent into treating a dangerous final action as ordinary" ([Yan et al., 2026](https://arxiv.org/abs/2605.17453)).
+Cognitive poisoning spreads the malicious payload across the trajectory state, not into a single tool response. The tool's interface and metadata look benign, and its first responses pass content filters. Harm activates only when the agent's accumulated trajectory state lines up with a final executable action whose parameters satisfy the required_all, required_any, and forbidden conditions. As the originating work puts it: "the attack succeeds not because one message is obviously malicious, but because the trajectory has shaped the agent into treating a dangerous final action as ordinary" ([Yan et al., 2026](https://arxiv.org/abs/2605.17453v1)).
 
 ```mermaid
 graph LR
