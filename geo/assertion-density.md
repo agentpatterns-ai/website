@@ -26,7 +26,7 @@ AI answer engines use retrieval-augmented generation: they match queries against
 
 ## The evidence
 
-The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.09735)) tested 9 optimization techniques against a 10,000-query benchmark (GEO-bench) across 25 domains. It measured source visibility using Position-Adjusted Word Count (PAWC — word count weighted by exponential decay based on citation position):
+The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.09735v3)) tested 9 optimization techniques against a 10,000-query benchmark (GEO-bench) across 25 domains. It measured source visibility using Position-Adjusted Word Count (PAWC — word count weighted by exponential decay based on citation position):
 
 | Technique | PAWC Improvement |
 |-----------|-----------------|
@@ -88,7 +88,7 @@ AI answer engines retrieve passages by matching queries against indexed content,
 
 **How much do quotations and statistics improve AI citation rates, according to the Princeton GEO study?**
 
-The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.09735)) found Quotation Addition improved source visibility by 41%, and Statistics Addition and Cite Sources each improved it by 30%. It measured these results via Position-Adjusted Word Count across a 10,000-query benchmark. Because the study permitted fabricated statistics and rewards added length, treat these percentages as an upper bound.
+The Princeton GEO study (Aggarwal et al., [KDD 2024](https://arxiv.org/abs/2311.09735v3)) found Quotation Addition improved source visibility by 41%, and Statistics Addition and Cite Sources each improved it by 30%. It measured these results via Position-Adjusted Word Count across a 10,000-query benchmark. Because the study permitted fabricated statistics and rewards added length, treat these percentages as an upper bound.
 
 **What should I do if I cannot find a real source for a claim?**
 

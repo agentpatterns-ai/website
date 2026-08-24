@@ -23,7 +23,7 @@ Feeding an entire repository into an LLM context window does not scale. A 250K-l
 
 Demand-driven analysis inverts this: start from a suspicious pattern (a potentially null pointer, an allocation without a matching free), then trace only the call chains that matter. The agent reads functions one at a time, following data flow across boundaries, and stops when the flow is resolved or a bug is confirmed.
 
-[RepoAudit](https://arxiv.org/abs/2501.18160) ([code](https://github.com/PurCL/RepoAudit); [ICML 2025 poster](https://icml.cc/virtual/2025/poster/45170)) demonstrates this on C/C++ memory safety bugs across 15 projects averaging 251K LoC, finding 40 true bugs at 78.43% precision — $2.54 and 0.44 hours per project.
+[RepoAudit](https://arxiv.org/abs/2501.18160v3) ([code](https://github.com/PurCL/RepoAudit); [ICML 2025 poster](https://icml.cc/virtual/2025/poster/45170)) demonstrates this on C/C++ memory safety bugs across 15 projects averaging 251K LoC, finding 40 true bugs at 78.43% precision — $2.54 and 0.44 hours per project.
 
 ## Architecture: Initiator-Explorer-Validator
 

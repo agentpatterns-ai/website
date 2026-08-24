@@ -31,7 +31,7 @@ Training data distribution sets the model's performance profile, not any general
 Evidence of the failure mode:
 
 - Adding irrelevant details to arithmetic problems causes [17 to 66% accuracy drops](https://www.ikangai.com/jagged-agi-superhuman-ai-flaws/) in models that pass the clean version
-- Code that behaves identically, with symbols renamed and structure reshaped, [degrades test pass rates by up to 62.5%](https://arxiv.org/abs/2412.08109) — the model does not generalize to logically identical tasks
+- Code that behaves identically, with symbols renamed and structure reshaped, [degrades test pass rates by up to 62.5%](https://arxiv.org/abs/2412.08109v2) — the model does not generalize to logically identical tasks
 - Coding agent success rates vary widely between greenfield and mature codebases, [even within the same domain](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)
 - A high leaderboard score, such as 92% on SWE-bench, does not predict outcomes on your own codebase and stack, Microsoft argues — benchmark conditions rarely match a team's actual repository, dependencies, and constraints ([Microsoft: what AI benchmarks are not telling you](https://developer.microsoft.com/blog/what-ai-benchmarks-are-not-telling-you))
 

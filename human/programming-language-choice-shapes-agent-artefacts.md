@@ -33,7 +33,7 @@ Language choice is no longer a feasibility check for AI coding agents — fronti
 
 Source: [Acher and Jézéquel, 2026](https://arxiv.org/abs/2606.13763). The agents reproduced the same conceptual blueprint (search, evaluation, board representation) in every language but adapted feature selection to the language's idiom — a Rust engine and a COBOL engine diverged at sub-feature granularity even when the prompt and agent were identical.
 
-The pattern is independent of one paper. [MultiPL-E](https://arxiv.org/abs/2308.09895) reports pass@1 of 4.7 to 11.3 for Racket and 11.3 to 41.9 for Julia, versus more than 40 for Python on the same models — the same training-corpus asymmetry the chess study reproduces at task scale rather than function scale. The [Wu et al. (2024) survey](https://arxiv.org/abs/2410.03981) (111 papers, 2020 to 2024) names this gap "low-resource programming languages" and identifies data scarcity as the root cause.
+The pattern is independent of one paper. [MultiPL-E](https://arxiv.org/abs/2308.09895v6) reports pass@1 of 4.7 to 11.3 for Racket and 11.3 to 41.9 for Julia, versus more than 40 for Python on the same models — the same training-corpus asymmetry the chess study reproduces at task scale rather than function scale. The [Wu et al. (2024) survey](https://arxiv.org/abs/2410.03981v3) (111 papers, 2020 to 2024) names this gap "low-resource programming languages" and identifies data scarcity as the root cause.
 
 ## Why it works
 
@@ -57,7 +57,7 @@ Budget extra verification when steering into a long-tail language. The work you 
 The language-density framing breaks in four cases:
 
 - Throwaway artifacts. Prototypes and disposable code never hit the quality ceiling that the gap measures. Choose for team velocity instead.
-- Mainstream-only stack switches. Within Python, TypeScript, and Go, the Elo and pass@1 gaps narrow sharply — [MultiPL-E](https://arxiv.org/abs/2308.09895) places all three near the top of its pass@1 distribution. Reviewer fluency and tooling familiarity dominate ([cross-tool translation](cross-tool-translation.md)).
+- Mainstream-only stack switches. Within Python, TypeScript, and Go, the Elo and pass@1 gaps narrow sharply — [MultiPL-E](https://arxiv.org/abs/2308.09895v6) places all three near the top of its pass@1 distribution. Reviewer fluency and tooling familiarity dominate ([cross-tool translation](cross-tool-translation.md)).
 - Domain-mandatory languages. Embedded C, Solidity, ladder logic, and hardware-description languages — the domain dictates the language. Apply the verification-budget half and skip the language-selection half.
 - Reviewer-bottlenecked teams. When reviewer expertise sits in one language and the team cannot review the higher-density alternative, switching shifts the bottleneck rather than removing it.
 

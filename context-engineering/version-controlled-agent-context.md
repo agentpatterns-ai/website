@@ -20,7 +20,7 @@ maturity: emerging
 
 Version-controlled agent context gives memory the operations of a version control system: commit a milestone, branch to try an alternative, merge the useful result back, and read the store at whatever abstraction level the current step needs. The store is plain files on disk, so a fresh session recovers state the way a new engineer reads git history ([Git Context Controller, arxiv 2508.00031](https://arxiv.org/abs/2508.00031)).
 
-The gains do not come from checkpointing, which is why the condition leads. In the source paper's ablation, adding a roadmap and commit records moved SWE-bench Verified resolution from 67.2% to 69.1%. Adding fine-grained logs plus the read operation that retrieves them moved it from 69.1% to 75.3% ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031)). Skip the read path and you land in the smaller number.
+The gains do not come from checkpointing, which is why the condition leads. In the source paper's ablation, adding a roadmap and commit records moved SWE-bench Verified resolution from 67.2% to 69.1%. Adding fine-grained logs plus the read operation that retrieves them moved it from 69.1% to 75.3% ([arxiv 2508.00031](https://arxiv.org/abs/2508.00031v3)). Skip the read path and you land in the smaller number.
 
 ## When it pays
 

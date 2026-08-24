@@ -21,7 +21,7 @@ maturity: emerging
 
 ## Misbehavior rate in production trajectories
 
-Production coding agent trajectories misbehave often enough that manual intervention does not scale. Analysis of 10,000+ real trajectories ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037)) shows ~30% contain at least one misbehavior — normal production behavior, not a tail event.
+Production coding agent trajectories misbehave often enough that manual intervention does not scale. Analysis of 10,000+ real trajectories ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037v2)) shows ~30% contain at least one misbehavior — normal production behavior, not a tail event.
 
 ## Three misbehavior categories
 

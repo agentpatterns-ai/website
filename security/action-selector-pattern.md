@@ -26,7 +26,7 @@ Related lesson: [Decide Before You Look](https://learn.agentpatterns.ai/security
 
 Standard tool-enabled agents return tool outputs to the LLM context. This creates a feedback loop: external content (web pages, API responses, file contents) can carry injected instructions that redirect which action the agent selects next — the [cognitive poisoning via tool feedback](cognitive-poisoning-tool-feedback.md) failure mode. The action-selector pattern breaks this loop through architecture, not through training or filtering.
 
-[Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837) define the pattern: the agent acts "merely as an action _selector_, which translates incoming requests (presumably expressed in natural language) to one or more predefined tool calls." Execution is deterministic; the LLM never sees what the action returned.
+[Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837v3) define the pattern: the agent acts "merely as an action _selector_, which translates incoming requests (presumably expressed in natural language) to one or more predefined tool calls." Execution is deterministic; the LLM never sees what the action returned.
 
 ## Mechanism
 

@@ -73,7 +73,7 @@ Keep a human review gate on each generated script before merge. The pipeline giv
 - Edge cases the generator may have missed
 - Assertions that are structurally valid but semantically wrong
 
-The [Hacon/Siemens study](https://arxiv.org/abs/2603.08190) found 30–50% of generated code per script was left unchanged by test engineers, indicating selective rather than exhaustive review. Reviewers focus on the spec-to-test mapping — whether assertions match intent — rather than optimizing every generated line.
+The [Hacon/Siemens study](https://arxiv.org/abs/2603.08190v2) found 30–50% of generated code per script was left unchanged by test engineers, indicating selective rather than exhaustive review. Reviewers focus on the spec-to-test mapping — whether assertions match intent — rather than optimizing every generated line.
 
 ## Scope
 
@@ -138,7 +138,7 @@ The pattern degrades or fails under several conditions:
 - High API churn: the generator anchors to helper functions and selectors from retrieved examples. When the codebase is under heavy refactoring, those anchors break. Retrieved examples then mislead rather than ground, and hallucination rates go up rather than down — the freshness failure mode that [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) have to manage.
 - Narrow test suites: when the existing corpus covers only one test pattern (for example, all smoke tests), retrieval keeps returning the same unhelpful example for every spec, whatever its type.
 
-Treat RAG as a style-grounding mechanism, not a correctness mechanism. A systematic study across five Python ML/DL libraries found that RAG did not improve the correctness of LLM-generated unit tests and improved line coverage by only 6.5% on average ([Shin et al., 2026](https://arxiv.org/abs/2409.12682), ICSE 2026). The throughput and style-consistency gains justify the pattern. Human review of assertion semantics stays load-bearing for correctness.
+Treat RAG as a style-grounding mechanism, not a correctness mechanism. A systematic study across five Python ML/DL libraries found that RAG did not improve the correctness of LLM-generated unit tests and improved line coverage by only 6.5% on average ([Shin et al., 2026](https://arxiv.org/abs/2409.12682v2), ICSE 2026). The throughput and style-consistency gains justify the pattern. Human review of assertion semantics stays load-bearing for correctness.
 
 ## Key Takeaways
 

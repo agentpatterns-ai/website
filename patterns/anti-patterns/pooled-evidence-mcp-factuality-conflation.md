@@ -35,11 +35,11 @@ For low-stakes, single-source agents, the cost of per-source claim routing is no
 
 Most factuality verifiers ask one question: is this claim supported anywhere in the pooled evidence? That includes the lightweight NLI-based RAG checkers in production today ([Sansford et al., 2024 — arxiv:2411.01022](https://arxiv.org/abs/2411.01022)). An MCP agent that emits a citation is making two claims, not one: the factual claim, and "source X supports this claim." Pooled-evidence verifiers conflate the two checks. A claim with a wrong source ID but accurate content passes.
 
-Alvarez et al. name this cross-source conflation: a claim "may be supported somewhere while being attributed to the wrong source" ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)). On 50 controlled clinical conflation probes against source-blind baselines, every injected attribution swap was retained. The verifier could not tell the swap apart from a correct answer.
+Alvarez et al. name this cross-source conflation: a claim "may be supported somewhere in the evidence while being attributed to the wrong source" ([arxiv:2606.18037v2](https://arxiv.org/abs/2606.18037v2)). On 50 controlled clinical conflation probes against source-blind baselines, every injected attribution swap was retained. The verifier could not tell the swap apart from a correct answer.
 
 ## Why it fails
 
-Source attribution is "an independent axis for factuality verification" ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)). Two distinct failures live on the axis a pooled-evidence verifier cannot see:
+Source attribution is an independent axis for factuality verification ([arxiv:2606.18037v2](https://arxiv.org/abs/2606.18037v2)). Two distinct failures live on the axis a pooled-evidence verifier cannot see:
 
 | Failure | What pooled NLI sees | What the agent did |
 |---|---|---|
@@ -71,7 +71,7 @@ graph TD
 Source-aware verification only earns its overhead inside the conditions named above. Outside them the trade-offs flip:
 
 - Semantically close sources defeat exact ownership. On a harder multi-source benchmark, source-plus-relation accuracy drops to 0.229 ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)). Two near-overlapping oncology guidelines look interchangeable to NLI, which inherits NLI's threshold sensitivity.
-- Repair-and-reverify can hide the upstream problem. Repair "resolves all blocked answers, often via conservative fallback" ([arxiv:2606.18037](https://arxiv.org/abs/2606.18037)). A verifier that always blocks then falls back lowers the answer rate without fixing why the agent keeps misattributing.
+- Repair-and-reverify can hide the upstream problem. A repair-and-reverify loop "resolves all 173 blocked answers, though 144 require fallback text rather than substantive rewriting" ([arxiv:2606.18037v2](https://arxiv.org/abs/2606.18037v2)). A verifier that always blocks then falls back lowers the answer rate without fixing why the agent keeps misattributing.
 - Free-text tool returns break routing. Web-search snippets that combine multiple URLs into one block have no stable source ID to route to, so the technique reduces to standard pooled NLI.
 - Single-source agents waste the overhead. With no conflation surface, per-source NLI buys nothing over a pooled fact-checker.
 

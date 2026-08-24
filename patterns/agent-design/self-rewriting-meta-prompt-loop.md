@@ -37,7 +37,7 @@ graph TD
     F --> A
 ```
 
-This maps onto [Reflexion](https://arxiv.org/abs/2303.11366) (Shinn et al., 2023), which stores verbal reflections in an episodic memory buffer without weight updates and reaches 91% pass@1 on HumanEval. [Self-Refine](https://arxiv.org/abs/2303.17651) (Madaan et al., 2023) reaches about 20% absolute improvement through iterative self-feedback, with no training required. [APE](https://arxiv.org/abs/2211.01910) (Zhou et al., 2022) shows LLMs can generate instructions that beat human-written prompts on 19 of 24 NLP tasks.
+This maps onto [Reflexion](https://arxiv.org/abs/2303.11366v4) (Shinn et al., 2023), which stores verbal reflections in an episodic memory buffer without weight updates and reaches 91% pass@1 on HumanEval. [Self-Refine](https://arxiv.org/abs/2303.17651v2) (Madaan et al., 2023) reaches about 20% absolute improvement through iterative self-feedback, with no training required. [APE](https://arxiv.org/abs/2211.01910v2) (Zhou et al., 2022) shows LLMs can generate instructions that beat human-written prompts on 19 of 24 NLP tasks.
 
 The [nibzard/awesome-agentic-patterns catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/self-rewriting-meta-prompt-loop.md) rates academic evidence as high and direct production adoption as low. Deployment constraints, not the validity of the mechanism, are the bottleneck.
 
@@ -82,7 +82,7 @@ More constraints that reduce risk:
 
 [Harness Hill-Climbing](harness-hill-climbing.md) and [Skill Library Refinement Loops](../../workflows/skill-library-refinement-loops.md) both improve prompts iteratively, but require a human to approve each change. The self-rewriting meta-prompt loop removes that approval step entirely. You get faster iteration, but unreviewed drift and adversarial exposure are the tradeoff.
 
-A 2026 study found that reflective APO with a defective seed can degrade accuracy sharply, from 23.81% to 13.50% on GSM8K, with optimization trajectories you cannot interpret ([Reflection in the Dark](https://arxiv.org/abs/2603.18388), Gao et al., 2026). A quality gate on the initial seed prompt, not just each delta, is a prerequisite.
+A 2026 study found that reflective APO with a defective seed can degrade accuracy sharply, from 23.81% to 13.50% on GSM8K, with optimization trajectories you cannot interpret ([Reflection in the Dark](https://arxiv.org/abs/2603.18388v2), Gao et al., 2026). A quality gate on the initial seed prompt, not just each delta, is a prerequisite.
 
 ## Key Takeaways
 

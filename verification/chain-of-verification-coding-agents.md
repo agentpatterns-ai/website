@@ -62,7 +62,7 @@ Factored verification breaks the attention path that produced the hallucination.
 
 ## Example
 
-A coding agent drafts a Python script using `polars`. The draft contains `df.write_to_csv("out.csv")`. A factored verification step asks, in a separate prompt with no draft context: "What is the method name to write a polars DataFrame to CSV?" The model retrieves `write_csv` from its knowledge of the polars API, the mismatch surfaces, and the agent revises. A joint variant — asking "does this script use the right polars methods?" while showing the draft — re-emits `write_to_csv` because the verifier attends to its own earlier output ([Dhuliawala et al., 2023, §3.2](https://arxiv.org/abs/2309.11495)).
+A coding agent drafts a Python script using `polars`. The draft contains `df.write_to_csv("out.csv")`. A factored verification step asks, in a separate prompt with no draft context: `What is the method name to write a polars DataFrame to CSV?` The model retrieves `write_csv` from its knowledge of the polars API, the mismatch surfaces, and the agent revises. A joint variant, asking `does this script use the right polars methods?` while showing the draft, re-emits `write_to_csv` because the verifier attends to its own earlier output ([Dhuliawala et al., 2023, §3.2](https://arxiv.org/abs/2309.11495)).
 
 The same draft contains an `import polars as pl` line. Do not route this through CoVe — an LSP or `python -c "import polars"` answers the same question deterministically and faster ([phantom symbol detection](phantom-symbol-detection.md) is the right layer here).
 

@@ -28,7 +28,7 @@ This differs from [PR description style as a lever](../../code-review/pr-descrip
 
 Rationale is private information. It lives in your head, or once in the originating issue or prompt, and it never enters the diff. A model conditioned only on the diff can restate the diff and nothing more, so it fills the description with fluent summary that reads as complete but tells a reviewer nothing new. The split works because the two halves have different sources: what changed is recoverable from the diff and safe to draft, while why it changed must be supplied by the human.
 
-The cost is measurable, not cosmetic. In a study of 23,247 agent-authored pull requests, those whose descriptions diverged from the code were accepted 28.3% of the time against 80.0% for aligned descriptions, and took 55.8 hours to review against 16.0 — a 3.5-times increase — after controlling for code complexity ([arXiv:2601.04886](https://arxiv.org/abs/2601.04886)). Reviewers lean on the description to judge a change, so one that carries no intent slows the judgment and erodes trust.
+The cost is measurable, not cosmetic. In a study of 23,247 agent-authored pull requests, those whose descriptions diverged from the code were accepted 28.3% of the time against 80.0% for aligned descriptions, and took 55.8 hours to review against 16.0 — a 3.5-times increase — after controlling for code complexity ([arXiv:2601.04886](https://arxiv.org/abs/2601.04886v2)). Reviewers lean on the description to judge a change, so one that carries no intent slows the judgment and erodes trust.
 
 ## When this backfires
 
@@ -70,7 +70,7 @@ retries so a transient restart no longer fails the whole run.
 
 - A description written from the diff can only restate the diff; intent is off-diff information the model never receives.
 - Keep the why human-authored even when the code is agent-written — the agent may draft what changed.
-- Unfaithful descriptions drop PR acceptance from 80.0% to 28.3% and triple review time in a 23,247-PR study ([arXiv:2601.04886](https://arxiv.org/abs/2601.04886)).
+- Unfaithful descriptions drop PR acceptance from 80.0% to 28.3% and triple review time in a 23,247-PR study ([arXiv:2601.04886](https://arxiv.org/abs/2601.04886v2)).
 - Full AI drafting is fine for mechanical changes, solo repos, and high-volume pipelines where intent is self-evident or captured upstream.
 
 ## Related

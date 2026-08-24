@@ -26,8 +26,8 @@ This is distinct from three adjacent failures. It is not [Boring Technology Bias
 
 ## The failure surface
 
-- Deprecated APIs. One study evaluated seven LLMs over 145 API mappings from eight popular Python libraries and 28,125 completion prompts. Every model struggled to avoid deprecated-API usage, which the authors attribute to deprecated examples in the training data and the absence of deprecation knowledge ([Wang et al., ICSE'25, arxiv 2406.09834](https://arxiv.org/abs/2406.09834)).
-- Version-specific idioms. GitChameleon 2.0 (328 Python completion problems conditioned on library version) puts enterprise frontier models at only 48% to 51% baseline success ([Misra et al., arxiv 2507.12367](https://arxiv.org/abs/2507.12367)).
+- Deprecated APIs. One study evaluated seven LLMs over 145 API mappings from eight popular Python libraries and 28,125 completion prompts. Every model struggled to avoid deprecated-API usage, which the authors attribute to deprecated examples in the training data and the absence of deprecation knowledge ([Wang et al., ICSE'25, arxiv 2406.09834](https://arxiv.org/abs/2406.09834v3)).
+- Version-specific idioms. GitChameleon 2.0 (328 Python completion problems conditioned on library version) puts enterprise frontier models at only 48% to 51% baseline success ([Misra et al., arxiv 2507.12367](https://arxiv.org/abs/2507.12367v2)).
 - Superseded libraries with generic names. Semantic collapse happens when a replacement reuses a generic label ("v2 CLI", "the new client"): the model folds it into the predecessor's concept and picks the one with more training signal. Distinctively named replacements (Vite, Bun, Deno, Astro) carve their own slot and avoid the collision ([Microsoft for Developers, 2026](https://developer.microsoft.com/blog/competing-against-yourself)).
 
 ## Why it works (the mechanism)

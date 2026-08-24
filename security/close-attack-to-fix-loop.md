@@ -66,7 +66,7 @@ Preference optimization builds a dataset of prompt-injected inputs. Each input p
 
 - No weight access: API-only deployments cannot apply model-level hardening.
 - Capability regression: fine-tuning on adversarial examples can degrade general task performance, a direct tension between robustness and utility.
-- Limited generalization: architecture-aware adaptive attacks reach 85 to 95% bypass rates against fine-tuning defenses on unseen prompts. [Source: [Pandya et al., 2025](https://arxiv.org/abs/2507.07417)]
+- Limited generalization: architecture-aware adaptive attacks reach 85 to 95% bypass rates against fine-tuning defenses on unseen prompts. [Source: [Pandya et al., 2025](https://arxiv.org/abs/2507.07417v2)]
 - Operational overhead: this needs fine-tuning infrastructure and a rapid deployment pipeline, an investment that low-autonomy agents may not justify.
 - Arms race ceiling: prompt injection "is unlikely to ever be fully solved". The rapid cycle reduces risk materially but does not remove it, so model-level hardening complements architectural controls rather than replacing them. [Source: [Hardening Atlas Against Prompt Injection](https://openai.com/index/hardening-atlas-against-prompt-injection/)]
 - Impossibility under contextual integrity: a formal argument holds that any defender broad enough to block injected flows will also block genuinely legitimate ones. So training-based defenses, including the rapid attack-to-fix loop, address only "a shrinking fraction of future attack surfaces" and should be paired with contextual-integrity-aware alignment rather than treated as a final fix. [Source: [Abdelnabi et al., 2026 — AI Agents May Always Fall for Prompt Injections](https://arxiv.org/abs/2605.17634)]

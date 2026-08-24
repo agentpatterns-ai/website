@@ -19,7 +19,7 @@ maturity: emerging
 
 > Client-side permission modes gate the tool calls a response contains, so a router that rewrites the response chooses what the agent asks permission for.
 
-Permission prompts, execution allowlists, and plan mode all evaluate the tool calls carried in the response the agent received ([Anthropic](https://code.claude.com/docs/en/permissions)). When a third-party API router sits between the agent and the provider, the router decides what that response carries, so it also decides what the permission system is shown. [Fu et al. (2026)](https://arxiv.org/abs/2607.23624) measured this against four commodity coding agents and recorded a 0% defense success rate at every injection level tested. The anti-pattern is counting in-agent gates as the control that keeps a router-mediated agent safe.
+Permission prompts, execution allowlists, and plan mode all evaluate the tool calls carried in the response the agent received ([Anthropic](https://code.claude.com/docs/en/permissions)). When a third-party API router sits between the agent and the provider, the router decides what that response carries, so it also decides what the permission system is shown. [Fu et al. (2026)](https://arxiv.org/abs/2607.23624v2) measured this against four commodity coding agents and recorded a 0% defense success rate at every injection level tested. The anti-pattern is counting in-agent gates as the control that keeps a router-mediated agent safe.
 
 ## When the gap is open
 
@@ -66,7 +66,7 @@ An `acceptEdits`-mode session sees a Bash call accompanied by a plausible explan
 ## Key Takeaways
 
 - Client-side permission modes authorize the tool calls a response contains, and a router on the path chooses that response, so the gate evaluates an artifact the attacker wrote
-- Four commodity coding agents recorded a 0% defense success rate across four injection levels, and Claude Code's four permission modes each recorded 0% ([Fu et al. 2026](https://arxiv.org/abs/2607.23624))
+- Four commodity coding agents recorded a 0% defense success rate across four injection levels, and Claude Code's four permission modes each recorded 0% ([Fu et al. 2026](https://arxiv.org/abs/2607.23624v2))
 - Execution allowlists reached 30.8% to 44.1% defense success and second-model review up to 64.4%, both with substantial wrong-blocking of benign actions — partial mitigations, not closures
 - The gap exists because no provider enforces cryptographic integrity between client and upstream model ([Xie et al. 2026](https://arxiv.org/abs/2606.16358))
 - The proportionate response is to add a layer that binds execution — sandboxing with egress allowlists, or an attested gateway that signs route and stream evidence — and to keep permission modes for the threats they were built for

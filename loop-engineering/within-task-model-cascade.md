@@ -57,7 +57,7 @@ Three gate families are documented, and they differ mainly in what they let thro
 | Self-judged | The model's own confidence or verification pass | Errors the model is confident about — the failure mode is correlated with the error |
 | Behavioral | Downstream signal such as a user rejecting the suggestion | Errors the user accepts, and nothing until the user acts |
 
-Structural gates are cheap and honest about their limits. Self-judged gates are the risky choice: intrinsic self-correction without external feedback degraded accuracy on every benchmark tested — GPT-4 fell from 95.5% to 89.0% on GSM8K over two rounds, and GPT-3.5 from 75.8% to 38.1% on CommonSenseQA ([Huang et al., arXiv:2310.01798](https://arxiv.org/abs/2310.01798)). AutoMix reaches the same conclusion from inside the cascade literature and layers a POMDP meta-verifier over the raw self-verification signal rather than trusting it ([arXiv:2310.12963](https://arxiv.org/abs/2310.12963)). Behavioral gates sidestep both problems by reading an external event: MCCom triggers its cloud model from user actions when the local 121M model's completion fails, cutting LLM usage 46.3% ([arXiv:2603.05974](https://arxiv.org/abs/2603.05974)).
+Structural gates are cheap and honest about their limits. Self-judged gates are the risky choice: intrinsic self-correction without external feedback degraded accuracy on every benchmark tested — GPT-4 fell from 95.5% to 89.0% on GSM8K over two rounds, and GPT-3.5 from 75.8% to 38.1% on CommonSenseQA ([Huang et al., arXiv:2310.01798](https://arxiv.org/abs/2310.01798v2)). AutoMix reaches the same conclusion from inside the cascade literature and layers a POMDP meta-verifier over the raw self-verification signal rather than trusting it ([arXiv:2310.12963](https://arxiv.org/abs/2310.12963v5)). Behavioral gates sidestep both problems by reading an external event: MCCom triggers its cloud model from user actions when the local 121M model's completion fails, cutting LLM usage 46.3% ([arXiv:2603.05974](https://arxiv.org/abs/2603.05974)).
 
 ## Why it works
 
@@ -71,7 +71,7 @@ That arithmetic is why the gate carries the design risk. It sets `p`, and it cap
 - Most items escalate. Above break-even you pay the cheap attempt on everything plus the flagship on everything, which is strictly worse than skipping the ladder.
 - The cheap rung has no scaffolding. The small model reached only about a third of fields alone; it needed "tight retrieval snippet, the right prompt content, validation on every field, and code doing the hard formatting" to reach 62% ([Towards Data Science](https://towardsdatascience.com/loop-engineering-for-rag-generation-an-llm-cascade-from-a-cheap-local-model-up-to-a-hosted-flagship/)).
 - The rungs fail on the same items. A cascade returns one member model's answer, and for any such policy "accuracy cannot exceed one minus beta, where beta is the rate at which every model is wrong on the same query" — a ceiling measured across 67 frontier models, with observed co-failure roughly 2.5 times higher than standard statistical models predict ([When Does Combining Language Models Help?, arXiv:2606.27288](https://arxiv.org/abs/2606.27288v1)).
-- A single up-front decision would do. Predictive routing sends each query to one model and reports up to 3.66x cost reduction at 95% of GPT-4 quality on MT Bench, never paying two inferences on the hard tail; its authors draw the contrast directly, noting that cascades "rely on multiple LLM queries" while "our approach routes each query to a single LLM" ([RouteLLM, arXiv:2406.18665](https://arxiv.org/abs/2406.18665)).
+- A single up-front decision would do. Predictive routing sends each query to one model and reports up to 3.66x cost reduction at 95% of GPT-4 quality on MT Bench, never paying two inferences on the hard tail; its authors draw the contrast directly, noting that cascades "rely on multiple LLM queries" while "our approach routes each query to a single LLM" ([RouteLLM, arXiv:2406.18665](https://arxiv.org/abs/2406.18665v4)).
 
 ## Example
 
@@ -86,7 +86,7 @@ The field-extraction benchmark measured accuracy at each rung ([Towards Data Sci
 
 Two readings follow, and they point opposite ways. The cost case holds: most fields "never leave the cheap rung," so flagship tokens go to the residual hard cases. The latency case inverts. The hosted flagship answered in "about 1.4 seconds per field" while the local 7B to 14B models took "roughly 2.6 to 7.6 seconds each on a single consumer GPU," so this cascade "does not buy latency" and escalated fields pay two serial attempts. Cascading is a cost lever here, not a speed lever.
 
-The sign is not fixed. MCCom pairs a 121M local model that is genuinely faster than its cloud tier and cuts latency up to 47.9% ([arXiv:2603.05974](https://arxiv.org/abs/2603.05974)). Measure your own rungs before assuming which way it goes.
+The sign is not fixed. MCCom pairs a 121M local model that is genuinely faster than its cloud tier and cuts latency up to 47.9% ([arXiv:2603.05974](https://arxiv.org/abs/2603.05974v2)). Measure your own rungs before assuming which way it goes.
 
 ## Key Takeaways
 

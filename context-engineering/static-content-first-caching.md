@@ -56,7 +56,7 @@ Optimizing for cache hits takes discipline in how you build the prompt:
 - System instructions cannot be personalized per call, because any change busts the prefix cache
 - You must keep the split between static and dynamic sections as the harness evolves
 
-For short agent sessions (5 to 10 tool calls), the cache optimization may not be worth the engineering overhead. For long-running sessions or high-volume production loops, [cache reads cost 10% of base input token price](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), and studies on agentic workloads report 41 to 80% total cost reductions across providers ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)).
+For short agent sessions (5 to 10 tool calls), the cache optimization may not be worth the engineering overhead. For long-running sessions or high-volume production loops, [cache reads cost 10% of base input token price](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), and studies on agentic workloads report 41 to 80% total cost reductions across providers ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007v2)).
 
 Static-first ordering is necessary but not sufficient. The same study finds that naive full-context caching (caching everything, including volatile tool results) can increase latency. Strategic cache-block control that excludes dynamic tool results and places variable content deliberately gives more consistent gains ([Don't Break the Cache, 2026](https://arxiv.org/abs/2601.06007)). Order the prefix static-first, then be selective about which dynamic blocks you cache at all.
 

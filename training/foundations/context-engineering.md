@@ -78,7 +78,7 @@ Tier 1 — Offload large tool responses. Replace large payloads (full files, API
 
 Tier 2 — Summarize conversation history. When context fills further, summarize prior turns. Effective summaries preserve the current objective, key artifacts, decisions and rationale, and next steps. [Anthropic's context engineering guide](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) identifies this as "compaction." The risk: summaries that capture only "what happened" without "what matters next" cause [objective drift](../../patterns/anti-patterns/objective-drift.md).
 
-More graduated approaches exist. The [OPENDEV framework](https://arxiv.org/abs/2603.05344) implements five-stage Adaptive Context Compaction, triggered at specific budget thresholds from 70% to 99%, degrading gracefully rather than hitting a single compression cliff.
+More graduated approaches exist. The [OPENDEV framework](https://arxiv.org/abs/2603.05344v3) implements five-stage Adaptive Context Compaction, triggered at specific budget thresholds from 70% to 99%, degrading gracefully rather than hitting a single compression cliff.
 
 For implementation details and the full five-stage pipeline, see [Context Compression Strategies: Offloading and Summarization](../../context-engineering/context-compression-strategies.md).
 

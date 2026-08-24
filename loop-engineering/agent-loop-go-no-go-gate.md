@@ -44,7 +44,7 @@ The four conditions each close one way the inequality flips: cadence sets N, ver
 
 Tokens-spent is the wrong unit. Tasks-attempted is the wrong unit. Cost per accepted, merged change is the unit that captures both the loop's throughput and the reviewer time it actually consumes.
 
-An empirical study of 567 Claude Code pull requests across 157 open-source projects ([Bui et al. (2025), arxiv 2509.14745](https://arxiv.org/abs/2509.14745)) measured the baseline: 83.8% of agent-assisted PRs are merged, but only 54.9% are merged without further modification — ~45% of "successful" agent output still consumed reviewer time. Below ~55% no-modification acceptance, the loop is doing the review work it was supposed to remove. The same metric captures the inverse failure: a smarter model with fewer turns at higher per-token cost can be cheaper per accepted change than a cheaper model burning 80 tool calls.
+An empirical study of 567 Claude Code pull requests across 157 open-source projects ([Bui et al. (2025), arxiv 2509.14745](https://arxiv.org/abs/2509.14745v3)) measured the baseline: 83.8% of agent-assisted PRs are merged, but only 54.9% are merged without further modification — ~45% of "successful" agent output still consumed reviewer time. Below ~55% no-modification acceptance, the loop is doing the review work it was supposed to remove. The same metric captures the inverse failure: a smarter model with fewer turns at higher per-token cost can be cheaper per accepted change than a cheaper model burning 80 tool calls.
 
 ## Good fits and no-go work
 
@@ -107,7 +107,7 @@ Verdict: do not loop. A single prompt-driven session with a domain expert review
 
 - A loop earns its cost only when all four conditions hold: weekly-or-better cadence, objective external verification, absorbable token budget, real tooling for the agent.
 - Cost per accepted change is the operating metric; tokens-spent and tasks-attempted both miss the reviewer-time leg of the cost.
-- The break-even threshold sits near the [Bui et al. (2025)](https://arxiv.org/abs/2509.14745) baseline of ~55% no-modification acceptance; below that, the loop is doing the review work it was meant to remove.
+- The break-even threshold sits near the [Bui et al. (2025)](https://arxiv.org/abs/2509.14745v3) baseline of ~55% no-modification acceptance; below that, the loop is doing the review work it was meant to remove.
 - Review capacity overrides a passing score — multiplying output past the reviewer ceiling lengthens the queue rather than shortening it.
 - Plan economics flip the same loop from worthwhile to reckless; the budget condition has to be answered for *your* token rate, not the practitioner-blog author's.
 

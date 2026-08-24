@@ -31,7 +31,7 @@ This is a structural property of how transformer attention weights earlier and l
 
 ## What this means in practice
 
-Position decides how well an instruction works. An instruction placed in section 5 of a 10-section system prompt sits in the weak attention zone. The instruction may be well written and clear, but the model is statistically less likely to follow it than the same instruction placed at the top or bottom. Position affects retrieval accuracy even when the content is identical ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)).
+Position decides how well an instruction works. An instruction placed in section 5 of a 10-section system prompt sits in the weak attention zone. The instruction may be well written and clear, but the model is statistically less likely to follow it than the same instruction placed at the top or bottom. Position affects retrieval accuracy even when the content is identical ([Liu et al., 2023](https://arxiv.org/abs/2307.03172v3)).
 
 Adding content degrades the content around it. Each instruction added in the middle pushes existing instructions further from the high-attention edges. A long AGENTS.md file buries most of its instructions in the zone where they are least likely to be followed.
 
@@ -98,7 +98,7 @@ It is a structural property of how transformer attention weights earlier and lat
 
 **Does position matter even when the wording is good?**
 
-Yes. An instruction placed in section 5 of a 10-section system prompt sits in the weak-attention zone; it may be well written and perfectly clear, yet the model is statistically less likely to follow it than the same instruction placed at the top or bottom. Position affects retrieval accuracy even when the content is identical ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)).
+Yes. An instruction placed in section 5 of a 10-section system prompt sits in the weak-attention zone; it may be well written and perfectly clear, yet the model is statistically less likely to follow it than the same instruction placed at the top or bottom. Position affects retrieval accuracy even when the content is identical ([Liu et al., 2023](https://arxiv.org/abs/2307.03172v3)).
 
 **What belongs in the middle of an instruction file?**
 

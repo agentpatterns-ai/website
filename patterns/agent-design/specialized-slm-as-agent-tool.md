@@ -59,7 +59,7 @@ The pattern fits operations that are high-volume and narrow:
 - Document reading and summarization inside a tool — long inputs, short answers
 - Pre-aggregated data fetching — multiple primitive calls combined into one tool result
 
-Belcak et al. argue SLMs are "sufficiently powerful, inherently more suitable, and necessarily more economical for many invocations in agentic systems" ([Belcak et al., 2025](https://arxiv.org/abs/2506.02153)). This composes with API-level features rather than replacing them — VS Code 1.118 reports the Anthropic Tool Search Tool delivers "up to 20% in token savings" on its own ([VS Code 1.118 release notes](https://code.visualstudio.com/updates/v1_118); [Anthropic — Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)).
+Belcak et al. argue SLMs are "sufficiently powerful, inherently more suitable, and necessarily more economical for many invocations in agentic systems" ([Belcak et al., 2025](https://arxiv.org/abs/2506.02153v2)). This composes with API-level features rather than replacing them — VS Code 1.118 reports the Anthropic Tool Search Tool delivers "up to 20% in token savings" on its own ([VS Code 1.118 release notes](https://code.visualstudio.com/updates/v1_118); [Anthropic — Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)).
 
 ## When it backfires
 

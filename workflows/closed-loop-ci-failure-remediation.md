@@ -28,7 +28,7 @@ CI failure is the highest-signal first trigger to give a cloud coding agent. It 
 |---|---|
 | Per-failure-class classifier upstream of dispatch | ~25% of CI failures in large systems are flake, not code defects ([Slack Engineering](https://slack.engineering/handling-flaky-tests-at-scale-auto-detection-suppression/)); dispatching on flake produces `sleep` patches around races and retry wrappers around real outages. |
 | Log-to-prompt sanitization at the dispatcher boundary | Job logs contain attacker-controlled output (assertion messages, third-party tool stdout); forwarding raw slices to the agent closes the indirect-prompt-injection surface documented for [Programmatic Cloud-Agent Dispatch](programmatic-cloud-agent-dispatch.md). |
-| Scope contract bounding the fix to the failing step | 15.3% of unmerged AI fix PRs were closed for "incorrect or incomplete fixes" and 18.1% for introducing new test failures ([arXiv:2602.00164](https://arxiv.org/html/2602.00164)); broad refactors compound that rate. |
+| Scope contract bounding the fix to the failing step | 15.3% of unmerged AI fix PRs were closed for "incorrect or incomplete fixes" and 18.1% for introducing new test failures ([arXiv:2602.00164](https://arxiv.org/html/2602.00164v1)); broad refactors compound that rate. |
 | Per-failure-key retry budget | Re-dispatching on the same failure stacks commits without convergence; without a circuit-breaker keyed on `(repo, failing_step)` the loop produces unbounded fix attempts. |
 | PR review gate that stays load-bearing | Reviewer engagement is the single strongest correlate of agent-PR merge; 30 of 32 successfully merged PRs involved actionable review loops ([arXiv:2602.19441](https://arxiv.org/html/2602.19441v1)). |
 

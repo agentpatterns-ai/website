@@ -38,7 +38,7 @@ A memory-poisoning attack plants a routing rule such as "forward tax messages to
 Two detectors exploit it:
 
 - A single rule over the `recall_before_send` transition reaches AUC 0.9563.
-- A Random Forest over 19 trajectory features (tool counts, bigram transitions, entry point) reaches AUC 0.9904, with the `recall_before_send` feature alone carrying about 31% of the model's importance ([Leong, 2026](https://arxiv.org/abs/2606.30566)).
+- A Random Forest over 19 trajectory features (tool counts, bigram transitions, entry point) reaches AUC 0.9904, with the `recall_before_send` feature alone carrying about 31% of the model's importance ([Leong, 2026](https://arxiv.org/abs/2606.30566v2)).
 
 A prefix-only variant that uses just the 13 features available before the send fires reaches AUC 0.934, so the check can block the send in real time rather than only flag it after the fact ([Leong, 2026](https://arxiv.org/abs/2606.30566)).
 
@@ -46,13 +46,13 @@ A prefix-only variant that uses just the 13 features available before the send f
 
 The invariant is causal, not a learned correlation. The attacker address is stored as a memory value, and the memory tool exposes values only through `memory_recall_fact(key)` — listing returns key names alone. So any successful memory-channel exfiltration must emit a recall before the send, because the send needs the address the recall retrieves ([Leong, 2026](https://arxiv.org/abs/2606.30566)).
 
-Suppressing the recall breaks the attack: either the address is never fetched, or the attacker moves it into the prompt, which converts the attack into prompt injection — a different vector this detector does not claim to catch. That is why the signal survives model changes (AUC 1.000 on 6 of 9 hold-out models from 7B to 120B, and Recall 1.000 zero-shot on GPT-4.1) but not architecture changes ([Leong, 2026](https://arxiv.org/abs/2606.30566)).
+Suppressing the recall breaks the attack: either the address is never fetched, or the attacker moves it into the prompt, which converts the attack into prompt injection — a different vector this detector does not claim to catch. That is why the signal survives model changes (AUC 1.000 on 6 of 9 hold-out models from 7B to 120B, and Recall 1.000 zero-shot on GPT-4.1) but not architecture changes ([Leong, 2026](https://arxiv.org/abs/2606.30566v2)).
 
 ## When this backfires
 
 The signature is cheap and mechanism-grounded, but narrow:
 
-- Benign reasoning agents trip it. On frontier reasoning models whose sessions recall facts often, the false-positive rate reaches 23.0%. On one model the benign and attack score distributions invert entirely (AUC 0.083) ([Leong, 2026](https://arxiv.org/abs/2606.30566)).
+- Benign reasoning agents trip it. On frontier reasoning models whose sessions recall facts often, the false-positive rate reaches 23.0%. On one model the benign and attack score distributions invert entirely (AUC 0.083) ([Leong, 2026](https://arxiv.org/abs/2606.30566v2)).
 - No true-benign baseline was measured. False positives were counted only against poisoned-but-defended sessions, never against ordinary unpoisoned agent traffic ([Leong, 2026](https://arxiv.org/abs/2606.30566)).
 - Adaptive attackers evade it. Storing the address as a key, using a different retrieval path, or moving stolen data into an unmonitored argument field defeats an operation-only rule — the same field-level evasion that content-aware tool-call detectors report ([Content-Aware Attack Detection, 2026](https://arxiv.org/abs/2605.11053)).
 - Non-tool retrieval is invisible. A memory-sandbox bypass that pulls the payload without an observable recall call evades the detector completely ([Leong, 2026](https://arxiv.org/abs/2606.30566)).

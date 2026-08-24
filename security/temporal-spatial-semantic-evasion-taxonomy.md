@@ -1,7 +1,7 @@
 ---
 title: "Three-Vector Evasion Taxonomy for Agent Security Tests"
 term: "Three-Vector Evasion Taxonomy"
-description: "Multi-turn agent payloads evade single-turn benchmarks along three orthogonal axes — temporal, spatial, semantic — and ASR rises from 28.3% to 52.6% when testers combine them across stateful tool-using agents."
+description: "Multi-turn agent payloads evade single-turn benchmarks along three orthogonal axes — temporal, spatial, semantic — and the average risk-trigger rate rises from 22.9% to 47.4% when testers add them to existing injection techniques."
 tags:
   - security
   - agent-design
@@ -19,7 +19,7 @@ maturity: emerging
 
 > These three evasion axes — temporal, spatial, semantic — diagnose what single-turn benchmarks miss for agents that hold state, ingest artifacts, or chain tool calls.
 
-A three-vector evasion taxonomy organizes agent-security test payloads by the dimension along which they hide from per-prompt review: temporal (fragmented across turns), spatial (concealed inside an artifact whose parsing path bypasses the safety classifier), and semantic (intent obscured by benign-looking context). [Ma et al. (2026)](https://arxiv.org/abs/2605.22321) introduce A3S-Bench — 2,254 real-world agent execution trajectories across 10 LLM backbones and 20 attack scenarios. They report that combining the three vectors raises the attack success rate from a 28.3% single-turn baseline to 52.6% against stateful tool-using agents. The framing is diagnostic: it tells an auditor which axis a payload exploits, so you check coverage axis by axis rather than by per-prompt screening alone.
+A three-vector evasion taxonomy organizes agent-security test payloads by the dimension along which they hide from per-prompt review: temporal (fragmented across turns), spatial (concealed inside an artifact whose parsing path bypasses the safety classifier), and semantic (intent obscured by benign-looking context). [Ma et al. (2026)](https://arxiv.org/abs/2605.22321v2) introduce A3S-Bench — 2,254 executable multi-turn test cases, synthesized by perturbing generated benign conversations and run against eleven LLM-backed OpenClaw agents. Adding their three perturbation operator families to existing prompt-injection techniques raises the average risk-trigger rate from 22.9% to 47.4%, judged by an action-grounded oracle that agrees with human annotation at 93.2% binary F1. The framing is diagnostic: it tells an auditor which axis a payload exploits, so you check coverage axis by axis rather than by per-prompt screening alone.
 
 ## When the three-vector framing fits
 
@@ -29,7 +29,7 @@ The taxonomy adds value only when the agent meets all three preconditions:
 - External artifact ingestion — web fetches, PDFs, MCP JSON, retrieved files, dependency manifests
 - Tool catalog larger than the immediate task — capabilities the model could compose into harmful sequences
 
-If any precondition is missing, the relevant vector collapses to known single-turn injection. [Ma et al. (2026)](https://arxiv.org/abs/2605.22321) report that the 28.3%→52.6% gap is concentrated on stateful agents.
+If any precondition is missing, the relevant vector collapses to known single-turn injection. The paper argues the same boundary from the other side: multi-turn delivery exposes far more risk than single-turn injection, because per-turn checks miss intent split across turns ([Ma et al., 2026](https://arxiv.org/abs/2605.22321v2)).
 
 ## The three vectors
 
@@ -47,7 +47,7 @@ The [tool-invocation attack surface](tool-invocation-attack-surface.md) captures
 
 ### Semantic evasion
 
-A payload whose intent is obscured under contextual noise — wrapped in benign-looking framing, role-play, or "consistency with prior context" cues. Per-prompt classifiers score surface features ("does this look like a jailbreak?") and miss the latent goal ([Ma et al., 2026](https://arxiv.org/abs/2605.22321)).
+A payload whose intent is obscured under contextual noise — wrapped in benign-looking framing, role-play, or appeals to consistency with prior context. Per-prompt classifiers score surface features, asking in effect whether a message looks like a jailbreak, and miss the latent goal ([Ma et al., 2026](https://arxiv.org/abs/2605.22321v2)).
 
 [Goal reframing](goal-reframing-exploitation-trigger.md) is the documented primary semantic-axis trigger: a 10,000-trial taxonomy finds reframing, not social engineering or incentives, is the one prompt condition that reliably exploits frontier models. [History-anchor consistency injection](history-anchor-consistency-injection.md) is a second instance, where a single "stay consistent with prior history" sentence flips frontier agents from near-zero unsafe selection to 91–98%. [Compositional vulnerability induction](compositional-vulnerability-induction.md) sits on this axis too: each routine ticket is semantically benign while the joint intent is exploitative.
 
@@ -64,7 +64,7 @@ graph TD
     A --> H[Harmful joint state<br>composes in agent]
 ```
 
-The vectors compose. A single payload can be fragmented temporally (split across three tool returns), spatially concealed (each fragment in PDF metadata fetched by an MCP server), and semantically reframed (each fragment looks like a documentation excerpt). [Ma et al. (2026)](https://arxiv.org/abs/2605.22321) report the 52.6% ASR specifically against such composed payloads; single-axis attacks score lower.
+The vectors compose. A single payload can be fragmented temporally (split across three tool returns), spatially concealed (each fragment in PDF metadata fetched by an MCP server), and semantically reframed (each fragment looks like a documentation excerpt). The 22.9% to 47.4% rise is what the three operator families add on top of existing injection techniques, averaged across eleven agents ([Ma et al., 2026](https://arxiv.org/abs/2605.22321v2)). The paper reports that average, not a per-payload figure for a fully composed attack.
 
 ## Mapping to existing site coverage
 
@@ -78,7 +78,7 @@ The taxonomy is orthogonal to the [four-layer defender taxonomy](four-layer-agen
 
 ## Why it works
 
-Multi-vector evasion succeeds because per-prompt classifiers score each message's visible features in isolation, not the joint policy implied by the message sequence, the artifact's parsing path, or the latent goal ([Ma et al., 2026 §1](https://arxiv.org/abs/2605.22321); [Steinberg and Gal, 2026](https://arxiv.org/abs/2605.03952v1)). Each fragment passes the gate; the harmful state composes across surfaces the gate cannot see. The flat attention surface offers no architectural signal distinguishing benign context from concealed instruction ([Greshake et al., 2023](https://arxiv.org/abs/2302.12173)). The 28.3%→52.6% rise is the empirical signal that single-turn screening leaves a structural hole, not a tuning gap.
+Multi-vector evasion succeeds because per-prompt classifiers score each message's visible features in isolation, not the joint policy implied by the message sequence, the artifact's parsing path, or the latent goal ([Ma et al., 2026 §1](https://arxiv.org/abs/2605.22321v2); [Steinberg and Gal, 2026](https://arxiv.org/abs/2605.03952v1)). Each fragment passes the gate; the harmful state composes across surfaces the gate cannot see. The flat attention surface offers no architectural signal distinguishing benign context from concealed instruction ([Greshake et al., 2023](https://arxiv.org/abs/2302.12173v2)). The 22.9% to 47.4% rise is the empirical signal that single-turn screening leaves a structural hole, not a tuning gap.
 
 ## When this backfires
 
@@ -111,7 +111,7 @@ If the standard suite passes but the three-vector additions succeed, the conclus
 
 ## Key Takeaways
 
-- Three orthogonal axes — temporal, spatial, semantic — organize multi-turn agent payloads by how they evade per-prompt review; ASR rises from 28.3% to 52.6% on stateful tool-using agents under combined attack ([Ma et al., 2026](https://arxiv.org/abs/2605.22321)).
+- Three orthogonal axes — temporal, spatial, semantic — organize multi-turn agent payloads by how they evade per-prompt review; adding them to existing injection techniques raises the average risk-trigger rate from 22.9% to 47.4% across eleven agents ([Ma et al., 2026](https://arxiv.org/abs/2605.22321v2)).
 - The framing is diagnostic, not defensive — use it to check axis coverage in an audit, not as a defense recipe.
 - It applies only when the agent has persistent state, external artifact ingestion, and a tool catalog larger than the immediate task; one-shot stateless agents collapse to standard single-turn injection.
 - Vectors compose — fragmenting temporally, concealing spatially, and reframing semantically targets three different gaps simultaneously.

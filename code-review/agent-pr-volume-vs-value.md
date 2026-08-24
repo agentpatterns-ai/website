@@ -73,7 +73,7 @@ Volume-first agent deployment underperforms when:
 - Scope is poorly defined: agents without clear, bounded task specifications produce PRs that are technically valid but strategically irrelevant. The 49% acceptance rate for Devin reflects this failure mode.
 - Review capacity is fixed: 10x more PRs at lower acceptance rates consumes reviewer time without proportional throughput. Bot pre-screening, already 20% of agent PR reviews, is a partial mitigation, not a solution.
 - Complexity is the real bottleneck: if the backlog is dominated by architectural changes (cyclomatic complexity), agent output skewed toward simpler tasks adds little to velocity. Only 9.1% of agent PRs change complexity, versus 23.3% for humans.
-- Integration friction is ignored: a separate analysis of 142K agent-authored PRs reports a 27.67% merge-conflict rate, with wide variation across agents ([arXiv:2604.03551](https://arxiv.org/abs/2604.03551)). Higher PR volume raises conflict exposure, so raw throughput gains erode once rebase and resolution costs are counted.
+- Integration friction is ignored: a separate analysis of 142K agent-authored PRs reports a 27.67% merge-conflict rate, with wide variation across agents ([arXiv:2604.03551](https://arxiv.org/abs/2604.03551v2)). Higher PR volume raises conflict exposure, so raw throughput gains erode once rebase and resolution costs are counted.
 - Merge is treated as success: a study of 1,210 merged agent-generated bug-fix PRs found that merge success does not reliably reflect post-merge code quality. Code smells, especially at critical and major severities, dominate the defects introduced ([arXiv:2601.20109](https://arxiv.org/abs/2601.20109)). Acceptance rate alone over-reports value unless paired with downstream quality signals.
 
 ## FAQ
@@ -114,7 +114,7 @@ Not on its own. A study of 1,210 merged agent-generated bug-fix PRs found that m
 ## Sources
 
 - [arXiv:2507.15003](https://arxiv.org/abs/2507.15003v1) — Li, Zhang & Hassan (2025): "The Rise of AI Teammates in SE 3.0" — AIDev dataset of 456K agent-authored PRs
-- [arXiv:2604.03551](https://arxiv.org/abs/2604.03551) — "AgenticFlict: A Large-Scale Dataset of Merge Conflicts in AI Coding Agent Pull Requests on GitHub" — 27.67% conflict rate across 142K agent PRs
+- [arXiv:2604.03551](https://arxiv.org/abs/2604.03551v2) — "AgenticFlict: A Large-Scale Dataset of Merge Conflicts in AI Coding Agent Pull Requests on GitHub" — 27.67% conflict rate across 142K agent PRs
 - [arXiv:2601.20109](https://arxiv.org/abs/2601.20109) — "Beyond Bug Fixes: An Empirical Investigation of Post-Merge Code Quality Issues in Agent-Generated Pull Requests" — merge success does not reliably reflect post-merge code quality
 - [arXiv:2606.13468](https://arxiv.org/abs/2606.13468v1) — empirical study of agent-authored fixes: 46.41% rejected, with a taxonomy of 14 rejection reasons across four categories
 - [Agentic Code Review (Addy Osmani)](https://addyo.substack.com/p/agentic-code-review) — review becomes the highest-value engineering skill as agent output volume rises

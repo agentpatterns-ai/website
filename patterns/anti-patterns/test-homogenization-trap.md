@@ -23,7 +23,7 @@ maturity: emerging
 
 When you use an LLM to generate both code and its tests, the tests cluster around the same solution strategies the model favors. The edge cases the model overlooks in code are the same ones it leaves out of tests — the [happy-path bias](happy-path-bias.md) carried from code into the test suite. You get a green test suite that gives false confidence.
 
-SAGA research measures the damage. In leading code benchmarks, [50% of problems had tests that failed to detect known errors and 84% of verifiers were flawed](https://arxiv.org/abs/2507.06920). Models showed average Pass@1 drops of 9.56% when tested against higher-quality test suites. So existing benchmarks systematically overstate how well models perform.
+SAGA research measures the damage. In leading code benchmarks, [50% of problems had tests that failed to detect known errors and 84% of verifiers were flawed](https://arxiv.org/abs/2507.06920v2). Models showed average Pass@1 drops of 9.56% when tested against higher-quality test suites. So existing benchmarks systematically overstate how well models perform.
 
 The root cause is error clustering. [LLM-induced errors are highly clustered around systematic weaknesses, whereas human errors are diverse and dispersed](https://arxiv.org/abs/2507.06920). A model-generated test suite catches model-like errors well but misses the varied failure modes that matter in production.
 
@@ -36,7 +36,7 @@ The root cause is error clustering. [LLM-induced errors are highly clustered aro
 
 ## Mitigations
 
-Combine human-authored edge cases with LLM-generated structural tests. Human testers spot failure modes the model systematically misses. [SAGA's human-LLM collaborative approach achieved 90.62% detection rate](https://arxiv.org/abs/2507.06920) — a 9.55% improvement over pure LLM generation.
+Combine human-authored edge cases with LLM-generated structural tests. Human testers spot failure modes the model systematically misses. [SAGA's human-LLM collaborative approach achieved 90.62% detection rate](https://arxiv.org/abs/2507.06920v2) — a 9.55% improvement over pure LLM generation.
 
 Use differential analysis. Compare failed submissions against corrected ones to surface specific error patterns, then aim tests at them — [SAGA's dual strategy of analyzing correct solutions alongside failures](https://arxiv.org/abs/2507.06920).
 

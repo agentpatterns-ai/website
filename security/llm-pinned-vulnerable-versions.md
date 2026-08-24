@@ -139,7 +139,7 @@ The model picked the version of each library that dominates Stack Overflow tutor
 
 - [arXiv:2605.06279](https://arxiv.org/abs/2605.06279) — Wang et al. (May 2026): "Correct Code, Vulnerable Dependencies: A Large Scale Measurement Study of LLM-Specified Library Versions"
 - [arXiv:2401.16340](https://arxiv.org/abs/2401.16340v1) — Versions appear in only 9% of Developer-ChatGPT conversations
-- [arXiv:2503.17181](https://arxiv.org/abs/2503.17181) — Library-preference bias, NumPy overuse in up to 45% of cases
+- [arXiv:2503.17181](https://arxiv.org/abs/2503.17181v4) — Library-preference bias, NumPy overuse in up to 45% of cases
 - [GitHub Docs — Dependabot security updates](https://docs.github.com/en/code-security/concepts/supply-chain-security/about-dependabot-security-updates)
 - [Renovate — Dependency Pinning](https://docs.renovatebot.com/dependency-pinning/)
 - [pip-audit](https://pypi.org/project/pip-audit/)

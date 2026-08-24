@@ -60,7 +60,7 @@ Each check covers a complementary attack pathway, and the ARGUS ablations show e
 
 ## What the benchmark measured
 
-The authors evaluated ARGUS on AgentLure across 4 domains (Banking, Travel, Workspace, Slack) and 8 attack vectors: Capability Routing Hijacking, Argument Tampering, Conditional Flow Hijacking, Reasoning Hijacking, Persistent Context Poisoning, Inter-Agent Contagion, Skill Injection, and Workflow Hijacking. It reaches a 3.8% attack success rate while preserving 87.5% of clean task utility. The closest baseline (MELON) reaches 1.6% ASR but drops utility to 65% ([Weng et al., 2026](https://arxiv.org/abs/2605.03378)). The two sit at different points on the same security and utility frontier.
+The authors evaluated ARGUS on AgentLure across 4 domains (Banking, Travel, Workspace, Slack) and 8 attack vectors: Capability Routing Hijacking, Argument Tampering, Conditional Flow Hijacking, Reasoning Hijacking, Persistent Context Poisoning, Inter-Agent Contagion, Skill Injection, and Workflow Hijacking. It reaches a 3.8% attack success rate while preserving 87.5% of clean task utility. The closest baseline (MELON) reaches 1.6% ASR but drops utility to 65% ([Weng et al., 2026](https://arxiv.org/abs/2605.03378v2)). The two sit at different points on the same security and utility frontier.
 
 ## Where it fails
 

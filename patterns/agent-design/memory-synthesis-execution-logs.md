@@ -43,7 +43,7 @@ graph LR
 
 Passive recording: Claude Code saves observations to `MEMORY.md` -- build commands, debugging insights, style preferences. Context window limits mean only part of a large memory file influences any given session.
 
-Verbal reflection (Reflexion): [Shinn et al., 2023](https://arxiv.org/abs/2303.11366) adds self-critique after a failure, injected as context on retry. HumanEval pass@1 rose from 80% to 91%. The limitation is that lessons are ephemeral and task-specific.
+Verbal reflection (Reflexion): [Shinn et al., 2023](https://arxiv.org/abs/2303.11366v4) adds self-critique after a failure, injected as context on retry. HumanEval pass@1 rose from 80% to 91%. The limitation is that lessons are ephemeral and task-specific.
 
 Structured lessons: Meta-Policy Reflexion ([2025](https://arxiv.org/abs/2509.03990)) consolidates reflections into transferable, predicate-like rules that persist beyond the originating episode.
 

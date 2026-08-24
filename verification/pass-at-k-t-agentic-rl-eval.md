@@ -18,7 +18,7 @@ maturity: emerging
 
 ## Why one-dimensional pass@k misleads for agents
 
-For static reasoning — math, code, visual reasoning — base and RL pass@k curves converge at large *k*: RL raises pass@1 but does not expand what the model can ever solve [Source: [Yue et al., *Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model?*](https://arxiv.org/abs/2504.13837)]. Many read that result as a general ceiling on RL post-training.
+For static reasoning — math, code, visual reasoning — base and RL pass@k curves converge at large *k*: RL raises pass@1 but does not expand what the model can ever solve [Source: [Yue et al., *Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model?*](https://arxiv.org/abs/2504.13837v5)]. Many read that result as a general ceiling on RL post-training.
 
 Agentic tool use breaks that assumption. Agents interleave reasoning with tool calls over *T* rounds. Compositional strategies depend on *T*, not on resampling: plan, retrieve, re-plan on retrieved content, retrieve again — the loop [retrieval-augmented agent workflows](../context-engineering/retrieval-augmented-agent-workflows.md) formalize. A metric that only varies *k* conflates "cannot do this at any k" with "cannot do this at this T."
 

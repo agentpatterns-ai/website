@@ -33,7 +33,7 @@ Attitude instructions have a documented backfire mode. Cursor found that telling
 
 Empirical signal without restraint gates:
 
-- Median PR size grew 33% between March and November 2025 (57 to 76 lines) as AI adoption rose ([Greptile, State of AI Coding 2025](https://www.greptile.com/state-of-ai-coding-2025)); "too large" is a documented rejection reason for agentic PRs ([Xiao et al., 2025](https://arxiv.org/abs/2509.14745)).
+- Median PR size grew 33% between March and November 2025 (57 to 76 lines) as AI adoption rose ([Greptile, State of AI Coding 2025](https://www.greptile.com/state-of-ai-coding-2025)); "too large" is a documented rejection reason for agentic PRs ([Xiao et al., 2025](https://arxiv.org/abs/2509.14745v3)).
 - Lines of code rose 76% and cognitive complexity 39% in agent-assisted repositories ([Agile Pain Relief](https://agilepainrelief.com/blog/ai-generated-code-quality-problems/)).
 - Agents scaffold "1,000 lines where 100 would suffice" ([Addy Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
 

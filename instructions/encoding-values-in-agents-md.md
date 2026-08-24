@@ -32,7 +32,7 @@ Two recent corpus studies measured what developers encode in context files. Func
 | Performance | 14.5% | — |
 | Accessibility, fairness, sustainability, tone | Not measured (rare) | None found |
 
-Liu et al. classified instructions by writing style — descriptive, prescriptive, prohibitive, explanatory, conditional — and found no explicit ethical, accessibility, fairness, or tone instructions across the analyzed AGENTS.md files ([Liu et al., 2025](https://arxiv.org/abs/2510.21413)). Wei et al. note the same gap: developers "provide few guardrails to ensure that agent-written code is secure or performant" ([Wei et al., 2025](https://arxiv.org/abs/2511.12884)).
+Liu et al. classified instructions by writing style — descriptive, prescriptive, prohibitive, explanatory, conditional — and found no explicit ethical, accessibility, fairness, or tone instructions across the analyzed AGENTS.md files ([Liu et al., 2025](https://arxiv.org/abs/2510.21413)). Wei et al. note the same gap: developers "provide few guardrails to ensure that agent-written code is secure or performant" ([Wei et al., 2025](https://arxiv.org/abs/2511.12884v2)).
 
 A later vision paper tempers how absolute that gap is. [Treude et al., 2026](https://arxiv.org/abs/2605.05584) report that developers already embed fairness, accessibility, sustainability, tone, and privacy guidance, framing AGENTS.md as a "developer-authored governance layer." But the authors defer the question that matters here — whether agents reliably follow those values — to future work. Values prose can be present without changing behavior, and that gap is what this page addresses.
 
@@ -48,7 +48,7 @@ graph TD
     F --> G[Documented value,<br>unchanged behavior]
 ```
 
-Frontier models top out at roughly 68% accuracy at 500 simultaneous instructions, and earlier instructions are satisfied more reliably than later ones — primacy effects peak around 150–200 instructions ([Jaroslawicz et al. — How Many Instructions Can LLMs Follow at Once?](https://arxiv.org/abs/2507.11538v1)). A "be accessible" sentence in a 500-line AGENTS.md inherits both penalties. Gloaguen et al. add a direct cost: verbose AGENTS.md files reduce task success and add about 20% inference cost on SWE-bench Lite and AGENTbench ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)).
+Frontier models top out at roughly 68% accuracy at 500 simultaneous instructions, and earlier instructions are satisfied more reliably than later ones — primacy effects peak around 150–200 instructions ([Jaroslawicz et al. — How Many Instructions Can LLMs Follow at Once?](https://arxiv.org/abs/2507.11538v1)). A "be accessible" sentence in a 500-line AGENTS.md inherits both penalties. Gloaguen et al. add a direct cost: verbose AGENTS.md files reduce task success and add about 20% inference cost on SWE-bench Lite and AGENTbench ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988v2)).
 
 ## Verification, not prose
 
@@ -128,15 +128,15 @@ The "after" version contains the same values commitments. The difference is that
 
 - Corpus studies show developers rarely encode fairness, accessibility, sustainability, or tone in AGENTS.md; functional context dominates ([Wei et al.](https://arxiv.org/abs/2511.12884), [Liu et al.](https://arxiv.org/abs/2510.21413))
 - Values-as-prose inherits the [compliance ceiling](instruction-compliance-ceiling.md) and primacy bias — read by the model, applied unreliably, never verified
-- Verbose AGENTS.md actively reduces task success and raises cost ~20% ([Gloaguen et al.](https://arxiv.org/abs/2602.11988)); adding values prose has a real cost
+- Verbose AGENTS.md actively reduces task success and raises cost ~20% ([Gloaguen et al.](https://arxiv.org/abs/2602.11988v2)); adding values prose has a real cost
 - Pair every value with a verification command, or move it to a lower-layer mechanism (permissions, CI, hooks, branch protection)
 - Keep AGENTS.md as a pointer: short rule, named command, link to policy
 
 ## Sources
 
-- [Wei et al. — Agent READMEs: An Empirical Study of Context Files for Agentic Coding](https://arxiv.org/abs/2511.12884) — 2,303 context files; functional categories dominate, security/performance under 15%
-- [Liu et al. — Context Engineering for AI Agents in Open-Source Software](https://arxiv.org/abs/2510.21413) — 466 OSS repos; five writing styles; no explicit ethical, accessibility, fairness, or tone instructions found
-- [Gloaguen et al. — Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?](https://arxiv.org/abs/2602.11988) — verbose context files reduce success and add ~20% cost
+- [Wei et al. — Agent READMEs: An Empirical Study of Context Files for Agentic Coding](https://arxiv.org/abs/2511.12884v2) — 2,303 context files; functional categories dominate, security/performance under 15%
+- [Liu et al. — Context Engineering for AI Agents in Open-Source Software](https://arxiv.org/abs/2510.21413v4) — 466 OSS repos; five writing styles; no explicit ethical, accessibility, fairness, or tone instructions found
+- [Gloaguen et al. — Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?](https://arxiv.org/abs/2602.11988v2) — verbose context files reduce success and add ~20% cost
 - [Jaroslawicz et al. — How Many Instructions Can LLMs Follow at Once?](https://arxiv.org/abs/2507.11538v1) — frontier models top out at 68% at 500 instructions; primacy bias peaks around 150–200 instructions
 - [Zhang et al. — Do Agent Rules Shape or Distort? Guardrails Beat Guidance in Coding Agents](https://arxiv.org/abs/2604.11088) — negative constraints help, positive directives hurt; ground for the verification-not-prose recommendation
 - [Treude et al. — Operationalizing Ethics for AI Agents: How Developers Encode Values into Repository Context Files](https://arxiv.org/abs/2605.05584) — vision paper; finds developers already embed fairness/accessibility/sustainability/tone/privacy guidance, but defers whether agents adhere to it

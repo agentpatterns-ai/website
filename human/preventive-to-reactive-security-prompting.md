@@ -19,7 +19,7 @@ status: current
 
 > AI assistants shift security thinking from writing-time to review-time — front-loading explicit security requirements in the initial prompt narrows that gap.
 
-AI assistants reorganize rather than eliminate security thinking. They shift it from writing code to reviewing code. Bappy et al. (2026) observed 15 professional engineers completing security-relevant tasks with AI assistance. The engineers rarely specified security requirements in their initial prompts, even when they had just named the relevant vulnerability concerns moments earlier ([arxiv 2605.23130](https://arxiv.org/abs/2605.23130)). Front-loading explicit security requirements at specification time narrows that gap, under the conditions covered below.
+AI assistants reorganize rather than eliminate security thinking. They shift it from writing code to reviewing code. Bappy et al. (2026) observed 15 professional engineers completing security-relevant tasks with AI assistance. The engineers rarely specified security requirements in their initial prompts, even when they had just named the relevant vulnerability concerns moments earlier ([arxiv 2605.23130](https://arxiv.org/abs/2605.23130v2)). Front-loading explicit security requirements at specification time narrows that gap, under the conditions covered below.
 
 ## The prompting gap
 

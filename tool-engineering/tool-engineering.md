@@ -69,7 +69,7 @@ Test tools independently before full agent integration. Observe how the model ca
 
 ## Tool result optimization
 
-The preceding sections address tool inputs; this section addresses tool outputs. The OPENDEV paper reports a roughly 54% reduction in peak context consumption through per-tool-type summarization and large output offloading ([Bui, 2026 §2.3.2](https://arxiv.org/abs/2603.05344)):
+The preceding sections address tool inputs; this section addresses tool outputs. The OPENDEV paper reports a roughly 54% reduction in peak context consumption through per-tool-type summarization and large output offloading ([Bui, 2026 §2.3.2](https://arxiv.org/abs/2603.05344v3)):
 
 - Per-type summarization: file reads replaced with metadata (line count, character count), search results collapsed to match counts, directory listings reduced to item counts, command outputs truncated to line counts for longer outputs
 - Large output offloading: results exceeding 8,000 characters written to session-specific scratch files with a 500-character preview — the agent can retrieve full output on demand without default context cost

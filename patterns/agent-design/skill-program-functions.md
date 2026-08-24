@@ -44,7 +44,7 @@ The same library applies at inference time, during post-training as structured s
 
 ## Why it works
 
-Moving the trigger from instruction-following to a runtime predicate removes two error sources: instruction fade-out over long contexts ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344)) and the compliance ceiling — frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1)). Neither applies to a Python predicate.
+Moving the trigger from instruction-following to a runtime predicate removes two error sources: instruction fade-out over long contexts ([Bui, 2025 §3.2](https://arxiv.org/abs/2603.05344v3)) and the compliance ceiling — frontier models reach only 68% accuracy at 500 instructions ([IFScale, 2025](https://arxiv.org/abs/2507.11538v1)). Neither applies to a Python predicate.
 
 The gain comes from removing model judgment from the trigger, not the corrective content — so the disruption-recovery framework still bounds it: a perfect trigger firing on a path the agent would have rescued anyway degrades performance ([Vasudev et al., 2026](https://arxiv.org/abs/2602.03338)).
 

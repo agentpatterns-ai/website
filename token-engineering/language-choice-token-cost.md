@@ -49,7 +49,7 @@ The shape of the overspend inverts by language, which is what makes the multipli
 
 - The language is not a free variable. In an existing repository the language was chosen years before an agent touched it, and a measured multiplier produces a recommendation nobody can act on.
 - Difficulty is not matched. The paper reports an intraclass correlation of 0.80–0.97, so problem identity explains most of the token variance ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)). Comparing raw per-language spend across a real backlog measures the backlog, not the language.
-- You chase 1.7x while carrying 30x. On SWE-bench Verified, identical tasks vary by up to 30x in total tokens across eight frontier models, and higher spend does not correlate with better accuracy ([Bai et al., arXiv:2604.22750](https://arxiv.org/abs/2604.22750)). Harness and loop design move more than language does.
+- You chase 1.7x while carrying 30x. On SWE-bench Verified, identical tasks vary by up to 30x in total tokens across eight frontier models, and higher spend does not correlate with better accuracy ([Bai et al., arXiv:2604.22750](https://arxiv.org/abs/2604.22750v2)). Harness and loop design move more than language does.
 - The result may not reach your work. MiniLCB tasks are self-contained competitive-programming problems with visible tests, and the authors say the findings may not generalize to repository-scale software engineering ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807)), where accumulated input tokens dominate spend ([arXiv:2604.22750](https://arxiv.org/abs/2604.22750)).
 - The gap is a moving target. Fine-tuning and in-context learning both shift low-resource performance, with effectiveness depending on model size ([Giagnorio et al., arXiv:2501.19085](https://arxiv.org/abs/2501.19085)). A multiplier you measure this quarter decays as models and harnesses improve.
 
@@ -80,7 +80,7 @@ Rewriting the service in Python to capture at most 1.57x would trade a bounded t
 - At matched difficulty, coding agents spend 1.28x–1.69x more tokens in OCaml than Python and 1.07x–1.57x more in Rust; Java ranges 0.85x–1.34x and can be cheaper than Python ([Wu et al., 2026](https://arxiv.org/abs/2607.22807v1))
 - The mechanism is compile-error looping, not deeper reasoning — 92% of failed OCaml snapshots are compile-time errors ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807v1))
 - Accuracy is largely unaffected by language, so this is a cost lever and not a capability one ([arXiv:2607.22807](https://arxiv.org/abs/2607.22807))
-- Problem difficulty dominates token variance (ICC 0.80–0.97), and within-task variance reaches 30x on repository-scale benchmarks — both larger than the language effect ([arXiv:2604.22750](https://arxiv.org/abs/2604.22750))
+- Problem difficulty dominates token variance (ICC 0.80–0.97), and within-task variance reaches 30x on repository-scale benchmarks — both larger than the language effect ([arXiv:2604.22750](https://arxiv.org/abs/2604.22750v2))
 - Act on the diagnosis, not the multiplier: a fast typechecker in the loop, verbatim compiler diagnostics, and idiom examples in context attack the mechanism without changing language
 
 ## Related

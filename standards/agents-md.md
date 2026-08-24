@@ -119,7 +119,7 @@ For a real, high-profile production example, the SQLite project ships its own `A
 AGENTS.md degrades in three conditions:
 
 - Stale content: as the codebase evolves, AGENTS.md drifts. A file that correctly described tooling six months ago now misleads agents into using deprecated commands. Static files need active maintenance — they do not self-update as conventions change.
-- Context overconsumption: every line in AGENTS.md consumes context budget before the agent sees the task. Verbose files — architecture writeups, process narratives, duplicated documentation — crowd out room for the task itself. An [ETH Zurich evaluation of AGENTS.md](https://arxiv.org/abs/2602.11988) found context files increased inference cost by over 20% on average, largely because agents followed their instructions into broader-than-necessary exploration. The file works against itself when it embeds knowledge instead of linking to it.
+- Context overconsumption: every line in AGENTS.md consumes context budget before the agent sees the task. Verbose files — architecture writeups, process narratives, duplicated documentation — crowd out room for the task itself. An [ETH Zurich evaluation of AGENTS.md](https://arxiv.org/abs/2602.11988v2) found context files increased inference cost by over 20% on average, largely because agents followed their instructions into broader-than-necessary exploration. The file works against itself when it embeds knowledge instead of linking to it.
 - Mismatch with dynamic environments: AGENTS.md is a static snapshot. A single root file serves projects poorly when they have frequent toolchain changes, several distinct workflows, or constraints that vary per run. MCP servers or runtime-loaded skill files handle dynamic context better than a committed static document.
 
 ## FAQ
@@ -130,7 +130,7 @@ The audience and the moment differ. A human README explains what the software do
 
 **Does adding an AGENTS.md cost anything?**
 
-Yes. Every line consumes context budget before the agent sees the task, and an [ETH Zurich evaluation of AGENTS.md](https://arxiv.org/abs/2602.11988) found context files increased inference cost by over 20% on average, largely because agents followed their instructions into broader-than-necessary exploration. Verbose files — architecture writeups, process narratives, duplicated documentation — crowd out room for the task itself.
+Yes. Every line consumes context budget before the agent sees the task, and an [ETH Zurich evaluation of AGENTS.md](https://arxiv.org/abs/2602.11988v2) found context files increased inference cost by over 20% on average, largely because agents followed their instructions into broader-than-necessary exploration. Verbose files — architecture writeups, process narratives, duplicated documentation — crowd out room for the task itself.
 
 **When is a single root file the wrong fit?**
 

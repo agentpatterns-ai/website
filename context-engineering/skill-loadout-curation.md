@@ -35,7 +35,7 @@ The discipline is conditional. Four things decide whether it returns anything.
 
 ## Prune for collision, not for size
 
-The intuitive reason to prune — idle skills waste context — is the weaker one. Song and Wei split the damage from a growing library into two channels and measured each. Skill shadowing, where the agent picks a distractor whose description matches the query better than the right skill does, costs 0.14 pass rate (95% CI [0.06, 0.26]). Context overhead costs 0.07 (CI [-0.13, 0.25]), indistinguishable from zero ([arxiv:2605.24050](https://arxiv.org/abs/2605.24050)).
+The intuitive reason to prune — idle skills waste context — is the weaker one. Song and Wei split the damage from a growing library into two channels and measured each. Skill shadowing, where the agent picks a distractor whose description matches the query better than the right skill does, costs 0.14 pass rate (95% CI [0.06, 0.26]). Context overhead costs 0.07 (CI [-0.13, 0.25]), indistinguishable from zero ([arxiv:2605.24050](https://arxiv.org/abs/2605.24050v2)).
 
 So deleting your largest skill usually changes nothing. Renaming or merging two skills that describe themselves the same way is what moves the number.
 

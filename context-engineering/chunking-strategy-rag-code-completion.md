@@ -63,7 +63,7 @@ Allocate optimization effort accordingly: pick any non-function strategy, then s
 
 The controlled study's finding is qualified by task shape and repository structure. The opposite recommendation (prefer function-respecting chunks) holds in these conditions:
 
-- Whole-function generation tasks: SWE-bench-style benchmarks where the output is an entire function body align retrieval and generation units; cAST's reported +4.3 pp Recall@5 and +2.67 pp Pass@1 on those tasks ([Zhang et al., 2025](https://arxiv.org/abs/2506.15655)) reflect this alignment.
+- Whole-function generation tasks: SWE-bench-style benchmarks where the output is an entire function body align retrieval and generation units; cAST's reported +4.3 pp Recall@5 and +2.67 pp Pass@1 on those tasks ([Zhang et al., 2025](https://arxiv.org/abs/2506.15655v2)) reflect this alignment.
 - Polyglot repositories with patchy parser coverage: AST-based chunking needs a language-specific parser. The cAST paper demonstrates the method on Python, Java, JavaScript, TypeScript, Go, C++, and Rust ([Zhang et al., 2025](https://arxiv.org/abs/2506.15655)); files outside that set fall back to non-structural splitting, so Sliding Window is safer when the repo mixes supported languages with Bicep, HCL, or proprietary DSLs.
 - Very long functions: function chunking's variance problem amplifies as individual functions grow ([Wu et al., 2026](https://arxiv.org/abs/2605.04763)).
 

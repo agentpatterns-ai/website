@@ -86,7 +86,7 @@ Coding-agent fleets with isolated sub-agent contexts already break the contagion
 
 ## Limitations
 
-- Inference overhead — per-round multi-persona simulation adds cost. The paper flags this for "large-scale MASs or long interaction processes" ([Ma et al., 2026](https://arxiv.org/abs/2605.01758)).
+- Inference overhead — per-round multi-persona simulation adds cost. The paper flags this for "large-scale MASs or long interaction processes" ([Ma et al., 2026](https://arxiv.org/abs/2605.01758v3)).
 - Adversary-controlled diagnostic — the simulation runs on the same model class as the agents, so prompt injection against the simulation step can suppress the diversity signal. The paper does not address this.
 - No provable containment — [Gu et al. (2024)](https://arxiv.org/abs/2402.08567) state that designing a defense to provably restrain spread "remains an open question". FLP shows empirical reduction, not formal guarantees.
 - Modality scope — evaluation is multimodal-RAG-specific. Generalizing to tool-use chains or code pipelines requires re-deriving the diversity-signal premise.

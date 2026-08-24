@@ -41,7 +41,7 @@ The viable threat surface is short-form, in-distribution text — chat snippets,
 
 The access slice ([multitenant-rag-authorization-gap](multitenant-rag-authorization-gap.md)) gates retrieval responses. The poisoning slice ([rag-architecture-poisoning-robustness](rag-architecture-poisoning-robustness.md)) gates retrieval inputs. Neither addresses the case where the index itself leaks — through a misconfigured vector database, an exposed admin API, an insider, or an intercepted replication channel.
 
-ALGEN shows that an attacker holding a leaked index plus ~30 paired (text, embedding) samples exceeds Rouge-L 20 on reconstruction; ~1,000 samples reaches Rouge-L ~45 — with no access to the original embedding model or query API ([Yin et al., 2025](https://arxiv.org/abs/2502.11308)). Black-box post-exfiltration recovery is the realistic threat model. Encryption-at-rest does not close it: embeddings are decrypted at query time, and inversion runs on the live vector ([OWASP LLM08:2025](https://genai.owasp.org/llmrisk/llm082025-vector-and-embedding-weaknesses/)).
+ALGEN shows that an attacker holding a leaked index plus ~30 paired (text, embedding) samples exceeds Rouge-L 20 on reconstruction; ~1,000 samples reaches Rouge-L ~45 — with no access to the original embedding model or query API ([Yin et al., 2025](https://arxiv.org/abs/2502.11308v2)). Black-box post-exfiltration recovery is the realistic threat model. Encryption-at-rest does not close it: embeddings are decrypted at query time, and inversion runs on the live vector ([OWASP LLM08:2025](https://genai.owasp.org/llmrisk/llm082025-vector-and-embedding-weaknesses/)).
 
 ## Why it works
 

@@ -27,7 +27,7 @@ The Singleton result is narrow. The technique is the right default only when all
 | Small predicate space (~3 boolean checks) | The Singleton checker validates three predicates: Private Constructor, Instance Method, Global Access Point. As the count grows, blind retries cannot localize the failure |
 | Deterministic judge available | The paper's judge is a regex matcher; an LLM judge inherits its own brittleness ([Gaming the Judge, 2026](https://arxiv.org/pdf/2601.14691)) |
 
-For general code repair the comparison reverses: detailed feedback wins by ~10 pp (mixed 63.6%, minimal 53.1%) on FeedbackEval ([Song et al., 2025](https://arxiv.org/abs/2504.06939)).
+For general code repair the comparison reverses: detailed feedback wins by ~10 pp (mixed 63.6%, minimal 53.1%) on FeedbackEval ([Song et al., 2025](https://arxiv.org/abs/2504.06939v2)).
 
 ## The loop
 
@@ -66,15 +66,15 @@ Llama 3.3 also hit 100% Singleton compliance on the instruction-only strategy �
 
 ## Why it works
 
-Binary feedback collapses the supervision signal to its minimum while preserving the model's full self-correction pathway. Detailed feedback ("private constructor missing") biases weaker models to patch only that predicate, often at the cost of functional correctness: the paper documents models that "lost context implementing Singleton correctly but for wrong functionality" under richer feedback ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898v1)). The bare retry instead forces a holistic regeneration on the same circuit that produced functional code initially. Self-Refine reports the same mechanism: iterative same-model feedback improved CODEX code generation by up to 13 pp absolute, with iteration, not signal richness, the active ingredient ([Madaan et al., 2023](https://arxiv.org/pdf/2303.17651)). Capable models probe a small predicate space by trial and error within the budget; richer specifications break this scaling.
+Binary feedback collapses the supervision signal to its minimum while preserving the model's full self-correction pathway. Detailed feedback ("private constructor missing") biases weaker models to patch only that predicate, often at the cost of functional correctness: the paper documents models that "lost context implementing Singleton correctly but for wrong functionality" under richer feedback ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898v1)). The bare retry instead forces a holistic regeneration on the same circuit that produced functional code initially. Self-Refine reports the same mechanism: iterative same-model feedback improved CODEX code generation by up to 13 pp absolute, with iteration, not signal richness, the active ingredient ([Madaan et al., 2023](https://arxiv.org/pdf/2303.17651v2)). Capable models probe a small predicate space by trial and error within the budget; richer specifications break this scaling.
 
 ## When this backfires
 
 - Functionality-critical output — Pattern adherence and functional correctness can diverge. DeepSeek Coder lost 9.8 pp on functional tests while improving Singleton compliance; Gemma3 (4B) lost 21.3 pp ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898v1)). Gate exits on test pass and pattern match
-- Multi-predicate or interacting patterns — Three predicates fit a 10-iteration probe budget; ten do not. FeedbackEval points to structured feedback as the safer default for richer patterns ([Song et al., 2025](https://arxiv.org/abs/2504.06939))
+- Multi-predicate or interacting patterns — Three predicates fit a 10-iteration probe budget; ten do not. FeedbackEval points to structured feedback as the safer default for richer patterns ([Song et al., 2025](https://arxiv.org/abs/2504.06939v2))
 - No deterministic judge — When the check requires semantic understanding (thread-safety, race conditions), an LLM judge replaces the regex and becomes the new failure surface, with reasoning-trace manipulation driving false positives above 80% ([Gaming the Judge, 2026](https://arxiv.org/pdf/2601.14691))
 - Already-converged instructions — Llama 3.3 hit 100% on instructions alone; the feedback loop then spends tokens and latency for no lift
-- General code repair — The result does not generalize to debugging or test-failure repair, where FeedbackEval shows detailed feedback wins by ~10 pp ([Song et al., 2025](https://arxiv.org/abs/2504.06939))
+- General code repair — The result does not generalize to debugging or test-failure repair, where FeedbackEval shows detailed feedback wins by ~10 pp ([Song et al., 2025](https://arxiv.org/abs/2504.06939v2))
 
 ## Threats to validity
 

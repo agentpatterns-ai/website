@@ -26,9 +26,9 @@ Two pre-filters wrap the investigator LLM after a coding agent has failed a repo
 
 Confirm all three conditions before adopting:
 
-- Trajectory length exceeds the investigator's effective long-context budget. TrajAudit targets repository-level runs whose trajectories are "very long, while long-context reasoning remains a known weakness of LLMs" ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Short trajectories that already fit the window do not benefit — the filter adds latency, not recall.
+- Trajectory length exceeds the investigator's effective long-context budget. TrajAudit targets repository-level runs whose trajectories are long enough to strain the reader: "even state-of-the-art LLMs struggle to maintain reasoning quality when processing long contexts" ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563v3)). Short trajectories that already fit the window do not benefit — the filter adds latency, not recall.
 - A structured test-failure report exists. The preliminary diagnosis is seeded from the test-failure artifact; without one, the investigator has no prior to anchor on ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
-- Trajectory noise is dominated by predictable patterns. Pattern matching only helps when "redundant program structure and verbose code context" compose the bulk of trajectory tokens ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Heterogeneous or context-dependent noise leaves the filter little to cut.
+- Trajectory noise is dominated by predictable patterns. Pattern matching only helps when "redundant program structures and verbose code context" compose the bulk of trajectory tokens ([arxiv 2605.26563v3](https://arxiv.org/abs/2605.26563v3)). Heterogeneous or context-dependent noise leaves the filter little to cut.
 
 If any condition is missing, fall back to [agent debugging](agent-debugging.md) for the four-mode taxonomy, or [trajectory decomposition](../verification/trajectory-decomposition-diagnosis.md) when the goal is per-stage grading rather than root-cause localization. When the suspected cause is a context source rather than the code under test, see [trajectory attribution for context repair](../context-engineering/trajectory-attribution-context-repair.md), which attributes the failure to a skill file, knowledge-base entry, or tool description.
 
@@ -82,7 +82,7 @@ A steelman of the opposite — feed the investigator the raw, unfiltered traject
 
 ## Example
 
-The TrajAudit evaluation runs on RootSE, 93 real-world failure instances drawn from software-maintenance tasks ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)). Walking through the pipeline on an illustrative instance from this class:
+The TrajAudit evaluation runs on RootSE, 93 real-world failure instances drawn from software-maintenance tasks ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563v3)). Walking through the pipeline on an illustrative instance from this class:
 
 A repository-level coding agent fails a maintenance task. The captured trajectory holds file dumps, tool-call results, repeated imports, and intermediate diffs. The test runner emits an assertion failure with a stack trace pointing into one module.
 
@@ -100,7 +100,7 @@ The LLM operates on a smaller, prior-anchored window — the regime its long-con
 
 - Two pre-filters wrap the investigator LLM: a pattern-matching noise filter and a preliminary diagnosis seeded from the test-failure report.
 - The technique applies when trajectories are long enough that long-context degradation bites, a structured test-failure artifact exists, and trajectory noise is dominated by predictable patterns.
-- Reported gains on RootSE are +24.4 percentage points in localization accuracy and at least 18% token reduction across 93 software-maintenance failure instances ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563)).
+- Reported gains on RootSE are +24.4 percentage points in localization accuracy and at least 18% token reduction across 93 software-maintenance failure instances ([arxiv 2605.26563](https://arxiv.org/abs/2605.26563v3)).
 - The mechanism is long-context degradation plus prior anchoring — the filter shifts irrelevant content out of the attention budget and the test-report-derived prior anchors the investigator's first hypothesis.
 - Failure modes: filter blind spots drop evidence the investigator needs, symptom-cause decoupling anchors the prior in the wrong region, and absence of a test-failure artifact removes the second pre-filter's input.
 

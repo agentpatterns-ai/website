@@ -54,7 +54,7 @@ The failure mode is specific to long-horizon, tool-using tasks where the agent c
 
 Brevity framing stays safe for conversational assistants, summarization, and single-turn tasks without tool use. There the model has no chance to do less work.
 
-The backfire is not universal. A bounded budget differs from an open-ended "don't waste tokens" directive. The Token-Budget-Aware LLM Reasoning framework reports a 68% token reduction with under 5% accuracy loss by inserting an estimated budget into the prompt ([arxiv 2412.18547](https://arxiv.org/abs/2412.18547), ACL 2025 Findings; [code](https://github.com/GeniusHTX/TALE)). The failure is a property of vague minimization framing, not of efficiency goals as such.
+The backfire is not universal. A bounded budget differs from an open-ended "don't waste tokens" directive. The Token-Budget-Aware LLM Reasoning framework reports a 68% token reduction with under 5% accuracy loss by inserting an estimated budget into the prompt ([arxiv 2412.18547](https://arxiv.org/abs/2412.18547v5), ACL 2025 Findings; [code](https://github.com/GeniusHTX/TALE)). The failure is a property of vague minimization framing, not of efficiency goals as such.
 
 ## Mitigation
 

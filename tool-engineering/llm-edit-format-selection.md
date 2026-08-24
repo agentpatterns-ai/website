@@ -20,7 +20,7 @@ maturity: established
 
 ## Why format choice matters
 
-Switching a strict unified diff to a search-replace block raised GPT-4's score on Aider's editing benchmark from 26% to 59%, with no model or prompt change ([Aider, "Unified diffs make GPT-4 Turbo 3X less lazy"](https://aider.chat/docs/unified-diffs.html)). The "To Diff or Not to Diff?" paper explains why: "fragile offsets and fragmented hunks make generation highly unnatural for LLMs" ([Cao et al., 2026, arxiv:2604.27296](https://arxiv.org/abs/2604.27296v1)). The Diff-XYZ benchmark finds search-replace beats unified diffs for larger models, while smaller open models gain almost nothing from any format change ([Glukhov et al., 2025, arxiv:2510.12487](https://arxiv.org/abs/2510.12487)). The effect is real, but not universal.
+Switching a strict unified diff to a search-replace block raised GPT-4's score on Aider's editing benchmark from 26% to 59%, with no model or prompt change ([Aider, "Unified diffs make GPT-4 Turbo 3X less lazy"](https://aider.chat/docs/unified-diffs.html)). The "To Diff or Not to Diff?" paper explains why: "fragile offsets and fragmented hunks make generation highly unnatural for LLMs" ([Cao et al., 2026, arxiv:2604.27296](https://arxiv.org/abs/2604.27296v1)). The Diff-XYZ benchmark finds search-replace beats unified diffs for larger models, while smaller open models gain almost nothing from any format change ([Glukhov et al., 2025, arxiv:2510.12487](https://arxiv.org/abs/2510.12487v2)). The effect is real, but not universal.
 
 ## The format spectrum
 
@@ -33,7 +33,7 @@ Switching a strict unified diff to a search-replace block raised GPT-4's score o
 
 ### Full rewrite
 
-The model emits the entire updated file. It always applies, but cost scales linearly with file length. On function-level benchmarks, full rewrite is the cheapest option for ~50–60% of samples — short bodies make anchor overhead larger than the new content ([arxiv:2604.27296 §5](https://arxiv.org/html/2604.27296)).
+The model emits the entire updated file. It always applies, but cost scales linearly with file length. On function-level benchmarks, full rewrite is the cheapest option for ~50–60% of samples — short bodies make anchor overhead larger than the new content ([arxiv:2604.27296 §5](https://arxiv.org/html/2604.27296v1)).
 
 ### Search-replace block
 
@@ -41,7 +41,7 @@ The model emits exact `old_str` and `new_str`; the harness substitutes one for t
 
 ### Structure-aware diff
 
-BlockDiff and FuncDiff use tree-sitter to align hunks to AST nodes — control structures for BlockDiff, functions and classes for FuncDiff. Anchors expand outward until contextually unique. On long-code edits (>300 tokens), AdaEdit cuts latency and cost by over 30% versus full rewrite while matching its accuracy ([arxiv:2604.27296 §5](https://arxiv.org/html/2604.27296)).
+BlockDiff and FuncDiff use tree-sitter to align hunks to AST nodes — control structures for BlockDiff, functions and classes for FuncDiff. Anchors expand outward until contextually unique. On long-code edits (>300 tokens), AdaEdit cuts latency and cost by over 30% versus full rewrite while matching its accuracy ([arxiv:2604.27296 §5](https://arxiv.org/html/2604.27296v1)).
 
 ### Line-numbered unified diff
 
@@ -55,7 +55,7 @@ Search-replace captures most of this gain without AST awareness: it swaps positi
 
 ## Adaptive selection (AdaEdit)
 
-For each source–target pair, AdaEdit picks whichever is shorter — diff or full rewrite — as the training label. The fine-tuned model learns to choose the cheaper format per sample, hitting >90% selection accuracy (>95% within a 20% token-deviation tolerance) ([arxiv:2604.27296 §4](https://arxiv.org/html/2604.27296)).
+For each source–target pair, AdaEdit picks whichever is shorter — diff or full rewrite — as the training label. The fine-tuned model learns to choose the cheaper format per sample, hitting >90% selection accuracy (>95% within a 20% token-deviation tolerance) ([arxiv:2604.27296 §4](https://arxiv.org/html/2604.27296v1)).
 
 Without fine-tuning, a harness can approximate this rule: full rewrite below ~300 tokens of file content, search-replace above.
 
@@ -88,7 +88,7 @@ A 1,200-token Python file needs a five-line change inside one function. Three fo
 
 - Full rewrite: regenerate the entire file, ~1,200 output tokens. It always applies and scales linearly with file size.
 - Search-replace block: unique surrounding context as `old_str`, modified function as `new_str`, ~150–250 output tokens. It applies if the anchor is unique; otherwise the harness errors and the model retries with more context.
-- FuncDiff: modified function with an AST-derived anchor, ~120–200 output tokens. It requires tree-sitter at apply time and a model trained on the format to perform reliably ([arxiv:2604.27296 §3](https://arxiv.org/html/2604.27296)).
+- FuncDiff: modified function with an AST-derived anchor, ~120–200 output tokens. It requires tree-sitter at apply time and a model trained on the format to perform reliably ([arxiv:2604.27296 §3](https://arxiv.org/html/2604.27296v1)).
 
 Search-replace is the practical choice for a frontier API model on this file. Below ~300 tokens of file content, full rewrite would have been cheaper.
 

@@ -21,7 +21,7 @@ The model economics of an agent swarm decide how wide it pays to run and whether
 
 ## Gate one: decomposability decides if a swarm helps
 
-Economics is the second question. The first is whether the task splits cleanly. A controlled Google Research study of 180 agent configurations found that multi-agent coordination improved a parallelizable task (financial reasoning) by 80.9% over a single agent, while every multi-agent variant degraded a strictly sequential planning task by 39 to 70% ([Google Research — Towards a science of scaling agent systems](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/), [arXiv:2512.08296](https://arxiv.org/abs/2512.08296)). No token budget or throughput rescues a task that does not decompose. Check decomposability before you price a swarm.
+Economics is the second question. The first is whether the task splits cleanly. A controlled Google Research study of 180 agent configurations found that multi-agent coordination improved a parallelizable task (financial reasoning) by 80.8% over a single agent, while every multi-agent variant degraded a strictly sequential planning task by 39 to 70% ([Google Research — Towards a science of scaling agent systems](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/), [arXiv:2512.08296](https://arxiv.org/abs/2512.08296v3)). No token budget or throughput rescues a task that does not decompose. Check decomposability before you price a swarm.
 
 ## Gate two: the model mix sets the ceiling
 

@@ -70,7 +70,7 @@ The study's main finding: offline evaluations substantially misrepresent real-wo
 | Offline (synthetic test sets) | Models score well on curated, clean inputs with full context |
 | Online (real IDE usage) | 4.91% average acceptance rate across all models and languages |
 
-Corroboration: LLMs achieve 84–89% on synthetic benchmarks but only 25–34% on real-world class-level tasks. [Source: [arxiv 2510.26130](https://arxiv.org/abs/2510.26130)]
+Corroboration: LLMs achieve 84–89% on synthetic benchmarks but only 25–34% on real-world class-level tasks. [Source: [arxiv 2510.26130](https://arxiv.org/abs/2510.26130v2)]
 
 The gap comes from:
 

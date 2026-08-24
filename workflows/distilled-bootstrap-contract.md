@@ -59,7 +59,7 @@ This is the same logic that underlies build artifact caching and the operator-au
 - Maintainer-authored bootstrap already exists. When `copilot-setup-steps.yml`, a devcontainer, or a working `make bootstrap` target is in place, an agent-distilled contract duplicates the surface and creates two sources of truth. Prefer the [Repository Bootstrap Checklist](repository-bootstrap-checklist.md) approach.
 - No deterministic verification target. Repos without `pytest`, `npm test`, or an equivalent give the discovery agent nothing to verify against. Without a pass/fail signal, the agent cannot distinguish a working setup from one that compiles but does not run ([arXiv 2605.15815](https://arxiv.org/abs/2605.15815)).
 - Hallucination-sensitive environments. SetupBench documents that agents "generate constraints not present in original tasks" during bootstrap ([arXiv 2507.09063](https://arxiv.org/abs/2507.09063v1)). A distilled contract durably encodes those phantom steps, and downstream agents will follow them as if they were necessary.
-- Rapidly changing build system. If dependency files churn weekly, the contract goes stale faster than agents reuse it. The cheaper non-persistent alternative is Repo2Run-style per-session iterative Docker synthesis, which reports 86.0% success on 420 Python repos without any contract layer ([arXiv 2502.13681](https://arxiv.org/abs/2502.13681)).
+- Rapidly changing build system. If dependency files churn weekly, the contract goes stale faster than agents reuse it. The cheaper non-persistent alternative is Repo2Run-style per-session iterative Docker synthesis, which reports 86.0% success on 420 Python repos without any contract layer ([arXiv 2502.13681](https://arxiv.org/abs/2502.13681v4)).
 
 ## Example
 
@@ -88,7 +88,7 @@ Agent-authored — a `.bootstrap` contract produced by the BootstrapAgent pipeli
 - The pipeline has four stages — evidence extraction, structured planning, Docker-based verification, and trace-driven repair — and depends on a deterministic build or test target to produce a usable pass/fail signal.
 - The pattern is Qualified, not universal: it pays back only when multiple agents will reuse the contract, a verification target exists, and the build system is stable.
 - Operator-authored alternatives like `copilot-setup-steps.yml` remain preferable when a maintainer is willing to write one — they are deterministic by construction and avoid encoding agent hallucinations as durable truth.
-- The non-persistent baseline (Repo2Run-style per-session iterative Docker synthesis) already hits 86.0% success ([arXiv 2502.13681](https://arxiv.org/abs/2502.13681)), so the marginal value of the contract is bounded by reuse frequency.
+- The non-persistent baseline (Repo2Run-style per-session iterative Docker synthesis) already hits 86.0% success ([arXiv 2502.13681](https://arxiv.org/abs/2502.13681v4)), so the marginal value of the contract is bounded by reuse frequency.
 
 ## Related
 

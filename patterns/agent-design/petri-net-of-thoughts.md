@@ -61,7 +61,7 @@ PNoT pays off when the reasoning process has known structure: a defined sequence
 - Code review workflows: check style, check logic, check security, then aggregate the findings.
 - Regulatory or compliance checks: sequential gates with defined pass or fail criteria.
 
-MedVerse (2026) independently applied Petri net theory to medical diagnosis, reframing differential diagnosis as a [DAG-structured parallel execution framework](https://arxiv.org/abs/2602.07529). It reported up to 8.9% accuracy gain over general-purpose LLM baselines, plus a 1.3x inference-latency reduction and 1.7x throughput gain relative to specialized medical LLMs.
+MedVerse (2026) independently applied Petri net theory to medical diagnosis, reframing differential diagnosis as a [DAG-structured parallel execution framework](https://arxiv.org/abs/2602.07529v3). It reported up to 8.9% accuracy gain over general-purpose LLM baselines, plus a 1.3x inference-latency reduction and 1.7x throughput gain relative to specialized medical LLMs.
 
 ## When simpler approaches suffice
 

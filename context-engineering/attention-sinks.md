@@ -28,7 +28,7 @@ Attention in autoregressive transformer models is structurally biased toward ear
 
 The attention sink is a structural property of how causal attention masking works, not a quirk to fix. Every token the model generates is shaped more by early tokens than by equivalent tokens placed later in the context.
 
-A more precise account narrows the mechanism. Gu et al. (2024) found that the sink concentrates on the first token rather than spreading smoothly across an early-position band. It is a learned behavior that emerges during pre-training under softmax normalization. Replace softmax with sigmoid attention and the sink does not appear in models up to 1B parameters, so it is not strictly inherent to causal masking ([When Attention Sink Emerges in Language Models](https://arxiv.org/abs/2410.10781)). The practical takeaway holds: the strongest-attention position is the very start of the prompt. But treat "earlier is stronger" as a first-token-anchored, softmax-driven effect, not a uniform positional gradient.
+A more precise account narrows the mechanism. Gu et al. (2024) found that the sink concentrates on the first token rather than spreading smoothly across an early-position band. It is a learned behavior that emerges during pre-training under softmax normalization. Replace softmax with sigmoid attention and the sink does not appear in models up to 1B parameters, so it is not strictly inherent to causal masking ([When Attention Sink Emerges in Language Models](https://arxiv.org/abs/2410.10781v2)). The practical takeaway holds: the strongest-attention position is the very start of the prompt. But treat "earlier is stronger" as a first-token-anchored, softmax-driven effect, not a uniform positional gradient.
 
 ## Practical implications
 

@@ -117,3 +117,4 @@ Yes. Running tests that do not cover the actual change is verification theater �
 - [Comprehension Debt](comprehension-debt.md) — merging agent output without understanding it compounds into unverifiable code
 - [The Yes-Man Agent](yes-man-agent.md) — agents that execute without pushback ship the same unverified errors at machine speed
 - [Model Confidence as Security Verification](model-confidence-as-security-verification.md) — the security-specific case: a model's own confidence does not track whether its code is secure
+- [LLM Support During the First Detection Pass](llm-support-first-detection-pass.md) — the measured cost of consulting a model during a review pass rather than after it

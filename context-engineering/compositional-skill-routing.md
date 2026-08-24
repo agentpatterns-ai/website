@@ -31,7 +31,7 @@ The pattern holds only under four conditions, each of which must be true before 
 | Condition | Why it matters |
 |----------|----------------|
 | Library holds hundreds to thousands of skills | The headline >99% context-window reduction in [Gao (2026)](https://arxiv.org/abs/2606.18051v1) is measured against 2,209 MCP server skills. At 50 skills, prompt caching and preloading remove most of the pressure; the extra LLM call to decompose costs more than it saves |
-| Queries span multiple skills per turn | Decomposition only earns its keep when the typical query is compositional. A library of 2,000 skills serving one-skill-at-a-time queries is the SkillRouter case — single-shot retrieve-and-rerank reaches [74.0% Hit@1 at ~80K skills](https://arxiv.org/abs/2603.22455) without any decomposition |
+| Queries span multiple skills per turn | Decomposition only earns its keep when the typical query is compositional. A library of 2,000 skills serving one-skill-at-a-time queries is the SkillRouter case — single-shot retrieve-and-rerank reaches [74.0% Hit@1 at ~80K skills](https://arxiv.org/abs/2603.22455v5) without any decomposition |
 | Sub-tasks are loosely coupled | The composer is a dependency-aware DAG. If sub-tasks need feedback between steps (output of step 2 changes what step 3 should look like), a pre-committed DAG cannot recover. Dynamic re-decomposition mid-flight is a separate, harder problem ([TDAG, 2402.10178](https://arxiv.org/abs/2402.10178)) |
 | Skill descriptions are unambiguous | The bi-encoder retriever tells skills apart by their description text. If two skills overlap functionally, no amount of decomposition rescues retrieval — Anthropic's [guidance is that "if a human engineer can't pick, the agent can't either"](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) |
 
@@ -40,7 +40,7 @@ Outside these conditions, the pattern adds a decoder call, a retriever round-tri
 ## The three stages
 
 1. Decompose. An LLM task decomposer breaks the user query into atomic sub-tasks. Each sub-task should map to roughly one skill. Standard decomposition reaches only [34.2% category recall at the step level](https://arxiv.org/abs/2606.18051v1) because the decomposer chunks by linguistic structure, not by what skills exist.
-2. Retrieve. A bi-encoder embedding model with FAISS indexing returns the top-k skills for each atomic sub-task. Retrieval over atomic sub-tasks works because each query now aligns roughly 1:1 with one skill, instead of carrying the mixed semantics of a compositional query ([Gao 2026](https://arxiv.org/abs/2606.18051v1)). Hiding skill implementation details to save tokens [drops routing accuracy 31–44 percentage points](https://arxiv.org/abs/2603.22455): the full skill text matters at retrieval time.
+2. Retrieve. A bi-encoder embedding model with FAISS indexing returns the top-k skills for each atomic sub-task. Retrieval over atomic sub-tasks works because each query now aligns roughly 1:1 with one skill, instead of carrying the mixed semantics of a compositional query ([Gao 2026](https://arxiv.org/abs/2606.18051v1)). Hiding skill implementation details to save tokens [drops routing accuracy 31–44 percentage points](https://arxiv.org/abs/2603.22455v5): the full skill text matters at retrieval time.
 3. Compose. A dependency-aware planner assembles the retrieved skills into an executable DAG. It resolves step ordering and data dependencies before execution begins ([Gao 2026](https://arxiv.org/abs/2606.18051)).
 
 ## Iterative skill-aware decomposition (SAD)

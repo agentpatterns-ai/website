@@ -28,7 +28,7 @@ Typed memory extracts structured prior knowledge from commits, PRs, and issues w
 
 Apply only when all four conditions hold:
 
-- High-quality commit hygiene — conventional commits, structured PR descriptions, linked issues. 90% of 5,000 randomly sampled GitHub commits are assessed low quality ([Tian et al. 2022](https://arxiv.org/pdf/2202.02974)); low-quality input yields a low-signal index.
+- High-quality commit hygiene — conventional commits, structured PR descriptions, linked issues. 90% of 5,000 randomly sampled GitHub commits are assessed low quality ([Tian et al. 2022](https://arxiv.org/pdf/2202.02974v1)); low-quality input yields a low-signal index.
 - Tight retrieval budget — the typing advantage shrinks as budget grows; unconstrained retrieval converges with BM25 ([Chukkapalli et al. 2026](https://arxiv.org/abs/2605.18284)).
 - Slow-evolving codebase — extracted Facts and Patterns reflect commit-time state; quarterly-refactoring repos encode conventions the codebase no longer follows.
 - Repository scale — small repos let the agent read raw `git log` directly; indexing only amortizes once linear scans exceed the budget.

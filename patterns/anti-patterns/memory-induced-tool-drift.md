@@ -69,7 +69,7 @@ The anti-pattern framing vanishes when any of the three conditions is removed:
 - Fully-constrained tool surfaces — if every parameter is dictated by the user's literal request, bias has no slack to exploit.
 - Strict task-conditional retrieval — namespacing preferences by domain shrinks the drift surface, though it does not eliminate it ([Dabas et al., 2026](https://arxiv.org/abs/2605.24941)).
 
-Scoped correctly, personality memory pays off: [MAPLE](https://arxiv.org/abs/2602.13258v1) reports a 14.6% personalization-score gain, and [MEMENTO](https://arxiv.org/abs/2505.16348) shows episodic memory delivering both personalization and in-context learning. The lesson is not "avoid personality memory" — it is "do not let it leak into tool calls in unrelated domains."
+Scoped correctly, personality memory pays off: [MAPLE](https://arxiv.org/abs/2602.13258v1) reports a 14.6% personalization-score gain, and [MEMENTO](https://arxiv.org/abs/2505.16348v4) shows episodic memory delivering both personalization and in-context learning. The lesson is not "avoid personality memory" — it is "do not let it leak into tool calls in unrelated domains."
 
 ## Key Takeaways
 

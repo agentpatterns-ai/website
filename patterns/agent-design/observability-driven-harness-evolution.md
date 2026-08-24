@@ -51,11 +51,11 @@ Score-only loops produce one bit per round: better or worse. A predicted outcome
 
 An improvement with a falsified prediction signals an accidental win: the edit worked for a reason the agent did not understand. A regression with a matched prediction means the agent correctly anticipated it, which helps rule out a hypothesis. This is [hypothesis-driven debugging](hypothesis-driven-debugging.md) applied to harness mutations: the prediction is the hypothesis, the eval round is the experiment, the mismatch is the diagnostic.
 
-Reflective optimization without this discipline collapses on defective seeds. [Gao et al., 2026](https://arxiv.org/abs/2603.18388) measured GEPA dropping GSM8K accuracy from 23.81% to 13.50% on a poor seed prompt — opaque, label-free trajectories cannot escape local optima. Decision observability is the interpretable trace such optimizers lack.
+Reflective optimization without this discipline collapses on defective seeds. [Gao et al., 2026](https://arxiv.org/abs/2603.18388v2) measured GEPA dropping GSM8K accuracy from 23.81% to 13.50% on a poor seed prompt — opaque, label-free trajectories cannot escape local optima. Decision observability is the interpretable trace such optimizers lack.
 
 ## Empirical result
 
-Ten AHE iterations lifted pass@1 on Terminal-Bench 2 from 69.7% to 77.0%, surpassing the human-designed Codex-CLI harness (71.9%) and self-evolving baselines ACE and TF-GRPO ([Lin et al., 2026](https://arxiv.org/abs/2604.25850)). The frozen harness transferred without re-evolution: top aggregate success on SWE-bench-verified at 12% fewer tokens than the seed, and +5.1 to +10.1pp gains across three alternate model families — evidence that the evolved components encode general engineering experience, not benchmark-specific tuning.
+Ten AHE iterations lifted pass@1 on Terminal-Bench 2 from 69.7% to 77.0%, surpassing the human-designed Codex-CLI harness (71.9%) and self-evolving baselines ACE and TF-GRPO ([Lin et al., 2026](https://arxiv.org/abs/2604.25850v4)). The frozen harness transferred without re-evolution: top aggregate success on SWE-bench-verified at 12% fewer tokens than the seed, and +5.1 to +10.1pp gains across three alternate model families — evidence that the evolved components encode general engineering experience, not benchmark-specific tuning.
 
 For comparison, LangChain's manually-driven changes on Terminal Bench 2.0 moved scores from 52.8% to 66.5% ([LangChain, 2026](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). AHE automates that loop without losing attribution.
 

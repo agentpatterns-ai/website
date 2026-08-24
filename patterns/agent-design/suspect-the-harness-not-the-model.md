@@ -20,7 +20,7 @@ maturity: emerging
 
 > When a released coding agent regresses after an update at a fixed model, suspect the harness, not the model.
 
-When a coding agent gets slower, more expensive, or less reliable after an update, the harness is the more likely cause than the model. The harness is the middleware around the model — system prompts, tool execution, context management, and the reasoning loop — and it changes far more often than the model does. A longitudinal study of 35 sequential Qwen Code CLI releases, run against 50 SWE-bench Verified tasks with the backing model held fixed, found no statistically significant improvement in resolve rate across the releases (Spearman ρ=0.208, p=0.231) while token consumption rose more than 70%, from 391K to 668K, a strong upward trend (ρ=0.743, p<0.0001) ([Ben Sghaier et al., 2026](https://arxiv.org/abs/2607.03691)).
+When a coding agent gets slower, more expensive, or less reliable after an update, the harness is the more likely cause than the model. The harness is the middleware around the model — system prompts, tool execution, context management, and the reasoning loop — and it changes far more often than the model does. A longitudinal study of 35 sequential Qwen Code CLI releases, run against 50 SWE-bench Verified tasks with the backing model held fixed, found no statistically significant improvement in resolve rate across the releases (Spearman ρ=0.208, p=0.231) while token consumption rose more than 70%, from 391K to 668K, a strong upward trend (ρ=0.743, p<0.0001) ([Ben Sghaier et al., 2026](https://arxiv.org/abs/2607.03691v2)).
 
 ## The diagnostic
 
@@ -36,7 +36,7 @@ If the slice confirms a drop at a fixed model, pinning the harness version is a 
 
 ## Why it works
 
-Token inflation with flat quality traces to a compounding structure in the harness, not to model change. Later releases shipped roughly 8% larger system prompts, from expanded tool schemas and instructions, and needed about 18% more conversation turns. Because the full conversation history is prepended on every API call, the enlarged per-turn overhead repeats across every turn — turns and total tokens correlate at ρ=0.941 ([Ben Sghaier et al., 2026](https://arxiv.org/abs/2607.03691)). A harness edit that adds prompt or tooling weight multiplies through the loop, raising cost without raising the resolve rate.
+Token inflation with flat quality traces to a compounding structure in the harness, not to model change. Later releases shipped roughly 8% larger system prompts, from expanded tool schemas and instructions, and needed about 18% more conversation turns. Because the full conversation history is prepended on every API call, the enlarged per-turn overhead repeats across every turn — turns and total tokens correlate at ρ=0.941 ([Ben Sghaier et al., 2026](https://arxiv.org/abs/2607.03691v2)). A harness edit that adds prompt or tooling weight multiplies through the loop, raising cost without raising the resolve rate.
 
 The attribution is credible because the study isolated the harness. It held a single self-hosted model constant so the provider could not swap it, fixed the compute, timeout, and evaluation environment, saw 87.7% run-to-run agreement on task outcomes, and mapped specific git commits to quality shifts by code inspection. The highest-risk components were the LLM-provider and context-management modules — the same layers that [harness token economics](../../token-engineering/harness-token-economics.md) shows control the token bill.
 
@@ -46,7 +46,7 @@ The diagnostic mis-fires or goes unactionable under specific conditions:
 
 - Managed or consumer-tier agents. When both the harness and the model are vendor-controlled and opaque, you cannot pin or inspect either, so the question is moot — see [managed vs self-hosted harness](managed-vs-self-hosted-harness.md).
 - Genuine model swaps. If the provider rotated the backing model, the regression really is the model, and the diagnostic misleads unless you have confirmed a fixed model ID.
-- Disciplined, eval-gated harness teams. Where each release is gated on a held-out eval, version drift is a weak regression signal and pinning forfeits real gains — [observability-driven harness evolution](observability-driven-harness-evolution.md) shows harness evolution lifting pass@1 from 69.7% to 77.0% when edits are verified against outcomes ([Lin et al., 2026](https://arxiv.org/abs/2604.25850)).
+- Disciplined, eval-gated harness teams. Where each release is gated on a held-out eval, version drift is a weak regression signal and pinning forfeits real gains — [observability-driven harness evolution](observability-driven-harness-evolution.md) shows harness evolution lifting pass@1 from 69.7% to 77.0% when edits are verified against outcomes ([Lin et al., 2026](https://arxiv.org/abs/2604.25850v4)).
 - Task-mix drift. A resolve-rate drop can come from your own workload shifting toward harder tasks. Without a fixed graded slice you cannot attribute the change to either layer.
 
 ## Example

@@ -18,7 +18,7 @@ Learn it hands-on in [Compaction](https://learn.agentpatterns.ai/harness-enginee
 
 ## The gap
 
-Claude Code's auto-compaction triggers at [approximately 95% of the context window](https://code.claude.com/docs/en/sub-agents). Benchmark research shows [LLMs effectively use only 10-20% of a long context window](https://arxiv.org/abs/2406.10149) for multi-step reasoning tasks. Code bug fixing collapses from 29% accuracy at 32K to 3% at 256K per [LongCodeBench](https://arxiv.org/abs/2505.07897). By the time auto-compaction fires, the agent has been in the [dumb zone](context-window-dumb-zone.md) for most of the session.
+Claude Code's auto-compaction triggers at [approximately 95% of the context window](https://code.claude.com/docs/en/sub-agents). Benchmark research shows [LLMs effectively use only 10-20% of a long context window](https://arxiv.org/abs/2406.10149v2) for multi-step reasoning tasks. Code bug fixing collapses from 29% accuracy at 32K to 3% at 256K per [LongCodeBench](https://arxiv.org/abs/2505.07897v3). By the time auto-compaction fires, the agent has been in the [dumb zone](context-window-dumb-zone.md) for most of the session.
 
 ```mermaid
 graph LR

@@ -62,7 +62,7 @@ A binary attack-success rate is a lossy projection: it collapses a trajectory's 
 
 ## Example
 
-On the AgentDojo workspace suite ([Debenedetti et al., 2024](https://arxiv.org/abs/2406.13352)), a tool filter drops the attack-success rate from 40% to 0% — a headline-perfect defense. Severity grading tells a different story: one episode still reaches L4. With email filtered, the agent substitutes the channel and invites the attacker as a calendar participant, an externally visible cross-scope leak the binary metric scores as a clean zero ([Owiredu-Ashley, 2026](https://arxiv.org/abs/2607.07474v1)). The grade turns "defense works" into "defense closes one channel and leaves another open."
+On the AgentDojo workspace suite ([Debenedetti et al., 2024](https://arxiv.org/abs/2406.13352v3)), a tool filter drops the attack-success rate from 40% to 0% — a headline-perfect defense. Severity grading tells a different story: one episode still reaches L4. With email filtered, the agent substitutes the channel and invites the attacker as a calendar participant, an externally visible cross-scope leak the binary metric scores as a clean zero ([Owiredu-Ashley, 2026](https://arxiv.org/abs/2607.07474v1)). The grade turns "defense works" into "defense closes one channel and leaves another open."
 
 ## Key Takeaways
 

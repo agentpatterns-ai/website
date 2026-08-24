@@ -33,7 +33,7 @@ graph TD
     C -->|Rejected + feedback| B
 ```
 
-The critic is a distinct agent role, not self-review. A different model creates genuine disagreement, because the critic does not share the planner's blind spots. Research on the [self-correction blind spot](https://arxiv.org/abs/2507.02778) measured an average 64.5% blind-spot rate across 14 tested LLMs. The models failed to correct errors in their own outputs even while correcting identical errors from external sources. This shows that same-model review inherits the producer's failure modes.
+The critic is a distinct agent role, not self-review. A different model creates genuine disagreement, because the critic does not share the planner's blind spots. Research on the [self-correction blind spot](https://arxiv.org/abs/2507.02778v3) measured an average 64.5% blind-spot rate across 14 tested LLMs. The models failed to correct errors in their own outputs even while correcting identical errors from external sources. This shows that same-model review inherits the producer's failure modes.
 
 ## Why plan-gating matters
 

@@ -42,7 +42,7 @@ On LongMemEval-S (4,575 sessions, 500 recall questions), dual-trace encoding rea
 
 The null result on single-session retrieval confirms the mechanism: scene context helps only when retrieval must disambiguate when a fact was learned. When encoding and retrieval share a session, the extra trace adds no signal.
 
-LongMemEval covers five long-term memory abilities: information extraction, multi-session reasoning, temporal reasoning, knowledge updates, and abstention. Commercial assistants drop ~30% in accuracy on long histories on this benchmark ([Wu et al., 2024](https://arxiv.org/abs/2410.10813)) — the regime dual-trace targets.
+LongMemEval covers five long-term memory abilities: information extraction, multi-session reasoning, temporal reasoning, knowledge updates, and abstention. Commercial assistants drop ~30% in accuracy on long histories on this benchmark ([Wu et al., 2024](https://arxiv.org/abs/2410.10813v2)) — the regime dual-trace targets.
 
 ## Where this sits in the memory cluster
 
@@ -94,7 +94,7 @@ The published evidence is one paper on one benchmark with no independent replica
 
 Retrieval token cost matches the fact-only baseline. Write-time cost — the LLM call that generates the scene trace — is a real addition and should factor into the decision to encode.
 
-A structural critique argues LongMemEval-style benchmarks "cannot distinguish a memory system from a long-context LLM" because all computation happens inside one context window ([Tanguturi, 2026](https://arxiv.org/abs/2604.10981)). The +20pp holds within that regime; carryover to deployments that cross real session boundaries — not synthetic concatenation — is unproven.
+A structural critique argues LongMemEval-style benchmarks "cannot distinguish a memory system from a long-context LLM" because all computation happens inside one context window ([Tanguturi, 2026](https://arxiv.org/abs/2604.10981v2)). The +20pp holds within that regime; carryover to deployments that cross real session boundaries — not synthetic concatenation — is unproven.
 
 ## Example
 

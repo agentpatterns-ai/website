@@ -33,7 +33,7 @@ In propose-evaluate-revise loops — kernel generation, hyperparameter search, c
 
 ## Why it works
 
-Each proposal samples from the LLM's pretrained conditional distribution. Feedback enters as prompt conditioning, which shifts probabilities only within the support the prior already assigns non-trivial mass. When the optimum lies where the prior assigns near-zero probability — low-resource languages like R and Racket ([Cassano et al.](https://arxiv.org/abs/2308.09895)), novel ISAs, bespoke DSLs — no conditioning produces samples from that region. The model cannot explore where it was never trained. When the prior is strong, refinement still adds roughly 20% over one-shot ([Madaan et al., "Self-Refine"](https://arxiv.org/abs/2303.17651)): feedback amplifies the prior, it does not replace it.
+Each proposal samples from the LLM's pretrained conditional distribution. Feedback enters as prompt conditioning, which shifts probabilities only within the support the prior already assigns non-trivial mass. When the optimum lies where the prior assigns near-zero probability — low-resource languages like R and Racket ([Cassano et al.](https://arxiv.org/abs/2308.09895v6)), novel ISAs, bespoke DSLs — no conditioning produces samples from that region. The model cannot explore where it was never trained. When the prior is strong, refinement still adds roughly 20% over one-shot ([Madaan et al., "Self-Refine"](https://arxiv.org/abs/2303.17651v2)): feedback amplifies the prior, it does not replace it.
 
 ## When this backfires
 
@@ -46,7 +46,7 @@ Added iterations rarely find the optimum when any of these hold:
 
 ## When propose-evaluate-revise still works
 
-The pattern is correct when the LLM has a substantial prior on the task family, the feedback encodes information the prior lacks (compiler errors, profiler timings, failing-test traces — not bare scalars), and the horizon is short enough that the prior still steers productively. ComPilot reaches 2.66x single-run and 3.54x best-of-5 speedups on PolyBench using zero-shot LLMs in a compiler-grounded loop ([Merouani et al.](https://arxiv.org/abs/2511.00592)).
+The pattern is correct when the LLM has a substantial prior on the task family, the feedback encodes information the prior lacks (compiler errors, profiler timings, failing-test traces — not bare scalars), and the horizon is short enough that the prior still steers productively. ComPilot reaches 2.66x single-run and 3.54x best-of-5 speedups on PolyBench using zero-shot LLMs in a compiler-grounded loop ([Merouani et al.](https://arxiv.org/abs/2511.00592v2)).
 
 ## Mitigations
 

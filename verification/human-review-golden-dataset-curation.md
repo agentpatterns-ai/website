@@ -75,7 +75,7 @@ Before letting a reviewer's verdict overwrite scorer output, measure inter-revie
 | 0.6–0.8 | Substantial | Use with a third-reviewer tiebreaker on disagreements |
 | < 0.6 | Rubric weak | Halt; rewrite the review rubric and re-calibrate before labels feed back |
 
-For LLM judge calibration, iterate the judge prompt against a 200-example expert-labeled slice until 85–90% agreement is reached ([Adaline 2026 guide](https://www.adaline.ai/blog/complete-guide-llm-ai-agent-evaluation-2026)). GPT-4-class judges hit ~80% human agreement on MT-Bench out of the box — the same level as human-human agreement ([Zheng et al. 2023](https://arxiv.org/abs/2306.05685)) — but documented biases (position, verbosity, self-enhancement, family) drift the number downward on subjective tasks without periodic re-anchoring.
+For LLM judge calibration, iterate the judge prompt against a 200-example expert-labeled slice until 85–90% agreement is reached ([Adaline 2026 guide](https://www.adaline.ai/blog/complete-guide-llm-ai-agent-evaluation-2026)). GPT-4-class judges hit ~80% human agreement on MT-Bench out of the box — the same level as human-human agreement ([Zheng et al. 2023](https://arxiv.org/abs/2306.05685v4)) — but documented biases (position, verbosity, self-enhancement, family) drift the number downward on subjective tasks without periodic re-anchoring.
 
 ## Why it works
 

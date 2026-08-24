@@ -50,7 +50,7 @@ All prevalence figures, precisions, and named examples below are from the paper'
 
 ## Why it works
 
-Five of the six are signal-to-token defects. Lint Leakage, Context Bloat, Skill Leakage, Init Fossilization, and Blind References reduce the useful fraction of the always-loaded context. Conflicting Instructions reduces its resolvability. Independent benchmark work converges on the same mechanism. Gloaguen et al. measured −3% task success and +20% inference cost for LLM-generated context files on SWE-bench Lite and AGENTbench, and only +4% success at +19% cost for human-written ones ([arxiv 2602.11988](https://arxiv.org/abs/2602.11988)). Naming each defect turns 'our CLAUDE.md is messy' into a checklist item with a known fix: extract style rules to the linter, split rarely-used sections into on-demand skills, resolve contradictions, update fossilized content, and pitch each external reference.
+Five of the six are signal-to-token defects. Lint Leakage, Context Bloat, Skill Leakage, Init Fossilization, and Blind References reduce the useful fraction of the always-loaded context. Conflicting Instructions reduces its resolvability. Independent benchmark work converges on the same mechanism. Gloaguen et al. measured −3% task success and +20% inference cost for LLM-generated context files on SWE-bench Lite and AGENTbench, and only +4% success at +19% cost for human-written ones ([arxiv 2602.11988](https://arxiv.org/abs/2602.11988v2)). Naming each defect turns 'our CLAUDE.md is messy' into a checklist item with a known fix: extract style rules to the linter, split rarely-used sections into on-demand skills, resolve contradictions, update fossilized content, and pitch each external reference.
 
 ## When this backfires
 

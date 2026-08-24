@@ -20,15 +20,15 @@ maturity: emerging
 
 This applies when your agent PRs touch GitHub Actions workflows, Dockerfiles, or dependency manifests. If your agents only edit application code and docs, the finding below does not describe your risk.
 
-An empirical study of the AIDev dataset classified security smells across 16,112 file changes in 4,022 agent-authored pull requests and found that 38.9% of those PRs carry at least one security smell, of which 82.3% are supply-chain integrity issues ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428)). GitHub Actions workflows and Docker files together held 87.6% of all detected smells. So review of agent PRs pays off most where the debt concentrates — the infrastructure paths — not spread evenly across every changed line.
+An empirical study of the AIDev dataset classified security smells across 16,112 file changes in 4,022 agent-authored pull requests and found that 38.9% of those PRs carry at least one security smell, of which 82.3% are supply-chain integrity issues ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428v2)). GitHub Actions workflows and Docker files together held 87.6% of all detected smells. So review of agent PRs pays off most where the debt concentrates — the infrastructure paths — not spread evenly across every changed line.
 
 ## Read the 82.3% as scoped, not absolute
 
-The study restricted its corpus to high-risk file paths and to added lines only ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428)). Scoping to CI and container files over-represents supply-chain smells by construction, so 82.3% describes the smell mix inside those paths, not the share of all agent security problems. Two more limits keep the number honest: the LLM-as-a-judge detector recovered 77.5% of smells against a manually-labeled gold standard (precision 0.908, F1 0.836), so real prevalence is higher than reported; and a "smell" is a hardening gap such as a mutable tag, not a confirmed exploit. Treat the finding as a signal about where to look, not a severity score.
+The study restricted its corpus to high-risk file paths and to added lines only ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428v2)). Scoping to CI and container files over-represents supply-chain smells by construction, so 82.3% describes the smell mix inside those paths, not the share of all agent security problems. Two more limits keep the number honest: the LLM-as-a-judge detector recovered 77.5% of smells against a manually-labeled gold standard (precision 0.908, F1 0.836), so real prevalence is higher than reported; and a "smell" is a hardening gap such as a mutable tag, not a confirmed exploit. Treat the finding as a signal about where to look, not a severity score.
 
 ## The credential leaks are a collaboration problem
 
-The critical-severity slice tells a sharper story. Of 253 critical smells, 99.6% were hard-coded credentials, and of the 74 confirmed genuine secrets, 67.6% were introduced by human collaborators rather than the agents ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428)). Worse, 81.1% of those secrets reached integration with no review comment from any bot or human. So the target is not distrust of agents specifically — humans leaked more secrets than the agents did. Agent-driven velocity outpaces human-in-the-loop review, and the same gap swallows secrets from either author. The fix belongs in CI, applied to every PR regardless of author: secret scanning with push protection, SHA-pinning policy, and pinned base images.
+The critical-severity slice tells a sharper story. Of 253 critical smells, 99.6% were hard-coded credentials, and of the 74 confirmed genuine secrets, 67.6% were introduced by human collaborators rather than the agents ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428v2)). Worse, 81.1% of those secrets reached integration with no review comment from any bot or human. So the target is not distrust of agents specifically — humans leaked more secrets than the agents did. Agent-driven velocity outpaces human-in-the-loop review, and the same gap swallows secrets from either author. The fix belongs in CI, applied to every PR regardless of author: secret scanning with push protection, SHA-pinning policy, and pinned base images.
 
 ## Why it works
 
@@ -59,7 +59,7 @@ The pinned form is what survived the March 2025 compromise: workflows referencin
 
 ## Key takeaways
 
-- In-scope agent PRs carry security debt concentrated in supply-chain integrity — unpinned CI and Docker references — with 87.6% of smells in workflow and Docker files ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428)).
+- In-scope agent PRs carry security debt concentrated in supply-chain integrity — unpinned CI and Docker references — with 87.6% of smells in workflow and Docker files ([arXiv:2607.12428](https://arxiv.org/abs/2607.12428v2)).
 - Read 82.3% as the smell mix inside high-risk paths, not the share of all agent security issues; the corpus was scoped to those paths and detector recall was 77.5%.
 - Hard-coded credentials were the critical failure, but humans introduced most of them — put secret scanning and SHA-pinning in CI for every author, not as author-conditional distrust of agents.
 - Agent velocity outpaces human review: 81.1% of confirmed secrets reached integration unreviewed, so deterministic CI gates beat manual inspection here.

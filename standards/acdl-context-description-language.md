@@ -22,7 +22,7 @@ The Agentic Context Description Language (ACDL) is a formal language for specify
 
 The motivating gap, in the authors' words: context construction "is typically conveyed through informal prose, ad hoc diagrams, or direct inspection of code, none of which precisely capture how a prompt evolves across interaction steps or how two context representation strategies differ" ([abstract](https://arxiv.org/abs/2605.01920v1)).
 
-The paper's empirical finding: "even small variations in how a basic ReAct agent's context is assembled lead to measurable differences in agent performance" ([§1](https://arxiv.org/html/2605.01920)). If macro-structure moves benchmark numbers, it deserves a notation.
+The paper's empirical finding: "even small variations in how a very basic ReAct agent's context is assembled ... lead to measurable differences in agent performance" ([§1](https://arxiv.org/html/2605.01920v1)). If macro-structure moves benchmark numbers, it deserves a notation.
 
 ## Core constructs
 

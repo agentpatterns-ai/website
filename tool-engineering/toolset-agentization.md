@@ -21,7 +21,7 @@ maturity: adopted
 
 ## The action-space problem
 
-A flat tool catalog forces the planner to select 1-of-N at every turn. Selection accuracy degrades as N grows: [LongFuncEval (2025)](https://arxiv.org/abs/2505.10570v1) reports 7–85% accuracy drops as tool catalogs expand, driven by the [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)) — correct tools become harder to locate among distractors. At hundreds of tools, a single planner cannot reliably reason about which combination achieves the goal.
+A flat tool catalog forces the planner to select 1-of-N at every turn. Selection accuracy degrades as N grows: [LongFuncEval (2025)](https://arxiv.org/abs/2505.10570v1) reports 7–85% accuracy drops as tool catalogs expand, driven by the [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172v3)) — correct tools become harder to locate among distractors. At hundreds of tools, a single planner cannot reliably reason about which combination achieves the goal.
 
 ## The pattern
 

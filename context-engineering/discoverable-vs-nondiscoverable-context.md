@@ -61,7 +61,7 @@ The pointer form works well for discoverable content that benefits from directio
 
 ## Why it works
 
-Instruction files sit at the front of every context window before the agent reads a single file. Discoverable content placed there competes with task context for limited space. It also creates a second source of truth that drifts from the codebase over time. An agent given a stale directory tree may read paths that no longer exist or skip new modules. A controlled evaluation found that human-authored context files raise inference cost by over 20% when they include structural overviews, with no gain in task success. Agents given high-level structural context explore the codebase more broadly, not more precisely ([Gloaguen et al., "Evaluating AGENTS.md," 2026](https://arxiv.org/abs/2602.11988)).
+Instruction files sit at the front of every context window before the agent reads a single file. Discoverable content placed there competes with task context for limited space. It also creates a second source of truth that drifts from the codebase over time. An agent given a stale directory tree may read paths that no longer exist or skip new modules. A controlled evaluation found that human-authored context files raise inference cost by over 20% when they include structural overviews, with no gain in task success. Agents given high-level structural context explore the codebase more broadly, not more precisely ([Gloaguen et al., "Evaluating AGENTS.md," 2026](https://arxiv.org/abs/2602.11988v2)).
 
 ## Anti-patterns
 

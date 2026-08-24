@@ -24,7 +24,7 @@ maturity: adopted
 
 Multi-agent delegation typically treats capability as a fixed per-agent property. Routing then marginalizes over task context — the assumption breaks when performance depends on features the profile discards: horizon length, dependency depth, file health, repo familiarity.
 
-Frontier models drop from 70%+ resolve on SWE-bench Verified to 23% on SWE-bench Pro ([Patel et al., 2025](https://arxiv.org/html/2509.16941v1)), which differs mainly in horizon and realism. A static "Opus-best-at-SWE" profile routes correctly on the first and badly on the second. Failure analysis of multi-agent LLM systems ([Cemri et al., 2025](https://arxiv.org/abs/2503.13657)) identifies agent-selection errors as a primary failure cluster — the symptom of profiles that average away the routing signal.
+Frontier models drop from 70%+ resolve on SWE-bench Verified to 23% on SWE-bench Pro ([Patel et al., 2025](https://arxiv.org/html/2509.16941v1)), which differs mainly in horizon and realism. A static "Opus-best-at-SWE" profile routes correctly on the first and badly on the second. Failure analysis of multi-agent LLM systems ([Cemri et al., 2025](https://arxiv.org/abs/2503.13657v3)) identifies agent-selection errors as a primary failure cluster — the symptom of profiles that average away the routing signal.
 
 ## The pattern
 

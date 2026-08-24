@@ -22,7 +22,7 @@ Related lesson: [What Makes a Tool Agent-Friendly](https://learn.agentpatterns.a
 
 ## From HCI to ACI
 
-Agent-Computer Interface (ACI) applies Human-Computer Interaction to the tools an LM agent uses: clear labels, constrained inputs, informative feedback, and error prevention by design. The [SWE-agent paper](https://arxiv.org/abs/2405.15793) (Yang et al., NeurIPS 2024) named the term. It showed that custom tool interfaces lifted SWE-bench pass@1 by 12.5% with no change to model weights.
+Agent-Computer Interface (ACI) applies Human-Computer Interaction to the tools an LM agent uses: clear labels, constrained inputs, informative feedback, and error prevention by design. The [SWE-agent paper](https://arxiv.org/abs/2405.15793v3) (Yang et al., NeurIPS 2024) named the term. It showed that custom tool interfaces lifted SWE-bench pass@1 by 12.5% with no change to model weights.
 
 Anthropic adopted the framing directly: "plan to invest just as much effort in creating good agent-computer interfaces (ACI)" as in HCI. ([Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents))
 

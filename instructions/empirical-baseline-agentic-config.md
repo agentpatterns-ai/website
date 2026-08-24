@@ -16,7 +16,7 @@ maturity: emerging
 
 ## The study
 
-[Galster et al. (arXiv:2602.14690)](https://arxiv.org/abs/2602.14690) analyzed 2,923 public GitHub repositories that use Claude Code, GitHub Copilot, Cursor, Gemini, and OpenAI Codex. The study names eight configuration mechanisms — context files, skills, subagents and agents, hooks, MCP servers, memory, permissions, and settings and model config — and measures how often each appears in practice.
+[Galster et al. (arXiv:2602.14690v5)](https://arxiv.org/abs/2602.14690v5) analyzed 2,853 public GitHub repositories that use Claude Code, GitHub Copilot, Cursor, Gemini, and OpenAI Codex. The study names eight configuration mechanisms — context files, skills, subagents and agents, hooks, MCP servers, memory, permissions, and settings and model config — and measures how often each appears in practice.
 
 ## What the data shows
 

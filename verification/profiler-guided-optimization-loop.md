@@ -19,7 +19,7 @@ maturity: emerging
 
 A profiler-guided optimization loop gives a coding agent two feedback channels: a summarized profile saying where time actually goes, and a behavior-preserving test gate deciding whether a candidate patch counts. PerfAgent layers both onto an off-the-shelf agent harness, along with a controller that intercepts the agent's stop signal and re-profiles. It raises expert-matching patches on GSO from 19.6% to 39.2% with GPT-5.1, and from 26% to 74% on SWE-fficiency-Lite against an OpenHands baseline ([Deng et al., 2026](https://arxiv.org/abs/2607.19653v1)).
 
-Optimization is harder for agents than issue resolution. Leading software-engineering agents clear under 5% of GSO's 102 optimization tasks across 10 codebases ([Shetty et al., 2025](https://arxiv.org/abs/2505.23671)), and a benchmark of 140 real performance pull requests reports a wide gap between model patches and expert ones ([SWE-Perf, 2025](https://arxiv.org/abs/2507.12415)).
+Optimization is harder for agents than issue resolution. Leading software-engineering agents clear under 5% of GSO's 102 optimization tasks across 10 codebases ([Shetty et al., 2025](https://arxiv.org/abs/2505.23671v3)), and a benchmark of 140 real performance pull requests reports a wide gap between model patches and expert ones ([SWE-Perf, 2025](https://arxiv.org/abs/2507.12415v2)).
 
 ## When this applies
 
@@ -76,7 +76,7 @@ Three parts carry the result: the agent reads a summary rather than raw profiler
 
 ## Key Takeaways
 
-- Optimization asks for more than a passing test suite, and agents are weak at it — leading agents clear under 5% of GSO's optimization tasks ([Shetty et al., 2025](https://arxiv.org/abs/2505.23671)).
+- Optimization asks for more than a passing test suite, and agents are weak at it — leading agents clear under 5% of GSO's optimization tasks ([Shetty et al., 2025](https://arxiv.org/abs/2505.23671v3)).
 - Ship the hotspot summary and the behavior gate together. Adding a test gate without profiler evidence scored below the plain loop on GSO, 24.5% against 33.3% ([Deng et al., 2026](https://arxiv.org/abs/2607.19653v1)).
 - Summarize the profile before the agent sees it, and keep the fastest correct patch across iterations rather than the last one submitted ([Deng et al., 2026](https://arxiv.org/abs/2607.19653)).
 - A behavior gate is what stops a timing objective from being gamed — 18 baseline instances cached results inside the timing loop ([Deng et al., 2026](https://arxiv.org/abs/2607.19653v1)).

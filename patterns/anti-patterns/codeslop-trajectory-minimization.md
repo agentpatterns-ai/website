@@ -24,7 +24,7 @@ CodeSlop is the gap between an agent's patch and the smallest behavior-preservin
 
 Iterative repair is a search. Between test-feedback requests an agent makes edit sequences, and failed hypotheses leave speculative and diagnostic changes behind. Once a solution passes, the agent has no incentive to remove them, so every edit — essential and abandoned alike — persists in the diff. The paper's motivating case: a Linux-kernel fix touched 21 lines where only 3 were required, leaving 18 search artifacts ([Mathai et al., 2026](https://arxiv.org/abs/2607.18161)).
 
-The residue concentrates in exploratory scaffolding, not core logic. On SWE-Bench-Verified, minimization removed 100% of scratch reproduction scripts and 100% of build and config changes, but only 20.4% of source edits ([Mathai et al., 2026](https://arxiv.org/abs/2607.18161v1)). Harmless in one patch, the drift compounds as agents own more of a codebase — independent benchmarking finds agent code 2.3x more verbose than human repositories and verbosity rising across 75.5% of long-horizon trajectories ([Orlanski et al., 2026](https://arxiv.org/abs/2603.24755)).
+The residue concentrates in exploratory scaffolding, not core logic. On SWE-Bench-Verified, minimization removed 100% of scratch reproduction scripts and 100% of build and config changes, but only 20.4% of source edits ([Mathai et al., 2026](https://arxiv.org/abs/2607.18161v1)). Harmless in one patch, the drift compounds as agents own more of a codebase — independent benchmarking finds agent code 2.3x more verbose than human repositories and verbosity rising across 75.5% of long-horizon trajectories ([Orlanski et al., 2026](https://arxiv.org/abs/2603.24755v2)).
 
 ## Minimize the trajectory — but only against a trustworthy oracle
 

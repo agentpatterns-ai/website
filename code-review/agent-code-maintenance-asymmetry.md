@@ -20,7 +20,7 @@ maturity: emerging
 
 ## The evidence
 
-An empirical study measured how AI-generated and human-authored files diverge after merge. It tracked 508 AI-generated files and 1,543 modifying commits across 100 GitHub repositories in the AIDev dataset ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)). Three asymmetries appear in a file's first six months.
+An empirical study measured how AI-generated and human-authored files diverge after merge. It tracked 508 AI-generated files and 1,543 modifying commits across 100 GitHub repositories in the AIDev dataset ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464v2)). Three asymmetries appear in a file's first six months.
 
 ### Frequency
 
@@ -43,17 +43,17 @@ For AI-generated files, feature additions lead. For human-authored files, bug fi
 
 ### Who maintains
 
-Humans perform 83.21% of maintenance commits on AI-generated files. On human-authored files the share is 92.98%. The agent that wrote the file rarely returns to maintain it ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)).
+Humans perform 83.21% of maintenance commits on AI-generated files. On human-authored files the share is 92.98%. The agent that wrote the file rarely returns to maintain it ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464v2)).
 
 ## Two readings of the same data
 
-The authors flag the ambiguity directly: lower modification rates "might suggest superior code quality, yet developers may avoid modifying AI-generated code due to difficulty in comprehending it" ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)).
+The authors flag the ambiguity directly: lower modification rates "may suggest that AI-generated code is stable enough to function without immediate corrective action", but the authors name the alternative in the same breath: "developers may avoid modifying AI-generated code due to difficulty in comprehending it" ([arXiv:2605.06464v2](https://arxiv.org/abs/2605.06464v2)).
 
-The second reading has separate support. A study of 302,600 AI-authored commits across 6,299 repositories found 22.7% of AI-introduced issues survive to the repository's latest version, with code smells accounting for 89.3% ([arXiv:2603.28592](https://arxiv.org/abs/2603.28592)). Lower commit volume is not the same as fewer defects.
+The second reading has separate support. A study of 302,600 AI-authored commits across 6,299 repositories found 22.7% of AI-introduced issues survive to the repository's latest version, with code smells accounting for 89.3% ([arXiv:2603.28592](https://arxiv.org/abs/2603.28592v2)). Lower commit volume is not the same as fewer defects.
 
 ## Why the mix shifts to features
 
-The Sawada et al. paper offers one reading: "generated files may lack sufficient coverage of requirements" — agents under-deliver on scope, leaving humans to add the missing capability after merge ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464)). This fits the wider pattern that agents skew simpler. Codex-assisted PRs change cyclomatic complexity 9.1% of the time, against 23.3% for human PRs ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003v1)).
+The Sawada et al. paper offers one reading: "generated files may lack sufficient coverage of requirements" — agents under-deliver on scope, leaving humans to add the missing capability after merge ([arXiv:2605.06464](https://arxiv.org/abs/2605.06464v2)). This fits the wider pattern that agents skew simpler. Codex-assisted PRs change cyclomatic complexity 9.1% of the time, against 23.3% for human PRs ([arXiv:2507.15003](https://arxiv.org/abs/2507.15003v1)).
 
 ## Practical implications
 

@@ -56,7 +56,7 @@ ReAct is the textbook example of a [CoALA decision-making loop](coala-decision-m
 
 ## Why it works
 
-The act-observe boundary forces each next thought to condition on a real observation rather than the model's own generated prior thought. Chain-of-thought compounds errors across steps because every step conditions on the previous generation. ReAct breaks the chain by re-grounding on tool output. On HotpotQA, the original paper reports ReAct's hallucination rate at 6%, against 56% for chain-of-thought with the same backbone model ([Yao et al., 2022, arXiv:2210.03629](https://arxiv.org/abs/2210.03629)). On ALFWorld and WebShop, one- or two-shot ReAct gives +34% and +10% absolute success over imitation- and RL-trained baselines on the same tasks ([Yao et al., 2022](https://arxiv.org/abs/2210.03629)).
+The act-observe boundary forces each next thought to condition on a real observation rather than the model's own generated prior thought. Chain-of-thought compounds errors across steps because every step conditions on the previous generation. ReAct breaks the chain by re-grounding on tool output. On HotpotQA, the original paper reports ReAct's hallucination rate at 6%, against 56% for chain-of-thought with the same backbone model ([Yao et al., 2022, arXiv:2210.03629](https://arxiv.org/abs/2210.03629v3)). On ALFWorld and WebShop, one- or two-shot ReAct gives +34% and +10% absolute success over imitation- and RL-trained baselines on the same tasks ([Yao et al., 2022](https://arxiv.org/abs/2210.03629v3)).
 
 The mechanism only pays back when the observation actually disambiguates the next thought. When every observation is predictable from prior state, the extra inference step costs without buying signal.
 
@@ -96,7 +96,7 @@ Linearly, because reasoning is "repeatedly recomputed after each observation" ([
 ## Key Takeaways
 
 - ReAct interleaves thought → act → observation; each step re-conditions on real evidence instead of the model's prior generation ([arXiv:2210.03629](https://arxiv.org/abs/2210.03629)).
-- The mechanism is environmental grounding: HotpotQA hallucination drops from 56% (CoT) to 6% (ReAct) on the same backbone model ([Yao et al., 2022](https://arxiv.org/abs/2210.03629)).
+- The mechanism is environmental grounding: HotpotQA hallucination drops from 56% (CoT) to 6% (ReAct) on the same backbone model ([Yao et al., 2022](https://arxiv.org/abs/2210.03629v3)).
 - ReAct is one CoALA instantiation that skips evaluate and select; plan-then-execute and Tree of Thoughts make those sub-stages explicit ([CoALA §4.3](https://arxiv.org/html/2309.02427v3)).
 - Bounded-call alternatives (PTR's 2-3 LM calls) beat ReAct on 16 of 24 configurations across 6 benchmarks when the task is predictable enough to plan upfront ([arXiv:2604.04131](https://arxiv.org/abs/2604.04131v1)).
 - Hallucinated tool names consumed 90.8% of retries in one production benchmark — deterministic tool routing prevents the failure ([Towards Data Science](https://towardsdatascience.com/your-react-agent-is-wasting-90-of-its-retries-heres-how-to-stop-it/)).

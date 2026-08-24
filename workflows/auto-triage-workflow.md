@@ -67,7 +67,7 @@ The investigation context that survives this stage feeds propose-fix without re-
 
 The agent opens a PR when "the fix is clear", or tags the right owner when not ([Cognition: Introducing Auto-Triage](https://cognition.ai/blog/auto-triage)). The decision is binary — no confidence score is surfaced, no per-incident-class threshold documented. Missing any one precondition turns this branch into autonomous PR generation against alerts the agent does not understand.
 
-Adjacent failure-rate data bounds the expected error rate: 15.3% of unmerged AI fix PRs were closed for "incorrect or incomplete fixes" and 18.1% for introducing new test failures ([arXiv:2602.00164](https://arxiv.org/html/2602.00164)). The [agent circuit breaker](../patterns/agent-design/agent-circuit-breaker.md) pattern provides the per-fingerprint retry budget that prevents stacked low-confidence fixes against the same alert.
+Adjacent failure-rate data bounds the expected error rate: 15.3% of unmerged AI fix PRs were closed for "incorrect or incomplete fixes" and 18.1% for introducing new test failures ([arXiv:2602.00164](https://arxiv.org/html/2602.00164v1)). The [agent circuit breaker](../patterns/agent-design/agent-circuit-breaker.md) pattern provides the per-fingerprint retry budget that prevents stacked low-confidence fixes against the same alert.
 
 ## Triggers and constraints
 
@@ -99,7 +99,7 @@ The four-stage shape is tool-agnostic — Cognition's Devin Auto-Triage and Sent
 
 ## Why it works
 
-Auto-triage produces faster recovery than serial human triage because it collapses four cognitive context-switches into one agent context. An agent that holds investigation context across the chain dispatches sub-investigations in parallel and re-uses telemetry already fetched in the correlate stage — the four-stage decomposition demonstrates 23% faster recovery than frontier-LLM baselines specifically because in-context refinement avoids redundant retrieval ([arXiv:2602.13156](https://arxiv.org/abs/2602.13156)). Cognition's mechanism is the same effect: known-issue alerts short-circuit to known patches, letting stage 2 hand stage 4 a pre-validated patch context that would otherwise cost a full investigation cycle ([Cognition: Introducing Auto-Triage](https://cognition.ai/blog/auto-triage)).
+Auto-triage produces faster recovery than serial human triage because it collapses four cognitive context-switches into one agent context. An agent that holds investigation context across the chain dispatches sub-investigations in parallel and re-uses telemetry already fetched in the correlate stage — the four-stage decomposition demonstrates 23% faster recovery than frontier-LLM baselines specifically because in-context refinement avoids redundant retrieval ([arXiv:2602.13156](https://arxiv.org/abs/2602.13156v2)). Cognition's mechanism is the same effect: known-issue alerts short-circuit to known patches, letting stage 2 hand stage 4 a pre-validated patch context that would otherwise cost a full investigation cycle ([Cognition: Introducing Auto-Triage](https://cognition.ai/blog/auto-triage)).
 
 ## When this backfires
 

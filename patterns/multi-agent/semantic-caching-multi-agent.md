@@ -19,7 +19,7 @@ maturity: established
 
 Multi-agent systems multiply token costs. Each request can trigger several LLM calls across orchestrators, sub-agents, and reviewers. Exact-match caching helps little, because users rarely phrase the same query the same way. Semantic caching closes the gap: it detects equivalence rather than requiring exact repetition.
 
-MeanCache (2025) finds that repeated queries make up about 31% of production LLM queries. That is the practical ceiling for semantic cache hit rates. ([arXiv:2403.02694](https://arxiv.org/abs/2403.02694))
+MeanCache (2025) finds that repeated queries make up about 31% of production LLM queries. That is the practical ceiling for semantic cache hit rates. ([arXiv:2403.02694](https://arxiv.org/abs/2403.02694v4))
 
 ## Semantic caching
 
@@ -84,7 +84,7 @@ Anthropic's prompt caching cuts cost by 90% on cache hits for the static prefix 
 
 ## Applicability
 
-The return is highest in systems with repetitive query patterns: analytics agents, code-generation pipelines, and customer support bots. Query mixes that vary widely see hit rates closer to the 31% baseline. ([arXiv:2403.02694](https://arxiv.org/abs/2403.02694))
+The return is highest in systems with repetitive query patterns: analytics agents, code-generation pipelines, and customer support bots. Query mixes that vary widely see hit rates closer to the 31% baseline. ([arXiv:2403.02694](https://arxiv.org/abs/2403.02694v4))
 
 ## When this backfires
 

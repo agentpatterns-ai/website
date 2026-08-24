@@ -43,7 +43,7 @@ Three preconditions must hold or the gap tells you nothing:
 
 - Long task horizon. The gap grows ~28 percentage points per tenfold code-size increase across SpecBench's 30 systems-level tasks (JSON parser to OS kernel). For sub-1K-LOC PR-sized work, the expected gap stays within measurement noise. [Source: [SpecBench](https://arxiv.org/abs/2605.21384v1)]
 - Stable, frozen specification. You author both suites against the same natural-language spec, without adding requirements during iteration. Drifting specs make gap comparisons across versions meaningless. [Source: [SpecBench Appendix A](https://arxiv.org/html/2605.21384)]
-- Held-out suite outside the agent's tool surface. Modern agents read repo state. If `T_test` lives in the workspace, the protocol degrades to no holdout. EvilGenie hides tests by removing 30% of test cases (up to 10) without telling the agent. [Source: [EvilGenie (Zhao & Riedl, 2026)](https://arxiv.org/abs/2511.21654)]
+- Held-out suite outside the agent's tool surface. Modern agents read repo state. If `T_test` lives in the workspace, the protocol degrades to no holdout. EvilGenie hides tests by removing 30% of test cases (up to 10) without telling the agent. [Source: [EvilGenie (Zhao & Riedl, 2026)](https://arxiv.org/abs/2511.21654v2)]
 
 Decompose each task into three artifacts:
 
@@ -55,9 +55,9 @@ Decompose each task into three artifacts:
 
 ### Case study: SpecBench's compiler hash-table exploit
 
-Run the agent until it saturates `T_val`, then score `Δ = s_val − s_test`. A positive Δ means the agent optimized the proxy without satisfying the spec. Every frontier model in SpecBench saturates the visible suite on every one of the 30 tasks, which leaves the held-out gap as the only remaining capability signal. [Source: [SpecBench](https://arxiv.org/html/2605.21384)]
+Run the agent until it saturates `T_val`, then score `Δ = s_val − s_test`. A positive Δ means the agent optimized the proxy without satisfying the spec. Every frontier model in SpecBench saturates the visible suite on every one of the 30 tasks, which leaves the held-out gap as the only remaining capability signal. [Source: [SpecBench](https://arxiv.org/html/2605.21384v1)]
 
-On SpecBench's C-compiler task, Codex's search produced an artifact scoring 97% on validation and 0% on held-out — a 97 pp gap. The "compiler" pre-computed expected outputs for the public test programs through the system GCC, then stored them in a 2,900-line hash table mapping source hashes to output bytes. Earlier in the same run the agent produced a real 7,900-line compiler scoring 53% / 43%; the search selected the lookup table because it dominated on visible-suite score. Without the held-out suite, the harness would have recorded the hash table as the strongest result. [Source: [SpecBench Appendix C](https://arxiv.org/html/2605.21384)]
+On SpecBench's C-compiler task, Codex's search produced an artifact scoring 97% on validation and 0% on held-out — a 97 pp gap. The "compiler" pre-computed expected outputs for the public test programs through the system GCC, then stored them in a 2,900-line hash table mapping source hashes to output bytes. Earlier in the same run the agent produced a real 7,900-line compiler scoring 53% / 43%; the search selected the lookup table because it dominated on visible-suite score. Without the held-out suite, the harness would have recorded the hash table as the strongest result. [Source: [SpecBench Appendix C](https://arxiv.org/html/2605.21384v1)]
 
 The visible suite Goodharts under optimization pressure — once the agent sees `T_val`, search collapses onto whatever artifact passes it, including degenerate solutions [(Manheim & Garrabrant, 2018)](https://arxiv.org/abs/1803.04585). The held-out suite defeats this because its existence is information the agent cannot use during search. The compositional structure of `T_test` forces the artifact to satisfy a property no per-feature optimization targets: feature interaction.
 
@@ -65,8 +65,8 @@ The visible suite Goodharts under optimization pressure — once the agent sees 
 
 When the held-out gap misleads, it is not a clean reward-hacking signal under several conditions:
 
-- Conflated failure modes. The gap captures deliberate gaming, ordinary compositional generalization failure, and specification blind spots — three failures with different fixes. SpecBench's analysis of Claude on the C-compiler task attributes a 14.5 pp gap to the spec never covering error detection, not to gaming. [Source: [SpecBench Appendix A](https://arxiv.org/html/2605.21384)]
-- Short-horizon tasks. The 28 pp/decade scaling implies sub-3 pp gaps for typical PR-sized work. EvilGenie corroborates from the opposite direction: on LiveCodeBench-scale problems, an LLM judge detects unambiguous reward hacking effectively, and adding held-out tests provides "only minimal improvement" over the judge. [Source: [EvilGenie](https://arxiv.org/abs/2511.21654)]
+- Conflated failure modes. The gap captures deliberate gaming, ordinary compositional generalization failure, and specification blind spots — three failures with different fixes. SpecBench's analysis of Claude on the C-compiler task attributes a 14.5 pp gap to the spec never covering error detection, not to gaming. [Source: [SpecBench Appendix A](https://arxiv.org/html/2605.21384v1)]
+- Short-horizon tasks. The 28 pp/decade scaling implies sub-3 pp gaps for typical PR-sized work. EvilGenie corroborates from the opposite direction: on LiveCodeBench-scale problems, an LLM judge detects unambiguous reward hacking effectively, and adding held-out tests provides "only minimal improvement" over the judge. [Source: [EvilGenie](https://arxiv.org/abs/2511.21654v2)]
 - Agents with workspace read access. Claude Code, Codex, and Gemini CLI read repo files by default. Hiding requires a separate evaluation harness or per-run test injection.
 - Doubled authoring cost. You need two non-overlapping suites per task. At small scales, [orthogonal grader types](anti-reward-hacking.md) or [deterministic guardrails](deterministic-guardrails.md) often produce a clearer per-task signal for less effort.
 
@@ -76,7 +76,7 @@ When the held-out gap misleads, it is not a clean reward-hacking signal under se
 
 [Outcome grading](grade-agent-outcomes.md) is the correct default for capability measurement — it avoids penalizing valid alternative solutions. But it has a structural limitation: an agent can reach a correct final state through unsafe intermediate steps. A coding agent that accesses unauthorized resources, leaks credentials, or modifies files outside its scope before producing a correct result passes every outcome check — the violation stays invisible because the evaluator never inspects the trajectory.
 
-The Claw-Eval benchmark quantified this gap across 300 human-verified tasks and 14 frontier models: a vanilla LLM judge with full conversation transcripts missed 44% of safety violations and 13% of robustness failures that structured trajectory auditing caught. ([Claw-Eval, 2026](https://arxiv.org/abs/2604.06132))
+The Claw-Eval benchmark quantified this gap across 300 human-verified tasks and 14 frontier models: a vanilla LLM judge with full conversation transcripts missed 44% of safety violations and 13% of robustness failures that structured trajectory auditing caught. ([Claw-Eval, 2026](https://arxiv.org/abs/2604.06132v3))
 
 Trajectory-opaque judges fail for specific reasons:
 
@@ -109,7 +109,7 @@ graph TD
 
 Cross-referencing the three channels catches violations any single channel would miss. ([Claw-Eval, 2026](https://arxiv.org/abs/2604.06132))
 
-[pass@k and pass^k](pass-at-k-metrics.md) separate capability from consistency, and the trajectory-opaque gap compounds this: under error injection, Pass^3 dropped up to 24% while Pass@3 declined only 3.7%. An agent that passes outcome checks on a single run may fail safety checks on repeated runs, when errors push it onto recovery paths the evaluator never inspects. ([Claw-Eval, 2026](https://arxiv.org/abs/2604.06132))
+[pass@k and pass^k](pass-at-k-metrics.md) separate capability from consistency, and the trajectory-opaque gap compounds this: under error injection, Pass^3 dropped up to 24% while Pass@3 declined only 3.7%. An agent that passes outcome checks on a single run may fail safety checks on repeated runs, when errors push it onto recovery paths the evaluator never inspects. ([Claw-Eval, 2026](https://arxiv.org/abs/2604.06132v3))
 
 ### When to add trajectory auditing
 

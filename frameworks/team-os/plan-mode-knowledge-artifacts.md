@@ -23,7 +23,7 @@ Plan mode's value on knowledge artifacts is higher than on code. Prose errors do
 Two mechanisms compound for prose:
 
 - Action bias. LLMs bias toward taking an action each round ([Maini, Goldstone & Tiganj, 2026, arXiv:2604.02578](https://arxiv.org/abs/2604.02578)). Plan mode removes that bias: "Claude's bias for action is removed" once plan mode is engaged ([Gupta × Stulberg](https://www.news.aakashg.com/p/claude-code-team-os)).
-- Reflection before production. Structured self-reflection significantly improves LLM problem-solving performance (p < 0.001) ([Renze & Guven, 2024, arXiv:2405.06682](https://arxiv.org/abs/2405.06682)). Plan mode forces a reflect-then-act decomposition before output.
+- Reflection before production. Structured self-reflection significantly improves LLM problem-solving performance (p < 0.001) ([Renze & Guven, 2024, arXiv:2405.06682](https://arxiv.org/abs/2405.06682v3)). Plan mode forces a reflect-then-act decomposition before output.
 
 For code, a failing test catches misread intent. For a PRD, the reader is the only gate, and the reader is fatigued.
 

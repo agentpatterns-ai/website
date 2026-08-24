@@ -24,7 +24,7 @@ GEPA pays off when three preconditions hold:
 
 1. Rich textual feedback exists — stage-level pass/fail, parse errors, constraint violations, unit-test output, profiler notes. The DSPy maintainers state outright that "a well-designed metric is central to GEPA's sample efficiency and learning signal richness" ([dspy.GEPA overview](https://dspy.ai/api/optimizers/GEPA/overview/)). A scalar-only correctness metric starves the reflection step.
 2. Evaluation instances are heterogeneous — different examples expose different failure modes. Pareto selection only adds value when the best candidate on instance A is not the best on instance B. Homogeneous evals collapse Pareto selection into plain scalar-greedy — the same regime where the [MIPROv2 Bayesian search](dspy-programmatic-prompt-optimization.md) is the better-fit optimizer — and leave only bookkeeping overhead.
-3. Rollout budget is the binding constraint — the paper reports up to 35× fewer rollouts than GRPO, and the reference implementation cites 100–500 evaluations versus 5,000–25,000+ for RL ([Agrawal et al., 2025](https://arxiv.org/abs/2507.19457); [gepa-ai/gepa](https://github.com/gepa-ai/gepa)).
+3. Rollout budget is the binding constraint — the paper reports up to 35× fewer rollouts than GRPO, and the reference implementation cites 100–500 evaluations versus 5,000–25,000+ for RL ([Agrawal et al., 2025](https://arxiv.org/abs/2507.19457v2); [gepa-ai/gepa](https://github.com/gepa-ai/gepa)).
 
 Without all three, reach for a different optimizer: [MIPROv2](https://arxiv.org/abs/2406.11695) for joint Bayesian search on stable pipelines, [GRPO](https://arxiv.org/abs/2402.03300) when dense scalar rewards dominate.
 
@@ -51,7 +51,7 @@ The optimizer captures full execution traces — inputs, outputs, errors, tool c
 
 ### 2. Textual feedback as optimization signal
 
-GEPA consumes any textual feedback, not just scalar rewards — eval logs, failed parses, constraint violations, error strings, sub-module-specific notes. In DSPy, the metric returns `dspy.Prediction(score=..., feedback=...)` where `feedback` is free-form text passed to the Reflector ([dspy.GEPA overview](https://dspy.ai/api/optimizers/GEPA/overview/)). The paper's framing: "the interpretable nature of language often provides a much richer learning medium for LLMs, compared to policy gradients derived from sparse, scalar rewards" ([Agrawal et al., 2025](https://arxiv.org/abs/2507.19457)).
+GEPA consumes any textual feedback, not just scalar rewards — eval logs, failed parses, constraint violations, error strings, sub-module-specific notes. In DSPy, the metric returns `dspy.Prediction(score=..., feedback=...)` where `feedback` is free-form text passed to the Reflector ([dspy.GEPA overview](https://dspy.ai/api/optimizers/GEPA/overview/)). The paper's framing: "the interpretable nature of language often provides a much richer learning medium for LLMs, compared to policy gradients derived from sparse, scalar rewards" ([Agrawal et al., 2025](https://arxiv.org/abs/2507.19457v2)).
 
 ### 3. Pareto-per-instance selection
 
@@ -82,7 +82,7 @@ All three are different algorithmic families. The DSPy API exposes a `candidate_
 
 - Uninformative feedback — tasks where the only signal is binary correctness. Without stage-level error text, reflection becomes noisy and the rollout advantage over MIPROv2 shrinks.
 - Homogeneous evaluation sets — when every instance ranks candidates the same way, the Pareto frontier degenerates to a single point.
-- Long-running adaptation — GEPA rewrites whole instruction blocks each round. For continuously adapting systems, [ACE](https://arxiv.org/abs/2510.04618) reports an 82.3% reduction in adaptation latency versus GEPA by replacing full rewrites with structured delta entries ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)); see [Evolving Playbooks](../../context-engineering/evolving-playbooks.md).
+- Long-running adaptation — GEPA rewrites whole instruction blocks each round. For continuously adapting systems, [ACE](https://arxiv.org/abs/2510.04618v3) reports an 82.3% reduction in adaptation latency versus GEPA by replacing full rewrites with structured delta entries ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618v3)); see [Evolving Playbooks](../../context-engineering/evolving-playbooks.md).
 - Small reflection-LM budget — each round calls the Reflector. Tight per-round token budgets with cheap rollouts may favor MIPROv2 end-to-end.
 
 ## Example: GEPA-friendly feedback metric

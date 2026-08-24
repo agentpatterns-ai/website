@@ -36,13 +36,13 @@ Practitioners reach for the intrinsic layer first because temperature is the mos
 
 ## Why it works
 
-A single trajectory cannot distinguish the layers because each step's intrinsic noise becomes the next step's deterministic state. The paper's mechanism: "sampling introduces stochasticity at each token; when agents iterate, this compounds across steps because state encodes all prior decisions" [Source: [Hydari & Iqbal](https://arxiv.org/abs/2606.08998)]. Holding one layer constant while varying the others gives the attribution:
+A single trajectory cannot distinguish the layers because each step's intrinsic noise becomes the next step's deterministic state. The paper's mechanism: sampling introduces stochasticity at each token, and when agents iterate it compounds across steps because the state encodes every prior decision [Source: [Hydari & Iqbal](https://arxiv.org/abs/2606.08998)]. Holding one layer constant while varying the others gives the attribution:
 
 - Isolate intrinsic: fix the prompt and tool sequence, then vary the seed (or run many times at fixed temperature). Remaining variance is sampling-driven.
 - Isolate extrinsic: fix the prompt, run at temperature 0, and vary the server-side batch size (or compare inference backends). Remaining variance is infrastructure-driven.
 - Isolate orchestration state: fix the prompt and use greedy decoding, then perturb the tool outputs or context order between runs. Remaining variance is state-driven.
 
-The independent agentic-eval study found single-run pass@1 standard deviations exceeding 1.5 percentage points even at temperature 0, "because trajectories diverge early, often within the first few percent of tokens, and these small differences cascade into different solution strategies" [Source: [arXiv:2602.07150](https://arxiv.org/abs/2602.07150)]. That cascade is the orchestration-state layer; the early divergence is the intrinsic layer that seeds it.
+The independent agentic-eval study found single-run pass@1 standard deviations exceeding 1.5 percentage points even at temperature 0, "because trajectories diverge early, often within the first few percent of tokens, and these small differences cascade into different solution strategies" [Source: [arXiv:2602.07150](https://arxiv.org/abs/2602.07150v3)]. That cascade is the orchestration-state layer; the early divergence is the intrinsic layer that seeds it.
 
 ## When this backfires
 

@@ -62,7 +62,7 @@ The RAD era ended for reasons that still apply:
 - Scaling limits — custom Access databases broke at hundreds of concurrent users, and custom agent-built software may hit similar walls
 - Knowledge concentration — when the one developer who built the system leaves, the system becomes unmaintainable
 
-AI agents partially address the maintenance argument (agents can maintain what agents built), but security, compliance, and organizational knowledge remain open challenges. One important caveat: peer-reviewed research shows that iterative AI code generation increases critical vulnerabilities by 37.6% after just five refinement cycles — even security-focused prompts introduced new flaws ([Security Degradation in Iterative AI Code Generation, IEEE-ISTAS 2025](https://arxiv.org/abs/2506.11022)). Using agents to maintain agent-built code without human review between iterations may deepen the security gap rather than close it.
+AI agents partially address the maintenance argument (agents can maintain what agents built), but security, compliance, and organizational knowledge remain open challenges. One important caveat: peer-reviewed research shows that iterative AI code generation increases critical vulnerabilities by 37.6% after just five refinement cycles — even security-focused prompts introduced new flaws ([Security Degradation in Iterative AI Code Generation, IEEE-ISTAS 2025](https://arxiv.org/abs/2506.11022v2)). Using agents to maintain agent-built code without human review between iterations may deepen the security gap rather than close it.
 
 ## Example
 

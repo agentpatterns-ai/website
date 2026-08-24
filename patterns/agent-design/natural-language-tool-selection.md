@@ -24,19 +24,19 @@ Natural Language Tools (NLT) present the available tools as a prose list and ask
 
 The gain is not uniform — it tracks model capability, so lead with the condition. Choose NLT when your agent runs on models that are weak at structured output:
 
-- Small or open-weight models. Mistral 7B gained 39.4pp; it and Qwen3-VL "collapsed completely with structured outputs: 0% accuracy," mostly from failing to emit valid JSON ([Somma et al., 2026](https://arxiv.org/html/2607.03953)).
-- Reasoning models. DeepSeek-R1 gained 24.0pp (55.0% versus 31.0%) ([Somma et al., 2026](https://arxiv.org/html/2607.03953)).
-- Models without strong native tool calling. Claude Sonnet 4 gained 43.1pp (61.9% versus 18.8%) in this single-turn selection setting ([Somma et al., 2026](https://arxiv.org/html/2607.03953)).
+- Small or open-weight models. Mistral 7B gained 39.4pp; it and Qwen3-VL "collapsed completely with structured outputs: 0% accuracy," mostly from failing to emit valid JSON ([Somma et al., 2026](https://arxiv.org/html/2607.03953v1)).
+- Reasoning models. DeepSeek-R1 gained 24.0pp (55.0% versus 31.0%) ([Somma et al., 2026](https://arxiv.org/html/2607.03953v1)).
+- Models without strong native tool calling. Claude Sonnet 4 gained 43.1pp (61.9% versus 18.8%) in this single-turn selection setting ([Somma et al., 2026](https://arxiv.org/html/2607.03953v1)).
 
 NLT also cut token usage 25.2% and won on 11 of the 14 models tested ([Somma et al., 2026](https://arxiv.org/abs/2607.03953v1)).
 
 ## Why it works
 
-Forcing schema compliance draws on a different part of the model's learned distribution than the task itself. The authors attribute the gap to cognitive-resource competition: JSON generation patterns are "primarily acquired from coding corpora, whereas tasks such as customer service or mental wellness originate from different domains," so producing a schema engages deliberate format compliance "at the expense of System 1's intuitive task understanding," diverting capacity from the actual decision ([Somma et al., 2026](https://arxiv.org/html/2607.03953)). The effect is corroborated independently: strict JSON-mode generation degrades accuracy on reasoning-heavy tasks compared with free-form generation converted to structure afterward ([Tam et al., 2024](https://arxiv.org/abs/2408.02442)), and structured-output constraints measurably suppress correct tool calling in open-weight models ([Constraint Tax, 2026](https://arxiv.org/abs/2606.25605v1)).
+Forcing schema compliance draws on a different part of the model's learned distribution than the task itself. The authors attribute the gap to cognitive-resource competition: JSON generation patterns are "primarily acquired from coding corpora, whereas tasks such as customer service or mental wellness originate from different domains," so producing a schema engages deliberate format compliance "at the expense of System 1's intuitive task understanding," diverting capacity from the actual decision ([Somma et al., 2026](https://arxiv.org/html/2607.03953v1)). The effect is corroborated independently: strict JSON-mode generation degrades accuracy on reasoning-heavy tasks compared with free-form generation converted to structure afterward ([Tam et al., 2024](https://arxiv.org/abs/2408.02442)), and structured-output constraints measurably suppress correct tool calling in open-weight models ([Constraint Tax, 2026](https://arxiv.org/abs/2606.25605v1)).
 
 ## When this backfires
 
-- Frontier models optimized for structured calling. GPT-5 gained only 1.6pp (both near 81%) and Gemini 2.5 Pro regressed 33.7pp under NLT (82.1% structured versus 48.3%) — the prose-parsing overhead buys nothing and can hurt ([Somma et al., 2026](https://arxiv.org/html/2607.03953)). The study notes reinforcement-learning optimization is narrowing the NLT advantage on these models over time.
+- Frontier models optimized for structured calling. GPT-5 gained only 1.6pp (both near 81%) and Gemini 2.5 Pro regressed 33.7pp under NLT (82.1% structured versus 48.3%) — the prose-parsing overhead buys nothing and can hurt ([Somma et al., 2026](https://arxiv.org/html/2607.03953v1)). The study notes reinforcement-learning optimization is narrowing the NLT advantage on these models over time.
 - Parameterized or multi-turn tool calls. The study validates only single-turn, parameterless tool selection across two domains. A `YES`/`NO` regex parse does not extract typed arguments the way a JSON schema does, so NLT does not obviously carry to tools that take structured inputs ([Somma et al., 2026](https://arxiv.org/html/2607.03953)).
 - Systems needing a guaranteed machine-readable contract. Replacing schema-validated JSON with regex-parsed prose adds a parse-failure surface that structured calling eliminates by construction. See the trade-off in [Structured Output Constraints](../../verification/structured-output-constraints.md).
 

@@ -21,9 +21,9 @@ maturity: emerging
 
 ## The benchmark and the gap
 
-[ComplexMCP](https://arxiv.org/abs/2605.10787) tests LLM agents on 47 hand-curated tasks across seven stateful application sandboxes: operating system, social, e-commerce, weather, flight, stock trading, and news. The benchmark exposes 150+ interdependent tools and another 150+ stateless APIs through the Model Context Protocol. It then perturbs the environment with seed-driven state initialization and injected API failures.
+[ComplexMCP](https://arxiv.org/abs/2605.10787v2) tests LLM agents on 47 hand-curated tasks across seven stateful application sandboxes: operating system, social, e-commerce, weather, flight, stock trading, and news. The benchmark exposes 150+ interdependent tools and another 150+ stateless APIs through the Model Context Protocol. It then perturbs the environment with seed-driven state initialization and injected API failures.
 
-The result is a persistent ceiling. Across 16 models tested, the top score is Gemini-3-Flash at 55.31%, followed by GLM-4.7 (42.55%) and Claude-Opus-4 (41.84%). Three human evaluators averaged 93.61%. No model crossed 60%. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+The result is a persistent ceiling. Across 16 models tested, the top score is Gemini-3-Flash at 55.31%, followed by GLM-4.7 (42.55%) and Claude-Opus-4 (41.84%). Three human evaluators averaged 93.61%. No model crossed 60%. [Source: [arxiv.org/abs/2605.10787v2](https://arxiv.org/abs/2605.10787v2)]
 
 Trajectory analysis breaks the gap into three reproducible failure modes.
 
@@ -42,7 +42,7 @@ graph TD
 
 ### 1. Tool retrieval saturation
 
-As the action space grows, the agent cannot reliably pick the next correct tool from its partial plan. Vector-retrieval RAG does not match full-context tool listing, even with iterative RAG, the best variant tested. The paper notes: "without a comprehensive view of the full API set, the LLM may fail to invoke essential intermediate steps that are not explicitly surfaced by the retrieval mechanism." [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+As the action space grows, the agent cannot reliably pick the next correct tool from its partial plan. Vector-retrieval RAG does not match full-context tool listing, even with iterative RAG, the best variant tested. The paper notes: "without a comprehensive view of the full API set, the LLM may fail to invoke essential intermediate steps that are not explicitly surfaced by the retrieval mechanism." [Source: [arxiv.org/abs/2605.10787v2](https://arxiv.org/abs/2605.10787v2)]
 
 This is the same precision-drop-at-scale mechanism documented in the [Skill Retrieval Realism Gap](eval-blind-spots.md) for skills. Retrieval that looks adequate at 30 items degrades sharply at 300.
 
@@ -52,7 +52,7 @@ Agents commit to actions without [checking environment state first](deterministi
 
 ### 3. Strategic defeatism
 
-When an action fails — a transient API error, a missing precondition — agents tend to abandon the task rather than try to recover. GPT-5 reaches only 19.14%, attributed to "polite surrender" after the first error. Models trained heavily on refusal and hedging are more prone to it. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+When an action fails — a transient API error, a missing precondition — agents tend to abandon the task rather than try to recover. GPT-5 reaches only 19.14%, attributed to "polite surrender" after the first error. Models trained heavily on refusal and hedging are more prone to it. [Source: [arxiv.org/abs/2605.10787v2](https://arxiv.org/abs/2605.10787v2)]
 
 ## When these bottlenecks bite
 
@@ -78,7 +78,7 @@ Bottleneck 3 (defeatism): the harness, not the prompt, owns recovery. Pre-comple
 
 Reproducible but bounded:
 
-- 47 hand-curated tasks with 3 human evaluators, 1 attempt each — narrow diversity and wide confidence intervals on the human baseline. [Source: [arxiv.org/abs/2605.10787](https://arxiv.org/abs/2605.10787)]
+- 47 hand-curated tasks with 3 human evaluators, 1 attempt each — narrow diversity and wide confidence intervals on the human baseline. [Source: [arxiv.org/abs/2605.10787v2](https://arxiv.org/abs/2605.10787v2)]
 - Synthetic sandboxes omit the concurrency, fraud detection, and rate limits that real systems enforce.
 - Full-context retrieval as an upper bound is not a viable production posture; the RAG versus full-context gap measures a regime no one ships.
 

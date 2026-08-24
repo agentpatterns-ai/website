@@ -59,7 +59,7 @@ Splitting ASR into a retrieval effect and a content effect shows where defense s
 
 For three of four architectures the failure is at generation, not retrieval. So defensive prompting at generation, not retriever hardening, is the more effective intervention.
 
-Agentic RAG's loop is a specific liability. The agent echoes the framing in 63% of incorrect responses, so the reasoning amplifies adversarial framing rather than filtering it. Independent ReAct work points the same way ([Benchmarking Poisoning Attacks against RAG, 2025](https://arxiv.org/pdf/2505.18543)).
+Agentic RAG's loop is a specific liability. The agent echoes the framing in 63% of incorrect responses, so the reasoning amplifies adversarial framing rather than filtering it. Independent ReAct work points the same way ([Benchmarking Poisoning Attacks against RAG, 2025](https://arxiv.org/pdf/2505.18543v1)).
 
 ## The behavioral taxonomy
 

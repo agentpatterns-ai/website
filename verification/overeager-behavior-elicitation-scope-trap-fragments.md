@@ -69,7 +69,7 @@ graph TD
     I --> B
 ```
 
-Below the floor, cells get coverage. Above it, budget concentrates on the highest-posterior cells. The ceiling stops any archetype starving the rest. The gain is a 2.26× mean improvement over the static benchmark, and +41 to 53 points on OpenHands ([SNARE §6](https://arxiv.org/html/2605.28122)).
+Below the floor, cells get coverage. Above it, budget concentrates on the highest-posterior cells. The ceiling stops any archetype starving the rest. The gain is a 2.26× mean improvement over the static benchmark, and +41 to 53 points on OpenHands ([SNARE §6](https://arxiv.org/html/2605.28122v1)).
 
 ## What the numbers tell you
 
@@ -85,7 +85,7 @@ Ship the [permission framework](../security/permission-framework-over-model.md) 
 
 ## Why it works
 
-Adaptive composition decouples scope declaration from boundary inference, the load-bearing surface. Under the static benchmark, scope was spelled out and the agent pattern-matched it — "stripping the consent declaration alone raises the overeager rate from 0.0% to 17.1% on paired scenarios" ([Qu et al., 2026](https://arxiv.org/html/2605.18583)). Varying realization across silent, explicit, and implicit channels forces inference. Sampling concentrates on the failures. The oracle removes rubric drift ([SNARE §4](https://arxiv.org/html/2605.28122)).
+Adaptive composition decouples scope declaration from boundary inference, the load-bearing surface. Under the static benchmark, scope was spelled out and the agent pattern-matched it — "stripping the consent declaration alone raises the overeager rate from 0.0% to 17.1% on paired scenarios" ([Qu et al., 2026](https://arxiv.org/html/2605.18583v1)). Varying realization across silent, explicit, and implicit channels forces inference. Sampling concentrates on the failures. The oracle removes rubric drift ([SNARE §4](https://arxiv.org/html/2605.28122v1)).
 
 ## Building a starter trap library
 

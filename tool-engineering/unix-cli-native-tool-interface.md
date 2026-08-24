@@ -85,7 +85,7 @@ Typed tools win for strongly-typed interactions, high-security environments that
 
 ## The spectrum in practice
 
-The [CodeAct paper (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030) shows executable code actions outperform JSON function calls by up to 20% success rate across 17 LLMs — though CodeAct uses Python as the action space, not shell. Manus itself integrates dozens of tools in production — not a single tool.
+The [CodeAct paper (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030v4) shows executable code actions outperform JSON function calls by up to 20% success rate across 17 LLMs — though CodeAct uses Python as the action space, not shell. Manus itself integrates dozens of tools in production — not a single tool.
 
 Five well-designed tools plus shell access captures most of the benefit without unrestricted execution risk.
 
@@ -136,7 +136,7 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 ## Sources
 
 - Reddit post by u/MorroHsu (r/LocalLLaMA) -- single run(command) tool vs function catalogs
-- [CodeAct: Executable Code Actions Elicit Better LLM Agents (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030) -- code actions outperform JSON/text by 20%
+- [CodeAct: Executable Code Actions Elicit Better LLM Agents (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030v4) -- code actions outperform JSON/text by 20%
 - [CLI-Anything (HKU)](https://github.com/HKUDS/CLI-Anything) -- agent-native CLI generation pipeline
 - [Manus architecture analysis](https://gist.github.com/renschni/4fbc70b31bad8dd57f3370239dccd58f) -- dozens of tools + CodeAct in practice
 

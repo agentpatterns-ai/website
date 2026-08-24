@@ -22,7 +22,7 @@ maturity: emerging
 
 ## When this applies
 
-The technique targets a specific deployment constraint: an 8B-class model running on a single 24 GB GPU, where a larger model does not fit and additional training is not an option ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465)). On unconstrained hardware, running a larger model once — or routing to heterogeneous models per role — is typically a stronger baseline. The result is a competitiveness claim for constrained deployments, not a general recommendation to stack roles on one model.
+The technique targets a specific deployment constraint: an 8B-class model running on a single 24 GB GPU, where a larger model does not fit and additional training is not an option ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465v2)). On unconstrained hardware, running a larger model once — or routing to heterogeneous models per role — is typically a stronger baseline. The result is a competitiveness claim for constrained deployments, not a general recommendation to stack roles on one model.
 
 ## The three roles
 
@@ -47,7 +47,7 @@ The corrector receives code without conversation history. This isolation is the 
 
 ## Reported results
 
-On AppWorld ([Trivedi et al., 2024](https://arxiv.org/abs/2407.18901v1)) with Qwen3-8B on a 24 GB GPU ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465)):
+On AppWorld ([Trivedi et al., 2024](https://arxiv.org/abs/2407.18901v1)) with Qwen3-8B on a 24 GB GPU ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465v2)):
 
 | Configuration | Baseline | Scaffolded |
 |---|---|---|
@@ -55,13 +55,13 @@ On AppWorld ([Trivedi et al., 2024](https://arxiv.org/abs/2407.18901v1)) with Qw
 | AWQ 4-bit (32K context) | 3.0% | 5.9% |
 | Difficulty-1 tasks (FP16) | 15.8% | 26.3% |
 
-The scaffolded 8B surpassed DeepSeek-Coder 33B Instruct (7.1% on FP16) from the original AppWorld evaluation ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465)). Absolute completion remains far below GPT-4o's ~49% on AppWorld normal tasks ([Trivedi et al., 2024](https://arxiv.org/abs/2407.18901v1)) — the result is a small-model competitiveness gain, not a production threshold.
+The scaffolded 8B surpassed DeepSeek-Coder 33B Instruct (7.1% on FP16) from the original AppWorld evaluation ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465v2)). Absolute completion remains far below GPT-4o's ~49% on AppWorld normal tasks ([Trivedi et al., 2024](https://arxiv.org/abs/2407.18901v1)) — the result is a small-model competitiveness gain, not a production threshold.
 
 ## Why it works
 
-Each role presents a different action space to the same weights — different instructions, inputs, and output formats. The paper frames this as "a scaffolded policy over a frozen base model, three invocations of the same weights with different conditioning," drawing explicit connections to test-time compute scaling and action-space shaping in reinforcement learning ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465)).
+Each role presents a different action space to the same weights — different instructions, inputs, and output formats. The paper frames this as "a scaffolded policy over a frozen base model, three invocations of the same weights with different conditioning," drawing explicit connections to test-time compute scaling and action-space shaping in reinforcement learning ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465v2)).
 
-Diversity here comes from conditioning, not from heterogeneous weights. That distinguishes the technique from ensemble approaches and from dual-model [critic agents](critic-agent-plan-review.md) that use a different model to avoid the [self-correction blind spot](https://arxiv.org/abs/2507.02778) measured at 64.5% across 14 LLMs.
+Diversity here comes from conditioning, not from heterogeneous weights. That distinguishes the technique from ensemble approaches and from dual-model [critic agents](critic-agent-plan-review.md) that use a different model to avoid the [self-correction blind spot](https://arxiv.org/abs/2507.02778v3) measured at 64.5% across 14 LLMs.
 
 ## Limits and counter-evidence
 

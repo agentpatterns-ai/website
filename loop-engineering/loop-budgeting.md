@@ -58,7 +58,7 @@ Loops that hit the cap silently usually emit a final tool-less summary call, whi
 
 ## Why it works
 
-Planning errors propagate while execution errors do not — a wrong plan in turn 1 contaminates every later turn, but a wrong tool call in turn 5 is local. Different phases make structurally different cognitive demands ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344)). Concentrating compute where ambiguity is highest beats spreading it uniformly when the phases are separable; the LangChain benchmark gap (66.5% sandwich vs 63.6% uniform high) is the empirical floor under that mechanism. The gap is small, which is why front-loading is a default only when planning and verification are clean phases — otherwise routing overhead eats the gain.
+Planning errors propagate while execution errors do not — a wrong plan in turn 1 contaminates every later turn, but a wrong tool call in turn 5 is local. Different phases make structurally different cognitive demands ([Bui, 2026 §2.2.5](https://arxiv.org/abs/2603.05344v3)). Concentrating compute where ambiguity is highest beats spreading it uniformly when the phases are separable; the LangChain benchmark gap (66.5% sandwich vs 63.6% uniform high) is the empirical floor under that mechanism. The gap is small, which is why front-loading is a default only when planning and verification are clean phases — otherwise routing overhead eats the gain.
 
 ## When this backfires
 

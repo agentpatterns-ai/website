@@ -21,7 +21,7 @@ Follow-up refinement requests in a multi-turn coding dialogue — "make it more 
 
 ## The silent-regression mechanism
 
-A model optimizes each refinement against the stated intent of the user's turn, not against the invariant that the original test suite encodes. The two come apart sharply. CodeChat-Eval evaluated 8 LLMs across 4 families on 542 tasks (164 HumanEval + 378 MBPP) over 10-turn dialogues (one initial generation plus nine refinement turns), grading every turn against EvalPlus extended test cases. The headline measurement: the Phi coefficient between instruction adherence and functional correctness is 0.089, a negligible correlation ([Guo et al., 2026](https://arxiv.org/abs/2606.25747)).
+A model optimizes each refinement against the stated intent of the user's turn, not against the invariant that the original test suite encodes. The two come apart sharply. CodeChat-Eval evaluated 8 LLMs across 4 families on 542 tasks (164 HumanEval + 378 MBPP) over 10-turn dialogues (one initial generation plus nine refinement turns), grading every turn against EvalPlus extended test cases. The headline measurement: the Phi coefficient between instruction adherence and functional correctness is 0.089, a negligible correlation ([Guo et al., 2026](https://arxiv.org/abs/2606.25747v2)).
 
 That single number is load-bearing. A developer reading the diff can verify the model did what was asked. They cannot, at face value, tell whether behavior was preserved — the Phi 0.089 says the two are statistically independent for this task. Re-executing the test suite is the only externalized invariant that catches the gap.
 
@@ -72,10 +72,10 @@ Preserving behavior across a refinement is not in the model's loss function for 
 
 The gate is not free, and the suite has to be load-bearing for the diff to mean anything.
 
-- The test suite is weak. SWE-bench analysis shows 7.8% of test-passing patches fail developer-written tests, and 29.6% diverge from the ground-truth patch even when tests pass ([Aleithan et al., 2025](https://arxiv.org/abs/2503.15223)). A thin suite re-run after every turn produces a stream of false-greens. Strengthen the suite first, or treat it as a filter rather than a guarantee.
+- The test suite is weak. SWE-bench analysis shows 7.8% of test-passing patches fail developer-written tests, and 29.6% diverge from the ground-truth patch even when tests pass ([Aleithan et al., 2025](https://arxiv.org/abs/2503.15223v2)). A thin suite re-run after every turn produces a stream of false-greens. Strengthen the suite first, or treat it as a filter rather than a guarantee.
 - Tests are flaky. A flaky baseline corrupts the differential signal. False positives train the developer to ignore real regressions, and the gate becomes anti-signal.
 - Per-turn CI cost exceeds the catch rate. For multi-minute integration or browser suites, the per-turn cost can exceed the regression-catch value in short two- or three-turn sessions. Gate at end-of-session for short interactive sessions; reserve per-turn execution for autonomous loops and longer dialogues where the Phi-0.089 gap compounds.
-- The session is purely cosmetic or removal-only. The 7 – 13% cosmetic rate is non-trivial but lower than the 21% semantic rate; the marginal benefit narrows in style-only sessions and pure deletions ([Guo et al., 2026](https://arxiv.org/abs/2606.25747)).
+- The session is purely cosmetic or removal-only. The 7 – 13% cosmetic rate is non-trivial but lower than the 21% semantic rate; the marginal benefit narrows in style-only sessions and pure deletions ([Guo et al., 2026](https://arxiv.org/abs/2606.25747v2)).
 - The harness already trusts the model. Pairing the gate with a "trust the agent's PR summary" workflow rebuilds the loop the gate is meant to break — the conjugate anti-pattern is [trust without verify](../patterns/anti-patterns/trust-without-verify.md).
 
 ## Example

@@ -70,7 +70,7 @@ Optimizing for reviewer engagement assumes reviewers are available and their exp
 - design disagreement without recourse: the dominant failure mode (10 of 30 failed PRs) is architectural divergence. If an agent cannot propose an alternative design, no review loop resolves the disagreement.
 - reviewer abandonment after queueing: a long time-to-first-review helps only when reviewers eventually engage. If they abandon a queued PR, wait time becomes noise. Large diffs compound this risk, which [agent-driven PR slicing](agent-driven-pr-slicing.md) is meant to reduce.
 - CRA-only review: the pattern assumes human reviewers with discretionary merge authority. Repositories reviewed only by automated agents show much lower merge rates (45% against 68%).
-- high comment volume as a correction signal: each extra reviewer comment decreases agentic-PR merge odds by 2.8% (against +2.7% for human PRs), read as required corrections rather than productive alignment ([arXiv:2601.18749](https://arxiv.org/abs/2601.18749v1)). Related work reports 1 to 10% ghosting after feedback ([arXiv:2601.00753](https://arxiv.org/abs/2601.00753)).
+- high comment volume as a correction signal: each extra reviewer comment decreases agentic-PR merge odds by 2.8% (against +2.7% for human PRs), read as required corrections rather than productive alignment ([arXiv:2601.18749](https://arxiv.org/abs/2601.18749v1)). Related work reports 1 to 10% ghosting after feedback ([arXiv:2601.00753](https://arxiv.org/abs/2601.00753v2)).
 
 ## Example
 

@@ -29,7 +29,7 @@ Prompt fragility: if the prompt is underspecified, scaling N scales errors. The 
 
 Redundant success: if the first three runs converge on a high-confidence winner, the remaining seven produce near-duplicate outputs at full cost. Early stopping gives the same result for 30% of the spend.
 
-The adaptive controller replaces fixed N with a signal-driven control loop. See [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/adaptive-sandbox-fanout-controller.md) for the full pattern specification. [Reinforce-Ada (Xiong et al., 2025)](https://arxiv.org/abs/2510.04996) formalizes the same intuition: it allocates inference budget per prompt and reports up to a 2× convergence speedup over fixed-N at equal total compute.
+The adaptive controller replaces fixed N with a signal-driven control loop. See [nibzard/awesome-agentic-patterns](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/adaptive-sandbox-fanout-controller.md) for the full pattern specification. [Reinforce-Ada (Xiong et al., 2025)](https://arxiv.org/abs/2510.04996v3) formalizes the same intuition: it allocates inference budget per prompt and reports up to a 2× convergence speedup over fixed-N at equal total compute.
 
 ## The four signals
 

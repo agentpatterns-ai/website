@@ -96,7 +96,7 @@ OAuth-only: the token covers `repo`. The push is allowed and logged as legitimat
 
 TBAC with hybrid inspection:
 
-1. Deterministic axis. The agent holds a JIT credential scoped to `read:issues` on `acme/widget` for 15 minutes. The push call presents no credential authorizing `write:contents`, so the PEP refuses it before the call leaves the proxy ([2505.19301](https://arxiv.org/abs/2505.19301)).
+1. Deterministic axis. The agent holds a JIT credential scoped to `read:issues` on `acme/widget` for 15 minutes. The push call presents no credential authorizing `write:contents`, so the PEP refuses it before the call leaves the proxy ([2505.19301](https://arxiv.org/abs/2505.19301v2)).
 2. Semantic axis. Even with a broader session token, the extracted task — "list and summarize open issues" — does not cover `git push`. The check flags the call as out-of-task. With [confirmation gating](human-in-the-loop-confirmation-gates.md) the user sees the requested action and the conversation excerpt that justified it.
 
 The deterministic axis stops the attack. The semantic axis makes it visible when the deterministic envelope was sized too generously.

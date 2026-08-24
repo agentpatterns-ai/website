@@ -25,7 +25,7 @@ Repository perturbation wraps an issue-resolution benchmark (typically SWE-Bench
 
 ## Why end-to-end scores conflate two capabilities
 
-Issue resolution on SWE-Bench-style benchmarks collapses two capabilities into one number: identifying which files and relations matter, and producing a correct patch. A high score can be reached by shortcutting the first — via training-set memorization, issue-description leakage, or pattern-matching on repository-specific surface tokens. A manual review of the original SWE-Bench found 32.67% of model-marked "successful" cases had the answer in the issue description or comments ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289)). Perturbation invalidates these shortcuts while keeping the reference patch correct, so the residual score reflects context reasoning alone.
+Issue resolution on SWE-Bench-style benchmarks collapses two capabilities into one number: identifying which files and relations matter, and producing a correct patch. A high score can be reached by shortcutting the first — via training-set memorization, issue-description leakage, or pattern-matching on repository-specific surface tokens. A manual review of the original SWE-Bench found 32.67% of model-marked "successful" cases had the answer in the issue description or comments ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289v1)). Perturbation invalidates these shortcuts while keeping the reference patch correct, so the residual score reflects context reasoning alone.
 
 ## The two-stage diagnostic
 
@@ -45,7 +45,7 @@ Average agent performance falls from 66.8% on the source task to 25.3% on RepoMi
 
 The causal mechanism is shortcut invalidation. A model that scored 66.8% by combining genuine reasoning with surface-token memorization cannot repeat it against a repository whose tokens are renamed or restructured while the call graph holds. The reference patch still applies; only the lookup pattern breaks. The accuracy delta is therefore a lower bound on the original score's shortcut share.
 
-Independent work probes the same gap with different instrumentation. TRAJEVAL decomposes agent trajectories into search, read, and edit stages and reports that outcome-only metrics cannot reveal where agents fail ([TRAJEVAL, 2026](https://arxiv.org/pdf/2603.24631)). SWE-EVO shows GPT-5 with OpenHands scoring 21% on long-horizon evolution tasks versus 65% on SWE-Bench Verified — the same shortfall reached without perturbation, by removing the shortcuts the benchmark allowed ([SWE-EVO, 2026](https://arxiv.org/html/2512.18470v1)).
+Independent work probes the same gap with different instrumentation. TRAJEVAL decomposes agent trajectories into search, read, and edit stages and reports that outcome-only metrics cannot reveal where agents fail ([TRAJEVAL, 2026](https://arxiv.org/pdf/2603.24631v2)). SWE-EVO shows GPT-5 with OpenHands scoring 21% on long-horizon evolution tasks versus 65% on SWE-Bench Verified — the same shortfall reached without perturbation, by removing the shortcuts the benchmark allowed ([SWE-EVO, 2026](https://arxiv.org/html/2512.18470v1)).
 
 ## When this backfires
 
@@ -57,7 +57,7 @@ Perturbation diagnostics over-predict failure or measure the wrong thing under s
 - Production agents pinned to a known repository set: when the agent only sees one or two well-mapped codebases, structural exploration amortizes across runs and perturbation over-predicts failure.
 - Intermediate gold-context labels already exist: ContextBench-style annotated contexts answer the same question more directly ([ContextBench, 2026](https://arxiv.org/pdf/2602.05892)).
 
-Other sources of inflated scores also confound it. Test-suite inadequacy lets 31.08% of accepted patches pass because the tests cannot reject incorrect or incomplete solutions ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289)) — a gap that remains even after perturbation removes shortcut leakage.
+Other sources of inflated scores also confound it. Test-suite inadequacy lets 31.08% of accepted patches pass because the tests cannot reject incorrect or incomplete solutions ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289v1)) — a gap that remains even after perturbation removes shortcut leakage.
 
 A second confound cuts the other way. Meaning-preserving perturbations degrade LLM accuracy even on tasks with no multi-file context to reason about — answer-flip rates of 28.8–45.1% are reported on semantically equivalent arithmetic variants ([Fragile Reasoning, 2026](https://arxiv.org/abs/2604.01639v1)). Part of RepoMirage's drop is therefore generic surface-form brittleness rather than invalidated shortcuts, inflating the attributed share. The lower-bound framing holds only if you net out brittleness with a no-context perturbation baseline; without one, the drop conflates two effects.
 

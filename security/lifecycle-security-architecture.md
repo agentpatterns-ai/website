@@ -110,7 +110,7 @@ On Agent-SafetyBench with DeepSeek-V3.2 across three configurations (ReAct, Mult
 
 - ReAct: 22.4 pp UBR reduction, 22.8 pp ASR reduction versus baseline
 - Aggregate: about 38% UBR and 42% ASR reduction, task completion within 1 to 2 pp of baselines
-- Residual: memory injection retains 55 to 56% UBR; composite attacks carry highest residual risk ([§4.3](https://arxiv.org/abs/2604.13630))
+- Residual: memory injection retains 55 to 56% UBR; composite attacks carry highest residual risk ([§4.3](https://arxiv.org/abs/2604.13630v2))
 
 ## When this pattern fails
 

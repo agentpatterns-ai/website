@@ -64,7 +64,7 @@ Voting adds little value for creative synthesis, open-ended generation, or real-
 
 ## Choosing N
 
-The original self-consistency paper ([Wang et al. 2023](https://arxiv.org/abs/2203.11171)) showed +17.9% accuracy on GSM8K by majority-voting over sampled reasoning paths. But more is not always better.
+The original self-consistency paper ([Wang et al. 2023](https://arxiv.org/abs/2203.11171v4)) showed +17.9% accuracy on GSM8K by majority-voting over sampled reasoning paths. But more is not always better.
 
 | N | Effect |
 |---|--------|
@@ -83,7 +83,7 @@ Simple majority voting treats all runs equally, but misses easy accuracy gains.
 |----------|-----------|-----------|
 | Majority vote | Most common answer wins | Simple; ignores model quality differences |
 | Weighted vote | Runs scored by model capability or historical accuracy | Better accuracy; requires calibration data |
-| Confidence-weighted | Weight by model's reported confidence score | ~46% compute reduction at equivalent accuracy ([Taubenfeld et al. 2025](https://arxiv.org/abs/2502.06233)) |
+| Confidence-weighted | Weight by model's reported confidence score | ~46% compute reduction at equivalent accuracy ([Taubenfeld et al. 2025](https://arxiv.org/abs/2502.06233v2)) |
 | Unanimous | All runs must agree; else escalate | High precision, low recall — good for safety-critical |
 | Semantic similarity | Cluster answers by meaning, pick densest cluster | Handles paraphrased equivalents |
 
@@ -139,7 +139,7 @@ The three models have independent failure modes: a vulnerability one model misse
 - Voting trades compute for confidence — same task, multiple runs, aggregated verdict
 - Multi-model diversity beats same-model repetition for genuine independence
 - 3-5 runs covers most use cases; beyond that, returns diminish or invert
-- Confidence-weighted aggregation cuts compute by ~46% versus naive majority voting ([Taubenfeld et al. 2025](https://arxiv.org/abs/2502.06233))
+- Confidence-weighted aggregation cuts compute by ~46% versus naive majority voting ([Taubenfeld et al. 2025](https://arxiv.org/abs/2502.06233v2))
 - Reserve voting for discrete, verifiable tasks (classification, security, compliance) — not open-ended generation
 - Distinct from fan-out synthesis (which merges complementary strengths) and committee review (which applies specialized lenses)
 

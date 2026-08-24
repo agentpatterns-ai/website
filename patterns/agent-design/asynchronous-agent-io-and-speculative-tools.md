@@ -47,7 +47,7 @@ Two consequences:
 
 Once tool dispatch is decoupled from the model turn, the next move is to dispatch tools before the model authorizes them — speculative execution at the LLM-tool boundary. Three current approaches:
 
-- PASTE, pattern-aware speculative tool execution ([Sui et al., arXiv:2603.18897](https://arxiv.org/abs/2603.18897)). It exploits stable control flow and predictable parameter passing. It reports a 48.5% reduction in task completion time and 1.8× tool throughput.
+- PASTE, pattern-aware speculative tool execution ([Sui et al., arXiv:2603.18897v3](https://arxiv.org/abs/2603.18897v3)). It exploits stable control flow and predictable parameter passing. It reports a 43.5% reduction in average task completion time and 1.8× lower observed tool latency.
 - Speculative Actions ([Ye et al., arXiv:2510.04371](https://arxiv.org/html/2510.04371v1)). A fast Speculator proposes k candidate actions, and a slow Actor validates them. Losslessness comes from semantic guards (state-transition equivalence), safety envelopes (only idempotent, reversible, or sandboxed effects allowed), and rollback paths. It reports up to 55% next-action accuracy.
 - Engine-resident speculation ([Nichols et al., arXiv:2512.15834](https://arxiv.org/abs/2512.15834)). It keeps speculative sequences resident in the vLLM engine and proposes a "tool cache" provider API. It reports hundreds of extra tokens per second of throughput.
 

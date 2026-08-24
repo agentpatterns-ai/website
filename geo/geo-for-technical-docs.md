@@ -23,7 +23,7 @@ Technical documentation needs the same GEO principles as any content, but you ap
 
 ## Why content format determines GEO strategy
 
-GEO techniques are not uniform across content types. The [arxiv GEO paper (KDD 2024)](https://arxiv.org/abs/2311.09735) found that quotation addition, statistics, and citing sources each produced 30–40% visibility gains. But the mechanism matters. A tutorial page gains most from HowTo schema and sequential answer-first steps. A pattern page gains from TechArticle schema and quotable assertions. Applying the wrong technique to the wrong format produces neutral or negative results.
+GEO techniques are not uniform across content types. The [arxiv GEO paper (KDD 2024)](https://arxiv.org/abs/2311.09735v3) found that quotation addition, statistics, and citing sources each produced 30–40% visibility gains. But the mechanism matters. A tutorial page gains most from HowTo schema and sequential answer-first steps. A pattern page gains from TechArticle schema and quotable assertions. Applying the wrong technique to the wrong format produces neutral or negative results.
 
 The formats this site produces map to three schema types:
 
@@ -177,7 +177,7 @@ GEO techniques developed for general web content do not transfer uniformly to al
 
 **Why does the same GEO technique produce different results across content formats?**
 
-Because the arxiv GEO paper (KDD 2024) measured gains for quotation addition, statistics, and citing sources at 30–40% overall, but that average hides format-specific mechanics. Tutorials gain most from HowTo schema and sequential steps. Pattern pages gain from TechArticle schema and quotable assertions. Anti-pattern or reference pages gain from FAQPage Q&A structure. Applying the wrong technique to the wrong format produces neutral or negative results ([arxiv.org/abs/2311.09735](https://arxiv.org/abs/2311.09735)).
+Because the arxiv GEO paper (KDD 2024) measured gains for quotation addition, statistics, and citing sources at 30–40% overall, but that average hides format-specific mechanics. Tutorials gain most from HowTo schema and sequential steps. Pattern pages gain from TechArticle schema and quotable assertions. Anti-pattern or reference pages gain from FAQPage Q&A structure. Applying the wrong technique to the wrong format produces neutral or negative results ([arxiv.org/abs/2311.09735v3](https://arxiv.org/abs/2311.09735v3)).
 
 **When does HowTo schema hurt a tutorial page instead of helping?**
 
@@ -189,7 +189,7 @@ No. The GEO paper's statistics gains were measured on general web content ([arxi
 
 ## Sources
 
-- [GEO: Generative Engine Optimization (arxiv.org/abs/2311.09735)](https://arxiv.org/abs/2311.09735) — KDD 2024; 9 techniques benchmarked; quotation addition +41%, statistics +30–40%, keyword stuffing counterproductive
+- [GEO: Generative Engine Optimization (arxiv.org/abs/2311.09735v3)](https://arxiv.org/abs/2311.09735v3) — KDD 2024; 9 techniques benchmarked; quotation addition +41%, statistics +30–40%, keyword stuffing counterproductive
 - [GitBook GEO Guide](https://gitbook.com/docs/guides/seo-and-llm-optimization/geo-guide) — section length, heading style, review checklist for documentation sites
 - [Schema Markup for GEO/AEO (hashmeta.ai)](https://www.hashmeta.ai/en/blog/schema-markup-for-geo-aeo-implementing-faqpage-howto-and-article-schema-types) — FAQPage, HowTo, TechArticle implementation guidance
 - [FAQ Schema and AI Search (frase.io)](https://www.frase.io/blog/faq-schema-ai-search-geo-aeo) — FAQPage as priority schema for AI citation probability

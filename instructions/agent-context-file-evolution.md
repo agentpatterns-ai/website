@@ -18,7 +18,7 @@ maturity: adopted
 
 > Agent Context Files grow monotonically; pair every add-on-drift update with a compact pass that deletes or consolidates.
 
-Agent Context Files (ACFs) — `CLAUDE.md`, `AGENTS.md`, `.github/copilot-instructions.md` — are not write-once documentation. The first large-scale empirical study of 2,303 ACFs from 1,925 repositories found that 67.4% of Claude Code files are modified in multiple commits, in short bursts at median intervals of 24.1h (Claude Code), 22.0h (Codex), and 70.7h (Copilot) ([Chatlatanagulchai et al., 2025](https://arxiv.org/abs/2511.12884)). Median deletions are under 15 words per commit. Those numbers imply one maintenance discipline: update triggers tied to code-evolution events, paired with an explicit pruning pass.
+Agent Context Files (ACFs) — `CLAUDE.md`, `AGENTS.md`, `.github/copilot-instructions.md` — are not write-once documentation. The first large-scale empirical study of 2,303 ACFs from 1,925 repositories found that 67.4% of Claude Code files are modified in multiple commits, in short bursts at median intervals of 24.1h (Claude Code), 22.0h (Codex), and 70.7h (Copilot) ([Chatlatanagulchai et al., 2025](https://arxiv.org/abs/2511.12884v2)). Median deletions are under 15 words per commit. Those numbers imply one maintenance discipline: update triggers tied to code-evolution events, paired with an explicit pruning pass.
 
 ## When this applies
 
@@ -119,7 +119,7 @@ The discipline is not free, and several conditions invert its sign:
 
 ## Key Takeaways
 
-- Empirical evidence: 67.4% of Claude Code ACFs are multi-commit artifacts edited in ~24-hour bursts and grow monotonically ([Chatlatanagulchai et al., 2025](https://arxiv.org/abs/2511.12884)). They are configuration code, not documentation.
+- Empirical evidence: 67.4% of Claude Code ACFs are multi-commit artifacts edited in ~24-hour bursts and grow monotonically ([Chatlatanagulchai et al., 2025](https://arxiv.org/abs/2511.12884v2)). They are configuration code, not documentation.
 - The maintenance discipline has two loops: add-on-drift (triggered by code-evolution PRs touching build/test/architecture) and compact-on-add (every addition pairs with a deletion or consolidation).
 - Without the compact loop, monotonic growth breaches the [Instruction Compliance Ceiling](instruction-compliance-ceiling.md) and each new rule reduces, not increases, agent compliance.
 - Apply only when the ACF is human-written, load-bearing, and the codebase evolves faster than the file tracks; prototypes, auto-generated files, and pinned-model deployments do not benefit.

@@ -86,3 +86,4 @@ Non-mutation and deep-merge are the two the stated suite cannot reach, because n
 - [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](../patterns/anti-patterns/code-first-test-oracle-bias.md) — a sibling shared-source failure, where the tests inherit the implementation rather than the prompt.
 - [Assumption Propagation](../patterns/anti-patterns/assumption-propagation.md) — the behavior underneath the number: one committed reading that stays internally consistent until checked.
 - [Verification Capacity as the Agent Quality Ceiling](verification-capacity-quality-ceiling.md) — budgets how much checking you can run; this page argues one specific check is worth the budget.
+- [Unstated-Contract Bugs: Sort Tickets by Information Gap](unstated-contract-bug-triage.md) — the same blindness one step further out, where the constraint sits in user behavior rather than in a prompt you wrote.

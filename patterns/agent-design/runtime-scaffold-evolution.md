@@ -23,7 +23,7 @@ maturity: emerging
 
 A capable LLM already knows how to write code and reason about tooling. The missing piece is permission and prompting: you explicitly ask the agent to treat tool creation as a first-class action alongside tool use.
 
-Live-SWE-agent demonstrated this by starting with bash-only access and autonomously evolving its toolkit — achieving 77.4% on SWE-bench Verified and 45.8% on SWE-Bench Pro without offline training or pre-built tool libraries ([Xia et al., 2025](https://arxiv.org/abs/2511.13646); [live-swe-agent leaderboard](https://live-swe-agent.github.io/); [reference implementation](https://github.com/OpenAutoCoder/live-swe-agent)).
+Live-SWE-agent demonstrated this by starting with bash-only access and autonomously evolving its toolkit — achieving 77.4% on SWE-bench Verified and 45.8% on SWE-Bench Pro without offline training or pre-built tool libraries ([Xia et al., 2025](https://arxiv.org/abs/2511.13646v3); [live-swe-agent leaderboard](https://live-swe-agent.github.io/); [reference implementation](https://github.com/OpenAutoCoder/live-swe-agent)).
 
 ## How it works
 
@@ -72,7 +72,7 @@ This is not a universal technique. It requires frontier-class models:
 | Mid-tier | Modest improvement | Creates tools but sometimes over-engineers them |
 | Small | Performance degrades | Gets stuck in tool-creation loops, never solves the actual problem |
 
-In ablation experiments, the pattern yielded +22.6% improvement with Claude 4.5 Sonnet and −68.2% degradation with GPT-5-Nano. Weaker models lack the meta-reasoning to judge when tool creation is worthwhile, turning the reflection prompt into a distraction trap ([Xia et al., 2025](https://arxiv.org/abs/2511.13646)).
+In ablation experiments, the pattern yielded +22.6% improvement with Claude 4.5 Sonnet and −68.2% degradation with GPT-5-Nano. Weaker models lack the meta-reasoning to judge when tool creation is worthwhile, turning the reflection prompt into a distraction trap ([Xia et al., 2025](https://arxiv.org/abs/2511.13646v3)).
 
 ## Runtime versus offline evolution
 

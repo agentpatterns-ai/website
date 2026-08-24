@@ -44,7 +44,7 @@ graph LR
     end
 ```
 
-The [Bui (2026) paper on OpenDev](https://arxiv.org/abs/2603.05344) describes this as "modular prompt composition": core identity and policies form the stable prefix; conversation history occupies the dynamic suffix. [Manus reports](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus) that KV-cache hit rate is "the single most important metric for a production-stage AI agent," noting a 10x price differential on Claude Sonnet.
+The [Bui (2026) paper on OpenDev](https://arxiv.org/abs/2603.05344v3) describes this as "modular prompt composition": core identity and policies form the stable prefix; conversation history occupies the dynamic suffix. [Manus reports](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus) that KV-cache hit rate is "the single most important metric for a production-stage AI agent," noting a 10x price differential on Claude Sonnet.
 
 ## Three rules that break caching
 
@@ -97,7 +97,7 @@ Claude Code's SDK `query()` method contained a bug (fixed in [v2.1.72](https://g
 Prefix-first discipline loses to the alternative in three conditions:
 
 - Memory-augmented agents with shifting context. In systems like MemGPT, archival documents and recalled conversations move across turns. Prefix caching misses the reuse because the same content sits at a different offset; block-based caching recovers more. [Source: [MemGPT: Where Prefix Caching Fails](https://medium.com/@tensormesh/memgpt-where-prefix-caching-fails-and-non-prefix-caching-succeeds-c6f3351bcc69)]
-- Mostly-dynamic prompts. If the prefix stabilizes for only a few turns, you pay the 25 to 100% write premium repeatedly without enough reads to amortize it. An uncached flow is cheaper. [Source: [Don't Break the Cache (arxiv 2601.06007)](https://arxiv.org/abs/2601.06007)]
+- Mostly-dynamic prompts. If the prefix stabilizes for only a few turns, you pay the 25 to 100% write premium repeatedly without enough reads to amortize it. An uncached flow is cheaper. [Source: [Don't Break the Cache (arxiv 2601.06007)](https://arxiv.org/abs/2601.06007v2)]
 - Memory-bound deployments. Each live prefix occupies KV memory on the server. In self-hosted or high-concurrency setups, reserved cache slots cap concurrent requests; letting caches expire can raise throughput. [Source: [Don't Break the Cache (arxiv 2601.06007)](https://arxiv.org/abs/2601.06007)]
 
 Audit the hit-rate trace first; if reads do not dominate writes after a few turns, the cost is not paid back.

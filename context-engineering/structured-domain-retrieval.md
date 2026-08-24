@@ -23,7 +23,7 @@ maturity: emerging
 
 Standard RAG retrieves context by embedding similarity — it vectorizes the query and returns the closest chunks. This fails for domain-specific code generation because API knowledge is hierarchical. A function belongs to a module, which belongs to a package, with specific parameter types and return conventions. Embedding distance does not encode these relationships. Graph-structured retrieval captures relational context better in knowledge-intensive tasks ([Edge et al., "From Local to Global", 2024](https://arxiv.org/abs/2404.16130)).
 
-DomAgent demonstrated this: a 7B model with flat retrieval scored ~40% pass@1 on truck software tasks; with structured KG retrieval plus case-based reasoning it scored 96.6% ([DomAgent, 2025](https://arxiv.org/abs/2603.21430)).
+DomAgent demonstrated this: a 7B model with flat retrieval scored ~40% pass@1 on truck software tasks; with structured KG retrieval plus case-based reasoning it scored 96.6% ([DomAgent, 2025](https://arxiv.org/abs/2603.21430v2)).
 
 ## Two retrieval paths
 
@@ -64,7 +64,7 @@ Working code examples show how API functions are actually used. The idea is cove
 2. Select cases one at a time, adding a case if it covers a new package or cluster.
 3. Stop at coverage thresholds, typically 90% of packages and 90% of clusters.
 
-DomAgent found that 30% of coverage-selected cases matched the performance of 80% randomly selected cases on the benchmarks tested (DS-1000 and a truck CAN signal domain). Generalizability to other domains has not been established ([DomAgent, 2025](https://arxiv.org/abs/2603.21430)).
+DomAgent found that 30% of coverage-selected cases matched the performance of 80% randomly selected cases on the benchmarks tested (DS-1000 and a truck CAN signal domain). Generalizability to other domains has not been established ([DomAgent, 2025](https://arxiv.org/abs/2603.21430v2)).
 
 ## Refinement gate
 

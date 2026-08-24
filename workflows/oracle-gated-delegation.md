@@ -76,7 +76,7 @@ The oracle checks a proxy. This failure looks most like success, because a parti
 
 The agent can reach the oracle. Grant the same session write access to the tests, the harness, or the fixture data, and the check measures compliance rather than correctness ([Qwen Team, 2026](https://arxiv.org/abs/2606.26300)). Models trained against verifiable rewards have been shown to "enumerate instance-level labels, producing outputs that pass verifiers without capturing the relational patterns required by the task," with shortcut prevalence rising alongside task complexity and inference-time compute ([Helff et al., 2026](https://arxiv.org/abs/2604.15149v1)) — the regime this cycle lives in.
 
-Capability is uneven in ways a non-expert cannot see. CryptanalysisBench, built alongside that work, reports 65% to 86% success on already-broken schemes but only 6 to 12 full-strength schemes broken across five frontier models ([Fluri et al., 2026](https://arxiv.org/abs/2607.18538)). Without domain knowledge you cannot tell a rediscovery from a new result, so the oracle has to carry that judgment instead of you.
+Capability is uneven in ways a non-expert cannot see. CryptanalysisBench, built alongside that work, reports 65% to 86% success on already-broken schemes but only 6 to 12 full-strength schemes broken across five frontier models ([Fluri et al., 2026](https://arxiv.org/abs/2607.18538v2)). Without domain knowledge you cannot tell a rediscovery from a new result, so the oracle has to carry that judgment instead of you.
 
 ## Example
 
