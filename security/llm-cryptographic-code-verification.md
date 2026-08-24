@@ -31,7 +31,7 @@ A controlled study of 240 Rust samples produced these results. The study covered
 
 Two failure modes recurred across all three models: nonce reuse and cryptographic API hallucination. The models invented function signatures and got argument orders wrong against the `aes-gcm` and `chacha20poly1305` crates ([Elsayed et al., 2026](https://arxiv.org/abs/2604.27001)).
 
-The pattern matches broader data on AI-generated code. Pearce et al. found that about 40% of Copilot completions across 89 CWE-Top-25 scenarios were vulnerable ([Pearce et al., 2021](https://arxiv.org/abs/2108.09293)). Cryptographic code sits at the worst end of that distribution.
+The pattern matches broader data on AI-generated code. Pearce et al. found that about 40% of Copilot completions across 89 CWE-Top-25 scenarios were vulnerable ([Pearce et al., 2021](https://arxiv.org/abs/2108.09293v3)). Cryptographic code sits at the worst end of that distribution.
 
 ## Why general SAST misses it
 
@@ -45,9 +45,9 @@ A crypto-specific analyzer encodes the actual invariants: nonce-counter monotoni
 
 ## Why chain-of-thought backfires
 
-The 5× CoT penalty inverts the usual prior that CoT improves reasoning ([Wei et al., 2022](https://arxiv.org/abs/2201.11903)). Two mechanisms fit the observation:
+The 5× CoT penalty inverts the usual prior that CoT improves reasoning ([Wei et al., 2022](https://arxiv.org/abs/2201.11903v6)). Two mechanisms fit the observation:
 
-- Reasoning amplifies hallucination. Each intermediate step is another decision point where the model can confidently assert a wrong crypto invariant and carry it into the code. Turpin et al. showed that CoT explanations rationalize wrong outputs rather than correct them, with accuracy dropping by up to 36% on biased prompts ([Turpin et al., 2023](https://arxiv.org/abs/2305.04388)).
+- Reasoning amplifies hallucination. Each intermediate step is another decision point where the model can confidently assert a wrong crypto invariant and carry it into the code. Turpin et al. showed that CoT explanations rationalize wrong outputs rather than correct them, with accuracy dropping by up to 36% on biased prompts ([Turpin et al., 2023](https://arxiv.org/abs/2305.04388v2)).
 - Structural anchors compound. Reasoning-to-code transitions are where CoT-induced fragility concentrates ([CoT Robustness in Code Generation](../verification/cot-robustness-code-generation.md)). Crypto code has more such anchors per line than typical application code — algorithm choice, mode, KDF, nonce strategy, and encoding — so CoT has more chances to drift.
 
 For cryptographic generation, prefer zero-shot prompts that name the exact crate and high-level API over reasoning-style prompts.

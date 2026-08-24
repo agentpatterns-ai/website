@@ -65,7 +65,7 @@ Context-graph memory works on multi-hop queries because it encodes relationships
 Two independent results show the gain is regime-specific, not universal:
 
 - Vector RAG beats graph memory outright in distributed multi-agent deployments — an independent cloud-edge testbed running mem0 (vector), Graphiti (graph), cognee (hybrid), and RAG and full-context baselines against the LoCoMo benchmark splits them into two clusters: mem0 at 81.08%, RAG at 78.31%, and full-context at 77.16%, against Graphiti at 56.03% and cognee at 55.27%. The separation is significant under a Bonferroni-corrected Wilcoxon signed-rank test (p = 0.002), and the graph engine is also the second most expensive backend measured — $6.95 total cost of ownership against RAG's $0.65. Only RAG and mem0 land on the Pareto frontier ([Wolff & Bennati 2026](https://arxiv.org/abs/2601.07978v4)).
-- Graph-RAG underperforms vanilla RAG on many real-world tasks — a systematic study across the graph-RAG pipeline finds the architecture "frequently underperforms vanilla RAG on many real-world tasks" outside the multi-hop reasoning regime ([Xiang et al. 2025](https://arxiv.org/abs/2506.05690)).
+- Graph-RAG underperforms vanilla RAG on many real-world tasks — a systematic study across the graph-RAG pipeline finds the architecture "frequently underperforms vanilla RAG on many real-world tasks" outside the multi-hop reasoning regime ([Xiang et al. 2025](https://arxiv.org/abs/2506.05690v3)).
 
 Specific failure conditions:
 

@@ -31,7 +31,7 @@ Closed-weight vendor APIs that own the inference path document the combination a
 
 Grammar-based decoding compiles the JSON schema into a finite-state grammar. At each decoding step the server intersects the model's logits with the grammar's allowed-token set and zeroes the rest. Tool-calling formats begin with distinct opening tokens (`<tool_call>`, `{"tool_calls":`, vendor markers). If the response schema does not enumerate that branch as a valid first-token sequence, the mask sets those probabilities to zero — the constraint engine outranks the model's preferences by construction ([arxiv:2606.25605](https://arxiv.org/abs/2606.25605)).
 
-The paper names the artifact Constraint Priority Inversion (CPI): schema satisfaction dominates action selection when constraints compete. Schema-compliance stays near 100% while tool-invocation rate collapses — the dashboard signals success and the agent stops acting. [Tam et al. (2024)](https://arxiv.org/abs/2408.02442) corroborate the broader pattern: stricter format constraints produce greater reasoning-accuracy degradation via the same mask mechanism.
+The paper names the artifact Constraint Priority Inversion (CPI): schema satisfaction dominates action selection when constraints compete. Schema-compliance stays near 100% while tool-invocation rate collapses — the dashboard signals success and the agent stops acting. [Tam et al. (2024)](https://arxiv.org/abs/2408.02442v3) corroborate the broader pattern: stricter format constraints produce greater reasoning-accuracy degradation via the same mask mechanism.
 
 ## When this does not apply
 

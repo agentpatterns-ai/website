@@ -38,7 +38,7 @@ The reference implementation is deterministic by construction. It counts turns w
 
 Retention decays as `Ret = e^(-t / S)` over turn-distance `t`. A recall updates the item's stability with `S_new = S_old × (1 + ln(1 + recall_count))` ([the decay-engine writeup](https://towardsdatascience.com/context-windows-forget-what-matters-i-used-a-140-year-old-psychology-paper-to-fix-ai-memory/)). Stability sits in the denominator of the exponent. Raising it flattens the entire remaining curve instead of moving the item to the front of a queue. A recency window can only answer "how long since this was touched", which discards the evidence that the agent has needed the item repeatedly. The logarithm keeps compounding sublinear, so stability grows without the resident set growing with it. The same run reports a token-footprint reduction of 0.911 against the baseline's 0.898.
 
-The same causal structure appears independently in [FadeMem](https://arxiv.org/abs/2601.18642), which strengthens memories on access under an Ebbinghaus-style decay. It reports 82.1% critical-fact retention against Mem0's 78.4% at 45% lower storage on LoCoMo, Multi-Session Chat, and LTI-Bench.
+The same causal structure appears independently in [FadeMem](https://arxiv.org/abs/2601.18642v2), which strengthens memories on access under an Ebbinghaus-style decay. It reports 82.1% critical-fact retention against Mem0's 78.4% at 45% lower storage on LoCoMo, Multi-Session Chat, and LTI-Bench.
 
 ## When this backfires
 

@@ -20,7 +20,7 @@ maturity: emerging
 
 > A reused SKILL.md is a one-time verbatim copy that silently forks from its source — treat it as a vendored dependency, not a live one.
 
-Reusing a skill from a registry is not subscribing to it. The first large-scale study of `SKILL.md` files as software artifacts found that adoption "largely behaves as a one-time copy that developers rarely synchronise with upstream revisions" ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). Across 2,462 recovered reuse links, 1,841 (74.8%) were adopted near-verbatim at ≥0.99 body similarity; only 25.2% diverged at all on entry ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). You own the copy the moment you make it, and it will not keep itself current.
+Reusing a skill from a registry is not subscribing to it. The first large-scale study of `SKILL.md` files as software artifacts found that adoption "largely behaves as a one-time copy that developers rarely synchronise with upstream revisions" ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). Across 2,462 recovered reuse links, 1,841 (74.8%) were adopted near-verbatim at ≥0.99 body similarity; the remaining 621 (25.2%) diverged at all on entry ([Gao et al., 2026](https://arxiv.org/abs/2607.00911v2)). You own the copy the moment you make it, and it will not keep itself current.
 
 ## When the vendored-fork stance pays off
 
@@ -36,16 +36,16 @@ If none of these hold — a stable, general-purpose skill you will never touch a
 
 The changes adopters make are narrow, which is why the vendored-fork framing fits. They are overwhelmingly additive — additions outnumber removals 2.7 to 1 — and re-ground the skill to its host project: reworking operational specs, rewiring reference pointers, supplying activation metadata ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)).
 
-The behavioral contract stays near-untouched. How a skill interacts with users, monitors runtime state, and recovers from failures rank lowest in revision — user interaction changed in 1.6% of customization diffs, runtime-state monitoring in 0.5% ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). Adopters inherit those rules almost verbatim, so the adoption review is small and specific: check the bindings, spot-check the inherited contract, stop there.
+The behavioral contract stays near-untouched. How a skill interacts with users, monitors runtime state, and recovers from failures rank lowest in revision — user interaction changed in 1.6% of customization diffs, runtime-state monitoring in 0.5% ([Gao et al., 2026](https://arxiv.org/abs/2607.00911v2)). Adopters inherit those rules almost verbatim, so the adoption review is small and specific: check the bindings, spot-check the inherited contract, stop there.
 
 ## Why it works
 
-Skills are "editable natural language interleaved with executable code," which makes them "unusually mutable" compared to versioned packages, and no reliable distribution or sync path exists — so adoption defaults to a one-time copy rather than a tracked dependency ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). A supply–demand split explains the shape of the edits that do happen: centralized registry skills encode broadly reusable, general-purpose coding capability whose behavioral contract is already correct, while adopters only re-ground project-specific bindings to their host project ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). The correct general contract arrives ready to inherit, so effort clusters on bindings — exactly how a vendored library's interface survives untouched while its call sites adapt.
+Skills are "editable natural language interleaved with executable code," which makes them "unusually mutable" compared to versioned packages, and no reliable distribution or sync path exists — so adoption defaults to a one-time copy rather than a tracked dependency ([Gao et al., 2026](https://arxiv.org/abs/2607.00911v2)). A supply–demand split explains the shape of the edits that do happen: centralized registry skills encode broadly reusable, general-purpose coding capability whose behavioral contract is already correct, while adopters only re-ground project-specific bindings to their host project ([Gao et al., 2026](https://arxiv.org/abs/2607.00911v2)). The correct general contract arrives ready to inherit, so effort clusters on bindings — exactly how a vendored library's interface survives untouched while its call sites adapt.
 
 ## When this backfires
 
 - Throwaway or prototype skills. Provenance records, upstream-change subscriptions, and version pinning are wasted ceremony on a skill used once and discarded — see [Throwaway Prototype Skill](../workflows/throwaway-prototype-skill.md).
-- Fast-moving upstream you want to track. Freezing a copy is the wrong call when the skill wraps a rapidly-fixed API. The 40.2% who silently miss upstream fixes ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)) are the cautionary case, but the remedy is a live link — a submodule or package that pulls fixes — not more fork discipline.
+- Fast-moving upstream you want to track. Freezing a copy is the wrong call when the skill wraps a rapidly-fixed API. The 40.2% who silently miss upstream fixes ([Gao et al., 2026](https://arxiv.org/abs/2607.00911v2)) are the cautionary case, but the remedy is a live link — a submodule or package that pulls fixes — not more fork discipline.
 - Small solo libraries. With a handful of skills you wrote and nobody else adopted, there is no upstream to sync and no provenance to track; the ritual is overhead, the same small-library caveat [Skill Library Evolution](skill-library-evolution.md) draws.
 - Mistaking near-verbatim for safe. A copy that matches its source at ≥0.99 similarity ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)) still inherits any latent defect in the source verbatim; high similarity is a drift signal, not a correctness guarantee.
 
@@ -69,8 +69,8 @@ The block names the source and pinned version, separates the bindings this fork 
 
 ## Key Takeaways
 
-- A reused skill is a fork the moment you copy it: 74.8% of reuse is near-verbatim and 53% is never modified again, so bind project specifics at adoption ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)).
-- Only subscribe to upstream for skills coupled to a moving source — 40.2% of unmodified copies already miss upstream fixes ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)); the rest are copy-and-forget by design.
+- A reused skill is a fork the moment you copy it: 1,841 of 2,462 recovered reuse links (74.8%) were adopted near-verbatim and 53% are never modified after adoption, so bind project specifics at adoption ([Gao et al., 2026](https://arxiv.org/abs/2607.00911v2)).
+- Only subscribe to upstream for skills coupled to a moving source — 40.2% of unmodified copies already miss upstream fixes ([Gao et al., 2026](https://arxiv.org/abs/2607.00911v2)); the rest are copy-and-forget by design.
 - The edits that happen are additive and re-ground bindings; the user-interaction, runtime, and failure contract is inherited near-verbatim, so keep the adoption review small and specific.
 - Skip the machinery for throwaway skills, solo libraries, and fast-moving upstreams where a live dependency beats a frozen fork.
 - Record provenance and version at copy time — a verbatim fork loses the link back to its source unless you write it down.

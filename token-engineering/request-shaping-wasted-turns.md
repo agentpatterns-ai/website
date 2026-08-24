@@ -25,7 +25,7 @@ Request shaping pays when the words you add remove work the agent would otherwis
 
 Shaping pays when the agent would otherwise search. Anthropic names the contrast directly: "Vague requests like 'improve this codebase' trigger broad scanning. Specific requests like 'add input validation to the login function in auth.ts' let Claude work efficiently with minimal file reads" ([Manage costs effectively](https://code.claude.com/docs/en/costs)).
 
-It stops paying once the agent has enough to act. Beyond that point every added clause is tokens on every turn with no retrieval removed. The measured version of this line comes from a study of 60 requirements across three tasks and 8,400 model-and-prompt combinations. An optimizer that selected which requirements to state, rather than stating all of them, gained 3.8% accuracy while cutting token usage 43% against baseline prompts ([What Prompts Don't Say](https://arxiv.org/abs/2505.13360)). Selection is the lever, not volume.
+It stops paying once the agent has enough to act. Beyond that point every added clause is tokens on every turn with no retrieval removed. The measured version of this line comes from a study of 60 requirements across three tasks and 8,400 model-and-prompt combinations. An optimizer that selected which requirements to state, rather than stating all of them, gained 3.8% accuracy while cutting token usage 43% against baseline prompts ([What Prompts Don't Say](https://arxiv.org/abs/2505.13360v3)). Selection is the lever, not volume.
 
 ## Four moves that replace retrieval
 
@@ -35,7 +35,7 @@ State the stop condition. Anthropic's framing: "Claude stops when the work looks
 
 Bound exploration. Unscoped investigation is a named failure pattern: "You ask Claude to 'investigate' something without scoping it. Claude reads hundreds of files, filling the context." The documented fixes are to scope the investigation or push it into a [subagent](../tools/claude/sub-agents.md) whose reads never enter your window ([Best practices](https://code.claude.com/docs/en/best-practices)).
 
-State the constraint the agent would otherwise discover by trial. Leaving a requirement implicit is fragile rather than free: models satisfy an unspecified requirement to better than 98% accuracy in only 41.1% of cases, and unspecified requirements are almost twice as likely to regress by more than 20% across a model update ([What Prompts Don't Say](https://arxiv.org/abs/2505.13360)).
+State the constraint the agent would otherwise discover by trial. Leaving a requirement implicit is fragile rather than free: models satisfy an unspecified requirement to better than 98% accuracy in only 41.1% of cases, and unspecified requirements are almost twice as likely to regress by more than 20% across a model update ([What Prompts Don't Say](https://arxiv.org/abs/2505.13360v3)).
 
 ## Why it works
 
@@ -78,7 +78,7 @@ Note what the second version does not do. It does not restate the project's test
 - Shape a request to remove agent-side retrieval, not to add detail — detail the agent already has costs tokens on every turn
 - Name the target, state the stop condition, bound exploration, and state constraints the agent would otherwise find by trial
 - Retrieval cost compounds because the full conversation is re-sent every turn, and attention degrades as the window grows ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents))
-- Selecting which requirements to state beat stating all of them by 3.8% accuracy at 43% fewer tokens ([What Prompts Don't Say](https://arxiv.org/abs/2505.13360))
+- Selecting which requirements to state beat stating all of them by 3.8% accuracy at 43% fewer tokens ([What Prompts Don't Say](https://arxiv.org/abs/2505.13360v3))
 - On richly-specified tasks, removing a constraint cost only 0.9% pass@1 and helped about as often as it hurt ([arxiv 2604.24712](https://arxiv.org/abs/2604.24712v1))
 - Check the bigger levers first — model choice, session hygiene, and team size move more than phrasing
 

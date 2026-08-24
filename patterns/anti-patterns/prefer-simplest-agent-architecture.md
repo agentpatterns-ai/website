@@ -41,14 +41,14 @@ The architecture is often shaped by org structure rather than task structure. As
 
 Multi-agent fails on most tasks because every handoff loses the context the receiving agent did not see. The receiver has to reconstruct it (expensive and lossy) or act on a degraded picture (incorrect). Cognition's "Don't Build Multi-Agents" post names the mechanism: in naive multi-agent setups *"sub-agents have no context of each other's work"*, and *"failure generally boils down to missing context within the system"* ([Cognition, *Don't Build Multi-Agents*, June 2025](https://cognition.com/blog/dont-build-multi-agents)).
 
-Compute-equalized benchmarks confirm the mechanism. With reasoning-token budget held constant, single-agent systems "consistently match or outperform" multi-agent ones on multi-hop reasoning across the Qwen3, DeepSeek-R1, and Gemini 2.5 families; the earlier multi-agent gains reflect "unaccounted computation and context effects rather than inherent architectural benefits" ([Tran & Kiela, 2026, *arxiv:2604.02460*](https://arxiv.org/abs/2604.02460)). Shopify's ICML 2025 Sidekick lessons reach the same conclusion from production: *"avoid multi-agent architectures early — simple single-agent systems can handle more complexity than you might expect"* ([Shopify Engineering, 2025](https://shopify.engineering/building-production-ready-agentic-systems)).
+Compute-equalized benchmarks confirm the mechanism. With reasoning-token budget held constant, single-agent systems "consistently match or outperform" multi-agent ones on multi-hop reasoning across the Qwen3, DeepSeek-R1, and Gemini 2.5 families; the earlier multi-agent gains reflect "unaccounted computation and context effects rather than inherent architectural benefits" ([Tran & Kiela, 2026, *arxiv:2604.02460*](https://arxiv.org/abs/2604.02460v2)). Shopify's ICML 2025 Sidekick lessons reach the same conclusion from production: *"avoid multi-agent architectures early — simple single-agent systems can handle more complexity than you might expect"* ([Shopify Engineering, 2025](https://shopify.engineering/building-production-ready-agentic-systems)).
 
 ## Signals of Over-Engineering
 
 - Sub-agents that mostly hand off. Each step is "summarise and pass forward" with no distinct capability that the lead agent lacks.
 - Coordination code outweighs task code. Message schemas, retry policy, and arbitration take more lines than the work the system does.
 - The topology matches the org chart. Each agent maps to a team or vendor rather than a task that genuinely decomposes.
-- Variance dominates accuracy. Across 260 multi-agent configurations and six benchmarks, the same architecture swings from *+80.8% on decomposable financial reasoning to -70.0% on sequential planning* ([Kim et al., 2025, *arxiv:2512.08296*](https://arxiv.org/abs/2512.08296)) — a configuration that wobbles by 150 points across tasks is being run on the wrong task.
+- Variance dominates accuracy. Across 260 multi-agent configurations and six benchmarks, the same architecture swings from *+80.8% on decomposable financial reasoning to -70.0% on sequential planning* ([Kim et al., 2025, *arxiv:2512.08296*](https://arxiv.org/abs/2512.08296v3)) — a configuration that wobbles by 150 points across tasks is being run on the wrong task.
 
 ## When This Backfires
 

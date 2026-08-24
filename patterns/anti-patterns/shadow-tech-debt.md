@@ -65,7 +65,7 @@ Mitigation can cost more than it saves when:
 | 3 | Medium | Review gates — autonomous agents must not merge without human review on shared repositories. |
 | 4 | High | Garbage-collection agents — background scans for architectural inconsistencies ([Fowler/Boeckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html); [Lavaee](https://alexlavaee.me/blog/openai-agent-first-codebase-learnings/)). Requires step 1. |
 
-A caveat on step 1. An ETH Zurich evaluation (Gloaguen et al., [arXiv:2602.11988](https://arxiv.org/abs/2602.11988)) found that LLM-generated or overly detailed AGENTS.md files cut task success rates by about 3% and raised inference cost by more than 20%. Agents followed the unnecessary instructions to the letter. The finding narrows step 1 rather than overturning it: limit instruction files to details an agent cannot infer, such as custom build commands and repository-specific conventions, and omit anything an agent would read from the code itself.
+A caveat on step 1. An ETH Zurich evaluation (Gloaguen et al., [arXiv:2602.11988](https://arxiv.org/abs/2602.11988v2)) found that LLM-generated or overly detailed AGENTS.md files cut task success rates by about 3% and raised inference cost by more than 20%. Agents followed the unnecessary instructions to the letter. The finding narrows step 1 rather than overturning it: limit instruction files to details an agent cannot infer, such as custom build commands and repository-specific conventions, and omit anything an agent would read from the code itself.
 
 ## What good looks like
 

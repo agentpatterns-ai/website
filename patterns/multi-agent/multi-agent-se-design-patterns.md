@@ -24,7 +24,7 @@ Related lesson: [Why Multi-Agent Systems Fail](https://learn.agentpatterns.ai/mu
 
 ## The 94-paper literature review
 
-[arXiv:2511.08475](https://arxiv.org/abs/2511.08475) is a systematic literature review of 94 papers that builds an empirical taxonomy of multi-agent SE design patterns. The taxonomy gives developers a vocabulary for design decisions, not ad-hoc choices.
+[arXiv:2511.08475](https://arxiv.org/abs/2511.08475v2) is a systematic literature review of 94 papers that builds an empirical taxonomy of multi-agent SE design patterns. The taxonomy gives developers a vocabulary for design decisions, not ad-hoc choices.
 
 ## The 16 patterns
 

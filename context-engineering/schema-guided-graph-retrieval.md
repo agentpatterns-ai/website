@@ -32,7 +32,7 @@ The result is overly broad retrieval and disconnected reasoning chains on multi-
 
 ## Schema as a control surface
 
-Schema-guided graph retrieval threads one domain schema through all three stages. The Youtu-GraphRAG framework ([Dong et al., 2025; arXiv:2508.19855](https://arxiv.org/abs/2508.19855)) tests this approach across six benchmarks. It reports 16.62% higher accuracy and up to 90.71% lower token cost than the best prior baselines.
+Schema-guided graph retrieval threads one domain schema through all three stages. The Youtu-GraphRAG framework ([Dong et al., 2025; arXiv:2508.19855](https://arxiv.org/abs/2508.19855v3)) tests this approach across six benchmarks. It reports 16.62% higher accuracy and up to 90.71% lower token cost than the best prior baselines.
 
 ```mermaid
 graph TD

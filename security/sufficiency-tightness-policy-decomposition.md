@@ -21,15 +21,15 @@ maturity: emerging
 
 ## The permission-boundary inference gap
 
-[AuthBench](https://arxiv.org/abs/2605.14859) frames permission-boundary inference as mapping a task instruction and terminal environment to a file-level read/write/execute policy. The policy has to complete the task without granting unused or sensitive accesses. AuthBench scores 120 terminal tasks with executable validators that measure both utility and attack outcome.
+[AuthBench](https://arxiv.org/abs/2605.14859v2) frames permission-boundary inference as mapping a task instruction and terminal environment to a file-level read/write/execute policy. The policy has to complete the task without granting unused or sensitive accesses. AuthBench scores 120 terminal tasks with executable validators that measure both utility and attack outcome.
 
-Frontier models do not converge on a tight, sufficient policy in one pass. They "often omit permissions required by the execution chain while also granting unused or sensitive accesses" ([arxiv:2605.14859](https://arxiv.org/abs/2605.14859)). The failure is structural, not a calibration miss — each model has its own steady-state bias.
+Frontier models do not converge on a tight, sufficient policy in one pass. They "often omit permissions required by the execution chain while also granting unused or sensitive accesses" ([arxiv:2605.14859](https://arxiv.org/abs/2605.14859v2)). The failure is structural, not a calibration miss — each model has its own steady-state bias.
 
 ### Reasoning amplifies the failure mode
 
 More reasoning time does not narrow the gap:
 
-> Each model moves toward a model-specific authorization attractor: more reasoning makes it more consistent in its own failure mode, whether broad-but-exposed or tight-but-brittle. ([arxiv:2605.14859](https://arxiv.org/abs/2605.14859))
+> Each model moves toward a model-specific authorization attractor: more reasoning makes it more consistent in its own failure mode, whether broad-but-exposed or tight-but-brittle. ([arxiv:2605.14859](https://arxiv.org/abs/2605.14859v2))
 
 Extended reasoning entrenches the bias rather than escaping it. A broad-biased model produces broader policies — a larger [blast radius](blast-radius-containment.md) — while a tight-biased model produces tighter and more brittle ones. The single-pass framing confounds two objectives, sufficiency and tightness, so the model drifts toward whichever it weights more heavily.
 
@@ -55,7 +55,7 @@ Pass 1 — forward simulate the execution chain. The model walks through what th
 
 Pass 2 — audit each entry for necessity and sensitivity. The model re-examines the policy entry by entry. It asks only whether each permission is required by the simulated chain and whether the target is sensitive. Unused entries get dropped; sensitive-but-necessary ones get flagged.
 
-Reported result: "up to 15.8% on tightness-biased models while reducing attack success across all evaluated models" ([arxiv:2605.14859](https://arxiv.org/abs/2605.14859)).
+Reported result: "up to 15.8% on tightness-biased models while reducing attack success across all evaluated models" ([arxiv:2605.14859](https://arxiv.org/abs/2605.14859v2)).
 
 ## When to reach for this pattern
 

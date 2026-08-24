@@ -85,7 +85,7 @@ Weak strategies roll back automatically. This prevents regressions where changes
 
 A cost-performance pattern: use frontier models (Claude, GPT-4) for exploration in the Competitor and Analyst roles, encode validated strategies in playbooks, then execute with local models (Ollama, vLLM, MLX) on later runs. Frontier models re-engage only on stagnation or novel problems.
 
-The ACE framework ([arxiv:2510.04618](https://arxiv.org/abs/2510.04618)) applies the same Generate/Reflect/Curate decomposition. It reports +10.6% on agent benchmarks and +8.6% on finance over strong baselines, without fine-tuning. On AppWorld it matches the top-ranked production agent overall and surpasses it on the harder test-challenge split. That is evidence that structured role decomposition with persistent context beats single-loop patterns.
+The ACE framework ([arxiv:2510.04618](https://arxiv.org/abs/2510.04618v3)) applies the same Generate/Reflect/Curate decomposition. It reports +10.6% on agent benchmarks and +8.6% on finance over strong baselines, without fine-tuning. On AppWorld it matches the top-ranked production agent overall and surpasses it on the harder test-challenge split. That is evidence that structured role decomposition with persistent context beats single-loop patterns.
 
 ## Applying the pattern
 

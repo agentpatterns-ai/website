@@ -61,7 +61,7 @@ Two reported signals support adaptive multi-fidelity retention over uniform accu
 - Sub-linear context growth. AgentFold-30B reports context length growing from about 3.5k to 7k tokens across 100 turns, less than doubling, against a 128k window, while raw ReAct grows linearly ([AgentFold, Ye et al., 2025](https://arxiv.org/abs/2510.24699v1)).
 - BrowseComp results at a fixed parameter class. LongSeeker (Qwen3-30B-A3B base, 10,000 synthesized trajectories) reports 61.5% on BrowseComp and 62.5% on BrowseComp-ZH, against AgentFold's 36.2 / 47.3 and Tongyi DeepResearch's 43.2 / 46.7 at comparable scale ([Lu et al., 2026](https://arxiv.org/abs/2605.05191v1)). All numbers come from the proposing labs; no third-party replication exists yet.
 
-Adjacent results in the same literature point the same way: ReSum's external summarizer yields +4.5% over ReAct training-free and +8.2% with GRPO on BrowseComp ([ReSum, Wu et al., 2025](https://arxiv.org/abs/2509.13313)).
+Adjacent results in the same literature point the same way: ReSum's external summarizer yields +4.5% over ReAct training-free and +8.2% with GRPO on BrowseComp ([ReSum, Wu et al., 2025](https://arxiv.org/abs/2509.13313v3)).
 
 ## Where the pattern does not apply
 

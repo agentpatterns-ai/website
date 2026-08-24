@@ -30,7 +30,7 @@ A behavioral rule mined from one framework's runs is not a finding about agents 
 
 ## Why it works
 
-Framework choices — which tools are exposed, how observations are formatted, how the agent-computer interface scaffolds turns — shape the trajectory more than the backing LLM does ([Ma et al., 2026](https://arxiv.org/abs/2605.18332v1)). "Short error cascades correlate with success" emerges because in framework A the harness short-circuits errors and only successful runs reach the cascade-length metric, while in framework B the harness lets errors compound and successful runs accumulate longer cascades. Identical signal, opposite data-generating process. The 64% framework versus 10% LLM variance for mean turns measures this mechanism directly ([Ma et al., 2026](https://arxiv.org/abs/2605.18332v1)). The SWE-agent paper named the same effect from the design side: "the design of the ACI can impact agents' behavior and performance" ([Yang et al., 2024](https://arxiv.org/abs/2405.15793)).
+Framework choices — which tools are exposed, how observations are formatted, how the agent-computer interface scaffolds turns — shape the trajectory more than the backing LLM does ([Ma et al., 2026](https://arxiv.org/abs/2605.18332v1)). "Short error cascades correlate with success" emerges because in framework A the harness short-circuits errors and only successful runs reach the cascade-length metric, while in framework B the harness lets errors compound and successful runs accumulate longer cascades. Identical signal, opposite data-generating process. The 64% framework versus 10% LLM variance for mean turns measures this mechanism directly ([Ma et al., 2026](https://arxiv.org/abs/2605.18332v1)). The SWE-agent paper named the same effect from the design side: "the design of the ACI can impact agents' behavior and performance" ([Yang et al., 2024](https://arxiv.org/abs/2405.15793v3)).
 
 ## How to apply it
 
@@ -50,7 +50,7 @@ Cross-framework validation is overhead, and that overhead is wasted in a few nar
 - Single-framework teams with no transfer ambition: a team that runs one harness and tunes its eval suite to that harness can ignore generalization, because the question never arises.
 - Mechanism-grounded signals: when a signal is tied to a falsifiable behavior ("did the agent run its own tests before claiming done?"), framework variance shrinks, so gating it on cross-framework re-measurement is ceremony.
 - Configuration-tweaking inside one framework: comparing two prompt variants in the same harness is not a cross-framework comparison, so applying the warning there freezes routine experimentation.
-- Benchmark-quality contamination: the SWE-bench dataset itself has solution leakage and inadequate test cases; resolution rate for SWE-agent+GPT-4 drops from 12.47% to 3.97% under stricter filtering ([Aleithan et al., 2024](https://arxiv.org/abs/2410.06992)). If borrowed signals are contaminated upstream, re-measurement on your harness inherits the same noise, and only mechanism-grounded checks survive it.
+- Benchmark-quality contamination: the SWE-bench dataset itself has solution leakage and inadequate test cases; resolution rate for SWE-agent+GPT-4 drops from 12.47% to 3.97% under stricter filtering ([Aleithan et al., 2024](https://arxiv.org/abs/2410.06992v2)). If borrowed signals are contaminated upstream, re-measurement on your harness inherits the same noise, and only mechanism-grounded checks survive it.
 
 ## Key Takeaways
 

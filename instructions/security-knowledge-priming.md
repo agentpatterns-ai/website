@@ -38,7 +38,7 @@ SPARK retrieves "a few of the relevant Common Weakness Enumeration (CWE) entries
 2. Append a short structured block listing those CWE IDs, names, and a one-line constraint each — placed near the end of the prompt for recency weighting.
 3. Generate; then scan.
 
-Adding the single word "secure" alone produced "a reduction in average weakness density of the generated code by 28.15%–42.85% across GPT models" ([Tony et al., 2024](https://arxiv.org/abs/2407.07064)). A structured CWE cue narrows the safe-code subspace further.
+Adding the single word "secure" alone produced "a reduction in average weakness density of the generated code by 28.15%–42.85% across GPT models" ([Tony et al., 2024](https://arxiv.org/abs/2407.07064v2)). A structured CWE cue narrows the safe-code subspace further.
 
 ## Why it works
 
@@ -87,7 +87,7 @@ The cue is short, task-relevant, and pre-selected — two plausible CWEs are lis
 
 - The priming mechanism is real: LLMs encode a measurable safe-vs-unsafe direction in hidden state ([Xu et al., 2026](https://arxiv.org/abs/2606.16244); [Lopez Bernal et al., 2025](https://arxiv.org/abs/2507.09508)), and a short cue activates it.
 - Use the cue as a supplement to mechanical scanners, never as a replacement — prompt-only defenses show no statistically significant overall vulnerability reduction across five LLMs and four languages ([Ko et al., 2026](https://arxiv.org/abs/2605.24298)).
-- Pre-select ≤5 task-relevant CWE entries; full CWE-list dumps backfire ([Tony et al., 2024](https://arxiv.org/abs/2407.07064)).
+- Pre-select ≤5 task-relevant CWE entries; full CWE-list dumps backfire ([Tony et al., 2024](https://arxiv.org/abs/2407.07064v2)).
 - On closed-source APIs (Claude, GPT, Copilot) only the prompt half ports; the token-bias-vector half is an open-source-only intervention ([Xu et al., 2026](https://arxiv.org/abs/2606.16244)).
 - Discount headline static-analyzer-only security gains by an order of magnitude — they overestimate true secure-and-functional performance by 7–21× ([Zhang et al., 2026](https://arxiv.org/abs/2601.07084v1)).
 

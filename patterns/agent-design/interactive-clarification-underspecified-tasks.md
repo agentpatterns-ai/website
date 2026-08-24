@@ -19,7 +19,7 @@ maturity: emerging
 
 Given incomplete instructions, agents fill the gaps with assumptions. They produce output that looks correct but solves the wrong problem. This is [assumption propagation](../anti-patterns/assumption-propagation.md), the default behavior across models. Knowing when to ask is itself an open research problem. Estimating the value of a clarifying question means reasoning over the space of possible user intents, not just the immediate input ([Zhang and Choi, NAACL 2025](https://arxiv.org/abs/2311.09469)).
 
-The Ambig-SWE benchmark tested this by creating underspecified variants of real GitHub issues. Interactivity improved resolution rates by up to 74% on underspecified tasks. But models consistently struggled to detect underspecification without explicit prompting ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
+The Ambig-SWE benchmark tested this by creating underspecified variants of real GitHub issues. Interactivity improved resolution rates by up to 74% on underspecified tasks. But models consistently struggled to detect underspecification without explicit prompting ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069v3)).
 
 ## Two types of missing information
 
@@ -36,7 +36,7 @@ Codebase exploration resolves navigational gaps, including [domain-scoped parall
 
 The effective strategy is not more questions. It is fewer, better ones.
 
-Claude Sonnet 4 asked 50% fewer questions than Qwen 3 Coder but achieved comparable extraction. Sonnet explored the codebase first, resolving navigational ambiguity independently, then asked only about informational gaps requiring human knowledge ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
+Claude Sonnet 4 asked 50% fewer questions than Qwen 3 Coder but achieved comparable extraction. Sonnet explored the codebase first, resolving navigational ambiguity independently, then asked only about informational gaps requiring human knowledge ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069v3)).
 
 ```mermaid
 flowchart LR
@@ -55,7 +55,7 @@ The anti-pattern is asking questions the agent could answer by reading code. Res
 
 Detecting underspecification before committing to an approach is the hardest part. Three interventions help:
 
-Explicit detection prompt: add to system instructions: "Before implementing, identify ambiguous or missing requirements. List what you know, what you're assuming, and what you need confirmed." This improved detection accuracy in benchmark evaluation ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
+Explicit detection prompt: add to system instructions: `Before implementing, identify ambiguous or missing requirements. List what you know, what you're assuming, and what you need confirmed.` The paper reports that explicit detection prompting improves how often models spot an incomplete specification ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
 
 Assumption surfacing: require the agent to state assumptions before proceeding: "I'm assuming the error should return a 404 rather than a 500. Correct me if wrong."
 
@@ -77,7 +77,7 @@ This maps to the [agent pushback protocol](agent-pushback-protocol.md) — pushb
 
 The 74% improvement is the peak result (Claude Sonnet 3.5, synthetic underspecification). Caveats:
 
-- Stronger models show compounding gains — Sonnet 4 recovered 89% of fully-specified performance versus Sonnet 3.5's 80%, suggesting capability shifts the bottleneck from detection to integration ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069))
+- Stronger models show compounding gains — Sonnet 4 recovered 89% of fully-specified performance versus Sonnet 3.5's 80%, suggesting capability shifts the bottleneck from detection to integration ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069v3))
 - Some models showed "complete non-responsiveness to interaction prompts" — following rigid protocols regardless of input ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069))
 - High extraction does not guarantee success — integrating answers matters more than asking the right questions
 

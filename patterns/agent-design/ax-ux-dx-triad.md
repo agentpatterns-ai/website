@@ -53,9 +53,9 @@ flowchart LR
 What the model sees. Curate context for inference quality, not human readability. When the illegibility lives on a public surface the agent calls from outside, the outward-facing complement is [Designing for Agent Consumers](../../tool-engineering/designing-for-agent-consumers.md):
 
 - Structured tool output: JSON or typed returns, not prose descriptions
-- Compressed summaries: preserving goals, decisions, TODOs, and error traces near context limits, improving Claude Sonnet 4 from 42.0% to 48.6% on SWE-Bench-Pro ([CCA ablation](https://arxiv.org/abs/2512.10398))
+- Compressed summaries: preserving goals, decisions, TODOs, and error traces near context limits, improving Claude Sonnet 4 from 42.0% to 48.6% on SWE-Bench-Pro ([CCA ablation](https://arxiv.org/abs/2512.10398v6))
 - Machine-readable error signals: stack traces and [RFC 9457 structured error fields](../../tool-engineering/rfc9457-machine-readable-errors.md), not user-friendly messages
-- Hindsight failure notes: recording failed approaches for cross-session learning, yielding 53.0% to 54.4% improvement on a 151-instance subset ([CCA paper §5.3](https://arxiv.org/abs/2512.10398))
+- Hindsight failure notes: recording failed approaches for cross-session learning, yielding 53.0% to 54.4% improvement on a 151-instance subset ([CCA paper §5.3](https://arxiv.org/abs/2512.10398v6))
 
 ### User Experience (UX)
 
@@ -85,7 +85,7 @@ DX degrades when internals are opaque or when AX concerns leak into the extensio
 | AX = DX | Debug traces in agent context add noise; configuration complexity leaks into prompts |
 | UX = DX | End users exposed to debug interfaces; developers forced to polish internal tools |
 
-CCA's explicit separation contributed to 52.7% on SWE-Bench-Pro with Claude Sonnet 4.5 -- outperforming stronger models on weaker scaffolds ([CCA paper](https://arxiv.org/abs/2512.10398)).
+CCA's explicit separation contributed to 52.7% on SWE-Bench-Pro with Claude Sonnet 4.5 -- outperforming stronger models on weaker scaffolds ([CCA paper](https://arxiv.org/abs/2512.10398v6)).
 
 ## Why it works
 
@@ -100,7 +100,7 @@ The AX/UX/DX separation adds engineering overhead. It is less valuable when:
 - Simple single-user tools: a CLI agent with one consumer does not need three output formats; one well-structured log serves all audiences.
 - Prototype or exploratory work: maintaining separate transformation layers slows iteration when requirements change frequently.
 - Thin context budgets: adding a transformation layer near context limits requires care; naive separation can introduce overhead of its own, the cost [context compression strategies](../../context-engineering/context-compression-strategies.md) exist to manage.
-- Scale constraints from CCA's own evaluation: performance degrades substantially for multi-file edits (57.8% for 1--2 files to 44.1% for 5--6 files) and context management requires configurable scopes to be effective -- the triad does not remove complexity, it relocates it ([CCA paper §6](https://arxiv.org/abs/2512.10398)).
+- Scale constraints from CCA's own evaluation: performance degrades substantially for multi-file edits (57.8% for 1--2 files to 44.1% for 5--6 files) and context management requires configurable scopes to be effective -- the triad does not remove complexity, it relocates it ([CCA paper §6](https://arxiv.org/abs/2512.10398v6)).
 
 ## Applying the triad
 

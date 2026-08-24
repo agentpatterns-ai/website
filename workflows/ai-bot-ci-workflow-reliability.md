@@ -41,7 +41,7 @@ Sample-size asymmetry. Devin and Copilot contribute 94% of the runs; Claude cont
 
 Public-repo selection. The dataset covers only public GitHub repositories. The paper notes that findings may not generalize to "private or enterprise CI/CD environments, which typically involve more complex workflows" ([arXiv:2604.18334](https://arxiv.org/abs/2604.18334v1)). Enterprise CI uses self-hosted runners, stricter gates, and custom orchestration not represented here.
 
-Attribution noise for low-volume agents. A separate fingerprinting study of the same five agents achieved 97.2% overall F1, but Claude Code alone scored 0.67 F1 with 57% recall ([arXiv:2601.17406](https://arxiv.org/html/2601.17406)). Some PRs labeled "Claude" in the reliability study may be misattributed. Misattribution dominates more heavily where the labeled population is smallest.
+Attribution noise for low-volume agents. A separate fingerprinting study of the same five agents achieved 97.2% overall F1, but Claude Code alone scored 0.67 F1 with 57% recall ([arXiv:2601.17406](https://arxiv.org/html/2601.17406v1)). Some PRs labeled "Claude" in the reliability study may be misattributed. Misattribution dominates more heavily where the labeled population is smallest.
 
 ## Repository-level correlation
 

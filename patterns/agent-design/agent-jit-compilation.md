@@ -30,7 +30,7 @@ Agent JIT compilation translates a task description into a code program that the
 | Tools expose precondition and postcondition contracts | Plan-time validation is the source of the accuracy gain — without contracts there is nothing to validate against ([arXiv:2605.21470](https://arxiv.org/abs/2605.21470)) |
 | Target UI or API is stable enough that pre-validated preconditions stay true at execution time | A page that re-renders or A/B-tests selectors between plan time and execute time silently violates the contract the validator just approved |
 
-Inside this envelope, JIT-Planner reports 10.4× speedup and +28% accuracy over Browser-Use, and JIT-Scheduler reports 2.4× speedup and +9% accuracy over OpenAI's computer-use agent across five web applications ([arXiv:2605.21470](https://arxiv.org/abs/2605.21470)).
+Inside this envelope, JIT-Planner reports 10.4× speedup and +28% accuracy over Browser-Use, and JIT-Scheduler reports 2.4× speedup and +9% accuracy over OpenAI's computer-use agent across five web applications ([arXiv:2605.21470](https://arxiv.org/abs/2605.21470v2)).
 
 ## The three components
 
@@ -55,7 +55,7 @@ graph TD
 
 ## Why it works
 
-The mechanism is cost relocation, not better reasoning. A conventional browser agent pays `inference + screenshot + parsing` on every step. In production, each screenshot adds roughly 0.8 seconds to LLM latency, and a single form interaction can take 15 to 30 seconds against 2 to 3 seconds for a scripted equivalent ([Browser-Use: Speed Matters](https://browser-use.com/posts/speed-matters)). JIT compilation invokes the LLM once per task to emit a program that covers many actions, which removes the per-step round trip. The accuracy gain is a side-effect of validation: the planner filters invalid candidate plans before any I/O happens, so the executed plan has cleared a correctness gate the baseline loop never sees ([arXiv:2605.21470](https://arxiv.org/abs/2605.21470)). The scheduler then runs independent tool calls at the same time, which bounds wall-clock cost by the critical path.
+The mechanism is cost relocation, not better reasoning. A conventional browser agent pays `inference + screenshot + parsing` on every step. In production, each screenshot adds roughly 0.8 seconds to LLM latency, and a single form interaction can take 15 to 30 seconds against 2 to 3 seconds for a scripted equivalent ([Browser-Use: Speed Matters](https://browser-use.com/posts/speed-matters)). JIT compilation invokes the LLM once per task to emit a program that covers many actions, which removes the per-step round trip. The accuracy gain is a side-effect of validation: the planner filters invalid candidate plans before any I/O happens, so the executed plan has cleared a correctness gate the baseline loop never sees ([arXiv:2605.21470](https://arxiv.org/abs/2605.21470v2)). The scheduler then runs independent tool calls at the same time, which bounds wall-clock cost by the critical path.
 
 ## When this backfires
 

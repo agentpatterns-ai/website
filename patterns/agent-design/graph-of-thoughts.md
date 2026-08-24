@@ -55,7 +55,7 @@ CoT and ToT can only represent linear or tree-shaped structures. Neither can exp
 
 ## Performance and cost
 
-On sorting tasks, GoT showed a [62% quality improvement over ToT while reducing costs by more than 31%](https://arxiv.org/abs/2308.09687). The gains come from aggregation: merging intermediate results avoids redundant exploration across independent tree searches.
+On sorting tasks, GoT showed a [62% quality improvement over ToT while reducing costs by more than 31%](https://arxiv.org/abs/2308.09687v4). The gains come from aggregation: merging intermediate results avoids redundant exploration across independent tree searches.
 
 GoT costs 5–20x more than linear CoT ([nibzard catalog](https://github.com/nibzard/awesome-agentic-patterns/blob/main/patterns/graph-of-thoughts.md)). That overhead is only worth it when the problem genuinely needs path convergence.
 

@@ -45,7 +45,7 @@ None is wrong; the defect is that each is private, so a collaborator cannot tell
 
 Write the readership contract where agents and people both read it — the [AGENTS.md file or its per-directory variants](../instructions/agents-md-distributed-conventions.md) — stating per artifact class who must understand it and who reviews it.
 
-Back it with something mechanical, because a social convention alone is weakly followed. Git carries one such marker: files tagged `linguist-generated` in `.gitattributes` are "suppressed in diffs" ([Linguist docs](https://github.com/github-linguist/linguist/blob/main/docs/overrides.md)), so review attention skips them without anyone opting in. Contribution policy is the other lever: among 118 AI policies across 1,000 popular GitHub repositories, 51% require disclosure and 74% a human in the loop ([Hora and Robbes, 2026](https://arxiv.org/abs/2605.16706)).
+Back it with something mechanical, because a social convention alone is weakly followed. Git carries one such marker: files tagged `linguist-generated` in `.gitattributes` are "suppressed in diffs" ([Linguist docs](https://github.com/github-linguist/linguist/blob/main/docs/overrides.md)), so review attention skips them without anyone opting in. Contribution policy is the other lever: among 118 AI policies across 1,000 popular GitHub repositories, 51% require disclosure and 74% a human in the loop ([Hora and Robbes, 2026](https://arxiv.org/abs/2605.16706v2)).
 
 ## Why it works
 

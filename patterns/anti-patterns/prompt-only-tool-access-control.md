@@ -19,7 +19,7 @@ maturity: established
 
 > A system-prompt "do not call this tool" cuts unauthorized invocation by only 11–18 points; stripping it from context and re-checking calls drives it to 0%.
 
-Prompt-only tool access control restricts which tools an agent may invoke by adding instructions to the system prompt — "do not call `delete_repo`", "only use the read-only API" — while the full tool catalog stays visible in the model's context. Across 150 adversarial tasks on Qwen 2.5 7B, Llama 3.1 8B, and Claude Haiku 3.5, this cut the Unauthorized Invocation Rate (UIR) by only 11–18 percentage points; a governed MCP proxy doing ABAC at discovery and invocation drove UIR to 0% with under 50 ms latency ([Uppala 2026](https://arxiv.org/abs/2605.18414)).
+Prompt-only tool access control restricts which tools an agent may invoke by adding instructions to the system prompt — "do not call `delete_repo`", "only use the read-only API" — while the full tool catalog stays visible in the model's context. Across 150 adversarial tasks on Qwen 2.5 7B, Llama 3.1 8B, and Claude Haiku 3.5, this cut the Unauthorized Invocation Rate (UIR) by only 11–18 percentage points; a governed MCP proxy doing ABAC at discovery and invocation drove UIR to 0% with under 50 ms latency ([Uppala 2026](https://arxiv.org/abs/2605.18414v2)).
 
 ## Why it fails
 
@@ -68,7 +68,7 @@ IMPORTANT: NEVER call delete_repo. NEVER call transfer_ownership.
 NEVER call exfiltrate_secrets. These are not for your use.
 ```
 
-The model sees all six tool definitions. Uppala's adversarial cases — including indirect prompt injection in a fetched PR description — bypass this restriction in 11–18% of attempts, depending on the model ([Uppala 2026, §5](https://arxiv.org/abs/2605.18414)).
+The model sees all six tool definitions. Uppala's adversarial cases — including indirect prompt injection in a fetched PR description — bypass this restriction in 11–18% of attempts, depending on the model ([Uppala 2026, §5](https://arxiv.org/abs/2605.18414v2)).
 
 After — architectural enforcement at the proxy:
 

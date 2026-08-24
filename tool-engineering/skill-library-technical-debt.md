@@ -51,7 +51,7 @@ SkillOps groups detectors under four library-health dimensions: [Source: [SkillO
 
 - Utility — invocation counts, success rates, supersession. Drives `retire`.
 - Compatibility — type matches across the graph, adapter coverage. Drives `add_adapter`, `merge`.
-- Risk — missing or weak validators, broken artifact references. Drives `add_validator`. A 26.1% vulnerability rate across community-contributed skills shows risk is not hypothetical. [Source: [Agent Skills for LLMs (arxiv:2602.12430)](https://arxiv.org/abs/2602.12430)]
+- Risk — missing or weak validators, broken artifact references. Drives `add_validator`. A 26.1% vulnerability rate across community-contributed skills shows risk is not hypothetical. [Source: [Agent Skills for LLMs (arxiv:2602.12430)](https://arxiv.org/abs/2602.12430v4)]
 - Validation — failure modes against ground truth, repair candidates. Drives `repair`, `instantiate`.
 
 Each dimension answers a different question; running only one leaves a coverage gap, like the one [Skill Library Refinement Loops](../workflows/skill-library-refinement-loops.md) describes for feedback.

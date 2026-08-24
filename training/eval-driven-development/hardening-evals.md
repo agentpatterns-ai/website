@@ -29,7 +29,7 @@ Hardening addresses all three.
 
 ## Benchmark Contamination
 
-Static benchmarks degrade as models train on their data (see [Benchmark Contamination as Eval Risk](../../verification/benchmark-contamination-eval-risk.md) for the full pattern). SWE-rebench demonstrated this concretely: DeepSeek-V3 scored 39.7% on older SWE-bench Verified but only 21.3% on decontaminated fresh tasks — an 18.4 percentage point gap attributable to contamination, not capability. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
+Static benchmarks degrade as models train on their data (see [Benchmark Contamination as Eval Risk](../../verification/benchmark-contamination-eval-risk.md) for the full pattern). SWE-rebench demonstrated this concretely: DeepSeek-V3 scored 39.7% on older SWE-bench Verified but only 21.3% on decontaminated fresh tasks — an 18.4 percentage point gap attributable to contamination, not capability. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411v2)]
 
 Teams that rely solely on published benchmarks for model comparison or upgrade decisions risk selecting models that memorized the benchmark rather than models that generalize. Two defenses:
 
@@ -40,7 +40,7 @@ Teams that rely solely on published benchmarks for model comparison or upgrade d
 
 ## Trajectory-Opaque Grading
 
-Outcome-based grading — checking only the final state — is the right default for capability measurement (see [Grade Agent Outcomes, Not Execution Paths](../../verification/grade-agent-outcomes.md)). But for safety and robustness evaluation, it is insufficient. Claw-Eval research found that a vanilla LLM judge missed 44% of safety violations and 13% of robustness failures that structured trajectory auditing caught. [Source: [Claw-Eval](https://arxiv.org/abs/2604.06132)]
+Outcome-based grading — checking only the final state — is the right default for capability measurement (see [Grade Agent Outcomes, Not Execution Paths](../../verification/grade-agent-outcomes.md)). But for safety and robustness evaluation, it is insufficient. Claw-Eval research found that a vanilla LLM judge missed 44% of safety violations and 13% of robustness failures that structured trajectory auditing caught. [Source: [Claw-Eval](https://arxiv.org/abs/2604.06132v3)]
 
 Agents can reach correct final states through unsafe intermediate steps — deleting and recreating files rather than editing them, executing commands with excessive permissions, or accessing data outside their scope. These violations are invisible when only the output is graded.
 

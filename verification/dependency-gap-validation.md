@@ -16,7 +16,7 @@ maturity: adopted
 
 ## The problem
 
-When an LLM generates a project, it writes a dependency file — `requirements.txt`, `package.json`, `pom.xml`. That file is incomplete. An [empirical study of 300 projects](https://arxiv.org/abs/2512.22387) across Claude Code, OpenAI Codex, and Gemini found a 13.5x average expansion from declared dependencies to actual runtime dependencies. A Python project declaring 3 packages (scikit-learn, pandas, matplotlib) needed 52 at runtime.
+When an LLM generates a project, it writes a dependency file — `requirements.txt`, `package.json`, `pom.xml`. That file is incomplete. An [empirical study of 300 projects](https://arxiv.org/abs/2512.22387v3) across Claude Code, OpenAI Codex, and Gemini found a 13.5x average expansion from declared dependencies to actual runtime dependencies. A Python project declaring 3 packages (scikit-learn, pandas, matplotlib) needed 52 at runtime.
 
 This is the dependency gap: the difference between what the agent says the code needs and what the code actually needs to run.
 

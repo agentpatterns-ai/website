@@ -71,7 +71,7 @@ Accuracy on the extended ASTRA benchmark for Claude Sonnet 4.6 ([§V](https://ar
 | Multi-turn (augmented) | 0.97 | 0.97 | 2% | 4% |
 | Multi-turn (multi-agent) | 0.92 | 0.92 | 10% | 7% |
 
-Single-turn is near-deterministic. Multi-turn degrades: a 7% FNR denies about 1 in 14 legitimate calls, and a 10% FPR over-allows on multi-agent traffic. The paper concludes semantic checks remain "insufficient for high-stakes, long-horizon autonomous tool use" ([§VII](https://arxiv.org/html/2605.02682)), so design fallbacks.
+Single-turn is near-deterministic. Multi-turn degrades: a 7% FNR denies about 1 in 14 legitimate calls, and a 10% FPR over-allows on multi-agent traffic. The paper concludes semantic checks remain "insufficient for high-stakes, long-horizon autonomous tool use" ([§VII](https://arxiv.org/html/2605.02682v1)), so design fallbacks.
 
 ## When hybrid beats deterministic-only
 

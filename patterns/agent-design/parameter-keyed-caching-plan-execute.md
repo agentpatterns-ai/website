@@ -55,7 +55,7 @@ Persist it on disk, keyed by server-set hash and planner version; invalidate whe
 
 ### 3. Dependency-aware parallel step execution
 
-LLM-generated plans often contain steps whose only inter-dependency is narrative ordering, not data flow. A planner that emits explicit input/output dataclasses per step lets a topological scheduler fan out independent leaves instead of running them serially. GAP trains the planner to emit the dependency graph directly for adaptive parallel-and-serial execution ([arxiv:2510.25320](https://arxiv.org/pdf/2510.25320)); M1-Parallel reports 2.2x speedup with preserved accuracy via early-termination parallel plans ([arxiv:2507.08944](https://arxiv.org/pdf/2507.08944)). This is distinct from [Agent Composition Patterns](agent-composition-patterns.md) fan-out: composition parallelizes across agents; this parallelizes steps within one plan.
+LLM-generated plans often contain steps whose only inter-dependency is narrative ordering, not data flow. A planner that emits explicit input/output dataclasses per step lets a topological scheduler fan out independent leaves instead of running them serially. GAP trains the planner to emit the dependency graph directly for adaptive parallel-and-serial execution ([arxiv:2510.25320](https://arxiv.org/pdf/2510.25320v1)); M1-Parallel reports 2.2x speedup with preserved accuracy via early-termination parallel plans ([arxiv:2507.08944](https://arxiv.org/pdf/2507.08944v1)). This is distinct from [Agent Composition Patterns](agent-composition-patterns.md) fan-out: composition parallelizes across agents; this parallelizes steps within one plan.
 
 ## Why it works
 

@@ -44,7 +44,7 @@ graph TD
 
 ## When parallelization helps
 
-Parallelization is effective when the task requires "multiple independent directions simultaneously" ([Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system)). A review of 94 multi-agent SE papers ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475)) confirms parallelism and specialization as the primary rationale for multi-agent over single-agent architectures. This includes:
+Parallelization is effective when the task requires "multiple independent directions simultaneously" ([Anthropic's multi-agent research system post](https://www.anthropic.com/engineering/multi-agent-research-system)). A review of 94 multi-agent SE papers ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475v2)) confirms parallelism and specialization as the primary rationale for multi-agent over single-agent architectures. This includes:
 
 - Research tasks spanning multiple independent sources or domains
 - Analysis requiring different methodologies applied to the same dataset

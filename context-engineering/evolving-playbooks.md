@@ -40,7 +40,7 @@ When an LLM rewrites a context, it drops domain-specific knowledge to stay conci
 
 ### Context collapse
 
-Repeated full rewrites turn brevity bias into steady knowledge loss. Each cycle takes the previous output as input and drops more nuance. In measured runs, monolithic rewrites shrank a working context from 18,282 tokens to 122 tokens over several cycles, with a 9.6-point accuracy drop, because rewriting loses information the model treats as redundant ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618)).
+Repeated full rewrites turn brevity bias into steady knowledge loss. Each cycle takes the previous output as input and drops more nuance. In measured runs, monolithic rewrites shrank a working context from 18,282 tokens to 122 tokens over several cycles, with a 9.6-point accuracy drop, because rewriting loses information the model treats as redundant ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618v3)).
 
 ## The generation-reflection-curation loop
 
@@ -83,9 +83,9 @@ Online (agent memory): run the loop within a session, accumulating strategies as
 
 On agent benchmarks, evolving playbooks outperform both static prompts and monolithic rewriting:
 
-- AppWorld: +10.6% task completion, matching IBM CUGA (60.3%) on smaller open-source models (DeepSeek-V3.1) ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618))
-- Finance: +8.6% average accuracy across financial NER and formula tasks ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618))
-- Adaptation latency: 82.3% reduction versus GEPA, because delta merges are cheaper than full regenerations ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618))
+- AppWorld: +10.6% task completion, matching IBM CUGA (60.3%) on smaller open-source models (DeepSeek-V3.1) ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618v3))
+- Finance: +8.6% average accuracy across financial NER and formula tasks ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618v3))
+- Adaptation latency: 82.3% reduction versus GEPA, because delta merges are cheaper than full regenerations ([Zhang et al., 2026](https://arxiv.org/abs/2510.04618v3))
 
 The predecessor framework, Dynamic Cheatsheet, showed the core mechanism: GPT-4o went from 10% to 99% on Game of 24 by reusing discovered solution strategies ([Suzgun et al., 2025](https://arxiv.org/abs/2504.07952v1)).
 

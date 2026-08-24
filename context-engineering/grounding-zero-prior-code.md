@@ -36,11 +36,11 @@ Zero-prior bites at generation time, on every call, against code no model has in
 
 ## Retrieving the docs is not enough
 
-The obvious fix is to pull the internal API reference into context at inference time. It closes less of the gap than you would expect. PriCoder tested exactly this across three mainstream LLMs on private-library benchmarks: "even given accurate required knowledge, LLMs still struggle to invoke private-library APIs effectively." Their training-side intervention adds "over 20% gains in pass@1 in many settings" on top of doc retrieval ([Zhang et al., "To See is Not to Master", arxiv 2603.15159, 2026](https://arxiv.org/abs/2603.15159)).
+The obvious fix is to pull the internal API reference into context at inference time. It closes less of the gap than you would expect. PriCoder tested exactly this across three mainstream LLMs on private-library benchmarks: "even given accurate required knowledge, LLMs still struggle to invoke private-library APIs effectively." Their training-side intervention adds "over 20% gains in pass@1 in many settings" on top of doc retrieval ([Zhang et al., "To See is Not to Master", arxiv 2603.15159, 2026](https://arxiv.org/abs/2603.15159v4)).
 
 The reason is mechanical. Context can only shift weight toward APIs the model already assigns some probability to, and a proprietary API has none. So the nearest public API keeps winning every decision the documentation does not explicitly forbid.
 
-ExploraCoder shows the same thing from the other direction: force the agent to call the real API at intermediate steps and it beats retrieval-based approaches by 11.99% and pretraining-based methods by 17.28% on unseen APIs ([Wang et al., "ExploraCoder", arxiv 2412.05366, 2024](https://arxiv.org/abs/2412.05366)). Documentation gives the agent somewhere to look things up. Overriding the wrong guess takes a model of the technology sitting in context at the moment of the decision.
+ExploraCoder shows the same thing from the other direction: force the agent to call the real API at intermediate steps and it beats retrieval-based approaches by 11.99% and pretraining-based methods by 17.28% on unseen APIs ([Wang et al., "ExploraCoder", arxiv 2412.05366, 2024](https://arxiv.org/abs/2412.05366v2)). Documentation gives the agent somewhere to look things up. Overriding the wrong guess takes a model of the technology sitting in context at the moment of the decision.
 
 ## The five-layer bootstrap
 
@@ -62,7 +62,7 @@ Where each layer lives depends on when it needs to be readable:
 | Reference implementations | Workspace code | Agents pattern-match the code they can see, so it has to show the right shape |
 | Diagnostics | Error messages | "Received: { clientId, scope } which appears to be an OAuth configuration" teaches at the point of failure |
 
-Loading all five every session costs more than it returns. A controlled evaluation found context files often reduce task success against no context file at all, while raising inference cost over 20% when they carry structural overviews ([Gloaguen et al., "Evaluating AGENTS.md", arxiv 2602.11988](https://arxiv.org/abs/2602.11988)). Layer 1 is a few lines and belongs in the always-loaded file. Layers 3 and 4 are long and belong behind an on-demand call.
+Loading all five every session costs more than it returns. A controlled evaluation found context files often reduce task success against no context file at all, while raising inference cost over 20% when they carry structural overviews ([Gloaguen et al., "Evaluating AGENTS.md", arxiv 2602.11988](https://arxiv.org/abs/2602.11988v2)). Layer 1 is a few lines and belongs in the always-loaded file. Layers 3 and 4 are long and belong behind an on-demand call.
 
 ## Start with the baseline run
 
@@ -74,7 +74,7 @@ Then write the identity layer against that specific answer. "Uses our internal a
 
 Every generation samples from the pretrained distribution. When the correct API carries no probability under that distribution, the nearest public API is the best answer available, so that is what comes out. The model has nothing to be uncertain about.
 
-The behavior is stubborn. In one study, models accepted fabricated library names under plausible prompts in up to 99% of cases ([Twist et al., "Library Hallucinations in LLM-Generated Code", arxiv 2509.22202, 2026](https://arxiv.org/abs/2509.22202)).
+The behavior is stubborn. In one study, models accepted fabricated library names under plausible prompts in up to 99% of cases ([Twist et al., "Library Hallucinations in LLM-Generated Code", arxiv 2509.22202, 2026](https://arxiv.org/abs/2509.22202v3)).
 
 Documentation adds weight where the correct API should be. The wrong one still wins wherever the docs are silent, which is most places. An identity layer changes the question the model is answering, from "complete this code against the most likely API" to "this is technology X, X is not Y, treat Y patterns as errors." That constraint holds across the whole generation, not just one call.
 
@@ -85,7 +85,7 @@ The five-layer bootstrap is real engineering, and it only pays for itself on a p
 - The surface is tiny. One internal helper does not earn a Skill plus an MCP server plus an identity layer. The agent gets it wrong, review catches it, and that costs less than maintaining the provisioning.
 - Nobody owns the reference material. Stale identity is worse than no identity: the agent now follows confidently wrong instructions instead of its own wrong guess. See [Stale AI Configuration Artifacts (Context Rot)](../patterns/anti-patterns/stale-ai-configuration-artifacts.md).
 - The SDK is a thin wrapper. If it is OAuth plus a header, the nearest public API is already about 80% right and the bootstrap buys little.
-- The always-loaded context is already full. Bulk context files add roughly 20% to inference cost with no gain in task success ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). Keep identity there and push shape, examples, and gotchas behind on-demand calls.
+- The always-loaded context is already full. Bulk context files add roughly 20% to inference cost with no gain in task success ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988v2)). Keep identity there and push shape, examples, and gotchas behind on-demand calls.
 - The verifier is fast and lossless. Unit tests covering the internal SDK on every commit surface the failure in seconds. Provisioning earns most where wrong code looks plausible and reaches production unchecked.
 
 ## Example

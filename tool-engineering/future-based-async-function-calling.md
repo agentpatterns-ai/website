@@ -24,7 +24,7 @@ Related lesson: [Annotations and Safe Concurrency](https://learn.agentpatterns.a
 
 End-to-end latency on a function-calling turn decomposes into `decode_time + tool_time`. On tool-heavy workloads `tool_time` dominates. The synchronous protocol stops decoding when the model emits a tool call, and resumes only after the call returns. So the two costs stack linearly.
 
-Native parallel function calling helps when the model names N independent calls in one turn ([OpenAI](https://platform.openai.com/docs/guides/function-calling), [Anthropic](https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview)), but decoding still blocks on the slowest call in the batch. [LLMCompiler](https://arxiv.org/abs/2312.04511) instead has a planner generate a DAG upfront and an executor run independent edges in parallel — up to 3.7x speedup, but the planner is a separate model call and the DAG is fixed once dispatched.
+Native parallel function calling helps when the model names N independent calls in one turn ([OpenAI](https://platform.openai.com/docs/guides/function-calling), [Anthropic](https://docs.claude.com/en/docs/agents-and-tools/tool-use/overview)), but decoding still blocks on the slowest call in the batch. [LLMCompiler](https://arxiv.org/abs/2312.04511v3) instead has a planner generate a DAG upfront and an executor run independent edges in parallel — up to 3.7x speedup, but the planner is a separate model call and the DAG is fixed once dispatched.
 
 ## The futures protocol
 

@@ -21,7 +21,7 @@ Related lesson: [Garbage-Collecting Entropy](https://learn.agentpatterns.ai/work
 
 ## The evidence
 
-A causal study of 806 Cursor-adopting repositories against 1,380 matched controls shows an asymmetry between velocity gains and quality costs ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427)):
+A causal study of 806 Cursor-adopting repositories against 1,380 matched controls shows an asymmetry between velocity gains and quality costs ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427v3)):
 
 | Metric | Effect | Duration |
 |--------|--------|----------|
@@ -56,7 +56,7 @@ graph LR
 
 ## Why it happens
 
-The study finds a direct complexity effect. Even controlling for codebase growth, AI tool adoption raises code complexity by about 9% on its own ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427)). The paper measures this effect statistically but does not directly observe the architectural mechanism. The authors suggest that multi-file edits introduce architectural inconsistencies: generated code that is locally correct but structurally incoherent.
+The study finds a direct complexity effect. Even controlling for codebase growth, AI tool adoption raises code complexity by about 9% on its own ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427v3)). The paper measures this effect statistically but does not directly observe the architectural mechanism. The authors suggest that multi-file edits introduce architectural inconsistencies: generated code that is locally correct but structurally incoherent.
 
 Independent data backs up the pattern:
 

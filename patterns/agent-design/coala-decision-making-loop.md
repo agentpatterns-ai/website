@@ -52,13 +52,13 @@ The lens earns its keep by giving readers a way to ask "which phase does this ta
 | Select | voting, argmax over candidate scores, majority-vote across parallel agents ([Graph of Thoughts](graph-of-thoughts.md) aggregation step) |
 | Act + observe | [Agent Backpressure](agent-backpressure.md) and verification gates sit on the act -> observe boundary; [Agent Turn Model](agent-turn-model.md) describes the iterative inference + tool-call structure of a single act step |
 
-ReAct is the textbook example of an agent that skips evaluate and select: a single reasoning step produces one grounding action with no candidate scoring ([CoALA §4.3](https://arxiv.org/html/2309.02427v3)). Tree of Thoughts is the textbook example of an agent that makes evaluate and select explicit: it proposes multiple thoughts, scores each, and searches the tree. On the same model it raised Game of 24 success from 4% (Chain-of-Thought) to 74% ([Yao et al., arXiv:2305.10601](https://arxiv.org/abs/2305.10601)). The phase taxonomy is what makes those two designs comparable on the same diagram.
+ReAct is the textbook example of an agent that skips evaluate and select: a single reasoning step produces one grounding action with no candidate scoring ([CoALA §4.3](https://arxiv.org/html/2309.02427v3)). Tree of Thoughts is the textbook example of an agent that makes evaluate and select explicit: it proposes multiple thoughts, scores each, and searches the tree. On the same model it raised Game of 24 success from 4% (Chain-of-Thought) to 74% ([Yao et al., arXiv:2305.10601](https://arxiv.org/abs/2305.10601v2)). The phase taxonomy is what makes those two designs comparable on the same diagram.
 
 ## Why it works
 
 CoALA grounds the four phases in 50 years of symbolic AI cognitive architectures (Soar, ACT-R), which empirically converged on propose -> evaluate -> select as the minimum sufficient decomposition for general problem-solving ([CoALA §3](https://arxiv.org/html/2309.02427v3)). The causal reason is informational, not procedural. Evaluate exists so that the policy's confidence is legible to select. Select exists so that the act decision is legible to whoever audits the trajectory. Skipping the named sub-stages does not make the cycle faster — it just hides the evaluate-and-select inside an opaque single LLM call.
 
-The empirical payoff of making the sub-stages explicit is Tree of Thoughts. The same backbone model raised Game of 24 success from 4% to 74% by exposing propose/evaluate/select to deliberate search ([Yao et al., arXiv:2305.10601](https://arxiv.org/abs/2305.10601)). Used as a locator, the lens lets you ask "which phase of this loop is hiding inside an opaque single call, and is exposing it likely to pay back?"
+The empirical payoff of making the sub-stages explicit is Tree of Thoughts. The same backbone model raised Game of 24 success from 4% to 74% by exposing propose/evaluate/select to deliberate search ([Yao et al., arXiv:2305.10601](https://arxiv.org/abs/2305.10601v2)). Used as a locator, the lens lets you ask "which phase of this loop is hiding inside an opaque single call, and is exposing it likely to pay back?"
 
 ## When this backfires
 
@@ -76,7 +76,7 @@ CoALA itself frames the loop descriptively, not prescriptively ("we use CoALA to
 
 - The loop is propose -> evaluate -> select -> act, but ReAct-shaped agents skip evaluate and select entirely; both are valid CoALA instantiations ([CoALA §4.3](https://arxiv.org/html/2309.02427v3)).
 - Use the vocabulary to locate where a tactic intervenes — ranking tactics improve evaluate, verification gates guard act, plan-mode front-loads propose.
-- The payoff of making evaluate and select explicit is demonstrated by Tree of Thoughts (4% -> 74% on Game of 24 with the same backbone model) ([Yao et al., arXiv:2305.10601](https://arxiv.org/abs/2305.10601)), not by CoALA itself.
+- The payoff of making evaluate and select explicit is demonstrated by Tree of Thoughts (4% -> 74% on Game of 24 with the same backbone model) ([Yao et al., arXiv:2305.10601](https://arxiv.org/abs/2305.10601v2)), not by CoALA itself.
 - Skip the lens when external verification already gates act, when latency budgets are tight, or when the agent is a fixed-shape router.
 
 ## Related

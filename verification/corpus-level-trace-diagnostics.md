@@ -51,7 +51,7 @@ The split echoes the division of labor in [Anthropic's multi-agent research syst
 
 Agent failures are governed by a few recurring causal patterns (tool misuse, context drift, [reward hacking](anti-reward-hacking.md), missing capability), but each surfaces with high per-trace variance. Aggregating across many traces averages out task-specific noise so the signal becomes detectable.
 
-The scout-investigator split keeps this safe at scale: scout pattern recognition is cheap but error-prone; investigator verification is expensive but precise. Composed, they mirror clinical diagnostic reasoning — broad differential, then targeted confirmation. Reported payoff: 30.4 percentage points scaffold improvement over baseline across HLE, SWeBench Pro, TerminalBench, and FeatureBench. [Source: [Manglik et al., Insights Generator (arxiv 2605.21347)](https://arxiv.org/abs/2605.21347)]
+The scout-investigator split keeps this safe at scale: scout pattern recognition is cheap but error-prone; investigator verification is expensive but precise. Composed, they mirror clinical diagnostic reasoning — broad differential, then targeted confirmation. Reported payoff: 30.4 percentage points scaffold improvement over baseline across HLE, SWeBench Pro, TerminalBench, and FeatureBench. [Source: [Manglik et al., Insights Generator (arxiv 2605.21347)](https://arxiv.org/abs/2605.21347v3)]
 
 ## Where it sits among diagnostic layers
 

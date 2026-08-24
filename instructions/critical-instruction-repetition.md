@@ -29,7 +29,7 @@ Learn it hands-on with the [Top and Tail guided lesson](https://learn.agentpatte
 Transformer attention is not uniform across a context window. Two structural biases sit at opposite ends:
 
 - Primacy bias — initial tokens receive disproportionate attention. Xiao et al. (2023) showed softmax attention concentrates on early tokens as a "sink," independent of semantic relevance ([Efficient Streaming Language Models with Attention Sinks](https://arxiv.org/abs/2309.17453)).
-- Recency bias — recent tokens are freshest in the model's working state and directly shape the next token. Liu et al. (2023) measured a 30%+ accuracy drop when relevant information moved to the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)).
+- Recency bias — recent tokens are freshest in the model's working state and directly shape the next token. Liu et al. (2023) measured a 30%+ accuracy drop when relevant information moved to the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172v3)).
 
 A critical instruction placed once in the middle of a prompt sits in the weakest-attention trough. Placing it at both ends puts it in both high-attention positions.
 

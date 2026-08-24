@@ -32,7 +32,7 @@ Design instruction sets to stay well below the ceiling. Stating a rule does not 
 
 ## Why it works
 
-Transformer models process instructions and task context through the same attention mechanism. As instruction length grows, each rule competes for attention weight at every output token. Research on multi-step agents confirms that monolithic prompts are "prone to instruction-following degradation as prompt length increases" ([Arbor, 2026](https://arxiv.org/abs/2602.14643)).
+Transformer models process instructions and task context through the same attention mechanism. As instruction length grows, each rule competes for attention weight at every output token. Research on multi-step agents confirms that monolithic prompts are "prone to instruction-following degradation as prompt length increases" ([Arbor, 2026](https://arxiv.org/abs/2602.14643v4)).
 
 Position compounds this: tokens near the beginning and end of a context window receive higher attention than those in the middle. Rules buried mid-prompt get less reliable attention regardless of stated importance.
 

@@ -132,7 +132,7 @@ Not every project needs a slopsquatting-specific gate; the defense duplicates wo
 
 - Lockfile-enforced workflows already in place. When `npm ci` / `uv pip sync` / `pip-sync` runs against a human-reviewed lockfile, the slopsquatted name is rejected before resolution — a second per-install existence check is redundant.
 - Curated internal mirrors. When Artifactory or Nexus already filters unknown upstream packages, an agent-side check adds nothing.
-- Mature canonical libraries only. Hallucination concentrates in the long tail; a manifest importing only well-known top-1000 packages (`requests`, `pandas`, `numpy`, `axios`) has minimal exposure. The 5.2% commercial rate is an average across all tasks, not per-call on canonical libraries ([arXiv:2406.10279](https://arxiv.org/abs/2406.10279)).
+- Mature canonical libraries only. Hallucination concentrates in the long tail; a manifest importing only well-known top-1000 packages (`requests`, `pandas`, `numpy`, `axios`) has minimal exposure. The 5.2% commercial rate is an average across all tasks, not per-call on canonical libraries ([arXiv:2406.10279](https://arxiv.org/abs/2406.10279v3)).
 - Throwaway prototypes and ephemeral sandboxes. A verification step adds latency for code that never leaves a laptop or a torn-down container; its cost dominates the per-install risk for short-lived workloads.
 - Registry-side defenses are improving. PyPI and npm have invested in supply-chain hardening since the Lanyado experiment ([Wikipedia](https://en.wikipedia.org/wiki/Slopsquatting)); the residual threat concentrates where agents install outside the gates above.
 
@@ -140,7 +140,7 @@ Same shape as the LLM-pinned-CVE finding: a measurement-grounded threat that ord
 
 ## Key Takeaways
 
-- 5.2%-21.7% of LLM-recommended package names do not exist in any public registry; 205,474 unique fabricated names found across 16 models and 576,000 generations ([arXiv:2406.10279](https://arxiv.org/abs/2406.10279))
+- 5.2%-21.7% of LLM-recommended package names do not exist in any public registry; 205,474 unique fabricated names found across 16 models and 576,000 generations ([arXiv:2406.10279](https://arxiv.org/abs/2406.10279v3))
 - 43% of hallucinated names reappear identically across 10 re-runs of the same prompt — that persistence is what makes the attack economic; an attacker enumerates them by re-prompting at scale
 - 48.6% of hallucinated names are Levenshtein distance ≥6 from any real package, so PyPI/npm typosquat detectors miss the bulk of the surface — defenses must verify existence, not edit distance
 - Lanyado's `huggingface-cli` PoC was downloaded >30,000 times in three months and referenced by Alibaba's GraphTranslator README — a hallucinated name registered on a public registry is installed at scale even when the payload is benign ([The Register](https://www.theregister.com/2024/03/28/ai_bots_hallucinate_software_packages/))

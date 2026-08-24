@@ -27,7 +27,7 @@ The gate pays off only under specific conditions. Outside them it does nothing o
 
 - The tool is policy-permissive and you cannot change it. The write API executes any syntactically valid call, and policy lives in a prose document the model is told to follow rather than in the tool. Where the tool already enforces its own preconditions, there is no silent wrong-state class to recover ([2607.07405](https://arxiv.org/abs/2607.07405)).
 - The policy is state-decidable. The rule can be written as a deterministic predicate over current state — fare class, timing, flown segments, ownership. Rules needing ambiguity resolution, legal interpretation, or human judgment cannot ([2607.07405](https://arxiv.org/abs/2607.07405)).
-- The failure distribution actually contains silent policy-violating writes. On the τ²-bench airline domain, 78% of a budget agent's failures were silent wrong-state failures with no tool error ([2607.07405](https://arxiv.org/abs/2607.07405)). Where the dominant errors are wrong-sequence or instance-state mismatches instead, the gate never fires.
+- The failure distribution actually contains silent policy-violating writes. On the τ²-bench airline domain, 78% of a budget agent's failures were silent wrong-state failures with no tool error ([2607.07405](https://arxiv.org/abs/2607.07405v2)). Where the dominant errors are wrong-sequence or instance-state mismatches instead, the gate never fires.
 
 ## How the gate works
 
@@ -39,14 +39,14 @@ The gate changes the system property rather than the model's reasoning. A silent
 
 ## When this backfires
 
-- Self-enforcing tools. When the tool already rejects out-of-policy calls, the gate adds maintenance for nothing and can cost success — on the τ²-bench retail domain, gates produced a −4.7pp point estimate with no significance ([2607.07405](https://arxiv.org/abs/2607.07405)).
+- Self-enforcing tools. When the tool already rejects out-of-policy calls, the gate adds maintenance for nothing and can cost success — on the τ²-bench retail domain, gates produced a −4.7pp point estimate with no significance ([2607.07405](https://arxiv.org/abs/2607.07405v2)).
 - Non-inducing workloads. On BFCL v4 the gates fired zero times across 200 entries, because the failures there are wrong-sequence and instance-state errors, not policy-violating writes ([2607.07405](https://arxiv.org/abs/2607.07405)).
-- Post-rejection dead-ends. Blocking a forbidden write does not rescue the task — one task fires the gate repeatedly yet stays at 0 of 5 successes. The guarantee is over the action, not over completion ([2607.07405](https://arxiv.org/abs/2607.07405)).
-- Overfit or low-precision predicates. A suite tuned on one model can over-block another, and a sloppy gate blocks mostly-legitimate calls — the baggage gate fired 42 times for 2 true blocks, 5% precision ([2607.07405](https://arxiv.org/abs/2607.07405)).
+- Post-rejection dead-ends. Blocking a forbidden write does not rescue the task — one task fires the gate repeatedly yet stays at 0 of 5 successes. The guarantee is over the action, not over completion ([2607.07405](https://arxiv.org/abs/2607.07405v2)).
+- Overfit or low-precision predicates. A suite tuned on one model can over-block another, and a sloppy gate blocks mostly-legitimate calls — the baggage gate fired 42 times for 2 true blocks, 5% precision ([2607.07405](https://arxiv.org/abs/2607.07405v2)).
 
 ## Example
 
-On the τ²-bench airline domain, adding the four-gate suite to a gpt-4o-mini budget agent raised overall task success from 29.6% to 42.0% (+12.4pp, P=0.0012), reproduced on a disjoint 15-seed set at +12.3pp ([2607.07405](https://arxiv.org/abs/2607.07405)). The lift concentrates where the gates engage: on the 26 firing tasks success rose 13.8% to 33.1% (+19.2pp), while the 24 non-firing tasks showed no significant change. Reliability improved too — pass@5 went from 8.0% to 26.0%. A frontier model saw a smaller but real gain, 61.2% to 71.6% ([2607.07405](https://arxiv.org/abs/2607.07405)). The gate improves task success, not only safety, because a blocked forbidden write is a wrong final state avoided.
+On the τ²-bench airline domain, adding the four-gate suite to a gpt-4o-mini budget agent raised overall task success from 29.6% to 42.0% (+12.4pp, P=0.0012), reproduced on a disjoint 15-seed set at +12.3pp ([2607.07405](https://arxiv.org/abs/2607.07405v2)). The lift concentrates where the gates engage: on the 26 firing tasks success rose 13.8% to 33.1% (+19.2pp), while the 24 non-firing tasks showed no significant change. Reliability improved too — pass@5 went from 8.0% to 26.0%. A frontier model saw a smaller but real gain, 61.2% to 71.6% ([2607.07405](https://arxiv.org/abs/2607.07405v2)). The gate improves task success, not only safety, because a blocked forbidden write is a wrong final state avoided.
 
 ## Key Takeaways
 

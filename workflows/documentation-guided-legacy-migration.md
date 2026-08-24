@@ -21,11 +21,11 @@ maturity: emerging
 
 File-by-file and function-by-function LLM translators lose architectural intent. They mirror C syntax into unsafe Rust that compiles, passes some tests, and silently violates ownership invariants the original codebase enforced implicitly. The documentation-guided approach inserts a structured intermediate representation — a human-readable architecture document — between the source and the agent that writes the target language.
 
-RustPrint, the system that introduced this pattern, reported 93.26% feature preservation against a 52.52% Claude Code agentic baseline and a 95.17% test pass rate against 79.85%, evaluated on eight real-world C repositories from 11K to 84K LoC ([arXiv:2605.14634](https://arxiv.org/abs/2605.14634)).
+RustPrint, the system that introduced this pattern, reported 93.26% feature preservation against a 52.52% Claude Code agentic baseline and a 95.17% test pass rate against 79.85%, evaluated on eight real-world C repositories from 11K to 84K LoC ([arXiv:2605.14634](https://arxiv.org/abs/2605.14634v3)).
 
 ## Why source-level translation fails
 
-Transpilation tools like [c2rust](https://github.com/immunant/c2rust) produce unsafe Rust that mirrors C control flow. The project itself documents the constraint: "the translator produces unsafe Rust code that closely mirrors the input C code" and "generating safe and idiomatic Rust code from C ultimately requires manual effort." LLM-based translators improve on this — [SACTOR](https://arxiv.org/abs/2503.12511) reaches 85% semantic preservation through a two-step unidiomatic-then-idiomatic pass — but idiomatic refinement still fails 48% of the time on CRust-Bench because the agent reasons about syntax, not intent.
+Transpilation tools like [c2rust](https://github.com/immunant/c2rust) produce unsafe Rust that mirrors C control flow. The project itself documents the constraint: "the translator produces unsafe Rust code that closely mirrors the input C code" and "generating safe and idiomatic Rust code from C ultimately requires manual effort." LLM-based translators improve on this — [SACTOR](https://arxiv.org/abs/2503.12511v3) reaches 85% semantic preservation through a two-step unidiomatic-then-idiomatic pass — but idiomatic refinement still fails 48% of the time on CRust-Bench because the agent reasons about syntax, not intent.
 
 The failure is structural. C ownership and lifetimes are implicit in pointer arithmetic, allocator pairing, and naming conventions. When an agent reads C and writes Rust, those implicit conventions never get reified. The Rust output is plausible, but it does not encode the model the original maintainer carried in their head.
 

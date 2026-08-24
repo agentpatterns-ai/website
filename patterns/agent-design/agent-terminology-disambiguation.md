@@ -106,7 +106,7 @@ Workflows pull from [Anthropic's Effective Agents Framework](anthropic-effective
 
 ## Why it works
 
-Category recognition reduces over-engineering. The [Agentless paper](https://arxiv.org/abs/2407.01489) demonstrated a two-phase non-autonomous workflow achieved 32.00% on SWE-bench Lite at $0.70 per issue, outperforming all existing open-source autonomous-agent baselines. The lesson: teams that recognize they are building a workflow stop reaching for autonomous-loop patterns. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) is explicit — "find the simplest solution possible", adding agentic patterns "only when it demonstrably improves outcomes". Shared vocabulary makes that judgment clear inside a team.
+Category recognition reduces over-engineering. The [Agentless paper](https://arxiv.org/abs/2407.01489v2) demonstrated a two-phase non-autonomous workflow achieved 32.00% on SWE-bench Lite at $0.70 per issue, outperforming all existing open-source autonomous-agent baselines. The lesson: teams that recognize they are building a workflow stop reaching for autonomous-loop patterns. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) is explicit — "find the simplest solution possible", adding agentic patterns "only when it demonstrably improves outcomes". Shared vocabulary makes that judgment clear inside a team.
 
 ## When this backfires
 

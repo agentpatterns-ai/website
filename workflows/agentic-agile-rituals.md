@@ -52,7 +52,7 @@ Long-horizon work needs a stricter version. Software-engineering pass rates drop
 
 The Microsoft framing makes acceptance criteria explicit and bi-directional: positive checks (what the feature must do) and negative constraints (what it must not do) ([Microsoft Developer Blog](https://developer.microsoft.com/blog/agentic-agile-why-agent-development-needs-agile-not-just-prompts)). Negative constraints are the half that gets dropped when acceptance criteria are imported unchanged from human workflows — humans default-comply with social rules an agent will not.
 
-Negative constraints map onto spec-violation detection. AgentPex extracts behavioral rules from agent prompts and evaluates traces for compliance — on 424 traces across telecom, retail, and airline customer-service domains it surfaced "specification violations that are not captured by outcome-only scoring" ([arXiv 2603.23806](https://arxiv.org/abs/2603.23806)). Acceptance criteria written as machine-checkable negative constraints turn the spec into a continuously-runnable test rather than a document.
+Negative constraints map onto spec-violation detection. AgentPex extracts behavioral rules from agent prompts and evaluates traces for compliance — on 424 traces across telecom, retail, and airline customer-service domains it surfaced "specification violations that are not captured by outcome-only scoring" ([arXiv 2603.23806](https://arxiv.org/abs/2603.23806v2)). Acceptance criteria written as machine-checkable negative constraints turn the spec into a continuously-runnable test rather than a document.
 
 ### 3. Retrospectives on trace corpora, not outcomes
 

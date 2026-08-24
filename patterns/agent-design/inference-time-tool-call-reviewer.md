@@ -60,7 +60,7 @@ The framing matters. The [self-critique paradox](https://snorkel.ai/blog/the-sel
 
 Two findings constrain deployment:
 
-1. Reviewer model choice dominates. Swapping GPT-4o for o3-mini changed the benefit-to-risk ratio from 2.1:1 to 3:1 without touching the base agent ([Ta et al., 2026](https://arxiv.org/abs/2604.27233v1)). A reviewer that shares the base agent's training distribution inherits its blind spots — [blind-spot research](https://arxiv.org/abs/2507.02778) measured a 64.5% rate when models reviewed their own outputs.
+1. Reviewer model choice dominates. Swapping GPT-4o for o3-mini changed the benefit-to-risk ratio from 2.1:1 to 3:1 without touching the base agent ([Ta et al., 2026](https://arxiv.org/abs/2604.27233v1)). A reviewer that shares the base agent's training distribution inherits its blind spots — [blind-spot research](https://arxiv.org/abs/2507.02778v3) measured a 64.5% rate when models reviewed their own outputs.
 2. Prompt optimization compounds. Applying [GEPA](gepa-reflective-prompt-evolution.md) to the reviewer prompt added +1.5–2.8% on top of the model swap ([Ta et al., 2026](https://arxiv.org/abs/2604.27233v1)). You can tune the reviewer independently of the base agent.
 
 ## When to apply

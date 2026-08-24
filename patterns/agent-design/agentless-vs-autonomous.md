@@ -16,7 +16,7 @@ maturity: adopted
 
 > Complex autonomous software agents are often unnecessary and counterproductive. Simple, constrained workflows frequently deliver better results at lower cost with reduced complexity debt.
 
-Empirical evidence challenges the assumption that more AI autonomy gives better results. The [Agentless paper](https://arxiv.org/abs/2407.01489) showed that a simple two-phase process, localization then repair, reached 27.33% accuracy on SWE-bench Lite at $0.70 average cost. It outperformed existing open-source autonomous agents while using far less complexity.
+Empirical evidence challenges the assumption that more AI autonomy gives better results. The [Agentless paper](https://arxiv.org/abs/2407.01489v2) showed that a simple two-phase process, localization then repair, resolved 32.00% of SWE-bench Lite at $0.70 average cost. It outperformed existing open-source autonomous agents while using far less complexity.
 
 ## The agentless approach
 
@@ -118,7 +118,7 @@ Simple-first defaults carry real costs when the task structure does not fit cons
 
 - Exploratory or open-ended tasks: when the problem space is poorly defined and needs iterative discovery, such as debugging novel production failures, fixed two-phase pipelines cannot adapt mid-execution.
 - Long-horizon planning: tasks that span many interdependent steps, such as multi-file refactors or features that cross architectural boundaries, may need the planning capacity that autonomous agents provide.
-- Rapidly maturing capability curve: benchmark results shift quickly. TDFlow reached [88.8% on SWE-bench Lite](https://arxiv.org/abs/2510.23761) and Live-SWE-agent reached [77.4% on SWE-bench Verified](https://arxiv.org/abs/2511.13646), both far above the Agentless 27.33% baseline from 2024. As model capability advances, the gap between simple and sophisticated designs narrows, which makes the complexity tradeoff worth reconsidering for higher-stakes tasks.
+- Rapidly maturing capability curve: benchmark results shift quickly. TDFlow reached [88.8% on SWE-bench Lite](https://arxiv.org/abs/2510.23761v2) and Live-SWE-agent reached [77.4% on SWE-bench Verified](https://arxiv.org/abs/2511.13646), both far above the Agentless 27.33% baseline from 2024. As model capability advances, the gap between simple and sophisticated designs narrows, which makes the complexity tradeoff worth reconsidering for higher-stakes tasks.
 
 The agentless approach remains a strong default for well-scoped tasks. The case for it weakens as tasks grow more exploratory, models grow more capable, and teams develop better tooling to manage agent complexity.
 

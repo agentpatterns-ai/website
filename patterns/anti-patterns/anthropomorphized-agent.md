@@ -31,7 +31,7 @@ Misplaced trust. "It understood last time" is not a basis for trust. The same pr
 
 Inappropriate frustration. "Why does it keep forgetting?" is the wrong question. The agent has no memory of previous sessions unless you add it deliberately through [agent memory patterns](../agent-design/agent-memory-patterns.md). Frustration directed at the agent is misplaced.
 
-Degradation misattributed to fatigue. Agents do not tire. They degrade with [context overload](context-poisoning.md) — long conversations accumulate noise that competes with signal ([NoLiMa benchmark, ICML 2025](https://arxiv.org/abs/2502.05167), found GPT-4o accuracy drops from 99.3% on short contexts to 69.7% at longer lengths). Reset context; do not take a break.
+Degradation misattributed to fatigue. Agents do not tire. They degrade with [context overload](context-poisoning.md) — long conversations accumulate noise that competes with signal ([NoLiMa benchmark, ICML 2025](https://arxiv.org/abs/2502.05167v3), found GPT-4o accuracy drops from 99.3% on short contexts to 69.7% at longer lengths). Reset context; do not take a break.
 
 Confidence as a signal. Agents produce confident-sounding output regardless of accuracy. [LLMs stay overconfident even when wrong and fail to recalibrate after the fact](https://www.cmu.edu/dietrich/news/news-stories/2025/july/trent-cash-ai-overconfidence.html). An agent that confidently produces wrong output is more dangerous than one that hedges, because confident delivery suppresses the skepticism that catches errors.
 

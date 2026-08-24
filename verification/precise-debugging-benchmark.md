@@ -24,7 +24,7 @@ maturity: emerging
 
 Unit-test pass rate treats "debugged" and "rewrote half the file" as the same outcome. A debugging task asks the model to localize a fault and apply a targeted edit. That conflation hides a systematic failure mode: frontier models often produce correct but over-edited solutions. Prior debugging benchmarks like [DebugBench](https://arxiv.org/abs/2401.04621) score only pass rate across thousands of LeetCode-derived bugs, so this regeneration pattern stays invisible.
 
-On the Precise Debugging Benchmark (PDB), GPT-5.1-Codex and DeepSeek-V3.2-Thinking achieve unit-test pass rates above 76% but edit-level precision below 45% — even when instructed explicitly to perform minimal debugging ([Zhu et al., 2026](https://arxiv.org/abs/2604.17338); [code release](https://github.com/Bill1235813/PDB)). Pass rate alone says both models are strong debuggers. Precision says more than half their edits were unnecessary.
+On the Precise Debugging Benchmark (PDB), GPT-5.1-Codex and DeepSeek-V3.2-Thinking achieve unit-test pass rates above 76% but edit-level precision below 45% — even when instructed explicitly to perform minimal debugging ([Zhu et al., 2026](https://arxiv.org/abs/2604.17338v4); [code release](https://github.com/Bill1235813/PDB)). Pass rate alone says both models are strong debuggers. Precision says more than half their edits were unnecessary.
 
 ## Two metrics instead of one
 
@@ -52,8 +52,8 @@ This mirrors the stage-level precision/recall split used by [trajectory decompos
 
 ## What the evidence shows
 
-- High pass with low precision is the default: above 76% pass, below 45% precision on PDB-Single-Hard and PDB-Multi for frontier coding models ([Zhu et al., 2026](https://arxiv.org/abs/2604.17338)).
-- Explicit instructions do not close the gap. Prompting for "minimal debugging" still leaves precision below 45% ([Zhu et al., 2026](https://arxiv.org/abs/2604.17338)).
+- High pass with low precision is the default: above 76% pass, below 45% precision on PDB-Single-Hard and PDB-Multi for frontier coding models ([Zhu et al., 2026](https://arxiv.org/abs/2604.17338v4)).
+- Explicit instructions do not close the gap. Prompting for "minimal debugging" still leaves precision below 45% ([Zhu et al., 2026](https://arxiv.org/abs/2604.17338v4)).
 - Iterative and agentic debugging strategies do not substantially improve precision or recall. Wrapping the same base model in multi-turn loops or delegator-worker topologies produced no meaningful lift. The authors argue the base policy itself favors regeneration over targeted edits ([Zhu et al., 2026](https://arxiv.org/abs/2604.17338)).
 
 ## Applying this to your own evals
@@ -95,7 +95,7 @@ Precision against a reference patch is a useful signal only when a reference pat
 ## Key Takeaways
 
 - Pass rate alone conflates debugging with regeneration; add edit-level precision and bug-level recall when the task is debugging
-- Frontier models clear 76% pass on PDB but fall below 45% precision, even when told to minimize edits ([Zhu et al., 2026](https://arxiv.org/abs/2604.17338))
+- Frontier models clear 76% pass on PDB but fall below 45% precision, even when told to minimize edits ([Zhu et al., 2026](https://arxiv.org/abs/2604.17338v4))
 - Iterative and agentic loops on the same base model do not close the precision gap — change the base policy, not the wrapper
 - The "high pass, low precision, high recall" profile is the regeneration signature to watch for in your own evals
 - Skip edit precision when no reference patch exists or when broader rewrites are the right answer
@@ -106,3 +106,4 @@ Precision against a reference patch is a useful signal only when a reference pat
 - [pass@k and pass^k](pass-at-k-metrics.md) — capability and consistency metrics that sit alongside edit precision
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — the right default when no reference patch exists
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md) — categorizes why code suggestions fail, complementary to edit-precision diagnosis
+- [Unstated-Contract Bugs: Sort Tickets by Information Gap](unstated-contract-bug-triage.md) — the bug class where a passing test suite is the wrong oracle in the first place

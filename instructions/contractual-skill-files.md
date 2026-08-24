@@ -27,7 +27,7 @@ The contractual structure is worth its overhead under specific conditions ([Liu,
 
 - Enterprise audit contexts — reviewers, compliance, or security teams must find permissions, evidence requirements, and approval points without reading every skill end-to-end.
 - Multi-author skill libraries — when several engineers write skills, a fixed schema keeps the inspection surface consistent across authors.
-- Skills that touch high-risk tools — the framework's tool-calling experiments showed contractual skills usually reduce high-risk tool attempts across eight models, though "runtime tool guardrails are still required" ([Liu, 2026](https://arxiv.org/abs/2605.22634)).
+- Skills that touch high-risk tools — the framework's tool-calling experiments showed contractual skills usually reduce high-risk tool attempts across eight models, and the paper is explicit that they do not replace runtime tool guardrails ([Liu, 2026](https://arxiv.org/abs/2605.22634v2)).
 
 If none of these apply, plain expanded skills perform comparably and cost less to maintain.
 
@@ -57,7 +57,7 @@ The same mechanism underlies typed-debt detection at library scale: SkillOps req
 
 ## When this backfires
 
-- Treated as enforcement. A `permissions:` field listing `git push` does not stop a runtime call. The framework states contractual skills are "a governance layer that makes task intent, boundaries, and acceptance criteria explicit, not a standalone safety mechanism" ([Liu, 2026](https://arxiv.org/abs/2605.22634)). Reading them otherwise produces false assurance and skipped runtime guardrails.
+- Treated as enforcement. A `permissions:` field listing `git push` does not stop a runtime call. The framework states contractual skills are "most useful as a governance layer for making task intent, boundaries, and acceptance criteria explicit, rather than as a standalone safety mechanism" ([Liu, 2026](https://arxiv.org/abs/2605.22634v2)). Reading them otherwise produces false assurance and skipped runtime guardrails.
 - Small teams with mature review. When engineers already read every skill before merge, the fixed schema adds maintenance overhead without changing what reviewers catch.
 - Greenfield prototyping. Skills that change weekly outpace any fixed schema. Minimal-skill baselines are enough until the skill stabilizes.
 - Compliance overload. The added field surface raises the rule count a model must honor. The [instruction compliance ceiling](instruction-compliance-ceiling.md) shows compliance degrades as rule count grows — more fields can produce more omission errors, not fewer.

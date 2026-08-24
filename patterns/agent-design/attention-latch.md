@@ -58,7 +58,7 @@ Shehata and Li (2026) mapped the Attention Stability Boundary empirically across
 - Mid-task updates contradict, rather than extend, prior constraints.
 - Retrieval results inject content that semantically resembles the contradicted instruction.
 
-Independent work confirms the wider pattern: sequences over 100K tokens show goal drift across model families, mostly through inaction ([Arike et al., 2025](https://arxiv.org/abs/2505.02709v1)); models deprioritize initial instructions as history grows, even when those instructions remain in context ([Bui, 2026 §3.2](https://arxiv.org/abs/2603.05344)).
+Independent work confirms the wider pattern: sequences over 100K tokens show goal drift across model families, mostly through inaction ([Arike et al., 2025](https://arxiv.org/abs/2505.02709v1)); models deprioritize initial instructions as history grows, even when those instructions remain in context ([Bui, 2026 §3.2](https://arxiv.org/abs/2603.05344v3)).
 
 ## Mitigations on a spectrum
 

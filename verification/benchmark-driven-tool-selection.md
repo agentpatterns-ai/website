@@ -29,7 +29,7 @@ The main finding: models that rank similarly on synthetic benchmarks diverge sha
 
 ### Performance is language-specific
 
-Leading models (GPT-4o, Claude 4 Sonnet) outperform smaller alternatives on aggregate scores. But per-language breakdowns show the gap narrows or reverses on specific languages. TypeScript is consistently the hardest language, with most models scoring 20 to 30% lower than on other languages because of strict type-consistency requirements. Strong aggregate performance does not guarantee strength in every language: DeepSeek-V3, competitive overall, ranks near the bottom on C++. [Source: [DevBench](https://arxiv.org/abs/2601.11895)]
+Leading models (GPT-4o, Claude 4 Sonnet) outperform smaller alternatives on aggregate scores. But per-language breakdowns show the gap narrows or reverses on specific languages. TypeScript is consistently the hardest language, with most models scoring 20 to 30% lower than on other languages because of strict type-consistency requirements. Strong aggregate performance does not guarantee strength in every language: DeepSeek-V3, competitive overall, ranks near the bottom on C++. [Source: [DevBench](https://arxiv.org/abs/2601.11895v3)]
 
 ### Task type matters more than overall score
 

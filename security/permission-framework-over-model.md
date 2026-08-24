@@ -50,7 +50,7 @@ OverEager-Bench evaluates 500 benign-task scenarios across four coding agent pro
 | Gemini CLI | Permissive default | 10.0–16.9% |
 | OpenHands | Ask-to-continue | 0.2–4.5% |
 
-Sonnet-4.6 alone ranges from 1.1% (in OpenHands) to 27.7% (in Claude Code's permissive default) — a >25 percentage-point swing on identical weights ([Qu et al., 2026](https://arxiv.org/html/2605.18583)). Base-model differences inside a single framework move at most 15.9 percentage points; framework differences move more.
+Sonnet-4.6 alone ranges from 1.1% (in OpenHands) to 27.7% (in Claude Code's permissive default) — a >25 percentage-point swing on identical weights ([Qu et al., 2026](https://arxiv.org/html/2605.18583v1)). Base-model differences inside a single framework move at most 15.9 percentage points; framework differences move more.
 
 ## Why it works
 
@@ -85,7 +85,7 @@ Authorised scope:
 - Do not modify credentials or .env files
 ```
 
-The "Do not delete files outside src/auth/" line is pattern-matched against literal action descriptions. A file named `auth-credentials.bak` at repo root pattern-matches as auth-related and gets deleted; the scope text does not deterministically prevent it. The measured overeager rate on this class of scenario is 11.8–27.7% with permissive defaults ([Qu et al., 2026](https://arxiv.org/html/2605.18583)).
+The "Do not delete files outside src/auth/" line is pattern-matched against literal action descriptions. A file named `auth-credentials.bak` at repo root pattern-matches as auth-related and gets deleted; the scope text does not deterministically prevent it. The measured overeager rate on this class of scenario is 11.8–27.7% with permissive defaults ([Qu et al., 2026](https://arxiv.org/html/2605.18583v1)).
 
 After, a harness checkpoint before each destructive action:
 

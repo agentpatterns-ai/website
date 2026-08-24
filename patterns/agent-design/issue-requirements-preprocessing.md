@@ -26,7 +26,7 @@ Most coding agents treat the issue description as the task specification. They g
 - Ambiguities — descriptions with multiple valid interpretations that lead to different patches
 - Conflicts — requirements that contradict each other or the actual codebase state
 
-Across SWE-Lite, SWE-Verified, and SWE-Pro benchmarks ([Jimenez et al., 2024](https://arxiv.org/abs/2310.06770)) using two LLMs, REAgent's preprocessing improved average resolution rates by 17.40% over five baselines using raw issue text.
+Across SWE-Lite, SWE-Verified, and SWE-Pro benchmarks ([Jimenez et al., 2024](https://arxiv.org/abs/2310.06770v3)) using two LLMs, REAgent's preprocessing improved average resolution rates by 17.40% over five baselines using raw issue text.
 
 ## The preprocessing approach
 

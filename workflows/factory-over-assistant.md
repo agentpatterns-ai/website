@@ -78,7 +78,7 @@ The factory model assumes feedback you can automate. It breaks down when:
 - Verification is unreliable. If CI is flaky or tests are thin, agents optimize for passing the gate rather than solving the real problem.
 - Safety-critical decisions are required. Architecture choices, security boundaries, and product trade-offs need human judgment. Do not automate them away.
 
-These failure rates are not hypothetical. The MAST taxonomy, built from more than 1,600 annotated traces across seven multi-agent frameworks, found per-framework failure rates of 41% to 87%. Specification ambiguity caused 41.77% of failures, coordination breakdowns 36.94%, and verification gaps 21.30%. [Source: [Why Do Multi-Agent LLM Systems Fail? (Cemri et al., NeurIPS 2025)](https://arxiv.org/abs/2503.13657)] Treat the infrastructure prerequisites above as the floor for keeping a deployment out of the high end of that range. Unambiguous specs, deterministic verification, and explicit coordination protocols separate a working fleet from a 17x error multiplier.
+These failure rates are not hypothetical. The MAST taxonomy, built from more than 1,600 annotated traces across seven multi-agent frameworks, found per-framework failure rates of 41% to 87%. Specification ambiguity caused 41.77% of failures, coordination breakdowns 36.94%, and verification gaps 21.30%. [Source: [Why Do Multi-Agent LLM Systems Fail? (Cemri et al., NeurIPS 2025)](https://arxiv.org/abs/2503.13657v3)] Treat the infrastructure prerequisites above as the floor for keeping a deployment out of the high end of that range. Unambiguous specs, deterministic verification, and explicit coordination protocols separate a working fleet from a 17x error multiplier.
 
 ## Example
 

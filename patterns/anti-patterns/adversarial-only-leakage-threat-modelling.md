@@ -38,11 +38,11 @@ Source for all five: [Baek et al. 2026](https://arxiv.org/abs/2606.17114v1). A c
 
 ## Why it works
 
-The model judges content sensitivity but not task necessity or recipient authorization. LLMs detect that a string is a salary or a credit-card number, yet in complex multi-tool tasks "often fail to determine which data should not be exposed" given the recipient and the task ([Zharmagambetov et al. 2025](https://arxiv.org/abs/2503.09780)). Tools widen the gap: they return broad outputs without considering task-specific necessity, and the model processes them coarsely ([Lin et al. 2026](https://arxiv.org/abs/2603.07557v1)).
+The model judges content sensitivity but not task necessity or recipient authorization. LLMs detect that a string is a salary or a credit-card number, yet in complex multi-tool tasks they often fail to judge which data should not be exposed given the recipient and the task ([Zharmagambetov et al. 2025](https://arxiv.org/abs/2503.09780)). Tools widen the gap: they return broad outputs without considering task-specific necessity, and the model processes them coarsely ([Lin et al. 2026](https://arxiv.org/abs/2603.07557v1)).
 
 Adversarial-only defenses check whether an instruction is hostile or whether a destination is known-bad. Neither check fires when a benign request causes oversharing through a legitimate tool to a legitimate-looking recipient. AGENTDAM finds GPT-4, Llama-3, and Claude agents inadvertently using unnecessary sensitive information in benign tasks ([Zharmagambetov et al. 2025](https://arxiv.org/abs/2503.09780)).
 
-Cross-tool inference compounds the problem: individually non-sensitive fragments compose into sensitive disclosures. Tools-Orchestration Privacy Risk reaches an average 88.6% leakage rate across six frontier LLMs. Prompt-only mitigations add about 2.7 H-score points, while supervised fine-tuning plus DPO adds about 16.2 ([Wang et al. 2026](https://arxiv.org/abs/2512.16310)). The signature behavior: agents sanitize email content (strip budget figures) while still sending to an unauthorized recipient — content-aware, audience-blind ([Baek et al. 2026](https://arxiv.org/abs/2606.17114v1)).
+Cross-tool inference compounds the problem: individually non-sensitive fragments compose into sensitive disclosures. Tools-Orchestration Privacy Risk reaches an average 88.6% leakage rate across six frontier LLMs. Prompt-only mitigations add about 2.7 H-score points, while supervised fine-tuning plus DPO adds about 16.2 ([Wang et al. 2026](https://arxiv.org/abs/2512.16310v3)). The signature behavior: agents sanitize email content (strip budget figures) while still sending to an unauthorized recipient — content-aware, audience-blind ([Baek et al. 2026](https://arxiv.org/abs/2606.17114v1)).
 
 ## When this backfires
 
@@ -52,7 +52,7 @@ The anti-pattern is the exclusion of benign-leakage modeling, not the adversaria
 - Intra-team agents acting under uniform trust: recipient allowlists, data-minimization prompts, and output scopes add latency and refusal rates that may exceed the harm avoided.
 - For low-trust user populations, adversarial defenses stay primary; benign-leakage controls are additive, not a replacement.
 
-The empirical signal cuts against adversarial-only modeling for any agent with broad tool access and mixed-audience tasks. Agents with adversarial defenses nominally engaged still failed every benign scenario; 88.6% TOP-R holds across models with prompt-injection training; 57% DOE holds across the real-world tool corpus ([Baek et al. 2026](https://arxiv.org/abs/2606.17114v1); [Wang et al. 2026](https://arxiv.org/abs/2512.16310); [Lin et al. 2026](https://arxiv.org/abs/2603.07557v1)).
+The empirical signal cuts against adversarial-only modeling for any agent with broad tool access and mixed-audience tasks. Agents with adversarial defenses nominally engaged still failed every benign scenario; 88.6% TOP-R holds across models with prompt-injection training; 57% DOE holds across the real-world tool corpus ([Baek et al. 2026](https://arxiv.org/abs/2606.17114v1); [Wang et al. 2026](https://arxiv.org/abs/2512.16310v3); [Lin et al. 2026](https://arxiv.org/abs/2603.07557v1)).
 
 ## Example
 
@@ -94,7 +94,7 @@ Each new control targets one named failure pattern from [Baek et al. 2026](https
 - Tool-using agents leak sensitive data while completing benign requests; defenses scoped to adversarial exfiltration do not cover audience, necessity, or access-scope failures ([Baek et al. 2026](https://arxiv.org/abs/2606.17114)).
 - The five named failure patterns — inadequate data awareness, insufficient audience consideration, policy non-compliance, excessive data collection, access boundary violations — are all benign-task behaviors, not attacks.
 - Content-sensitivity classification is not enough: the model can strip a budget figure from text yet still send the message to an unauthorized recipient ([Baek et al. 2026](https://arxiv.org/abs/2606.17114)).
-- Cross-tool inference is its own risk class — individually non-sensitive fragments compose into sensitive disclosures at an average 88.6% rate; prompt-only mitigations close little of that ([Wang et al. 2026](https://arxiv.org/abs/2512.16310)).
+- Cross-tool inference is its own risk class — individually non-sensitive fragments compose into sensitive disclosures at an average 88.6% rate; prompt-only mitigations close little of that ([Wang et al. 2026](https://arxiv.org/abs/2512.16310v3)).
 - Treat benign-leakage controls as additive: recipient authorization per data class, data-minimisation at the tool boundary, and audience-aware egress filters target the failure surface adversarial-only models miss.
 
 ## Related

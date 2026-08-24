@@ -33,7 +33,7 @@ The agent forms a wrong interpretation and starts building. The output compiles 
 
 ## Why agents are susceptible
 
-Agents do not seek clarification or push back on ambiguity ([Osmani, 2025](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)). RLHF reward models favor high-confidence answers over surfaced uncertainty ([Leng et al., ICLR 2025](https://arxiv.org/abs/2410.09724)). On underspecified tasks, models assume rather than ask, even when asking would improve outcomes by up to 74% ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069)).
+Agents do not seek clarification or push back on ambiguity ([Osmani, 2025](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)). RLHF reward models favor high-confidence answers over surfaced uncertainty ([Leng et al., ICLR 2025](https://arxiv.org/abs/2410.09724v2)). On underspecified tasks, models assume rather than ask, even when asking would improve outcomes by up to 74% ([Vijayvargiya et al., ICLR 2026](https://arxiv.org/abs/2502.13069v3)).
 
 Architecture compounds this. Coding agents optimize for autonomous execution. They do not separate underspecification detection from code generation, so they treat every instruction as actionable ([Edwards & Schuster, 2026](https://arxiv.org/abs/2603.26233)).
 

@@ -32,7 +32,7 @@ Adding "write concise code" creates a competing objective — the agent does les
 
 ### Structural optimization (reliable)
 
-[ShortCoder (Liu et al., 2026)](https://arxiv.org/abs/2601.09703v1) shows that AST-preserving syntax transformations achieve 18.1-37.8% token reduction on [HumanEval](https://arxiv.org/abs/2107.03374) without degrading correctness.
+[ShortCoder (Liu et al., 2026)](https://arxiv.org/abs/2601.09703v1) shows that AST-preserving syntax transformations achieve 18.1-37.8% token reduction on [HumanEval](https://arxiv.org/abs/2107.03374v2) without degrading correctness.
 
 ```mermaid
 flowchart LR

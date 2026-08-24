@@ -59,7 +59,7 @@ The dividing line: middleware sees the conversation and wraps every call. Hooks 
 
 ## Why it works
 
-Every model call and tool invocation is a request/response pair, so cross-cutting concerns compose at that boundary — the aspect-oriented composition Express, ASP.NET, and gRPC interceptors have used for a decade. Genkit describes the mechanism as "composable hooks that intercept generation calls, including the tool execution loop, and inject custom behaviors" ([Google Developers Blog](https://developers.googleblog.com/announcing-genkit-middleware-intercept-extend-and-harden-your-agentic-apps/)). The Agent Lifecycle Toolkit formalizes six intervention points and argues interception prevents "misinterpreted tool arguments from corrupting production data" ([ALTK, CAIS '26](https://arxiv.org/abs/2603.15473)). Once every call passes through the same chain, adding a concern is additive, not invasive.
+Every model call and tool invocation is a request/response pair, so cross-cutting concerns compose at that boundary — the aspect-oriented composition Express, ASP.NET, and gRPC interceptors have used for a decade. Genkit describes the mechanism as "composable hooks that intercept generation calls, including the tool execution loop, and inject custom behaviors" ([Google Developers Blog](https://developers.googleblog.com/announcing-genkit-middleware-intercept-extend-and-harden-your-agentic-apps/)). The Agent Lifecycle Toolkit formalizes six intervention points and argues interception prevents "a misinterpreted tool argument can corrupt production data" ([ALTK, CAIS '26](https://arxiv.org/abs/2603.15473v2)). Once every call passes through the same chain, adding a concern is additive, not invasive.
 
 ## Prebuilt catalogs
 

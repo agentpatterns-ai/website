@@ -50,7 +50,7 @@ The semantic tier is not pre-populated. It accumulates only entries the daemon o
 
 Flat-store retrieval re-ranks every entry on every call, so a high-value generalized fact competes against thousands of low-value raw observations. Promoting it into a smaller, separately-scored tier evaluates that fact against fewer competitors and lets the tiers carry different weights ([MEMTIER §3](https://arxiv.org/abs/2605.03675)). Broader memory surveys treat consolidation between memory forms as a generalization step, not a storage optimization ([Memory in the Age of AI Agents, arxiv:2512.13564](https://arxiv.org/abs/2512.13564)).
 
-Reported numbers are conditional. MEMTIER claims 38.2% accuracy on LongMemEval-S with Qwen2.5-7B — +33 percentage points over a full-context baseline at 5% on a 6GB consumer GPU ([Sidik and Rokach, 2026](https://arxiv.org/abs/2605.03675)). The baseline is weak; a tuned RAG-over-JSONL system operates well above 5%, so the margin over a non-tiered RAG store is smaller than the headline suggests. The paper is preprint-only and unreplicated. Treat the architecture as defensible, not the absolute numbers as load-bearing.
+Reported numbers are conditional. MEMTIER claims 38.2% accuracy on LongMemEval-S with Qwen2.5-7B — +33 percentage points over a full-context baseline at 5% on a 6GB consumer GPU ([Sidik and Rokach, 2026](https://arxiv.org/abs/2605.03675v3)). The baseline is weak; a tuned RAG-over-JSONL system operates well above 5%, so the margin over a non-tiered RAG store is smaller than the headline suggests. The paper is preprint-only and unreplicated. Treat the architecture as defensible, not the absolute numbers as load-bearing.
 
 ## When tiering pays off
 
@@ -58,7 +58,7 @@ The overhead — a consolidation daemon, attention-attribution loop, and PPO pol
 
 Tiering pays off when:
 
-- Operation windows exceed a day or two. The 14-percentage-point degradation over 72 hours that motivates the design ([MEMTIER abstract](https://arxiv.org/abs/2605.03675)) is the regime where consolidation fires often enough to matter.
+- Operation windows exceed a day or two. The 14-percentage-point degradation over 72 hours that motivates the design ([MEMTIER abstract](https://arxiv.org/abs/2605.03675v3)) is the regime where consolidation fires often enough to matter.
 - Task structure is recurring. The PPO policy learns from outcome feedback. Without recurring task signatures it never converges, and tier-aware retrieval underperforms a static recency-weighted baseline.
 - Retrieval is dilution-bound, not relevance-bound. Below a few thousand entries the embedding model dominates, and tier separation contributes little.
 - Cross-tenant isolation is required. A separate semantic tier with controlled promotion is the natural place for provenance and pruning policies once stored episodes become an attack surface ([Memory Poisoning and Secure Multi-Agent Systems, arxiv:2603.20357](https://arxiv.org/abs/2603.20357)).

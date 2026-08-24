@@ -274,7 +274,7 @@ Stop at L4 if:
 
 - [Eval-Driven Development](../../workflows/eval-driven-development.md) — the workflow pattern for writing evals before building agent features
 - [Progressive Autonomy Model](../../human/progressive-autonomy-model-evolution.md) — how to scale agent trust incrementally with metrics
-- [Structured Agentic Software Engineering](../../patterns/agent-design/structured-agentic-software-engineering.md) — the SE 0–5 maturity model and structured artifact types ([arXiv:2509.06216](https://arxiv.org/abs/2509.06216))
+- [Structured Agentic Software Engineering](../../patterns/agent-design/structured-agentic-software-engineering.md) — the SE 0–5 maturity model and structured artifact types ([arXiv:2509.06216](https://arxiv.org/abs/2509.06216v3))
 - [Headless Claude in CI](../../workflows/headless-claude-ci.md) — running Claude Code non-interactively in CI pipelines
 - [Agent Harness](../../patterns/agent-design/agent-harness.md) — the initializer/coding-agent architecture for long-running work
 - [L2 → L3: Building Mechanical Enforcement](level-2-to-3.md) — previous module

@@ -22,7 +22,7 @@ maturity: emerging
 
 Many "agent failures" are benchmark failures: broken specifications, implicit assumptions, and rigid evaluation scripts that penalize valid alternative approaches. BenchGuard frames this directly: agent benchmarks are software artifacts, and like any software they ship with bugs that distort the numbers built on top of them. [Source: [BenchGuard (arxiv 2604.24955)](https://arxiv.org/abs/2604.24955)]
 
-The problem is not theoretical. SWE-bench+ re-audited SWE-bench by hand and found that 32.67% of "successful" patches involved solution leakage in the issue or comments, and 31.08% passed only because the test cases were too weak to discriminate. After removing the defective instances, SWE-Agent + GPT-4's resolution rate fell from 12.47% to 3.97%. [Source: [SWE-bench+ (arxiv 2410.06992)](https://arxiv.org/abs/2410.06992)] Trusting an unaudited benchmark can mean trusting a number that is three times too high.
+The problem is not theoretical. SWE-bench+ re-audited SWE-bench by hand and found that 32.67% of "successful" patches involved solution leakage in the issue or comments, and 31.08% passed only because the test cases were too weak to discriminate. After removing the defective instances, SWE-Agent + GPT-4's resolution rate fell from 12.47% to 3.97%. [Source: [SWE-bench+ (arxiv 2410.06992)](https://arxiv.org/abs/2410.06992v2)] Trusting an unaudited benchmark can mean trusting a number that is three times too high.
 
 ## What an LLM auditor checks
 

@@ -45,7 +45,7 @@ Admission returns a decision from a fixed vocabulary rather than a yes or no. Be
 
 Two causes, both structural. First, timing: an integration conflict becomes visible only after both workers have spent inference and test budget, while an authority conflict is decidable from a declared base commit, typed resources, and dependencies before a single byte is written ([Nikolaev, 2026](https://arxiv.org/abs/2607.21909)). Moving the decision earlier converts wasted inference into a cheap refusal. Second, separation of proposal from authority: the planner may be probabilistic, but admission, promotion, leases, fencing, and verification are deterministic and auditable, so a mis-predicting planner cannot expand its own rights. This is the same systems argument [SWE-agent](https://arxiv.org/abs/2405.15793) made for single agents — the execution interface and the invariants around tool actions change outcomes independently of the model.
 
-The coordination penalty it targets is measured: across more than 600 collaborative coding tasks, [CooperBench](https://arxiv.org/abs/2601.13295) reports roughly 30% lower success when two agents split work than when one agent does both.
+The coordination penalty it targets is measured: across more than 600 collaborative coding tasks, [CooperBench](https://arxiv.org/abs/2601.13295v2) reports roughly 30% lower success when two agents split work than when one agent does both.
 
 ## Example
 

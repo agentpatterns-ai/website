@@ -19,7 +19,7 @@ maturity: emerging
 
 ## The evidence
 
-[Huang et al. (2025)](https://arxiv.org/abs/2512.14012) observed 13 professional developers and surveyed 99 more (3 to 25 years experience). The central finding: experienced developers "carefully control the agents through planning and supervision" rather than adopting hands-off [vibe coding](../patterns/anti-patterns/vibe-coding.md).
+[Huang et al. (2025)](https://arxiv.org/abs/2512.14012v2) observed 13 professional developers and surveyed 99 more (3 to 25 years experience). The central finding: experienced developers "carefully control the agents through planning and supervision" rather than adopting hands-off [vibe coding](../patterns/anti-patterns/vibe-coding.md).
 
 | Study | Design | Key finding |
 |-------|--------|-------------|

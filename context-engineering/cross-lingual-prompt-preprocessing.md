@@ -19,7 +19,7 @@ maturity: emerging
 
 > Cross-lingual preprocessing translates non-English prompts to English via a local small model, arbitraging BPE tokenizer asymmetry to cut cloud input tokens 34–47%.
 
-Cross-lingual prompt preprocessing inserts a small local model (for example, Llama 3.2 3B) between the developer and a cloud coding agent. The local model translates the prompt to English and rewrites it into a compact task-oriented form. A regex-validated fallback ensures the rewrite never exceeds the original size, so the cloud LLM bills against the rewritten version ([Colak, 2026](https://arxiv.org/abs/2606.03618)). The arbitrage is flat per-token cloud pricing applied to languages that tokenize 2–6× more expensively than English in standard BPE vocabularies ([Tokenization Is Killing Our Multilingual LLM Dream](https://huggingface.co/blog/omarkamali/tokenization)).
+Cross-lingual prompt preprocessing inserts a small local model (for example, Llama 3.2 3B) between the developer and a cloud coding agent. The local model translates the prompt to English and rewrites it into a compact task-oriented form. A regex-validated fallback ensures the rewrite never exceeds the original size, so the cloud LLM bills against the rewritten version ([Colak, 2026](https://arxiv.org/abs/2606.03618v2)). The arbitrage is flat per-token cloud pricing applied to languages that tokenize 2–6× more expensively than English in standard BPE vocabularies ([Tokenization Is Killing Our Multilingual LLM Dream](https://huggingface.co/blog/omarkamali/tokenization)).
 
 ## When this pattern applies
 
@@ -33,7 +33,7 @@ The pattern only pays back its preprocessing latency and complexity under all of
 
 ## Reported savings and the conditions behind them
 
-[Colak (2026)](https://arxiv.org/abs/2606.03618) reports 34–47% input-token reduction across commercial cloud LLM backends and up to 18.8% total token reduction on the OMH-Polyglot benchmark — Turkish, Arabic, Chinese, and code-switched specifications. Three design choices keep the savings real:
+[Colak (2026)](https://arxiv.org/abs/2606.03618v2) reports 34–47% input-token reduction across commercial cloud LLM backends and up to 18.8% total token reduction on the OMH-Polyglot benchmark — Turkish, Arabic, Chinese, and code-switched specifications. Three design choices keep the savings real:
 
 | Mechanism | What it prevents |
 |-----------|------------------|
@@ -87,7 +87,7 @@ The rewrite drops conversational framing, restatement of intent, and the politen
 
 ## Key Takeaways
 
-- The reported 34–47% input-token reduction ([Colak, 2026](https://arxiv.org/abs/2606.03618)) is a ceiling, not a guarantee — it holds only once preprocessing latency, accuracy, and fidelity costs are netted out.
+- The reported 34–47% input-token reduction ([Colak, 2026](https://arxiv.org/abs/2606.03618v2)) is a ceiling, not a guarantee — it holds only once preprocessing latency, accuracy, and fidelity costs are netted out.
 - The savings only materialize when the developer cannot prompt directly in English, input dominates cost, latency tolerates the local pass, and the source language tokenizes inefficiently.
 - Before trusting a token-reduction number, check task resolution rate too: [Ren et al. (2026)](https://arxiv.org/abs/2604.14210) found that prompting in the source language lowers coding-benchmark resolution rate even when its token counts drop, so cost-per-successful-task is the metric that matters.
 - Preprocessing pays back only inside the narrow operating window from [arXiv 2604.02985](https://arxiv.org/abs/2604.02985); short interactive prompts close it.

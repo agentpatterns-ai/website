@@ -28,7 +28,7 @@ Independent teams have named this pattern four different ways within a year:
 |--------|------|----------|
 | [SRI Lab, ETH Zurich](https://www.sri.inf.ethz.ch/blog/fixedcode) | "Fixing correct code" | Agents patch already-passing code >50% of the time across Claude Opus 4.6, Sonnet 4.6, GLM-5, GPT-5.4, Gemini 3 Pro, Qwen3.5 on 235 tasks |
 | [ForgeCode](https://forgecode.dev/blog/gpt-5-4-agent-improvements/) | "Premature completion" | GPT-5.4 implements, sounds confident, stops — "edge cases missed, files not saved, tests not run" |
-| [SWE-EVO (arxiv 2512.18470)](https://arxiv.org/abs/2512.18470) | "Premature termination" | Table 5: *"stopped or concluded early after encountering difficulty, without exhausting reasonable next steps"* |
+| [SWE-EVO (arxiv 2512.18470)](https://arxiv.org/abs/2512.18470v6) | "Gave Up Prematurely" | *"Agent stops or declares failure while reasonable next steps remain."* |
 | [arxiv 2503.15223](https://arxiv.org/html/2503.15223v1) | "Inflated resolution rates" | Full test suites expose 6.2 pp of reported SWE-Bench resolution as patches that fail untouched tests |
 
 Converging terminology across four unrelated teams is strong evidence the failure is real and underdescribed.
@@ -43,7 +43,7 @@ A first-signal-of-progress pattern triggers the agent's "I'm done" token — tes
 
 ## Capability-band skew
 
-SWE-EVO's Figure 6 shows "o3, gpt-4.1, gpt-4o exhibit more syntax, looping, and early-termination failures on SWE-EVO, indicating less robust long-horizon trajectories compared to gpt-5" ([arxiv 2512.18470](https://arxiv.org/abs/2512.18470)). GPT-5 shows near-zero early termination — its failures are instruction-following.
+SWE-EVO reports that the older models o3, gpt-4.1 and gpt-4o "exhibit more looping and early-termination issues". The rising syntax-error failures belong to the smaller variants, not to those older ones ([arxiv 2512.18470v6](https://arxiv.org/abs/2512.18470v6)). GPT-5 shows near-zero early termination — its failures are instruction-following.
 
 Weak models fail before reaching a stopping point. Strong models verify internally. Mid-band models are just good enough to see green and declare done — the band where mitigations matter most.
 

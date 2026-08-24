@@ -53,7 +53,7 @@ The architect's real work is navigating corner cases: a regulatory exception tha
 
 ### Advertised capacity is not effective capacity
 
-Liu et al. (2023) found LLMs exhibit a U-shaped attention curve: performance degrades when relevant information is in the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172)). Chroma (2025) tested all 18 frontier models and found every one degrades as input length grows ([Chroma Research](https://research.trychroma.com/context-rot)). Effective capacity is substantially below advertised window size, and both find degradation begins well before the nominal limit is reached.
+Liu et al. (2023) found LLMs exhibit a U-shaped attention curve: performance degrades when relevant information is in the middle of a long context ([Lost in the Middle](https://arxiv.org/abs/2307.03172v3)). Chroma (2025) tested all 18 frontier models and found every one degrades as input length grows ([Chroma Research](https://research.trychroma.com/context-rot)). Effective capacity is substantially below advertised window size, and both find degradation begins well before the nominal limit is reached.
 
 Du et al. (2025) found performance drops 13.9 to 85% as input length increases even when all relevant information is retrieved and all distractors are removed -- sheer input length degrades performance independent of retrieval quality ([arXiv](https://arxiv.org/abs/2510.05381v1)). Better retrieval cannot fix the ceiling.
 

@@ -29,23 +29,23 @@ As an agent's context fills, output quality drops. [Anthropic calls this "contex
 
 The original heuristic — complete tasks within 50% of the context window — assumed degradation scales with window size. It does not. Degradation onset sits closer to an absolute token threshold (roughly 32K to 100K) than a fixed percentage, and it varies by task type.
 
-[RULER](https://arxiv.org/abs/2404.06654) tested 17 models and found larger claimed windows do not yield proportionally later degradation. Yi-34B (200K claimed) has only 32K effective context — 16%. GPT-4 (128K claimed) reaches 64K effective — 50%. Only half the tested models maintained satisfactory performance at 32K tokens.
+[RULER](https://arxiv.org/abs/2404.06654v3) tested 17 models and found larger claimed windows do not yield proportionally later degradation. Yi-34B (200K claimed) has only 32K effective context — 16%. GPT-4 (128K claimed) reaches 64K effective — 50%. Only half the tested models maintained satisfactory performance at 32K tokens.
 
 ## Task-type degradation spectrum
 
 | Task Type | Benchmark | Effective Context | Finding |
 |-----------|-----------|-------------------|---------|
-| Simple retrieval (NIAH) | [Gemini 1.5 Technical Report](https://arxiv.org/abs/2403.05530) | >99% recall up to at least 10M tokens | Misleadingly optimistic for real tasks |
-| Semantic retrieval | [NoLiMa](https://arxiv.org/abs/2502.05167) | 11/13 models below 50% baseline at 32K | Removing lexical cues causes collapse |
-| Multi-hop retrieval | [RULER](https://arxiv.org/abs/2404.06654) | 16-50% of advertised window | Only best models reach 50% |
-| Reasoning | [BABILong](https://arxiv.org/abs/2406.10149) | 10-20% of context window | "Popular LLMs effectively utilize only 10-20% of the context" |
+| Simple retrieval (NIAH) | [Gemini 1.5 Technical Report](https://arxiv.org/abs/2403.05530v5) | >99% recall up to at least 10M tokens | Misleadingly optimistic for real tasks |
+| Semantic retrieval | [NoLiMa](https://arxiv.org/abs/2502.05167v3) | 11/13 models below 50% baseline at 32K | Removing lexical cues causes collapse |
+| Multi-hop retrieval | [RULER](https://arxiv.org/abs/2404.06654v3) | 16-50% of advertised window | Only best models reach 50% |
+| Reasoning | [BABILong](https://arxiv.org/abs/2406.10149v2) | 10-20% of context window | "Popular LLMs effectively utilize only 10-20% of the context" |
 | Code comprehension | [LongCodeBench](https://arxiv.org/abs/2505.07897) | Model-dependent (GPT-4.1 stable to 1M, others decline) | Some models improve with more context |
-| Code bug fixing | [LongCodeBench](https://arxiv.org/abs/2505.07897) | Claude 3.5 Sonnet: 29% at 32K to 3% at 256K | Severe collapse for most models |
+| Code bug fixing | [LongCodeBench](https://arxiv.org/abs/2505.07897v3) | Claude 3.5 Sonnet: 29% at 32K to 3% at 256K | Severe collapse for most models |
 
 The [Chroma context rot study](https://research.trychroma.com/context-rot) confirmed all 18 frontier models tested (including Claude Opus 4, GPT-4.1, Gemini 2.5 Pro) degrade with input length. Degradation is non-uniform: it varies by task type, similarity, and position, with no fixed threshold.
 
 !!! warning "NIAH benchmarks are misleadingly optimistic"
-    Standard needle-in-a-haystack tests use high lexical overlap between needle and question. [NoLiMa](https://arxiv.org/abs/2502.05167) removes this cue and finds 11 of 13 models drop below 50% accuracy at 32K tokens. Do not use NIAH results to justify large context loads.
+    Standard needle-in-a-haystack tests use high lexical overlap between needle and question. [NoLiMa](https://arxiv.org/abs/2502.05167v3) removes this cue and finds 11 of 13 models drop below 50% accuracy at 32K tokens. Do not use NIAH results to justify large context loads.
 
 ## Practical guidance
 

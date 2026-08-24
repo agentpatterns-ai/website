@@ -28,9 +28,9 @@ The discipline is conditional. Three things decide whether it returns anything.
 
 | Condition | Why it matters |
 |---|---|
-| The library is large enough for selection to fail | Agent performance degrades "by up to 21% when scaling from a small set of helpful skills to a 202-skill library" ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)). Below roughly 30 candidates, retrieval precision holds and there is nothing to recover ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275v1)). |
+| The library is large enough for selection to fail | Agent performance degrades "by up to 21% when scaling from a small set of helpful skills to a 202-skill library" ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050v2)). Below roughly 30 candidates, retrieval precision holds and there is nothing to recover ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275v1)). |
 | Several people author into the same library | A shared construction standard is what keeps descriptions from colliding across authors who never read each other's files. |
-| Something automated checks the result | Guidance alone does not change practice. Across 238 real-world skills, "over 99% of SKILL.md files contain at least one skill smell", and once introduced they "rarely disappear as skills evolve" ([Gao et al., 2026](https://arxiv.org/abs/2607.01456)). |
+| Something automated checks the result | Guidance alone does not change practice. Across 238 real-world skills, "over 99% of SKILL.md files contain at least one skill smell", and once introduced they "rarely disappear as skills evolve" ([Gao et al., 2026](https://arxiv.org/abs/2607.01456v2)). |
 
 ## Which principles transfer
 
@@ -43,7 +43,7 @@ All four principles come from the same source ([Destefanis, 2026](https://arxiv.
 | Low coupling | Transfers as documentation only | Skills should not rely on another skill's internal behavior or output format, and dependencies should be stated. Nothing verifies this at load time. |
 | Token economy | Demote | Contradicted by measurement (below). |
 
-Token economy is the odd one out. Song and Wei separated library-growth damage into two channels and measured each: skill shadowing "grows with library size and significantly contributes to the performance degradation", while context overhead "remains small and indistinguishable from zero" ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)). Trimming a skill body targets the channel that measures near zero.
+Token economy is the odd one out. Song and Wei separated library-growth damage into two channels and measured each: skill shadowing "grows with library size and significantly contributes to the performance degradation", while context overhead "remains small and indistinguishable from zero" ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050v2)). Trimming a skill body targets the channel that measures near zero.
 
 Testing transfers "only in a qualified form" — a language model executes the skill, so authoring is checked by behavioral evaluation against rubrics rather than deterministic unit tests ([Destefanis, 2026](https://arxiv.org/abs/2607.25032)).
 
@@ -57,7 +57,7 @@ The resulting rule is short. "If a step depends on judgement, varies with contex
 
 ## Why it works
 
-Single responsibility works through selection interference, not code hygiene. An agent picks a skill by matching the request against every preloaded description, so scope decides how many siblings compete for that match. Shadowing is "the primary bottleneck when expanding the skill libraries" while context expansion is not ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)). Narrow scope earns its keep by making one description win cleanly — which is why the principle survives even though its software-engineering justification does not.
+Single responsibility works through selection interference, not code hygiene. An agent picks a skill by matching the request against every preloaded description, so scope decides how many siblings compete for that match. Shadowing is "the primary bottleneck when expanding the skill libraries" while context expansion is not ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050v2)). Narrow scope earns its keep by making one description win cleanly — which is why the principle survives even though its software-engineering justification does not.
 
 ## When this backfires
 
@@ -71,7 +71,7 @@ The strongest case against the framing is that skills are prompts, not programs:
 
 ## Example
 
-Song and Wei's worked case shows what a diffuse description costs at selection time. In their mario-coin-counting task the library contains a skill named `video-frame-extraction`, "whose description superficially matches the query better than the provided helpful skill", and the agent invokes that wrong skill in every trajectory they ran ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)).
+Song and Wei's worked case shows what a diffuse description costs at selection time. In their mario-coin-counting task the library contains a skill named `video-frame-extraction`, whose description matches the query more closely on the surface than the helpful skill does, and the agent invokes that wrong skill in every trajectory they ran ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)).
 
 The failure lands before either skill body is read, because the selector compares descriptions only. That is the case for treating the description as an interface: the fix is to narrow the scope and rewrite the description so it stops matching queries the skill cannot serve. No amount of editing the intended skill's body would have rescued the run.
 
@@ -81,7 +81,7 @@ The failure lands before either skill body is read, because the selector compare
 - Single responsibility and interface separation transfer, on the selection-time mechanism rather than the modularity argument.
 - Demote token economy — context overhead measures as indistinguishable from zero next to skill shadowing ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)).
 - Two questions pick the mechanism: who decides it runs, and what guarantee it provides. Judgement-dependent steps become skills; must-happen-every-time steps become hooks ([Destefanis, 2026](https://arxiv.org/abs/2607.25032)).
-- Pair any authoring standard with an automated detector, because published guidance alone leaves over 99% of real skills non-compliant ([Gao et al., 2026](https://arxiv.org/abs/2607.01456)).
+- Pair any authoring standard with an automated detector, because published guidance alone leaves over 99% of real skills non-compliant ([Gao et al., 2026](https://arxiv.org/abs/2607.01456v2)).
 
 ## Related
 

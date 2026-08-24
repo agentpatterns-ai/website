@@ -71,7 +71,7 @@ Memories transfer across models. Those from GPT-5-mini, DeepSeek V3.2, and Qwen3
 
 Simple embedding retrieval (text-embedding-3-small, top-3) beat both LLM reranking and adaptive rewriting ([Kim et al., 2026, Table 7](https://arxiv.org/abs/2604.14004)).
 
-MTL used 431 memories — 13x fewer than [AgentKB's](https://arxiv.org/abs/2507.06229) 5,899 — while beating both AgentKB and [ReasoningBank](https://arxiv.org/abs/2509.25140) ([Kim et al., 2026, Table 2](https://arxiv.org/abs/2604.14004v1)).
+MTL used 431 memories — 13x fewer than [AgentKB's](https://arxiv.org/abs/2507.06229v5) 5,899 — while beating both AgentKB and [ReasoningBank](https://arxiv.org/abs/2509.25140v2) ([Kim et al., 2026, Table 2](https://arxiv.org/abs/2604.14004v1)).
 
 ## When this pattern applies
 

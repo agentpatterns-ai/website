@@ -19,7 +19,7 @@ maturity: emerging
 
 > Attaching a ready-to-apply inline suggestion moves agent review comments to resolution more than clearer prose does, where the finding is mechanically verifiable.
 
-Attach an inline code suggestion to an agent review comment and developers act on it more often than on the same finding written as better prose. A study of agent-generated review comments across 342 Python repositories analyzed 54,713 of them from Copilot, Cursor, and Codex: comments carrying an inline suggestion resolved at 75.5% against 64.5% without, and suggestion attachment was the strongest predictor in the model at odds ratio 1.617 ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). Clarity scored 1.022. Prose quality is measurably not the lever.
+Attach an inline code suggestion to an agent review comment and developers act on it more often than on the same finding written as better prose. A study of agent-generated review comments across 342 Python repositories analyzed 54,713 of them from Copilot, Cursor, and Codex: comments carrying an inline suggestion resolved at 75.5% against 64.5% without, and suggestion attachment was the strongest predictor in the model at odds ratio 1.617 ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997v2)). Clarity scored 1.022. Prose quality is measurably not the lever.
 
 ## Attach only where the finding is mechanically checkable
 
@@ -29,7 +29,7 @@ The attachment decision is a gate, not a default. A suggestion block lowers the 
 - The fix is localized. One hunk, one call site, no dependent edits elsewhere. A suggestion that is only part of the change invites a partial application.
 - The surrounding code is simple enough to review at a glance.
 
-Where those conditions fail (design disagreements, cross-file refactors, anything contestable), post prose and no patch. Among the comments core developers left unresolved, over 72% were rejected on intentional-design-decision grounds ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)); a diff-shaped suggestion cannot carry an architectural argument, and dressing an opinion as a mechanical fix invites the wrong kind of agreement.
+Where those conditions fail (design disagreements, cross-file refactors, anything contestable), post prose and no patch. Among the comments core developers left unresolved, over 72% were rejected on intentional-design-decision grounds ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997v2)); a diff-shaped suggestion cannot carry an architectural argument, and dressing an opinion as a mechanical fix invites the wrong kind of agreement.
 
 ## What the model actually ranks
 
@@ -44,9 +44,9 @@ Every variable that reduces interpretive work moves resolution. Every variable t
 | Comment length (log) | 0.926 | Lowers resolution |
 | Has explanation | 0.593 | Lowers resolution |
 
-All values from [arXiv:2607.21997](https://arxiv.org/abs/2607.21997); every row is significant at p<0.05. The length penalty is sharper on functional-issue comments at 0.855. Read the explanation row carefully: among comments that carry explanations, two explanation types peak at 71.7% usefulness. The finding is that more prose does not buy action, which is a narrower claim than explaining being pointless.
+All values from [arXiv:2607.21997](https://arxiv.org/abs/2607.21997v2); every row is significant at p<0.05. The length penalty is sharper on functional-issue comments at 0.855. Read the explanation row carefully: among comments that carry explanations, two explanation types peak at 71.7% usefulness. The finding is that more prose does not buy action, which is a narrower claim than explaining being pointless.
 
-Resolution rates varied by agent: Copilot 72.9%, Cursor 67.2%, Codex 54.8% ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)).
+Resolution rates varied by agent: Copilot 72.9%, Cursor 67.2%, Codex 54.8% ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997v2)).
 
 ## Why it works
 
@@ -56,11 +56,11 @@ An inline suggestion changes what the comment asks of the developer. Prose requi
 
 The mechanism is friction removal, so it removes friction from wrong changes just as efficiently.
 
-- Comment validity is unmeasured. A patch attached to a false positive converts a comment the developer would have skipped into a one-click defect. Incorrect suggestions and intentional design decisions are the two most prevalent reasons comments go unresolved, and 63 of the 67 incorrect-suggestion cases were factually wrong or false positives ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)); a separate reception study finds rejection tracks validity rather than packaging ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316)). Gate on [comment acceptance data](agentic-review-comment-acceptance.md) before optimizing attachment.
-- The person applying the patch is not the person who would push back. Core developers (the top 20% by authored and reviewed pull requests) resolved 78.1% of Copilot's resolved comments, and design-grounds rejection concentrates in that group ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). A one-click patch applied by a contributor with less repository context skips the scrutiny that data attributes to core reviewers.
+- Comment validity is unmeasured. A patch attached to a false positive converts a comment the developer would have skipped into a one-click defect. Incorrect suggestions and intentional design decisions are the two most prevalent reasons comments go unresolved, and 63 of the 67 incorrect-suggestion cases were factually wrong or false positives ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997v2)); a separate reception study finds rejection tracks validity rather than packaging ([arXiv:2607.03316](https://arxiv.org/abs/2607.03316v2)). Gate on [comment acceptance data](agentic-review-comment-acceptance.md) before optimizing attachment.
+- The person applying the patch is not the person who would push back. Core developers (the top 20% by authored and reviewed pull requests) resolved 78.1% of Copilot's resolved comments, and design-grounds rejection concentrates in that group ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997v2)). A one-click patch applied by a contributor with less repository context skips the scrutiny that data attributes to core reviewers.
 - Merge latency matters more than resolution. Suggestion use significantly increased pull request resolution time and produced no decrease in code complexity ([arXiv:2502.04835](https://arxiv.org/abs/2502.04835)). More action is not faster delivery.
 - You are treating resolution as usefulness. The authors flag resolution as "an imperfect proxy" and report the model's discrimination as low at AUC 0.58 ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)). Suggestion attachment is the strongest lever inside a model that explains a small share of the outcome.
-- Your stack is unlike the sample. Findings come from Python repositories with at least 1,000 stars, 1,000 pull requests, and 50 contributors; the authors name other languages, small projects, and proprietary settings as generalizability threats, and excluded Devin and Claude for insufficient data ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997)).
+- Your stack is unlike the sample. Findings come from Python repositories with at least 1,000 stars, 1,000 pull requests, and 50 contributors; the authors name other languages, small projects, and proprietary settings as generalizability threats, and excluded Devin and Claude for insufficient data ([arXiv:2607.21997](https://arxiv.org/abs/2607.21997v2)).
 
 ## Key Takeaways
 
@@ -80,6 +80,6 @@ The mechanism is friction removal, so it removes friction from wrong changes jus
 
 ## Sources
 
-- [arXiv:2607.21997](https://arxiv.org/abs/2607.21997) — Cynthia, Widyasari, Roy, Zhang, Lo (2026): "Go Home Copilot, You're Drunk": Understanding Developer Responses to Agent-Generated Code Review Comments — 54,791 comments collected across 342 Python repositories, 54,713 analyzed from three agents.
+- [arXiv:2607.21997](https://arxiv.org/abs/2607.21997v2) — Cynthia, Widyasari, Roy, Zhang, Lo (2026): "Go Home Copilot, You're Drunk": Understanding Developer Responses to Agent-Generated Code Review Comments — 54,791 comments collected across 342 Python repositories, 54,713 analyzed from three agents.
 - [arXiv:2502.04835](https://arxiv.org/abs/2502.04835v1) — Bouraffa, Pham, Maalej (2025): How Do Developers Use Code Suggestions in Pull Request Reviews? — 8,672 suggestions across 2,852 pull requests in 46 projects.
 - [arXiv:2607.03316](https://arxiv.org/abs/2607.03316) — Lin, Liang, Thongtanunam, Tantithamthavorn (2026): Is Agentic Code Review Helpful? Mining Developers' Feedback to CodeRabbit Reviews in the Wild.

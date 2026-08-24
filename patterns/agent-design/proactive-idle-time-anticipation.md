@@ -29,8 +29,8 @@ Four conditions must hold together before the pattern earns back its speculative
 
 - Predictable need chains in the dialogue. ProAct models scenarios with a hidden user-needs graph whose nodes carry `predictable_after` dependencies; it scored 0.447 Anticipation Recall versus 0.020 for an undirected baseline ([arXiv:2605.25971](https://arxiv.org/abs/2605.25971)). Without structure to predict against — single-shot Q&A, scattershot topic-hopping — there is nothing to anticipate.
 - Persistent memory exists and is trustworthy. The predictor decomposes future needs from user profiles, entity facts, summaries, and prior artifacts. No memory degenerates the predictor to dialogue-only extrapolation; stale memory injects wrong predictions confidently. See [agent memory patterns](agent-memory-patterns.md) for the substrate.
-- Idle wall-clock exceeds the predict-acquire-deliver loop. Anticipation pays off only if the artifact lands before the next turn. In 82 of 200 scenarios recall improved without reducing user effort because predictions arrived too late ([arXiv:2605.25971](https://arxiv.org/abs/2605.25971)).
-- Latency dominates dollar cost. Directed Idle consumed 111.8k active tokens per scenario versus 0 for Reactive, at 687s versus 265s wall-clock. The paper treats the search budget as "an operating point that balances efficiency gains against compute cost, rather than as a parameter to maximize" ([arXiv:2605.25971](https://arxiv.org/abs/2605.25971)).
+- Idle wall-clock exceeds the predict-acquire-deliver loop. Anticipation pays off only if the artifact lands before the next turn. In 82 of 200 scenarios recall improved without reducing user effort because predictions arrived too late ([arXiv:2605.25971](https://arxiv.org/abs/2605.25971v2)).
+- Latency dominates dollar cost. Directed Idle consumed 111.8k active tokens per scenario versus 0 for Reactive, at 687s versus 265s wall-clock. The paper treats the search budget as "an operating point that balances efficiency gains against compute cost, rather than as a parameter to maximize" ([arXiv:2605.25971](https://arxiv.org/abs/2605.25971v2)).
 
 ## How it works
 
@@ -53,7 +53,7 @@ This is the inter-turn sibling of [idle-time speculative planning](idle-time-spe
 
 ## Why it works
 
-Idle time between turns is underused compute: the inference budget is paid regardless of whether tokens are generated. The accuracy lift comes from converting that slack into directed speculation — needs resolved before the next turn are skipped by the simulator, reducing `User Effort` and `T100` (turns to full must-have coverage). Removing the predictor (Undirected Idle, matched token budget) beats Reactive by only 0.9% on T100 versus Directed Idle's 14.1% — direction is the load-bearing component, not raw compute ([arXiv:2605.25971](https://arxiv.org/abs/2605.25971)). The 28.1% hallucination reduction comes from memory-gap augmentation: when a candidate need exposes incomplete stored knowledge, the agent grounds the next answer in acquired evidence rather than confabulating.
+Idle time between turns is underused compute: the inference budget is paid regardless of whether tokens are generated. The accuracy lift comes from converting that slack into directed speculation — needs resolved before the next turn are skipped by the simulator, reducing `User Effort` and `T100` (turns to full must-have coverage). Removing the predictor (Undirected Idle, matched token budget) beats Reactive by only 0.9% on T100 versus Directed Idle's 14.1% — direction is the load-bearing component, not raw compute ([arXiv:2605.25971](https://arxiv.org/abs/2605.25971v2)). The 28.1% hallucination reduction comes from memory-gap augmentation: when a candidate need exposes incomplete stored knowledge, the agent grounds the next answer in acquired evidence rather than confabulating.
 
 ## When this backfires
 
@@ -80,7 +80,7 @@ On ProActEval (200 scenarios, 40 domains, GPT-4o assistant and simulator, GPT-4o
 | Active tokens per scenario | 0 | 111.8k | cost |
 | Wall-clock per scenario | 264.8s | 687.2s | longer |
 
-Anticipation Recall comparison against the prior baseline ProactiveAgent (Lu et al., 2024; [arXiv:2410.12361](https://arxiv.org/abs/2410.12361)): 0.447 versus 0.020. The 22× gap isolates the contribution of directed prediction over undirected proactive task initiation.
+Anticipation Recall comparison against the prior baseline ProactiveAgent (Lu et al., 2024; [arXiv:2410.12361](https://arxiv.org/abs/2410.12361v3)): 0.447 versus 0.020. The 22× gap isolates the contribution of directed prediction over undirected proactive task initiation.
 
 ## Example
 
@@ -104,7 +104,7 @@ python experiments/run_scenario.py \
   --condition full-single-idle  # Directed idle — full ProAct
 ```
 
-The three conditions ablate the load-bearing component: `baseline` measures the reactive floor, `blind` measures the value of idle compute without direction, and `full-single-idle` measures the value of directed idle compute. The 0.9%-versus-14.1% T100 gap between `blind` and `full-single-idle` is what tells you the predictor (not the search budget) is what earns the latency win ([arXiv:2605.25971](https://arxiv.org/abs/2605.25971)).
+The three conditions ablate the load-bearing component: `baseline` measures the reactive floor, `blind` measures the value of idle compute without direction, and `full-single-idle` measures the value of directed idle compute. The 0.9%-versus-14.1% T100 gap between `blind` and `full-single-idle` is what tells you the predictor (not the search budget) is what earns the latency win ([arXiv:2605.25971](https://arxiv.org/abs/2605.25971v2)).
 
 ## Key Takeaways
 

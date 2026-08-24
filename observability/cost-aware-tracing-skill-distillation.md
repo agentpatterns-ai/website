@@ -46,7 +46,7 @@ Prune patches must name a high-cost step and supply the counterfactual. Aestheti
 
 ## The transfer asymmetry
 
-The empirical finding in the paper is that prune patches and preserve patches do not behave alike across tasks. On 30 held-out SpreadsheetBench tasks, removing prune patches roughly tripled the quality-regression count without lowering median cost: prune patches act as a quality safeguard, not a net cost cut. Across the full 84-task SkillsBench transfer, CostCraft saved no aggregate cost, and preserve patches drove the regressions ([ClawTrace, 2026](https://arxiv.org/abs/2604.23853)).
+The empirical finding in the paper is that prune patches and preserve patches do not behave alike across tasks. On 30 held-out SpreadsheetBench tasks, removing prune patches roughly tripled the quality-regression count without lowering median cost: prune patches act as a quality safeguard, not a net cost cut. Across the full 84-task SkillsBench transfer, CostCraft saved no aggregate cost, and preserve patches drove the regressions ([ClawTrace, 2026](https://arxiv.org/abs/2604.23853v2)).
 
 ```mermaid
 graph TD

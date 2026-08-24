@@ -27,7 +27,7 @@ maturity: established
 
 When a single agent generates code and then writes tests for it, the tests confirm the code's logic rather than challenge it — following the same reasoning path and missing the same edge cases.
 
-[AgentCoder](https://arxiv.org/abs/2312.13010) (Huang et al., 2023) quantified this: separating test generation into an independent agent raised test accuracy from 61.0% to 87.8% on HumanEval benchmarks.
+[AgentCoder](https://arxiv.org/abs/2312.13010v3) (Huang et al., 2023) quantified this: separating test generation into an independent agent raised test accuracy from 61.0% to 87.8% on HumanEval benchmarks.
 
 ## Three-agent architecture
 
@@ -82,7 +82,7 @@ The non-linear jump when all three work together shows what produces the gains: 
 ## When this backfires
 
 - Test designer inherits spec errors: both agents receive the same requirements document, so ambiguities, underspecifications, or outright errors reach both. The pattern removes code-context bias but cannot make up for a flawed or incomplete specification.
-- Generated tests can be wrong themselves: independent generation does not guarantee test correctness. [BACE (arXiv:2603.28653)](https://arxiv.org/abs/2603.28653) documents how "incorrect code frequently passes faulty or trivial tests, while valid solutions are often degraded to satisfy incorrect assertions". So treating agent-generated tests as ground truth is fragile. Use public reference tests or a human-reviewed test suite as an anchor when correctness guarantees matter.
+- Generated tests can be wrong themselves: independent generation does not guarantee test correctness. [BACE (arXiv:2603.28653)](https://arxiv.org/abs/2603.28653v2) documents how "incorrect code frequently passes faulty or trivial tests, while valid solutions are often degraded to satisfy incorrect assertions". So treating agent-generated tests as ground truth is fragile. Use public reference tests or a human-reviewed test suite as an anchor when correctness guarantees matter.
 - Benchmark gap: AgentCoder measured its results on single-function HumanEval tasks. Multi-file codebases add cross-module dependencies and integration constraints that a spec-only test designer cannot fully anticipate, so test accuracy improvements may be smaller in practice.
 - Token overhead is real: running three agents uses about 57K tokens per task versus a single-agent approach, roughly doubling cost. For high-volume, low-complexity tasks such as boilerplate generation, the accuracy gain may not justify the overhead.
 

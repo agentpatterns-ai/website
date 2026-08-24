@@ -32,7 +32,7 @@ LLM self-composition: the model selects or invents each helper's prompt and tool
 
 ## Why a static roster is safer
 
-Schema-level tool filtering works because "the model cannot form the intent to call tools it has never seen" ([Bui 2026 §2.2.2](https://arxiv.org/abs/2603.05344)). That guarantee depends on the allowlist being fixed in advance. A runtime-chosen allowlist — particularly one the model can influence mid-task — removes that precondition and reintroduces the exact intent the filter was built to prevent.
+Schema-level tool filtering works because a model cannot form the intent to call a tool it has never been shown ([Bui 2026 §2.2.2](https://arxiv.org/abs/2603.05344v3)). That guarantee depends on the allowlist being fixed in advance. A runtime-chosen allowlist — particularly one the model can influence mid-task — removes that precondition and reintroduces the exact intent the filter was built to prevent.
 
 Static definitions also give you reproducible evals. When every subagent's prompt and tool set lives in version control, a regression traces to a specific change in a specific file. A non-deterministic roster cannot offer this: you cannot pin which definition produced a result, which breaks reproducible reviewer calibration. Every handoff between agents introduces loss, and fewer well-defined agents compound errors less than a freely assembled set ([Cognition: Don't Build Multi-Agents](https://cognition.ai/blog/dont-build-multi-agents)).
 

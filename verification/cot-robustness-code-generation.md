@@ -30,7 +30,7 @@ Concrete results from the same study: [Source: [Liu et al., §5](https://arxiv.o
 - DeepSeek-Coder-6.7B — task-dependent. No gain on MHPP (25.2%→21.4%); significant gain on BigCodeBench (Pass@1 7.4%→10.4%, Pass@10 11.1%→17.1%).
 - Qwen2.5-Coder-7B — instruction-dependent. CoT helped with standard prompts (26.2%→27.6%) but diminished when the prompt included explicit perturbation definitions.
 
-Parallel work on misleading natural-language context found a 13.8% average CoT performance drop on code-reasoning tasks and "reasoning collapse" on reasoning-heavy models (QwQ-32B) — 2–3× token usage on pathological self-reflection. [Source: [Lam et al., *CodeCrash*, 2025](https://arxiv.org/abs/2504.14119)]
+Parallel work on misleading natural-language context found a 13.8% average CoT performance drop on code-reasoning tasks and "reasoning collapse" on reasoning-heavy models (QwQ-32B) — 2–3× token usage on pathological self-reflection. [Source: [Lam et al., *CodeCrash*, 2025](https://arxiv.org/abs/2504.14119v3)]
 
 ## Three failure modes
 
@@ -59,14 +59,14 @@ Early-token uncertainty is a weak predictor of failure (AUROC 0.55–0.60) but r
 
 Two 2025 techniques reduce the fragility above:
 
-- Structured CoT (SCoT). Scaffold the reasoning with program-structure placeholders (sequence, branch, loop) instead of free-form prose. SCoT outperformed plain CoT by up to 13.79% on HumanEval and remained stable across example orderings. [Source: [Li et al., arxiv:2305.06599](https://arxiv.org/abs/2305.06599)]
+- Structured CoT (SCoT). Scaffold the reasoning with program-structure placeholders (sequence, branch, loop) instead of free-form prose. SCoT outperformed plain CoT by up to 13.79% on HumanEval and remained stable across example orderings. [Source: [Li et al., arxiv:2305.06599](https://arxiv.org/abs/2305.06599v3)]
 - Reverse CoT. Generate code first, then produce CoT to explain it — sidestepping the reasoning-to-code anchor. ICML 2025 reported a 9.86% relative improvement over reasoning-first order. [Source: [Liu et al., PMLR 267:38809–38826](https://proceedings.mlr.press/v267/liu25ah.html)]
 
 ## When this matters most
 
 - Smaller base-model code LLMs. CodeLlama-7B/13B showed consistent CoT harm on Pass@1 and Pass@10. [Source: [Liu et al., §5](https://arxiv.org/html/2604.12214)]
 - Noisy prompts. Typos, paraphrases, and synonym swaps — common in real user input — amplify CoT destabilization. [Source: [Lam et al., 2025](https://arxiv.org/abs/2504.14119)]
-- Reasoning-heavy models given misleading hints. They enter "reasoning collapse" and consume 2–3× tokens without converging. [Source: [Lam et al., 2025](https://arxiv.org/abs/2504.14119)]
+- Reasoning-heavy models given misleading hints. They enter "reasoning collapse" and consume 2–3× tokens without converging. [Source: [Lam et al., 2025](https://arxiv.org/abs/2504.14119v3)]
 - Free-form CoT without structural scaffolding. Plain "think step by step" underperforms SCoT by up to 13.79%. [Source: [Li et al., TOSEM 2025](https://dl.acm.org/doi/10.1145/3690635)]
 
 ## Example

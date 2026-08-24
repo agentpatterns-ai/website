@@ -57,7 +57,7 @@ This is a different review slot from neighboring patterns:
 
 ## Why runtime feedback is not enough
 
-Unstructured self-critique improves output on diverse tasks by about 20% ([Madaan et al., 2023](https://arxiv.org/abs/2303.17651)), and adding real execution feedback lifts M3ToolEval performance from 0.65 to 0.75, a real but modest gain ([LeVine et al., 2026](https://arxiv.org/abs/2605.09730)). The remaining errors are inter-tool contract violations that do not raise:
+Unstructured self-critique improves output on diverse tasks by about 20% ([Madaan et al., 2023](https://arxiv.org/abs/2303.17651v2)), and adding real execution feedback lifts M3ToolEval performance from 0.65 to 0.75, a real but modest gain ([LeVine et al., 2026](https://arxiv.org/abs/2605.09730v3)). The remaining errors are inter-tool contract violations that do not raise:
 
 - Wrong output shape passed to the next tool
 - Incorrect tool routing for a sub-step

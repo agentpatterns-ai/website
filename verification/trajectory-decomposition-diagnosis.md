@@ -56,7 +56,7 @@ Stage independence is why this works: you compute precision and recall at each s
 
 ## What the evidence shows
 
-Analysis of 16,758 trajectories across three architectures and seven models reveals patterns that binary metrics hide. [Source: [TRAJEVAL](https://arxiv.org/abs/2603.24631)]
+Analysis of 16,758 trajectories across three architectures and seven models reveals patterns that binary metrics hide. [Source: [TRAJEVAL](https://arxiv.org/abs/2603.24631v2)]
 
 ### Universal over-reading
 
@@ -104,7 +104,7 @@ Apply the same formula at the read and edit levels.
 
 ### 4. Inject real-time feedback
 
-Stage-level signals extend beyond post-hoc analysis. Feeding trajectory diagnostics back during execution improved two models by 2.2-4.6 percentage points while reducing token costs by 20-31% — aligning with [agent self-review loops](../code-review/agent-self-review-loop.md). [Source: [TRAJEVAL](https://arxiv.org/abs/2603.24631)]
+Stage-level signals extend beyond post-hoc analysis. Feeding trajectory diagnostics back during execution improved two models by 2.2-4.6 percentage points while reducing token costs by 20-31% — aligning with [agent self-review loops](../code-review/agent-self-review-loop.md). [Source: [TRAJEVAL](https://arxiv.org/abs/2603.24631v2)]
 
 ## When to use it, and when not to
 

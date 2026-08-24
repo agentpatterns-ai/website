@@ -44,7 +44,7 @@ Two metrics carry concrete formulas, and cost is a weighted sum ([Li et al., arx
 
 ## Why it works
 
-Recurring failure modes leave trace-level fingerprints before final-answer failure: tool instability as a rising error ratio, an orchestration loop as identical action keys, low information gain as a streak of calls returning no new URLs or facts, evidence failure as low answer-citation cosine similarity — all readable before the grader sees the answer. The paper's GAIA evaluation confirms them empirically: across 165 traces, failure rates were 41% at Level 1 (22/53), 38% at Level 2 (33/86), and 46% at Level 3 (12/26), with mean token use rising from 8,152 to 16,389 ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)). Concurrent work reinforces the mechanism: full execution traces improve failure-attribution accuracy by up to 76% over partial-observation baselines ([Chen et al., arxiv 2604.22708](https://arxiv.org/abs/2604.22708v1)).
+Recurring failure modes leave trace-level fingerprints before final-answer failure: tool instability as a rising error ratio, an orchestration loop as identical action keys, low information gain as a streak of calls returning no new URLs or facts, evidence failure as low answer-citation cosine similarity — all readable before the grader sees the answer. The paper's GAIA evaluation confirms them empirically: across 165 traces, failure rates were 41% at Level 1 (22/53), 38% at Level 2 (33/86), and 46% at Level 3 (12/26), with mean token use rising from 8,152 to 16,389 ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365v2)). Concurrent work reinforces the mechanism: full execution traces improve failure-attribution accuracy by up to 76% over partial-observation baselines ([Chen et al., arxiv 2604.22708](https://arxiv.org/abs/2604.22708v1)).
 
 ## How it differs from single-signal stopping
 
@@ -54,7 +54,7 @@ Single-signal mechanisms — iteration caps, edit counters, cost ceilings — an
 
 Four conditions where instrumentation cost outweighs return:
 
-1. Single-agent or short-trajectory workloads. The taxonomy targets multi-agent systems where 16k-token trajectories with consecutive tool failures are the failure surface ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)); a solo harness under ten tool calls per task surfaces loops and budget overrun directly. [Loop Detection](loop-detection.md) plus [Circuit Breakers for Agent Loops](circuit-breakers.md) cover this regime.
+1. Single-agent or short-trajectory workloads. The taxonomy targets multi-agent systems where 16k-token trajectories with consecutive tool failures are the failure surface ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365v2)); a solo harness under ten tool calls per task surfaces loops and budget overrun directly. [Loop Detection](loop-detection.md) plus [Circuit Breakers for Agent Loops](circuit-breakers.md) cover this regime.
 
 2. No trace store or intervention path. Without a way to act on the signals — mid-run pause, nudge injection, early-stop — they reduce to postmortem instrumentation no faster than final-answer eval. An [agent-trace data layer](agent-trace-data-layer.md) is the prerequisite.
 
@@ -74,7 +74,7 @@ At step 18 of 30, retrieval-agent-2 has `ToolErr = 0.7` over the last 10 calls, 
 
 - Six trace signals — tool reliability, execution recovery, orchestration loops, evidence availability, information change, budget pressure — map recurring multi-agent failure modes to online observability ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)).
 - It is a diagnostic taxonomy, not a stopping rule: it tells the harness *why* a run is failing while budget remains to intervene.
-- The empirical basis is 165 GAIA validation traces with 38–46% per-level failure rates and mean token use rising from 8,152 to 16,389 ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365)).
+- The empirical basis is 165 GAIA validation traces with 38–46% per-level failure rates and mean token use rising from 8,152 to 16,389 ([Li et al., arxiv 2606.01365](https://arxiv.org/abs/2606.01365v2)).
 - Without a trace store and an intervention path, the signals reduce to postmortem instrumentation no faster than final-answer eval.
 - For single-agent harnesses and short trajectories, two signals (loops + budget) dominate six.
 

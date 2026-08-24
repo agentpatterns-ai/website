@@ -29,7 +29,7 @@ After every model release, user forums fill with reports that quality has declin
 
 Candidate causes include post-training adjustments, confirmation bias (consistent with OpenAI VP Peter Welinder's [statement](https://twitter.com/npew/status/1681578562419056641)), A/B routing, and weight quantization. None has definitive proof.
 
-LLM drift (behavioral change over time) differs from degradation (inability to solve previously solvable tasks). Chen, Zaharia, and Zou ([2023](https://arxiv.org/abs/2307.09009)) documented GPT-4 prime-identification accuracy dropping from 84% to 51%. The drop coincided with reduced chain-of-thought compliance, which makes the root cause hard to isolate.
+LLM drift (behavioral change over time) differs from degradation (inability to solve previously solvable tasks). Chen, Zaharia, and Zou ([2023](https://arxiv.org/abs/2307.09009v3)) documented GPT-4 prime-identification accuracy dropping from 84% to 51%. The drop coincided with reduced chain-of-thought compliance, which makes the root cause hard to isolate.
 
 ## What to do instead
 

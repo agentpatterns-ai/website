@@ -49,7 +49,7 @@ The architectural family is the same as [CaMeL](camel-control-data-flow-injectio
 
 ## Empirical anchor
 
-On the [WebArena benchmark](https://arxiv.org/abs/2307.13854), every task is compatible with plan-then-execute, and 80% can be completed with a purely programmatic plan — no runtime LLM subroutines required ([Piet et al., 2026](https://arxiv.org/abs/2605.14290v1)). The remaining 20% need bounded LLM calls inside the plan (extraction, classification), but the control graph is still fixed before execution begins.
+On the [WebArena benchmark](https://arxiv.org/abs/2307.13854v4), every task is compatible with plan-then-execute, and 80% can be completed with a purely programmatic plan — no runtime LLM subroutines required ([Piet et al., 2026](https://arxiv.org/abs/2605.14290v1)). The remaining 20% need bounded LLM calls inside the plan (extraction, classification), but the control graph is still fixed before execution begins.
 
 ## When this backfires
 

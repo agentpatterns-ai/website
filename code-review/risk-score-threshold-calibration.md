@@ -53,7 +53,7 @@ graph TD
 
 ## What calibration buys
 
-Published RADAR metrics quantify the tradeoff. At Meta scale (535K+ diffs reviewed, 331K+ landed without manual intervention), relaxing the threshold from the 25th to the 50th percentile raised approval rate to 60.31% ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208)). Safety outcomes versus the non-RADAR baseline:
+Published RADAR metrics quantify the tradeoff. At Meta scale (535K+ diffs reviewed, 331K+ landed without manual intervention), relaxing the threshold from the 25th to the 50th percentile raised approval rate to 60.31% ([arXiv:2605.30208](https://arxiv.org/abs/2605.30208v2)). Safety outcomes versus the non-RADAR baseline:
 
 | Metric | RADAR vs. baseline |
 |--------|-------------------|

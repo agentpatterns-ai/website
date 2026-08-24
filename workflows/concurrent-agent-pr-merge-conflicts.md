@@ -28,9 +28,9 @@ If your setup meets none of these, run agents in parallel and resolve the occasi
 
 ## Why concurrency is the default, not the exception
 
-Concurrent agent pull requests are not an edge case you can dispatch your way around. A study of the AIDev-pop dataset — 33,596 agent-authored PRs across 2,807 repositories, December 2024 to July 2025 — measured how often agent PRs overlap in time ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697)).
+Concurrent agent pull requests are not an edge case you can dispatch your way around. A study of the AIDev-pop dataset — 33,596 agent-authored PRs across 2,807 repositories, December 2024 to July 2025 — measured how often agent PRs overlap in time ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697v2)).
 
-Under exact temporal overlap, 40.2% of repositories have co-active agent-authored PR pairs, and those co-active pairs account for 79.4% of all agent-submitted PRs ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697)). Widen the window to one week and 53.4% of repositories show co-activity, covering 95.0% of agent PRs ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697)). Once you run more than one agent, most of their work happens while another agent is also mid-change.
+Under exact temporal overlap, 40.2% of repositories have co-active agent-authored PR pairs, and those co-active pairs account for 79.4% of all agent-submitted PRs ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697v2)). Widen the window to one week and 53.4% of repositories show co-activity, covering 95.0% of agent PRs ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697v2)). Once you run more than one agent, most of their work happens while another agent is also mid-change.
 
 ## The measured conflict cost
 
@@ -41,13 +41,13 @@ Co-activity produces textual merge conflicts at rates worth budgeting for:
 | Intra-agent (same agent) | 19.8% | [16.8%, 23.2%] |
 | Cross-agent (different vendors) | 41.7% | [33.1%, 50.9%] |
 
-Cross-agent pairs conflict at roughly double the rate of same-agent pairs ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697)). The conflicts land where they hurt: 84.4% of conflicted files are source code and only 3.9% are manifest or lockfiles, so a human reviews the resolution rather than a tool auto-merging it ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697)). About 42% of conflicts are structural — modify/delete (26.8%) or add/add (15.1%) — not simple overlapping-line merges, and structural conflicts cost more to resolve than content conflicts (57.6%) ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697)).
+Cross-agent pairs conflict at roughly double the rate of same-agent pairs ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697v2)). The conflicts land where they hurt: 84.4% of conflicted files are source code and only 3.9% are manifest or lockfiles, so a human reviews the resolution rather than a tool auto-merging it ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697v2)). About 42% of conflicts are structural — modify/delete (26.8%) or add/add (15.1%) — not simple overlapping-line merges, and structural conflicts cost more to resolve than content conflicts (57.6%) ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697v2)).
 
 These are textual conflicts only, which the authors call conservative lower bounds — build and semantic conflicts were not measured, so the true friction is higher ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697)).
 
 ## Why it works
 
-Agents collide because they carry no shared-workspace awareness. Each one "operate[s] independently and in isolation, without knowledge that other agents of the same type are simultaneously accessing and altering the same files" — there is no lock or communication protocol preventing two agents from editing the same code region at once ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697)). Cross-vendor pairs conflict at double the rate because different products apply different formatting, structure, and conventions, which widens the edit overlap whenever they touch the same file ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697)). Coordination works by restoring the awareness the agents lack — either by keeping their edit regions apart, or by making one agent's change land before the next one starts.
+Agents collide because they carry no shared-workspace awareness. Each one "operate[s] independently and in isolation, without knowledge that other agents of the same type are simultaneously accessing and altering the same files" — there is no lock or communication protocol preventing two agents from editing the same code region at once ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697v2)). Cross-vendor pairs conflict at double the rate because different products apply different formatting, structure, and conventions, which widens the edit overlap whenever they touch the same file ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697v2)). Coordination works by restoring the awareness the agents lack — either by keeping their edit regions apart, or by making one agent's change land before the next one starts.
 
 ## The coordination ladder
 
@@ -67,7 +67,7 @@ Coordinating dispatch is itself a cost. It is the wrong default under these cond
 - Low agent volume: a repo that rarely has two agents active at once gains nothing from coordination machinery and pays its overhead in full.
 - Disjoint file ownership already in place: if agents are scoped to non-overlapping modules, temporal concurrency produces no overlap, and adding serialization only slows delivery.
 - Fast merge cadence: short-lived branches and auto-merge shrink the overlap window, dropping co-activity without any coordination step.
-- Single-vendor deployments: the high-cost 41.7% figure is cross-agent. A shop standardized on one agent sees the 19.8% rate, and cross-agent pairs are only about 0.5% of observed pairs today — partly an artifact of single-vendor data collection ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697)).
+- Single-vendor deployments: the high-cost 41.7% figure is cross-agent. A shop standardized on one agent sees the 19.8% rate, and cross-agent pairs are only about 0.5% of observed pairs today — partly an artifact of single-vendor data collection ([arXiv:2607.04697](https://arxiv.org/abs/2607.04697v2)).
 
 The failure mode is treating a ~20% same-agent conflict rate as a reason to serialize everything. Roughly four in five co-active same-agent pairs never conflict, and blanket serialization forfeits that parallel throughput to avoid a probabilistic, human-resolvable cost.
 

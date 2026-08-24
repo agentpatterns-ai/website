@@ -23,7 +23,7 @@ A TDD cycle has two halves — writing the test and writing the production code 
 
 ## Why the interaction model matters
 
-How much of the loop you delegate has a measurable cost, and it outlives the benefit. Repositories adopting autonomous coding agents saw static-analysis warnings rise roughly 18% and cognitive complexity roughly 39%, and those effects persisted across settings after the throughput gains had faded ([Agarwal, He and Vasilescu, 2026](https://arxiv.org/abs/2601.13597)). The delegation boundary is the lever that sets that trade, so it is worth choosing deliberately rather than by default.
+How much of the loop you delegate has a measurable cost, and it outlives the benefit. Repositories adopting autonomous coding agents saw static-analysis warnings rise roughly 18% and cognitive complexity roughly 39%, and those effects persisted across settings after the throughput gains had faded ([Agarwal, He and Vasilescu, 2026](https://arxiv.org/abs/2601.13597v2)). The delegation boundary is the lever that sets that trade, so it is worth choosing deliberately rather than by default.
 
 ## The four interaction models
 
@@ -79,7 +79,7 @@ The rung sets where the specification gets pinned; it does not by itself decide 
 
 Gating the test-writing half on a human costs more than it returns under several conditions.
 
-- The task is large. The study measured 40-minute string-formatting exercises. At repository scale the human becomes the bottleneck: TDFlow reaches 94.3% on SWE-Bench Verified when handed human-written tests, and its authors name "writing successful reproduction tests" as the primary remaining obstacle to human-level performance ([Han et al., 2025](https://arxiv.org/abs/2510.23761)).
+- The task is large. The study measured 40-minute string-formatting exercises. At repository scale the human becomes the bottleneck: TDFlow reaches 94.3% on SWE-Bench Verified when handed human-written tests, and its authors name "writing successful reproduction tests" as the primary remaining obstacle to human-level performance ([Han et al., 2025](https://arxiv.org/abs/2510.23761v2)).
 - You are optimizing for defect detection. On that axis the human advantage reverses by a factor of four ([Vathana et al., 2026](https://arxiv.org/abs/2606.08588)). Choose the collaborative rung to pin the specification, not to maximize bugs found per test.
 - Your models are current. The collaborative arm ran on GPT-3.5 Turbo. A 2026-vintage model in the same loop is not the configuration that was measured, and the observed gap may not survive the upgrade.
 - Reviewer time is the scarce resource. Collaborative TDD puts a human in every iteration, so the cost lands on each cycle rather than once at the end.

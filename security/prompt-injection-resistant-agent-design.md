@@ -104,7 +104,7 @@ Each pattern cuts the path from untrusted content to consequential action before
 
 - Utility loss: the [Action-Selector](action-selector-pattern.md) and Plan-Then-Execute patterns only fit workflows with a fixed action set or stable plan. Open-ended agents that reason over what they just read cannot be constrained this way.
 - Architectural cost: Dual LLM doubles inference cost, and most frameworks do not provide the privileged and quarantined split.
-- Steep utility cost: "Provable" here means resistance by construction, not an empirically validated guarantee -- the originating patterns paper runs no quantitative experiments. Follow-up work measured the Dual LLM pattern driving attack success to 0% while task utility collapsed from 49.7% to 14.6% in a bug-fixing scenario. [Source: [Jacob et al., 2025](https://arxiv.org/abs/2509.25926)]
+- Steep utility cost: "Provable" here means resistance by construction, not an empirically validated guarantee -- the originating patterns paper runs no quantitative experiments. Follow-up work measured the Dual LLM pattern driving attack success to 0% while task utility collapsed from 49.7% to 14.6% in a bug-fixing scenario. [Source: [Jacob et al., 2025](https://arxiv.org/abs/2509.25926v2)]
 - False confidence: one pattern alone, without removing another leg of the [Lethal Trifecta](lethal-trifecta-threat-model.md), creates an illusion of safety. An agent that asks before acting can still exfiltrate data if egress is open.
 - Schema drift: tools added after deployment may silently reintroduce capabilities that schema-level filtering excluded.
 
@@ -146,7 +146,7 @@ No. LLMs have no parameterized-query equivalent, because the boundary between in
 
 **What does "provable" resistance actually guarantee?**
 
-Resistance by construction, not an empirically validated guarantee -- the originating patterns paper runs no quantitative experiments. Follow-up work measured the Dual LLM pattern driving attack success to 0% while task utility collapsed from 49.7% to 14.6% in a bug-fixing scenario. [Source: [Jacob et al., 2025](https://arxiv.org/abs/2509.25926)] The security gain is real, and so is the utility cost.
+Resistance by construction, not an empirically validated guarantee -- the originating patterns paper runs no quantitative experiments. Follow-up work measured the Dual LLM pattern driving attack success to 0% while task utility collapsed from 49.7% to 14.6% in a bug-fixing scenario. [Source: [Jacob et al., 2025](https://arxiv.org/abs/2509.25926v2)] The security gain is real, and so is the utility cost.
 
 **Which agents cannot be constrained this way?**
 

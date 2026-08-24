@@ -22,7 +22,7 @@ maturity: established
 
 Models trained on large internet corpora end up seeing benchmark data. When a model has seen the test set during training, its score reflects memorization, not generalization.
 
-SWE-rebench quantified this for coding agents: DeepSeek-V3 scores 39.7% on SWE-bench Verified but only 21.3% on decontaminated fresh tasks — an 18.4 percentage point gap attributable to contamination. GPT-4.1 shows a similar pattern: 31.1% on older tasks versus 26.7% on newer ones. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
+SWE-rebench quantified this for coding agents: DeepSeek-V3 scores 39.7% on SWE-bench Verified but only 21.3% on decontaminated fresh tasks — an 18.4 percentage point gap attributable to contamination. GPT-4.1 shows a similar pattern: 31.1% on older tasks versus 26.7% on newer ones. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411v2)]
 
 The problem extends beyond SWE-bench. LessLeak-Bench audited 83 software engineering benchmarks and found leakage ratios ranging from under 1% to 100%. StarCoder-7b achieved Pass@1 4.9x higher on leaked samples than on non-leaked samples in the APPS benchmark. [Source: [LessLeak-Bench](https://arxiv.org/abs/2502.06215v1)]
 
@@ -38,7 +38,7 @@ Track the creation date of every eval task (the issue, the PR, the test) against
 
 ### Continuous fresh task sourcing
 
-Rather than curate a fixed benchmark once, extract tasks continuously from recent real-world activity. SWE-rebench mines merged PRs linked to resolved GitHub issues, yielding 21,336 tasks from 3,468 repositories. The pipeline runs four stages: repository filtering, LLM-driven environment setup, execution validation in isolated containers, and quality assessment. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
+Rather than curate a fixed benchmark once, extract tasks continuously from recent real-world activity. SWE-rebench mines merged PRs linked to resolved GitHub issues, yielding 21,336 tasks from 3,468 repositories. The pipeline runs four stages: repository filtering, LLM-driven environment setup, execution validation in isolated containers, and quality assessment. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411v2)]
 
 The same principle works at team scale. Periodically add eval tasks from recent internal work to keep your suite ahead of contamination.
 
@@ -69,7 +69,7 @@ For teams making one model-selection decision per year, triangulating two or thr
 
 ## Example
 
-SWE-rebench's own leaderboard shows the pattern. DeepSeek-V3 leads on SWE-bench Verified at 39.7%, but drops to 21.3% on decontaminated tasks — a gap nearly as large as its reported score. Models with lower Verified scores show smaller drops, suggesting their original scores were less inflated by contamination. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411)]
+SWE-rebench's own leaderboard shows the pattern. DeepSeek-V3 leads on SWE-bench Verified at 39.7%, but drops to 21.3% on decontaminated tasks — a gap nearly as large as its reported score. Models with lower Verified scores show smaller drops, suggesting their original scores were less inflated by contamination. [Source: [SWE-rebench](https://arxiv.org/abs/2505.20411v2)]
 
 A team using SWE-bench Verified scores alone to choose between models would rank DeepSeek-V3 highest. A team running the same models against fresh, post-cutoff tasks drawn from their own repositories would get a different ranking — one that reflects generalization to the work the team actually needs done.
 

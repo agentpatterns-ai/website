@@ -33,7 +33,7 @@ The choice is not vendor-specific. Browser Use takes the same element-addressed 
 
 ## Budget observations by signal, not by step
 
-Re-observing the whole page after every action is what exhausts a long-horizon run. Web agents "ingest raw DOM and accessibility trees — routinely tens of thousands of tokens — at every action step, causing progressive context degradation that erodes reasoning well before tasks complete" ([Gaur and Lane, arXiv:2606.06708](https://arxiv.org/abs/2606.06708)). That runs 20,000 to 80,000 tokens per step, with WorkArena pages reaching 40,000 to 500,000.
+Re-observing the whole page after every action is what exhausts a long-horizon run. Web agents "ingest raw DOM and accessibility trees — routinely tens of thousands of tokens — at every action step, causing progressive context degradation that erodes reasoning well before tasks complete" ([Gaur and Lane, arXiv:2606.06708](https://arxiv.org/abs/2606.06708v2)). That runs 20,000 to 80,000 tokens per step, with WorkArena pages reaching 40,000 to 500,000.
 
 The proposed remedy decouples observation from action. Re-read the page only when a signal fires: a URL transition, a new ARIA element such as a modal, an action failure, or an exogenous event like a cookie banner. Treat this as a design direction, not a settled result — the authors state that the paper "does not include experiments".
 
@@ -53,7 +53,7 @@ Assertions change when a failure becomes observable. The same study notes that p
 
 - The task is expressible as a fixed plan. The loop then pays injection surface, latency, and per-step tokens for adaptivity it never exercises — the case for 81.28% of measured WebArena tasks ([arXiv:2605.14290](https://arxiv.org/abs/2605.14290v1)).
 - The page encodes state visually. Accessibility trees carry roles and names, not rendering, so canvas apps and charts push you back to screenshots and coordinates ([vision mode](https://playwright.dev/mcp/vision-mode)).
-- The browser holds an authenticated session reaching unrelated origins. Agentic browsers "frequently violate SOP, both in benign settings and under attacks" ([Wang et al., arXiv:2606.14027](https://arxiv.org/abs/2606.14027)). Brave demonstrated a hidden page comment steering an agent to harvest a one-time password from the user's logged-in mail and exfiltrate it, "without any further user input" ([Brave](https://brave.com/blog/comet-prompt-injection/)). A driven browser turns a read surface into an act-with-credentials surface, closing the [lethal trifecta](../../security/lethal-trifecta-threat-model.md).
+- The browser holds an authenticated session reaching unrelated origins. Agentic browsers "frequently violate SOP, both in benign settings and under attacks" ([Wang et al., arXiv:2606.14027](https://arxiv.org/abs/2606.14027v3)). Brave demonstrated a hidden page comment steering an agent to harvest a one-time password from the user's logged-in mail and exfiltrate it, "without any further user input" ([Brave](https://brave.com/blog/comet-prompt-injection/)). A driven browser turns a read surface into an act-with-credentials surface, closing the [lethal trifecta](../../security/lethal-trifecta-threat-model.md).
 - Irreversible actions sit inside the action space. Submit Order and Confirm Transfer have no undo, and benchmarks grade happy-path completion rather than recovery from selector drift, modals, expired sessions, or rate-limit cliffs ([Future AGI](https://futureagi.com/blog/evaluating-browser-use-agents-2026)).
 
 ## Example

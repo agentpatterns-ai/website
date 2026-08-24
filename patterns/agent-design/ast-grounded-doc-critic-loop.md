@@ -45,7 +45,7 @@ AST grounding addresses factual incorrectness in generated docs. That is one of 
 
 Dependency-aware retrieval (the RAG layer) fills the context window with exactly the code that constrains the doc. Loading the whole module pollutes context; loading nothing forces invention. The AST answers precisely: load the transitively-referenced nodes.
 
-Critic-guided Reflexion is the separation lever. A single model reflecting on its own output rationalizes rather than critiques — the [self-correction blind spot](https://arxiv.org/abs/2507.02778) measures a 64.5% average blind-spot rate across 14 tested LLMs. A critic working on the AST diff (a different artifact than the generator's text) breaks that shared blind spot. The Reflexion layer ([Shinn et al. 2023 — arXiv:2303.11366](https://arxiv.org/abs/2303.11366)) carries the rejected attempt's lesson into the next iteration as a verbal note.
+Critic-guided Reflexion is the separation lever. A single model reflecting on its own output rationalizes rather than critiques — the [self-correction blind spot](https://arxiv.org/abs/2507.02778v3) measures a 64.5% average blind-spot rate across 14 tested LLMs. A critic working on the AST diff (a different artifact than the generator's text) breaks that shared blind spot. The Reflexion layer ([Shinn et al. 2023 — arXiv:2303.11366](https://arxiv.org/abs/2303.11366)) carries the rejected attempt's lesson into the next iteration as a verbal note.
 
 ## When to apply
 

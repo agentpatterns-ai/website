@@ -37,7 +37,7 @@ graph LR
 
 ## Why per-message defenses fail
 
-Single-shot defenses collapse to a constant policy on TRUST-Bench, the 1,970-episode benchmark from the originating work ([Yan et al., 2026](https://arxiv.org/html/2605.17453)):
+Single-shot defenses collapse to a constant policy on TRUST-Bench, the 1,970-episode benchmark from the originating work ([Yan et al., 2026](https://arxiv.org/html/2605.17453v1)):
 
 | Defense class | GuardedJoint score |
 |---|---|

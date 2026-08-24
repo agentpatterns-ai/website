@@ -129,7 +129,7 @@ Agents miss by omission as much as by commission. The Anthropic engineering team
 
 Agent-proposed fixes can overfit to the surface of a failure rather than its root cause. A description rewrite may resolve the visible symptom while introducing a subtler ambiguity. That ambiguity only surfaces on task types your eval set does not cover. This is why re-running a [held-out test set after changes](eval-blind-spots.md) is not optional.
 
-When the same model both generates and reviews, self-preference bias makes the problem worse. Judges mark their own outputs as satisfying rubrics up to 50% more often than a neutral evaluator would, even on objectively verifiable criteria. [Source: [Self-Preference Bias in Rubric-Based Evaluation](https://arxiv.org/abs/2604.06996)] Cross-check proposed fixes with a different model family.
+When the same model both generates and reviews, self-preference bias makes the problem worse. Judges mark their own outputs as satisfying rubrics up to 50% more often than a neutral evaluator would, even on objectively verifiable criteria. [Source: [Self-Preference Bias in Rubric-Based Evaluation](https://arxiv.org/abs/2604.06996v3)] Cross-check proposed fixes with a different model family.
 
 Do not rely on agent analysis as the only quality gate. Use it to narrow the search space for human review, not to replace the judgment needed to validate fixes.
 

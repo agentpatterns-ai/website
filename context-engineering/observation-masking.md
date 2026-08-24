@@ -21,7 +21,7 @@ Learn it hands-on with [Masking the Tail](https://learn.agentpatterns.ai/context
 
 ## The problem
 
-Tool calls are a primary source of context growth in agent workflows. Every tool output injects tokens into the context window: a file read, a search result, test runner output, a lint report. In software engineering agent benchmarks, observation tokens account for roughly 84% of trajectory content. The agent consumes most of them once during synthesis and never references them again ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433)). They stay in context, consuming budget and diluting attention.
+Tool calls are a primary source of context growth in agent workflows. Every tool output injects tokens into the context window: a file read, a search result, test runner output, a lint report. In software engineering agent benchmarks, observation tokens account for roughly 84% of trajectory content. The agent consumes most of them once during synthesis and never references them again ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433v3)). They stay in context, consuming budget and diluting attention.
 
 The useful artifact of a tool call is usually what the agent produced from it: the code written, the decision made, the summary. The raw tool output that informed it is not.
 
@@ -77,7 +77,7 @@ Reference outputs are masked too early. Schema definitions, API contracts, or do
 
 Synthesis is not yet complete. Masking a test failure output before the agent has produced and verified a fix removes the ground truth mid-task. Confirm the retention decision, do not assume it.
 
-Models use extended reasoning. Benchmarks show that masking reduces solve rate by about 10% for models with extended thinking enabled, where the model benefits from inspecting its full observation history during long chains of thought ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433)). Prefer LLM-based summarization over hard masking in those configurations.
+Models use extended reasoning. Benchmarks show that masking reduces solve rate by about 10% for models with extended thinking enabled, where the model benefits from inspecting its full observation history during long chains of thought ([arXiv 2508.21433](https://arxiv.org/abs/2508.21433v3)). Prefer LLM-based summarization over hard masking in those configurations.
 
 Domain differs from software engineering. The efficiency advantage of masking assumes observation tokens dominate context, about 84% in SE benchmarks. In domains where observations are brief and reasoning turns are long, the gain is smaller and the risk of over-masking is higher.
 

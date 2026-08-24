@@ -27,7 +27,7 @@ All four must hold:
 - Verifier independent of producer: use a different model class, prompt context, and evidence sources. A verifier that shares the producer's training distribution admits the same hallucinations.
 - Ground truth exists: tests, type checks, schema validation, CI exit codes — not another LLM's opinion.
 - Verifier on the critical path: every claim routes through it. Sidecar advisory verifiers yield audit data, not admission control.
-- Blocked precision measured: [Nguyen & Tran (2026)](https://arxiv.org/abs/2605.17998) report 98.58% rule agreement but only 0.39% blocked precision, so almost every rejection is a false positive. Without precision evidence, an enforcing gate blocks more valid work than invalid.
+- Blocked precision measured: [Nguyen & Tran (2026)](https://arxiv.org/abs/2605.17998v2) report 98.58% rule agreement but only 0.39% blocked precision, so almost every rejection is a false positive. Without precision evidence, an enforcing gate blocks more valid work than invalid.
 
 If any condition fails, prefer agent-internal verification ([pre-completion checklists](../../verification/pre-completion-checklists.md)) or recording without admission control ([verification ledger](../../verification/verification-ledger.md)).
 
@@ -54,7 +54,7 @@ Separating the authority to declare done from the agent doing the work removes a
 The architecture adds an inter-agent protocol, a verifier, and a record store. It costs more than it returns in these cases:
 
 - Verifier shares the producer's failure modes: the same model class and training data admits the same hallucinations ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)).
-- Advisory verifier treated as enforcing: promoted without precision evidence, it mostly blocks valid work — 0.39% blocked precision in the cited deployment ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)).
+- Advisory verifier treated as enforcing: promoted without precision evidence, it mostly blocks valid work — 0.39% blocked precision in the cited deployment ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998v2)).
 - Short, low-stakes interactions: for single-turn or exploratory work the bookkeeping exceeds the audit value, as it does for the [verification ledger](../../verification/verification-ledger.md).
 - No independent ground truth: when "done" is only another agent's judgment, verifier and producer argue the same uncertain claim.
 - Bypass paths: if agents route around the verifier through direct file writes, the gate is only a suggestion.

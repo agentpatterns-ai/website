@@ -27,7 +27,7 @@ A traditional interactive debugger exposes `step`, `next`, `print var`, `continu
 
 ## Granularity matched to the consumer
 
-The same principle the [Agent-Computer Interface (ACI)](agent-computer-interface.md) work identified for editors and search applies here: interface granularity moves benchmark numbers without changing the model. [Yang et al. (NeurIPS 2024)](https://arxiv.org/abs/2405.15793) showed a custom ACI took SWE-agent to 12.5% pass@1 on SWE-bench — state of the art at the time — with no weight changes. ADI applies the same principle to debuggers.
+The same principle the [Agent-Computer Interface (ACI)](agent-computer-interface.md) work identified for editors and search applies here: interface granularity moves benchmark numbers without changing the model. [Yang et al. (NeurIPS 2024)](https://arxiv.org/abs/2405.15793v3) showed a custom ACI took SWE-agent to 12.5% pass@1 on SWE-bench — state of the art at the time — with no weight changes. ADI applies the same principle to debuggers.
 
 Two design moves do the work:
 

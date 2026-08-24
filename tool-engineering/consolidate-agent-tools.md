@@ -48,7 +48,7 @@ This works better than flat naming (`search`, `project_search`, `create_task`), 
 
 LLMs pick tools by reading their [descriptions](tool-description-quality.md) in the context window. When ten narrow tool descriptions compete for attention, the model has to reason about which subset reaches the goal. That is a multi-step inference problem stacked on top of the real task. Fewer, well-scoped tools turn the choice into a direct mapping: intent to tool, rather than intent to a combination of tools.
 
-The benefit is not only ergonomic. [LongFuncEval (2025)](https://arxiv.org/abs/2505.10570v1) found that growing a tool catalog dropped accuracy by 7 to 85%, depending on the model, with a strong [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172)): the correct tool gets harder to find among distractors. Consolidation removes the distractors at the source, rather than relying on the model to filter them.
+The benefit is not only ergonomic. [LongFuncEval (2025)](https://arxiv.org/abs/2505.10570v1) found that growing a tool catalog dropped accuracy by 7 to 85%, depending on the model, with a strong [lost-in-the-middle](../context-engineering/lost-in-the-middle.md) effect ([Liu et al., 2023](https://arxiv.org/abs/2307.03172v3)): the correct tool gets harder to find among distractors. Consolidation removes the distractors at the source, rather than relying on the model to filter them.
 
 ## Context window impact
 

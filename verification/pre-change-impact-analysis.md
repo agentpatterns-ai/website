@@ -20,7 +20,7 @@ maturity: established
 
 ## The problem
 
-AI coding agents fix issues but frequently break things that were working. On SWE-bench Verified, vanilla agent runs show a 6.08% test-level regression rate ([TDAD paper](https://arxiv.org/abs/2603.17973), Table 3). [METR's March 2026 review](https://metr.org/notes/2026-03-10-many-swe-bench-passing-prs-would-not-be-merged-into-main/) of 296 SWE-bench Verified patches found roughly half would not be merged by maintainers — with regressions and code quality cited among top rejection reasons.
+AI coding agents fix issues but frequently break things that were working. On SWE-bench Verified, vanilla agent runs show a 6.08% test-level regression rate ([TDAD paper](https://arxiv.org/abs/2603.17973v2), Table 3). [METR's March 2026 review](https://metr.org/notes/2026-03-10-many-swe-bench-passing-prs-would-not-be-merged-into-main/) of 296 SWE-bench Verified patches found roughly half would not be merged by maintainers — with regressions and code quality cited among top rejection reasons.
 
 Agents lack visibility into which tests exercise the code they modify.
 
@@ -77,7 +77,7 @@ Procedural TDD instructions without dependency context make regressions worse, n
 | Procedural TDD instructions | 9.94% | +64% worse |
 | Dependency map + concise guidance | 1.82% | -70% better |
 
-Source: [TDAD paper](https://arxiv.org/abs/2603.17973), evaluated on SWE-bench Verified with Qwen3-Coder 30B (100 instances).
+Source: [TDAD paper](https://arxiv.org/abs/2603.17973v2), evaluated on SWE-bench Verified with Qwen3-Coder 30B (100 instances).
 
 Why procedural TDD backfires:
 

@@ -107,7 +107,7 @@ The [Voting / Ensemble Pattern](voting-ensemble-pattern.md) at N=3 costs 3× but
 
 ## Empirical caveats
 
-Controlled studies show mixed results. [Zhang et al. (2025)](https://arxiv.org/abs/2502.08788) found MAD often fails to outperform Chain-of-Thought or Self-Consistency at equal compute. [Becker et al. (2025)](https://arxiv.org/abs/2502.18965v1) document problem drift: 35% of debate rounds show lack of progress. Majority pressure can suppress independent correction — agents converge on a confident wrong answer.
+Controlled studies show mixed results. [Zhang et al. (2025)](https://arxiv.org/abs/2502.08788v3) found MAD often fails to outperform Chain-of-Thought or Self-Consistency at equal compute. [Becker et al. (2025)](https://arxiv.org/abs/2502.18965v1) document problem drift: 35% of debate rounds show lack of progress. Majority pressure can suppress independent correction — agents converge on a confident wrong answer.
 
 Debate earns its cost only for hard-to-reverse decisions with genuine value conflicts. For tasks with an objectively correct answer, single-agent scaling or voting is more efficient.
 

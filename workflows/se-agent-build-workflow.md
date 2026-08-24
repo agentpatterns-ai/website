@@ -52,7 +52,7 @@ flowchart TD
     B -.-> D
 ```
 
-The seven components form an iterative loop rather than a one-way pipeline. Evaluation results, operational feedback, and provider model changes all return teams to earlier stages. Of the survey respondents, 91% agreed the loop reflects how SE agents get built ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). The loop is tool-agnostic — no stage depends on which agent you build with.
+The seven components form an iterative loop rather than a one-way pipeline. Evaluation results, operational feedback, and provider model changes all return teams to earlier stages. Of the survey respondents, 91% agreed the loop reflects how SE agents get built ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856v2)). The loop is tool-agnostic — no stage depends on which agent you build with.
 
 What distinguishes each stage ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)):
 
@@ -76,7 +76,7 @@ The study measured agreement with five process shifts on a five-point scale ([ar
 | Specifications become central engineering artifacts | 77% | 3.90 |
 | Role boundaries shrink | 71% | 3.81 |
 
-The strongest result is not that work got faster. It is that work moved. As coding shrank, long-standing effort in requirements, coordination, and deployment became more visible. Meanwhile reviewing generated code and evaluating agent behavior created work that did not exist before. One participant put the unmasking plainly: "Writing code isn't the slow bit, it never was" ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)).
+The strongest result is not that work got faster. It is that work moved. As coding shrank, long-standing effort in requirements, coordination, and deployment became more visible. Meanwhile reviewing generated code and evaluating agent behavior created work that did not exist before. One participant put the unmasking plainly: "Writing code isn't the slow bit, it never was" ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856v2)).
 
 ## Why it works
 
@@ -92,17 +92,17 @@ Your task already has a trustworthy oracle. The evaluation stage exists because 
 
 You cannot staff evaluation. Participants described evaluation as the hardest and most resource-intensive part of building an agent, with dedicated research and data-science teams behind it ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). A two-person team cannot fund that.
 
-The acceleration premise is contested. That implementation gets cheaper rests on self-report: 16 of 20 interviewees said implementation was faster, and none reported a slowdown ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). A randomized controlled trial found the opposite in a comparable population. Sixteen experienced open-source developers completed 246 tasks. They took 19% longer with AI tools, while estimating afterwards that AI had made them 20% faster ([Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity](https://arxiv.org/abs/2507.09089)). The developers who felt faster were measured slower. That trial covered early-2025 tooling, so it bounds the claim rather than refuting it. Do not treat self-reported speed-up as evidence of throughput.
+The acceleration premise is contested. That implementation gets cheaper rests on self-report: 16 of 20 interviewees said implementation was faster, and none reported a slowdown ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856v2)). A randomized controlled trial found the opposite in a comparable population. Sixteen experienced open-source developers completed 246 tasks. They took 19% longer with AI tools, while estimating afterwards that AI had made them 20% faster ([Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity](https://arxiv.org/abs/2507.09089v2)). The developers who felt faster were measured slower. That trial covered early-2025 tooling, so it bounds the claim rather than refuting it. Do not treat self-reported speed-up as evidence of throughput.
 
-The prescriptions age. Scaffolding built around a model's current weaknesses turns into drag when the model improves. Participants named the pattern directly: "Today's design pattern may be tomorrow's anti-pattern" ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). See [Harness Impermanence: Build Scaffolding To Be Deleted](../patterns/agent-design/harness-impermanence.md).
+The prescriptions age. Scaffolding built around a model's current weaknesses turns into drag when the model improves. Participants named the pattern directly: "Today's design pattern may be tomorrow's anti-pattern" ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856v2)). See [Harness Impermanence: Build Scaffolding To Be Deleted](../patterns/agent-design/harness-impermanence.md).
 
-The weakest answers concern comprehension. Practices addressing the gap between generated code and developer understanding drew the lowest effectiveness ratings in the study, at 53.9% for delegating maintenance back to AI. The authors concede the problem remains unresolved ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)).
+The weakest answers concern comprehension. Practices addressing the gap between generated code and developer understanding drew the lowest effectiveness ratings in the study, at 53.9% for delegating maintenance back to AI. The authors concede the problem remains unresolved ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856v2)).
 
 ## Example
 
 The clearest case of a metric breaking is code volume. In one organization studied, AI-generated code grew from roughly four million lines a year to a projected fifteen million lines a month. The organization could not translate that increase into business value ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)). The participant responsible described the number as a warning rather than a target: "It is like a canary in a coal mine. If that number goes up, that should give us some attention. I do not think it is something we should performance-manage on."
 
-The team-level cost is what makes the metric misleading. An individual developer generating code quickly can look faster while creating review and maintenance work for everyone downstream. Of the survey respondents, 85% agreed that coding agents increase observable output without clarifying its value, the highest agreement of any challenge in the study. Only 65.8% rated treating code volume as a diagnostic signal rather than a target as very effective or essential. Even the recommended response is unsettled ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856)).
+The team-level cost is what makes the metric misleading. An individual developer generating code quickly can look faster while creating review and maintenance work for everyone downstream. Of the survey respondents, 85% agreed that coding agents increase observable output without clarifying its value, the highest agreement of any challenge in the study. Only 65.8% rated treating code volume as a diagnostic signal rather than a target as very effective or essential. Even the recommended response is unsettled ([arXiv:2607.10856](https://arxiv.org/abs/2607.10856v2)).
 
 ## Key Takeaways
 

@@ -46,7 +46,7 @@ Regulators have reached the same shape. EU AI Act [Article 12](https://artificia
 
 ## When this backfires
 
-- Retrieval is not attention. A read event proves a file entered the context window, not that it informed the change. Accuracy "significantly degrades when models must access relevant information in the middle of long contexts" ([Liu et al.](https://arxiv.org/abs/2307.03172)), so bulk-loading produces a trail that overstates what was used.
+- Retrieval is not attention. A read event proves a file entered the context window, not that it informed the change. Accuracy "significantly degrades when models must access relevant information in the middle of long contexts" ([Liu et al.](https://arxiv.org/abs/2307.03172v3)), so bulk-loading produces a trail that overstates what was used.
 - The trail cannot establish completeness. It records what was read, never what should have been read; testing that assertion needs an independently defined set of relevant sources, which the log cannot supply.
 - Verbatim capture inverts the control. Storing prompt content and model output as plaintext is "a PII spill waiting to happen" ([ARMO](https://www.armosec.io/blog/minimum-viable-audit-trail/)) — the control becomes the breach.
 - Attacker-controlled sources still pass. The trail records that the agent read a poisoned file; it defends nothing. Pair it with [Provenance-Aware Decision Auditing](provenance-aware-decision-auditing.md), which gates actions at runtime instead.

@@ -46,7 +46,7 @@ The second half is exactness. An identifier resolves to one record, so recovery 
 
 - Reasoning-bound tasks. The margin falls from 19 points on verbatim recall to under 2 points on LongBench-v2 hard, because perfect recall still permits faulty reasoning ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
 - Tight recall budgets. At the smallest ablated budget ARC scored 26.05% against a structured-state baseline's 27.01% on Qwen3-8B — stub overhead consumed the budget it was meant to protect ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066v1)).
-- Models that never call recall. StructMemEval found agents handle structured memory reliably only when explicitly instructed, and "do not always recognize the memory structure when not prompted to do so" ([arxiv 2602.11243](https://arxiv.org/abs/2602.11243)). Unprompted, the store becomes write-only.
+- Models that never call recall. StructMemEval found agents handle structured memory reliably only when explicitly instructed: "modern LLMs often do not recognize the memory structure unless prompted to do so" ([arxiv 2602.11243v2](https://arxiv.org/abs/2602.11243v2)). Unprompted, the store becomes write-only.
 - Latency-sensitive loops. Every dereference is another turn and another inference. Anthropic notes that just-in-time loading is slower than pre-processing data up front ([Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 - Dialogue-shaped history. Similarity retrieval sometimes wins there, and the ARC authors describe explicit and implicit recall as complementary rather than competing ([arxiv 2607.25066](https://arxiv.org/abs/2607.25066)).
 

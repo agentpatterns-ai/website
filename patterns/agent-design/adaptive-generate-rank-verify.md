@@ -47,7 +47,7 @@ The expected cost stays within a constant factor of the distribution-aware optim
 
 ## Why it works
 
-Under monotonicity, the information value per verifier call concentrates at the top of the rank distribution. The marginal probability that the next verification yields the first success is highest among top-ranked items, and it decays down the list ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)). Meanwhile, an extra generation costs orders of magnitude less than an extra verification when verification runs tests or judge calls ([Aletheia, 2026](https://arxiv.org/pdf/2601.12186)). So you generate freely until the head of the rank distribution is dense, then spend verifier dollars only on that head. This is provably within a constant of optimal. [Snell et al. (2024)](https://arxiv.org/abs/2408.03314v1) measured the same broad principle at the test-time compute level: prompt-conditional adaptive allocation beat uniform scaling by over 4× under matched FLOPs on MATH. The doubling schedule produces the constant-factor guarantee, because each shell either finds a passing candidate or rules out the previous regime.
+Under monotonicity, the information value per verifier call concentrates at the top of the rank distribution. The marginal probability that the next verification yields the first success is highest among top-ranked items, and it decays down the list ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609v2)). Meanwhile, an extra generation costs orders of magnitude less than an extra verification when verification runs tests or judge calls ([Aletheia, 2026](https://arxiv.org/pdf/2601.12186)). So you generate freely until the head of the rank distribution is dense, then spend verifier dollars only on that head. This is provably within a constant of optimal. [Snell et al. (2024)](https://arxiv.org/abs/2408.03314v1) measured the same broad principle at the test-time compute level: prompt-conditional adaptive allocation beat uniform scaling by over 4× under matched FLOPs on MATH. The doubling schedule produces the constant-factor guarantee, because each shell either finds a passing candidate or rules out the previous regime.
 
 ## When this backfires
 
@@ -55,7 +55,7 @@ The optimality result is conditional. The pattern degrades or inverts under comm
 
 | Failure condition | Symptom | What to do instead |
 |---|---|---|
-| Reward-hacked ranker | High-rank candidates are systematically gamed — PRM reward >0.9 while ground-truth accuracy <4% on AIME ([Reward Under Attack, 2026](https://arxiv.org/pdf/2603.06621)) | Verify a random sample, not the rank top; or retrain the ranker with anti-hacking objectives |
+| Reward-hacked ranker | High-rank candidates are systematically gamed — PRM reward >0.9 while ground-truth accuracy <4% on AIME ([Reward Under Attack, 2026](https://arxiv.org/pdf/2603.06621v1)) | Verify a random sample, not the rank top; or retrain the ranker with anti-hacking objectives |
 | Cheap verifier | Verifier runs sub-second per candidate | Fixed-budget best-of-N with full parallelism |
 | Small N (≤ 16) | Wall-clock latency dominated by sequential rank-verify dependencies | Parallel best-of-N; ADAP gains compound only at larger N |
 | Outcome-only verifier with false positives | Verifier passes on right-answer-wrong-reasoning ([Right Is Not Enough, 2026](https://arxiv.org/pdf/2506.06877)) | Pair with stricter verifiers; use this pattern only when verifier ≈ ground truth |

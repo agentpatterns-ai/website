@@ -22,7 +22,7 @@ maturity: emerging
 
 An agent that synthesizes its own tools ships two artifacts per answer: the answer, and a reusable script later tasks compose and depend on. Task completion certifies the answer, not the script. Treating a green in-session run as a passing grade is the mistake: the tool can execute cleanly and still be wrong on every input it did not see during creation.
 
-A pilot preserved each synthesized tool's source and replayed it against a held-out conformance suite. Across 222 tools from three tool-creating protocols on Claude Haiku 4.5, [96.8% recorded per-tool correctness of zero](https://arxiv.org/abs/2604.00392): two protocols failed 100% of their tools, one failed 91.7%. Session-level task completion was highest for the protocol whose tools all scored zero, so the gap is invisible to pass-rate dashboards. Hand-written reference implementations scored perfectly on all 16 suites, ruling out a mis-calibrated test ([Kaliyev & Maryanskyy, 2026](https://arxiv.org/abs/2604.00392)).
+A pilot preserved each synthesized tool's source and replayed it against a held-out conformance suite. Across 222 tools from three tool-creating protocols on Claude Haiku 4.5, [96.8% recorded per-tool correctness of zero](https://arxiv.org/abs/2604.00392v2): two protocols failed 100% of their tools, one failed 91.7%. Session-level task completion was highest for the protocol whose tools all scored zero, so the gap is invisible to pass-rate dashboards. Hand-written reference implementations scored perfectly on all 16 suites, ruling out a mis-calibrated test ([Kaliyev & Maryanskyy, 2026](https://arxiv.org/abs/2604.00392v2)).
 
 ## Why the false signal is convincing
 
@@ -41,7 +41,7 @@ Preserve each tool's source and replay reusable ones against a held-out conforma
 The gap only bites once a tool is reused, duplicated, or made load-bearing, so the mitigation is not always worth its cost:
 
 - Strictly ephemeral tools. A tool used once on the same input regime and discarded at session end never reaches reuse; a 10-to-22-probe suite per throwaway script will not repay itself.
-- Larger models may narrow the gap. The 96.8% figure is Haiku-4.5 scale; the authors note held-out correctness at Sonnet or larger could change the rates, so treating it as model-independent over-claims ([Kaliyev & Maryanskyy, 2026](https://arxiv.org/abs/2604.00392)).
+- Larger models may narrow the gap. The 96.8% figure is Haiku-4.5 scale; the authors note held-out correctness at Sonnet or larger could change the rates, so treating it as model-independent over-claims ([Kaliyev & Maryanskyy, 2026](https://arxiv.org/abs/2604.00392v2)).
 - A reference suite already exists. A tool fit against a supplied test suite is no longer verified against a single input, and the gap shrinks.
 
 ## Example

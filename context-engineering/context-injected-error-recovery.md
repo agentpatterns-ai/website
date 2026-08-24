@@ -58,7 +58,7 @@ The key property is structure: the model receives what went wrong, what has alre
 
 ## Impact
 
-Context-injected error recovery reduces retry loops by 25–40% compared to passing raw error messages alone ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)). The improvement comes from removing the first two to three redundant retries that would otherwise happen before the model works out on its own that a different approach is needed.
+Context-injected error recovery reduces retry loops by 25–40% compared to passing raw error messages alone ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344v3)). The improvement comes from removing the first two to three redundant retries that would otherwise happen before the model works out on its own that a different approach is needed.
 
 ## Relationship to loop detection
 
@@ -67,7 +67,7 @@ Loop detection and error recovery work together, but act at different points in 
 - error recovery acts at the moment of failure — it stops loops from forming by giving the model better information on the first retry ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344))
 - loop detection acts after repeated failures — it spots and interrupts loops that have already formed
 
-Error recovery lightens the load on loop detection. The 25–40% reduction in retry loops means fewer cases reach the threshold that triggers detection ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344)). Loop detection is still needed as a safety net when the enriched context is not enough.
+Error recovery lightens the load on loop detection. The 25–40% reduction in retry loops means fewer cases reach the threshold that triggers detection ([Bui, 2026 §2.3.5](https://arxiv.org/abs/2603.05344v3)). Loop detection is still needed as a safety net when the enriched context is not enough.
 
 ## Implementation considerations
 

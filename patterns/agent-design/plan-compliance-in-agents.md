@@ -18,7 +18,7 @@ maturity: emerging
 
 ## The silent gap
 
-Writing a plan into a system prompt does not mean the agent follows it. A 16,991-trajectory study of SWE-agent gave the first systematic measurement of plan compliance in programming agents ([Liu et al., 2026](https://arxiv.org/abs/2604.12147)). It ran four LLMs on SWE-bench Verified and SWE-bench Pro under eight plan variations. The core finding: "without an explicit plan, agents fall back on workflows internalized during training, which are often incomplete, overfit, or inconsistently applied."
+Writing a plan into a system prompt does not mean the agent follows it. A 21,120-trajectory study of SWE-agent gave the first systematic measurement of plan compliance in programming agents ([Liu et al., 2026](https://arxiv.org/abs/2604.12147v3)). It ran four LLMs on SWE-bench Verified and SWE-bench Pro under eight plan variations. The core finding: "without an explicit plan, agents fall back on workflows internalized during training, which are often incomplete, overfit, or inconsistently applied."
 
 Until you measure compliance, a pass rate blends two different sources of success. One is strategic reasoning that the instructed plan drives. The other is memorized pattern-matching against benchmark-adjacent training data. Resolution rate alone cannot tell them apart ([Liu et al., 2026](https://arxiv.org/abs/2604.12147)).
 
