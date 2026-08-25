@@ -1,7 +1,7 @@
 ---
 title: "LLM Agent Bug Fix Taxonomy: 23 Fix Patterns from 930 Real Bugs"
 term: "LLM Agent Bug Fix Taxonomy"
-description: "An empirical taxonomy of bug fix patterns in LLM agents: the tools component dominates, framework version churn drives most fixes, and retrieval-augmented repair beats general-purpose SoTA by 21 points on the AgentDefect benchmark."
+description: "An empirical taxonomy of bug fix patterns in LLM agents: framework version churn drives most fixes, and retrieval-augmented repair beats general-purpose SoTA by 21 points on the AgentDefect benchmark."
 tags:
   - testing-verification
   - agent-design
@@ -18,7 +18,7 @@ maturity: emerging
 
 ## Where the bugs live
 
-Islam, Raza, and Wardat mined 930 buggy instances from Stack Overflow (665), GitHub (180), and HuggingFace (85) ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699v1), EASE 2026). In the AgentDefect benchmark (37 runtime-executable), up to 19 bugs localize to the tools component.
+Islam, Raza, and Wardat mined 930 buggy instances from Stack Overflow (665), GitHub (180), and HuggingFace (85) ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699v1), EASE 2026). In the AgentDefect benchmark (37 runtime-executable), the component split is curated, not measured: the authors "ensured" it spans all four components, "with a maximum of 19 out of 37 bugs occurring in the tools".
 
 ```mermaid
 pie title AgentDefect component distribution (n=37)
@@ -98,7 +98,7 @@ Ablations confirm external knowledge is not optional in fast-churning frameworks
 
 ## Practical implications
 
-Audit the tools layer first. Up to half of benchmark bugs sit in the tools component, so tool definitions, call parsing, and output handling beat prompt tuning as targets. Pair with [behavioral testing](behavioral-testing-agents.md) on tool I/O.
+Audit the tools layer early. The benchmark's tools share is capped by design and cannot rank components, but tool definitions, call parsing, and output handling are cheap to inspect. Pair with [behavioral testing](behavioral-testing-agents.md) on tool I/O.
 
 Pinning reduces the fix surface. `Change Version` and `Install Library` fixes vanish once you pin versions. A slow-upgrade LTS policy beats a repair agent chasing breaking changes.
 
@@ -115,7 +115,7 @@ Cost-quality is steep. Gemini 3 Pro costs 9x GPT-5.2 for 5.4 extra points. For C
 
 ## Key Takeaways
 
-- The tools component is the most bug-prone part of LLM agents — up to 19 of 37 AgentDefect bugs localize there
+- AgentDefect's 19-of-37 tools share is a sampling cap on a benchmark built to span all four components, so it does not establish that tools are the most bug-prone layer
 - 23 recurrent fix patterns repeat across Stack Overflow, GitHub, and HuggingFace Forums with high inter-annotator agreement
 - LangChain and LlamaIndex version churn drives `Change Version` and `Install Library` fixes — pinning reduces fix surface
 - Retrieval-augmented repair beats SoTA SWE-Agent by 21+ points on AgentDefect; removing web search costs 13.51 points in ablation
@@ -130,3 +130,4 @@ Cost-quality is steep. Gemini 3 Pro costs 9x GPT-5.2 for 5.4 extra points. For C
 - [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) — Post-deploy regression auto-fix loop
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md) — The general pattern behind SelfHeal's external-knowledge tool
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — Why single-run repair rates need distributions, not point estimates
+- [Symptom-First Bug Triage for Agent Code](symptom-first-agent-bug-triage.md) — The same group's forum-corpus study, which puts the majority of bugs in the agent core rather than tools

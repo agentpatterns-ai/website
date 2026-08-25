@@ -45,6 +45,8 @@ Each agent reads the queue in a different state. Agent-2 sees a queue already pa
 
 A 30-second stagger is a common practitioner convention. A short delay between launching an agent and sending its first prompt gives [session initialization](../agent-design/session-initialization-ritual.md) time to settle before the agent reads the queue. Neither figure comes from measured data. The real principle is to give each agent enough time to read and reserve before the next agent reads.
 
+A second, unrelated reason to stagger a fan-out is prompt-cache reuse, which needs a much shorter delay sized to a first response rather than to a queue claim. See [Cache-Prefix Staggering for Sibling Agent Fan-Out](cache-prefix-staggering.md).
+
 ```mermaid
 gantt
     title Staggered Launch — Queue Coverage Over Time
@@ -128,6 +130,7 @@ Each agent starts 30 seconds after the previous one. By the time agent 2 reads t
 
 ## Related
 
+- [Cache-Prefix Staggering for Sibling Agent Fan-Out](cache-prefix-staggering.md)
 - [File-Based Agent Coordination](file-based-agent-coordination.md)
 - [Sub-Agents Fan-Out](sub-agents-fan-out.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)

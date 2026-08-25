@@ -109,6 +109,7 @@ Allowlisting eliminates noise so that genuine risk prompts stand out; it is not 
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)
 - [The AI Development Maturity Model](../workflows/ai-development-maturity-model.md)
 - [Evidence-Based Allowlist Auto-Discovery for Agents](evidence-based-allowlist-auto-discovery.md)
+- [Parser-Versus-Shell Evasion in Command Permission Checks](parser-versus-shell-permission-evasion.md) — the documented record of allowlist patterns matching text the shell then respells
 - [Progressive Autonomy: Scaling Trust with Model Evolution](../human/progressive-autonomy-model-evolution.md)
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](../human/cognitive-load-ai-fatigue.md)
 - [The Bottleneck Migration](../human/bottleneck-migration.md)

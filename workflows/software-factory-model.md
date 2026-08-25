@@ -11,7 +11,7 @@ aliases:
   - agent factory
   - dark factory
   - lit factory
-last_reviewed: 2026-08-15
+last_reviewed: 2026-08-25
 maturity: emerging
 ---
 
@@ -54,11 +54,13 @@ The factory is many harnessed loops running at once against a work queue, with i
 
 The real design decision is where the lights go. A dark factory ships code no human has read, verified only by the machines that built it — the software version of a lights-out manufacturing floor. It is easy to reach at first, because the missing review step makes perceived throughput feel suddenly higher, but it takes on comprehension debt as fast as it can, tests green the whole way ([Osmani, 2026](https://addyosmani.com/blog/software-factories/)). The reckoning is quiet and late: Osmani reports a fully automated factory run for about four months with no human reading the code, which then needed painstaking manual debugging to recover.
 
-A lit factory is the same pipeline with the lights left on where judgment lives. Agents still do most of the building, but a human reads the output before it ships, and judgment moves upstream to product, design, and architecture — reviewing a two-hundred-line plan instead of chasing two thousand lines of generated code to find what the decision even was ([Osmani, 2026](https://addyosmani.com/blog/software-factories/)). The person never left the factory; they moved from the line to the end of it, owning the outer loop: deciding whether it is the right fix, verifying the diagnosis, approving, and carrying the consequences of being wrong.
+A lit factory is the same pipeline with the lights left on where judgment lives. Agents still do most of the building, but a human reads the output before it ships, and judgment moves upstream to product, design, and architecture — reviewing a two-hundred-line plan instead of chasing two thousand lines of generated code to find what the decision even was ([Osmani, 2026](https://addyosmani.com/blog/software-factories/)). The person never left the factory; they moved from the line to the end of it, owning the outer loop: deciding whether it is the right fix, verifying the diagnosis, approving, and carrying the consequences of being wrong. Osmani later enumerates what that ownership covers, adding two decisions about the gate itself to the three upstream ones: "Someone decides which verification signals deserve trust. Someone decides when the evidence is sufficient to ship" ([Osmani, "Human judgment doesn't leave the software factory. It relocates.", 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)). Whether that ownership is real or nominal is a separate question, treated in [judgment relocation](../human/judgment-relocation.md).
 
 Vercel runs a lit factory on its AI SDK repo: one agent per task type, and human review mandatory on every merge ([Vercel, 2026-08-12](https://vercel.com/blog/building-a-software-factory-for-ai-sdk)). Four weeks in, its agents authored 25 to 35% of the pull requests merged each week, and closed over 75% of the issues closed in July. Open issues fell from a peak of 1,022 in late June to 844 by early August.
 
 ## Triggers and constraints
+
+The prior question is whether to build a factory at all, and Osmani puts the threshold at repeatability. A stock coding harness gets you "surprisingly far"; the factory starts to pay once that work has to be repeatable and event-driven ([Osmani, "Human Judgment Doesn't Leave the Software Factory", 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)).
 
 A loop earns lights-out status only when its check is cheap, high-frequency, and hard to fake; the danger is setting every switch to the same mode.
 

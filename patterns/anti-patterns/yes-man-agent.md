@@ -112,3 +112,4 @@ The corrected prompt adds three gate points: a pre-task duplicate check, in-task
 - [Happy Path Bias](happy-path-bias.md)
 - [LLM Review Overcorrection](llm-review-overcorrection.md)
 - [Pattern Replication Risk](pattern-replication-risk.md)
+- [Evidence-Grounded Disagreement in Agentic Code Review](../../code-review/evidence-grounded-disagreement.md) — the same compliance bias between two agents, and the constraint that measurably reduces it

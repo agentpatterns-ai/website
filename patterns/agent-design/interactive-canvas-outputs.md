@@ -106,4 +106,5 @@ The source-traceability requirement still applies. A "Show query" affordance on 
 - [Diff-Based Review](../../code-review/diff-based-review.md)
 - [Visible Thinking in AI Development](../../human/visible-thinking-ai-development.md)
 - [Durable Interactive Artifacts](durable-interactive-artifacts.md)
+- [Canvas as Control Surface](canvas-as-control-surface.md) — the same surface used to steer a run mid-flight rather than to package its result
 - [Product-as-IDE](../../emerging/product-as-ide.md)

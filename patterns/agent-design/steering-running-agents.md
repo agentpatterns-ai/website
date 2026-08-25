@@ -10,7 +10,7 @@ tags:
   - human-factors
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-06-12
+last_reviewed: 2026-08-23
 maturity: adopted
 ---
 
@@ -54,7 +54,7 @@ Let it finish when the approach is acceptable, even if not ideal.
 
 ## Observing agent direction
 
-Good steering depends on reading tool calls as they happen — the same observation point [agent loop middleware](../../loop-engineering/agent-loop-middleware.md) hooks into. Most agent interfaces show tool use in real time. Watch which files the agent reads and which commands it runs to spot wrong direction early.
+Good steering depends on reading tool calls as they happen — the same observation point [agent loop middleware](../../loop-engineering/agent-loop-middleware.md) hooks into. Most agent interfaces show tool use in real time. Watch which files the agent reads and which commands it runs to spot wrong direction early. Where a run is long enough that a raw tool-call stream is unreadable, a [canvas as control surface](canvas-as-control-surface.md) renders the same trajectory as workflow state instead.
 
 These signs suggest a steer may be needed:
 
@@ -79,7 +79,7 @@ Steer as early as possible — ideally after the first tool call that signals a 
 
 Follow-up messages work best when the current step is short. For long-running steps, steering mid-step may be more efficient.
 
-Interface behavior varies: Claude Code queues messages typed during execution and delivers them at the next turn boundary — pressing Enter alone does not interrupt the current step ([issue #36326](https://github.com/anthropics/claude-code/issues/36326)). To interrupt immediately, press Ctrl+C first, then send your message.
+Interface behavior varies: Claude Code queues messages typed during execution and delivers them at the next turn boundary — pressing Enter alone does not interrupt the current step ([issue #36326](https://github.com/anthropics/claude-code/issues/36326)). To interrupt immediately, press Ctrl+C first, then send your message. Cursor queues a follow-up for the agent's next tool call, so the run continues rather than halting mid-step ([Cursor changelog, 2026-08-19](https://cursor.com/changelog/08-19-26)).
 
 ## Example
 

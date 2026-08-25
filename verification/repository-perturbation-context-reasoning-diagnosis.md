@@ -101,3 +101,4 @@ The example numbers are illustrative; the methodology is the load-bearing contri
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — the leakage problem perturbation is one mitigation for
 - [Controlled Benchmark Rewriting for Agent Safety Judgment](controlled-benchmark-rewriting-safety-judgment.md) — same perturbation logic applied to safety judgment instead of code-agent context reasoning
 - [Constraint Decay in Backend Code Generation](constraint-decay-backend-agents.md) — independent evidence of multi-file reasoning degradation as constraints accumulate
+- [Static Difficulty Estimation for Agent Issue Triage](static-difficulty-estimation-issue-triage.md) — measures repository scale as a difficulty predictor rather than perturbing it

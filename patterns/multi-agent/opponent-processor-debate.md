@@ -192,3 +192,4 @@ The advocate and skeptic receive the same task but structurally incompatible inc
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
 - [Reviewer Precision as a Pipeline Quality Proxy](reviewer-precision-proxy.md)
 - [Homogeneous Debate Panels as a Groundedness Quality Lever](../anti-patterns/homogeneous-debate-panel-groundedness.md)
+- [Evidence-Grounded Disagreement in Agentic Code Review](../../code-review/evidence-grounded-disagreement.md) — a critic that audits the review rather than the artifact, with the artifact frozen during the exchange

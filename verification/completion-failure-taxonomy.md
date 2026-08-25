@@ -124,3 +124,4 @@ The 66 / 24 / 9 split is a useful prior, not a fixed budget:
 - [Demo-to-Production Gap](../patterns/anti-patterns/demo-to-production-gap.md) — The systematic gap between curated demos and production reality
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md) — Separating capability from consistency in agent evaluation
 - [RAG Agent Reliability Problem Map](rag-agent-reliability-problem-map.md) — Retrieval-specific failure taxonomy that extends completion-failure categories
+- [Symptom-First Bug Triage for Agent Code](symptom-first-agent-bug-triage.md) — The equivalent empirical split for agent bugs, mapping observed symptoms onto components

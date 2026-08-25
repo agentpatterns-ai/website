@@ -43,6 +43,7 @@ Strategies for splitting work across parallel agents — and controlling the bla
 - [The Model Economics of Agent Swarms](model-economics-agent-swarms.md) — Swarm width is capped first by task decomposability, then by the planner-worker model mix that dominates cost — not by fan-out alone
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md) — Process large agent workloads without hitting API rate limits by dispatching work in sequential batches of fixed size
 - [Staggered Agent Launch](staggered-agent-launch.md) — Launch parallel agents 30 seconds apart to break the thundering-herd dynamic so each agent claims work before the next reads the queue
+- [Cache-Prefix Staggering for Sibling Agent Fan-Out](cache-prefix-staggering.md) — Delay each sibling until the first response begins so later siblings read the shared prompt prefix from cache instead of each writing their own entry
 - [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — Decouple the orchestrator's processing loop from subagent lifecycle so it continues planning and processing partial results while delegates execute concurrently
 - [LLM Map-Reduce Pattern](llm-map-reduce.md) — Split a large input into context-window-sized chunks, process each chunk independently, then combine chunk-level results into a coherent output
 

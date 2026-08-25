@@ -132,3 +132,4 @@ Skip it when:
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — stage-level behavioral verification approach
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — where outcome-only grading misses safety and robustness signals that trajectory-aware auditing catches
 - [Evidence-Chain Run Logs](evidence-chain-run-logs.md) — the per-run counterpart: bracket the reported symptom with one measurement instead of scoring stages across a corpus
+- [Static Difficulty Estimation for Agent Issue Triage](static-difficulty-estimation-issue-triage.md) — the pre-hoc counterpart: estimate whether a run will succeed from task structure before any trajectory exists

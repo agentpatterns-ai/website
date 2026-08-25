@@ -55,6 +55,8 @@ For sub-agents spawned at scale, this compounds. Each one that inherits a bloate
 
 Claude Code's built-in `claude-api` skill cut its context cost from over 200,000 tokens to about 25,000. It moved reference documentation to on-demand loading instead of bundling it up front ([Claude Code changelog, August 2026](https://code.claude.com/docs/en/changelog#2-1-234)).
 
+How much a given skill actually saves depends on its size and on how much of it each turn needs, and a measured comparison of four loading methods found no method that wins in every regime. See [Choosing a Skill Loading Method for Agents](../../context-engineering/skill-loading-method-selection.md) before assuming on-demand loading is cheaper.
+
 ## Implementation
 
 Agent definitions reference skills by name or path; the agent reads them on demand:
