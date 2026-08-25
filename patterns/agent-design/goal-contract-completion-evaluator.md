@@ -6,7 +6,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
-last_reviewed: 2026-06-02
+last_reviewed: 2026-08-23
 maturity: adopted
 ---
 
@@ -14,7 +14,7 @@ maturity: adopted
 
 > A goal contract is a user-declared completion condition that a separate evaluator model checks after every turn — completion authority lives outside the doing agent.
 
-A goal contract is a user-authored "done-when" condition the harness checks after every turn with a different model than the one writing code; the agent keeps running until it holds. Claude Code ships this as `/goal` from v2.1.139: after each turn a small fast model — Haiku by default — reads the conversation and returns yes-or-no plus a one-line reason. A "no" feeds back as next-turn guidance; a "yes" clears the goal ([Claude Code docs: Keep Claude working toward a goal](https://code.claude.com/docs/en/goal)).
+A goal contract is a user-authored "done-when" condition the harness checks after every turn with a different model than the one writing code; the agent keeps running until it holds. Two harnesses ship it under the name `/goal`: Claude Code from v2.1.139 and Cursor since August 2026 ([Cursor changelog](https://cursor.com/changelog/08-19-26)). In Claude Code, after each turn a small fast model — Haiku by default — reads the conversation and returns yes-or-no plus a one-line reason. A "no" feeds back as next-turn guidance; a "yes" clears the goal ([Claude Code docs: Keep Claude working toward a goal](https://code.claude.com/docs/en/goal)).
 
 ## When this pattern applies
 
@@ -56,7 +56,7 @@ A bound clause — "or stop after 20 turns" — is the documented way to cap run
 
 ## Cross-tool variants
 
-Other tools ship the same shape with different evaluator designs. Codex CLI 0.128.0 uses a turn-end continuation template plus a budget cap as a second stop signal — see [Goal-Driven Autonomous Loop with Budget Cap](../../loop-engineering/goal-driven-autonomous-loop.md). Anthropic Managed Agents `outcomes` runs the grader "in a separate context window to avoid being influenced by the main agent's implementation choices" with rubric-based verdicts and a `max_iterations` cap defaulting to 3 ([Anthropic: New in Claude Managed Agents](https://claude.com/blog/new-in-claude-managed-agents)). The shared primitive is completion authority delegated to a model that is not the doing model. Variants differ in whether the evaluator shares context (Claude Code), runs cold (Managed Agents), or is a templated re-injection (Codex).
+Other tools ship the same shape with different evaluator designs. Cursor added a `/goal` command of its own for long-lived objectives that persist until completion ([Cursor changelog, August 19 2026](https://cursor.com/changelog/08-19-26)). Codex CLI 0.128.0 uses a turn-end continuation template plus a budget cap as a second stop signal — see [Goal-Driven Autonomous Loop with Budget Cap](../../loop-engineering/goal-driven-autonomous-loop.md). Anthropic Managed Agents `outcomes` runs the grader "in a separate context window to avoid being influenced by the main agent's implementation choices" with rubric-based verdicts and a `max_iterations` cap defaulting to 3 ([Anthropic: New in Claude Managed Agents](https://claude.com/blog/new-in-claude-managed-agents)). The shared primitive is completion authority delegated to a model that is not the doing model. Variants differ in whether the evaluator shares context (Claude Code), runs cold (Managed Agents), or is a templated re-injection (Codex).
 
 ## Why it works
 

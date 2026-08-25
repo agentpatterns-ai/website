@@ -114,6 +114,7 @@ nav:
   - org-membership-gated-agent-entitlement.md
   - permission-framework-over-model.md
   - permission-gated-commands.md
+  - parser-versus-shell-permission-evasion.md
   - permitted-egress-attack-surface.md
   - pii-tokenization-in-agent-context.md
   - plan-then-execute-web-agents.md

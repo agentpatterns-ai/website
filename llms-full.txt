@@ -333,12 +333,14 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Exclude Dynamic System Prompt Sections for Cross-Machine Cache Sharing](context-engineering/exclude-dynamic-system-prompt-sections.md)
 - [App-Window Snapshot as Agent Context](context-engineering/app-window-snapshot-context.md)
 - [Coding-Agent Working-Set Coverage (Coherence Debt)](context-engineering/coherence-debt-working-set.md)
+- [Choosing a Skill Loading Method for Agents](context-engineering/skill-loading-method-selection.md)
 - [Goal Recitation: Countering Drift in Long Sessions](context-engineering/goal-recitation.md)
 - [Instruction-Guided Code Completion: Controlling What Models Generate](context-engineering/instruction-guided-code-completion.md)
 - [Live Browser as Agent Context Channel](context-engineering/live-browser-context-channel.md)
 - [LLM-Driven Logical Retrieval: Boolean Queries over an Inverted Index](context-engineering/llm-driven-logical-retrieval.md)
 - [Long Context vs Retrieval: The Break-Even Decision](context-engineering/long-context-vs-retrieval-break-even.md)
 - [Manual Compaction Strategy for Dumb Zone Mitigation](context-engineering/manual-compaction-dumb-zone-mitigation.md)
+- [Measuring Reacquisition Cost Under Context Compaction](context-engineering/reacquisition-cost-measurement.md)
 - [Narrative Problem Reformulation for Code Generation](context-engineering/narrative-problem-reformulation.md)
 - [PEEK: Orientation Cache for Recurring-Context Agents](context-engineering/peek-orientation-cache.md)
 - [Phase-Specific Context Assembly for AI Agent Development](context-engineering/phase-specific-context-assembly.md)
@@ -539,6 +541,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [CoALA Structured Action Space: Internal vs External Actions](patterns/agent-design/coala-structured-action-space.md)
 - [Coding Agent Scope Expansion: When to Extend Beyond the Codebase](patterns/agent-design/coding-agent-scope-expansion.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](patterns/agent-design/cognitive-reasoning-execution-separation.md)
+- [Canvas as Control Surface: Steering a Long-Running Agent Mid-Run](patterns/agent-design/canvas-as-control-surface.md)
+- [Cache-Prefix Staggering for Sibling Agent Fan-Out](patterns/multi-agent/cache-prefix-staggering.md)
 - [Code-Native Memory Substrates for Coding Agents](patterns/agent-design/code-native-memory-substrates.md)
 - [Cohesion-Aware Task Partitioning for Multi-Agent Coding](patterns/multi-agent/cohesion-aware-task-partitioning.md)
 - [Component-Isolated Memory Stress Testing for LLM Agents](verification/component-isolated-memory-stress-testing.md)
@@ -964,6 +968,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Oracle Poisoning: Knowledge Graph Corruption Against Tool-Using Agents](security/oracle-poisoning-knowledge-graph.md)
 - [Org-Membership-Gated Agent Entitlement](security/org-membership-gated-agent-entitlement.md)
 - [OWASP LLM Top 10 (2025): Agent Security Crosswalk](security/owasp-llm-top-10-2025-agent-crosswalk.md)
+- [Parser-Versus-Shell Evasion in Command Permission Checks](security/parser-versus-shell-permission-evasion.md)
 - [Per-Server MCP Environment Scoping for Credential Isolation](security/mcp-server-credential-isolation.md)
 - [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](security/permission-framework-over-model.md)
 - [Plan-Then-Execute as the Default for Web Agents](security/plan-then-execute-web-agents.md)
@@ -1105,6 +1110,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Code Health as a Signal for Agent-Generated Test Quality](verification/code-health-agent-generated-tests.md)
 - [Detecting Self-Preference in a Single LLM Judge](verification/judge-self-preference-detection.md)
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](verification/eval-blind-spots.md)
+- [Evidence-Grounded Disagreement in Agentic Code Review (Adversarial Review)](code-review/evidence-grounded-disagreement.md)
 - [Human-AI Review Synergy in Agentic Code Review](code-review/human-ai-review-synergy.md)
 - [Human-Review-Driven Curation of Golden Eval Datasets](verification/human-review-golden-dataset-curation.md)
 - [Incident-to-Eval Synthesis: Production Failures as Evals](verification/incident-to-eval-synthesis.md)
@@ -1145,8 +1151,10 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Spec-Derived Execution as a Correctness Oracle](verification/spec-derived-execution-correctness-judging.md)
 - [Spec-Driven Test Generation: Contract Coverage Is the Lever](verification/spec-driven-test-generation-contract-coverage.md)
 - [Staged Evidence Gates for Agentic Program Repair](verification/staged-evidence-gates-program-repair.md)
+- [Static Difficulty Estimation for Agent Issue Triage](verification/static-difficulty-estimation-issue-triage.md)
 - [Structural Coverage Criteria for Agent Workflows](verification/structural-coverage-agent-workflows.md)
 - [Structure-Aware Diff Labeling with Two-Stage LLM Pipelines](code-review/structure-aware-diff-labeling.md)
+- [Symptom-First Bug Triage for Agent Code](verification/symptom-first-agent-bug-triage.md)
 - [Symptom-Reduction-as-Root-Cause: Why Oracle Tests Alone Miss Architectural Drift](verification/symptom-reduction-as-root-cause.md)
 - [Task Alignment: The Selective-Compliance Gap Benchmarks Miss](verification/task-alignment-benchmark.md)
 - [Test-Driven Intent Clarification: Tests as Intermediate Alignment Artifacts](verification/test-driven-intent-clarification.md)
@@ -1456,6 +1464,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Human-Equivalent Hours for Autonomous Coding Agent Productivity](human/human-equivalent-hours-agent-productivity.md)
 - [Human-Facing Docs in the Agent Era: Mental Models Over Reference](human/human-docs-mental-models-agent-era.md)
 - [Intent-Centric Engineering: Oversight Over Authorship](human/intent-centric-engineering.md)
+- [Judgment Relocation: Where Human Decisions Land in an Agent Factory](human/judgment-relocation.md)
 - [LLM Refactoring Adoption Patterns](human/llm-refactoring-adoption-patterns.md)
 - [PM on the AI Exponential](human/pm-on-the-ai-exponential.md)
 - [Polya Small-Steps: Using AI to Think Better, Not Think Less](human/polya-small-steps.md)
@@ -1467,6 +1476,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Suggestion Gating: Fewer Completions, Better DX](human/suggestion-gating.md)
 - [The Addictive Flow State of Agent-Assisted Development](human/addictive-flow-agent-development.md)
 - [The Bottleneck Migration When Humans Supervise Agents](human/bottleneck-migration.md)
+- [The Citizen-Agent-Expert Operating Model for AI Coding](human/citizens-agents-experts-operating-model.md)
 - [The Context Ceiling -- Where AI Fails Expert Architects](human/context-ceiling.md)
 - [The Productivity-Experience Paradox in AI-Assisted Development](human/productivity-experience-paradox.md)
 - [Visible Thinking in AI-Assisted Development](human/visible-thinking-ai-development.md)
@@ -1896,6 +1906,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Elastic Context Orchestration](elastic-context-orchestration.md) — A per-turn vocabulary of context operations — Skip, Compress, Snippet, Rollback, Delete — that lets long-horizon search agents tier retention by current task relevance instead of accumulating raw trajectory
 - [Prompt Compression](prompt-compression.md) — Write instructions that convey the same guidance in fewer words; shorter, denser instructions improve agent compliance and reduce token cost
 - [Choosing a Compression Budget for Agent Control Context](control-context-compression-budget.md) — Set how far you compress an agent's always-loaded instructions from environment-verified task success rather than a token-reduction ratio, and keep semantic sections whole
+- [Measuring Reacquisition Cost Under Context Compaction](reacquisition-cost-measurement.md) — Split the agent's tool calls into retrieval and execution to expose the interaction cost a flat task-completion rate hides, and confirm the cause by restoring one class of dropped state
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — Treat prompt caching as a structural constraint on prompt composition, with cross-provider economics and extended-TTL guidance folded in
 - [Static Content First for Cache Hits](static-content-first-caching.md) — Place static content at the beginning of the prompt and variable content at the end to maximize prompt cache hits and keep inference costs linear
 - [Prompt Cache Keepalive for Agent Pauses](prompt-cache-keepalive-agent-pauses.md) — Replay a cached prefix on a timer so it survives tool runs and approval waits, and the billing, pause-length, and interval conditions that decide whether it saves money or costs 4x more
@@ -1951,6 +1962,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Hypothetical Classification for Large Label Vocabularies](hypothetical-classification.md) — Let the model invent a label that does not exist, then resolve it to the nearest real one by embedding; the unguided form lost to plain retrieval on both published benchmarks
 - [Compositional Skill Routing](compositional-skill-routing.md) — Decompose a query into atomic sub-tasks, retrieve one skill per sub-task, then compose the plan — earns its cost only above hundreds of skills, where decomposition quality caps the system
 - [Skill Loadout Curation for Coding Agents](skill-loadout-curation.md) — Curate the skills and MCP servers an agent loads before a session; above roughly 30 skills the gain comes from removing colliding descriptions, not from saving tokens
+- [Choosing a Skill Loading Method for Agents](skill-loading-method-selection.md) — Preload, on-demand blocks, a reference catalog, or a hybrid of stubs and fetches; skill size and per-turn need decide which wins, measured on cache-corrected input
 - [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — A typed skill graph whose candidate edges come from the retriever's own embedding neighbors can relabel what retrieval found but cannot extend its reach; overlay the edges and count what they newly connect
 - [Per-Object Context Allocation](per-object-context-allocation.md) — Group retrieved fragments by canonical code object and cap each object's token share, so repeated views of one function stop displacing independent dependencies before the model sees them
 - [Organizational Context Layer for Agents](organizational-context-layer.md) — A shared context layer maps many source systems into one governed store that many agents query; deterministic identity and rebuildable index projections transfer well below that scale
@@ -2572,6 +2584,86 @@ No. Input-token reduction can be offset or reversed by output expansion, measure
 - [Context Compression Strategies: Offloading and Summarization](context-compression-strategies.md) — the dynamic counterpart, compressing conversation history rather than the static control layer
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — the caching economics that decide whether compressing this surface pays
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md) — the finite-budget framing this technique applies to the control layer
+
+---
+
+### Choosing a Skill Loading Method for Agents
+Source: https://agentpatterns.ai/context-engineering/skill-loading-method-selection/
+
+# Choosing a Skill Loading Method for Agents
+
+> No skill loading method wins everywhere; a skill's size and how much of it each turn needs decide the choice.
+
+Choose a loading method from two properties of the skill: how large it is, and how much of it a typical turn needs. A controlled comparison of four content-preserving methods across five benchmarks found no universal winner. One method cut multi-turn effective input by 73.0% on the largest skill, while an aggressively nudged, ungated arm of that same method raised single-turn raw input by 48.4% on the smallest — an arm the authors call "an overhead diagnostic, not a recommended configuration" ([Nakasuji, arXiv:2608.14943v1](https://arxiv.org/abs/2608.14943v1)).
+
+## The four methods
+
+| Method | Always in context | Arrives later |
+|---|---|---|
+| Full | The entire skill, on every request | Nothing |
+| Skill Block | A small core plus one `load_skill_block(name)` tool | Optional sections, verbatim, when the model calls the tool |
+| Reference | A compact catalog plus the core, with no tool schema | One section, after the model spends a turn selecting it |
+| Hybrid | The core plus a one-line stub for every optional block | Full block detail, only when a stub proves insufficient |
+
+All four preserve the same content. They differ only in when each part is shown ([arXiv:2608.14943v1](https://arxiv.org/abs/2608.14943v1)).
+
+## What the measurements show
+
+Single-turn benchmarks are scored on raw input tokens, and multi-turn benchmarks on cache-corrected effective input, defined as new input plus a tenth of the cache reads.
+
+| Benchmark | Skill size | Turns | Result against Full |
+|---|---|---|---|
+| SearchQA | ~2K | Single | Hybrid −27.4%, Reference +10.4%, Skill Block +48.4% (aggressively nudged, ungated — the authors' overhead diagnostic) |
+| SpreadsheetBench | ~8K | Single | Hybrid −39.8%, Skill Block −35.6%, Reference −31.7% |
+| ALFWorld | ~1K | Multi | Skill Block −12.6%, Hybrid −3.2%, Reference +24.2% |
+| ScienceWorld | ~6K | Multi | Skill Block −62.5%, Hybrid −52.8% |
+| SynthProc | ~10K | Multi | Skill Block −73.0%, Hybrid −66.6% |
+
+Paired outcome tests detected no quality difference in the principal comparisons. The authors are explicit that this warrants "'no detected difference' only" — the tests "do not prove equivalence or rule out regression" ([arXiv:2608.14943v1](https://arxiv.org/abs/2608.14943v1)).
+
+Two patterns survive the noise, and both match the paper's own regime guidance: reach for Hybrid on a single-turn skill *when all of its content must stay available*, because its stubs hold fetch rates down without paying for a catalog, and evaluate Skill Block on a large multi-turn skill whose optional mass goes unread most turns. Where reduced coverage is acceptable, try static pruning first — it is cheaper still, and on SpreadsheetBench the non-content-parity `original8` treatment cut input by 55.5% against Hybrid's 39.8% ([arXiv:2608.14943v1](https://arxiv.org/abs/2608.14943v1)).
+
+## Why it works
+
+Conditional loading separates coverage from per-query cost, so an optional block nobody reads costs nothing. In a multi-turn session the effect compounds, because the agent resubmits its context every turn, so the always-on footprint of core content plus fetch-tool schema is paid once per turn for the life of the session ([arXiv:2608.14943v1](https://arxiv.org/abs/2608.14943v1)).
+
+That only nets out positive when the loading mechanism leaves the cached prefix alone. Anthropic's cache follows a `tools` → `system` → `messages` hierarchy, and modifying tool definitions invalidates all three levels ([Anthropic on tool use with prompt caching](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-use-with-prompt-caching)). The four methods avoid that, because their fetch tool has a fixed schema and the content arrives as appended conversation. Anthropic's own deferred tool loading takes the same shape, keeping discovered definitions out of the prefix so that "prompt caching is preserved" ([Anthropic on tool search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)). Load a skill by swapping tool definitions instead and you reprocess the whole conversation to save a few hundred tokens, which is the failure documented in [Dynamic Tool Fetching Breaks KV Cache](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md).
+
+The accounting follows from the same mechanism. Raw input counts cache reads at full weight, which flatters the preload baseline and can rank the methods wrongly.
+
+## When this backfires
+
+- The skill is small and needed on nearly every turn. ALFWorld's ~1K skill of short, repeatedly used procedures gave Skill Block only −12.6%, and Hybrid's confidence interval crossed zero. The paper's advice for this regime is to treat the options as near parity and avoid a heavy catalog.
+- Sessions are short or the cache is cold. The effective-input metric assumes cache reads cost roughly a tenth of fresh ones, which matches [Anthropic's published cache-read rate](https://platform.claude.com/docs/en/build-with-claude/prompt-caching). One-shot calls and sessions that outlive the cache TTL pay the round trips with no discounted reads to offset them.
+- Latency is the binding constraint. Reference costs a whole turn before answering, and the tool-based methods cost a round trip per fetch. The study excludes measured latency.
+- Block boundaries are drawn badly. Routing correctness was never labeled, and the authors call task accuracy a weak proxy for it, because later feedback can recover a wrong fetch. A badly split skill degrades quietly.
+- You need a number that transfers. Primary runs come from a single GitHub Copilot endpoint reported as gpt-5.5, with no provider-attested model identity, and the size guidance is described as a post-hoc heuristic rather than a validated gate.
+
+## Example
+
+Rank candidate methods on your own traffic before adopting one. For each arm, subtract the cache-read tokens from the provider's reported input tokens, then add back a tenth of the cache reads:
+
+```
+effective_input = (raw_input - cache_read) + 0.1 * cache_read
+```
+
+Run that over a representative multi-turn session per method and compare medians. If your provider prices cache reads differently, substitute your own discount for 0.1, since the factor is a sensitivity assumption in the paper rather than a billed rate ([arXiv:2608.14943v1](https://arxiv.org/abs/2608.14943v1)).
+
+## Key Takeaways
+
+- Two properties decide the method: the skill's token size, and the share of it a typical turn needs.
+- Hybrid was the only method that beat preloading on both single-turn benchmarks; Skill Block was worse than preloading on the smallest one, in the aggressively nudged arm the authors flag as a diagnostic rather than a configuration to run.
+- Conditional loading pays off only when the fetch mechanism leaves the cached prefix intact.
+- Rank methods on cache-corrected input, because raw token counts favor the preload baseline.
+- The measurements come from one provider endpoint and establish no quality equivalence, so treat the percentages as a shape to test locally rather than a rule to adopt.
+
+## Related
+
+- [Progressive Disclosure for Layered Agent Definitions](../patterns/agent-design/progressive-disclosure-agents.md) — the underlying principle these four methods implement in different ways
+- [Dynamic Tool Fetching Breaks KV Cache](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md) — what happens when conditional loading mutates the cached prefix
+- [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](../tool-engineering/mcp-eager-vs-jit-loading.md) — the same eager-or-deferred decision at MCP server granularity
+- [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — why the prefix hierarchy constrains any loading design
+- [Skill Loadout Curation for Coding Agents](skill-loadout-curation.md) — which skills to carry at all, before deciding how to load each one
 
 ---
 
@@ -7270,6 +7362,73 @@ CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=55 claude
 
 ---
 
+### Measuring Reacquisition Cost Under Context Compaction
+Source: https://agentpatterns.ai/context-engineering/reacquisition-cost-measurement/
+
+# Measuring Reacquisition Cost Under Context Compaction
+
+> Compaction that drops state an agent can only get by asking makes it spend its turn budget asking again, while completion rate stays flat.
+
+Reacquisition cost is the extra retrieval work an agent does to rebuild state that compaction removed. Measure it by splitting the agent's tool calls into retrieval and execution, then comparing both counts across compression settings at a fixed turn budget. In a controlled study under a 24-turn horizon, retrieval calls rose in all six model and task-regime comparisons at 5x compression while execution calls stayed approximately stable in five of the six, and completion changed significantly in none of them ([Liu, arXiv:2608.16370v1](https://arxiv.org/abs/2608.16370v1)).
+
+## Check these conditions first
+
+The measurement reads non-zero only where all three of these hold.
+
+- Your agent's execution-relevant state is obtainable by asking rather than by looking again: a task graph, dependency ordering, resource holds, prior failure counts. In an ALFWorld probe where the relevant state could be re-observed through ordinary interaction actions, sliding compression produced a paired retrieval-like delta of −0.13 and no completion difference ([arXiv:2608.16370v1](https://arxiv.org/abs/2608.16370v1)).
+- Your tools split cleanly into reading and acting. The decomposition attributes each call to its tool schema rather than to intent, so a tool that both reads and mutates cannot be classified.
+- Tool calls are the currency you pay in. If your constraint is the provider bill on a cache-heavy coding agent, count dollars instead. Prompt-cache creation and reads dominate measured input-side cost, and token reduction correlated only weakly with cost reduction at Pearson r = 0.15 ([Weinberger and Hozez, arXiv:2607.12161v5](https://arxiv.org/abs/2607.12161v5)).
+
+## Split the calls, then compare
+
+Classify each tool as retrieval or execution, run paired trials at full context and at each compression setting under the same turn budget, then report all three counts together ([arXiv:2608.16370v1](https://arxiv.org/abs/2608.16370v1)). The signature to look for is a retrieval count that climbs while the execution count sits still, which says the agent is re-acquiring information rather than doing more work. A completion cell that does not move is a result about the metric, not evidence that the setting was free.
+
+## Confirm the cause by restoring the state
+
+Correlating severity with retrieval count is weak evidence. The controlled version injects one class of dropped state back into a compressed run and measures the difference. Restoring the queryable task state at 5x compression cut tool calls from 72.9 to 35.8, a 51% reduction at paired p = .002, and recovered completion from 66% to 80% ([arXiv:2608.16370v1](https://arxiv.org/abs/2608.16370v1)).
+
+The same intervention tells you what is worth keeping. Selecting finely among real, task-relevant state atoms bought little over random selection. Replacing retained atoms with fabricated out-of-universe content raised retrieval 57% (p < .001) with completion statistically unchanged at p = 0.41 ([arXiv:2608.16370v1](https://arxiv.org/abs/2608.16370v1)). Whether what survives compaction is still true matters more than the ranking that chose it.
+
+## Why it works
+
+An agent under a bounded horizon has slack. When compaction removes state it still needs, it spends that slack on retrieval, finishes anyway, and the completion metric never registers what happened. The decomposition exposes the spend because the two call types move independently: retrieval calls account for almost all of the added interaction while execution calls remain approximately stable in five of the six comparisons ([arXiv:2608.16370v1](https://arxiv.org/abs/2608.16370v1)). Restoring the dropped state removes half that overhead, which is what makes the account causal rather than correlational. A separate team measuring provider-billed cost on Claude Code reports the same trajectory inflation from another direction, finding that compression "can alter agent trajectories through additional retrieval, diagnosis, testing, and turns, offsetting local token savings" ([arXiv:2607.12161v5](https://arxiv.org/abs/2607.12161v5)).
+
+## When this backfires
+
+- The environment lets the agent look again. ALFWorld showed no retrieval surge under the same compression operator, so the reacquisition signature is environment-dependent rather than an intrinsic consequence of shortening context ([arXiv:2608.16370v1](https://arxiv.org/abs/2608.16370v1)). Instrumenting there measures nothing.
+- You quote the magnitudes as effect sizes. Every figure above comes from bounded, synthetic-adjacent environments under a fixed 24-turn horizon with ten seeds and three model families, and the author declines to generalize the magnitudes. Treat the shape as transferable and the numbers as local.
+- You read a flat completion cell as proof of safety. The flat cells sit at the 5x comparison point, and DeepSeek showed a significant completion drop at 10x compression ([arXiv:2608.16370v1](https://arxiv.org/abs/2608.16370v1)). A non-significant completion change is a finding about the metric, not a null result about compression.
+- One model's reading settles the setting for you. Qwen in the high regime showed a retrieval increase of only 2.9 calls at p = .088, the single comparison that does not survive correction ([arXiv:2608.16370v1](https://arxiv.org/abs/2608.16370v1)).
+
+## Example
+
+The clearest reported cell, showing what the decomposition surfaces that a completion table hides. Both columns cover the same agent and tasks under different compression severity.
+
+| Measurement | Full context | 5x compression |
+|---|---|---|
+| Completion | 80% | 85% (p = 1.0) |
+| Retrieval calls | 21.0 | 63.9 (p = .002) |
+| Execution calls | reference | change of approximately zero |
+
+Read alone, the completion row says the setting is safe and possibly better. The retrieval row says the agent tripled its retrieval calls to get there ([arXiv:2608.16370v1](https://arxiv.org/abs/2608.16370v1)).
+
+## Key Takeaways
+
+- Ask which execution-relevant state the agent would pay to fetch again, and keep that state reachable, instead of searching for a compression ratio that is safe.
+- Report retrieval count, execution count, and completion in one table. A compaction change reviewed on completion alone has not been reviewed.
+- Prove causation by restoring one class of dropped state into a compressed run and re-measuring, not by correlating severity with call counts.
+- Check whether your environment has query-only state before building the instrumentation, because re-observable state produces no signal to read.
+
+## Related
+
+- [Context Compression Strategies: Offloading and Summarization](context-compression-strategies.md) — the compaction mechanisms this measurement evaluates.
+- [Addressable Recall Compaction: Compact to Citations, Not Summaries](addressable-recall-compaction.md) — keeping dropped observations recoverable by ID instead of losing them.
+- [Choosing a Compression Budget for Agent Control Context](control-context-compression-budget.md) — setting compression severity from environment-verified success rather than a ratio.
+- [Token Reduction Mistaken for Cost Reduction](../patterns/anti-patterns/token-reduction-not-cost-reduction.md) — the same misjudgement measured in billed dollars rather than tool calls.
+- [Context Budget Allocation](context-budget-allocation.md) — deciding what occupies the window before compaction has to remove any of it.
+
+---
+
 ### Narrative Problem Reformulation for Code Generation
 Source: https://agentpatterns.ai/context-engineering/narrative-problem-reformulation/
 
@@ -8254,6 +8413,7 @@ After the first turn, `cache_read_input_tokens` should cover the system prompt a
 - [Peek-Orientation Cache](peek-orientation-cache.md) — caching orientation reads so re-priming does not bust the prefix
 - [Observation Masking: Filter Tool Outputs from Context](observation-masking.md)
 - [Dynamic Tool Fetching Breaks KV Cache](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md)
+- [Cache-Prefix Staggering for Sibling Agent Fan-Out](../patterns/multi-agent/cache-prefix-staggering.md) — timing parallel siblings so one writes the shared prefix and the rest read it
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
   - long-form
@@ -12990,25 +13150,25 @@ Source: https://agentpatterns.ai/instructions/constraint-encoding-compliance-gap
 
 # Constraint Encoding Does Not Fix Constraint Compliance
 
-> Reformatting constraints — more structured, more compact, more formal — does not improve how reliably models follow them. Compliance is determined by what constraints say, not how they are laid out.
+> Reformatting constraints does not change how reliably models follow them. Compliance turns on what a constraint says, not how it is laid out.
 
 Related lesson: [The Ceiling](https://learn.agentpatterns.ai/prompt-engineering/the-ceiling/) — this concept features in a hands-on lesson with quizzes.
 
 ## The experiment
 
-A study across 11 models, 16 benchmark tasks, and 830+ LLM invocations tested three encoding forms — including a compact header form — and four propagation modes against a constraint satisfaction rate (CSR) metric ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
+A study across 11 models, 16 benchmark tasks, and 830+ LLM invocations tested three encoding forms — including a compact header form — and four propagation modes against a constraint satisfaction rate (CSR) metric ([Tang, 2026](https://arxiv.org/abs/2604.07192v2)).
 
 Compact headers cut constraint-portion tokens by about 71% and full-prompt tokens by 25 to 30%. This result replicated across three independent rounds.
 
-Compliance did not move. There was no statistically significant difference in CSR across encoding forms or propagation modes. Effect sizes were negligible (Cliff's δ < 0.01) ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
+Compliance did not move. There was no statistically significant difference in CSR across encoding forms or propagation modes. Effect sizes were negligible (Cliff's δ < 0.01) ([Tang, 2026](https://arxiv.org/abs/2604.07192v2)).
 
 Compact headers are a free token saving. They are not a compliance fix.
 
 ## What actually drives compliance
 
-The study found that constraint type — not encoding — produced the largest compliance variation: a 9 percentage point gap between conventional and counter-intuitive constraints. Counter-intuitive constraints failed at 10 to 100% rates regardless of encoding. Conventional constraints achieved 99%+ compliance regardless of encoding ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
+The study found that constraint type — not encoding — produced the largest compliance variation: a 9 percentage point gap between conventional and counter-intuitive constraints. Counter-intuitive constraints failed at 10 to 100% rates regardless of encoding. Conventional constraints achieved 99%+ compliance regardless of encoding ([Tang, 2026](https://arxiv.org/abs/2604.07192v2)).
 
-The gap between understanding and execution also depends on how you measure it. Model self-assessment systematically overestimates compliance relative to rule-based scoring ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)). A model that reports following a constraint may not be.
+The gap between understanding and execution also depends on how you measure it. Model self-assessment systematically overestimates compliance relative to rule-based scoring ([Tang, 2026](https://arxiv.org/abs/2604.07192v2)). A model that reports following a constraint may not be.
 
 ## Why this matters for practitioners
 
@@ -21046,6 +21206,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Deterministic Orchestration for Structured Modernization](deterministic-orchestration-structured-modernization.md) — When the workflow shape is stable, encoding orchestration in code reserves the LLM for translation choices — comparable accuracy at up to 3.5x lower token cost
 - [LLM-as-Code Agentic Programming for Agent Harnesses](llm-as-code-agentic-programming.md) — When the workflow shape is enumerable, the program holds control flow and the LLM is a callable component; context scales with call-tree depth instead of accumulated steps
 - [Bounded Agent Steps Inside a Deterministic Workflow](bounded-agent-step.md) — Keep the agentic loop but run it as one fenced workflow stage — pre-set goal, tool allowlist, turn cap, typed output — and only where the stage boundary is a durable domain seam
+- [Canvas as Control Surface: Steering a Long-Running Agent Mid-Run](canvas-as-control-surface.md) — A canvas the agent writes to while it works re-encodes the run as inspectable state, but only pays off on recurring workflows with few, well-placed approval points
 - [AST-Grounded Critic Loop for Documentation Maintenance](ast-grounded-doc-critic-loop.md) — Combine AST-anchored retrieval with a critic-guided Reflexion loop, treating doc-vs-code consistency as a structural verification problem rather than a text-generation problem
 - [DSPy: Programmatic Prompt Optimization](dspy-programmatic-prompt-optimization.md) — Replace hand-written prompts with optimizable modules: define a metric, supply training examples, and an optimizer searches prompt and few-shot space automatically for compound pipelines
 - [GEPA: Reflective Prompt Evolution with Pareto Selection](gepa-reflective-prompt-evolution.md) — Evolve prompts by reflecting on execution traces in natural language and keeping the Pareto frontier of candidates per-instance — tuned for rich textual feedback and sample-efficient gains over MIPROv2 and RL
@@ -25105,6 +25266,97 @@ Without the final call, the agent proceeds on the assumption that the click land
 - [CoALA Structured Action Space: Internal vs External Actions](coala-structured-action-space.md) — the general framing for splitting an agent's actions by cost, reversibility, and permission profile.
 - [Lethal Trifecta Threat Model](../../security/lethal-trifecta-threat-model.md) — why private data, untrusted content, and egress in one principal is the condition a driven browser creates.
 - [Stateful Agent State and Transition Evals](../../verification/stateful-agent-state-and-transition-evals.md) — evaluating an agent by the state transitions it produces rather than final output alone.
+
+---
+
+### Canvas as Control Surface: Steering a Long-Running Agent Mid-Run
+Source: https://agentpatterns.ai/patterns/agent-design/canvas-as-control-surface/
+
+# Canvas as Control Surface: Steering a Long-Running Agent Mid-Run
+
+> A control-surface canvas re-encodes an unfolding agent run as inspectable state, so a human can stop a wrong trajectory before paying for it.
+
+Build one only when three conditions hold: the workflow recurs often enough to amortize the build, the surface renders whether an intervention would help rather than how risky the run looks, and the approval points are few. Miss any one and the canvas costs more than the runs it watches.
+
+## What separates this from a canvas as output
+
+A canvas as output packages a finished result. That decision is covered in [Interactive Canvas Outputs](interactive-canvas-outputs.md). A control-surface canvas is written to while the run is still going. GitHub documents that difference for Copilot canvases, created with `/create-canvas` in an agent session: "The agent can update the canvas as it works, and you can interact with that same workspace through clicks, edits, and other actions" ([GitHub](https://github.blog/ai-and-ml/github-copilot/how-to-build-interactive-experiences-with-canvases/)).
+
+The target is buried state rather than presentation: "The important parts are technically there, but buried: the plan, decision points, validations, and approval moments" ([GitHub](https://github.blog/ai-and-ml/github-copilot/how-canvases-make-agentic-workflows-visible-steerable-and-cost-efficient/)). A durable shared surface is claimed to make "work visible, steerable, and approvable as it unfolds."
+
+Treat mid-run writing as a Copilot canvas property, not a canvas property. Cursor's canvas documentation describes the card appearing at the end of a response and documents no update during a run ([Cursor](https://cursor.com/docs/agent/tools/canvas)), so check your own tool before assuming the surface is writable mid-flight. Where it is not, a canvas is an output and this page does not apply.
+
+## Render recoverability, not risk
+
+The common way to build this surface wrong is to render a risk score. Runtime oversight framed as scalar risk prediction targets the wrong object: "The relevant question is not how likely the agent is to fail if it continues, but whether an available intervention would improve the outcome," because two prefixes at the same risk estimate can differ in whether either "remains recoverable" ([arXiv](https://arxiv.org/abs/2606.21399v1)). Fixing the score does not fix the decision: recalibration "improves prediction metrics but leaves control regret unchanged," while a prefix-only action-conditioned controller cut regret from 0.506 to 0.110 on ALFWorld "in the strongest interactive regime" — across four benchmarks the paper reports the gains as "regime-dependent" rather than uniform.
+
+Panels that earn their space answer whether the run can still be turned around:
+
+- Which step the run is on, and which earlier steps produced state the later ones depend on
+- Whether the work so far is a revisable draft or an applied effect
+- The decision in front of the agent now, phrased as options a human could pick between
+- The inputs that decision rests on, so a wrong premise shows before its consequences
+
+GitHub's recipe reads as four instructions: "Define workflow states clearly. Surface the decisions that matter. Persist progress and drafts immediately. Keep explicit human approval points" ([GitHub](https://github.blog/ai-and-ml/github-copilot/how-canvases-make-agentic-workflows-visible-steerable-and-cost-efficient/)).
+
+## Choose few approval points
+
+Apply the fourth instruction with restraint. Modeling the reviewer as a finite, fatiguing resource turns realized safety into an inverted-U: "more human oversight can make a system less safe, and the safety-optimal guard escalates below full escalation" ([arXiv](https://arxiv.org/abs/2606.08919v1)). The same study found reviewers agree only moderately on which agent actions are risky, at a Fleiss' kappa of 0.52 over a hand-labeled set of 125 adversarially weighted actions, so gating on "the decisions that matter" gates on a label reviewers do not share.
+
+Place approval where the agent crosses from revisable state into applied effect, and nowhere else. Steps producing only drafts the canvas already persists need no gate; the human reads them at the next one.
+
+## The cost argument is not yet measured
+
+The published figures are what the author spent building the canvases, not a saving: "Site Studio cost me about 2,000 AI credits, and the modernization canvas cost me about 3,000 AI credits" ([GitHub](https://github.blog/ai-and-ml/github-copilot/how-canvases-make-agentic-workflows-visible-steerable-and-cost-efficient/)). The return is prospective, "Over time, that can save both time and money," against no measured chat-only baseline, and the article concedes that "canvases can be an investment".
+
+Stopping a doomed run early does save compute, and that half has been quantified with no human involved: the strongest of 24 abort-cascade settings cut generated tokens by 60.2% on TextCraft and 54.9% on WebShop at a 90% recall target, with the general result stated as saving "1.5-8.8 times more compute at a 90% recall target" than the best single-gate baseline ([arXiv](https://arxiv.org/abs/2607.06503v2)). The saving is real; a canvas is the expensive way to capture it.
+
+## Why it works
+
+A human can only make a useful mid-run call on the object an automated auditor works from, the trajectory prefix. AgentForesight states the constraint: "at each step of an unfolding trajectory, an auditor observes only the current prefix and must either continue the run or alarm at the earliest decisive error, without access to future steps" ([arXiv](https://arxiv.org/abs/2605.08715v2)). In a transcript that prefix exists but is not legible as state, the failure GitHub calls the plan and decision points being "technically there, but buried" ([GitHub](https://github.blog/ai-and-ml/github-copilot/how-canvases-make-agentic-workflows-visible-steerable-and-cost-efficient/)). Declared workflow states and immediately persisted drafts re-encode the prefix as something readable at a glance, which turns a post-hoc review into an earliest-decisive-error call. The payoff is the compute never spent on the rest of a doomed run ([arXiv](https://arxiv.org/abs/2607.06503v2)).
+
+## When this backfires
+
+A one-off workflow never amortizes the build. The source claims payback only over time and for repeated workflows ([GitHub](https://github.blog/ai-and-ml/github-copilot/how-canvases-make-agentic-workflows-visible-steerable-and-cost-efficient/)).
+
+Gating every step inverts the safety argument. Realized safety falls past a certain escalation rate once reviewer fatigue is modeled, so the safety-optimal guard sits below full escalation ([arXiv](https://arxiv.org/abs/2606.08919v1)). An approval on every step pushes the reviewer past that point rather than short of it.
+
+Populating the surface with a judge model eats the saving. Judging every step with a second LLM "costs more than the agent itself"; cheap step telemetry ran at about 200 microseconds per step, three orders of magnitude below a judge call ([arXiv](https://arxiv.org/abs/2608.02464v1)). Render what the run already emits before paying a model to narrate it.
+
+Where a threshold could make the call, an early-abort probe already does, so the surface adds cost without adding a decision. Build one for the calls a threshold cannot encode: whether a plan matches an intent nobody wrote down, or whether a premise the agent inferred is the one you meant.
+
+The pattern does not transfer to a tool whose canvas is not documented as writable mid-run. Confirm that property first; without it the canvas is an output-shape decision instead.
+
+## Example
+
+A worked design, not a captured session. A migration agent upgrades a service's framework version across roughly forty files. Run as a chat session it emits several hundred tool calls and the human reads the summary at the end. As a control surface, the canvas declares four workflow states and persists each artifact as the agent produces it:
+
+| State | What the canvas holds | Gate |
+|-------|----------------------|------|
+| Inventory | The file list and the version pins found | None — revisable |
+| Plan | Per-file change description, grouped by risk | Approve before edits begin |
+| Edits | Diffs written to the worktree, per file | None — revisable |
+| Apply | Commit and open the pull request | Approve before it lands |
+
+Two gates, both at the crossing from revisable state into applied effect. The Plan gate is where a wrong premise is cheapest to catch: if the inventory picked up a vendored copy of the framework, the human sees it in the file list before forty edits exist. The Edits state carries no gate because the worktree is recoverable, so an intervention there buys nothing a later one does not.
+
+What makes the Plan gate readable is the grouping by risk alongside the inventory it derives from. A panel reading "confidence 0.72" would tell the reviewer nothing about whether to stop, which is the distinction between a risk estimate and a recoverability judgment ([arXiv](https://arxiv.org/abs/2606.21399v1)).
+
+## Key Takeaways
+
+- The mid-run write is what separates a control surface from a canvas as output, and it is documented for Copilot canvases rather than for canvases in general
+- Render whether an intervention would help, not how risky the run looks — the two can be identical on a prefix that is still recoverable and one that is not
+- Place approval points where revisable state becomes applied effect; more gates past that point reduce realized safety rather than raise it
+- The published credit figures are build costs. No measured saving against a chat-only baseline has been published, so size the payback yourself
+- If a threshold could make the call, an automated early-abort probe captures the compute saving more cheaply than a human surface
+
+## Related
+
+- [Interactive Canvases: Agent-Generated Visual Artifacts as Outputs](interactive-canvas-outputs.md) — the output-shape decision this page's surface is distinct from
+- [Steering Running Agents: Mid-Run Redirection and Follow-Ups](steering-running-agents.md) — the message mechanism a reader uses once the canvas surfaces a wrong trajectory
+- [Durable Interactive Artifacts: Agent Output Outside the Transcript](durable-interactive-artifacts.md) — the persistence properties a control surface inherits
+- [Approval Response Taxonomy](approval-response-taxonomy.md) — what a human can answer at an approval point beyond yes and no
+- [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — the drift signals a control surface has to render
 
 ---
 
@@ -31835,7 +32087,7 @@ Source: https://agentpatterns.ai/patterns/agent-design/goal-contract-completion-
 
 > A goal contract is a user-declared completion condition that a separate evaluator model checks after every turn — completion authority lives outside the doing agent.
 
-A goal contract is a user-authored "done-when" condition the harness checks after every turn with a different model than the one writing code; the agent keeps running until it holds. Claude Code ships this as `/goal` from v2.1.139: after each turn a small fast model — Haiku by default — reads the conversation and returns yes-or-no plus a one-line reason. A "no" feeds back as next-turn guidance; a "yes" clears the goal ([Claude Code docs: Keep Claude working toward a goal](https://code.claude.com/docs/en/goal)).
+A goal contract is a user-authored "done-when" condition the harness checks after every turn with a different model than the one writing code; the agent keeps running until it holds. Two harnesses ship it under the name `/goal`: Claude Code from v2.1.139 and Cursor since August 2026 ([Cursor changelog](https://cursor.com/changelog/08-19-26)). In Claude Code, after each turn a small fast model — Haiku by default — reads the conversation and returns yes-or-no plus a one-line reason. A "no" feeds back as next-turn guidance; a "yes" clears the goal ([Claude Code docs: Keep Claude working toward a goal](https://code.claude.com/docs/en/goal)).
 
 ## When this pattern applies
 
@@ -31877,7 +32129,7 @@ A bound clause — "or stop after 20 turns" — is the documented way to cap run
 
 ## Cross-tool variants
 
-Other tools ship the same shape with different evaluator designs. Codex CLI 0.128.0 uses a turn-end continuation template plus a budget cap as a second stop signal — see [Goal-Driven Autonomous Loop with Budget Cap](../../loop-engineering/goal-driven-autonomous-loop.md). Anthropic Managed Agents `outcomes` runs the grader "in a separate context window to avoid being influenced by the main agent's implementation choices" with rubric-based verdicts and a `max_iterations` cap defaulting to 3 ([Anthropic: New in Claude Managed Agents](https://claude.com/blog/new-in-claude-managed-agents)). The shared primitive is completion authority delegated to a model that is not the doing model. Variants differ in whether the evaluator shares context (Claude Code), runs cold (Managed Agents), or is a templated re-injection (Codex).
+Other tools ship the same shape with different evaluator designs. Cursor added a `/goal` command of its own for long-lived objectives that persist until completion ([Cursor changelog, August 19 2026](https://cursor.com/changelog/08-19-26)). Codex CLI 0.128.0 uses a turn-end continuation template plus a budget cap as a second stop signal — see [Goal-Driven Autonomous Loop with Budget Cap](../../loop-engineering/goal-driven-autonomous-loop.md). Anthropic Managed Agents `outcomes` runs the grader "in a separate context window to avoid being influenced by the main agent's implementation choices" with rubric-based verdicts and a `max_iterations` cap defaulting to 3 ([Anthropic: New in Claude Managed Agents](https://claude.com/blog/new-in-claude-managed-agents)). The shared primitive is completion authority delegated to a model that is not the doing model. Variants differ in whether the evaluator shares context (Claude Code), runs cold (Managed Agents), or is a templated re-injection (Codex).
 
 ## Why it works
 
@@ -34073,6 +34325,7 @@ The source-traceability requirement still applies. A "Show query" affordance on 
 - [Diff-Based Review](../../code-review/diff-based-review.md)
 - [Visible Thinking in AI Development](../../human/visible-thinking-ai-development.md)
 - [Durable Interactive Artifacts](durable-interactive-artifacts.md)
+- [Canvas as Control Surface](canvas-as-control-surface.md) — the same surface used to steer a run mid-flight rather than to package its result
 - [Product-as-IDE](../../emerging/product-as-ide.md)
 
 ---
@@ -38432,6 +38685,8 @@ A monolithic 2000-token definition loads 2000 tokens on every invocation. Split 
 For sub-agents spawned at scale, this compounds. Each one that inherits a bloated definition multiplies the waste across the whole fan-out.
 
 Claude Code's built-in `claude-api` skill cut its context cost from over 200,000 tokens to about 25,000. It moved reference documentation to on-demand loading instead of bundling it up front ([Claude Code changelog, August 2026](https://code.claude.com/docs/en/changelog#2-1-234)).
+
+How much a given skill actually saves depends on its size and on how much of it each turn needs, and a measured comparison of four loading methods found no method that wins in every regime. See [Choosing a Skill Loading Method for Agents](../../context-engineering/skill-loading-method-selection.md) before assuming on-demand loading is cheaper.
 
 ## Implementation
 
@@ -42883,7 +43138,7 @@ Let it finish when the approach is acceptable, even if not ideal.
 
 ## Observing agent direction
 
-Good steering depends on reading tool calls as they happen — the same observation point [agent loop middleware](../../loop-engineering/agent-loop-middleware.md) hooks into. Most agent interfaces show tool use in real time. Watch which files the agent reads and which commands it runs to spot wrong direction early.
+Good steering depends on reading tool calls as they happen — the same observation point [agent loop middleware](../../loop-engineering/agent-loop-middleware.md) hooks into. Most agent interfaces show tool use in real time. Watch which files the agent reads and which commands it runs to spot wrong direction early. Where a run is long enough that a raw tool-call stream is unreadable, a [canvas as control surface](canvas-as-control-surface.md) renders the same trajectory as workflow state instead.
 
 These signs suggest a steer may be needed:
 
@@ -42908,7 +43163,7 @@ Steer as early as possible — ideally after the first tool call that signals a 
 
 Follow-up messages work best when the current step is short. For long-running steps, steering mid-step may be more efficient.
 
-Interface behavior varies: Claude Code queues messages typed during execution and delivers them at the next turn boundary — pressing Enter alone does not interrupt the current step ([issue #36326](https://github.com/anthropics/claude-code/issues/36326)). To interrupt immediately, press Ctrl+C first, then send your message.
+Interface behavior varies: Claude Code queues messages typed during execution and delivers them at the next turn boundary — pressing Enter alone does not interrupt the current step ([issue #36326](https://github.com/anthropics/claude-code/issues/36326)). To interrupt immediately, press Ctrl+C first, then send your message. Cursor queues a follow-up for the agent's next tool call, so the run continues rather than halting mid-step ([Cursor changelog, 2026-08-19](https://cursor.com/changelog/08-19-26)).
 
 ## Example
 
@@ -55147,6 +55402,7 @@ The corrected prompt adds three gate points: a pre-task duplicate check, in-task
 - [Happy Path Bias](happy-path-bias.md)
 - [LLM Review Overcorrection](llm-review-overcorrection.md)
 - [Pattern Replication Risk](pattern-replication-risk.md)
+- [Evidence-Grounded Disagreement in Agentic Code Review](../../code-review/evidence-grounded-disagreement.md) — the same compliance bias between two agents, and the constraint that measurably reduces it
 
 ---
 
@@ -56443,6 +56699,7 @@ Strategies for splitting work across parallel agents — and controlling the bla
 - [The Model Economics of Agent Swarms](model-economics-agent-swarms.md) — Swarm width is capped first by task decomposability, then by the planner-worker model mix that dominates cost — not by fan-out alone
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md) — Process large agent workloads without hitting API rate limits by dispatching work in sequential batches of fixed size
 - [Staggered Agent Launch](staggered-agent-launch.md) — Launch parallel agents 30 seconds apart to break the thundering-herd dynamic so each agent claims work before the next reads the queue
+- [Cache-Prefix Staggering for Sibling Agent Fan-Out](cache-prefix-staggering.md) — Delay each sibling until the first response begins so later siblings read the shared prompt prefix from cache instead of each writing their own entry
 - [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — Decouple the orchestrator's processing loop from subagent lifecycle so it continues planning and processing partial results while delegates execute concurrently
 - [LLM Map-Reduce Pattern](llm-map-reduce.md) — Split a large input into context-window-sized chunks, process each chunk independently, then combine chunk-level results into a coherent output
 
@@ -57125,6 +57382,91 @@ Adjusting N: if 429 errors appear, reduce to N=10. If you have headroom and thro
 - [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md)
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
+
+---
+
+### Cache-Prefix Staggering for Sibling Agent Fan-Out
+Source: https://agentpatterns.ai/patterns/multi-agent/cache-prefix-staggering/
+
+# Cache-Prefix Staggering for Sibling Agent Fan-Out
+
+> When the shared prefix is cacheable, delaying each sibling until the first response begins turns N cache writes into one write plus N-1 reads.
+
+A provider writes a prompt-cache entry while serving a request, not while receiving one. Siblings launched at the same instant therefore have no entry to read, so each prefills the shared prefix and is billed for it. Anthropic states the constraint directly: "For concurrent requests, note that a cache entry only becomes available after the first response begins. If you need cache hits for parallel requests, wait for the first response before sending subsequent requests" ([Prompt caching, Claude Platform Docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
+
+## When this pays
+
+All of the following have to hold before a stagger returns anything:
+
+- The shared prefix clears the provider's minimum cacheable length. Anthropic's per-model floor runs from 512 to 4,096 tokens, and shorter prompts are processed without caching and without an error ([Prompt caching, Claude Platform Docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). OpenAI caches automatically "for prompts that are 1,024 tokens or longer" ([Prompt caching, OpenAI API](https://developers.openai.com/api/docs/guides/prompt-caching)).
+- Every sibling sends the same prefix. Anthropic invalidates in the hierarchy tools, then system, then messages, and "changes at each level invalidate that level and all subsequent levels" ([Prompt caching, Claude Platform Docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)), so a per-sibling tool allowlist or an injected timestamp splits one entry into N.
+- The shared prefix is a large share of each sibling's input. When each worker also carries a large task-specific payload, the discount applies to a small part of the bill.
+- The provider bills cache writes. Anthropic charges 1.25x base input for a 5-minute write. OpenAI charges 1.25x on GPT-5.6 and later, and states that "cache writes have no additional fee on models before the GPT-5.6 family" ([Prompt caching, OpenAI API](https://developers.openai.com/api/docs/guides/prompt-caching)).
+- The fan-out can absorb the delay. The last sibling starts N-1 intervals late.
+
+## Why it works
+
+Lumer et al. define prompt caching as the "productized, provider-managed features that reuse KV tensors across API requests when prompts share common prefixes" ([2026 v2, §2.2](https://arxiv.org/abs/2601.06007v2)). That prefix-match requirement is the constraint [prompt caching as architectural discipline](../../context-engineering/prompt-caching-architectural-discipline.md) treats as structural. Creating a cache entry is a side effect of serving a request, so a read can only hit an entry that already exists. That is why Anthropic pins availability to the moment "the first response begins" rather than to request submission ([Prompt caching, Claude Platform Docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
+
+The size of the win follows from published multipliers, not from a measurement. Anthropic prices a 5-minute cache write at 1.25x base input tokens and a cache read at 0.1x. For N siblings sharing a prefix of P tokens:
+
+| Launch shape | Cost of the shared prefix | N = 8 |
+|---|---|---|
+| Simultaneous, caching requested | N x 1.25P | 10.0P |
+| Simultaneous, no caching | N x 1.0P | 8.0P |
+| Staggered | 1.25P + 0.1(N-1)P | 1.95P |
+
+That arithmetic covers the shared prefix only, and neither Anthropic nor the Claude Code changelog publishes a measured saving for the behavior.
+
+## How it differs from queue-contention staggering
+
+[Staggered Agent Launch](staggered-agent-launch.md) prescribes the same physical action for an unrelated reason: de-synchronizing queue reads so each agent claims work before the next one looks. The two motives size the delay differently.
+
+| Question | Queue contention | Cache prefix |
+|---|---|---|
+| What the delay must cover | One agent reading and reserving work | One request beginning to return tokens |
+| Order of magnitude | Seconds | Milliseconds |
+| Fails when | Queue-read latency varies | Prefixes diverge or fall below the cache minimum |
+| Structural alternative | File-locked task claims | A single warm-up request before the fan-out |
+
+Both can apply to one fan-out. Size the interval from whichever constraint is larger.
+
+## When this backfires
+
+- The prefix falls below the cacheable minimum. No entry is written, no error is raised, and the delay is pure added latency.
+- Siblings diverge. Distinct system text or tool definitions give each sibling its own entry at 1.25x, which costs more than a flat uncached fan-out. This is the [mid-session config-cache invalidator](../anti-patterns/mid-session-config-cache-invalidators.md) failure applied across siblings instead of across turns.
+- The first sibling errors or is rate-limited before its response begins. Every later sibling misses and the delay bought nothing.
+- The fan-out is interactive. A person waiting on results feels N-1 intervals of serialization, which is the latency the fan-out existed to remove.
+- Concurrency is very high on one OpenAI cache key. OpenAI advises keeping "the total traffic across all prefixes for each key to approximately 15 requests per minute" ([Prompt caching, OpenAI API](https://developers.openai.com/api/docs/guides/prompt-caching)), so a wide fan-out can miss regardless of timing.
+- Caching is applied to the wrong span. Lumer et al. found that "naively enabling full-context caching can paradoxically increase latency, as dynamic tool calls and results may trigger cache writes for content that will not be reused across sessions" ([arXiv:2601.06007v2](https://arxiv.org/abs/2601.06007v2)).
+
+## Example
+
+Claude Code ships the stagger as a default rather than leaving it to the caller. Release 2.1.229 (2026-08-12) records: "Improved workflow fan-outs to stagger same-prefix sibling agents so subsequent agents read the cached prompt prefix instead of re-paying it (`CLAUDE_CODE_WORKFLOW_PREFIX_STAGGER_MS=0` disables)" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-229)).
+
+```bash
+# Opt out when siblings do not share a prefix and the delay buys nothing
+CLAUDE_CODE_WORKFLOW_PREFIX_STAGGER_MS=0 claude
+```
+
+The changelog publishes the opt-out but not the default value, so the only supportable statement about the interval is its unit. The `_MS` suffix puts it in milliseconds, which matches a delay sized to a first response rather than to a queue claim. Where a harness does not automate the stagger, the caller applies it, which is what Anthropic's own instruction to "wait for the first response before sending subsequent requests" asks for ([Prompt caching, Claude Platform Docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)).
+
+## Key Takeaways
+
+- A cache entry exists only once a request is being served, so simultaneous siblings can never read one another's prefix.
+- Size the interval to the first sibling's time to first token, not to its full response, and not to the seconds-scale interval that queue contention needs.
+- One warm-up request before the fan-out writes the same entry and lets the siblings then start together, rather than each waiting behind the one before it.
+- Check the prefix against the provider's minimum cacheable length before adding any delay; below it the stagger is cost with no benefit.
+- Verify that siblings really do send byte-identical prefixes, because divergence converts the discount into a write premium.
+
+## Related
+
+- [Staggered Agent Launch](staggered-agent-launch.md) — the same delay applied to work-queue contention instead of cache reuse
+- [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md) — the fan-out shape this pattern prices
+- [Bounded Batch Dispatch](bounded-batch-dispatch.md) — batching as the rate-limit companion to launch timing
+- [Mid-Session Config Changes as Invisible Cache Invalidators](../anti-patterns/mid-session-config-cache-invalidators.md) — the same prefix divergence seen across turns
+- [Prompt Caching: Architectural Discipline for Agents](../../context-engineering/prompt-caching-architectural-discipline.md) — how to compose context so a shared prefix exists at all
+- [Prompt Cache Keepalive for Agent Pauses](../../context-engineering/prompt-cache-keepalive-agent-pauses.md) — keeping an entry resident once it is written
 
 ---
 
@@ -60192,6 +60534,7 @@ The advocate and skeptic receive the same task but structurally incompatible inc
 - [Independent Test Generation in Multi-Agent Code Systems](independent-test-generation-multi-agent.md)
 - [Reviewer Precision as a Pipeline Quality Proxy](reviewer-precision-proxy.md)
 - [Homogeneous Debate Panels as a Groundedness Quality Lever](../anti-patterns/homogeneous-debate-panel-groundedness.md)
+- [Evidence-Grounded Disagreement in Agentic Code Review](../../code-review/evidence-grounded-disagreement.md) — a critic that audits the review rather than the artifact, with the artifact frozen during the exchange
 
 ---
 
@@ -61614,6 +61957,8 @@ Each agent reads the queue in a different state. Agent-2 sees a queue already pa
 
 A 30-second stagger is a common practitioner convention. A short delay between launching an agent and sending its first prompt gives [session initialization](../agent-design/session-initialization-ritual.md) time to settle before the agent reads the queue. Neither figure comes from measured data. The real principle is to give each agent enough time to read and reserve before the next agent reads.
 
+A second, unrelated reason to stagger a fan-out is prompt-cache reuse, which needs a much shorter delay sized to a first response rather than to a queue claim. See [Cache-Prefix Staggering for Sibling Agent Fan-Out](cache-prefix-staggering.md).
+
 ```mermaid
 gantt
     title Staggered Launch — Queue Coverage Over Time
@@ -61697,6 +62042,7 @@ Each agent starts 30 seconds after the previous one. By the time agent 2 reads t
 
 ## Related
 
+- [Cache-Prefix Staggering for Sibling Agent Fan-Out](cache-prefix-staggering.md)
 - [File-Based Agent Coordination](file-based-agent-coordination.md)
 - [Sub-Agents Fan-Out](sub-agents-fan-out.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
@@ -77691,6 +78037,7 @@ As agents author more pull requests, review tooling is moving toward the surface
 - [Cloud Parallel Review Pattern](cloud-parallel-review-pattern.md) — Fan out code review across multiple agents in a remote sandbox, verify each candidate finding against actual code behavior, then aggregate into a single severity-ranked review
 - [Reproduce-Before-Report Verification Gate](reproduce-before-report-verification-gate.md) — Place an independent verifier between reviewer findings and the user so only candidates that can be reproduced against actual code behavior are reported
 - [Committee Review Pattern](committee-review-pattern.md) — Route agent-produced work through a panel of specialized reviewer agents — each applying a distinct lens — before accepting or iterating on the output
+- [Evidence-Grounded Disagreement in Agentic Code Review](evidence-grounded-disagreement.md) — A reviewer-critic loop only beats a single reviewer once every objection must cite code; the naive form scored worse than one reviewer on real pull-request diffs
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — Empirical data from 3,109 PRs shows CRA-only review achieves a 45% merge rate versus 68% for human-only review — reviewer composition determines merge outcomes
 - [Preempting Agentic PR Rejection by Failure-Mode Category](preempting-agentic-pr-rejection.md) — A 14-reason rejection taxonomy explains why 46% of agentic fix PRs fail, and only implementation and CI categories respond to preemption prompts
 - [Diff-Based Review](diff-based-review.md) — Review what changed, not the full output — mistakes live in the delta, and diffs compress review effort to the right scope
@@ -79384,6 +79731,7 @@ Each reviewer receives only the diff, not prior verdicts, so opinions are indepe
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — adaptive rule extraction to reduce noise across review rounds
+- [Evidence-Grounded Disagreement in Agentic Code Review](evidence-grounded-disagreement.md) — what happens when reviewers interact instead of running in parallel, and the verdict grammar that keeps the interaction honest
 
 ---
 
@@ -79769,6 +80117,98 @@ Per-agent assessment remains a complementary signal — agent merge rates range 
 - [arXiv:2509.16941](https://arxiv.org/abs/2509.16941) — SWE-Bench Pro: documented limits of per-agent benchmarks
 - [arXiv:2603.26487](https://arxiv.org/abs/2603.26487) — Beyond Banning AI: enforcement-gap limits of repository-level governance
 - [Why Coding Agents Need a Merge Queue](https://ctx.rs/blog/merge-queue-for-agents/) — practitioner argument for tempo governance
+
+---
+
+### Evidence-Grounded Disagreement in Agentic Code Review
+Source: https://agentpatterns.ai/code-review/evidence-grounded-disagreement/
+
+# Evidence-Grounded Disagreement in Agentic Code Review
+
+> Two review agents told to converge tend to agree with each other; only requiring every objection to cite code makes the second reviewer worth it.
+
+Adding a critic that audits the reviewer improves review quality only when the protocol forbids ungrounded agreement. Without that constraint the pair scored F1 0.457 on 100 real GitHub pull-request diffs, below a single reviewer at 0.495, two independent reviewers at 0.503, and the paper's MARS reviewer panel at 0.501. One prompt change, holding the agent count and wiring fixed, moved the same pair to 0.533 ([Qiu and Gill, 2026](https://arxiv.org/abs/2608.18167v1)). Treat the constraint as the pattern and the second agent as the delivery mechanism.
+
+## The protocol
+
+Three roles, two of which talk to each other. A main agent writes the artifact. A reviewer inspects it. A critic evaluates the reviewer's review, not the code. That exchange is what separates the protocol from a [committee of parallel reviewers](committee-review-pattern.md), where no reviewer sees another's output.
+
+The artifact is frozen while the reviewer and critic argue. They exchange review text only; the main agent edits once the review stabilizes, then a fresh review round opens on the new version ([Qiu and Gill, 2026](https://arxiv.org/abs/2608.18167v1)).
+
+The critic's output is constrained to three verdicts:
+
+| Verdict | Meaning | What the reviewer must do next |
+|---------|---------|-------------------------------|
+| `AGREE` | Every flag is real and nothing is missing | Keep every flag unchanged |
+| `DISAGREE_EVIDENCE: <code citation>` | Code visible in the diff contradicts a flag | Revise the flag against the cited code |
+| `DISAGREE_CONCERN: <epistemic objection>` | The objection is a doubt with no code behind it | Cite code that confirms the bug and keep the flag, or cite code that refutes it and drop the flag |
+
+The asymmetry in the last row is where the protocol earns its result.
+
+## Why it works
+
+Asked to agree on a joint output, two agents "tend to agree with each other. They do not always find the truth." The paper traces one such case: the critic raised a real bug, the reviewer rebutted with "a file-level argument yet cites no code", the critic yielded, and the verdict flipped to agreement with the bug dropped ([Qiu and Gill, 2026](https://arxiv.org/abs/2608.18167v1)). The authors call this false consensus; from outside it looks like independent validation.
+
+The three-verdict grammar changes which move ends an exchange. Yielding is no longer available as a response to `DISAGREE_CONCERN`, so the cheapest exit becomes fetching a line of code. That converts disagreement into an object a later reader can audit.
+
+The tendency is not specific to this protocol. An operational study of inter-agent sycophancy found it "amplifies disagreement collapse before reaching a correct conclusion in multi-agent debates, yields lower accuracy than single-agent baselines" ([Peacemaker or Troublemaker, 2025](https://arxiv.org/abs/2509.23055v1)).
+
+## When this backfires
+
+Speculation gets promoted. On the `astropy__astropy-14182` repair task a zero-shot agent's 24-line patch passed the hidden tests. The reviewer-critic pair produced a 32-line patch that added an unrequested method and removed a stable class variable, and failed. The reviewer raised a hypothetical about a separate call path, and the paper records: "The critic does not reject this as out of scope" ([Qiu and Gill, 2026](https://arxiv.org/abs/2608.18167v1)). Nothing in the verdict grammar checks scope.
+
+Unconstrained, the loop also inflates the finding count. The reviewer hedged, the critic confirmed the hedges and added one more, and a judge marked 3 of 5 resulting comments as fabricated ([Qiu and Gill, 2026](https://arxiv.org/abs/2608.18167v1)).
+
+Against that sits a real bill: about 4.5 times the tokens of a zero-shot run, buying a 75.2% pass rate against 71.6% on SWE-bench Verified ([Qiu and Gill, 2026](https://arxiv.org/abs/2608.18167v1)). On easy or narrowly scoped work the extra spend returns nothing.
+
+The gain may not survive a different setup. A benchmark of debate protocols found that "multi-agent debating systems, in their current form, do not reliably outperform other proposed prompting strategies", and that they are "more sensitive to different hyperparameter settings and difficult to optimize" ([Smit et al., 2024](https://arxiv.org/abs/2311.17371v3)). A swing from 0.457 to 0.533 on a single prompt edit fits that description. The evidence is one workshop paper, one model family, and an LLM judge the authors note "may penalize valid comments that differ from the human review" ([Qiu and Gill, 2026](https://arxiv.org/abs/2608.18167v1)).
+
+Nothing outside the prompt enforces the grammar. The authors concede that current models are "prone to forgetting or ignoring instructions, especially as the context window approaches full and past full" ([Qiu and Gill, 2026](https://arxiv.org/abs/2608.18167v1)).
+
+## Example
+
+The critic prompt's verdict block, which is the entire difference between the two measured configurations:
+
+```text
+End your response with EXACTLY ONE of these verdict lines:
+
+AGREE
+Use when every flag is real and you have nothing to add.
+
+DISAGREE_EVIDENCE: <cite file:line or code snippet that contradicts the flag>
+Use when you can ground your objection in code visible in the diff.
+
+DISAGREE_CONCERN: <flag is plausible but not yet substantiated>
+Use when your objection is epistemic (reviewer hedged, you have a gut
+reaction, external attribution argument) but you cannot point to code
+that refutes the flag. The reviewer's job on the next round is then to
+firm up the flag with evidence or drop it.
+
+Use DISAGREE_EVIDENCE when you have code grounding; DISAGREE_CONCERN when
+you only have epistemic doubt. Do NOT use DISAGREE_CONCERN as a dismissal
+mechanism -- use it to request evidence, not to suppress findings.
+```
+
+Source: [Qiu and Gill, 2026, Appendix A.2.4](https://arxiv.org/abs/2608.18167v1). The baseline configuration offered the critic two choices, agree or disagree.
+
+The protocol also ran as a plain `SKILL.md` file that an autonomous agent followed with no orchestration code enforcing the steps, which is how it was measured on SWE-bench Verified ([Qiu and Gill, 2026](https://arxiv.org/abs/2608.18167v1)). Two round caps appear in the paper and they are not interchangeable: five inner rounds under the Python orchestrator, seven in the skill file before escalating to a human.
+
+## Key Takeaways
+
+- Copy the verdict grammar before copying the second agent; the agent count was constant across both measured configurations and only the prompt changed
+- Make one verdict unsettleable by argument, so an unsupported objection can only be closed by fetching code
+- Freeze the artifact while reviewers disagree, and edit only after the review stabilizes, so the agents cannot rewrite the solution mid-argument
+- Add an explicit scope check, because the measured failure is the reviewer's hypothetical becoming a patch the issue never asked for
+- Reserve the loop for complex repositories where root-cause localization outranks token cost; at roughly 4.5 times zero-shot spend it is wasted on easy tasks
+- Audit the inner-loop transcript, since a converged verdict looks identical whether the agents checked the code or checked each other
+
+## Related
+
+- [Committee Review Pattern](committee-review-pattern.md) — parallel reviewers with no interaction, the baseline this protocol was measured against
+- [Opponent Processor / Multi-Agent Debate](../patterns/multi-agent/opponent-processor-debate.md) — co-equal agents debating the artifact itself rather than the review of it
+- [The Yes-Man Agent](../patterns/anti-patterns/yes-man-agent.md) — the same compliance bias pointed at a human instead of a peer agent
+- [Reproduce-Before-Report Verification Gate](reproduce-before-report-verification-gate.md) — an alternative grounding mechanism that verifies findings by execution rather than citation
+- [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — why the thin-findings failure mode costs more than it appears to
 
 ---
 
@@ -81994,6 +82434,7 @@ Source: https://agentpatterns.ai/verification/
 - [Decomposing Agent Output Variability by Layer (Sampling vs Orchestration State)](sampling-state-agent-variability-layers.md) — Separate run-to-run agent variability into token-sampling, infrastructure, and orchestration-state layers so the mitigation matches the layer; a single trajectory cannot distinguish them
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — Decompose agent trajectories into search, read, and edit stages with per-stage precision and recall to pinpoint where and why an agent went wrong
 - [Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)](repository-perturbation-context-reasoning-diagnosis.md) — Apply semantics-preserving repository perturbations before an agent runs to isolate context reasoning from end-to-end issue-resolution shortcuts; average score drops 66.8% to 25.3% on the explicit-task formulation
+- [Static Difficulty Estimation for Agent Issue Triage](static-difficulty-estimation-issue-triage.md) — Structural task features predict agent success at AUC 0.863, but the top features are computed on the gold patch, so only the repository group survives to triage time
 - [Canary Tools for Diagnosing Tool-Selection Reasoning](canary-tools-tool-selection-diagnosis.md) — Plant one deliberately flawed decoy per weakness in a staging tool set, then read a trap rate per type; capability mirage was the only strongly active probe on six hosted models
 - [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](precise-debugging-benchmark.md) — Frontier LLMs pass unit tests on debugging tasks by regenerating large chunks of code rather than making targeted edits — edit-level precision and bug-level recall expose the gap
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — Agents analyzing identical data diverge systematically by model family; treat single-run outputs as one point from an unsampled distribution
@@ -82004,6 +82445,7 @@ Source: https://agentpatterns.ai/verification/
 - [Head-to-Head Evaluation of Competing MCP Servers](head-to-head-mcp-server-evaluation.md) — Score competing MCP servers under one fixed agent configuration and decide on consistency, duration, and cost per quality point, because a small eval rarely separates them on quality
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md) — Two-thirds of code completion failures are model errors, but one quarter are integration failures — fix both to improve acceptance rates
 - [LLM Agent Bug Fix Taxonomy](agent-bug-fix-taxonomy.md) — 23 recurrent fix patterns from 930 real LLM-agent bugs; the tools component dominates and framework version churn drives most fixes
+- [Symptom-First Bug Triage for Agent Code](symptom-first-agent-bug-triage.md) — 1,268 annotated agent bugs put 57.1% in the agent core and map non-terminating runs to planning and amnesiac runs to memory, for single-agent framework codebases
 - [CausalFlow: Counterfactual Repair for Failed Agent Trajectories](causalflow-counterfactual-agent-repair.md) — Score each step in a failed run by counterfactual lift; the step whose oracle-guided replacement flips the outcome is the failure cause, and the replacement is a validated repair — applicable when replay is isolated, success is binary, and the failure is not a cascade
 - [Constraint Decay in Backend Code Generation](constraint-decay-backend-agents.md) — Multi-file backend agents drop ~30 percentage points in assertion pass rate as architectural, ORM, and framework constraints accumulate — convention-heavy frameworks take the largest hit
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — Four measurement-methodology gaps (held-out, trajectory-opaque, skill-retrieval, test-evolution) a stronger model cannot close — each needs a harness fix, not a better model
@@ -84251,6 +84693,7 @@ The 66 / 24 / 9 split is a useful prior, not a fixed budget:
 - [Demo-to-Production Gap](../patterns/anti-patterns/demo-to-production-gap.md) — The systematic gap between curated demos and production reality
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md) — Separating capability from consistency in agent evaluation
 - [RAG Agent Reliability Problem Map](rag-agent-reliability-problem-map.md) — Retrieval-specific failure taxonomy that extends completion-failure categories
+- [Symptom-First Bug Triage for Agent Code](symptom-first-agent-bug-triage.md) — The equivalent empirical split for agent bugs, mapping observed symptoms onto components
 
 ---
 
@@ -89385,7 +89828,7 @@ Source: https://agentpatterns.ai/verification/agent-bug-fix-taxonomy/
 
 ## Where the bugs live
 
-Islam, Raza, and Wardat mined 930 buggy instances from Stack Overflow (665), GitHub (180), and HuggingFace (85) ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699v1), EASE 2026). In the AgentDefect benchmark (37 runtime-executable), up to 19 bugs localize to the tools component.
+Islam, Raza, and Wardat mined 930 buggy instances from Stack Overflow (665), GitHub (180), and HuggingFace (85) ([arxiv 2604.17699](https://arxiv.org/abs/2604.17699v1), EASE 2026). In the AgentDefect benchmark (37 runtime-executable), the component split is curated, not measured: the authors "ensured" it spans all four components, "with a maximum of 19 out of 37 bugs occurring in the tools".
 
 ```mermaid
 pie title AgentDefect component distribution (n=37)
@@ -89465,7 +89908,7 @@ Ablations confirm external knowledge is not optional in fast-churning frameworks
 
 ## Practical implications
 
-Audit the tools layer first. Up to half of benchmark bugs sit in the tools component, so tool definitions, call parsing, and output handling beat prompt tuning as targets. Pair with [behavioral testing](behavioral-testing-agents.md) on tool I/O.
+Audit the tools layer early. The benchmark's tools share is capped by design and cannot rank components, but tool definitions, call parsing, and output handling are cheap to inspect. Pair with [behavioral testing](behavioral-testing-agents.md) on tool I/O.
 
 Pinning reduces the fix surface. `Change Version` and `Install Library` fixes vanish once you pin versions. A slow-upgrade LTS policy beats a repair agent chasing breaking changes.
 
@@ -89482,7 +89925,7 @@ Cost-quality is steep. Gemini 3 Pro costs 9x GPT-5.2 for 5.4 extra points. For C
 
 ## Key Takeaways
 
-- The tools component is the most bug-prone part of LLM agents — up to 19 of 37 AgentDefect bugs localize there
+- AgentDefect's 19-of-37 tools share is a sampling cap on a benchmark built to span all four components, so it does not establish that tools are the most bug-prone layer
 - 23 recurrent fix patterns repeat across Stack Overflow, GitHub, and HuggingFace Forums with high inter-annotator agreement
 - LangChain and LlamaIndex version churn drives `Change Version` and `Install Library` fixes — pinning reduces fix surface
 - Retrieval-augmented repair beats SoTA SWE-Agent by 21+ points on AgentDefect; removing web search costs 13.51 points in ablation
@@ -89497,6 +89940,7 @@ Cost-quality is steep. Gemini 3 Pro costs 9x GPT-5.2 for 5.4 extra points. For C
 - [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) — Post-deploy regression auto-fix loop
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md) — The general pattern behind SelfHeal's external-knowledge tool
 - [Nonstandard Errors in AI Agents](nonstandard-errors-ai-agents.md) — Why single-run repair rates need distributions, not point estimates
+- [Symptom-First Bug Triage for Agent Code](symptom-first-agent-bug-triage.md) — The same group's forum-corpus study, which puts the majority of bugs in the agent core rather than tools
 
 ---
 
@@ -92830,6 +93274,7 @@ The example numbers are illustrative; the methodology is the load-bearing contri
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — the leakage problem perturbation is one mitigation for
 - [Controlled Benchmark Rewriting for Agent Safety Judgment](controlled-benchmark-rewriting-safety-judgment.md) — same perturbation logic applied to safety judgment instead of code-agent context reasoning
 - [Constraint Decay in Backend Code Generation](constraint-decay-backend-agents.md) — independent evidence of multi-file reasoning degradation as constraints accumulate
+- [Static Difficulty Estimation for Agent Issue Triage](static-difficulty-estimation-issue-triage.md) — measures repository scale as a difficulty predictor rather than perturbing it
 
 ---
 
@@ -94453,6 +94898,64 @@ The span-level check catches the wrong-order refund mid-trajectory; the trace-le
 
 ---
 
+### Static Difficulty Estimation for Agent Issue Triage
+Source: https://agentpatterns.ai/verification/static-difficulty-estimation-issue-triage/
+
+# Static Difficulty Estimation for Agent Issue Triage
+
+> Task structure predicts whether a coding agent resolves an issue, but the strongest published predictor is measured on the answer.
+
+Static difficulty estimation forecasts a coding agent's chance of resolving an issue from deterministic properties of the task, its repository, and its issue text, without running the agent. Over CoderForge-Preview (45,769 tasks across 1,553 repositories, mean 4.8 test-verified trajectories each), an XGBoost model on 54 such features reached AUC 0.863 on whether any trajectory succeeded, and R² 0.408 regressing continuous pass rate ([Al-Haque and Johnson, 2026](https://arxiv.org/abs/2608.18280v1)).
+
+## Read the conditions before the headline
+
+Three limits decide how much of that result reaches a real backlog.
+
+The largest is that the top predictors are oracle measurements. Patch fragmentation supplies the top three features, and the authors compute them on the reference solution: "Patch features are computed from the gold (oracle) patch provided with each task." At triage time no gold patch exists, so `patch_lines_deleted` (mean absolute SHAP 0.406, "2.65× larger than the fourth-ranked feature") is not a quantity you can measure.
+
+The reported metric is the second limit. A study of ex ante difficulty prediction across 17 agentic benchmarks reports that "AUC can remain high even when the predictor contains no task-specific difficulty information", and measured 0.715 AUC from a predictor that assigns every task the same constant difficulty ([Krsteski and Meyer, 2026](https://arxiv.org/abs/2608.05797v1)). That baseline is pooled across their own suite rather than computed on CoderForge, so the figures are not directly comparable, but an AUC in the mid-0.80s carries a smaller informative margin than it appears to. The R² of 0.408 is the more honest summary: roughly 60% of pass-rate variance stays unexplained.
+
+Generalization closes the list. Every trajectory came from Qwen3-Coder-480B under OpenHands v0.52.1 over Python-centric repositories drawn from SWE-Smith and SWE-Rebench, and the authors state that features predicting difficulty for this agent "may not generalize to agents with different architectures" ([Al-Haque and Johnson, 2026](https://arxiv.org/abs/2608.18280v1)).
+
+## What survives to triage time
+
+The repository feature group. It reaches AUC 0.839 and R² 0.350 on its own, against 0.863 and 0.408 for the full model, and every feature in it is computable before dispatch: `repo_top_level_dir_count`, `repo_file_count`, `repo_total_known_size`, and `repo_max_depth` ([Al-Haque and Johnson, 2026](https://arxiv.org/abs/2608.18280v1)). The deployable signal is a property of the codebase you point the agent at, not of the individual ticket.
+
+Issue wording is the weakest lever. Prompt features alone reach AUC 0.599 and explain "almost none of the continuous variance (R²=0.025)", surfacing only near the pass/fail boundary: at least one ranked in the top five contributors for 70.3% of the 575 near-baseline tasks, against 6.8% of hard ones. Rewriting an issue description pays off for borderline work and close to nothing for the hard tail.
+
+## Why it works
+
+The study measures correlation and offers only a partial causal account, so read the mechanism as the authors' interpretation. Repository scale features "reflect the size of the search space the agent must traverse", standing in for the group-level construct of "navigation difficulty: how hard it is to locate the relevant code before making any edit". Patch features borrow the diffusion result from defect prediction, where what separates defect-inducing commits from clean ones is "how scattered a change is across files and hunks" rather than raw edit volume; "tasks with unusually large inter-hunk distances are especially penalized". Across the top three patch features the pattern is monotone: "high feature values push predictions toward failure". The repository group contributes separately — "ranks 4-14 are occupied entirely by repository structural and patch features, all showing negative directional effects", which the authors read as evidence that "the navigational complexity of the repository the agent must traverse matters beyond the properties of the edit itself" ([Al-Haque and Johnson, 2026](https://arxiv.org/abs/2608.18280v1)).
+
+The account has a hole the authors name. Gold-patch features "do not capture all sources of task complexity", and "a task could have a simple gold patch but require complex agent reasoning, or vice versa". Trajectory evidence sharpens the caveat: examining all 12 never-solved simple-patch tasks, one study found the agent "correctly localizes the bug, finding the gold-patch file in 12 of 12 tasks and editing it in 10 of 12", failing instead by patching "the symptom (the caller, the consumer, the display layer) while the gold patch fixes the root cause" ([Mehtiyev and Assunção, 2026](https://arxiv.org/abs/2604.02547v1)). Structure predicts where difficulty concentrates. It does not tell you what the agent got wrong.
+
+## When this backfires
+
+- Ranking issues inside one repository. The deployable features are repository-level constants, so every ticket shares its file count and directory depth. The surviving signal separates codebases, not backlog items within one.
+- Substituting the agent's own patch for the missing gold patch. A scattered patch from a confused run then reads as a hard task instead of a bad run, and the feature becomes an output of the run it was meant to predict.
+- Calibrating on a small backlog. Pass rate came from a mean of 4.8 nonzero-temperature trajectories per task, and outcomes "conflate genuine task difficulty with sampling variance" ([Al-Haque and Johnson, 2026](https://arxiv.org/abs/2608.18280v1)), so a score fitted on a few dozen of your own issues mostly measures noise. See [seed variance reporting](seed-variance-reporting.md).
+- Using the score as a gate. With most pass-rate variance unexplained, an auto-reject threshold discards issues the agent would have solved. Treat the estimate as a prior over verification depth, not an admission test.
+- Transferring a threshold from public repositories to private code, since pretraining on public code may elevate the solve rates it was fitted on. See [benchmark contamination as eval risk](benchmark-contamination-eval-risk.md).
+
+For a single issue the agent run is itself the measurement, and it is cheap next to standing up a feature pipeline and keeping it calibrated as the agent changes underneath it. [Krsteski and Meyer](https://arxiv.org/abs/2608.05797v1) locate the actionable signal in the residual between expected and observed difficulty, which "can expose hidden environment flaws such as contamination and infeasibility", and residuals require rollouts.
+
+## Key Takeaways
+
+- Difficulty is substantially encoded in static structure, but the published headline rests on features derived from the reference solution, which triage does not have.
+- The repository feature group is the part you can compute before dispatch, and it gives up only 0.024 AUC against the full model.
+- Report Spearman rank correlation or pairwise accuracy within a benchmark alongside AUC, so a predictor carrying no task-specific signal cannot hide behind a strong-looking curve.
+- Use the estimate to decide how much verification a class of work deserves, and calibrate on your own outcomes rather than importing published coefficients.
+
+## Related
+
+- [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — the post-hoc counterpart, decomposing a run into search, read, and edit stages once it exists.
+- [Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)](repository-perturbation-context-reasoning-diagnosis.md) — isolates repository navigation from issue resolution by perturbing the codebase before the agent runs.
+- [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — why solve rates on public repositories overstate performance on private code.
+- [Risk-Based Task Sizing for Agent Verification Depth](risk-based-task-sizing.md) — how to spend a difficulty prior once you have one.
+- [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — the metric pair that separates the mixed-outcome band from genuinely hard tasks.
+
+---
+
 ### Structural Coverage Criteria for Agent Workflows
 Source: https://agentpatterns.ai/verification/structural-coverage-agent-workflows/
 
@@ -94683,6 +95186,77 @@ The constrained version cannot hedge, cannot omit the verdict, and must attach a
 - [Grading Agent Outcomes](grade-agent-outcomes.md)
 - [Agent Transcript Analysis](agent-transcript-analysis.md)
 - [Natural Language Tool Selection (NLT)](../patterns/agent-design/natural-language-tool-selection.md)
+
+---
+
+### Symptom-First Bug Triage for Agent Code
+Source: https://agentpatterns.ai/verification/symptom-first-agent-bug-triage/
+
+# Symptom-First Bug Triage for Agent Code
+
+> A measured agent bug corpus maps a few observable failure symptoms onto the component most likely to hold the defect.
+
+## When this applies
+
+The corpus is 1,268 annotated bug reports from Stack Overflow, GitHub, and Hugging Face forums, covering agents built with seven frameworks (LangChain, LangChain-js, LangGraph, LlamaIndex, CrewAI, AutoGen, Semantic Kernel) plus custom implementations ([arxiv 2601.15232v3](https://arxiv.org/abs/2601.15232v3)). The distributions below are the Stack Overflow half: 951 retained posts, each labeled independently by two annotators who reached Cohen's kappa of 0.93 to 1.00 on bug type, root cause, effect, and component. The Hugging Face set has no reported distribution; it evaluates the study's automated labeler.
+
+Use the order when all three hold:
+
+- You are debugging one agent, not a group of coordinating agents.
+- The agent is built on one of the mainstream agent frameworks the corpus indexes (LangChain, LangChain-js, LangGraph, LlamaIndex, CrewAI, AutoGen, Semantic Kernel) or a comparable model-plus-tools-plus-memory structure.
+- The failure has no stack trace. Crashes are 60.6% of observed effects on Stack Overflow and already name a file and a line.
+
+## Where the bugs sit
+
+Each bug carries the component that originated it: agent core, planning, memory, or tools, plus Other for defects outside the agent and Unknown where the annotators could not tell. The agent core holds 57.1% of Stack Overflow bugs, followed by tools, and it carries more than half of every bug type except initialization and resource limitation bugs ([arxiv 2601.15232v3](https://arxiv.org/abs/2601.15232v3)).
+
+Two symptoms localize further than that baseline:
+
+| Observed effect | Share of Stack Overflow bugs | Reported component |
+|---|---|---|
+| Crash | 60.6% | not reported |
+| Incorrect output | 16.6% | not reported |
+| Empty response | 3.7% | not reported |
+| Tool ignored | 2.2% | not reported |
+| Stateless interaction | 1.6% | memory in 53.33% of cases |
+| Indeterminate loop | 0.9% | planning in 66.7% of cases |
+
+## The triage order
+
+1. The agent loops and will not terminate. Read the planning component first.
+2. The agent answers the current turn with no recollection of earlier ones. Read the memory layer first.
+3. Anything else with no stack trace. Start in the agent core, on the base rate above.
+4. An import fails, a signature moved, or version pins conflict. Treat it as a dependency problem before reading agent code. Requirement violation causes 61.88% of API bugs, and the paper's recommendation is a lock file rather than a code change ([arxiv 2601.15232v3](https://arxiv.org/abs/2601.15232v3)).
+
+Incorrect control flow (14.4%) and requirement violation (14.1%) are the two leading root causes, so steps 3 and 4 cover most of what the symptom shortcuts miss.
+
+## Why it works
+
+The mechanism turns on what you can observe for free. Assigning a bug type or a root cause means reading the code; assigning an effect means reading the output you already have. The study makes that split explicit: "While identifying bug types and root causes from the output alone is difficult, determining effects is comparatively easier ... observed effects can serve as useful indicators for bug localization" ([arxiv 2601.15232v3](https://arxiv.org/abs/2601.15232v3)). The effect is therefore the only label available at the moment of failure, and the study measures where each one leads. The mapping holds where the symptom is definitionally tied to one component's job, since a run that never terminates is a control-flow property. It collapses toward the base rate for symptoms any component can produce, which is why the study reports a pointer for only these two.
+
+## When this backfires
+
+- Multi-agent systems. MAST classifies multi-agent failures into system design issues, inter-agent misalignment, and task verification, categories that do not decompose into one agent's components ([arxiv 2503.13657v3](https://arxiv.org/abs/2503.13657v3)). Attributing a failure to a responsible agent and step "is difficult due to long-horizon interactions and tightly coupled agent behaviors" ([arxiv 2607.07989v1](https://arxiv.org/abs/2607.07989v1)).
+- Stacks outside the corpus. Posts were gathered by searching seven named frameworks, so the corpus is framework-centric rather than language-scoped: JavaScript is measured and shrinking ("14.56% of bugs reported in 2023 coming from JavaScript, dropping to 7.30% in 2025") while C# grows "from 2.63% to 5.11%". What sits outside is an agent on no named framework — a direct vendor SDK call — not a particular language.
+- Thin evidence behind the two shortcuts. Indeterminate loop and stateless interaction are 0.9% and 1.6% of Stack Overflow effects, a handful of posts out of 951, with no confidence interval reported.
+- No competing component distribution exists to weigh this against. The same group's 37-instance runtime benchmark looks like one, but its tools share is a curation choice, not a measurement: the authors "ensured that the component where the bug occurred spans across all four components of LLM agents, with a maximum of 19 out of 37 bugs occurring in the tools" ([arxiv 2604.17699v1](https://arxiv.org/abs/2604.17699v1)), written up in [LLM Agent Bug Fix Taxonomy](agent-bug-fix-taxonomy.md). A designed cap on a deliberately spanning benchmark says nothing about where agent bugs concentrate.
+- Pinned, mature codebases. Requirement violation is reported as less common on GitHub, where finished projects fix their library versions, so step 4 shrinks once you pin.
+
+## Key Takeaways
+
+- Ask what the agent did wrong before asking which file is wrong; the symptom is the only label you get without reading code
+- Two symptoms carry a measured pointer: a non-terminating run points at planning, an amnesiac run points at memory
+- Absent a pointer, open the agent core first, but treat 57.1% as a prior about where to look rather than a diagnosis
+- Version churn is a separate track from component triage, and a lock file closes more of it than debugging does
+- The order is scoped to single-agent framework code, and coordination failures need [trajectory-level diagnosis](trajectory-decomposition-diagnosis.md) instead
+
+## Related
+
+- [LLM Agent Bug Fix Taxonomy](agent-bug-fix-taxonomy.md) — The fix-pattern half from the same research group, and the source of the competing tools-first answer
+- [Agent Debugging](../observability/agent-debugging.md) — The diagnostic sequence to run once triage has named a component
+- [Completion Failure Taxonomy](completion-failure-taxonomy.md) — The equivalent empirical split for code completion failures
+- [Trajectory Decomposition Diagnosis](trajectory-decomposition-diagnosis.md) — Per-stage attribution for failures that no single component owns
+- [Symptom-Reduction-as-Root-Cause](symptom-reduction-as-root-cause.md) — Why a symptom that stops appearing is not proof the cause is gone
 
 ---
 
@@ -95670,6 +96244,7 @@ Skip it when:
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — stage-level behavioral verification approach
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — where outcome-only grading misses safety and robustness signals that trajectory-aware auditing catches
 - [Evidence-Chain Run Logs](evidence-chain-run-logs.md) — the per-run counterpart: bracket the reported symptom with one measurement instead of scoring stages across a corpus
+- [Static Difficulty Estimation for Agent Issue Triage](static-difficulty-estimation-issue-triage.md) — the pre-hoc counterpart: estimate whether a run will succeed from task structure before any trajectory exists
 
 ---
 
@@ -96596,6 +97171,7 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — Writes to `.npmrc`, `.yarnrc`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, and `.devcontainer/` are execution-escalations — interrupt permissive edit modes at the write site, complementing execution-side defaults like `ignore-scripts=true`
 - [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — A server-issued intent certificate narrows the static OpenPort manifest per user request via a monotone-only filter; the planner cannot reach tools the current ask does not justify, but classifier failure and intent-materialization privacy regressions constrain where the trade-off pays off
 - [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md) — Gate AI chat activation on directory-managed GitHub organization membership via VS Code's `ChatApprovedAccountOrganizations` device policy; fail-closed and structurally distinct from seat licenses
+- [Parser-Versus-Shell Evasion in Command Permission Checks](parser-versus-shell-permission-evasion.md) — A permission rule matches command text while the shell computes a richer function of it; the documented bypass record makes text matching a pre-flight and puts enforcement below the parser
 - [Permission-Gated Custom Commands](permission-gated-commands.md) — Pre-approve the tools a Claude Code slash command may use via frontmatter, narrowing the expected surface for shared commands
 - [Pre-Execution Risk Classification for Terminal Commands](pre-execution-command-risk-classification.md) — Display a tiered Safe/Caution/Review-carefully badge with command-specific text before the agent runs a terminal command; an attention-allocation lever paired with deterministic allowlists that carry the policy load
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Materialize each subgoal-scoped capability as an opaque epoch-bound handle that closure removes from the planner's interface; stale replay is rejected before side effects, closing lingering authority when tool traffic is mediated and the catalog is typed
@@ -105945,6 +106521,74 @@ A crosswalk is a discovery aid, not a threat model — five conditions make it a
 
 ---
 
+### Parser-Versus-Shell Evasion in Command Permission Checks
+Source: https://agentpatterns.ai/security/parser-versus-shell-permission-evasion/
+
+# Parser-Versus-Shell Evasion in Command Permission Checks
+
+> A command permission check reads a string; the shell executes a different function of that string, and every gap between them is a bypass.
+
+Treat a command-text permission check as a heuristic pre-flight and place the control you actually rely on somewhere the shell cannot respell its input. The check matches a proposed command against rules. The shell then parses, expands, redirects, and resolves that same command through its own pipeline, and any spelling the two disagree about is a permitted execution of a denied effect. One harness shipped eight separately-numbered fixes to that disagreement across four releases between 2026-08-04 and 2026-08-14, and the record includes a revert, which is what makes this a design conclusion rather than a patching schedule.
+
+## The conditions this conclusion depends on
+
+Moving enforcement below the parser pays only where three things hold. Check them before weakening a command-text check that is currently carrying load.
+
+- A layer below the parser exists on your platform, with the capabilities you assume. What the floor offers varies by host: Claude Code's sandbox credential masking runs "on Linux and WSL", while "on macOS file masking falls back to `deny`" ([changelog](https://code.claude.com/docs/en/changelog#2-1-221)). Where the floor is thinner than you pictured, the pre-flight is carrying more than its share.
+- That layer does not match strings either. Claude Code 2.1.224 fixed "sandbox filesystem deny entries written with a trailing slash (e.g. `denyRead: \"~/.aws/\"`) being silently bypassable on Linux and macOS" ([changelog](https://code.claude.com/docs/en/changelog#2-1-224)). Relocating a text match one floor down relocates the defect with it. The representation has to change: an inode, a resolved handle, a syscall, or a server-side check on the protected action.
+- You can pay the false-positive cost of tightening. Version 2.1.232 extended permission checks to input redirections and Cygwin-style symlinks; 2.1.233 reverted both and fixed "Windows auto mode repeatedly stopping for manual approval on ordinary `cd <dir> && <command> > file` Bash commands (a 2.1.232 regression)" ([changelog](https://code.claude.com/docs/en/changelog#2-1-233)). A check that interrupts routine work gets switched off.
+
+## The evasion classes on record
+
+Every entry below was fixed. The point is the shape they share: in each one the checker read a string that the shell resolved into something else.
+
+| Class | What the check saw | What the shell did | Fixed in |
+|---|---|---|---|
+| Conditional-context execution | a `[[ ]]` test | zsh executed the command hidden inside it | [2.1.221](https://code.claude.com/docs/en/changelog#2-1-221) |
+| Quote handling in paths | one path | PowerShell resolved a different one | [2.1.221](https://code.claude.com/docs/en/changelog#2-1-221) |
+| Self-concealing commands | part of the command | all of it | [2.1.223](https://code.claude.com/docs/en/changelog#2-1-223) |
+| Invisible padding | the visible span in the approval dialog | the padded remainder as well | [2.1.223](https://code.claude.com/docs/en/changelog#2-1-223) |
+| Default-value poisoning | one command's parameters | later commands' file access, redirected via `$PSDefaultParameterValues` | [2.1.232](https://code.claude.com/docs/en/changelog#2-1-232) |
+| Symlink resolution | a regular file | a write through a Cygwin-style link under Git Bash | [2.1.232](https://code.claude.com/docs/en/changelog#2-1-232) |
+| Unchecked argument spellings | no path operand | a read of the file named by `< file` | [2.1.232](https://code.claude.com/docs/en/changelog#2-1-232) |
+| Path-namespace spellings | a path UNC validation accepted | reached a remote host through the NT `\??\` device prefix, leaking NTLM credentials | [2.1.233](https://code.claude.com/docs/en/changelog#2-1-233) |
+
+Two of those rows target different readers. The self-concealing command hid from the permission check; the invisible padding hid from the approval dialog a human was reading. One crafted string can defeat the automated gate and the person reviewing its output, and those are distinct defects with distinct fixes.
+
+The classes are not one vendor's. Cursor patched an allowlist bypass reached "with backtick(`` ` ``) character or `$(cmd)`" in 1.3 and described the fix as "a more robust parser" ([GHSA-534m-3w6r-8pqr](https://github.com/cursor/cursor/security/advisories/GHSA-534m-3w6r-8pqr)), then patched a second in 2.3, where "certain shell built-ins can still be executed without appearing in the allowlist" by poisoning the environment that trusted commands read ([CVE-2026-22708](https://github.com/cursor/cursor/security/advisories/GHSA-82wg-qcm4-fp2w)). VS Code states the limit in its own documentation: "The rule-based auto-approval system uses best-effort command parsing that has known limitations. For example, quote concatenation or shell aliases might bypass the rules" ([VS Code security](https://code.visualstudio.com/docs/copilot/security)). Anything computed from that parse inherits the same limits, including the [risk badge](pre-execution-command-risk-classification.md) shown to a human before the command runs.
+
+## Why it works
+
+Placing the control below the parser works because it collapses an unbounded matching problem into a bounded one. A permission rule is a predicate over a command string, and the effect that string produces is decided by the shell's own parse-expand-execute pipeline, a much richer function of the same input. Soundness would require reimplementing that pipeline exactly for every shell in play (bash, zsh, PowerShell, Git Bash over Cygwin) and every path namespace those shells reach, each an independently evolving grammar. The research side concedes the same boundary. CARE's authors write that "The goal of canonicalization is bounded normalization, not full semantic recovery", and position their gate as "a complementary *pre-execution* defense rather than a replacement for sandboxing, host hardening, or TOCTOU-safe enforcement" ([Liu et al., 2026](https://arxiv.org/abs/2607.21642v2)).
+
+The effect a rule protects is the tractable half. A file write, an outbound connection, a merge into a protected branch: each is one well-defined event at one boundary, so a check placed there models a single thing rather than several grammars. Version 2.1.234 shows the price of the alternative, hardening "remote file reads, session restore, CLAUDE.md includes, workflow scripts and file uploads" against the same `\??\` spelling that 2.1.233 had already blocked at UNC path validation ([changelog](https://code.claude.com/docs/en/changelog#2-1-234)). One spelling, five more surfaces, because each ran its own string check. VS Code draws the conclusion directly: "Agent sandboxing is the strongest protection against malicious terminal commands."
+
+## When this backfires
+
+- The parser is your only control and you weaken it. The advice is to stop depending on a text match, never to delete one. A pre-flight that produces an explanatory denial at the moment of the mistake keeps its value even where it cannot be made sound.
+- The lower layer is imperfect too, so this buys a better position rather than a guarantee. The clearest case is condition 2 repeating one layer down: a "SOCKS5 hostname null-byte injection that can be exploited to trick the sandbox allowlist filter into approving connections it should block" ([The Register, 2026-05-20](https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662)) — an allowlist *filter* matching strings, which relocates the parser defect rather than escaping it. A defect that is genuinely different in kind looks like 2.1.232's "Hardened the Linux filesystem sandbox against a protected-path bypass" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-232)): a bug in one implementation that stays fixed, where the parser gap is a property of finite rules meeting unbounded spellings.
+- The protected effect has no chokepoint. Arbitrary developer shell work in a trusted repo exists only as "a command", with no server-side gate to move enforcement to. The answer there is a human decision rather than a better parser.
+- Traffic is stereotyped rather than adversarial. On the CVE-derived Exploit-DB corpus, plain regex beat the full CARE pipeline on F1, 81.52% against 66.33% — the paper's own summary is that CARE "trails Regex on Exploit-DB (66.33 vs 81.52), where CVE proof-of-concepts embed stereotyped destructive idioms" that keyword matching captures without context ([Liu et al., 2026, §V-C2](https://arxiv.org/abs/2607.21642v2)). Sophistication in the matching layer is not monotonically better.
+
+## Key Takeaways
+
+- A command-text permission check and the shell compute different functions of the same string. Every spelling they disagree about is a bypass, so the class regenerates after each fix rather than being exhausted by it.
+- Eight separately-shipped fixes across four releases in one ten-day window of a single changelog, plus two Cursor advisories a major version apart, put this in the structural column rather than the bug-count column.
+- Anything unparseable must deny. Several entries on record are cases where the checker parsed something and matched nothing.
+- Verify that the layer you move enforcement to is not another string match. A `denyRead` entry defeated by a trailing slash is the same defect one floor down.
+- One spelling blocked at one surface stays open at the others. Enforce on the effect, which has one boundary, instead of on the command, which has as many spellings as your shells have grammars.
+- Budget for the revert. Tightening a checker to cover a new spelling catches benign traffic too, and a control that interrupts routine work does not survive contact with a working team.
+
+## Related
+
+- [Static-First Shell Command Gating with Selective Escalation](static-first-shell-command-gating.md) — the cost model for classifying commands well; this page is why even a well-canonicalized verdict stays a pre-flight
+- [Safe Command Allowlisting](safe-command-allowlisting.md) — the approval-fatigue case for allowlists, whose broad globs are what these evasions exploit
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — the same sorting question one level up: where a safeguard is evaluated decides whether it binds
+- [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — the layer the conclusion points at, and the one a parser gap falls through to
+- [Dual-Boundary Sandboxing: Filesystem and Network Isolation](dual-boundary-sandboxing.md) — what enforcement below the shell looks like when it is built deliberately
+
+---
+
 ### Per-Server MCP Environment Scoping for Credential Isolation
 Source: https://agentpatterns.ai/security/mcp-server-credential-isolation/
 
@@ -107731,6 +108375,7 @@ Allowlisting eliminates noise so that genuine risk prompts stand out; it is not 
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)
 - [The AI Development Maturity Model](../workflows/ai-development-maturity-model.md)
 - [Evidence-Based Allowlist Auto-Discovery for Agents](evidence-based-allowlist-auto-discovery.md)
+- [Parser-Versus-Shell Evasion in Command Permission Checks](parser-versus-shell-permission-evasion.md) — the documented record of allowlist patterns matching text the shell then respells
 - [Progressive Autonomy: Scaling Trust with Model Evolution](../human/progressive-autonomy-model-evolution.md)
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](../human/cognitive-load-ai-fatigue.md)
 - [The Bottleneck Migration](../human/bottleneck-migration.md)
@@ -110296,7 +110941,7 @@ Realized harm counts commands that pass the guard and then succeed in a Docker s
 ## When this backfires
 
 - Adversarial traffic with the judge enabled. The judge over-allows warn-band commands that paraphrase attacks close to its own training distribution, which is how a tier that halves false positives still lets more harm through ([Liu et al., 2026](https://arxiv.org/abs/2607.21642v2)).
-- Stereotyped destructive idioms rather than obfuscated ones. On CVE-derived snippets from Exploit-DB, plain regex beats the whole pipeline on F1 (81.52% against 66.33%), so the AST and rule bank are cost without benefit for that distribution ([Liu et al., 2026](https://arxiv.org/abs/2607.21642v2)).
+- Stereotyped destructive idioms rather than obfuscated ones. On CVE-derived snippets from Exploit-DB, plain regex beats the whole pipeline on F1 (81.52% against 66.33%), so the AST and rule bank are cost without benefit for that distribution ([Liu et al., 2026, §V-C2](https://arxiv.org/abs/2607.21642v2)).
 - Staged multi-command chains. Scoring each command in isolation passes a sequence that is individually benign and collectively an exfiltration, and the paper scopes itself out of session-level hazards.
 - Encoding- and escape-heavy obfuscation. Bounded decoding is the canonicalizer's weakest axis by its own ablation, and vendors report the same limit from the other side: VS Code documents that terminal auto-approvals "use best-effort command parsing and have known limitations with shell aliases, quote concatenation, and complex shell syntax" ([VS Code security](https://code.visualstudio.com/docs/copilot/security)).
 - A tighter false-positive budget than 0.91%. A four-layer static baseline in the same evaluation reaches 0.30% FPR at 0.02 ms for about 13 fewer F1 points ([Liu et al., 2026](https://arxiv.org/abs/2607.21642v2)).
@@ -110316,6 +110961,7 @@ Realized harm counts commands that pass the guard and then succeed in a Docker s
 - [Classifier-Gated Auto-Permission](../patterns/agent-design/classifier-gated-auto-permission.md) — the always-on-classifier posture this pattern inverts by putting the model last
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md) — the same two-layer split applied at the MCP tool boundary rather than the shell string
 - [Safe Command Allowlisting](safe-command-allowlisting.md) — the deterministic allowlist that should absorb the high-volume benign tail before any scorer sees it
+- [Parser-Versus-Shell Evasion in Command Permission Checks](parser-versus-shell-permission-evasion.md) — why bounded canonicalization leaves a residue, and what that implies about where enforcement belongs
 - [Blast Radius Containment](blast-radius-containment.md) — the layer underneath, which the guard explicitly does not replace
 
 ---
@@ -119408,6 +120054,8 @@ Source: https://agentpatterns.ai/human/
 - [Agent Rewrites Lose Meaning: The Ownership Rule for AI-Assisted Writing](agent-rewrite-ownership-rule.md) — Rewrites drop scope restrictors and emphasis in a measurable direction; the ownership rule that follows, plus the cases where a blanket rule costs more than it saves
 - [Artifact-Level Accountability Mapping for Agent Workflows](artifact-level-accountability-mapping.md) — Audit every workflow event against authority, execution, verification, consequence, and record; the map earns its keep on events the artifact schema records opaquely, chiefly approval
 - [Stated-Understanding Checks: Asking the Agent to Correct You](stated-understanding-checks.md) — State your reading of the system and ask the agent to correct it before it edits; the check informs only when the claim is decidable from the repository, and returns agreement bias when it is not
+- [Judgment Relocation: Where Human Decisions Land in an Agent Factory](judgment-relocation.md) — Which five decisions keep a human owner once agents write the code, and the four conditions — capacity, comprehension, trustworthy signals, a return path — that separate a real owner from a nominal one
+- [The Citizen-Agent-Expert Operating Model for AI Coding](citizens-agents-experts-operating-model.md) — Where engineering value moves when AI writes most of the code: citizens originate, agents execute, and experts govern the guardrails that let generated code reach production
 
 ---
 
@@ -121736,6 +122384,68 @@ Baseline by task type. Read the category breakdowns (Sniffly-style) before you r
 
 ---
 
+### Judgment Relocation: Where Human Decisions Land in an Agent Factory
+Source: https://agentpatterns.ai/human/judgment-relocation/
+
+# Judgment Relocation: Where Human Decisions Land in an Agent Factory
+
+> Judgment relocation is real only when the capacity to exercise a decision moves with accountability for it; otherwise the owner signs work they cannot judge.
+
+Judgment relocation is the claim that automating code production moves human decisions to a new position in the pipeline instead of deleting them. It holds under four conditions: attention budget to exercise the decision, comprehension of the artifact, verification signals worth trusting, and a route back into the pipeline. Miss one and the position survives on the org chart while the judgment it was meant to hold has quietly gone.
+
+## Which decisions relocate
+
+Addy Osmani names five that keep a human owner in a software factory: "Someone still chooses the problem. Someone still chooses the architecture. Someone still sets the quality bar. Someone decides which verification signals deserve trust. Someone decides when the evidence is sufficient to ship" ([Osmani, 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)). The first three are the upstream move that the [software factory model](../workflows/software-factory-model.md) already describes. The last two differ in kind, because they are judgments about the gate instead of judgments made at it.
+
+The destination is wider than a final approval. Osmani reports that in a good factory "the human isn't limited to just reviewing and approving the final diff at the very end," listing four live positions: shaping the work early, steering it during implementation, carrying it through a handoff, and stopping it before production ([Osmani, 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)). A factory offering only the last of those has relocated less judgment than it claims.
+
+## The four conditions
+
+| Condition | What fails without it | Test |
+|---|---|---|
+| Capacity | The owner approves at the rate work arrives | Does one person's attention cover the queue at current agent count? |
+| Comprehension | Approval becomes signature | Could the owner explain the change a week later? |
+| Trustworthy signals | The gate reports green on work that is wrong | Has anyone checked the checks against a known-bad change? |
+| Return path | A stopped run has nowhere to resume from | When the factory asks a question, where does the answer go? |
+
+Osmani hit the fourth directly. His sample factory correctly halted an issue and labeled it for more information, and he "didn't know where to put my answer." A manual run finishes when the human knows what to do next, not when the machine stops ([Osmani, 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)).
+
+## Why it works
+
+Human judgment does not scale with compute, so its value concentrates wherever machine signals are weakest. Osmani states the prescription directly: "We should remove people from the parts of the loop where machines can produce stronger, faster, more deterministic signals," and "concentrate people around the places where context, taste, risk, and long-term ownership matter most" ([Osmani, 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)). Baum and Laux supply the causal precision behind that prescription. A human contribution changes an output only when it is constitutive, meaning "a necessary ingredient without which the process cannot proceed," or when it is a corrective position someone actually exercises, where "the human is not a 'gate' but a 'switch': present, capable of redirecting the process, but not necessary for it to run" ([Baum and Laux, arXiv:2603.19213v2](https://arxiv.org/abs/2603.19213v2)). A position nobody has the capacity to exercise is causally inert, which is why the four conditions are the pattern itself.
+
+The mitigation that follows is structural. Layered oversight distributes real-time review of individual decisions, systemic review of aggregate patterns, and compliance review "across different roles and organizational levels," so no single compromised position carries the whole load ([Baum and Laux, arXiv:2603.19213v2](https://arxiv.org/abs/2603.19213v2)).
+
+## When this backfires
+
+- Volume outruns attention. Agent count scales and reviewer bandwidth does not ([Osmani, 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)). A human who clicks approve on every decision "but rubberstamps without genuine judgment does not thereby become an overseer" ([Baum and Laux, arXiv:2603.19213v2](https://arxiv.org/abs/2603.19213v2)).
+- Accountability moves and control does not. Elish calls the result a moral crumple zone, in which responsibility "may be misattributed to a human actor who had limited control over the behavior of an automated or autonomous system" ([Elish, 2019](https://estsjournal.org/index.php/ests/article/view/260)). Naming an owner for a decision nobody can make manufactures a scapegoat.
+- The signals lie. Asked to make a test pass, an agent "can change the unit test to satisfy that condition" ([Osmani, 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)). Judgment relocated onto a gate inherits whatever that gate actually measures.
+- Comprehension lags approval. Osmani approved a feature in his own repository, returned days later, and "couldn't explain to you how the feature worked" ([Osmani, 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)). See [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) for how that gap compounds.
+- The scale does not warrant it. "You can get surprisingly far with your stock coding harness" ([Osmani, 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)). At one or two sessions you still read everything, and formal placement is ceremony.
+
+## Example
+
+Osmani measured two tasks inside the same sample factory. A quick finder with no rejections took 7 minutes. A favorites feature, carrying two rejections and one human decision in the middle, took 56 ([Osmani, 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)). The difference is where judgment sat, which is why he pairs a run-outcome taxonomy with per-stage timing: otherwise a team learns that a run came back flawed without learning what finding out cost them.
+
+## Key Takeaways
+
+- The discriminator is exercise rather than assignment: ask what the named owner would have had to do to catch the last defect that shipped.
+- Two of the five relocated decisions concern the gate itself: which verification signals deserve trust, and when evidence is sufficient to ship.
+- The available positions include shaping, steering, and handoff, so a factory offering only final-diff approval has relocated less than it claims.
+- A position nobody can exercise is causally inert, which makes layered oversight across roles the structural answer to a single overloaded owner.
+- Relocating accountability without relocating control produces a moral crumple zone, where blame lands on the operator with the least ability to have prevented the failure.
+
+## Related
+
+- [The Software Factory Model: Industrializing Agent Loops](../workflows/software-factory-model.md) — the light/dark pipeline whose review gate this page assigns an owner to
+- [Rigor Relocation: Engineering Discipline with AI Agents](rigor-relocation.md) — the sibling relocation, covering engineering discipline moving into scaffolding rather than judgment moving position
+- [The Bottleneck Migration](bottleneck-migration.md) — why the review stage becomes the binding constraint that these conditions have to hold under
+- [Author-to-Reviewer Role Inversion in AI-Assisted Teams](author-to-reviewer-role-inversion.md) — the staffing and measurement half of giving the relocated position real capacity
+- [Reviewer Habituation in Agent PR Review](../code-review/reviewer-habituation-decay.md) — the measured decay that turns an exercised position into a nominal one over months
+
+---
+
 ### Language Selection Scored on Review Cost
 Source: https://agentpatterns.ai/human/language-selection-review-cost/
 
@@ -122886,7 +123596,11 @@ The engineer's job shifts from code reviewer to harness designer:
 - Approve architectural decisions (not line-by-line code)
 - Build feedback loops that catch bug classes, not individual bugs
 
+Simon Willison describes the same skill from practice: instruct the agent confidently, then verify the change was applied the way you asked. Reading every line is one route to that, and by his account "Eyeballing every line of code has never been the most effective way to validate" a change ([Willison](https://simonwillison.net/2026/Aug/22/more-than-just-code-review/)).
+
 A linter rule catches a dependency violation every time, in every session, for every agent -- compounding across iterations rather than catching one issue in one PR review.
+
+The decisions themselves relocate too, under conditions of their own: see [judgment relocation](judgment-relocation.md).
 
 ## When this backfires
 
@@ -123692,7 +124406,9 @@ Developers report large time savings on writing tasks, yet total engineering hou
 
 The bottleneck shifts because the constraint on software delivery is the slowest stage, not a single resource. When AI cuts generation time sharply, generation stops being the bottleneck. Review then becomes the binding constraint, because it scales with human attention rather than compute. Rachel Laycock traces the same migration through the software delivery lifecycle in [Conductor Developer](https://martinfowler.com/rachels-ramblings/conductor-developer.html) on martinfowler.com (July 2026).
 
-Laycock puts the same migration in organizational terms, [assigning the work to citizens, agents, and experts](https://martinfowler.com/rachels-ramblings/citizens-agents-experts.html) on martinfowler.com in August 2026: "Citizens build. Agents execute. Experts govern." What is scarce, the piece argues, is "knowing what good looks like, understanding the risks and knowing when something that works is actually safe to trust". On that account experts become "dramatically more leveraged", and their job turns into "creating the environment in which thousands of features can be built safely by other people and by agents".
+Laycock puts the same migration in organizational terms, [assigning the work to citizens, agents, and experts](https://martinfowler.com/rachels-ramblings/citizens-agents-experts.html) on martinfowler.com in August 2026: "Citizens build. Agents execute. Experts govern." The [citizen-agent-expert operating model](citizens-agents-experts-operating-model.md) develops that split into who may originate work and where the production gate sits. What is scarce, the piece argues, is "knowing what good looks like, understanding the risks and knowing when something that works is actually safe to trust". On that account experts become "dramatically more leveraged", and their job turns into "creating the environment in which thousands of features can be built safely by other people and by agents".
+
+Which decisions land at the new bottleneck, and on what conditions, is [judgment relocation](judgment-relocation.md).
 
 The same structural dynamic drove Jevons' original 1865 observation. Cheaper coal energy raised total coal consumption, because the lower cost made new uses worthwhile. Cheaper code generation works the same way: it enables more features, which drive more review load, which consumes the freed capacity and then some.
 
@@ -123792,6 +124508,70 @@ Because it fragments logically unified changes. Each atomic PR passes review on 
 - [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md) -- review burden on senior engineers
 - [Author-to-Reviewer Role Inversion](author-to-reviewer-role-inversion.md) -- the team-level staffing and measurement shift this economic migration produces
 - [Language Selection Scored on Review Cost](language-selection-review-cost.md) -- the technology-selection consequence: score a language on review cost once generation is cheap
+
+---
+
+### The Citizen-Agent-Expert Operating Model for AI Coding
+Source: https://agentpatterns.ai/human/citizens-agents-experts-operating-model/
+
+# The Citizen-Agent-Expert Operating Model for AI Coding
+
+> A three-tier operating model where citizens build, agents execute, and experts govern the guardrails that let generated code reach production.
+
+The citizen-agent-expert model describes where engineering value moves when AI writes most of the code: non-specialists can originate work, agents execute it, and experienced engineers own the guardrails, platforms, and feedback loops that decide whether the result reaches production. The framing comes from Rachel Laycock, CTO at Thoughtworks, who proposed the phrase "citizens build, agents execute, experts govern" as a description of a change in role weighting rather than a set of new job titles ([Laycock, martinfowler.com, 2026](https://martinfowler.com/rachels-ramblings/citizens-agents-experts.html)).
+
+## The three tiers
+
+Citizens are the people closest to a problem who can now hold a specification and get a working application from it. An executive prototypes an internal workflow, a domain expert wires a chatbot, an analyst builds a small automation. Twelve months ago they could not have shipped code at all ([Laycock](https://martinfowler.com/rachels-ramblings/citizens-agents-experts.html)).
+
+Agents are the execution surface. They write, refactor, test, and iterate code at speeds a human keyboard cannot match. Laycock relays one production shape from a peer conversation: "one team described spending the day designing a specification, letting agents work overnight and reviewing the results the next morning". The account puts the weight on the humans rather than the pipeline — "deciding what good looked like, making trade-offs and judging whether what came back was actually what they wanted" ([Laycock](https://martinfowler.com/rachels-ramblings/citizens-agents-experts.html)).
+
+Experts are experienced engineers whose leverage moves from writing every feature to creating the environment in which thousands of features can be built safely by other people and by agents. Their work is guardrails, platforms, engineering practices, and feedback loops. This is the discipline named ["rigor relocation" in the harness-engineering literature](../patterns/agent-design/harness-engineering.md).
+
+## Where the boundary sits
+
+The gate is production admission. Laycock places it precisely: "the moment that application becomes something the business depends on, the questions change completely. Is customer data protected? What happens when a dependency fails? Can someone else understand this system in two years' time? Will it survive an audit?" ([Laycock](https://martinfowler.com/rachels-ramblings/citizens-agents-experts.html)). Before that moment a citizen-built app is real software solving a real problem; after it, the questions the expert tier owns become load-bearing.
+
+This is the same boundary the corpus's [delegated-autonomy boundary artifacts](../patterns/agent-design/delegated-autonomy-boundary-artifacts.md) describe at the tool layer. The three-tier model is the organizational form of that boundary. It names who is authorized to originate on each side of the gate and what artifacts hold the line.
+
+## Why it works
+
+As agents drive the cost of code production toward zero, engineering scarcity relocates from authorship to the gates that decide whether generated code deserves to run in production. Laycock names the relocation directly: "what feels scarce now is good engineering judgement: knowing what good looks like, understanding the risks and knowing when something that works is actually safe to trust in production" ([Laycock](https://martinfowler.com/rachels-ramblings/citizens-agents-experts.html)). Martin Fowler's rigor-relocation framing supplies the same mechanism in tool terms: discipline moves to constraint design, verification systems, and intent specification when the model does the typing ([Fowler: Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
+
+Faros AI data on high-adoption teams quantifies where the relocation lands. They report 98% more pull requests merged while review times ran 91% longer, so generation roughly doubled while review capacity stayed flat ([Osmani: The 80% Problem](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)). Three roles fall out of this pattern rather than from titling. Citizens become anyone who can hold a specification. Agents become the execution surface. Experts become the tier that owns the guardrails, platforms, and feedback loops the other two run on.
+
+## When this backfires
+
+The model degrades in five stated conditions.
+
+- Understaffed expert tier. When citizens can ship apps in a weekend but the expert tier still reviews one pull request at a time, governance becomes a bottleneck. Either every launch delays, or the sanctioned path gets bypassed for shadow AI. AI agents inside citizen-development platforms create audit exposures such as unmonitored connectors, hidden data propagation, and cross-environment jumps that scale with agent activity rather than citizen headcount ([Finzi, Forbes, 2026](https://www.forbes.com/councils/forbestechcouncil/2026/01/16/how-ai-agents-in-citizen-development-will-create-a-governance-crisis/)).
+- Governance retrofitted after adoption. Three prior citizen-development waves (spreadsheets, low-code, robotic process automation) each decentralized building successfully and then stalled because each tool produced its own silo of logic, access, and information that nothing else could see or trust ([Chavez-Mattos, MindStudio, 2026](https://www.mindstudio.ai/blog/why-citizen-development-finally-works)). Applying the three tiers to an already-fragmented estate produces theatre.
+- Expert tier detached from execution. If experts only govern and never build, they lose the calibration to know whether the agent's output is safe. The corpus records this as [skill atrophy in the review layer](skill-atrophy.md); METR measured developers taking "19% longer than without" while still believing "AI had sped them up by 20%" — a 39-point gap between perception and measurement, by subtraction ([METR](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/)).
+- No production-admission gate. The boundary Laycock names is "the moment that application becomes something the business depends on" ([Laycock](https://martinfowler.com/rachels-ramblings/citizens-agents-experts.html)). Without a defined path from prototype to production, the three tiers describe nothing enforceable.
+- Throw-it-over-the-wall degradation. Laycock flags the antipattern by name: "people build stuff and throw it to engineers to fix, that is a total antipattern" ([Laycock](https://martinfowler.com/rachels-ramblings/citizens-agents-experts.html)). The model collapses into two-tier queueing (citizens generate, experts refactor) with none of the governing-by-construction it requires.
+
+## Example
+
+An insurance firm gives its analysts a Copilot-style agent to build internal apps. In one quarter, the sanctioned catalog grows from three to forty tools. The two-engineer platform team was staffed for the old ratio: it hand-reviews each new deployment and cannot keep up. Analysts start bypassing the team, standing up unreviewed integrations directly against production databases.
+
+The team re-baselines around the three tiers. It adds a production-admission checklist that every citizen-built app runs before it can touch customer data. It publishes a shared platform of vetted connectors, an audit log of agent-initiated changes, and a rollback path any analyst can trigger. The two engineers grow into a small platform group whose work is guardrails rather than features. Citizens keep shipping at their own pace; experts stop being the review bottleneck and become the environment citizens ship into. The rate of new tools stays flat; the rate of production-safe tools rises.
+
+## Key Takeaways
+
+- The citizen-agent-expert model is a change in where engineering value sits when agents write most of the code, not a set of new job titles.
+- The gate between the citizen tier and the expert tier is production admission — the moment an app becomes something the business depends on.
+- Experts govern with guardrails, platforms, engineering practices, and feedback loops rather than by writing every feature.
+- The model breaks when the expert tier is understaffed, retrofitted after adoption, detached from execution, missing a production gate, or reduced to fixing what citizens throw over the wall.
+
+## Related
+
+- [The Review Bottleneck Migration](bottleneck-migration.md) — the economic reading of the same shift: where the delivery constraint moves once generation gets cheap
+- [Intent-Centric Engineering: Oversight Over Authorship](intent-centric-engineering.md) — the operating model that describes what the expert tier's work becomes once agents author the code
+- [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](../patterns/agent-design/delegated-autonomy-boundary-artifacts.md) — the tool-layer form of the boundary the three-tier model draws at the org layer
+- [Risk Architecture for AI-Native Engineering Teams](risk-architecture-ai-native-teams.md) — the ownership, escalation, and assurance side of the same shift
+- [AI Abundance Reshapes Software Engineering Identity](ai-abundance-engineering-identity.md) — the identity-side reading of why generation cheapens and judgement gets scarce
+- [Author-to-Reviewer Role Inversion in AI-Assisted Teams](author-to-reviewer-role-inversion.md) — the staffing and measurement inversion the model implies for the expert tier
+- [Verification-Gated Agent Autonomy via Automated Review](../patterns/agent-design/verification-gated-agent-autonomy.md) — the mechanized gate that makes production admission tractable at citizen-tier volume
 
 ---
 
@@ -146622,6 +147402,8 @@ Chat delegation closes all three legs of the [lethal trifecta](../security/letha
 
 Per Willison's model, this combination is enough for exfiltration via a single injected message ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)). A project that already audits every new MCP server for the lethal trifecta must run the same audit on the chat principal before adding chat delegation. The cheapest leg to remove is usually untrusted content: restrict the bot to specific channels, treat channel content outside an explicit `@mention` as out-of-scope, or run the agent in a sandbox with no network egress beyond the forge API.
 
+GitHub reports that several channel participants can watch and direct one `@GitHub` session in Teams, so its prompt has more than one author. Repository administrators can enforce extra approval requirements on pull requests attributed to the Teams integration ([GitHub Changelog](https://github.blog/changelog/2026-08-21-shared-agentic-work-with-github-copilot-in-microsoft-teams)). That gates the egress leg at the forge without closing it.
+
 Cursor's Cloud Agents require temporary code storage while running, so legacy Privacy Mode is not supported for the integration; Cursor instead ships a snippet-exposure toggle for status messages ([Cursor docs](https://cursor.com/docs/integrations/microsoft-teams)) — a partial mitigation, not trifecta removal.
 
 ## Failure modes
@@ -158006,11 +158788,13 @@ The factory is many harnessed loops running at once against a work queue, with i
 
 The real design decision is where the lights go. A dark factory ships code no human has read, verified only by the machines that built it — the software version of a lights-out manufacturing floor. It is easy to reach at first, because the missing review step makes perceived throughput feel suddenly higher, but it takes on comprehension debt as fast as it can, tests green the whole way ([Osmani, 2026](https://addyosmani.com/blog/software-factories/)). The reckoning is quiet and late: Osmani reports a fully automated factory run for about four months with no human reading the code, which then needed painstaking manual debugging to recover.
 
-A lit factory is the same pipeline with the lights left on where judgment lives. Agents still do most of the building, but a human reads the output before it ships, and judgment moves upstream to product, design, and architecture — reviewing a two-hundred-line plan instead of chasing two thousand lines of generated code to find what the decision even was ([Osmani, 2026](https://addyosmani.com/blog/software-factories/)). The person never left the factory; they moved from the line to the end of it, owning the outer loop: deciding whether it is the right fix, verifying the diagnosis, approving, and carrying the consequences of being wrong.
+A lit factory is the same pipeline with the lights left on where judgment lives. Agents still do most of the building, but a human reads the output before it ships, and judgment moves upstream to product, design, and architecture — reviewing a two-hundred-line plan instead of chasing two thousand lines of generated code to find what the decision even was ([Osmani, 2026](https://addyosmani.com/blog/software-factories/)). The person never left the factory; they moved from the line to the end of it, owning the outer loop: deciding whether it is the right fix, verifying the diagnosis, approving, and carrying the consequences of being wrong. Osmani later enumerates what that ownership covers, adding two decisions about the gate itself to the three upstream ones: "Someone decides which verification signals deserve trust. Someone decides when the evidence is sufficient to ship" ([Osmani, "Human judgment doesn't leave the software factory. It relocates.", 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)). Whether that ownership is real or nominal is a separate question, treated in [judgment relocation](../human/judgment-relocation.md).
 
 Vercel runs a lit factory on its AI SDK repo: one agent per task type, and human review mandatory on every merge ([Vercel, 2026-08-12](https://vercel.com/blog/building-a-software-factory-for-ai-sdk)). Four weeks in, its agents authored 25 to 35% of the pull requests merged each week, and closed over 75% of the issues closed in July. Open issues fell from a peak of 1,022 in late June to 844 by early August.
 
 ## Triggers and constraints
+
+The prior question is whether to build a factory at all, and Osmani puts the threshold at repeatability. A stock coding harness gets you "surprisingly far"; the factory starts to pay once that work has to be repeatable and event-driven ([Osmani, "Human Judgment Doesn't Leave the Software Factory", 2026](https://addyo.substack.com/p/human-judgment-doesnt-leave-the-software)).
 
 A loop earns lights-out status only when its check is cheap, high-frequency, and hard to fake; the danger is setting every switch to the same mode.
 

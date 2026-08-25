@@ -80,7 +80,7 @@ Realized harm counts commands that pass the guard and then succeed in a Docker s
 ## When this backfires
 
 - Adversarial traffic with the judge enabled. The judge over-allows warn-band commands that paraphrase attacks close to its own training distribution, which is how a tier that halves false positives still lets more harm through ([Liu et al., 2026](https://arxiv.org/abs/2607.21642v2)).
-- Stereotyped destructive idioms rather than obfuscated ones. On CVE-derived snippets from Exploit-DB, plain regex beats the whole pipeline on F1 (81.52% against 66.33%), so the AST and rule bank are cost without benefit for that distribution ([Liu et al., 2026](https://arxiv.org/abs/2607.21642v2)).
+- Stereotyped destructive idioms rather than obfuscated ones. On CVE-derived snippets from Exploit-DB, plain regex beats the whole pipeline on F1 (81.52% against 66.33%), so the AST and rule bank are cost without benefit for that distribution ([Liu et al., 2026, §V-C2](https://arxiv.org/abs/2607.21642v2)).
 - Staged multi-command chains. Scoring each command in isolation passes a sequence that is individually benign and collectively an exfiltration, and the paper scopes itself out of session-level hazards.
 - Encoding- and escape-heavy obfuscation. Bounded decoding is the canonicalizer's weakest axis by its own ablation, and vendors report the same limit from the other side: VS Code documents that terminal auto-approvals "use best-effort command parsing and have known limitations with shell aliases, quote concatenation, and complex shell syntax" ([VS Code security](https://code.visualstudio.com/docs/copilot/security)).
 - A tighter false-positive budget than 0.91%. A four-layer static baseline in the same evaluation reaches 0.30% FPR at 0.02 ms for about 13 fewer F1 points ([Liu et al., 2026](https://arxiv.org/abs/2607.21642v2)).
@@ -100,4 +100,5 @@ Realized harm counts commands that pass the guard and then succeed in a Docker s
 - [Classifier-Gated Auto-Permission](../patterns/agent-design/classifier-gated-auto-permission.md) — the always-on-classifier posture this pattern inverts by putting the model last
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md) — the same two-layer split applied at the MCP tool boundary rather than the shell string
 - [Safe Command Allowlisting](safe-command-allowlisting.md) — the deterministic allowlist that should absorb the high-volume benign tail before any scorer sees it
+- [Parser-Versus-Shell Evasion in Command Permission Checks](parser-versus-shell-permission-evasion.md) — why bounded canonicalization leaves a residue, and what that implies about where enforcement belongs
 - [Blast Radius Containment](blast-radius-containment.md) — the layer underneath, which the guard explicitly does not replace

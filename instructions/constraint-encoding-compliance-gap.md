@@ -16,25 +16,25 @@ maturity: emerging
 
 # Constraint Encoding Does Not Fix Constraint Compliance
 
-> Reformatting constraints — more structured, more compact, more formal — does not improve how reliably models follow them. Compliance is determined by what constraints say, not how they are laid out.
+> Reformatting constraints does not change how reliably models follow them. Compliance turns on what a constraint says, not how it is laid out.
 
 Related lesson: [The Ceiling](https://learn.agentpatterns.ai/prompt-engineering/the-ceiling/) — this concept features in a hands-on lesson with quizzes.
 
 ## The experiment
 
-A study across 11 models, 16 benchmark tasks, and 830+ LLM invocations tested three encoding forms — including a compact header form — and four propagation modes against a constraint satisfaction rate (CSR) metric ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
+A study across 11 models, 16 benchmark tasks, and 830+ LLM invocations tested three encoding forms — including a compact header form — and four propagation modes against a constraint satisfaction rate (CSR) metric ([Tang, 2026](https://arxiv.org/abs/2604.07192v2)).
 
 Compact headers cut constraint-portion tokens by about 71% and full-prompt tokens by 25 to 30%. This result replicated across three independent rounds.
 
-Compliance did not move. There was no statistically significant difference in CSR across encoding forms or propagation modes. Effect sizes were negligible (Cliff's δ < 0.01) ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
+Compliance did not move. There was no statistically significant difference in CSR across encoding forms or propagation modes. Effect sizes were negligible (Cliff's δ < 0.01) ([Tang, 2026](https://arxiv.org/abs/2604.07192v2)).
 
 Compact headers are a free token saving. They are not a compliance fix.
 
 ## What actually drives compliance
 
-The study found that constraint type — not encoding — produced the largest compliance variation: a 9 percentage point gap between conventional and counter-intuitive constraints. Counter-intuitive constraints failed at 10 to 100% rates regardless of encoding. Conventional constraints achieved 99%+ compliance regardless of encoding ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)).
+The study found that constraint type — not encoding — produced the largest compliance variation: a 9 percentage point gap between conventional and counter-intuitive constraints. Counter-intuitive constraints failed at 10 to 100% rates regardless of encoding. Conventional constraints achieved 99%+ compliance regardless of encoding ([Tang, 2026](https://arxiv.org/abs/2604.07192v2)).
 
-The gap between understanding and execution also depends on how you measure it. Model self-assessment systematically overestimates compliance relative to rule-based scoring ([Fang et al., 2025](https://arxiv.org/abs/2604.07192)). A model that reports following a constraint may not be.
+The gap between understanding and execution also depends on how you measure it. Model self-assessment systematically overestimates compliance relative to rule-based scoring ([Tang, 2026](https://arxiv.org/abs/2604.07192v2)). A model that reports following a constraint may not be.
 
 ## Why this matters for practitioners
 

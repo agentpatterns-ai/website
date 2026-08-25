@@ -10,7 +10,7 @@ tags:
   - harness-engineering
   - tool-agnostic
   - human-factors
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-25
 maturity: established
 ---
 
@@ -97,7 +97,11 @@ The engineer's job shifts from code reviewer to harness designer:
 - Approve architectural decisions (not line-by-line code)
 - Build feedback loops that catch bug classes, not individual bugs
 
+Simon Willison describes the same skill from practice: instruct the agent confidently, then verify the change was applied the way you asked. Reading every line is one route to that, and by his account "Eyeballing every line of code has never been the most effective way to validate" a change ([Willison](https://simonwillison.net/2026/Aug/22/more-than-just-code-review/)).
+
 A linter rule catches a dependency violation every time, in every session, for every agent -- compounding across iterations rather than catching one issue in one PR review.
+
+The decisions themselves relocate too, under conditions of their own: see [judgment relocation](judgment-relocation.md).
 
 ## When this backfires
 

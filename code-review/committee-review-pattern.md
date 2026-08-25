@@ -158,3 +158,4 @@ Each reviewer receives only the diff, not prior verdicts, so opinions are indepe
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — adaptive rule extraction to reduce noise across review rounds
+- [Evidence-Grounded Disagreement in Agentic Code Review](evidence-grounded-disagreement.md) — what happens when reviewers interact instead of running in parallel, and the verdict grammar that keeps the interaction honest

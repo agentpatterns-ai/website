@@ -11,7 +11,7 @@ aliases:
   - chat as agent control surface
   - chat-platform delegation
   - mentioning agents in chat channels
-last_reviewed: 2026-06-12
+last_reviewed: 2026-08-25
 maturity: established
 ---
 
@@ -84,6 +84,8 @@ Chat delegation closes all three legs of the [lethal trifecta](../security/letha
 - Egress: the agent writes pull requests to the forge, and posts status back to the channel
 
 Per Willison's model, this combination is enough for exfiltration via a single injected message ([Willison, 2025](https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/)). A project that already audits every new MCP server for the lethal trifecta must run the same audit on the chat principal before adding chat delegation. The cheapest leg to remove is usually untrusted content: restrict the bot to specific channels, treat channel content outside an explicit `@mention` as out-of-scope, or run the agent in a sandbox with no network egress beyond the forge API.
+
+GitHub reports that several channel participants can watch and direct one `@GitHub` session in Teams, so its prompt has more than one author. Repository administrators can enforce extra approval requirements on pull requests attributed to the Teams integration ([GitHub Changelog](https://github.blog/changelog/2026-08-21-shared-agentic-work-with-github-copilot-in-microsoft-teams)). That gates the egress leg at the forge without closing it.
 
 Cursor's Cloud Agents require temporary code storage while running, so legacy Privacy Mode is not supported for the integration; Cursor instead ships a snippet-exposure toggle for status messages ([Cursor docs](https://cursor.com/docs/integrations/microsoft-teams)) — a partial mitigation, not trifecta removal.
 
