@@ -139,3 +139,4 @@ The verifier confirms `OCR_2` and `Calculator_1` are in the trajectory, the span
 - [RAG/Agent Reliability Problem Map](rag-agent-reliability-problem-map.md)
 - [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — Attach a machine-checkable requirement ID to each generated line so a set-difference check catches hallucinated requirements deterministically.
 - [Typed Generation Contracts for Grounded Extraction](typed-generation-contract.md) — The same evidence-span discipline applied to a single extraction step, with typed values and an explicit not-found flag.
+- [Claim-to-Evidence Trace Graphs for Auditing Agent Runs](claim-to-evidence-trace-graphs.md) — The post-hoc counterpart: a graph reconstructed over a finished session rather than records emitted during generation.

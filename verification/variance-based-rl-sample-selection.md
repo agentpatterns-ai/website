@@ -119,3 +119,4 @@ The team trains on 300 samples instead of 2,000, a 6.7 times compute reduction, 
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md)
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md)
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md)
+- [Adaptive Validation Task Selection](adaptive-validation-task-selection.md) — the same variance argument applied to a harness search loop instead of a gradient step

@@ -82,3 +82,4 @@ The shape Treude & Baltes apply in [the paper](https://arxiv.org/abs/2606.09090v
 - [The Infinite Context](infinite-context.md) — the other meaning of "context rot" the lede disambiguates against.
 - [Pattern Replication Risk](pattern-replication-risk.md) — the related compounding failure where agents propagate whatever they find in the repo, stale references included.
 - [Catastrophic Remembering: Instruction Files That Only Grow](catastrophic-remembering-instruction-files.md) — the rival explanation for the same files, where the deletion hazard falls with age instead of rising as staleness predicts.
+- [Repository Skill Release Drift](repository-skill-release-drift.md) — the same decay measured across a release boundary in a skill the agent executes, rather than in a config file it reads.

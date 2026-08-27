@@ -99,3 +99,4 @@ Compact headers are token-efficient and compliance-neutral, but the trade-off is
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — move constraints that must not fail to deterministic enforcement outside the prompt
 - [Negative Space Instructions](negative-space-instructions.md) — ban-list and exclusion constraints as a complement to positive compliance requirements
 - [Standard-Grounded NFR Specs](standard-grounded-nfr-specification.md) — the same JSON-versus-prose neutrality for quality requirements, plus what enriching the content does buy
+- [Match Architecture Spec Format to Model Capability](spec-format-by-model-tier.md) — where format does move the outcome: architecture specs handed to weaker models

@@ -97,4 +97,5 @@ Source: [Cursor Canvas docs](https://cursor.com/docs/agent/tools/canvas) and [Cu
 - [Plan Files as Resumable Artifacts](../../frameworks/team-os/plan-files-resumable-artifacts.md)
 - [Session Recap: Goal-Shaped Handoff at Context Boundaries](session-recap.md)
 - [Externalization in LLM Agents](externalization-in-llm-agents.md)
+- [Canvas as Durable Workflow State](canvas-as-durable-workflow-state.md)
 - [Trajectory Logging and Progress Files](../../observability/trajectory-logging-progress-files.md)

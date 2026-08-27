@@ -88,6 +88,7 @@ The only change is what the test-generation prompt is allowed to see. The spec-g
 - [TDD for Agent Development](../../verification/tdd-agent-development.md) — write tests first so the agent implements against human-defined expectations
 - [Re-Run the Original Test Suite After Every Refinement Turn](../../verification/test-suite-after-refinement-turn.md) — the pinned original suite is the invariant multi-turn refinement is not optimizing against
 - [Assertion-Free Test Theater in Agent-Authored Patches](assertion-free-test-theater.md) — agent-written tests that run green while carrying no real oracle signal
+- [Test Oracles That Read Their Expectation From the Code](state-anchored-test-oracles.md) — the run-time counterpart: the expected value flows from the code being judged, so the comparison cancels under any fault that moves both halves
 - [Happy Path Bias](happy-path-bias.md) — agents skip error handling and edge cases systematically, in code and in tests
 - [Specification-Grounded Test Writing](../../verification/specification-grounded-test-generation.md) — the complementary move: withhold the implementation, then supply the specification as enumerated rules so the tester knows the intended edge behavior
 - [Deriving a Specification From Buggy Code Before Generating Tests](../../verification/derived-specification-test-generation.md) — what to do when no written specification exists: have the model derive one from the code, then drop the code from the prompt

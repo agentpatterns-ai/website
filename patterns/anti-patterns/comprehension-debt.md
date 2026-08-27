@@ -26,6 +26,7 @@ AI coding agents generate code faster than developers can thoroughly read it. Te
 | Comprehension debt | People | Accepting code without understanding it | Cannot debug, plan, or extend without AI |
 | [Skill atrophy](../../human/skill-atrophy.md) | People | Reduced practice over time | Cannot write similar code independently |
 | [Cognitive load / fatigue](../../human/cognitive-load-ai-fatigue.md) | People | Sustained oversight | Exhaustion during work |
+| [Conceptual integrity erosion](conceptual-integrity-erosion.md) | System design | Feature cost falling below the rejection threshold | Small changes touch many files |
 
 ## The velocity-comprehension gap
 

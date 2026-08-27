@@ -21,7 +21,7 @@ maturity: established
 
 Agents are probabilistic. The model may skip a critical step — committing changes, opening a PR, logging state — depending on context, token pressure, or model attention. Prompt instructions reduce the failure rate. They do not remove it.
 
-Middleware wraps the [agent turn model](../patterns/agent-design/agent-turn-model.md) to remove the dependence on agent compliance. Either the agent does the critical step or the middleware does, and the outcome is the same. This differs from the per-tool-call enforcement that [hooks rather than prompts](../instructions/hooks-vs-prompts.md) handle, and the CI checks that [deterministic guardrails](../verification/deterministic-guardrails.md) run. Those act within the loop or after it. Middleware acts at loop boundaries.
+Middleware wraps the [agent turn model](../patterns/agent-design/agent-turn-model.md) to remove the dependence on agent compliance. Either the agent does the critical step or the middleware does, and the outcome is the same. This differs from the per-tool-call enforcement that [hooks rather than prompts](../instructions/hooks-vs-prompts.md) handle, and the CI checks that [deterministic guardrails](../verification/deterministic-guardrails.md) run. Those act within the loop or after it. Middleware acts at loop boundaries. For the placement inside the loop, where the model has proposed a tool call and the runtime has not yet dispatched it, see [in-loop interception](in-loop-interception.md).
 
 ## Two middleware patterns
 

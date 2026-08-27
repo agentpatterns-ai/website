@@ -148,3 +148,4 @@ The retriever-first ordering removes the dense-stack cost, defers the generator 
 - [Repository Map Pattern](repository-map-pattern.md) — AST + PageRank symbol selection; structural retrieval complementary to BM25 or dense
 - [Semantic Context Loading](semantic-context-loading.md) — LSP-based retrieval bypassing chunk-based RAG entirely for symbol-level navigation
 - [Codebase-Derived Pattern Libraries as Agent Context](codebase-pattern-library-context.md) — narrows the retrieval corpus to vetted in-house code rather than tuning the retriever over a fixed corpus
+- [Corpus Shape as a Retrieval Design Constraint](corpus-shape-retrieval-architecture.md) — the step above component choice: which failures are reachable by tuning any component at all

@@ -120,6 +120,7 @@ Prompts live in [`.github/copilot-instructions.md`](../../tools/copilot/copilot-
 - [Human-in-the-Loop Placement](../../workflows/human-in-the-loop.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
 - [Bounded Batch Dispatch](../multi-agent/bounded-batch-dispatch.md)
+- [PR-Subscribed Agent Ownership](pr-subscribed-agent-ownership.md)
 - [Idempotent Agent Operations](idempotent-agent-operations.md)
 - [Classical SE Patterns and Agent Analogues](classical-se-patterns-agent-analogues.md)
 - [Agentic AI Architecture Evolution](agentic-ai-architecture-evolution.md)

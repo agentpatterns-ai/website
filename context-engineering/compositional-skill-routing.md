@@ -100,3 +100,4 @@ At inference, the agent issues a tool-search call, retrieves the small subset of
 - [Prompt Chaining: Sequential LLM Calls for Agent Workflows](prompt-chaining.md)
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md)
 - [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — the bound on adding typed structure over a skill ranker instead of decomposing the query
+- [Coverage-Aware Skill Selection Under a Token Budget](coverage-aware-skill-selection.md) — choosing the retrieved subset by capability coverage rather than per-skill relevance

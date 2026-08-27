@@ -66,6 +66,7 @@ A testcase runs one execution path, and its initial resource state quietly decid
 ## Related
 
 - [Skill Evals](skill-evals.md) — the dataset, assertion, and trigger layer whose adequacy this metric measures
+- [Skill Lift: Measuring What a Skill Adds at Runtime](skill-lift.md) — the value half of the same release decision, measured as a paired with-versus-without delta rather than as coverage
 - [Structural Coverage Criteria for Agent Workflows](structural-coverage-agent-workflows.md) — the same adequacy idea with obligations derived from a declared coordination graph instead of natural-language prose
 - [Emulated APIs for Agent Skill Evals](emulated-apis-for-skill-evals.md) — controls what a skill's calls hit while these testcases run
 - [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md) — the complement that checks whether a covered behavior is actually asserted on

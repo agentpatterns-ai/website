@@ -23,7 +23,7 @@ JetBrains coined the term Shadow Tech Debt ([The New Stack](https://thenewstack.
 
 ## What it looks like
 
-An agent fixes a bug and the PR passes tests. But the agent skipped ADRs, ignored naming conventions, and copied a suboptimal pattern. One such PR is invisible. Ten per day compound into structural incoherence.
+An agent fixes a bug and the PR passes tests. But the agent skipped ADRs, ignored naming conventions, and copied a suboptimal pattern. One such PR is invisible. Ten per day compound into structural incoherence. That is the same endpoint as [conceptual integrity erosion](conceptual-integrity-erosion.md), reached by missing context rather than by the collapsed cost of adding a feature.
 
 ```mermaid
 graph TD

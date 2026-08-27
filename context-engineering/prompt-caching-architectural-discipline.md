@@ -262,5 +262,6 @@ After the first turn, `cache_read_input_tokens` should cover the system prompt a
 - [Dynamic Tool Fetching Breaks KV Cache](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Cache-Prefix Staggering for Sibling Agent Fan-Out](../patterns/multi-agent/cache-prefix-staggering.md) — timing parallel siblings so one writes the shared prefix and the rest read it
 - [Context Compression Strategies](context-compression-strategies.md)
+- [Typed Context Buys Addressability, Not Token Savings](typed-context-addressability.md) — a typed store that re-serializes each turn forfeits the prefix discount this page protects
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
   - long-form

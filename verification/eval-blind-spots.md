@@ -111,7 +111,7 @@ Cross-referencing the three channels catches violations any single channel would
 
 [pass@k and pass^k](pass-at-k-metrics.md) separate capability from consistency, and the trajectory-opaque gap compounds this: under error injection, Pass^3 dropped up to 24% while Pass@3 declined only 3.7%. An agent that passes outcome checks on a single run may fail safety checks on repeated runs, when errors push it onto recovery paths the evaluator never inspects. ([Claw-Eval, 2026](https://arxiv.org/abs/2604.06132v3))
 
-### When to add trajectory auditing
+### When to add trajectory auditing, and when it backfires
 
 Add trajectory auditing when:
 
@@ -122,9 +122,7 @@ Add trajectory auditing when:
 | Regulatory audit | Auditors need evidence of what happened, not just what was produced |
 | Multi-step workflows | Intermediate side effects are invisible in final output |
 
-### When trajectory auditing backfires
-
-When trajectory auditing backfires, it is not free. Narrow its scope when review cost exceeds the safety signal (every stored trajectory needs a reviewer or judge, and immutable [trajectory logging](../observability/trajectory-logging-progress-files.md) adds per-call overhead); when captured trajectories create a privacy liability (full traces record PII and credentials — the Microsoft 365 Unified Audit Log stores activity metadata rather than message contents for this reason, [Microsoft 365 audit log activities](https://learn.microsoft.com/en-us/purview/audit-log-activities)); or when judge-based trajectory evaluation inherits LLM-judge position, length, and agreeableness biases ([TRACE, 2026](https://arxiv.org/abs/2602.21230)). Deterministic rule-based checks against audit logs avoid the judge-reliability problem but require rule-expressible policies. The gap exactly parallels what [defense-in-depth agent safety](../security/defense-in-depth-agent-safety.md) layers to catch.
+Trajectory auditing is not free. Narrow its scope when review cost exceeds the safety signal (every stored trajectory needs a reviewer or judge, and immutable [trajectory logging](../observability/trajectory-logging-progress-files.md) adds per-call overhead); when captured trajectories create a privacy liability (full traces record PII and credentials — the Microsoft 365 Unified Audit Log stores activity metadata rather than message contents for this reason, [Microsoft 365 audit log activities](https://learn.microsoft.com/en-us/purview/audit-log-activities)); or when judge-based trajectory evaluation inherits LLM-judge position, length, and agreeableness biases ([TRACE, 2026](https://arxiv.org/abs/2602.21230)). Deterministic rule-based checks against audit logs avoid the judge-reliability problem but require rule-expressible policies. The gap exactly parallels what [defense-in-depth agent safety](../security/defense-in-depth-agent-safety.md) layers to catch.
 
 ## Skill-retrieval realism gap: benchmarks overstate production gains
 

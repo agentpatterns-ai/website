@@ -171,3 +171,4 @@ Specification size. Larger spec files take longer to compile and consume more of
 - [Multi-Agent RAG Spec-to-Test](../verification/multi-agent-rag-spec-to-test.md)
 - [Spec Complexity Displacement](../patterns/anti-patterns/spec-complexity-displacement.md) — the failure mode when specs become code-adjacent
 - [Bootstrapping Coding Agents](../emerging/bootstrapping-coding-agents.md) — the theoretical extension where the spec alone is sufficient to regenerate the implementation
+- [Specification Portability Across Coding Agents](../instructions/specification-portability-across-agents.md) — what happens to the spec when a different agent implements from it

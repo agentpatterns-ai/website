@@ -25,6 +25,7 @@ Every major AI coding tool ships a project-level instruction file. These pages c
 - [Knowledge Gap or Skill Gap: Triage Before Writing Context](knowledge-gap-vs-skill-gap-triage.md) — Classify agent near-misses before enlarging a context file; a two-agent ablation found near-misses trace to implementation skill, which context cannot supply
 - [Encoding Values in AGENTS.md: Why Prose Without Verification Fails](encoding-values-in-agents-md.md) — Corpus studies show ethics, fairness, and accessibility are largely absent from AGENTS.md; pair every value with a verification command or move it to a lower layer
 - [Public Rules-File Corpora as Evidence](rules-file-corpus-evidence.md) — Corpus studies of `.cursorrules` files measure who wrote them and when, so read the 4.2% security share as an authorship artifact rather than as advice
+- [Documentation Read Counts Measure Retrievability, Not Value](documentation-read-counts.md) — Behavioral traces put instruction files and agent working notes at 60.5% of documentation interactions, but the same corpus leaves the consult-to-edit link at 0.002
 - [Natural-Language Customization Bootstrap](natural-language-customization-bootstrap.md) — Describe the customization in plain language; the agent drafts the instruction file, skill, subagent, or hook for you to review and commit
 
 ## Instruction Design
@@ -90,6 +91,8 @@ Leveraging existing artifacts — specs, schemas, standards files — as agent i
 - [Stage-Targeted Prompt Structure for Pull Request Outcomes](stage-targeted-prompt-structure-pr-outcomes.md) — Specificity, Context, and Verification each move a different stage of the LLM-assisted PR pipeline — diagnose which stage is failing, then raise that dimension
 - [Ubiquitous Language for AI Plans](ubiquitous-language-for-ai-plans.md) — A maintained domain glossary plus ADRs anchors agent plans in existing code so plans, source, and prompt share one vocabulary
 - [Standard-Grounded NFR Specs: Quality Up, Correctness Flat](standard-grounded-nfr-specification.md) — Grounding a non-functional requirement in a published quality model cuts static defect density and wording variance, but leaves correctness flat and hurts error handling
+- [Match Architecture Spec Format to Model Capability](spec-format-by-model-tier.md) — Spec format barely moves a frontier model and decides what a weak one ships; pick the format from the tier you drive
+- [Specification Portability Across Coding Agents](specification-portability-across-agents.md) — Handing one agent's specification to another moves the generated code in both directions; measure the swap against a baseline instead of assuming the artifact is agent-neutral
 
 ## Governance & Maintenance
 

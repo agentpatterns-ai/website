@@ -41,6 +41,8 @@ Before rewriting anything, audit each runbook step against three questions:
 
 Steps that fail question 1 need tool-call replacements. Steps that fail question 2 need explicit conditionals. Steps that fail question 3 need supporting context injected. Anthropic's guidance on building effective agents notes that tool definitions require the same deliberate engineering attention as system prompts — "example usage, edge cases, input format requirements, and clear boundaries from other tools" ([Anthropic: Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)).
 
+Add a fourth question wherever a step consumes an earlier step's result. Name that artifact. Doing it mechanically across a whole procedure is [artifact-driven workflow compilation](../patterns/agent-design/artifact-driven-workflow-compilation.md).
+
 ## Before and after: step transformations
 
 ### Implicit action becomes explicit tool call

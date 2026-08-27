@@ -106,3 +106,4 @@ Anthropic's `/claude-api migrate` skill and the `openai-docs migrate this projec
 - [Production System Prompt Architecture](production-system-prompt-architecture.md) — XML-sectioned prompt structure that makes axis-by-axis re-tuning tractable
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — altitude calibration interacts with literal-interpretation shifts on the successor model
 - [Re-Auditing Context Engineering Across Model Generations](../context-engineering/generation-scoped-context-engineering.md) — which specific best practices expire on the capability jump this rewrite responds to
+- [Specification Portability Across Coding Agents](specification-portability-across-agents.md) — the same rewrite-and-measure question when the hop is between agents rather than model generations

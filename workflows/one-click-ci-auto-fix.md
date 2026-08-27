@@ -96,6 +96,7 @@ Eligibility started with Copilot Business and Copilot Enterprise subscribers ([G
 
 - [Continuous AI (Agentic CI/CD)](continuous-ai-agentic-cicd.md) — the broader pattern of running agents inside CI infrastructure with read-only defaults and reviewable artifacts
 - [AI Bot CI/CD Workflow Reliability by Agent](ai-bot-ci-workflow-reliability.md) — per-agent CI success rates that quantify the failure backlog this pattern is competing with
+- [PR-Subscribed Agent Ownership](../patterns/agent-design/pr-subscribed-agent-ownership.md) — the autonomous half of this pair: the agent subscribes to the PR it opened and drives it to green without the per-round click
 - [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) — the autonomous variant of the same loop, with circuit-breaker design for unfixable regressions
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — convert accepted fixes into regression eval cases that gate future deploys
 - [Agent-Authored PR Integration and Merge Predictors](../code-review/agent-authored-pr-integration.md) — empirical baselines on reviewer engagement, force pushes, and comment-volume effects that the one-click loop must respect

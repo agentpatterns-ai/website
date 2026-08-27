@@ -159,3 +159,4 @@ This workflow combines `--max-turns`, `--max-budget-usd`, and `timeout-minutes` 
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
 - [Continuous AI: Agentic CI/CD Pipelines](continuous-ai-agentic-cicd.md)
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
+- [Bounding a Headless Codex Run Without a Turn Cap](headless-codex-bounding.md)

@@ -144,3 +144,4 @@ Throughout, the agent commits after each successful file change (`git commit -m 
 - [Trajectory Logging and Progress Files](../../observability/trajectory-logging-progress-files.md)
 - [Agent Self-Review Loop](../../code-review/agent-self-review-loop.md)
 - [Agent Failure Trajectories and the Recovery Window](failure-trajectory-recovery-window.md) — the recovery window this failing-forward hierarchy has to act inside, with measured onset and lock-in timings
+- [Outcome Monitors: Recovery Affordances for Tool Failures](outcome-monitors-recovery-affordances.md) — the entry point for failures that raise no exception at all, and what the advisory receipt has to carry to be acted on

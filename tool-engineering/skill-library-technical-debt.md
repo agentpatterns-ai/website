@@ -137,3 +137,4 @@ No LLM call, no agent run — the defect is structural and the fix is structural
 - [SKILL.md Frontmatter Reference](skill-frontmatter-reference.md) — fields a typed contract can extend
 - [Enterprise Skill Marketplace](../workflows/enterprise-skill-marketplace.md) — distribution and OTel telemetry that feed the utility dimension at scale
 - [Skill Supply Chain Poisoning](../security/skill-supply-chain-poisoning.md) — risk dimension at the boundary, complementing internal validator gaps
+- [Repository Skill Release Drift](../patterns/anti-patterns/repository-skill-release-drift.md) — the stale-clone row measured against a repository release, and how badly frontier models repair it
