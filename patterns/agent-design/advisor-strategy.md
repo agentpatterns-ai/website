@@ -134,3 +134,4 @@ The advisor strategy is an API-native form of established patterns:
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
 - [Agent Turn Model](agent-turn-model.md)
+- [Comparison-Only Advisor: Steering a Large Actor With a Tiny Comparator](comparison-only-advisor.md) — the inverse arrangement, where a 0.5B comparator advises a far larger actor by ranking its options rather than solving anything

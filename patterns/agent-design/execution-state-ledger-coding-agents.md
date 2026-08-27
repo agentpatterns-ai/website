@@ -95,3 +95,4 @@ With the ledger, step 40's record carries the counter value at read time. The pa
 - [Observation Masking: Filter Tool Outputs from Context](../../context-engineering/observation-masking.md) — the other response to observation bloat; drops processed tool output instead of indexing its freshness.
 - [Stateful Iteration State-Carry](../../context-engineering/stateful-iteration-state-carry.md) — typed state carried across iterations through a tool call, for loops whose observations are large.
 - [ACID for Agent Repository State](acid-for-agent-repository-state.md) — the consistency framing for repository work that this pattern's counters operate inside.
+- [Fact Supersession Memory for Code Assistants](../../context-engineering/fact-supersession-memory.md) — the same freshness problem one level up, over remembered facts rather than file reads, with supersession keyed by subject and relation.

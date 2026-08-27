@@ -58,3 +58,4 @@ The fix is calibrated restraint, not maximal clarification. Forcing an agent to 
 - [Run-Status vs Task-Status Confusion in Autonomous Agent Runs](run-status-vs-task-status-confusion.md) — why a clean exit code is not evidence the task succeeded.
 - [Task Completion as Tool Certification (Silent Tool Rot)](task-completion-as-tool-certification.md) — the parallel failure where completion overstates the correctness of a reused agent-built tool rather than its safety.
 - [Task-Uniform Agent Permissions Ignore Where Failures Land](task-uniform-agent-permissions.md) — which task contexts the confirmation gate belongs in, from an incident corpus of 547 confirmed failures.
+- [Skill Review Without a Token Cost Baseline](skill-review-without-cost-baseline.md) — the economic version, where the completed task hides a 5x to 10x token bill instead of an unsafe action.

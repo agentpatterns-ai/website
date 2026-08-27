@@ -93,3 +93,4 @@ Contrast with the failure mode: the same conflict is resolved by a one-shot prom
 - [Parallel Agent Sessions](../workflows/parallel-agent-sessions.md) — the decision-making shift that makes conflict friction a high-leverage target.
 - [Worktree Isolation](../workflows/worktree-isolation.md) — sandbox primitive for resolving conflicts without touching `main`.
 - [Agent HQ](../tools/copilot/agent-hq.md) — platform host for agent-proposed changes on github.com, including conflict resolution.
+- [The Merge-Conflict Resolution Skill: What to Encode](../tool-engineering/merge-conflict-resolution-skill.md) — the same resolution work written as a skill file that commits without a confirmation step.

@@ -171,3 +171,4 @@ The Honk team wired deterministic verifiers — format, build, and test — dire
 - [Pre-Completion Checklists](pre-completion-checklists.md)
 - [Grade Agent Outcomes](grade-agent-outcomes.md)
 - [Evidence-Chain Run Logs](evidence-chain-run-logs.md) — records whether the reported symptom moved, not only whether the checks ran
+- [Claim-to-Evidence Trace Graphs for Auditing Agent Runs](claim-to-evidence-trace-graphs.md) — typed edges linking a claim to the artifacts and checks behind it, rather than a flat table of check results

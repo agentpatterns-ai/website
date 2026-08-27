@@ -46,6 +46,7 @@ How much context each iteration carries, and how much the loop runs on its own.
 The shape of a single iteration and what guarantees run inside it.
 
 - [Agent Loop Middleware — Safety Nets and Message Injection](agent-loop-middleware.md) — wrap the loop from outside so critical steps always run
+- [In-Loop Interception: Custom Logic Between the Model Call and the Tool Call](in-loop-interception.md) — the counterpart placement, at `PreToolUse`, where the arguments exist and the side effect does not
 - [CoALA Decision-Making Loop](../patterns/agent-design/coala-decision-making-loop.md) — propose/evaluate/select/act as a vocabulary for where tactics intervene
 - [ReAct Pattern](../patterns/agent-design/react-pattern.md) — interleave thought, tool call, and observation each step
 - [Plan-First Loop](../workflows/plan-first-loop.md) — design a written plan before code, then loop on it

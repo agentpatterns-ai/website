@@ -81,3 +81,4 @@ A trigram decomposition of `func (s *Server) Handle` against a corpus yields req
 - [Agent-Tuned Code Search](../context-engineering/agent-tuned-code-search.md) — the tool-contract layer above this index, and how to read its vendor benchmarks
 - [Semantic Context Loading](../context-engineering/semantic-context-loading.md)
 - [Retrieval-Augmented Agent Workflows](../context-engineering/retrieval-augmented-agent-workflows.md)
+- [Symbol Ranking for Agent File Pickers](../context-engineering/symbol-ranked-file-picker.md) — the same index applied to interactive file selection, where the staleness cost lands on a keystroke instead of a tool call

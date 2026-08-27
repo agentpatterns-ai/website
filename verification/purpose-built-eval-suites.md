@@ -104,3 +104,4 @@ LangChain publishes the benchmark setup it runs against its own deep agents, wit
 - [Head-to-Head Evaluation of Competing MCP Servers](head-to-head-mcp-server-evaluation.md) — a worked instance where the configuration under test is a tool server, and the quality axis ties
 - [AX Evals: Measure the Agent-Facing Surface, Not the Model](ax-evals-agent-facing-surface.md) — the inversion: hold the configuration fixed and vary your own product's agent-facing surface instead
 - [Review-Comment-Derived Benchmarks for Code Review Agents](review-comment-derived-benchmarks.md) — a worked instance where the tasks come from your reviewers' own PR comments
+- [Adaptive Validation Task Selection](adaptive-validation-task-selection.md) — spending less of the suite per round once it is large enough that a full pass costs real money

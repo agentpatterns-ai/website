@@ -130,6 +130,7 @@ sequenceDiagram
 - [Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — compaction degrades compliance; understanding the ceiling informs re-read protocol design
 - [Frozen Spec File](frozen-spec-file.md) — pairs with this protocol: the frozen spec survives compaction on disk; this protocol ensures the agent re-reads it
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — broader hook patterns for behavioral enforcement, including SessionStart hooks used here
+- [Per-Type Retention Policy for Agent Compaction](../context-engineering/per-type-retention-under-compaction.md) — the measured decay this protocol repairs, and pinning rules out of the summarizer's reach instead
 - [CLAUDE.md Convention](claude-md-convention.md) — the instruction file that this protocol ensures is re-read after compaction
 - [Instruction File Ecosystem](instruction-file-ecosystem.md) — the broader set of instruction files (CLAUDE.md, AGENTS.md, sub-directory files) that benefit from post-compaction re-reads
 - [Hierarchical CLAUDE.md](hierarchical-claude-md.md) — layered instruction scopes across directories; per-scope re-reads may be needed after compaction in multi-directory projects

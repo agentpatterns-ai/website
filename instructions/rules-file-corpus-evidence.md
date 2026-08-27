@@ -68,3 +68,4 @@ Applying the method means asking, of any corpus claim, where the files came from
 - [Stale AI Configuration Artifacts (Context Rot)](../patterns/anti-patterns/stale-ai-configuration-artifacts.md) — what happens to these files after the 67.3% stop being edited
 - [Project Instruction File Ecosystem](instruction-file-ecosystem.md) — how `.cursorrules`, CLAUDE.md, and AGENTS.md relate
 - [Encoding Values in AGENTS.md: Why Prose Without Verification Fails](encoding-values-in-agents-md.md) — the same gap for ethics and accessibility content, with the pairing rule
+- [Documentation Read Counts Measure Retrievability, Not Value](documentation-read-counts.md) — the behavioral-trace version of the same trap, where read frequency stands in for efficacy

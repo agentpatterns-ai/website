@@ -112,3 +112,4 @@ The decoupled measurement reveals which side of the compression Pareto your work
 - [Prompt Compression](prompt-compression.md) — Compress instructions and prose for the same goal at a different layer of the prompt.
 - [Semantic Density Optimization](semantic-density-optimization.md) — Why naive compression backfires: removing semantic content shifts cost to inference. This parallels the input-vs-output asymmetry seen with format swaps.
 - [Tokenizer Swap Tax](../token-engineering/tokenizer-swap-tax.md) — Another notation-layer change with hidden costs that only surface in end-to-end measurement.
+- [Typed Context Buys Addressability, Not Token Savings](typed-context-addressability.md) — Why teams reach for a notation swap in the first place: schema-bearing context costs tokens, and the payoff sits in the harness.

@@ -93,3 +93,4 @@ drskill audit                        # which skills traces show being called
 - [Contractual Skill Files](../instructions/contractual-skill-files.md) — writing the description a router has to discriminate on
 - [Skill Authoring as Software Engineering: What Transfers](../tool-engineering/skill-authoring-software-engineering.md) — the authoring-time counterpart; single responsibility is what keeps a description from shadowing its siblings
 - [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — why layering a typed graph over that retrieval layer usually returns nothing, and how to test it first
+- [Coverage-Aware Skill Selection Under a Token Budget](coverage-aware-skill-selection.md) — which subset of the curated loadout to inject for one task, once the library is settled

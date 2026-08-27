@@ -154,3 +154,4 @@ v2.1.89 also added a `PermissionDenied` hook event that fires when the [auto-mod
 - [Session Initialization Ritual](session-initialization-ritual.md)
 - [Rollback-First Design](rollback-first-design.md)
 - [Override Pattern: Reusing Interactive Commands in Automated Pipelines](../../tool-engineering/override-interactive-commands.md)
+- [Bounding a Headless Codex Run Without a Turn Cap](../../workflows/headless-codex-bounding.md)

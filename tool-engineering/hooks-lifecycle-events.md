@@ -43,7 +43,7 @@ Agent runtimes expose hooks at these points:
 | `InstructionsLoaded` | CLAUDE.md or `.claude/rules/*.md` loads | No |
 | `SubagentStart` / `SubagentStop` | Sub-agent spawns or completes | No |
 
-`PreToolUse` enforces. It receives the tool name and inputs, can block the call, and returns a reason the model must adapt to. `PostToolUse` automates. It only observes, but it can trigger side effects like logging or linting.
+`PreToolUse` enforces. It receives the tool name and inputs, can block the call, and returns a reason the model must adapt to. `PostToolUse` automates. It only observes, but it can trigger side effects like logging or linting. Choosing `PreToolUse` over a loop boundary, and checking what your runtime lets a handler there decide, is [in-loop interception](../loop-engineering/in-loop-interception.md).
 
 See [Claude Code hooks](https://code.claude.com/docs/en/hooks) and [Copilot hooks](https://code.visualstudio.com/docs/copilot/customization/hooks). Cursor exposes the same turn-lifecycle surface for its cloud agents — `beforeSubmitPrompt`, `afterAgentResponse`, `afterAgentThought`, `subagentStart`, `stop`, and compaction events — so agents can build self-correcting loops around these points ([Cursor changelog](https://cursor.com/changelog/side-chat)).
 

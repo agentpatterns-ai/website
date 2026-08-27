@@ -72,6 +72,7 @@ Keep the human read for intent, but make correctness the machine's job: run the 
 
 - [Trust Without Verify](trust-without-verify.md) — accepting polished output without independent checks; this page is the reviewer-calibration evidence behind it.
 - [Assertion-Free Test Theater in Agent-Authored Patches](assertion-free-test-theater.md) — generated tests with no oracle; the upstream failure to the one reviewers then wave through.
+- [Test Oracles That Read Their Expectation From the Code](state-anchored-test-oracles.md) — the assertion a reviewer is least likely to question: present, specific, and unable to fail because its expected value comes from the code under test.
 - [Tab-Accept Rate as a Proxy for Critical Engagement](tab-accept-critical-engagement-gap.md) — the same automation-complacency mechanism measured at the completion-acceptance level.
 - [Model Confidence as Security Verification](model-confidence-as-security-verification.md) — confidence not tracking correctness, on the model side rather than the reviewer side.
 - [LLM Comprehension Fallacy](../../fallacies/llm-comprehension-fallacy.md) — correct-looking output read as understanding; the belief this anti-pattern operationalizes.

@@ -66,3 +66,4 @@ The before-half carries most of the weight. Of five repair agents studied across
 - [Symptom-Reduction-as-Root-Cause](symptom-reduction-as-root-cause.md) — what happens when a single-point oracle becomes the target instead of the gate
 - [Evidence-Gated Lifecycle Control for Coding Agents](evidence-gated-lifecycle-control.md) — advancing work state only on fresh, source-bound evidence
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md) — the checkpoint discipline the bracket sits inside
+- [Claim-to-Evidence Trace Graphs for Auditing Agent Runs](claim-to-evidence-trace-graphs.md) — session-scale review structure, where the chain covers one change and the graph covers a whole run

@@ -151,6 +151,7 @@ Three checks. Lower the threshold deliberately, then verify task continuity acro
 
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
 - [Post-Compaction Re-read Protocol](../instructions/post-compaction-reread-protocol.md) — restoring instruction-file fidelity after compaction summaries paraphrase rules
+- [Per-Type Retention Policy for Agent Compaction](per-type-retention-under-compaction.md) — how much of a safety rule survives each summarization round, and how to set fidelity per knowledge type
 - [Context Window Dumb Zone](context-window-dumb-zone.md)
 - [Prompt Compression: Maximizing Signal Per Token](prompt-compression.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)

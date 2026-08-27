@@ -120,3 +120,4 @@ The next session loads this rule, and the self-review step checks item SR-07 bef
 - [Agent Context File Evolution](../instructions/agent-context-file-evolution.md) — the retirement and compaction discipline that keeps the rule file from bloating.
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — the broader observe-categorize-update-verify loop this is one instance of.
 - [Learned Review Rules](../code-review/learned-review-rules.md) — the reviewer-side analogue that tunes an agent from accept and reject signals.
+- [The Error-Class Governance Loop for Instruction Libraries](instruction-library-governance-loop.md) — the governance cycle that runs over the rules this loop accumulates, and decides when each one retires.

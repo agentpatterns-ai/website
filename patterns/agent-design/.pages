@@ -60,6 +60,7 @@ nav:
       - dual-trace-memory-encoding.md
       - durable-interactive-artifacts.md
       - interactive-canvas-outputs.md
+      - canvas-as-durable-workflow-state.md
       - episodic-memory-retrieval.md
       - executable-memory-user-as-code.md
       - compiled-specialist-agents.md
@@ -94,6 +95,7 @@ nav:
       - llm-as-code-agentic-programming.md
       - bounded-agent-step.md
       - canvas-as-control-surface.md
+      - artifact-driven-workflow-compilation.md
       - ast-grounded-doc-critic-loop.md
       - selective-autonomy-from-copilot-feedback.md
       - dspy-programmatic-prompt-optimization.md
@@ -107,6 +109,7 @@ nav:
       - minimum-sufficient-control-ladder.md
       - orchestrator-attention-budget.md
       - plan-compliance-in-agents.md
+      - pr-subscribed-agent-ownership.md
       - proactive-idle-time-anticipation.md
       - progressive-disclosure-agents.md
       - prompted-uncertainty-decomposition-clarification.md
@@ -130,6 +133,7 @@ nav:
       - advisor-strategy.md
       - agent-backpressure.md
       - behavioral-drivers-agent-success.md
+      - comparison-only-advisor.md
       - cross-vendor-competitive-routing.md
       - decoupled-search-grounding.md
       - deterministic-fast-paths.md
@@ -148,6 +152,7 @@ nav:
       - remote-agent-host-sessions.md
       - per-user-supervisor-process.md
       - observation-contract-preservation.md
+      - outcome-monitors-recovery-affordances.md
       - per-call-budget-hints-tool-calls.md
       - per-run-budget-reservation.md
       - per-tool-extended-reasoning-opt-in.md
@@ -168,6 +173,7 @@ nav:
       - wip-1-littles-law-agent-throughput.md
   - "Harness & Tools":
       - agent-composition-patterns.md
+      - embedded-harness-integration-layer.md
       - agent-sdk-hosting-topology.md
       - cloud-agent-state-layer-decoupling.md
       - agent-harness.md

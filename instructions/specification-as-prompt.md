@@ -113,3 +113,4 @@ The agent reads the interface, derives the signatures, types, and nullability co
 - [Constraint Encoding Compliance Gap](constraint-encoding-compliance-gap.md)
 - [Hints Over Code Samples](hints-over-code-samples.md)
 - [Bootstrapping Coding Agents](../emerging/bootstrapping-coding-agents.md) — natural-language specifications as a sufficient substrate to regenerate the implementation
+- [Match Architecture Spec Format to Model Capability](spec-format-by-model-tier.md) — which spec format pays off depends on the model tier you drive
