@@ -635,6 +635,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Most-Restrictive-Wins Fusion for Parallel Agent Control Returns](patterns/agent-design/most-restrictive-wins-fusion.md)
 - [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](patterns/multi-agent/multi-agent-se-design-patterns.md)
 - [Multi-Agent Topology Taxonomy: Centralized, Decentralized](patterns/multi-agent/multi-agent-topology-taxonomy.md)
+- [Multi-Client Session Attachment: One Session, Many Clients](patterns/agent-design/multi-client-session-attachment.md)
 - [Multi-Model Plan Synthesis for System Architecture](patterns/multi-agent/multi-model-plan-synthesis.md)
 - [Multi-Shape BYOK Provider: Declare API Family per Endpoint](patterns/agent-design/multi-shape-byok-provider.md)
 - [Observability-Driven Harness Evolution](patterns/agent-design/observability-driven-harness-evolution.md)
@@ -1131,6 +1132,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Detecting Self-Preference in a Single LLM Judge](verification/judge-self-preference-detection.md)
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](verification/eval-blind-spots.md)
 - [Evidence-Grounded Disagreement in Agentic Code Review (Adversarial Review)](code-review/evidence-grounded-disagreement.md)
+- [Handoff-Boundary Fault Injection (llmmas-otel)](verification/handoff-boundary-fault-injection.md)
 - [Human-AI Review Synergy in Agentic Code Review](code-review/human-ai-review-synergy.md)
 - [Human-Review-Driven Curation of Golden Eval Datasets](verification/human-review-golden-dataset-curation.md)
 - [Incident-to-Eval Synthesis: Production Failures as Evals](verification/incident-to-eval-synthesis.md)
@@ -21914,6 +21916,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Interactive Effort Sliders: Per-Turn Reasoning-Budget Controls](interactive-effort-sliders.md) — Expose reasoning budget as an interactive, per-turn operator control — the third option alongside static effort config and heuristic effort scaling
 - [Long-Running Agents: Durability, Checkpoints, and Resumability](long-running-agents.md) — The operational shape of agents that work for hours, days, or weeks — three walls (finite context, no persistent state, unreliable self-grading) and the five primitives that recur across Anthropic, Cursor, and Google designs
 - [Remote Agent Host Sessions over SSH and Dev Tunnels](remote-agent-host-sessions.md) — Run the agent loop on a remote host whose lifecycle is decoupled from the client editor — SSH attach, dev tunnel reverse, or cloud worker — so sessions survive laptop sleep, network drops, and editor restarts
+- [Multi-Client Session Attachment: One Session, Many Clients](multi-client-session-attachment.md) — Several front ends attach to one live agent session at once; the host holds the only authoritative state, and client-contributed tools stay behind
 - [Per-User Supervisor Process for Background Agent Sessions](per-user-supervisor-process.md) — A managed-daemon model where a per-user supervisor spawns each background agent session as a detached process, reconnects via on-disk roster, evicts idle non-pinned sessions, and restarts in place onto an updated binary
 - [Outcome Monitors: Recovery Affordances for Tool Failures](outcome-monitors-recovery-affordances.md) — A silent tool failure raises no error; an advisory receipt naming the broken property and the substitute tools the agent can call is what recovers the run
 - [Observation Contract Preservation](observation-contract-preservation.md) — Tool outputs like presigned URLs and session tokens are contract-bound — preserve their bytes and respect their expiry on the second call, or the chain fails silently
@@ -30644,7 +30647,7 @@ Claude Code's agent view illustrates Manager mode: each row's one-line summary i
 | GitHub Copilot | [Inline agent mode](../../tools/copilot/agent-mode.md#inline-agent-mode-jetbrains) ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)) | Mission Control ([GitHub Changelog 2025-10-28](https://github.blog/changelog/2025-10-28-a-mission-control-to-assign-steer-and-track-copilot-coding-agent-tasks/)) |
 | Claude Code | Interactive `claude` session | `claude agents` view ([Claude Code agent view](https://code.claude.com/docs/en/agent-view)) |
 
-Detail varies — Cursor's window "resembl[es] a Kubernetes dashboard rather than a chat window," Claude Code's is a terminal list grouped by status — but the structural choice is the same: aggregated per-agent state lives outside the editor.
+Detail varies — Cursor's window "resembl[es] a Kubernetes dashboard rather than a chat window," Claude Code's is a terminal list grouped by status — but the structural choice is the same: aggregated per-agent state lives outside the editor. Where a host process owns that state, both surfaces can attach to one live session at once ([Multi-Client Session Attachment](multi-client-session-attachment.md)).
 
 ## Why it works
 
@@ -37466,6 +37469,65 @@ If `authorization_check` returns `deny`, the call is blocked regardless of what 
 
 ---
 
+### Multi-Client Session Attachment: One Session, Many Clients
+Source: https://agentpatterns.ai/patterns/agent-design/multi-client-session-attachment/
+
+# Multi-Client Session Attachment: One Session, Many Clients
+
+> Several clients attach to one running agent session, and ordered updates from the host keep every view in step.
+
+Multi-client session attachment means the agent session runs in a host process that "owns agent sessions independently of the clients that display and control them," holding session state as "the source of truth" ([VS Code Agent Host architecture](https://code.visualstudio.com/docs/agents/concepts/agent-host)). An editor window, a separate agents window, and a browser can each attach to that one session at the same time. Every attached client can "observe progress, contribute actions, approve tool calls, or cancel work" ([VS Code, 2026-08-26](https://code.visualstudio.com/blogs/2026/08/26/agent-host-architecture)).
+
+## Conditions this depends on
+
+Three conditions carry the pattern, and the first two are easy to assume wrongly.
+
+The host has to outlive the clients for real, not nominally. VS Code's own documentation limits the local case: "For local sessions, VS Code must remain running because it manages the local Agent Host" ([VS Code, 2026-08-26](https://code.visualstudio.com/blogs/2026/08/26/agent-host-architecture)). Only the remote mode, where "the host can run next to the workspace on another machine while clients connect from elsewhere," separates the two lifetimes ([VS Code Agent Host architecture](https://code.visualstudio.com/docs/agents/concepts/agent-host)).
+
+The session must not depend on tools that a single client supplies. Clients "can also contribute tools based on their own capabilities" ([VS Code, 2026-08-26](https://code.visualstudio.com/blogs/2026/08/26/agent-host-architecture)), and those tools leave when that client does.
+
+The wire format has to be one you can afford to track. The Agent Host Protocol is MIT-licensed with client implementations in six languages, and VS Code is "the reference AHP server implementation" ([microsoft/agent-host-protocol](https://github.com/microsoft/agent-host-protocol)). It is also pre-1.0: v0.8.0 shipped on 2026-08-18 carrying a type rename and a session-status behavior change ([AHP releases](https://github.com/microsoft/agent-host-protocol/releases)).
+
+## What synchronizes and what does not
+
+| Travels with the session | Stays with one client |
+|---|---|
+| Turn state, progress, and the session log | Tools an extension contributes in that window |
+| Actions, tool-call approvals, and cancellations from any client | Capabilities only that client can reach |
+
+Extension tools are the sharp edge. "Tools from extensions are only available in chats in an editor window where the extension is running" ([VS Code Agent Host architecture](https://code.visualstudio.com/docs/agents/concepts/agent-host)). Reattach from a browser and the session keeps its full history but loses part of its tool set, with nothing in the transcript marking the change.
+
+## Why it works
+
+Convergence comes from making updates ordered and deterministic instead of harness-specific. The host translates each harness's backend events into one display-ready state shape plus a sequence of actions, and "shared reducers apply those actions consistently, so an editor, the Agents window, and a browser client converge on the same view without each client having to understand the harness's SDK or session model" ([VS Code, 2026-08-26](https://code.visualstudio.com/blogs/2026/08/26/agent-host-architecture)). Clients therefore need no agreement with each other: each one replays the same ordered actions and lands in the same place. That same translation layer is why the protocol stays agent-neutral: Copilot runs "powered by the GitHub Copilot SDK, which manages its runtime as a child process," while Claude "loads Anthropic's Claude Agent SDK. Its adapter maps sessions, tools, permissions, and subagents into AHP" (same source). Two different agent runtimes drive identical clients.
+
+## When this backfires
+
+- Local-only work. The host dies with the application, so you gain window-level survival and pay for a second process anyway.
+- Sessions built on extension tools. The tool set narrows when the contributing window closes, and the next turn degrades with no error naming the cause.
+- Third-party clients pinned against a moving spec. Renames land in AHP minor releases, so six client SDKs cost more to track than the MIT license suggests.
+- Treating attached clients as review. Sabotage survived 94% of sessions with no monitor and 63% with one, and in the 16 sessions where the monitor alerted correctly it still survived 9 ([arXiv:2606.05647v1](https://arxiv.org/abs/2606.05647v1), 107 sessions). Extra windows add views, not scrutiny.
+- Short interactive tasks. A session that never detaches collects none of the benefit.
+
+## Key Takeaways
+
+- One host process holds the authoritative session state; clients are views that attach and detach without owning anything
+- Ordered actions through shared reducers make an editor, an agents window, and a browser agree, and keep the protocol agent-neutral across the Copilot and Claude SDKs
+- Client-contributed tools are the exception to portability: they leave with the client that supplied them, and the session does not announce the loss
+- Local hosts die with the editor application; only the remote mode separates host and client lifetimes
+- AHP is MIT-licensed and pre-1.0 at v0.8.0 (2026-08-18), with renames shipping in minor releases
+- Attaching more clients does not buy oversight: developers accepted the sabotaged code in 9 of the 16 sessions where a monitor alerted correctly
+
+## Related
+
+- [Remote Agent Host Sessions over SSH and Dev Tunnels](remote-agent-host-sessions.md) — the durability half: what survives a disconnect, and the SSH, tunnel, and cloud-worker transports
+- [Long-Running Agents: Durability, Checkpoints, and Resumability](long-running-agents.md) — the operational shape that makes a host-owned session worth running
+- [Session Harness Sandbox Separation for Long-Running Agents](session-harness-sandbox-separation.md) — the three-primitive split these clients attach to
+- [Editor and Manager Surface Separation in Agent IDEs](editor-manager-surface-separation.md) — why attached clients serve different attention modes instead of duplicating one panel
+- [Per-User Supervisor Process for Background Agent Sessions](per-user-supervisor-process.md) — the daemon form of keeping a session alive with no client attached
+
+---
+
 ### Multi-Shape BYOK Provider
 Source: https://agentpatterns.ai/patterns/agent-design/multi-shape-byok-provider/
 
@@ -40824,7 +40886,7 @@ This is [Session Harness Sandbox Separation](session-harness-sandbox-separation.
 - Dev tunnel. A pre-started `code tunnel` exposes an outbound reverse tunnel; "both hosting and connecting to a tunnel requires authentication with the same Github or Microsoft account on each end" with AES-256-CTR over SSH ([VS Code Remote Tunnels docs](https://code.visualstudio.com/docs/remote/tunnels)).
 - Cloud worker. Cursor's self-hosted cloud agents invert the network shape — "a worker process connects outbound via HTTPS to Cursor's cloud—no inbound ports, firewall changes, or VPN tunnels required" — with inference in the cloud and tool execution on the worker ([Cursor: Self-Hosted Cloud Agents](https://cursor.com/blog/self-hosted-cloud-agents)).
 
-All three colocate the agent loop with the filesystem it edits and put session state on something that outlives the client.
+All three colocate the agent loop with the filesystem it edits and put session state on something that outlives the client. Several clients can then attach to one session at once, which [Multi-Client Session Attachment](multi-client-session-attachment.md) covers.
 
 ## State location matters
 
@@ -83879,6 +83941,7 @@ Source: https://agentpatterns.ai/verification/
 - [Audit Your Test Suite With an Agent, Then Certify Each Flag](certified-agent-test-suite-auditing.md) — An agent generates inputs your suite wrongly accepts, and a four-gate certification chain proves each flagged failure genuine before a human triages it — usable only where an oracle independent of the code under test exists
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — Plant deterministic bugs and check that captured signals lead an agent to the responsible layer — if they don't, the gap is in the instrumentation, not the bug
 - [LLM API Fault Injection at the HTTP Layer (AgentChaos)](llm-api-fault-injection-http-layer.md) — Corrupt named LLM response fields at the HTTP client to score agent robustness; the ranking tracks architecture across all four backbones, and truncation is the fault diagnosis misses at 4.3% accuracy
+- [Handoff-Boundary Fault Injection (llmmas-otel)](handoff-boundary-fault-injection.md) — Delay a message between two agents and diff the faulted trace against a structurally aligned baseline; the amplification it reports is heavy-tailed runtime, reading 59.2 mean against 6.6 median on ChatDev
 - [Behavior-Partitioned Security Tests as Executable Specs](behavior-partitioned-security-tests.md) — Split security cases by attack mechanism, show one set to the model as its spec, and hold the rest out; showing tests upfront lifts joint success 19.3 pp but raises the visible-pass-but-hidden-fail rate from 5.6% to 18.8%
 
 ## Regression Testing
@@ -90598,6 +90661,84 @@ Add targeted trajectory constraints scoped to the steps that matter — the audi
 
 ---
 
+### Handoff-Boundary Fault Injection (llmmas-otel)
+Source: https://agentpatterns.ai/verification/handoff-boundary-fault-injection/
+
+# Handoff-Boundary Fault Injection (llmmas-otel)
+
+> One injected fault at an agent-to-agent handoff amplified ChatDev's end-to-end runtime 59x on the mean and 6.6x on the median run.
+
+Handoff-boundary fault injection pauses a message on its way between two agents, then compares that run against a baseline trace with the same span structure. The comparison unit is a metric the paper calls amplification: "the extra end-to-end runtime caused by the fault divided by the injected delay" ([Seyedghorban et al., arxiv 2608.24271v1](https://arxiv.org/abs/2608.24271v1)). A value near 1 means the delay cost what it cost. Values above 1 mean the pipeline spread it.
+
+## Three conditions before the number means anything
+
+- The pipeline is multi-phase and message-heavy. On the paper's two-agent Planner-to-Coder demo, both fault types amplified close to linearly. The large factors appear only on ChatDev, which runs three lifecycle phases across many specialized agents ([arxiv 2608.24271v1](https://arxiv.org/abs/2608.24271v1)).
+- Runtime is the failure you care about. Amplification counts seconds, and the paper measures no correctness effect anywhere. If the question is whether a delayed handoff produces a worse answer, [HTTP-layer injection scored against pass@1](llm-api-fault-injection-http-layer.md) answers it and this does not.
+- Someone has hours to read paired traces. The tool "does not yet provide higher-level analysis features such as paired-run differencing, trace summarization, root-cause ranking, or automated debugging reports; at present, users inspect the produced traces and run artifacts directly" ([arxiv 2608.24271v1](https://arxiv.org/abs/2608.24271v1)).
+
+## The mean and the median disagree
+
+On ChatDev, a 1000 ms delay at the planning-phase LLM call yielded "a mean amplification of 48.1 and a median of 13.9", while the same delay at the Planner-to-Coder send yielded "an even higher mean amplification of 59.2 (median 6.6)" ([arxiv 2608.24271v1](https://arxiv.org/abs/2608.24271v1)). Setup was the 30-task ProgramDev benchmark, five runs per task per condition.
+
+| System | Fault | Mean | Median |
+|---|---|---|---|
+| Demo (2 agents) | LLM delay 1000 ms | 1.053 | 1.036 |
+| Demo (2 agents) | A2A delay 1000 ms | 1.295 | 1.390 |
+| ChatDev | LLM delay 1000 ms | 48.1 | 13.9 |
+| ChatDev | A2A delay 1000 ms | 59.2 | 6.6 |
+
+Read the bottom two rows together. The handoff wins on the mean by 11 points and loses on the median by more than half. A mean of 59.2 above a median of 6.6 describes a distribution where a handful of runs blow up and most do not, which is a different engineering problem from a boundary that is uniformly slow. Quote the mean and you overstate the typical run by roughly nine times. Report both figures or neither. The ordering that survives both statistics is the demo's, where the handoff amplifies more on mean and median alike.
+
+## Where the injection points sit
+
+Instrumentation covers six span levels: session, segment for the workflow phase, agent step, the paired a2a_send and a2a_receive, tool call, and LLM call. The public API is "thin decorators and context managers", wrapping a host workflow instead of replacing its orchestration ([arxiv 2608.24271v1](https://arxiv.org/abs/2608.24271v1)). Injection reaches four of those hook points, with fourteen boundary-and-fault pairs between them.
+
+| Hook point | Faults available |
+|---|---|
+| A2A send | delay, drop, truncate |
+| A2A receive | delay, drop |
+| Tool call | delay, not_installed, timeout, malformed_response |
+| LLM call | delay, rate_limit, timeout, network_error, malformed_response |
+
+Copy that table whatever tool you use. The A2A rows are the two a transport-layer injector cannot reach: [AgentChaos patches the HTTP client and matches outgoing requests to LLM endpoints](llm-api-fault-injection-http-layer.md), and a message passed between agents in one process is neither.
+
+## Why it works
+
+Serialization produces the amplification. A multi-phase pipeline runs its stages in order, so a pause at one boundary shifts every later interaction rather than adding its own duration once. The paper attributes ChatDev's factors to "how a localized perturbation can cascade across many downstream interactions and LLM calls", and explains why the communication boundary concentrates it: "the final outcome often depends on the quality and timing of inter-agent handoffs rather than on isolated LLM calls alone" ([arxiv 2608.24271v1](https://arxiv.org/abs/2608.24271v1)).
+
+Structural alignment is what makes the amplification measurable, and it is the half specific to this design. A faulted run records the fault on the same span in the same position as the baseline: an A2A delay lands on the a2a_send span carrying `llmmas.fault.injected=true` and `llmmas.fault.type=a2a.delay`. Injection is "not treated as a separate logging mode or a disconnected experiment pipeline, but as an overlay on the same execution structure used for normal runs" ([arxiv 2608.24271v1](https://arxiv.org/abs/2608.24271v1)). Two traces with identical span trees diff span for span. Two wall-clock numbers do not.
+
+## Example
+
+Walk through a hypothetical four-agent review pipeline where you suspect the reviewer-to-integrator handoff is the weak joint. Mark the six boundaries, run the task five times clean, then add one rule, `a2a.delay = 1000 ms` on that send, and run it five times again. You now have ten structurally identical traces, five carrying `fault.injected=true` on one span.
+
+Compute amplification per pair, then read the spread rather than the average. Five runs at 1.2x say the handoff absorbs the delay and your suspicion was wrong. Four runs at 1.1x and one at 40x say something downstream retries or times out when its input arrives late, and that single trace is the artifact worth opening. The mean of those five is about 8.9x, and it describes none of them.
+
+## When this backfires
+
+- Instrumenting to avoid a structural fix. A hierarchical topology showed "the lowest performance drop of 5.5%, compared to 10.5% and 23.7% of other two structures" under faulty agents, and a reviewing Inspector agent recovered "up to 96.4% errors made by faulty agents" ([Zhang et al., arxiv 2408.00989v4](https://arxiv.org/abs/2408.00989v4)). Neither needs a single span. Spend the hours there first and reach for injection on the residue.
+- Expecting the trace to diagnose itself. [AgentChaosBench](https://arxiv.org/abs/2608.14680v1) injects ten operational fault types at tool, model, guardrail, and inter-agent boundaries, then asks language models to read the telemetry. Local detectors up to 14B parameters reach 13.6% to 19.2% top-1 fault-type accuracy, a frontier model reaches 24.8%, and joint type-plus-location "tops out at 22%". Capturing the trace and understanding it are separate budgets.
+- Leaving full-fidelity tracing on in production. Jaeger on the Train Ticket microservice benchmark showed "180% and 16% overhead on the tail and average latency, respectively" ([Toslali et al., arxiv 2405.15645v1](https://arxiv.org/abs/2405.15645v1)). That figure is weaker against agent systems, where a span costs microseconds against model calls measured in seconds, but it still argues against leaving an experiment rig on as a monitoring layer.
+- A framework with no send seam. The API decorates boundaries the host workflow already has. A managed orchestrator that owns message passing gives you nothing to wrap, and the validation covers two Python systems.
+
+## Key Takeaways
+
+- Amplification is a runtime ratio. The paper measures no correctness effect anywhere, so a 59x figure carries no information about whether the run's answer was right.
+- Report mean and median together. ChatDev's handoff delay reads 59.2 mean against 6.6 median, and the two numbers imply different fixes.
+- Run both injection surfaces. An HTTP-layer wrapper never sees an in-process message, so it scores every architecture as if its handoffs were free.
+- Record the fault on the same span in the same position, so the two runs diff. That design choice is worth copying even in your own rig.
+- The published rig stops at artifact generation, and it is validated on two systems at one delay value. Budget the trace-reading time before the injection time.
+
+## Related
+
+- [LLM API Fault Injection at the HTTP Layer (AgentChaos)](llm-api-fault-injection-http-layer.md) — the same inject-and-score loop at the LLM response boundary, scored against pass@1 rather than runtime
+- [FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems](flare-multi-agent-fuzzing.md) — explores the input space rather than perturbing a fixed boundary
+- [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — the calibration step this technique assumes has already passed
+- [Failure-Aware Observability for Multi-Agent LLM Systems](../observability/failure-aware-observability-multi-agent.md) — six trace signals for diagnosing an organic failure, where this page causes one
+- [Subagent OTel Trace Correlation via agent_id Attribute](../observability/subagent-otel-trace-correlation.md) — the attribute propagation that makes per-agent span queries work
+
+---
+
 ### Head-to-Head Evaluation of Competing MCP Servers
 Source: https://agentpatterns.ai/verification/head-to-head-mcp-server-evaluation/
 
@@ -91710,6 +91851,7 @@ A single configuration names four things: the fault type, the target field, the 
 
 - [Tool-Use Sim-to-Real Perturbation Taxonomy](tool-use-sim-to-real-perturbation-taxonomy.md) — perturbs tool observations and actions rather than the model's own response
 - [FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems](flare-multi-agent-fuzzing.md) — explores the input space instead of corrupting a fixed response field
+- [Handoff-Boundary Fault Injection (llmmas-otel)](handoff-boundary-fault-injection.md) — injects at the agent-to-agent message boundary this transport-layer wrapper cannot reach, and scores runtime amplification rather than pass@1
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — the same inject-then-check-detection loop applied to instrumentation
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — per-stage attribution for the runs an injection campaign flags
 - [Agent Circuit Breaker](../patterns/agent-design/agent-circuit-breaker.md) — the runtime mitigation for the crash faults this technique simulates
@@ -116677,6 +116819,7 @@ At step 18 of 30, retrieval-agent-2 has `ToolErr = 0.7` over the last 10 calls, 
 - [Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)](trajectory-prefilter-failure-diagnosis.md) — complementary technique for *localizing* failure once it has occurred; this page is about detecting it while the run is live.
 - [Agent-Trace Data Layer: Storage for Hours-Long Traces](agent-trace-data-layer.md) — the storage tier the framework presupposes; without it, the signals lag the run.
 - [Observability Feedback Loop: A 7-Step Debug Runbook](observability-feedback-loop.md) — the broader debugging runbook into which failure-aware signals plug as the early-detection step.
+- [Handoff-Boundary Fault Injection (llmmas-otel)](../verification/handoff-boundary-fault-injection.md) — causes the failure deliberately at a named boundary instead of waiting for an organic one to show up in the signals.
 
 ---
 

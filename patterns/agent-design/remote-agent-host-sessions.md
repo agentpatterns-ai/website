@@ -38,7 +38,7 @@ This is [Session Harness Sandbox Separation](session-harness-sandbox-separation.
 - Dev tunnel. A pre-started `code tunnel` exposes an outbound reverse tunnel; "both hosting and connecting to a tunnel requires authentication with the same Github or Microsoft account on each end" with AES-256-CTR over SSH ([VS Code Remote Tunnels docs](https://code.visualstudio.com/docs/remote/tunnels)).
 - Cloud worker. Cursor's self-hosted cloud agents invert the network shape — "a worker process connects outbound via HTTPS to Cursor's cloud—no inbound ports, firewall changes, or VPN tunnels required" — with inference in the cloud and tool execution on the worker ([Cursor: Self-Hosted Cloud Agents](https://cursor.com/blog/self-hosted-cloud-agents)).
 
-All three colocate the agent loop with the filesystem it edits and put session state on something that outlives the client.
+All three colocate the agent loop with the filesystem it edits and put session state on something that outlives the client. Several clients can then attach to one session at once, which [Multi-Client Session Attachment](multi-client-session-attachment.md) covers.
 
 ## State location matters
 
