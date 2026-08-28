@@ -40,3 +40,4 @@ Most readers find what they need through tags or the concept map, not the sectio
 - [Workflows](workflows/index.md) — end-to-end workflows for agent-assisted development
 - Reference — [Standards](standards/index.md), [Human Factors](human/index.md), [Emerging](emerging/index.md), [Fallacies](fallacies/index.md), [Training](training/index.md), [Frameworks](frameworks/index.md), [GEO](geo/index.md)
 - Tools — [Claude Code](tools/claude/index.md), [GitHub Copilot](tools/copilot/index.md), [Cursor](tools/cursor/index.md), [OpenAI Agents SDK](tools/openai-agents-sdk.md)
+- [Codex 教程](codex-tutorial/index.md) — Simplified Chinese getting-started series for OpenAI Codex: what it is now, install and login, a first reviewable task, then AGENTS.md, skills, and MCP

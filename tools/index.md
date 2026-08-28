@@ -28,3 +28,7 @@ GitHub's AI coding assistant — agent mode, coding agent, extensions, MCP integ
 ## [OpenAI Agents SDK](openai-agents-sdk.md)
 
 OpenAI's Python framework for sandboxed agents — a model-native harness, native sandbox execution, and configurable memory shipped as one library.
+
+## Related
+
+- [Codex 教程](../codex-tutorial/index.md) — Simplified Chinese getting-started series for OpenAI Codex: ChatGPT Codex, Codex CLI, IDE extension
