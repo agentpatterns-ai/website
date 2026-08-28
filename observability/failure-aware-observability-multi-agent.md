@@ -85,3 +85,4 @@ At step 18 of 30, retrieval-agent-2 has `ToolErr = 0.7` over the last 10 calls, 
 - [Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)](trajectory-prefilter-failure-diagnosis.md) — complementary technique for *localizing* failure once it has occurred; this page is about detecting it while the run is live.
 - [Agent-Trace Data Layer: Storage for Hours-Long Traces](agent-trace-data-layer.md) — the storage tier the framework presupposes; without it, the signals lag the run.
 - [Observability Feedback Loop: A 7-Step Debug Runbook](observability-feedback-loop.md) — the broader debugging runbook into which failure-aware signals plug as the early-detection step.
+- [Handoff-Boundary Fault Injection (llmmas-otel)](../verification/handoff-boundary-fault-injection.md) — causes the failure deliberately at a named boundary instead of waiting for an organic one to show up in the signals.

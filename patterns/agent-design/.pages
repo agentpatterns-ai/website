@@ -150,6 +150,7 @@ nav:
       - interactive-effort-sliders.md
       - long-running-agents.md
       - remote-agent-host-sessions.md
+      - multi-client-session-attachment.md
       - per-user-supervisor-process.md
       - observation-contract-preservation.md
       - outcome-monitors-recovery-affordances.md

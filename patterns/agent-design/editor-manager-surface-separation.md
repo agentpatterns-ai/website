@@ -49,7 +49,7 @@ Claude Code's agent view illustrates Manager mode: each row's one-line summary i
 | GitHub Copilot | [Inline agent mode](../../tools/copilot/agent-mode.md#inline-agent-mode-jetbrains) ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)) | Mission Control ([GitHub Changelog 2025-10-28](https://github.blog/changelog/2025-10-28-a-mission-control-to-assign-steer-and-track-copilot-coding-agent-tasks/)) |
 | Claude Code | Interactive `claude` session | `claude agents` view ([Claude Code agent view](https://code.claude.com/docs/en/agent-view)) |
 
-Detail varies — Cursor's window "resembl[es] a Kubernetes dashboard rather than a chat window," Claude Code's is a terminal list grouped by status — but the structural choice is the same: aggregated per-agent state lives outside the editor.
+Detail varies — Cursor's window "resembl[es] a Kubernetes dashboard rather than a chat window," Claude Code's is a terminal list grouped by status — but the structural choice is the same: aggregated per-agent state lives outside the editor. Where a host process owns that state, both surfaces can attach to one live session at once ([Multi-Client Session Attachment](multi-client-session-attachment.md)).
 
 ## Why it works
 

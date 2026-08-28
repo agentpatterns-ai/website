@@ -75,6 +75,7 @@ A single configuration names four things: the fault type, the target field, the 
 
 - [Tool-Use Sim-to-Real Perturbation Taxonomy](tool-use-sim-to-real-perturbation-taxonomy.md) — perturbs tool observations and actions rather than the model's own response
 - [FLARE: Coverage-Guided Fuzzing for Multi-Agent LLM Systems](flare-multi-agent-fuzzing.md) — explores the input space instead of corrupting a fixed response field
+- [Handoff-Boundary Fault Injection (llmmas-otel)](handoff-boundary-fault-injection.md) — injects at the agent-to-agent message boundary this transport-layer wrapper cannot reach, and scores runtime amplification rather than pass@1
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — the same inject-then-check-detection loop applied to instrumentation
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — per-stage attribution for the runs an injection campaign flags
 - [Agent Circuit Breaker](../patterns/agent-design/agent-circuit-breaker.md) — the runtime mitigation for the crash faults this technique simulates
