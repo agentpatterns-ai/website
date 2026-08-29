@@ -10,7 +10,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-07-01
+last_reviewed: 2026-08-28
 maturity: emerging
 ---
 
@@ -61,6 +61,8 @@ The interpreter is a lighter alternative for orchestration code, not a universal
 A Deep Agents workflow lets the model write a short JavaScript program that fans out subagents, rather than issuing one dispatch tool call at a time ([LangChain, 2026](https://www.langchain.com/blog/introducing-dynamic-subagents-in-deep-agents)). The program runs in an interpreter with zero ambient authority — no filesystem, no network — and the only bridge it can reach is a `spawnSubagent` function. The harness caps that bridge: a bound on concurrent subagents and a bound on how many any single call can spawn.
 
 An injected instruction that tells the code to read `~/.ssh/id_rsa` or POST to an attacker host finds no filesystem and no network bridge to call — the capability was never added. If the program pauses for a human to approve a spend, the harness snapshots the interpreter's linear memory and resumes it when approval returns, even a day later.
+
+Vercel's Run SDK ships the same pattern in production ([Vercel, 2026](https://vercel.com/blog/introducing-run)). Each run gets a fresh QuickJS context in a worker thread, with no direct route to Node or the network. Every capability is bridged in as a host function. Dynamic evaluation is disabled, and built-in prototypes are hardened. Its resumption model differs from the snapshot approach above: settled host-function calls replay from their recorded results after an interruption.
 
 ## Key Takeaways
 

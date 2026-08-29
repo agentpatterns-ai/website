@@ -88,6 +88,7 @@ Agent assignment degrades or fails in three conditions:
 ## Related
 
 - [Copilot Coding Agent](coding-agent.md)
+- [Delegating Dependabot Pull Request Triage to an Agent](../../workflows/dependabot-pr-triage-delegation.md)
 - [GitHub Agentic Workflows](github-agentic-workflows.md)
 - [Defense-in-Depth Agent Safety](../../security/defense-in-depth-agent-safety.md)
 - [Safe Outputs Pattern](../../security/safe-outputs-pattern.md)

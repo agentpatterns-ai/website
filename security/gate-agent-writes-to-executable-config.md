@@ -9,7 +9,7 @@ aliases:
   - executable config write gate
   - acceptEdits build-tool config prompt
   - privileged write gate for code-execution config
-last_reviewed: 2026-06-02
+last_reviewed: 2026-08-28
 maturity: adopted
 ---
 
@@ -71,7 +71,7 @@ This gate addresses a surface that the existing pages on this site leave open:
 ## When this backfires
 
 - Greenfield scaffolding — when you expect the agent to author `.npmrc`, `.devcontainer/devcontainer.json`, or `.pre-commit-config.yaml` as part of project bootstrap, the gate fires on every legitimate step. Suppress the gate during explicit scaffolding flows, or scope it to changes of existing files rather than initial creation.
-- Headless CI agent runs — background jobs have no human at a prompt, so the gate either fails the run or auto-bypasses, defeating itself. Use pre-merge config review or sandbox isolation instead ([Pre-Trust Execution Surface §Headless CI](pre-trust-execution-surface.md)).
+- Headless CI agent runs — background jobs have no human at a prompt, so the gate either fails the run or auto-bypasses, defeating itself. Use pre-merge config review or sandbox isolation instead ([Pre-Trust Execution Surface §Headless CI](pre-trust-execution-surface.md)). GitHub reports that push rules in rulesets now support path exceptions. That adds a server-side enforcement point for this same pattern ([Push rules in rulesets now support path exceptions](https://github.blog/changelog/2026-08-25-push-rules-in-rulesets-now-support-path-exceptions)).
 - Confirmation-fatigue collapse — a multi-file refactor pass that touches ten config paths trains the reviewer to rubber-stamp. The same dynamic is flagged in [Confirmation Gates §When This Backfires](human-in-the-loop-confirmation-gates.md) and in [Approval Fatigue Is Breaking AI Agents (Edulakanti, 2026)](https://medium.com/@shreya_edulakanti/approval-fatigue-is-breaking-ai-agents-execution-boundaries-fix-it-6c46c6d512dd). Keep the gate's file scope narrow.
 - Lies-in-the-Loop dialog manipulation — an injected payload manipulates how the confirmation renders, so the user approves a diff that looks like a benign preference change but actually adds a `postinstall` script. Researchers demonstrated this against Claude Code and Copilot Chat in 2025 ([Checkmarx — Bypassing AI Agent Defenses With Lies-In-The-Loop](https://checkmarx.com/zero-post/bypassing-ai-agent-defenses-with-lies-in-the-loop/)). Surface the exact diff and parse for `preinstall`, `postCreateCommand`, and plugin paths in the dialog text.
 - Long-lived trust persistence — folder trust outlives any single approved edit. A teammate's PR review session weeks later picks up a config file the agent now treats as already trusted. Pair the write gate with periodic trust invalidation on config-file changes ([Mindgard, 2026](https://mindgard.ai/blog/approve-once-exploit-forever-the-trust-persistence-problem-in-ai-coding-agents)).

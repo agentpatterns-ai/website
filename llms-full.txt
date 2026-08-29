@@ -555,6 +555,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Choosing an Integration Layer for an Embedded Agent Harness](patterns/agent-design/embedded-harness-integration-layer.md)
 - [Canvas as Durable Workflow State: The Four-Step Blueprint and What It Costs](patterns/agent-design/canvas-as-durable-workflow-state.md)
 - [Artifact-Driven Workflow Compilation for Agent Execution](patterns/agent-design/artifact-driven-workflow-compilation.md)
+- [Capability Declarations for Agents That Act on Data](patterns/agent-design/capability-declarations-for-agent-actions.md)
 - [Code-Native Memory Substrates for Coding Agents](patterns/agent-design/code-native-memory-substrates.md)
 - [Cohesion-Aware Task Partitioning for Multi-Agent Coding](patterns/multi-agent/cohesion-aware-task-partitioning.md)
 - [Comparison-Only Advisor: Steering a Large Actor With a Tiny Comparator](patterns/agent-design/comparison-only-advisor.md)
@@ -1393,6 +1394,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Continuous Documentation as an Agent-Driven Practice](workflows/continuous-documentation.md)
 - [Continuous Triage: Automating Issue Classification with AI Workflows](workflows/continuous-triage.md)
 - [Daily-Use Skill Library: Encoding Your Process as Agent Skills](workflows/daily-use-skill-library.md)
+- [Delegating Dependabot Pull Request Triage to an Agent](workflows/dependabot-pr-triage-delegation.md)
 - [Discovery-Only Refactor Pass: Surface Candidates Before Touching Code](workflows/discovery-only-refactor-pass.md)
 - [Distilled Bootstrap Contract: Agent-Authored Repo Setup](workflows/distilled-bootstrap-contract.md)
 - [Documentation-Guided Legacy Migration: Architecture Docs as a C-to-Rust Blueprint](workflows/documentation-guided-legacy-migration.md)
@@ -1415,6 +1417,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Model-ID-as-Dependency: Migration Protocol for Deprecation Churn](workflows/model-deprecation-migration-protocol.md)
 - [Monolith-to-Sub-Agents Refactor: Five Lessons from a Brittle Prototype](workflows/monolith-to-subagents-refactor.md)
 - [Multi-Repo and No-Repo Coding Agent Automation Templates](workflows/multi-repo-no-repo-automation-templates.md)
+- [Notebook-Documented Automation for Repeat Operational Work](workflows/notebook-documented-automation.md)
 - [One-Click CI Auto-Fix: Human-Triggered Cloud-Agent Remediation for Failing GitHub Actions](workflows/one-click-ci-auto-fix.md)
 - [Parallel Polyglot Ports as a Spec-Ambiguity Oracle](workflows/parallel-polyglot-ports-spec-oracle.md)
 - [Pre-Execution Codebase Exploration for AI Coding Agents](workflows/pre-execution-codebase-exploration.md)
@@ -19548,6 +19551,8 @@ Handing the agent the exact clause does not close the gap. Under the study's Quo
 
 Moving a restraint rule out of the instruction file helps only when the control gates on something the contributor must produce: a required trailer, a passing verification job, a required human approval. Each is a fact CI can check.
 
+Built-in product controls close little of that gap. An audit of 481 public CLAUDE.md files extracted their security rules and checked each against Claude Code's built-in controls. Only 4.4% matched under the strictest standard (95% CI 2.6-6.7%), and 4-16% under looser matching. Two practitioners checked the sample independently ([When "Do Not" Is Not Deny, 2026](https://arxiv.org/abs/2608.23550)).
+
 A control that has to infer AI authorship is far weaker. Bot-account lookup, the signal most adoption studies lean on, recovers only 3.3% of detectable agent activity, a 30x relative-recall gap ([Khosravani and Mockus, 2026](https://arxiv.org/abs/2606.24429v1)). A bot that closes pull requests it believes are AI-authored inherits that error rate.
 
 Projects with working policies gate on artifacts instead. The Linux kernel requires an `Assisted-by:` trailer and the Apache Software Foundation requires `Generated-by:` in the commit message ([open-source AI contribution policies census](https://github.com/melissawm/open-source-ai-contribution-policies)). Neither detects the agent; both make it leave a mark a check can require.
@@ -21882,6 +21887,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Steering Running Agents: Mid-Run Redirection and Follow-Ups](steering-running-agents.md) — Send a mid-execution message that redirects tool calls without discarding the context already built
 - [Tool Preamble: User-Visible Status Updates Before Tool Calls](tool-preamble-status-update.md) — A short visible message before tool execution in multi-step agent runs reduces perceived latency without altering behavior; apply at phase boundaries, not per call
 - [Verification-Gated Agent Autonomy via Automated Review](verification-gated-agent-autonomy.md) — Pair broader agent autonomy with an automated review gate that screens output — trust scales through verification rather than per-action human approval, under specific conditions
+- [Capability Declarations for Agents That Act on Data](capability-declarations-for-agent-actions.md) — Declare permissions, an owner, live-state preconditions, and a reversibility class per action, so retrieved text can inform what an agent proposes without ever authorizing it
 - [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — A read-only deterministic predicate checks a proposed tool call against current state and blocks a forbidden write before it silently corrupts state — the deterministic counterpart to a probabilistic reviewer
 - [Informed Abstention as a Tool-Boundary Runtime Gate](informed-abstention-tool-boundary-gate.md) — Three pre-execution checks catch a missing required field, an unconfirmable state, and an absent approval, then route to clarification, a bounded re-read, or human handoff
 - [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — Write an agent's authority boundary down as two reviewable requirements artifacts — an Agency Justification Record and an Agentic Delegation Policy — instead of leaving it implicit in prompts and tool schemas
@@ -26129,6 +26135,69 @@ The default a canvas must beat is a file in the repository. Issues, branches, re
 - [Structured Task-State Ledger for Tool-Calling Agents (LedgerAgent)](ledger-agent-structured-task-state.md) — the same externalization done as typed state, not a surface
 - [Six-Shape Approval Response Taxonomy](approval-response-taxonomy.md) — what a human approval point can return beyond allow/deny
 - [Externalization in LLM Agents](externalization-in-llm-agents.md) — the mechanism this pattern rests on
+
+---
+
+### Capability Declarations for Agents That Act on Data
+Source: https://agentpatterns.ai/patterns/agent-design/capability-declarations-for-agent-actions/
+
+# Capability Declarations for Agents That Act on Data
+
+> Declare every capability an agent may invoke: who may call it, what must hold when it acts, and how badly it can go wrong.
+
+A capability declaration records one action an agent may perform, written in version control before the agent runs. Pramod Sadalage and Prem Chandrasekaran place it as the third body of definition in a context layer, next to a domain model of entities and a semantic model of metrics: the capability model "says what the agent may do". Every capability carries permissions and an owner; the ones that act carry preconditions and a reversibility class too ([Sadalage & Chandrasekaran, Thoughtworks](https://martinfowler.com/articles/making-data-ready-for-agentic-ai.html)).
+
+## When it pays
+
+Two things have to be true together. The agent can take an action you cannot cheaply undo, and the fact deciding whether that action is allowed does not appear in anything the agent reads. Without the first, you are buying a guarantee against a risk you do not carry. Without the second, the model can already see enough to judge for itself.
+
+The second condition is measurable. Jie Wu and Ming Gong call the failure mode policy-invisible violations, "cases in which compliance depends on entity attributes, contextual state, or session history absent from the agent's visible context". Their PhantomPolicy benchmark returns clean business data with no policy metadata attached, and across 60 risky cases each of five frontier models took the violating action 54 to 59 times ([arXiv:2604.12177v1](https://arxiv.org/abs/2604.12177v1)).
+
+## What a capability declares
+
+| Field | What it fixes |
+|---|---|
+| Permissions | Who may invoke this action, and acting as whom |
+| Owner | The person accountable when it misbehaves |
+| Preconditions | What must hold, checked "against live state at the moment of acting rather than against whatever the agent read earlier in its plan" |
+| Reversibility class | Cleanly reversible, reversible at a cost through a compensating transaction, or irreversible |
+
+Reversibility is the field worth arguing about. Sadalage and Chandrasekaran hold that it predicts safe autonomy better than the money involved: "A $50,000 internal ledger correction you can back out is a safer thing to automate than a $200 payment to an external account you cannot claw back." Key guardrails to the class rather than the transaction size, and route irreversible actions to a human whatever autonomy the agent has earned ([Sadalage & Chandrasekaran](https://martinfowler.com/articles/making-data-ready-for-agentic-ai.html)).
+
+## Retrieved text informs, declared rules gate
+
+Most preconditions already exist as prose somewhere, in a refund policy or a compliance manual. The shortcut is to let the agent read that document at action time and decide for itself, and that shortcut is what the pattern forbids. Rules get extracted ahead of time, curated by a human, and stored as declared preconditions, each carrying a link back to the passage it came from. The agent may still read a complaint ticket or a contract clause to work out what to propose. Only the declared rules decide what is permitted ([Sadalage & Chandrasekaran](https://martinfowler.com/articles/making-data-ready-for-agentic-ai.html)).
+
+That boundary is a security property too. Keeping retrieved text out of the authorization path means a poisoned document cannot grant a permission the agent did not already hold. The prompt-injection literature reaches the same rule from the other direction: "once an LLM agent has ingested untrusted input, it must be constrained so that it is *impossible* for that input to trigger any consequential actions" ([Beurer-Kellner et al., arXiv:2506.08837v3](https://arxiv.org/abs/2506.08837v3)). It is not a full defense, and the limit is the article's own: injected text still shapes what the agent proposes, and a human approver shown fabricated evidence may wave it through ([Sadalage & Chandrasekaran](https://martinfowler.com/articles/making-data-ready-for-agentic-ai.html)).
+
+## Why it works
+
+A check the model's own reading can influence is not a check. Wu and Gong moved the decision into a layer that materializes the post-action world state and verifies structural invariants before allowing, blocking, or asking. It scored 93.0% against human-reviewed trace labels where a content-only baseline scored 68.8%, and the paper states the split plainly: "The model should be responsible for task completion; a policy-aware enforcement layer, with access to organizational world state, should be responsible for compliance" ([arXiv:2604.12177v1](https://arxiv.org/abs/2604.12177v1)). The declaration is what gives that layer something to check. Without it, enforcement sees the same context the model had and inherits the same blindness.
+
+## When this backfires
+
+- Every action in reach reverses cleanly. The reversibility class is what keys the guardrail, so when every action falls into one class there is nothing left for it to decide.
+- Rules change faster than anyone clears the review queue. The authors name the limit themselves: "Detecting that a document changed is easy; knowing that the change invalidated a precondition derived from it is a judgement, not a diff" ([Sadalage & Chandrasekaran](https://martinfowler.com/articles/making-data-ready-for-agentic-ai.html)).
+- Pruning the read surface along with the write surface. Sadalage and Chandrasekaran hold that five to ten well-described capabilities beat 50 thin API wrappers "almost every time" ([Sadalage & Chandrasekaran](https://martinfowler.com/articles/making-data-ready-for-agentic-ai.html)), which is sound where the capability acts. On MCPVerse, which wires 550 real executable tools into an action space over 140k tokens, most models degrade on larger tool sets but Claude-4-Sonnet improved with the expanded space ([Lei et al., arXiv:2508.16260v2](https://arxiv.org/abs/2508.16260v2)). Measure before you prune what the agent may read.
+- Nobody owns the declarations. Sadalage and Chandrasekaran put the decay bluntly: "An access scope with no owner quietly widens until it's a standing service account again" ([Sadalage & Chandrasekaran](https://martinfowler.com/articles/making-data-ready-for-agentic-ai.html)).
+- Treating a declaration as ground truth. Natural-language authorization constraints "inevitably contain ambiguities and logical or semantic gaps that cause the agent's behavior to systematically diverge from the true requirements", and refining them against pre-deployment feedback closed up to 82% of the gap toward a human oracle ([Choi et al., arXiv:2604.15505v1](https://arxiv.org/abs/2604.15505v1)).
+- The declared set is thin next to the real case mix. Where nothing covers the situation the agent escalates rather than improvising, because "an undeclared case degrades the agent to supervised, not to autonomous" ([Sadalage & Chandrasekaran](https://martinfowler.com/articles/making-data-ready-for-agentic-ai.html)). A narrow capability model therefore yields an agent that escalates most of the time.
+
+## Key Takeaways
+
+- Declare permissions, an owner, live-state preconditions, and a reversibility class per action. The first two apply to every capability; the last two only to the ones that act.
+- Reach for this when actions are hard to undo and the deciding facts sit outside the agent's context. Five frontier models violated policy in 54 to 59 of 60 cases when those facts were hidden ([arXiv:2604.12177v1](https://arxiv.org/abs/2604.12177v1)).
+- Extract the rule from the policy document once, under human curation, and check it against live state. Reading the document at action time puts a poisoned page on the authorization path.
+- Key autonomy to reversibility, not transaction size, and route irreversible actions to a human regardless of track record.
+- Give every declaration an owner and a revision cadence. The artifact drifts from the source it was derived from, and no diff will tell you when it stopped being true.
+
+## Related
+
+- [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — the runtime predicate that evaluates a rule; this page covers where that rule is written down and curated.
+- [Informed Abstention as a Tool-Boundary Runtime Gate](informed-abstention-tool-boundary-gate.md) — what the agent does when a declared precondition is unmet or unconfirmable.
+- [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — the whole-agent authority boundary reviewed before shipping, one level above a per-action declaration.
+- [Agent-Ready Data Architecture for Analytics Agents](agent-ready-data-architecture.md) — the warehouse facts the read path needs, beneath the acting path this page governs.
+- [Governed Sources of Truth for Analytics Agents (Structure Over Access)](governed-sources-of-truth-analytics-agents.md) — the read-side counterpart, routing questions through governed metrics instead of raw tables.
 
 ---
 
@@ -33673,7 +33742,7 @@ Source: https://agentpatterns.ai/patterns/agent-design/harness-design-dimensions
 
 # Harness Design Dimensions and Archetypes
 
-> A source-grounded study of 70 agent-system projects reduces harness infrastructure to five recurring design dimensions and five archetypes — a population-level lens for reading and comparing harnesses.
+> A source-grounded study of 70 agent-system projects reduces harness infrastructure to five design dimensions and five archetypes — a population-level lens for comparing harnesses.
 
 Related lesson: [What a Harness Is](https://learn.agentpatterns.ai/harness-engineering/what-a-harness-is/) — this concept features in a hands-on lesson with quizzes.
 
@@ -33701,6 +33770,8 @@ Each dimension is a position choice, not a binary ([arXiv:2604.18071](https://ar
 - Tool systems — registry-oriented systems are dominant; [MCP](../../tool-engineering/mcp-result-persistence-annotation.md)- and plugin-oriented extensions are emerging.
 - Safety mechanisms — intermediate isolation ([sandboxes](../../security/sandbox-runtime-comparison.md), [permission prompts](../../security/permission-gated-commands.md)) is common; high-assurance audit ([provenance-aware decision auditing](../../security/provenance-aware-decision-auditing.md)) is rare.
 - Orchestration — the control flow and scheduling layer around agent loops.
+
+A case-study companion to the population-level study above reads three harnesses built from opposing philosophies (LangChain's deepagents, Earendil's pi, and DeepSeek's dsh) at pinned commits. Despite traveling in opposite directions, all three converge on one middle form built from five recurring elements distinct from the dimensions above ([arXiv:2608.23953](https://arxiv.org/abs/2608.23953)).
 
 The paper complements the 12-dimension / 13-system scaffold-architecture taxonomy ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515v2)) detailed in the next section: finer-grained analysis of individual scaffolds, lower population coverage. Pick the five-dimension view for reading across the whole population; pick the 12-dimension view when characterizing a single scaffold in depth.
 
@@ -84412,7 +84483,7 @@ Adopt it only when all four conditions hold. Drop one and it degrades into the a
 - The reviewer executes the test steps against the running system. Reading the summary and clicking verified turns the report into a self-authored verdict, the configuration that fails hardest.
 - The change is not cheaply machine-checkable. A unit test or CI gate is independent and costs no human attention per run. Reserve the report for visual behavior, judgement calls, and cross-system flows.
 - The verdict channel is wired back to the agent. Without the return path you are writing status comments by hand again — the cost the practice exists to remove.
-- Batch size stays inside review capacity. GitHub reports Copilot code review has "processed over 60 million reviews, growing 10x in less than a year", and that "more than one in five code reviews on GitHub now involve an agent" ([Griffiths, GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)). Past some batch size the report is another skim surface.
+- Batch size stays inside review capacity. GitHub reports Copilot code review has "processed over 60 million reviews, growing 10x in less than a year", and that "more than one in five code reviews on GitHub now involve an agent" ([Griffiths, GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)). One practitioner runs 50 to 100 tasks a day this way, spending 30 seconds to one minute verifying each report ([Towards Data Science](https://towardsdatascience.com/how-to-effectively-solve-100-tasks-with-claude-code/)). Past some batch size the report is another skim surface.
 
 ## What goes in the report
 
@@ -88104,7 +88175,7 @@ Every standard correction is partial. The measured limits matter more than the r
 | Swap to a cross-family judge | Judge accuracy tracks the judge's own task accuracy at Pearson r of 0.795, 0.708, and 0.899 on MATH500, MMLU, and MBPP+, so a weaker neutral judge can cost more accuracy than the bias it removes ([Chen et al., 2025, arXiv:2504.03846v3](https://arxiv.org/abs/2504.03846v3)) |
 | Add a panel of diverse judges | A panel of smaller disjoint families runs "over seven times less expensive" than one large judge ([Verga et al., 2024, arXiv:2404.18796v2](https://arxiv.org/abs/2404.18796v2)), but nine judges from seven families supply about 2.18 independent votes, and the best single judge matched or beat the panel in every condition tested ([Kohli, 2026, arXiv:2605.29800v1](https://arxiv.org/abs/2605.29800v1)) |
 | Blind the candidate's provenance | Light perturbation such as synonym replacement reduces self-preference, but under fuller neutralization of stylistic differences "self-preference recovers" ([Mahbub and Feng, 2025, arXiv:2512.05379v1](https://arxiv.org/abs/2512.05379v1)) |
-| Calibrate against a human golden set | Catches aggregate judge error, not this one. It is the practice described in [meta-evaluating the judge](meta-evaluate-llm-judge-rubric-verification.md), and it averages the two strata |
+| Calibrate against a human golden set | Catches aggregate judge error, not this one. It is the practice described in [meta-evaluating the judge](meta-evaluate-llm-judge-rubric-verification.md), and it averages the two strata. GitHub's eval lifecycle applies the idea at production scale: the judge triages rather than settles ground truth, low-confidence, conflicting, or high-impact verdicts go to a human, and periodic resampling of high-confidence cases catches drift. GitHub reports the practice cut false positives by 95% and held a recall guardrail ([GitHub, 2026](https://github.blog/ai-and-ml/llms/how-to-evaluate-llms-before-production/)) |
 
 ## When this backfires
 
@@ -100779,6 +100850,8 @@ A Deep Agents workflow lets the model write a short JavaScript program that fans
 
 An injected instruction that tells the code to read `~/.ssh/id_rsa` or POST to an attacker host finds no filesystem and no network bridge to call — the capability was never added. If the program pauses for a human to approve a spend, the harness snapshots the interpreter's linear memory and resumes it when approval returns, even a day later.
 
+Vercel's Run SDK ships the same pattern in production ([Vercel, 2026](https://vercel.com/blog/introducing-run)). Each run gets a fresh QuickJS context in a worker thread, with no direct route to Node or the network. Every capability is bridged in as a host function. Dynamic evaluation is disabled, and built-in prototypes are hardened. Its resumption model differs from the snapshot approach above: settled host-function calls replay from their recorded results after an interruption.
+
 ## Key Takeaways
 
 - A capability-additive interpreter starts with zero authority and bridges in each action deliberately, so the blast radius is what you added, not what you forgot to remove.
@@ -104151,7 +104224,7 @@ Enforced outside the model: sandboxed execution (105 comments), version control 
 
 Advisory, resolved inside the model's context: ignore files and rules files, which make up the other half of secure IDE configuration. Configuration is the most-adopted category of the 13 at 501 comments, and it mixes the two kinds together.
 
-Three independent records show the advisory half failing. The study's opening case has a developer block a `.env` file in Copilot, after which Copilot "read and attempted to modify the `.env` file, ignoring the configured access restrictions" ([Akhond et al., 2026](https://arxiv.org/abs/2607.26390v3)). Cursor documents the same ceiling as designed behavior: "The terminal and MCP server tools used by Agent cannot block access to code governed by `.cursorignore`" ([Cursor Docs](https://cursor.com/docs/reference/ignore-file)). A published advisory shows an attacker can invalidate an existing ignore configuration by writing a new cursorignore file ([GHSA-vhc2-fjv4-wqch](https://github.com/cursor/cursor/security/advisories/GHSA-vhc2-fjv4-wqch)).
+Four independent records show the advisory half failing. The study's opening case has a developer block a `.env` file in Copilot, after which Copilot "read and attempted to modify the `.env` file, ignoring the configured access restrictions" ([Akhond et al., 2026](https://arxiv.org/abs/2607.26390v3)). Cursor documents the same ceiling as designed behavior: "The terminal and MCP server tools used by Agent cannot block access to code governed by `.cursorignore`" ([Cursor Docs](https://cursor.com/docs/reference/ignore-file)). A published advisory shows an attacker can invalidate an existing ignore configuration by writing a new cursorignore file ([GHSA-vhc2-fjv4-wqch](https://github.com/cursor/cursor/security/advisories/GHSA-vhc2-fjv4-wqch)). A fourth record checks CLAUDE.md files directly. The paper extracted security rules from 481 public files. Only 4.4% had a matching built-in Claude Code control under the strictest standard (95% CI 2.6-6.7%), and 4-16% under looser matching. Two practitioners checked a sample independently and confirmed the count (["When 'Do Not' Is Not Deny," 2026](https://arxiv.org/abs/2608.23550)).
 
 ## Why it works
 
@@ -104204,6 +104277,7 @@ Nothing here depends on the agent honoring a rule; the file is not in the reposi
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — environment-variable injection as the enforced alternative to ignore files
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — scoping the permissions that carry the enforced half
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — design-side taxonomy to place these field-reported categories against
+- [Delegating Dependabot Pull Request Triage to an Agent](../workflows/dependabot-pr-triage-delegation.md) — a vendor stating that its own approval panel is advisory, not enforced
 
 ---
 
@@ -105381,7 +105455,7 @@ This gate addresses a surface that the existing pages on this site leave open:
 ## When this backfires
 
 - Greenfield scaffolding — when you expect the agent to author `.npmrc`, `.devcontainer/devcontainer.json`, or `.pre-commit-config.yaml` as part of project bootstrap, the gate fires on every legitimate step. Suppress the gate during explicit scaffolding flows, or scope it to changes of existing files rather than initial creation.
-- Headless CI agent runs — background jobs have no human at a prompt, so the gate either fails the run or auto-bypasses, defeating itself. Use pre-merge config review or sandbox isolation instead ([Pre-Trust Execution Surface §Headless CI](pre-trust-execution-surface.md)).
+- Headless CI agent runs — background jobs have no human at a prompt, so the gate either fails the run or auto-bypasses, defeating itself. Use pre-merge config review or sandbox isolation instead ([Pre-Trust Execution Surface §Headless CI](pre-trust-execution-surface.md)). GitHub reports that push rules in rulesets now support path exceptions. That adds a server-side enforcement point for this same pattern ([Push rules in rulesets now support path exceptions](https://github.blog/changelog/2026-08-25-push-rules-in-rulesets-now-support-path-exceptions)).
 - Confirmation-fatigue collapse — a multi-file refactor pass that touches ten config paths trains the reviewer to rubber-stamp. The same dynamic is flagged in [Confirmation Gates §When This Backfires](human-in-the-loop-confirmation-gates.md) and in [Approval Fatigue Is Breaking AI Agents (Edulakanti, 2026)](https://medium.com/@shreya_edulakanti/approval-fatigue-is-breaking-ai-agents-execution-boundaries-fix-it-6c46c6d512dd). Keep the gate's file scope narrow.
 - Lies-in-the-Loop dialog manipulation — an injected payload manipulates how the confirmation renders, so the user approves a diff that looks like a benign preference change but actually adds a `postinstall` script. Researchers demonstrated this against Claude Code and Copilot Chat in 2025 ([Checkmarx — Bypassing AI Agent Defenses With Lies-In-The-Loop](https://checkmarx.com/zero-post/bypassing-ai-agent-defenses-with-lies-in-the-loop/)). Surface the exact diff and parse for `preinstall`, `postCreateCommand`, and plugin paths in the dialog text.
 - Long-lived trust persistence — folder trust outlives any single approved edit. A teammate's PR review session weeks later picks up a config file the agent now treats as already trusted. Pair the write gate with periodic trust invalidation on config-file changes ([Mindgard, 2026](https://mindgard.ai/blog/approve-once-exploit-forever-the-trust-persistence-problem-in-ai-coding-agents)).
@@ -143928,6 +144002,7 @@ Agent assignment degrades or fails in three conditions:
 ## Related
 
 - [Copilot Coding Agent](coding-agent.md)
+- [Delegating Dependabot Pull Request Triage to an Agent](../../workflows/dependabot-pr-triage-delegation.md)
 - [GitHub Agentic Workflows](github-agentic-workflows.md)
 - [Defense-in-Depth Agent Safety](../../security/defense-in-depth-agent-safety.md)
 - [Safe Outputs Pattern](../../security/safe-outputs-pattern.md)
@@ -146257,6 +146332,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Skill Library Refinement Loops](skill-library-refinement-loops.md) — Four complementary feedback mechanisms that together keep a shared skill library accurate and useful
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — Iterating on agent quality over time
 - [Continuous Documentation as an Agent-Driven Practice](continuous-documentation.md) — AI agents detect documentation-code drift on schedule or push and open reviewable PRs to realign docs as a continuous pipeline
+- [Notebook-Documented Automation for Repeat Operational Work](notebook-documented-automation.md) — The agent writes an executable notebook while it works, records the dead ends and the decision, and drops an index file the next run can find it by
 - [Accumulated Behavioral Rules from Review Feedback](accumulated-behavioral-rules.md) — Codify each accepted review comment as a persistent behavioral rule the agent loads and self-checks, so it stops repeating the same class of mistake
 - [The Error-Class Governance Loop for Instruction Libraries](instruction-library-governance-loop.md) — Classify each recurrence as novelty or drift, move rules along a fixed pathway from prose to mechanized check to archive, and pair every metric with its inverse
 - [Escape Hatches](escape-hatches.md) — Unsticking stuck agents
@@ -146280,6 +146356,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — A single skill encodes a state machine into issue labels and produces a durable agent brief as the executor hand-off contract
 - [Labels as Locks: Pipelined Backlog Processing with Issue Labels as Stage Gates](labels-as-locks-pipeline.md) — Coordinate concurrent agents on a backlog by gating stages with labels and locking work with a claim label plus timestamped comment as a lease — for idempotent, minutes-scale work
 - [Auto-Triage Workflow: Bug-Monitoring Agent that Connects Related Reports and Opens Fix PRs](auto-triage-workflow.md) — Four-stage agent workflow (monitor, correlate, investigate, propose-fix) that watches alert streams and either tags the right owner or opens a fix PR — only safe under three named preconditions
+- [Delegating Dependabot Pull Request Triage to an Agent](dependabot-pr-triage-delegation.md) — A scheduled agent groups open dependency PRs by risk and reads CI, with the decision boundary enforced by the automation's tool grant rather than an approval prompt
 - [Throwaway-Prototype Skill: Build to Discard, Keep Only the Answer](throwaway-prototype-skill.md) — A scoped skill that builds the smallest end-to-end thing to resolve one design question, forbids polish, and captures only the verdict before the code is deleted
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md) — Configure a PostToolUse hook so that formatting and linting run automatically after every file Claude writes or edits
 - [Repository Bootstrap Checklist](repository-bootstrap-checklist.md) — Adding agent support to an existing repo
@@ -151671,6 +151748,85 @@ The tier rule is specific to platform-resident agents that write into third-part
 
 ---
 
+### Delegating Dependabot Pull Request Triage to an Agent
+Source: https://agentpatterns.ai/workflows/dependabot-pr-triage-delegation/
+
+# Delegating Dependabot Pull Request Triage to an Agent
+
+> Delegate Dependabot triage to a scheduled agent that only produces a digest, and set the boundary with the automation's tool grant.
+
+Three conditions decide whether this is worth building. Your CI has to exercise the dependencies it covers, or the agent's central signal means nothing. Grouping and cooldown have to be configured already, because those solve the volume problem deterministically and for free. And the automation has to hold no write tool, because the agent's summary is a claim about risk that nothing in the pipeline verifies. Miss any of the three and you have added a confident narrator to a queue you were already approving too fast.
+
+## The volume argument, and its limit
+
+Dependency PRs are repetitive and high-volume, which is what makes them a delegation candidate. GitHub reports one repository where "92 of its 578 commits, roughly one in six, were Dependabot version bumps, with 61 in the previous 12 months alone, sometimes several in a single day" ([GitHub Blog: Tame Dependabot](https://github.blog/security/supply-chain-security/tame-dependabot-group-your-updates-slow-the-cadence-keep-security-fast/)). Opening each one to read a version delta and a check mark is work no one wants and no one does carefully by the fortieth PR.
+
+The limit is that the same post answers the volume problem without an agent. Grouping bundles updates so that "instead of 10 pull requests, you get one pull request." Dependabot "now waits until a new release has been on its registry for at least three days before opening a version-update pull request." Configure those first. An agent layered on a queue that has neither grouping nor a cooldown is a premature answer, and the more expensive one.
+
+## Three implementation layers
+
+```mermaid
+flowchart LR
+    subgraph automation [Automation with no write tools]
+        A[Daily schedule fires] --> B[Read open PRs]
+        B --> C[Group by risk]
+        C --> D[Produce digest]
+    end
+    D --> E[Human merges or investigates]
+```
+
+### Layer 1: Trigger
+
+GitHub Copilot cloud agent automations run "on an interval (hourly, daily, or weekly), when a new issue is created or when a pull request is created or updated" ([GitHub Changelog: Schedule and automate tasks](https://github.blog/changelog/2026-06-02-schedule-and-automate-tasks-with-copilot-cloud-agent/)). A daily interval timed before the working day suits this loop, because the queue's contents change on Dependabot's schedule rather than on yours.
+
+### Layer 2: Classification
+
+GitHub's walkthrough gives the automation this instruction verbatim: "Review the open Dependabot pull requests, group them by risk, identify the safe patch and minor version updates, verify that CI is passing for each pull request, and provide a short summary of the recommended next steps" ([GitHub Blog: Automate Dependabot pull request triage](https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-automate-dependabot-pull-request-triage/)). Everything that instruction asks for sits in the PR metadata. The agent never reads your application.
+
+### Layer 3: Output
+
+In the walkthrough the output is a digest and nothing else. "When the automation finishes, Copilot returns a summary instead of a list of individual pull requests." The automation applies no label, writes no comment, approves nothing, and merges nothing. That is the version worth copying, and it is a weaker claim than the phrase "agent triage" usually carries.
+
+## Where the boundary is enforced
+
+Copilot automations bind tools per automation. You configure "the tools available to the agent, such as 'create pull request' or 'update issue labels', so you have full control over what your automation can do" ([GitHub Changelog](https://github.blog/changelog/2026-06-02-schedule-and-automate-tasks-with-copilot-cloud-agent/)). An automation granted no write tool cannot act on a PR whatever the model concludes about it. That grant is the boundary.
+
+A suggest-then-apply approval step is not. GitHub says so about its own, writing of the automation controls it shipped for GitHub Issues: "Approvals are a workflow convenience, not a security control. They don't enforce a server-side boundary, and an agent with permission to change issues can directly apply changes rather than suggest them" ([GitHub Changelog: Agent automation controls](https://github.blog/changelog/2026-07-23-agent-automation-controls-in-github-issues-in-public-preview/)). The same feature has agents "rate each supported action high, medium, or low confidence," and "High-confidence changes apply automatically." The statement is scoped to issue automations, and the shape generalizes: a threshold the agent scores itself against is not a gate on the agent. This is the [enforced-versus-advisory distinction](../security/enforced-versus-advisory-controls.md) in a vendor's own words.
+
+Summarizing, grouping, reading CI status, and naming which PRs need a look are verdicts the agent may issue alone. Merging a bump, widening a version range, and dismissing an alert are not. The way to make that split hold is to withhold the tool rather than to instruct the model.
+
+## Why it works
+
+Dependency PRs are delegable because triage is a classification over a small machine-readable feature set: the semver delta, the CI conclusion, the release age, and the changelog text. None of those require reading the application, which is why an automation with no repository-code access still produces a useful digest ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-automate-dependabot-pull-request-triage/)). The queue is repetitive in the way that makes it a poor use of a person's attention and a fair use of a model's.
+
+The mechanism fails where the feature set stops predicting the outcome. A version number is a claim by the publisher, not a measurement of compatibility. A systematic review of 97 studies found that "approximately one in five non-major Maven releases introduce public API breaks," that behavioral changes "account for the largest share (1,034 of 1,519, 68.1%)" of npm breaking changes, and that the 43 surveyed detection approaches "reach high accuracy on syntactic breaks but limited coverage on behavioral ones" ([arXiv:2605.24397v1](https://arxiv.org/abs/2605.24397v1)). That review names the failure of semantic versioning as a trust mechanism among its open challenges. The agent classifies on the axis that lies.
+
+## When this backfires
+
+- CI that does not exercise the dependency. The safe bucket rests entirely on a green check. Where tests never touch the upgraded path, the agent turns an absence of evidence into a recommendation, and the digest reads the same either way.
+- Security updates during a live compromise. Dependabot security updates bypass the three-day cooldown by design: "Security updates still open immediately, so critical fixes are never held back by the cooldown" ([Tame Dependabot](https://github.blog/security/supply-chain-security/tame-dependabot-group-your-updates-slow-the-cadence-keep-security-fast/)). The malicious axios releases `1.14.1` and `0.30.4` went up at 00:21 UTC on 2026-03-31 and came down at 03:15, injecting `plain-crypto-js@4.2.1`, a cross-platform remote access trojan ([axios post-mortem](https://github.com/axios/axios/issues/10636)). Roughly three hours. Microsoft's mitigation guidance was to "Disable automated dependency bots (such as Dependabot or Renovate) by disabling or restricting Axios updates in their config" ([Microsoft Security Blog](https://www.microsoft.com/en-us/security/blog/2026/04/01/mitigating-the-axios-npm-supply-chain-compromise/)). The remedy is to stop the bot for the affected package, which is a decision about one dependency taken under time pressure. An agent that makes the urgent bucket faster to clear pushes the other way.
+- Transitive bumps. Transitive changes account for 20.36% of client-impacting source breaks ([arXiv:2605.24397v1](https://arxiv.org/abs/2605.24397v1)). The agent reads the manifest diff, not the resolved tree, so the package named in the PR title is not the package that breaks the build.
+- Ecosystems where semver is decorative. Patch, minor, and major is the agent's primary output axis. Where publishers ship breaks in non-major releases, that grouping sorts the queue on the wrong property and gives no signal that it has done so.
+- Granting write tools to save a step. Once the automation holds label or PR write tools, the prompt is the only thing between it and the repository. GitHub disclaims its own approval step as a boundary for issue automations, so assume the same of any suggest-then-apply gate you did not enforce server-side. The step you saved is the boundary.
+
+## Key Takeaways
+
+- The GitHub walkthrough builds a read-only summarizer; treat "agent triage" claims that go further as a change in risk, not a change in convenience.
+- Enforce the boundary with the automation's tool grant. GitHub states its own approval step for issue automations enforces no server-side boundary.
+- Configure grouping and the three-day cooldown before adding an agent. They solve the volume problem deterministically.
+- The agent classifies on the semver delta, and 68.1% of npm breaking changes are behavioral rather than syntactic.
+- Security updates skip the cooldown, so the bucket with the least platform protection is the one an agent is most likely to mark urgent and safe.
+
+## Related
+
+- [Dependabot Agent Assignment](../tools/copilot/dependabot-agent-assignment.md) — assigning an alert to the coding agent for a fix, the acting half of this loop
+- [Enforced Versus Advisory Controls](../security/enforced-versus-advisory-controls.md) — why an approval prompt is not a boundary
+- [The Delegation Decision](../patterns/agent-design/delegation-decision.md) — deciding whether a task class is worth an agent at all
+- [Supply-Chain Security Debt in Agent Pull Requests](../security/supply-chain-security-debt-agent-prs.md) — where security debt concentrates in agent-authored diffs
+- [LLM-Pinned Vulnerable Versions](../security/llm-pinned-vulnerable-versions.md) — the model-side half of the dependency-version risk
+
+---
+
 ### Dev Containers for AI Coding Agents: Claude Code vs Copilot CLI
 Source: https://agentpatterns.ai/workflows/devcontainers-for-ai-coding-agents/
 
@@ -156210,6 +156366,102 @@ The configuration is fictional in syntax, but the substance is real. The trigger
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — The three-leg framing that the no-repo template anatomy must honour.
 - [One-Click CI Auto-Fix](one-click-ci-auto-fix.md) — Adjacent bounded-autonomy pattern: human-triggered cloud-agent remediation for failing GitHub Actions, single-repo scope.
 - [Continuous Autonomous Task Loop](continuous-autonomous-task-loop.md) — Self-directed loop variant: the agent selects and executes from a task backlog without external dispatch.
+
+---
+
+### Notebook-Documented Automation for Repeat Operational Work
+Source: https://agentpatterns.ai/workflows/notebook-documented-automation/
+
+# Notebook-Documented Automation for Repeat Operational Work
+
+> An operational run records its own steps, dead ends, and decision into a notebook, with an index file the next agent discovers it by.
+
+Notebook-documented automation makes the agent produce a durable artifact as a side effect of doing the chore. The agent writes a plan into an executable notebook, waits for approval, then documents each command, its output, and how it read the result. An engineer at OpenAI describes the outcome: "The result is a notebook that documents the steps required to complete the task, along with the dead ends" ([OpenAI Developers](https://developers.openai.com/blog/automating-repetitive-work-at-openai-with-codex)). The failed paths are the part a conventional runbook throws away.
+
+It pays off under four conditions. The work has to recur. The record has to be curated rather than appended. The environment has to be stable enough that last quarter's dead end is still a dead end. A human has to read the decision notes, for a reason covered under [when this backfires](#when-this-backfires).
+
+## The lost-reasoning problem
+
+Runbooks decay because the reasoning behind each step is never written down. It stays in the conversation that produced the procedure, and the procedure ships without it. The next operator inherits a list of commands and no account of the approaches that did not work, so they try some of them again.
+
+Recovering that reasoning is a deliberate step at the end of the run, not a byproduct of it: "Before wrapping up, I work with Codex to capture decisions that would otherwise disappear into the conversation: why one option was chosen, which approach is now preferred, and what someone should do differently next time" ([OpenAI Developers](https://developers.openai.com/blog/automating-repetitive-work-at-openai-with-codex)). The work it is applied to is ordinary infrastructure toil: provisioning Kubernetes clusters against private links, quota, and Terraform, and running model evaluations through grader issues and PyTorch configuration.
+
+## Three implementation layers
+
+```mermaid
+flowchart LR
+    A[Goal cell] --> B[Agent writes plan]
+    B --> C{Human approves}
+    C -->|revise| B
+    C -->|approve| D[Execute and document]
+    D --> E[Dead ends and decision]
+    E --> F[Index file]
+    F -.discovered by.-> A
+```
+
+### Layer 1: the approved outline
+
+The agent writes its plan into the notebook and stops. The instruction the source uses is short: "Review a previous run to understand the workflow. Write a detailed plan in this notebook. Wait for me to review and approve the plan before beginning" ([OpenAI Developers](https://developers.openai.com/blog/automating-repetitive-work-at-openai-with-codex)). The gate sits on the plan rather than the finished work, which is the cheap place to catch a wrong approach.
+
+### Layer 2: the run record
+
+The same instruction continues: "Document the commands you run, their output, and how you interpret the results." Interpretation is the load-bearing word. A logged command with no reading of its output is a [trajectory log](../observability/trajectory-logging-progress-files.md), useful for debugging and useless as a runbook. Dead ends go in this layer too, alongside the successful path, and the decision record closes it.
+
+### Layer 3: the discovery index
+
+Discovery is a separate mechanism from recording, and skipping it makes the first two layers write-only. Runme emits a companion file for each notebook: "For each notebook, Runme also writes a companion Markdown index named `*.index.md`. Google Drive can index that file, which makes previous notebooks easier for an agent to discover when it needs examples, operational context, or the outcome of an earlier run" ([OpenAI Developers](https://developers.openai.com/blog/automating-repetitive-work-at-openai-with-codex)). Runme is an open-source notebook that combines Markdown, code cells, and shell execution ([Runme](https://github.com/runmedev/runme)); any substrate that produces an indexable pointer alongside the artifact will do.
+
+## Triggers and constraints
+
+The cycle is manually triggered, not scheduled. Someone starts a run when the chore comes round again, and the agent's first act is to read the index for a prior example.
+
+Two constraints bound the agent's authority. It cannot begin executing until the human approves the plan, which is the only hard gate in the loop. During execution the human watches and intervenes rather than reviewing at the end. The source describes a stuck agent being nudged toward an approved option when it exhausts quota ([OpenAI Developers](https://developers.openai.com/blog/automating-repetitive-work-at-openai-with-codex)), which is supervision of a running process rather than sign-off on a finished one.
+
+The implementation is tool-agnostic and depends on no specific assistant. It needs a notebook substrate the agent can write to, an approval step before execution, and a place to put the index where the next run will look.
+
+## Why it works
+
+An agent opening a new session has no memory of the previous one, so a written record is the only thing that prunes the search space before it starts. Reflexion measures that step directly: agents that turn task failure into verbal reflections, store them in an episodic memory buffer, and read them back on the next trial reach 91% pass@1 on HumanEval against GPT-4's 80%, with no weight updates ([Shinn et al., arXiv:2303.11366v4](https://arxiv.org/abs/2303.11366v4)). The dead ends are the reflections and the notebook is the buffer.
+
+The claim is narrow. Written failures cut branches an agent would otherwise re-explore. They do not make it better at the branches that remain.
+
+## When this backfires
+
+### The agent's stated reason may not be the real one
+
+This is the sharpest limit and it lands on the decision record. Model-produced explanations systematically misrepresent the basis for an answer: Turpin et al. biased models with features the explanations never mentioned, and accuracy fell by up to 36% across 13 BIG-Bench Hard tasks while the prose stayed fluent ([Turpin et al., arXiv:2305.04388v2](https://arxiv.org/abs/2305.04388v2)). An unreviewed account of why one option was chosen is a plausible record of something that may not have happened. Write that cell with the agent, not through it.
+
+### The dead-end log decays and nothing expires it
+
+Recording a failure is cheap. Deciding whether last month's failure is still a failure is expensive, and no step in this workflow does it. That is the trap in [reusing a frozen playbook](../patterns/anti-patterns/frozen-playbook-reuse-validation.md) against a target nobody re-validated. Date each dead end and drop the ones older than your environment's drift rate.
+
+### Accumulated context costs the next run
+
+Every retained dead end is input the following agent pays for. Chroma's context-rot study reports that model performance "varies significantly as input length changes, even on simple tasks" ([Chroma](https://github.com/chroma-core/context-rot)). Length alone degrades the read, so a bigger context window does not buy you a bigger log. Feed the next run the index and the decision record, not three prior transcripts. It is the same [attention budget](../patterns/agent-design/orchestrator-attention-budget.md) constraint that bounds any accumulating artifact.
+
+### The approval gate stops being a gate
+
+One plan a week gets read. Twenty a day get approved. The outline gate is the only human check here, so its collapse under volume matters more than the notebook's quality; see [human-in-the-loop](human-in-the-loop.md) for where such gates hold.
+
+### The work does not recur
+
+A [runbook rewritten for agents](runbooks-as-agent-instructions.md) is cheaper for a one-off chore and does the same job. The notebook only earns its bookkeeping across repeat runs.
+
+## Key Takeaways
+
+- The artifact is a side effect of the run, not a documentation task after it. That is what stops it being skipped.
+- Dead ends are the payload. A record of the successful path alone is a runbook, and runbooks already exist.
+- The index file is a separate layer from the notebook. Skip it and nothing reads the record.
+- Have a human write or check the decision cell, because the agent's own account of why it chose an option is unreliable evidence ([Turpin et al., arXiv:2305.04388v2](https://arxiv.org/abs/2305.04388v2)).
+- Put an expiry on dead ends. A stale one steers the next run away from a path that now works.
+
+## Related
+
+- [Runbooks as Agent Instructions](runbooks-as-agent-instructions.md) — rewriting human procedures for agent execution, the cheaper option when the work recurs rarely
+- [Error Preservation in Context](../context-engineering/error-preservation-in-context.md) — keeping failed actions in context within one session, the same idea at session scope
+- [Memory Synthesis: Extracting Lessons from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — deriving causal lessons from traces after the fact rather than during the run
+- [Human-in-the-Loop Approval Gates](human-in-the-loop.md) — where to place the approval checkpoint and why gates degrade as volume rises
+- [Trajectory Logging and Progress Files](../observability/trajectory-logging-progress-files.md) — the raw-record layer beneath a curated notebook
 
 ---
 
