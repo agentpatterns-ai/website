@@ -12,7 +12,7 @@ tags:
   - human-factors
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-08-03
+last_reviewed: 2026-08-28
 maturity: emerging
 ---
 
@@ -52,7 +52,7 @@ Enforced outside the model: sandboxed execution (105 comments), version control 
 
 Advisory, resolved inside the model's context: ignore files and rules files, which make up the other half of secure IDE configuration. Configuration is the most-adopted category of the 13 at 501 comments, and it mixes the two kinds together.
 
-Three independent records show the advisory half failing. The study's opening case has a developer block a `.env` file in Copilot, after which Copilot "read and attempted to modify the `.env` file, ignoring the configured access restrictions" ([Akhond et al., 2026](https://arxiv.org/abs/2607.26390v3)). Cursor documents the same ceiling as designed behavior: "The terminal and MCP server tools used by Agent cannot block access to code governed by `.cursorignore`" ([Cursor Docs](https://cursor.com/docs/reference/ignore-file)). A published advisory shows an attacker can invalidate an existing ignore configuration by writing a new cursorignore file ([GHSA-vhc2-fjv4-wqch](https://github.com/cursor/cursor/security/advisories/GHSA-vhc2-fjv4-wqch)).
+Four independent records show the advisory half failing. The study's opening case has a developer block a `.env` file in Copilot, after which Copilot "read and attempted to modify the `.env` file, ignoring the configured access restrictions" ([Akhond et al., 2026](https://arxiv.org/abs/2607.26390v3)). Cursor documents the same ceiling as designed behavior: "The terminal and MCP server tools used by Agent cannot block access to code governed by `.cursorignore`" ([Cursor Docs](https://cursor.com/docs/reference/ignore-file)). A published advisory shows an attacker can invalidate an existing ignore configuration by writing a new cursorignore file ([GHSA-vhc2-fjv4-wqch](https://github.com/cursor/cursor/security/advisories/GHSA-vhc2-fjv4-wqch)). A fourth record checks CLAUDE.md files directly. The paper extracted security rules from 481 public files. Only 4.4% had a matching built-in Claude Code control under the strictest standard (95% CI 2.6-6.7%), and 4-16% under looser matching. Two practitioners checked a sample independently and confirmed the count (["When 'Do Not' Is Not Deny," 2026](https://arxiv.org/abs/2608.23550)).
 
 ## Why it works
 
@@ -105,3 +105,4 @@ Nothing here depends on the agent honoring a rule; the file is not in the reposi
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — environment-variable injection as the enforced alternative to ignore files
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — scoping the permissions that carry the enforced half
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — design-side taxonomy to place these field-reported categories against
+- [Delegating Dependabot Pull Request Triage to an Agent](../workflows/dependabot-pr-triage-delegation.md) — a vendor stating that its own approval panel is advisory, not enforced

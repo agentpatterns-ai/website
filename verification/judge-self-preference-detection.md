@@ -11,7 +11,7 @@ aliases:
   - self-preference bias
   - self-enhancement bias
   - judge self-agreement
-last_reviewed: 2026-08-21
+last_reviewed: 2026-08-28
 maturity: emerging
 ---
 
@@ -49,7 +49,7 @@ Every standard correction is partial. The measured limits matter more than the r
 | Swap to a cross-family judge | Judge accuracy tracks the judge's own task accuracy at Pearson r of 0.795, 0.708, and 0.899 on MATH500, MMLU, and MBPP+, so a weaker neutral judge can cost more accuracy than the bias it removes ([Chen et al., 2025, arXiv:2504.03846v3](https://arxiv.org/abs/2504.03846v3)) |
 | Add a panel of diverse judges | A panel of smaller disjoint families runs "over seven times less expensive" than one large judge ([Verga et al., 2024, arXiv:2404.18796v2](https://arxiv.org/abs/2404.18796v2)), but nine judges from seven families supply about 2.18 independent votes, and the best single judge matched or beat the panel in every condition tested ([Kohli, 2026, arXiv:2605.29800v1](https://arxiv.org/abs/2605.29800v1)) |
 | Blind the candidate's provenance | Light perturbation such as synonym replacement reduces self-preference, but under fuller neutralization of stylistic differences "self-preference recovers" ([Mahbub and Feng, 2025, arXiv:2512.05379v1](https://arxiv.org/abs/2512.05379v1)) |
-| Calibrate against a human golden set | Catches aggregate judge error, not this one. It is the practice described in [meta-evaluating the judge](meta-evaluate-llm-judge-rubric-verification.md), and it averages the two strata |
+| Calibrate against a human golden set | Catches aggregate judge error, not this one. It is the practice described in [meta-evaluating the judge](meta-evaluate-llm-judge-rubric-verification.md), and it averages the two strata. GitHub's eval lifecycle applies the idea at production scale: the judge triages rather than settles ground truth, low-confidence, conflicting, or high-impact verdicts go to a human, and periodic resampling of high-confidence cases catches drift. GitHub reports the practice cut false positives by 95% and held a recall guardrail ([GitHub, 2026](https://github.blog/ai-and-ml/llms/how-to-evaluate-llms-before-production/)) |
 
 ## When this backfires
 

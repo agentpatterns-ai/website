@@ -10,7 +10,7 @@ aliases:
   - agent-generated verification report
   - structured review round-trip for agent work
   - per-sub-task verification report
-last_reviewed: 2026-08-02
+last_reviewed: 2026-08-28
 maturity: emerging
 ---
 
@@ -27,7 +27,7 @@ Adopt it only when all four conditions hold. Drop one and it degrades into the a
 - The reviewer executes the test steps against the running system. Reading the summary and clicking verified turns the report into a self-authored verdict, the configuration that fails hardest.
 - The change is not cheaply machine-checkable. A unit test or CI gate is independent and costs no human attention per run. Reserve the report for visual behavior, judgement calls, and cross-system flows.
 - The verdict channel is wired back to the agent. Without the return path you are writing status comments by hand again — the cost the practice exists to remove.
-- Batch size stays inside review capacity. GitHub reports Copilot code review has "processed over 60 million reviews, growing 10x in less than a year", and that "more than one in five code reviews on GitHub now involve an agent" ([Griffiths, GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)). Past some batch size the report is another skim surface.
+- Batch size stays inside review capacity. GitHub reports Copilot code review has "processed over 60 million reviews, growing 10x in less than a year", and that "more than one in five code reviews on GitHub now involve an agent" ([Griffiths, GitHub Blog](https://github.blog/ai-and-ml/generative-ai/agent-pull-requests-are-everywhere-heres-how-to-review-them/)). One practitioner runs 50 to 100 tasks a day this way, spending 30 seconds to one minute verifying each report ([Towards Data Science](https://towardsdatascience.com/how-to-effectively-solve-100-tasks-with-claude-code/)). Past some batch size the report is another skim surface.
 
 ## What goes in the report
 

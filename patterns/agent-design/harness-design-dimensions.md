@@ -12,13 +12,13 @@ aliases:
   - agent harness design dimensions
   - agent-system archetypes
   - harness archetype taxonomy
-last_reviewed: 2026-05-27
+last_reviewed: 2026-08-28
 maturity: emerging
 ---
 
 # Harness Design Dimensions and Archetypes
 
-> A source-grounded study of 70 agent-system projects reduces harness infrastructure to five recurring design dimensions and five archetypes — a population-level lens for reading and comparing harnesses.
+> A source-grounded study of 70 agent-system projects reduces harness infrastructure to five design dimensions and five archetypes — a population-level lens for comparing harnesses.
 
 Related lesson: [What a Harness Is](https://learn.agentpatterns.ai/harness-engineering/what-a-harness-is/) — this concept features in a hands-on lesson with quizzes.
 
@@ -46,6 +46,8 @@ Each dimension is a position choice, not a binary ([arXiv:2604.18071](https://ar
 - Tool systems — registry-oriented systems are dominant; [MCP](../../tool-engineering/mcp-result-persistence-annotation.md)- and plugin-oriented extensions are emerging.
 - Safety mechanisms — intermediate isolation ([sandboxes](../../security/sandbox-runtime-comparison.md), [permission prompts](../../security/permission-gated-commands.md)) is common; high-assurance audit ([provenance-aware decision auditing](../../security/provenance-aware-decision-auditing.md)) is rare.
 - Orchestration — the control flow and scheduling layer around agent loops.
+
+A case-study companion to the population-level study above reads three harnesses built from opposing philosophies (LangChain's deepagents, Earendil's pi, and DeepSeek's dsh) at pinned commits. Despite traveling in opposite directions, all three converge on one middle form built from five recurring elements distinct from the dimensions above ([arXiv:2608.23953](https://arxiv.org/abs/2608.23953)).
 
 The paper complements the 12-dimension / 13-system scaffold-architecture taxonomy ([arXiv:2604.03515](https://arxiv.org/abs/2604.03515v2)) detailed in the next section: finer-grained analysis of individual scaffolds, lower population coverage. Pick the five-dimension view for reading across the whole population; pick the 12-dimension view when characterizing a single scaffold in depth.
 

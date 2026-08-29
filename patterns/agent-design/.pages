@@ -121,6 +121,7 @@ nav:
       - steering-running-agents.md
       - tool-preamble-status-update.md
       - verification-gated-agent-autonomy.md
+      - capability-declarations-for-agent-actions.md
       - deterministic-precondition-gates.md
       - informed-abstention-tool-boundary-gate.md
       - delegated-autonomy-boundary-artifacts.md
