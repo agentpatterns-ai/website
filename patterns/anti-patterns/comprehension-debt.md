@@ -34,7 +34,7 @@ Code accumulates faster than understanding. Developers ask AI to fix code they n
 
 ## The evidence: usage mode matters
 
-An [Anthropic RCT with 52 junior engineers](https://www.anthropic.com/research/AI-assistance-coding-skills) found AI-assisted developers scored 17 percentage points lower on comprehension tests (50% vs 67%). The critical finding was not whether developers used AI but how they used it:
+An [Anthropic RCT with 52 mostly junior software engineers](https://www.anthropic.com/research/AI-assistance-coding-skills) found AI-assisted developers scored 17 percentage points lower on comprehension tests (50% vs 67%). The critical finding was not whether developers used AI but how they used it:
 
 | Usage mode | Comprehension score | What it looks like |
 |-----------|-------------------|-------------------|

@@ -134,3 +134,4 @@ A single-threaded main agent with disciplined [context engineering](../../contex
 - [Claude Code Agent Teams](../../tools/claude/agent-teams.md)
 - [Copilot Custom Agents and Skills](../../tools/copilot/custom-agents-skills.md)
 - [Cross-Tool Translation](../../human/cross-tool-translation.md)
+- [The Subagent Inheritance Contract: What Crosses Down](subagent-inheritance-contract.md)

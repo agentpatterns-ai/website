@@ -85,3 +85,4 @@ Both delegations happen in the same session. The fork-vs-fresh choice is per-tas
 - [Subagent Schema-Level Tool Filtering](subagent-schema-level-tool-filtering.md) — narrowing what a subagent can do, complementary to narrowing what it sees.
 - [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — orchestrator-side concurrency model that pairs with the fork/fresh choice on each spawn.
 - [Agent as Tool vs Handoff: Who Keeps the Conversation](../agent-design/agent-as-tool-vs-handoff.md) — the control-return axis, orthogonal to the context-inheritance axis this page covers.
+- [The Subagent Inheritance Contract: What Crosses Down](subagent-inheritance-contract.md) — what a fresh spawn still carries, and how Codex and Claude Code invert their defaults.

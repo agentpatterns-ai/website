@@ -120,3 +120,4 @@ The four design choices map across tools even when setting names do not. A team 
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — how headless sessions pause for out-of-band approval when the classifier blocks
 - [Trigger-Level Gating for Autonomous Agent Intake](trigger-level-agent-intake-gating.md) — the intake counterpart: gating whether an unprompted agent starts at all, rather than which of its tool calls re-prompt
 - [Static-First Shell Command Gating with Selective Escalation](../../security/static-first-shell-command-gating.md) — the inverted cost shape: deterministic evidence decides 95.8% of shell commands and the classifier sees only the residual band
+- [Permission Gates That Deny the Agent's Own Cleanup (Denied Remediation Path)](../anti-patterns/denied-remediation-path.md) — the false positive this page's FNR framing does not cover, fired on the recovery path after a compromise

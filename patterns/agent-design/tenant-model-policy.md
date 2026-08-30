@@ -10,7 +10,7 @@ tags:
 aliases:
   - organization-scoped model rules
   - org-admin model governance
-last_reviewed: 2026-06-12
+last_reviewed: 2026-08-29
 maturity: established
 ---
 
@@ -38,6 +38,8 @@ The picker reflects what a user wants. The [harness routing layer](auto-model-se
 | GitHub Copilot model rules | Enterprise owner targets organizations; each model is `Enabled` (auto-on for all orgs) or `Optional` (orgs opt in) ([GitHub Changelog 2026-05-26](https://github.blog/changelog/2026-05-26-target-copilot-models-to-organizations-with-model-rules/)) | An `Enabled` rule auto-applies to all orgs without per-org action | Enterprise overrides organization ([GitHub Docs: Copilot policies](https://docs.github.com/en/copilot/concepts/policies)) |
 | Claude Code `availableModels` | Managed/policy settings file; arrays merge across user/project/managed surfaces ([Claude Code: Model configuration](https://code.claude.com/docs/en/model-config)) | Default-allow; "Default" picker option always available regardless of `availableModels` | Managed settings take highest priority |
 | Cursor Enterprise admin controls | Enterprise admins "whitelist or blocklist repos, models, and MCP servers" ([Cursor Enterprise](https://cursor.com/enterprise)); Business tier exposes no equivalent surface, per [Cursor Forum](https://forum.cursor.com/t/cursor-business-plan-restrict-models-for-all-users/44556) | Default-allow except where admin restricts | No documented per-team override; teams reach for gateway workarounds |
+
+On 2026-08-26 GitHub made global model policy generally available, an enterprise-scoped control over which models each organization may use ([GitHub Changelog 2026-08-26](https://github.blog/changelog/2026-08-26-global-model-policy-generally-available)).
 
 The three diverge on a critical detail: Claude Code documents that "even with `availableModels: []`, users can still use Claude Code with the Default model for their tier" — an `availableModels` allow-list is not a deny-list. To pin model identity, admins must combine `availableModels`, `model`, and `ANTHROPIC_DEFAULT_*_MODEL` ([Claude Code: Model configuration](https://code.claude.com/docs/en/model-config)).
 

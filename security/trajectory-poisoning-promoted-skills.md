@@ -13,7 +13,7 @@ tags:
   - memory
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-08-07
+last_reviewed: 2026-08-29
 maturity: emerging
 status: current
 ---
@@ -66,7 +66,7 @@ The gate is preliminary, and its preconditions are stronger than they look:
 - Coordinated accounts mimic diversity. The authors state that authentic provenance is not trustworthy provenance; several accounts or deliberately varied sessions produce the signal the gate looks for ([Chen et al., 2026](https://arxiv.org/abs/2608.05563v1)).
 - Grouping is assumed rather than detected. The pilot receives evidence already grouped into candidates. Coarse grouping blocks legitimate multi-contributor support; fine grouping splits one attacker's sessions into apparently distinct clusters ([Chen et al., 2026](https://arxiv.org/abs/2608.05563v1)).
 - Some pipelines already suppress the attack. Trace2Skill's outcome-split analysts and hierarchical consolidation held success to 369 of 600 (61.5%) with no provenance gate, and safety-weakening payloads to 28 of 150 (18.7%) ([Chen et al., 2026](https://arxiv.org/abs/2608.05563v1)). A gate bolted onto that architecture buys less for the same cost.
-- The evidence is one cycle deep. Experiments stop after a single evolution cycle and measure artifact-level embedding rather than runtime compromise, so feedback from an already-poisoned skill into the next cycle is unmeasured ([Chen et al., 2026](https://arxiv.org/abs/2608.05563v1)).
+- The evidence is one cycle deep. Experiments stop after a single evolution cycle and measure artifact-level embedding rather than runtime compromise, so feedback from an already-poisoned skill into the next cycle is unmeasured ([Chen et al., 2026](https://arxiv.org/abs/2608.05563v1)). EvoMal measures that propagation step with a planted skill instead of a synthesized one. A retrieved malicious skill becomes the template an agent imitates while writing a new one. The payload survives into the skill the agent then stores and runs ([EvoMal, arXiv 2026](https://arxiv.org/abs/2608.25776)). The paper credits that imitation to banners, benign-looking structural elements in the retrieved skill. The attacker plants skills in the library and never invokes them.
 - Counting agreement is a fragile signal in this family. [Forged reasoning trace attacks](forged-reasoning-trace-memory-attack.md) defeat a consensus-anomaly detector by flooding a store with mutually-citing entries until the poison is the majority. A gate keyed on how much evidence agrees inherits that weakness; the diversity gate survives because it keys on distinct origins.
 
 Artifact-level checking retains value as a second layer. [Semantic intent validation](semantic-intent-validation-skills.md) catches a promoted skill whose stated purpose contradicts its observable steps, and it needs no identity infrastructure, which matters wherever the provenance signal is unavailable.

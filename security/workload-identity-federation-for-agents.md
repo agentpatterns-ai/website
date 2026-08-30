@@ -9,7 +9,7 @@ aliases:
   - workload identity federation for AI agents
   - keyless authentication for agent runtimes
   - OIDC federation for Claude API
-last_reviewed: 2026-06-03
+last_reviewed: 2026-08-28
 maturity: established
 ---
 
@@ -20,6 +20,8 @@ maturity: established
 Learn it hands-on: [Keys That Expire in Minutes](https://learn.agentpatterns.ai/security/keys-that-expire-in-minutes/) — guided lesson with quizzes.
 
 A static `sk-ant-...` API key is the highest-blast-radius credential on an agent runtime — leakable from logs, hooks, and transcripts, with rotation cadences that never match incident timelines. Workload Identity Federation (WIF) removes the key: the workload presents a signed OIDC JWT from an identity provider it already runs inside, and Anthropic mints a short-lived access token bound to a service account. [[Source]](https://platform.claude.com/docs/en/manage-claude/workload-identity-federation)
+
+Anthropic is not the only vendor on this pattern. Vercel runs the same short-lived-token model across more than 100 agent connectors and can scope a token to a single repository with read-only permissions. It prices that access at $3 per 1,000 token requests on its Pro plan ([The end of credential sprawl for agents](https://vercel.com/blog/the-end-of-credential-sprawl-for-agents)).
 
 ## The federation contract
 

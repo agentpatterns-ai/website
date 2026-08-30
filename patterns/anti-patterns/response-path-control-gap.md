@@ -78,3 +78,4 @@ An `acceptEdits`-mode session sees a Bash call accompanied by a plausible explan
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — the same lesson one layer up: enforcement outside the model beats instruction inside it
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](../../security/agent-network-egress-policy.md) — a containment layer that bounds an injected call regardless of who authored the response
 - [Blast Radius Containment: Least Privilege for AI Agents](../../security/blast-radius-containment.md) — scoping the permissions a compromised turn can spend
+- [Permission Gates That Deny the Agent's Own Cleanup (Denied Remediation Path)](denied-remediation-path.md) — the same gates failing in the other direction, blocking recovery rather than admitting an attack

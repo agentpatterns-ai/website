@@ -47,7 +47,7 @@ Cursor's Bugbot applied this pattern in its [April 8, 2026 release](https://curs
 
 Bugbot learns rules from feedback. When a developer accepts a Bugbot suggestion, Bugbot extracts a rule and stores it. Dismissing a suggestion instead makes Bugbot record a suppression rule. Future reviews on the same repository apply the accumulated rule set.
 
-The rules accumulate at scale. Since learned rules launched, more than 110,000 repositories have turned learning on. Cursor [reports a resolution rate nearing 78%](https://cursor.com/blog/bugbot-learning) — up from 52% at general availability in July 2025 — and attributes the rise to the accumulated rule set sharpening detection and reducing false positives.
+The rules accumulate at scale: "More than 110,000 repos have enabled learning, generating more than 44,000 learned rules" ([Cursor](https://cursor.com/blog/bugbot-learning)). What Cursor does not claim is an effect on its own headline metric. Bugbot's resolution rate went from 52% at general availability in July 2025 to "nearing 80%" in April 2026, and the post credits that elsewhere: "Up until now, improvements have been propelled exclusively by offline experiments." Learned rules are the new mechanism announced there, with no resolution-rate figure attached.
 
 The same release also [added MCP support](https://cursor.com/changelog/04-08-26). Bugbot can connect to MCP servers for more context during review: project documentation, team conventions, or codebase-specific data from tools like GitHub, GitLab, and Linear. That extra context lets its analysis reach beyond the PR diff.
 
