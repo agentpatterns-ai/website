@@ -12,7 +12,7 @@ aliases:
   - loopcraft
   - stacking loops
   - designing loops that prompt agents
-last_reviewed: 2026-08-15
+last_reviewed: 2026-08-27
 maturity: emerging
 ---
 
@@ -25,6 +25,8 @@ maturity: emerging
 Loop engineering is the practice of replacing the human as the agent's prompter with a system of stacked outer loops. The inner-most loop is the familiar [agent loop](../patterns/agent-design/anthropic-effective-agents-framework.md) — a model calling tools until a task is complete. The outer loops add automated grading, automated initiation, and automated harness improvement. Each layer removes one place where a human used to sit between the agent and its next action.
 
 Three primary-source descriptions of the discipline converged inside an eight-day window in June 2026. Addy Osmani's ["Loop Engineering"](https://addyo.substack.com/p/loop-engineering) names the term on 2026-06-08, framing it as "replacing yourself as the person who prompts the agent." swyx's ["Loopcraft: The Art of Stacking Loops"](https://www.latent.space/p/ainews-loopcraft-the-art-of-stacking) follows on 2026-06-12, framing it as a stacked-loops design space where reliability comes from going *down* a loop and leverage from going *up*. LangChain's Sydney Runkle publishes ["The Art of Loop Engineering"](https://blog.langchain.com/the-art-of-loop-engineering/) on 2026-06-16, structuring the stack as four named loops. Three independent practitioners arriving at the same term inside one week marks loop engineering as a recognized discipline, not one author's coinage.
+
+Lulla et al. put a number on the uptake. Their August 2026 survey *Loop Engineering: Building Blocks, Adoption, and Impact* dates the term to that same June — "In June 2026, practitioners began to describe a further level called loop engineering" — and mines 36,710 repositories for it, confirming autonomous agent loops in 217 of 256 matched repositories ([arXiv:2608.21884v2](https://arxiv.org/abs/2608.21884v2)). Its framing matches the one here: prompting, then context engineering, then harness configuration, then loop engineering. The June essays describe the practice; the survey measures how far it has spread.
 
 ## When loop engineering pays off
 

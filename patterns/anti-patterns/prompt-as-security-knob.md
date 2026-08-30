@@ -11,7 +11,7 @@ aliases:
   - prompt-as-security-guarantee
   - prompt fragility security
   - secure-prompt fallacy
-last_reviewed: 2026-06-02
+last_reviewed: 2026-08-29
 maturity: emerging
 status: current
 ---
@@ -28,11 +28,12 @@ This applies wherever prompt quality, instruction files, or security-tagged prom
 
 ## The failure mode
 
-Three independent results converge:
+Four independent results converge:
 
 - Adversarial prompt collapse. [Tessa et al. (2026)](https://arxiv.org/abs/2601.07084v1) ran three secure code generators (SVEN, SafeCoder, PromSec) under semantic-preserving perturbations. The true secure-and-functional rate fell to 3–17%, and analyzers overstated security by 7–21x (37–60% of "secure"-labeled outputs were non-functional).
 - Word-level changes are the dominant axis. [Liu et al. (2025)](https://arxiv.org/abs/2506.07942) found word-level perturbations beat character- and sentence-level on HumanEval/MBPP. A synonym swap shifts the local token distribution enough to flip the top-1 choice on a security-relevant token.
 - Prompt normativity governs the defect rate. [Wang et al. (2025/2026)](https://arxiv.org/abs/2510.22944) found that against CWE-BENCH-PYTHON, insecure generation rises markedly as prompt normativity drops. CoT and self-correction close some of the gap, never all.
+- Security-oriented prompting redistributes weaknesses rather than removing them. [Urmi et al. (2026)](https://arxiv.org/abs/2608.24857v1) ran 424 security-sensitive Python tasks through GPT-4o and LLaMA 3.1-8B under five prompt variants that progressively add structural and security guidance, scoring with Bandit and CodeQL. Overall weakness prevalence did not fall. For GPT-4o the risk moved instead: high-severity findings dropped from 20.8% to 13.6% while low-severity findings rose from 32% to 43.5%. LLaMA shifted less and less consistently. A shrinking high-severity count can mean redistribution rather than repair.
 
 ## Why it works (the mechanism)
 

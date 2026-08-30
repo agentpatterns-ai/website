@@ -9,7 +9,7 @@ tags:
 aliases:
   - cross-generation prompt rewrite
   - fresh-baseline prompt migration
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-28
 maturity: established
 ---
 
@@ -36,6 +36,8 @@ OpenAI's `openai-docs` skill classifies upgrades into three buckets ([OpenAI ski
 | `blocked` | Upgrade requires API-surface changes, parameter rewrites, or tool-handler rewiring | Report the blocker; do not improvise |
 
 Cross-generation hops sit in the middle bucket by default; minor-version successors sit in the first. Anthropic aligns: "Claude Opus 4.7 should have strong out-of-the-box performance on existing Claude Opus 4.6 prompts and evals" ([Anthropic: Migration guide](https://platform.claude.com/docs/en/about-claude/models/migration-guide)) — the rewrite is conditional on observed drift, not assumed.
+
+Which way the drift runs depends on the model family, so a rewrite rule inherited from another vendor's models will point the wrong way. Rudyk et al. scored 19,620 generations across three version pairs under five prompting techniques and found the effect splits by family: newer GPT models show "diminishing or even negative marginal gains from structured prompting", while Qwen models "continue to benefit substantially from Few-Shot and CCoT" ([arXiv:2608.24641v1](https://arxiv.org/abs/2608.24641v1)). A scaffold a newer GPT model has internalized is dead weight in its prompt; the same scaffold still earns its place on a Qwen hop.
 
 ## The smallest prompt that preserves the product contract
 

@@ -11,7 +11,7 @@ aliases:
   - chat as agent control surface
   - chat-platform delegation
   - mentioning agents in chat channels
-last_reviewed: 2026-08-25
+last_reviewed: 2026-08-26
 maturity: established
 ---
 
@@ -44,7 +44,7 @@ Chat-platform delegation ships on more than one agent as of June 2026, and the s
 | Agent | Chat surface | Notes |
 |-------|--------------|-------|
 | Cursor | Slack, Microsoft Teams | `@Cursor` in any channel; auto-selects repo and model from the message and thread context; returns a PR to the thread. Teams added 2026-05 ([Cursor changelog](https://cursor.com/changelog/microsoft-teams), [Cursor docs](https://cursor.com/docs/integrations/microsoft-teams)) |
-| GitHub Copilot coding agent | Slack, Microsoft Teams | Mention `@GitHub` in a Slack thread with a prompt; the coding agent runs in the background using the thread as context and opens a PR. Slack went generally available 2025-10-28; the GitHub app for Teams offers the same context-to-PR flow ([GitHub Changelog](https://github.blog/changelog/2025-10-28-work-with-copilot-coding-agent-in-slack/), [GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/integrate-cloud-agent-with-slack)) |
+| GitHub Copilot coding agent | Slack, Microsoft Teams | Mention `@GitHub` in a Slack thread with a prompt; the coding agent runs in the background using the thread as context and opens a PR. Slack went generally available 2025-10-28; the GitHub app for Teams offers the same context-to-PR flow. A rebuilt Slack experience entered public preview 2026-08-21 for Copilot Business and Enterprise: `@GitHub` also triages and labels issues, investigates failures in a cloud sandbox, and opens a dedicated code channel per task where the team follows the plan and reviews diffs together ([2025 GA changelog](https://github.blog/changelog/2025-10-28-work-with-copilot-coding-agent-in-slack/), [2026 preview changelog](https://github.blog/changelog/2026-08-21-the-new-github-copilot-experience-in-slack), [GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/integrate-cloud-agent-with-slack)) |
 | Claude Code | None as built-in | `@claude` triggers are GitHub-comment based, not chat-platform ([Claude Code docs](https://code.claude.com/docs/en/github-actions)) |
 
 Surface availability matters when comparing delegation strategies. The chat platforms a team already runs (Slack or Teams) determine which agents can adopt the pattern without bridging to a different tool.

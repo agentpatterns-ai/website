@@ -25,7 +25,7 @@ maturity: emerging
 |-------|--------|-------------|
 | [Huang et al. (2025)](https://arxiv.org/abs/2512.14012) | 13 observations + 99 surveys | Developers plan, supervise, and validate — they do not vibe |
 | [METR (2025)](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | RCT, 16 experienced OSS devs | AI made developers take 19% longer, yet they estimated 20% faster |
-| [Anthropic (2026)](https://www.anthropic.com/research/AI-assistance-coding-skills) | RCT, 52 junior engineers | AI-assisted group scored ~17 points lower on comprehension |
+| [Anthropic (2026)](https://www.anthropic.com/research/AI-assistance-coding-skills) | RCT, 52 mostly junior engineers | AI-assisted group scored ~17 points lower on comprehension |
 | [Dhanorkar et al. (2026)](https://arxiv.org/abs/2606.05391v1) | 17 developer interviews | Oversight splits into four forms: a priori control, co-planning, real-time monitoring, post hoc review |
 
 The METR perception gap (~39 points) suggests developers who skip control may not notice the productivity loss.
