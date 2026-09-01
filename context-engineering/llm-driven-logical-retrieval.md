@@ -12,7 +12,7 @@ tags:
   - arxiv
   - tool-agnostic
   - rag
-last_reviewed: 2026-08-14
+last_reviewed: 2026-08-30
 maturity: emerging
 ---
 
@@ -22,20 +22,20 @@ maturity: emerging
 
 ## When this pattern applies
 
-The pattern only holds under all four conditions:
+LogicalRAG only pays off under all four conditions:
 
-- Frontier-capable agent LLM, able to plan multi-hop questions and author well-formed Boolean expressions. Weaker generators collapse — Search-R1 paired with BM25 reaches 3.86% on BrowseComp-Plus against the same retriever a frontier agent uses to reach 83.1% ([Chen et al., 2025](https://arxiv.org/abs/2508.06600v1); [Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848v1)).
-- Lexical-overlap-rich corpus — multi-hop QA over Wikipedia-style text, code, docs, log lines, where queries and target documents share surface forms. It weakens when one concept has many surface forms with no shared tokens.
-- Construction cost matters — the index is rebuilt often, or indexing budget is constrained. A static, one-time index amortizes hybrid's build cost to zero, which erases the 41× indexing-cost advantage reported below.
-- Hallucination on unanswerable queries is tracked — the Boolean "no match" gives a sharper unanswerable signal than a low cosine score.
+- Frontier-capable agent LLM, able to plan multi-hop questions and author well-formed Boolean expressions. Weaker generators collapse: Search-R1 paired with untuned BM25 reaches 3.86% on BrowseComp-Plus, versus 55.9% for GPT-5 on that same baseline ([Chen et al., 2025](https://arxiv.org/abs/2508.06600v1)). A separately tuned BM25 configuration lifts a frontier agent to 83.1% in a different paper — that gain includes a retriever change ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848v1)).
+- Lexical-overlap-rich corpus — multi-hop QA over Wikipedia-style text, code, docs, or logs, where queries and documents share surface forms. It weakens when many surface forms share no tokens.
+- Construction cost matters — the index rebuilds often, or indexing budget is tight. A one-time index amortizes hybrid's build cost to zero, erasing the 41× indexing-cost advantage.
+- Hallucination on unanswerable queries matters — a Boolean "no match" gives a sharper signal than a low cosine score.
 
-Outside these conditions, an agentic hybrid baseline keeps a small accuracy edge and is the more conservative default.
+Outside these conditions, hybrid retrieval keeps a small edge and stays the safer default.
 
-Parsing method is an earlier decision: see [Towards Data Science on picking a parsing method before adopting agentic retrieval](https://towardsdatascience.com/before-full-agentic-rag-know-how-you-decide-and-the-parsing-methods-you-pick-from/).
+Parsing method is an earlier decision: see [Towards Data Science on choosing a parsing method first](https://towardsdatascience.com/before-full-agentic-rag-know-how-you-decide-and-the-parsing-methods-you-pick-from/).
 
 ## The architecture
 
-LogicalRAG ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)) hands retrieval intent to the LLM and shrinks the backend to a faithful executor of that intent:
+LogicalRAG ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)) hands retrieval intent to the LLM and shrinks the backend to a faithful executor:
 
 ```mermaid
 graph LR
@@ -47,36 +47,36 @@ graph LR
     A -->|next query or answer| O[Answer or Refine]
 ```
 
-Retrieval runs in two phases. Boolean logic picks the eligible document set, then BM25 ranks within it. The interface exposes `AND`, `OR`, `NOT`, quoted phrases for exact matching, and field-targeting like `title:entity_name` ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)). The agent then iterates: it reads intermediate results, refines the query, and re-issues. The backend executes only what the LLM authors, with no notion of semantic similarity.
+Retrieval runs in two phases: Boolean logic picks the eligible document set, then BM25 ranks within it. The interface exposes `AND`, `OR`, `NOT`, quoted phrases, and field-targeting like `title:entity_name` ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)). The agent iterates: it reads results, refines the query, and re-issues. The backend executes only what the LLM authors, with no semantic-similarity notion.
 
 ## Reported results
 
 | Metric | LogicalRAG | Agentic Hybrid | Source |
 |--------|------------|----------------|--------|
-| Medium-scale accuracy (HotpotQA / 2WikiMultiHopQA / MuSiQue avg.) | 0.784 | 0.807 | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
-| KILT Wikipedia accuracy | 0.717 | 0.716 | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
-| KILT throughput (16 concurrent) | 152.5 QPS | 66.6 QPS | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
+| Medium-scale accuracy (HotpotQA / 2WikiMultiHopQA / MuSiQue avg.) | 0.784 | 0.807 | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1) |
+| KILT Wikipedia accuracy | 0.717 | 0.716 | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1) |
+| KILT throughput (16 concurrent) | 152.5 QPS | 66.6 QPS | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1) |
 | KILT mean latency | 74.9 ms | 230.5 ms | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1) |
-| Index construction time | 1.27 h | 52.02 h | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
-| Hallucination rate (answer-unavailable) | 0.083 | 0.128 | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123) |
+| Index construction time | 1.27 h | 52.02 h | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1) |
+| Hallucination rate (answer-unavailable) | 0.083 | 0.128 | [Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1) |
 
-The headline "matches hybrid" holds at KILT scale and on cost. On medium-scale multi-hop QA the pattern trails hybrid by 2.3 accuracy points. The trade is honest only when index-rebuild cost and unanswerable-query hallucination matter as much as raw accuracy.
+The headline "matches hybrid" holds at KILT scale and on cost, but trails hybrid by 2.3 accuracy points on medium-scale multi-hop QA. The trade is honest only when index-rebuild cost and hallucination on unanswerable queries matter as much as raw accuracy.
 
 ## Why it works
 
-The pattern moves retrieval precision from the index to the query author. Hybrid retrieval pays for precision twice — at indexing time (dense embeddings, HNSW graphs, sometimes graph construction) and at query time (vector similarity fused with BM25). LogicalRAG removes both costs. The frontier LLM that already plans multi-hop questions breaks them into Boolean predicates over fielded terms, and the inverted index looks up rather than guesses ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
+LogicalRAG moves retrieval precision from the index to the query author. Hybrid retrieval pays for precision twice — at indexing time (dense embeddings, HNSW graphs) and at query time (vector similarity fused with BM25). LogicalRAG removes both costs. The frontier LLM that already plans multi-hop questions breaks them into Boolean predicates over fielded terms, and the inverted index looks up rather than guesses ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
 
 Hallucination reduction follows the same mechanism. A Boolean empty set is a sharp not-found signal. A low cosine score is ambiguous — "no relevant document" versus "relevant document was paraphrased."
 
-This fits a broader retrieval-side-dominance trend: retriever choice exerts more influence than generator choice for SE-task RAG with high identifier-query overlap ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)), and tuned BM25 plus a frontier agent matches dense retrieval on deep-research benchmarks ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
+This fits a broader retrieval-side-dominance trend: retriever choice matters more than generator choice for SE-task RAG with high identifier-query overlap ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)), and tuned BM25 plus a frontier agent matches dense retrieval on deep-research benchmarks ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848)).
 
 ## When this backfires
 
-- Sub-frontier generator — weaker LLMs cannot plan Boolean decompositions. The same BM25 index that supports 83.1% under a frontier agent supports 3.86% under Search-R1 on BrowseComp-Plus ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848v1); [Chen et al., 2025](https://arxiv.org/abs/2508.06600v1)). The pattern is a precision-cost migration, not a free optimization.
-- Semantic-gap queries — natural-language paraphrases against identifier-heavy documents ("deduplicate while preserving order" → `unique_ordered`) have near-zero lexical overlap. Logical operators cannot bridge that without a thesaurus or expansion step.
-- Synonym-heavy corpora — medical, legal, multilingual, and consumer-product corpora where one concept has many surface forms. BM25's insensitivity to synonymy is well documented, so agents author speculative `OR` chains to compensate.
-- Static-index, query-rate-dominated workloads — when the index is built once and serves billions of queries, the 41× build-time win amortizes to zero and the medium-scale 2.3-point gap dominates.
-- Latency-sensitive workloads — every logical query is an inference call, so dense retrieval with a single round-trip can beat multi-turn Boolean refinement on tail latency.
+- Sub-frontier generator — weaker LLMs cannot plan Boolean decompositions. On BrowseComp-Plus, Search-R1 paired with BM25 reaches only 3.86% versus 55.9% for GPT-5 on the same untuned baseline ([Chen et al., 2025](https://arxiv.org/abs/2508.06600v1)). LogicalRAG is a precision-cost migration, not a free optimization.
+- Semantic-gap queries — natural-language paraphrases against identifier-heavy documents ("deduplicate while preserving order" → `unique_ordered`) have near-zero lexical overlap. Logical operators cannot bridge that gap without an expansion step.
+- Synonym-heavy corpora — medical, legal, multilingual, or consumer-product domains where one concept has many surface forms. BM25's insensitivity to synonymy is well documented, so agents author speculative `OR` chains to compensate.
+- Static-index, query-rate-dominated workloads — an index built once, serving billions of queries, amortizes the 41× build-time win to zero; the medium-scale 2.3-point gap then dominates.
+- Latency-sensitive workloads — every logical query is an inference call, so single round-trip dense retrieval can beat multi-turn Boolean refinement on tail latency.
 
 ## Example
 
@@ -119,14 +119,14 @@ agent:
     - '"event_loop" AND asyncio NOT "twisted"'
 ```
 
-The "after" configuration trades about 2 accuracy points (only at medium scale; it matches at large scale) for a 42× reduction in nightly build time and a roughly 3× latency win at the query path. You keep frontier LLM authoring; the migration is the retrieval interface, not the agent. Re-evaluate hallucination rate on a held-out unanswerable-query set before committing — the 0.083 versus 0.128 hallucination delta is the second load-bearing benefit beyond raw cost ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1)).
+The "after" configuration trades about 2 accuracy points for 42× faster nightly builds and roughly 3× lower query latency. That accuracy cost applies only at medium scale — it matches hybrid at large scale. You keep frontier LLM authoring; the migration is the retrieval interface, not the agent. Re-evaluate hallucination rate on a held-out unanswerable-query set before committing: the 0.083 versus 0.128 hallucination delta is the second load-bearing benefit beyond raw cost ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1)).
 
 ## Key Takeaways
 
 - LogicalRAG moves retrieval precision from the index to the query author: a frontier LLM emits AND/OR/NOT and field-scoped queries against a plain inverted index ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
-- The pattern matches an agentic hybrid baseline at KILT-scale Wikipedia (0.717 vs. 0.716) and trails it on medium-scale multi-hop QA (0.784 vs. 0.807); the win is cost (41× faster indexing) and hallucination rate (0.083 vs. 0.128), not raw accuracy ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1)).
+- The pattern matches an agentic hybrid baseline at KILT-scale Wikipedia (0.717 vs. 0.716) and trails it on medium-scale multi-hop QA (0.784 vs. 0.807). The win is cost (41× faster indexing) and hallucination rate (0.083 vs. 0.128), not raw accuracy ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123v1)).
 - Evaluate this pattern by checking hallucination rate on answer-unavailable queries specifically — that is where its gap over hybrid concentrates ([Zeng et al., 2026](https://arxiv.org/abs/2605.27123)).
-- Benchmark your specific agent model on Boolean decomposition before switching — Search-R1 + BM25 collapses to 3.86% where a frontier agent reaches 83.1% on the same index ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848v1); [Chen et al., 2025](https://arxiv.org/abs/2508.06600v1)).
+- Benchmark your specific agent model on Boolean decomposition before switching: Search-R1 + BM25 reaches only 3.86% on BrowseComp-Plus, while GPT-5 on that same BM25 baseline reaches 55.9% ([Chen et al., 2025](https://arxiv.org/abs/2508.06600v1)). A separately tuned BM25 configuration lifts a frontier agent to 83.1% in a different paper — tuning, not generator capability, drives most of that gap ([Hsu, Yang, Lin, 2026](https://arxiv.org/abs/2605.10848v1)).
 - When corpora have high lexical overlap, weight retriever choice over generator upgrades — the broader SE-task RAG evidence shows retriever choice dominates outcomes there ([Ke et al., 2026](https://arxiv.org/abs/2605.14503)).
 
 ## Related
