@@ -10,7 +10,7 @@ tags:
 aliases:
   - "single-tool hypothesis"
   - "run command tool"
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-30
 maturity: adopted
 ---
 
@@ -54,9 +54,8 @@ graph LR
     A[Agent] -->|"run(command)"| B[Execution Layer]
     B -->|stdin/stdout/stderr/exit code| C[Presentation Layer]
     C -->|binary guard| D[User Display]
-    C -->|truncation| D
+    C -->|overflow guard| D
     C -->|stderr attachment| D
-    C -->|metadata| D
 ```
 
 Execution layer — pure Unix semantics: raw output, exit codes, error streams.
@@ -85,9 +84,9 @@ Typed tools win for strongly-typed interactions, high-security environments that
 
 ## The spectrum in practice
 
-The [CodeAct paper (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030v4) shows executable code actions outperform JSON function calls by up to 20% success rate across 17 LLMs — though CodeAct uses Python as the action space, not shell. Manus itself integrates dozens of tools in production — not a single tool.
+The [CodeAct paper (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030v4) shows executable code actions outperform JSON function calls by up to 20% success rate across 17 LLMs. CodeAct uses Python as the action space, not shell. Manus itself integrates dozens of tools in production — not a single tool.
 
-Five well-designed tools plus shell access captures most of the benefit without unrestricted execution risk.
+A small, curated toolset plus shell access captures most of the benefit without unrestricted execution risk.
 
 ## Designing CLIs for agent consumption
 
@@ -130,12 +129,11 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - One `run(command)` tool exploits the model's dense pretraining on shell usage — high-alignment action space without bespoke schemas.
 - Unix supplies discovery (`--help`), error routing (stderr + exit codes), and composition (pipes, `&&`, `||`) for free.
 - Separate execution from presentation: a binary guard, overflow truncation, and stderr attachment prevent raw output from poisoning the context window.
-- Typed tools still win for strong parameter constraints, high-security surfaces, and multimodal payloads — five well-designed tools plus shell access captures most of the upside.
-- Design CLIs for agents with `--json`, distinct exit codes, `--dry-run`, `--yes`/`--force`, batch operations, and `--schema` introspection.
+- Reach for typed tools when the trade-off table's failure modes matter most: strict parameter constraints, a narrow security surface, or multimodal input the shell cannot carry.
+- Of the six agent-consumption flags, `--json` and `--dry-run` carry the most weight: they remove output-scraping and let the agent preview a mutation before it runs.
 
 ## Sources
 
-- Reddit post by u/MorroHsu (r/LocalLLaMA) -- single run(command) tool vs function catalogs
 - [CodeAct: Executable Code Actions Elicit Better LLM Agents (Wang et al., ICML 2024)](https://arxiv.org/abs/2402.01030v4) -- code actions outperform JSON/text by 20%
 - [CLI-Anything (HKU)](https://github.com/HKUDS/CLI-Anything) -- agent-native CLI generation pipeline
 - [Manus architecture analysis](https://gist.github.com/renschni/4fbc70b31bad8dd57f3370239dccd58f) -- dozens of tools + CodeAct in practice
@@ -143,15 +141,10 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 ## Related
 
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md)
-- [CLI-First Skill Design](cli-first-skill-design.md)
 - [Consolidate Agent Tools](consolidate-agent-tools.md)
-- [CLI Scripts as Agent Tools](cli-scripts-as-agent-tools.md)
+- [Override Interactive Commands](override-interactive-commands.md)
 - [Agent-Aware CLI via Environment Variable](agent-aware-cli-via-env-var.md) — orthogonal angle: a CLI adapting its output when an agent is detected, vs the output-filtering interface here
 - [Rewriting a CLI Into a JSON Payload for Agents](../patterns/anti-patterns/cli-json-payload-rewrite.md) — the counter-case: measured evidence that replacing conventional args with a JSON input payload does not improve agent reliability and costs more
-- [Agent-Computer Interface](agent-computer-interface.md)
-- [Semantic Tool Output](semantic-tool-output.md)
-- [Override Interactive Commands](override-interactive-commands.md)
-- [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
 - [Restricting a Coding Agent to a Single execute_code Tool](restrict-coding-agent-to-execute-code.md) — measures the cost of this single-bash surface against an interpreter-only surface, by task regime and agent
 - [Terminal-First Agent Interfaces with Browser Escalation](terminal-first-browser-escalation.md) — the same interface applied to enterprise platform automation, with measured cost against browser and MCP-style agents and an explicit escalation list
 - [MCP-vs-CLI Cost Ratios Are a Property of the Scaffolding](mcp-cli-cost-ratio-scaffolding-bound.md) — how much of the CLI cost advantage is the interface and how much is the harness around it
