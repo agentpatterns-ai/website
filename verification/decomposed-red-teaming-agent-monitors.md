@@ -67,7 +67,7 @@ Attacks refined against three development monitors (GPT-5 Nano, GPT-5, Claude Op
 
 The 34.6-point spread is the conceive-execute gap — same monitor, same threat model, same models, different elicitation method. Weaker monitors (GPT-5-tier and below) show steeper cliffs. The 60.3% Opus 4.5 figure is the upper bound of detection in this setting, not a floor ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684v1)).
 
-Stepwise monitors expose a separate problem: a per-action false-positive rate calibrated at 1% compounds to 6.7 to 17.4% at the trajectory level ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684v1)). Independent work on weak-to-strong monitoring sees the same pattern — true-positive rate is hard to hold at low false-positive rate, and monitor scaffolding matters more than the model itself ([Bhatt et al., 2025](https://arxiv.org/abs/2508.19461v1)). Reporting only the per-action rate understates production noise.
+Stepwise monitors expose a separate problem: a per-action false-positive rate calibrated at 1% compounds to 6.7 to 17.4% at the trajectory level ([Jotautaitė et al., 2026](https://arxiv.org/abs/2605.09684v1)). Independent work on weak-to-strong monitoring sees the same pattern — true-positive rate is hard to hold at low false-positive rate, and monitor scaffolding matters more than the model itself ([Kale et al., 2025](https://arxiv.org/abs/2508.19461v1)). Reporting only the per-action rate understates production noise.
 
 ## When this applies
 

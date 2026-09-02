@@ -81,6 +81,7 @@ nav:
       - subtask-level-memory.md
       - tiered-memory-architecture.md
       - wiki-memory-agent-maintained-knowledge-base.md
+      - self-correcting-memory-evidence-backed-claims.md
       - filesystem-memory-organization.md
       - persistent-teammate-workspace.md
       - weakest-consistent-learning.md
@@ -126,6 +127,7 @@ nav:
       - informed-abstention-tool-boundary-gate.md
       - delegated-autonomy-boundary-artifacts.md
       - trigger-level-agent-intake-gating.md
+      - approval-gate-granularity.md
   - "Reliability":
       - agent-circuit-breaker.md
       - agent-client-admission-control.md
@@ -148,6 +150,7 @@ nav:
       - five-failure-layers-diagnostic.md
       - heuristic-effort-scaling.md
       - idempotent-agent-operations.md
+      - tool-operability-lost-responses.md
       - interactive-effort-sliders.md
       - long-running-agents.md
       - remote-agent-host-sessions.md
@@ -191,10 +194,12 @@ nav:
       - most-restrictive-wins-fusion.md
       - natural-language-tool-selection.md
       - product-operation-tool-surface.md
+      - typed-tool-surface-out-of-loop-gate.md
       - programmatic-tool-calling.md
       - tool-confirmation-carousel.md
       - approval-response-taxonomy.md
       - harness-design-dimensions.md
+      - per-task-agent-routing.md
       - fleet-harness-attribution.md
       - harness-engineering.md
       - dsl-constraining-harness.md
@@ -203,6 +208,7 @@ nav:
       - harness-as-product.md
       - situated-harness-layers.md
       - isometric-harness-ablation.md
+      - last-unconstrained-axis.md
       - suspect-the-harness-not-the-model.md
       - lane-based-execution-queueing.md
       - managed-vs-self-hosted-harness.md

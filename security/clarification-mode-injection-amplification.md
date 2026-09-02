@@ -81,3 +81,4 @@ Removing clarification regresses the agent to silent assumption-making, which ha
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
 - [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
+- [Which Task You Delegate Changes Poisoned-Repo Exposure](task-choice-poisoned-repository-exposure.md) — Another user-side choice measured against attack success: which task you name

@@ -20,7 +20,7 @@ maturity: established
 
 ## Why format choice matters
 
-Switching a strict unified diff to a search-replace block raised GPT-4's score on Aider's editing benchmark from 26% to 59%, with no model or prompt change ([Aider, "Unified diffs make GPT-4 Turbo 3X less lazy"](https://aider.chat/docs/unified-diffs.html)). The "To Diff or Not to Diff?" paper explains why: "fragile offsets and fragmented hunks make generation highly unnatural for LLMs" ([Cao et al., 2026, arxiv:2604.27296](https://arxiv.org/abs/2604.27296v1)). The Diff-XYZ benchmark finds search-replace beats unified diffs for larger models, while smaller open models gain almost nothing from any format change ([Glukhov et al., 2025, arxiv:2510.12487](https://arxiv.org/abs/2510.12487v2)). The effect is real, but not universal.
+Switching a strict unified diff to a search-replace block raised GPT-4's score on Aider's editing benchmark from 26% to 59%, with no model or prompt change ([Aider, "Unified diffs make GPT-4 Turbo 3X less lazy"](https://aider.chat/docs/unified-diffs.html)). The "To Diff or Not to Diff?" paper explains why: "fragile offsets and fragmented hunks make generation highly unnatural for LLMs" ([Cheng et al., 2026, arxiv:2604.27296](https://arxiv.org/abs/2604.27296v1)). The Diff-XYZ benchmark finds search-replace beats unified diffs for larger models, while smaller open models gain almost nothing from any format change ([Glukhov et al., 2025, arxiv:2510.12487](https://arxiv.org/abs/2510.12487v2)). The effect is real, but not universal.
 
 ## The format spectrum
 

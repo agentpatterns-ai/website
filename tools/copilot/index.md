@@ -22,6 +22,7 @@ status: current
 - [Cloud Agent: Research, Plan, and Code Phases](cloud-agent-research-plan-code.md) — Three-phase execution model with explicit developer checkpoints between Research, Plan, and Code
 - [Coding Agent](coding-agent.md) — Asynchronous agent that works via GitHub Actions to plan, implement, and open PRs
 - [Copilot Dedicated App (Desktop)](copilot-dedicated-app.md) — Standalone Windows/macOS/Linux desktop client where the agent session is the primary tenant of the window; one thin client over backend-held session state, not a unified app spanning web, mobile, and IDE
+- [Copilot App Customize Tab vs Repo Configuration Files](copilot-app-customize-tab.md) — What the app's Customize tab installs per user, the two app-side surfaces with no repo copy, and why the committed file is still the only config the cloud agent reads
 - [Copilot Extensions](copilot-extensions.md) — Build agents and skillsets that integrate into Copilot Chat via GitHub Marketplace (deprecated — see [migration guide](../../tool-engineering/copilot-extensions-to-mcp-migration.md))
 - [copilot-instructions.md Convention](copilot-instructions-md-convention.md) — Repository-level instruction file for persistent project context
 - [Copilot Spaces](copilot-spaces.md) — Named context collections that ground Copilot in curated reference material across repositories, files, PRs, issues, and uploads

@@ -56,7 +56,7 @@ Once elicited, tacit knowledge takes three forms in agent systems:
 | Contextual judgment ("in case Z, prefer A over B") | Annotated few-shot example | Context-dependent, not rule-expressible |
 | Quality standard ("this output is poor because…") | Eval task with rubric | Drives calibration of automated evaluators |
 
-The Knowledge Activation Pipeline formalizes this as three stages: codification (capture from experts), compression (distill into token-efficient units), and injection (deliver at the point of need) ([arxiv 2603.14805](https://arxiv.org/html/2603.14805)). A runbook of 2,000 tokens compresses into an agent skill of about 300 tokens while keeping the same task completion — a 6 to 7 times gain in knowledge density.
+The Knowledge Activation Pipeline formalizes this as three stages: codification (capture from experts), compression (distill into token-efficient units), and injection (deliver at the point of need) ([arxiv 2603.14805](https://arxiv.org/html/2603.14805v2)). A runbook of 2,000 tokens compresses into an agent skill of about 300 tokens while keeping the same task completion — a 6 to 7 times gain in knowledge density.
 
 ## Scaling with annotation queues
 

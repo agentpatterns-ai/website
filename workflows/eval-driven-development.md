@@ -253,6 +253,7 @@ Defer during early exploration of a novel problem space, on short-lived prototyp
 - [Eval-Driven Development: Golden Query Pairs as Regression Tests](../verification/golden-query-pairs-regression.md)
 - [Test-Driven Agent Development](../verification/tdd-agent-development.md)
 - [LLM-as-Judge Evaluation with Human Spot-Check Review](llm-as-judge-evaluation.md)
+- [Offline Evaluation as an Integration Test for LLM Features](offline-eval-integration-test.md) — what the suite does once it exists: re-run on every change and gate the release
 - [Simulation and Replay Testing for Agent Verification](simulation-replay-testing.md)
 - [Failure-Driven Iteration for Improving Agent Workflows](failure-driven-iteration.md)
 - [The Eval-First Development Loop](../training/eval-driven-development/eval-first-loop.md) — training module with step-by-step loop walkthrough

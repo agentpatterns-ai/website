@@ -11,7 +11,7 @@ aliases:
   - denied remediation path
   - classifier blocks agent cleanup
   - safety gate denies incident recovery
-last_reviewed: 2026-08-29
+last_reviewed: 2026-09-01
 maturity: emerging
 ---
 
@@ -30,6 +30,8 @@ Only on a runtime you cannot discard. In a container or VM you delete the contai
 The classifier judges the action, and the evidence that would justify it is withheld by design. Auto mode routes tool calls "through a classifier that blocks anything irreversible, destructive, or aimed outside your environment" ([Configure auto mode](https://code.claude.com/docs/en/auto-mode-config)), so a `kill` scores on that axis alone. Detection lives in tool results, and the classifier "never receives tool results themselves" ([Hooks reference](https://code.claude.com/docs/en/hooks)). That is the same reasoning-blinding that stops a hostile web page arguing the gate down. The agent cannot supply the missing authority either: only the user's own message clears a soft block, and "General requests don't count as explicit intent" ([Configure auto mode](https://code.claude.com/docs/en/auto-mode-config)).
 
 Scoring is a single number per action. A mitmproxy capture of a live verdict shows `<severity>78</severity>` against a threshold where "Ratings over 50 are blocked" ([Prompt Injection Experiments with Opus-5 in Claude Code](https://itmeetsot.eu/posts/2026-08-12-opus5_automode/)). Nothing in that number tracks whether the command restores a safe state. Retrying makes it worse: one user recorded the classifier scoring a good-faith correction as `[Auto-Mode Bypass] ... a bad-faith tunneling attempt around a just-issued block with no new user authorization` ([anthropics/claude-code #75325](https://github.com/anthropics/claude-code/issues/75325)).
+
+A 2026-08-30 update on [Simon Willison's link post](https://simonwillison.net/2026/Aug/27/breaking-claude-code-opus-5-auto-mode/) quotes a commenter who disputes calling this prompt injection. A classic injection needs the model to follow malicious instructions from the site, and it never does. On that reading Rehberger's demonstration is a confused environment attack, where the environment the agent runs in produces the exploit. What the classifier did is not in dispute.
 
 ## When this backfires
 

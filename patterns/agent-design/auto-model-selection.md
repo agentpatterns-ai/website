@@ -197,7 +197,7 @@ graph TD
     E --> F
 ```
 
-Both gates must pass for the local completion to ship. The pipeline is training-free (off-the-shelf models, hand-tuned thresholds, no router fine-tuning) but thresholds couple to the specific small model and language: perplexity, the basis of the confidence gate, varies systematically by language ([Cao et al., 2026](https://arxiv.org/abs/2508.16131)), so one cutoff rarely transfers across a polyglot codebase. The paper reports routine pass@1 of 78.9%, 7.4 points higher than always invoking the 480B model, and 58% lower accelerator usage ([Thangarajah et al., 2026](https://arxiv.org/abs/2605.04894v1)).
+Both gates must pass for the local completion to ship. The pipeline is training-free (off-the-shelf models, hand-tuned thresholds, no router fine-tuning) but thresholds couple to the specific small model and language: perplexity, the basis of the confidence gate, varies systematically by language ([Kotti et al., 2026](https://arxiv.org/abs/2508.16131)), so one cutoff rarely transfers across a polyglot codebase. The paper reports routine pass@1 of 78.9%, 7.4 points higher than always invoking the 480B model, and 58% lower accelerator usage ([Thangarajah et al., 2026](https://arxiv.org/abs/2605.04894v1)).
 
 How the three tier-routing signals compose:
 
@@ -228,6 +228,7 @@ Code-health routing decides before the small model runs; syntax-aware routing de
 - [Scout-Then-Route: Verify the Handoff Before Routing](scout-then-route.md) — routes on repository evidence gathered by a cheap scout rather than on vendor availability.
 - [BYOK Model Token Visibility](../../observability/byok-model-token-visibility.md) — the parallel observability contract for self-hosted routes; both fail the same way when `model_id` is missing.
 - [Utility Model Split](utility-model-split.md) — background-vs-foreground model routing and vendor model fleet partitioning; complements Auto's within-pool selection.
+- [Per-Task Agent Routing Across Coding Harnesses](per-task-agent-routing.md) — the human-side counterpart: picking the harness per task where Auto picks the model per request.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the taxonomic framework for per-task tier routing across an entire harness; upstream of the tiered, code-health-gated, and syntax-aware variants folded above.
 - [Verification-Centric Development](../../workflows/verification-centric-development.md) — the deterministic gate that makes tier equivalence measurable for code-health-gated routing.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — a small model behind a tool boundary rather than a routed completion peer.

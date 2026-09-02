@@ -17,7 +17,7 @@ maturity: emerging
 
 > Pin agent config files by content hash and declared permissions so consumers know what bytes they read and approvers see every change.
 
-Agent configuration files — `CLAUDE.md`, `AGENTS.md`, `.cursor/rules/`, IDE-specific markdown — propagate across repositories as an undeclared shared-component supply chain. A 2026 prevalence study of 10,008 public GitHub repositories ([Carey et al., arxiv:2606.26924](https://arxiv.org/abs/2606.26924v1)) measured 6,145 such files and found three governance gaps. They justify managing these files with the same discipline mature package registries apply to packages: cross-org duplication, near-zero revision cadence, and almost no declared permission boundaries.
+Agent configuration files — `CLAUDE.md`, `AGENTS.md`, `.cursor/rules/`, IDE-specific markdown — propagate across repositories as an undeclared shared-component supply chain. A 2026 prevalence study of 10,008 public GitHub repositories ([Madatha et al., arxiv:2606.26924](https://arxiv.org/abs/2606.26924v1)) measured 6,145 such files and found three governance gaps. They justify managing these files with the same discipline mature package registries apply to packages: cross-org duplication, near-zero revision cadence, and almost no declared permission boundaries.
 
 ## When the pattern applies
 
@@ -32,7 +32,7 @@ Single-repo single-team stacks already get versioning, PR review, and rollback f
 
 ## What the study found
 
-[Carey et al. (arxiv:2606.26924)](https://arxiv.org/abs/2606.26924v1) measured three governance gaps across 6,145 agent config files in 10,008 public repos:
+[Madatha et al. (arxiv:2606.26924)](https://arxiv.org/abs/2606.26924v1) measured three governance gaps across 6,145 agent config files in 10,008 public repos:
 
 | Signal | Measurement | Comparator |
 |---|---|---|
@@ -56,11 +56,11 @@ Convergent 2026 research reaches similar architectural conclusions from a securi
 
 ## Why it works
 
-The mechanism is auditability and rollback, not compliance. The causal chain runs in three steps. Hashing the bytes creates a stable referent that a log entry can name. The referent enables a byte-for-byte diff between two versions of the config. The diff enables an approval gate that catches every change before it advances to a tagged environment. Without addressing, the config is just bytes at `HEAD` — the same diff is possible in principle but no log entry can prove which bytes ran. With addressing, every change is a hash transition tied to an approval ([Carey et al., arxiv:2606.26924](https://arxiv.org/abs/2606.26924)). The supply-chain analogy is load-bearing: shared components without provenance and declared permissions are the documented attack surface every package registry has had to retrofit, from npm to PyPI to GitHub Actions.
+The mechanism is auditability and rollback, not compliance. The causal chain runs in three steps. Hashing the bytes creates a stable referent that a log entry can name. The referent enables a byte-for-byte diff between two versions of the config. The diff enables an approval gate that catches every change before it advances to a tagged environment. Without addressing, the config is just bytes at `HEAD` — the same diff is possible in principle but no log entry can prove which bytes ran. With addressing, every change is a hash transition tied to an approval ([Madatha et al., arxiv:2606.26924](https://arxiv.org/abs/2606.26924)). The supply-chain analogy is load-bearing: shared components without provenance and declared permissions are the documented attack surface every package registry has had to retrofit, from npm to PyPI to GitHub Actions.
 
 ## Example
 
-The mature comparator is a [GitHub Actions workflow's `permissions:` block](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token), already present in 33% of workflows ([Carey et al., arxiv:2606.26924](https://arxiv.org/abs/2606.26924v1)):
+The mature comparator is a [GitHub Actions workflow's `permissions:` block](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#permissions-for-the-github_token), already present in 33% of workflows ([Madatha et al., arxiv:2606.26924](https://arxiv.org/abs/2606.26924v1)):
 
 ```yaml
 # .github/workflows/release.yaml
@@ -77,15 +77,15 @@ The qualified scope is not decoration — several conditions invert the recommen
 
 - Compliance is not the benefit. [McMillan (2026, arxiv:2605.10039)](https://arxiv.org/abs/2605.10039v1) ran a factorial study across 1,650 Claude Code sessions and found rearranging configuration files does not measurably change compliance within realistic file sizes. The gain from this pattern is governance, not behavior — see [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md).
 - The execution layer is the real security boundary. [Hooks for Enforcement vs Prompts for Guidance](hooks-vs-prompts.md) blocks deterministically regardless of what the markdown says; a config-layer permission DSL whose violations are advisory adds review overhead without closing the breach path.
-- Single-repo single-team stacks. Carey et al.'s 75.5% cross-org clone rate is the population the pattern is for; a config consumed only by agents in its own repo gets versioning and rollback from existing git history for free.
+- Single-repo single-team stacks. Madatha et al.'s 75.5% cross-org clone rate is the population the pattern is for; a config consumed only by agents in its own repo gets versioning and rollback from existing git history for free.
 - Short-lived projects. Hashing, pinning, and drift detection only amortize across repeated promotion cycles.
-- Apples-to-oranges permission gap. The <1% vs 33% comparison is partly a measurement artifact: agent configs often declare boundaries in unstructured prose the [Carey et al.](https://arxiv.org/abs/2606.26924v1) regex-based detector cannot pick up. Leading with the comparison overstates the gap.
+- Apples-to-oranges permission gap. The <1% vs 33% comparison is partly a measurement artifact: agent configs often declare boundaries in unstructured prose the [Madatha et al.](https://arxiv.org/abs/2606.26924v1) regex-based detector cannot pick up. Leading with the comparison overstates the gap.
 - Standardized duplication is not negligent duplication. The 10.1% exact-duplicate rate does not distinguish copy-paste-and-forget from deliberate adoption of an industry template (the [agents.md spec](https://agents.md) is itself copy-able). The failure mode is unpinned duplication, not duplication.
-- Developer outcomes are unvalidated. [Carey et al.](https://arxiv.org/abs/2606.26924) explicitly defer "developer outcomes" to future work — the control plane's mechanisms are tested for conformance only.
+- Developer outcomes are unvalidated. [Madatha et al.](https://arxiv.org/abs/2606.26924) explicitly defer "developer outcomes" to future work — the control plane's mechanisms are tested for conformance only.
 
 ## Key Takeaways
 
-- A 2026 prevalence study of 10,008 repos found agent configs are an undeclared shared-component supply chain: 10.1% exact-duplicate rate, 75.5% cross-org propagation, near-zero revision cadence, <1% permission declarations ([Carey et al., arxiv:2606.26924](https://arxiv.org/abs/2606.26924v1)).
+- A 2026 prevalence study of 10,008 repos found agent configs are an undeclared shared-component supply chain: 10.1% exact-duplicate rate, 75.5% cross-org propagation, near-zero revision cadence, <1% permission declarations ([Madatha et al., arxiv:2606.26924](https://arxiv.org/abs/2606.26924v1)).
 - Four control-plane mechanisms close the governance gap: content addressing, permission declaration, state-machine promotion, drift detection.
 - The pattern earns its keep at multi-repo, multi-team, or regulated scale. Single-repo single-team stacks already get the benefit from `git`.
 - The benefit is provenance and rollback, not model compliance. [McMillan 2026](https://arxiv.org/abs/2605.10039) shows file structure does not move compliance — the pattern's value lies elsewhere.

@@ -77,3 +77,4 @@ The strongest case against the pattern follows from the same evidence: every fie
 - [Pre-Completion Checklists for AI Agent Development](pre-completion-checklists.md) — gating the agent's own completion signal before a human sees it
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](../human/author-to-reviewer-role-inversion.md) — why review capacity is the constraint this report spends
 - [Parallel Agent Sessions Shift the Bottleneck from Writing](../workflows/parallel-agent-sessions.md) — the parallelism that creates the review load in the first place
+- [Per-Task Verification Budget: Size the Task to Fit the Check](../workflows/per-task-verification-budget.md) — the fixed time budget this report is built to fit inside

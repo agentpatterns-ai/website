@@ -67,3 +67,4 @@ SWE-Router pairs a weak model with a strong one and lets the weak model explore 
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — the weak-model side of the pairing, used as a bounded sub-tool.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the broader cost-routing frame this escalation policy sits inside.
 - [Routing Break-Even: When a Cheaper Model Actually Pays](routing-break-even.md) — the cost screen to run before building any router, including this one.
+- [The Handoff Tax: What a Receiving Model Should Inherit](../../context-engineering/handoff-tax-model-switch-context.md) — measured evidence that the partial trajectory this router reads should not travel with the task when it escalates.

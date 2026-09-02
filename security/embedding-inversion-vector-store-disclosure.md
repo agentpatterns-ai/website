@@ -41,7 +41,7 @@ The viable threat surface is short-form, in-distribution text — chat snippets,
 
 The access slice ([multitenant-rag-authorization-gap](multitenant-rag-authorization-gap.md)) gates retrieval responses. The poisoning slice ([rag-architecture-poisoning-robustness](rag-architecture-poisoning-robustness.md)) gates retrieval inputs. Neither addresses the case where the index itself leaks — through a misconfigured vector database, an exposed admin API, an insider, or an intercepted replication channel.
 
-ALGEN shows that an attacker holding a leaked index plus ~30 paired (text, embedding) samples exceeds Rouge-L 20 on reconstruction; ~1,000 samples reaches Rouge-L ~45 — with no access to the original embedding model or query API ([Yin et al., 2025](https://arxiv.org/abs/2502.11308v2)). Black-box post-exfiltration recovery is the realistic threat model. Encryption-at-rest does not close it: embeddings are decrypted at query time, and inversion runs on the live vector ([OWASP LLM08:2025](https://genai.owasp.org/llmrisk/llm082025-vector-and-embedding-weaknesses/)).
+ALGEN shows that an attacker holding a leaked index plus ~30 paired (text, embedding) samples exceeds Rouge-L 20 on reconstruction; ~1,000 samples reaches Rouge-L ~45 — with no access to the original embedding model or query API ([Chen et al., 2025](https://arxiv.org/abs/2502.11308v2)). Black-box post-exfiltration recovery is the realistic threat model. Encryption-at-rest does not close it: embeddings are decrypted at query time, and inversion runs on the live vector ([OWASP LLM08:2025](https://genai.owasp.org/llmrisk/llm082025-vector-and-embedding-weaknesses/)).
 
 ## Why it works
 
@@ -56,7 +56,7 @@ Layer defenses against the realistic threat model — the index leaks and the at
 | Treat the index as confidential as the corpus | Same ACLs, audit, retention as the source documents | [OWASP LLM08:2025](https://genai.owasp.org/llmrisk/llm082025-vector-and-embedding-weaknesses/) |
 | Gaussian noise on stored vectors | λ≈0.01 perturbation defeats vec2text while preserving retrieval — the cheapest practical defense | [Seputis et al., 2025](https://arxiv.org/abs/2507.07700) |
 | Never embed secrets | API keys, passwords, and high-entropy short strings face the strongest password-recovery vector; scrub before embedding | [Seputis et al., 2025](https://arxiv.org/abs/2507.07700) |
-| Projection or mutual-information defense | Heavier options like Eguard report ~95% token-level protection without major utility loss | [Zhou et al., 2024](https://arxiv.org/abs/2411.05034) |
+| Projection or mutual-information defense | Heavier options like Eguard report ~95% token-level protection without major utility loss | [Liu et al., 2024](https://arxiv.org/abs/2411.05034) |
 | Index access logging | An inversion attack starts with an index read; logging turns silent confidentiality failure into a detectable event | [OWASP LLM08:2025](https://genai.owasp.org/llmrisk/llm082025-vector-and-embedding-weaknesses/) |
 
 ## Example

@@ -69,7 +69,7 @@ a successful injection in a tool output cannot redirect the agent to call unauth
 
 ## Trade-offs
 
-Task completion: CaMeL solves 77% of AgentDojo tasks with provable security, versus 84% for an undefended system — a 7 percentage point cost for architectural security guarantees. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)]
+Task completion: CaMeL solves 77% of AgentDojo tasks with provable security, versus 84% for an undefended system — a 7 percentage point cost for architectural security guarantees. [Source: [Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813v2)]
 
 Latency: The dual-LLM design roughly doubles model invocations. When the Q-LLM processes complex artifacts, latency can exceed 10 seconds — too slow for interactive applications. [Source: [Tallam & Miller, 2025](https://arxiv.org/abs/2505.22852v1)]
 
@@ -133,3 +133,4 @@ Side channels. The authors leave them outside the guarantee: an adversary can st
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Adaptive Evaluation of Out-of-Band Prompt-Injection Defenses](adaptive-evaluation-out-of-band-defenses.md) — CaMeL is one of the five out-of-band defenses; this evaluation page explains why even structurally sound defenses need defense-aware adaptive testing.
 - [Single-Layer Prompt Injection Defense](../patterns/anti-patterns/single-layer-injection-defence.md)
+- [Reframed Exfiltration Defeats Wording-Based Defenses (Framing Gap)](framing-gap-exfiltration-defenses.md) — an independent harness where a CaMeL-style planner/reader split held at 0% while channel separation and a fine-tuning defense did not.

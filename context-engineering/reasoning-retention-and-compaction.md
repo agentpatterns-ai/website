@@ -98,6 +98,7 @@ The only differences are which prior content the harness sends back and what it 
 ## Related
 
 - [Context Compression Strategies](context-compression-strategies.md) — the tiered offload-then-summarize approach that compaction belongs to
+- [Shortening Old Tool Results Under Context Pressure (Half-Life Truncation)](half-life-tool-result-truncation.md) — a truncation policy that beat the untouched transcript under a tight window, complicating the compact-not-truncate default
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md) — compacting on reasoning quality rather than at a fill threshold
 - [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — letting the agent choose the compaction moment from trajectory structure
 - [Eval Blind Spots](../verification/eval-blind-spots.md) — what a benchmark cannot observe about the system it scores

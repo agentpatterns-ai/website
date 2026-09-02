@@ -38,7 +38,7 @@ The composition is load-bearing. Drop the informative gate and the metric reward
 
 ## Why it works
 
-Success depends on the task posterior converging on the right solution before the budget runs out. Raw spend measures the opportunity for that posterior to update, not the update itself. Re-reads, identical-error retries, and fact-restating critiques change no posterior and yield no success gain, and EFC subtracts exactly those events. Iterative Agent Decoding reaches the same conclusion from another angle: inserting feedback between decoding steps beats best-of-N by up to 10 percentage points under matched compute, because best-of-N spends it on near-identical posteriors ([Chen et al., 2025](https://arxiv.org/abs/2504.01931v4)).
+Success depends on the task posterior converging on the right solution before the budget runs out. Raw spend measures the opportunity for that posterior to update, not the update itself. Re-reads, identical-error retries, and fact-restating critiques change no posterior and yield no success gain, and EFC subtracts exactly those events. Iterative Agent Decoding reaches the same conclusion from another angle: inserting feedback between decoding steps beats best-of-N by up to 10 percentage points under matched compute, because best-of-N spends it on near-identical posteriors ([Chakraborty et al., 2025](https://arxiv.org/abs/2504.01931v4)).
 
 In matched-budget interventions, redirecting the same budget toward EFC-credited events lifted success from a 27% baseline to 90% ([Zhang et al., 2026](https://arxiv.org/abs/2605.29682v2)) — the model did not change, only which events the harness produced.
 

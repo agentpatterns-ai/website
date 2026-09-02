@@ -76,3 +76,4 @@ A team using an agentic coding assistant on a mid-size monorepo can act on the p
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — Defense-in-depth patterns that topology complements rather than replaces
 - [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md) — A parallel treatment of repo files as untrusted authority
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md) — Capability-level control that does not depend on model classification
+- [Which Task You Delegate Changes Poisoned-Repo Exposure](task-choice-poisoned-repository-exposure.md) — The user-side half of the same question: the task verb moves ASR while repository layout stays fixed

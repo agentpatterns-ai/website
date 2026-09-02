@@ -124,3 +124,4 @@ The `follow_redirects=False` flag prevents redirect-chain bypasses. If the respo
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md)
 - [Defense in Depth for Agent Safety](defense-in-depth-agent-safety.md)
+- [Reframed Exfiltration Defeats Wording-Based Defenses (Framing Gap)](framing-gap-exfiltration-defenses.md) — why a guard that must recognize the secret in the outbound bytes loses to a held-out encoding, while a destination check does not.

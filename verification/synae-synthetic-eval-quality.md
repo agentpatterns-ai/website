@@ -88,6 +88,7 @@ Skip or replace the framework when:
 ## Related
 
 - [Golden Query Pairs as Continuous Regression Tests for Agents](golden-query-pairs-regression.md)
+- [Building Agent Eval Environments With a World Spec](world-spec-eval-environments.md)
 - [Incident-to-Eval Synthesis: Production Failures as Evals](incident-to-eval-synthesis.md)
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md)
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)

@@ -80,3 +80,4 @@ Run one toolset and the agent sees a handful of GitHub operations. Run them all 
 - [Poka-Yoke for Agent Tools](../../tool-engineering/poka-yoke-agent-tools.md) — the same error-prevention logic applied inside a single tool's schema
 - [Progressive Disclosure for Layered Agent Definitions](progressive-disclosure-agents.md) — on-demand loading of knowledge rather than tools
 - [Issue-Tracker as Agent Dispatch Surface](../../workflows/issue-tracker-agent-dispatch-surface.md) — the view from the team wiring an agent to a tracker, rather than the team building the agent inside it
+- [Typed Tool Surfaces and Out-of-Loop Correctness Gates](typed-tool-surface-out-of-loop-gate.md) — the opposite split, a few tools naming the domain's semantics rather than one tool per product action

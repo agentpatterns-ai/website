@@ -141,3 +141,4 @@ That pays off debt with more debt. The gap that made the original code opaque is
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md) -- team knowledge invisible to agents, compounding the gap between AI output and developer expectations
 - [Cargo Cult Agent Setup](cargo-cult-agent-setup.md) -- copying configurations without understanding why they work, the setup-time parallel to blind code acceptance
 - [Marking Which Artifacts Are for Humans or Agents (Landmarking)](../../human/landmarking-human-vs-agent-artifacts.md) -- a team convention declaring which artifacts are written to be understood, so comprehension effort lands where it is needed
+- [Absorbing Entry-Level Work into Senior-Agent Workflows](entry-level-work-absorption.md) -- comprehension debt is what a junior carries after accepting code; absorption is the routing decision that stops the work reaching them at all

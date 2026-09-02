@@ -55,6 +55,7 @@ Six frontier models were asked to bring a stale skill set up to a new release. T
 
 - [Stale AI Configuration Artifacts (Context Rot)](stale-ai-configuration-artifacts.md) — the adjacent failure, measured between a config file and the code it describes rather than across a release boundary
 - [Skill Reuse as Vendored Forking](../../tool-engineering/skill-reuse-as-vendored-forking.md) — the third drift axis: a copied skill diverging from its upstream source
+- [Plugin Component Co-Change](../../instructions/plugin-component-co-change.md) — the fourth axis: a skill diverging from the script bundled beside it in the same plugin
 - [Skill Library Technical Debt](../../tool-engineering/skill-library-technical-debt.md) — library-level defects that no single-skill eval catches, including stale clones
 - [Skill Over-Trust](skill-over-trust.md) — a topically matched skill is not evidence the skill helps, stale or fresh
 - [Belief Inertia After Tool-Map Drift](belief-inertia-after-tool-map-drift.md) — what an agent does when the surface it memorized changes underneath it

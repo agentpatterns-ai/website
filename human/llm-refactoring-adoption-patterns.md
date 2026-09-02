@@ -9,7 +9,7 @@ tags:
 aliases:
   - developer adoption of LLM refactoring
   - ChatGPT refactoring suggestion modification
-last_reviewed: 2026-06-02
+last_reviewed: 2026-08-30
 maturity: emerging
 ---
 
@@ -25,15 +25,16 @@ The result is qualified, not universal:
 
 - Single-repo concentration: 143 of 169 commits come from one project (`tisztamo/Junior`) ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)).
 - Adoption-biased sample: DevGPT only captures commits where developers shared the ChatGPT link. Rejected conversations are absent ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)).
+- Automation confound: "in one of the projects, there is a shell script" that prompts ChatGPT, "extracts the code suggestion, updates the relevant file, and commits the changes". The paper does not say which project. The authors attribute most of the observed full-adoption rate to this automated pipeline, not to developer judgment ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)).
 - Refactoring-only: not ambient completion (~10% useful raw inference, see [Suggestion Gating](suggestion-gating.md)) and not AI review feedback (16.6% adoption per [arxiv:2603.15911](https://arxiv.org/abs/2603.15911v1)).
 
 Read the patterns as a vocabulary for modification work, not as proof that suggestions are reliable.
 
 ## The headline
 
-Token Match Rate density concentrates above 0.9 — most refactored files closely mirror the suggestion, and developers typically reach the goal in 1 to 4 prompts ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)). Of 190 manually inspected datapoints, 96 showed any modification.
+Token Match Rate density concentrates above 0.9 — most refactored files closely mirror the suggestion, and developers typically reach the goal in 1 to 4 prompts ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)). The authors qualitatively inspected 190 datapoints: all 96 files across the full 440-file dataset that showed any token-level modification, plus a complementary sample of 94 files with a perfect token match. That sample is stratified, not random, so 96 of 190 is not a modification rate — the dataset-wide share of files with any token-level modification is 96 of 440, about 22% ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)).
 
-Refactoring activity distribution ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)):
+Refactoring activity distribution ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)):
 
 | Activity | Count |
 |----------|-------|
@@ -62,7 +63,7 @@ graph TD
 
 ### 1. Complete adoption without modification
 
-Developers commit the suggestion verbatim (similarity = 1.0). This concentrates on low-risk, local tasks — variable rename, file reorganization — and on prompts that paste the entire file as context ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)). When the prompt encodes the integration points, the suggestion lands as-is.
+The suggestion is committed verbatim (similarity = 1.0). This concentrates on low-risk, local tasks — variable rename, file reorganization — and on prompts that paste the entire file as context ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)). Some of this is a prompting effect: when the prompt encodes the integration points, the suggestion lands as-is. But the authors trace much of the full-adoption rate to an automated commit pipeline in one unnamed project, not to developer review (see Scope and caveats).
 
 ### 2. Removal of erroneous parts
 
@@ -78,7 +79,7 @@ Developers keep the suggested logic but reshape it — combine multiple suggeste
 
 ### 5. Structure preservation, content disregard
 
-The inverse of pattern 4. Developers keep the suggestion's layout — function decomposition, file structure — but replace the logic with their own approach. Token Match Rate is low; the file is reorganized around different logic, sometimes alongside `mkdir`, `mv`, or `rm` operations ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)). The suggestion functioned as a scaffold, not a solution.
+The inverse of pattern 4. Developers keep the suggestion's layout — function decomposition, file structure — but replace the logic with their own approach. Token Match Rate is low; the file is reorganized around different logic. In the paper's words, developers "preserve the layout or function decomposition in the suggestion, while disregarding the logic" ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)). The suggestion functioned as a scaffold, not a solution.
 
 ## What drives which pattern
 
@@ -91,7 +92,7 @@ graph LR
     X -->|High| P4P5[Patterns 4–5]
 ```
 
-Two axes explain them ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)):
+Two axes explain which of the five modification patterns a refactor lands in ([Schön et al., 2026](https://arxiv.org/abs/2605.04835)):
 
 - Context completeness — full-file context drives pattern 1; partial context drives pattern 3.
 - Refactor complexity — simple transformations land in pattern 1 or 2; complex transformations (logic split, restructure) trigger patterns 4 and 5 because, as the authors note, "more complex suggestions often cause errors or add unwanted behavior" that requires more substantial modification ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)).
@@ -104,22 +105,27 @@ Do not generalize past the dataset. Findings cover developer-initiated, single-f
 
 ## Example
 
-A developer prompts ChatGPT to "split this 200-line `processOrders` function into smaller functions." They paste the surrounding file.
+Two excerpts from the paper, one a commit and one a suggestion, show what the metric does and does not see ([Schön et al., 2026](https://arxiv.org/abs/2605.04835v1)).
 
-- If the result lands as-is — pattern 1. Whole-file context plus a well-scoped local refactor.
-- If they delete an unrequested logging block the model added — pattern 2. Scope inflation, edited out.
-- If they rename `validateOrder` to `checkOrderValidity` to match project style — pattern 3. Project-specific integration, not present in the prompt.
-- If they keep the new helper functions but merge two of them and reorder others — pattern 4. Logic preserved, structure adjusted.
-- If they accept the four-function decomposition but rewrite each function's body — pattern 5. Scaffold accepted, logic rejected.
+**Pattern 2, removal of erroneous parts.** ChatGPT suggested a `GenerateButton` component whose `handleGeneratePrompt` function called `copy(response.prompt)` and `setPrompt(htmlPrompt)` after generating a response. The developer kept the suggestion's core logic but removed both calls before committing — behavior nobody asked for, edited back out.
 
-The same prompt and the same suggestion can produce any of these depending on prompt completeness and refactor complexity. The pattern label tells you which lever to pull next time.
+**Not a pattern: a limit of the metric.** The paper introduces this one with "on the other hand", against pattern 5. Here the developer does apply the suggestion, and similarity stays low because command-line operations "are not captured by the similarity measures". A suggestion to reorganize a project's file layout included:
+
+```
+mkdir -p src/frontend/service/helpers/
+mv src/frontend/services/helpers/getComparison.js src/frontend/service/helpers/getComparison.js
+rm -r src/frontend/services/
+```
+
+Token Match Rate does not see `mkdir`, `mv`, or `rm`, so a suggestion of this shape scores as heavily modified whatever the developer does with it. The paper prints the suggestion alone, with no committed file beside it, so it evidences the blind spot rather than any particular adoption.
+
+The paper names no repository for either excerpt. Read them as illustrations, not as a claim about how often either case occurs.
 
 ## Key Takeaways
 
-- Most committed ChatGPT refactors in the [DevGPT dataset](https://arxiv.org/abs/2605.04835v1) are adopted with high similarity, but 51% of inspected datapoints show some modification — modification is the norm at the boundary, not the exception
+- Most committed ChatGPT refactors in the [DevGPT dataset](https://arxiv.org/abs/2605.04835v1) are adopted with high similarity; only about 22% of the 440 files show any token-level modification, and even that is a floor, since a perfect token match can still hide a deletion
 - The five patterns (complete adoption, remove erroneous parts, integration adjustments, structural redesign, structure preservation with content disregard) are driven by prompt context completeness and refactor complexity, not LLM capability per se
-- Findings are qualified by single-repo concentration (143 of 169 commits) and adoption bias (rejected conversations excluded) — generalization requires explicit conditions
-- Full-file context in the prompt is correlated with pattern 1; partial context is correlated with pattern 3
+- Findings are qualified by single-repo concentration (143 of 169 commits), an automated commit pipeline in that repo, and adoption bias (rejected conversations excluded) — generalization requires explicit conditions
 - The result does not extend to AI-generated review feedback (16.6% adoption — [arxiv:2603.15911](https://arxiv.org/abs/2603.15911v1)) or to ambient code completion (~10% useful raw inference — see [Suggestion Gating](suggestion-gating.md))
 
 ## Related

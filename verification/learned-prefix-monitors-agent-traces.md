@@ -46,7 +46,7 @@ StepView induction. Offline, the framework derives "deterministic typed-step ada
 
 Supervised monitor. With the abstraction fixed, train a scorer that maps a typed-step prefix to terminal-failure probability, learned from labeled complete traces.
 
-The split matters. Hand-authored schemas commit to one vocabulary; StepView re-derives it from data. An [LLM-as-judge](../workflows/llm-as-judge-evaluation.md) reasons at inference; the supervised scorer pushes that cost offline. Adjacent work uses the same offline-learn, online-score split: ProbGuard fits a discrete-time Markov chain over abstracted agent states and fires when the probability of reaching an unsafe state crosses a threshold [Source: [Zhou et al., *ProbGuard*](https://arxiv.org/abs/2508.00500)].
+The split matters. Hand-authored schemas commit to one vocabulary; StepView re-derives it from data. An [LLM-as-judge](../workflows/llm-as-judge-evaluation.md) reasons at inference; the supervised scorer pushes that cost offline. Adjacent work uses the same offline-learn, online-score split: ProbGuard fits a discrete-time Markov chain over abstracted agent states and fires when the probability of reaching an unsafe state crosses a threshold [Source: [Wang et al., *ProbGuard*](https://arxiv.org/abs/2508.00500)].
 
 ## What the numbers actually say
 

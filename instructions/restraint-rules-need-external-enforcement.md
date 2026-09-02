@@ -34,7 +34,7 @@ Handing the agent the exact clause does not close the gap. Under the study's Quo
 
 Moving a restraint rule out of the instruction file helps only when the control gates on something the contributor must produce: a required trailer, a passing verification job, a required human approval. Each is a fact CI can check.
 
-Built-in product controls close little of that gap. An audit of 481 public CLAUDE.md files extracted their security rules and checked each against Claude Code's built-in controls. Only 4.4% matched under the strictest standard (95% CI 2.6-6.7%), and 4-16% under looser matching. Two practitioners checked the sample independently ([When "Do Not" Is Not Deny, 2026](https://arxiv.org/abs/2608.23550)).
+Built-in product controls close little of that gap. An audit of 481 public CLAUDE.md files extracted their security rules and checked each against Claude Code's built-in controls. Only 4.4% matched under the strictest standard (95% CI 2.6-6.7%), and 4-16% under looser matching. Two practitioners checked the sample independently ([When "Do Not" Is Not Deny, 2026](https://arxiv.org/abs/2608.23550v1)).
 
 A control that has to infer AI authorship is far weaker. Bot-account lookup, the signal most adoption studies lean on, recovers only 3.3% of detectable agent activity, a 30x relative-recall gap ([Khosravani and Mockus, 2026](https://arxiv.org/abs/2606.24429v1)). A bot that closes pull requests it believes are AI-authored inherits that error rate.
 
@@ -99,6 +99,7 @@ Add a branch-protection rule requiring human review on `crypto/**`. The trailer 
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — the phrasing lever, complementary to the enforcement-surface choice here
 - [Do Not Price the Rules in Your Agent Instruction File](enforcement-information-paradox.md) — a second reason prose fails: naming the penalty prices the rule instead of enforcing it
 - [Hooks for Enforcement vs Prompts for Guidance: When to Use Each](hooks-vs-prompts.md) — the general enforcement-surface split this evidence grounds empirically
+- [Assuming a CLAUDE.md Security Rule Is Enforced](../patterns/anti-patterns/unenforced-claude-md-security-rules.md) — the coverage half: how many written security rules a built-in control could back in the first place
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the separate failure where rule count, not rule kind, drives non-compliance
 - [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md) — parallel finding that file placement and structure are not the compliance lever
 - [Encoding AI Writing Tells as a Prose Style Contract](ai-writing-tell-catalogue.md) — a worked split of one rule set into the mechanically-enforced half and the review half

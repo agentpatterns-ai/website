@@ -30,7 +30,7 @@ The discipline is conditional. Three things decide whether it returns anything.
 |---|---|
 | The library is large enough for selection to fail | Agent performance degrades "by up to 21% when scaling from a small set of helpful skills to a 202-skill library" ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050v2)). Below roughly 30 candidates, retrieval precision holds and there is nothing to recover ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275v1)). |
 | Several people author into the same library | A shared construction standard is what keeps descriptions from colliding across authors who never read each other's files. |
-| Something automated checks the result | Guidance alone does not change practice. Across 238 real-world skills, "over 99% of SKILL.md files contain at least one skill smell", and once introduced they "rarely disappear as skills evolve" ([Gao et al., 2026](https://arxiv.org/abs/2607.01456v2)). |
+| Something automated checks the result | Guidance alone does not change practice. Across 238 real-world skills, "over 99% of SKILL.md files contain at least one skill smell", and once introduced they "rarely disappear as skills evolve" ([Hong et al., 2026](https://arxiv.org/abs/2607.01456v2)). |
 
 ## Which principles transfer
 
@@ -61,7 +61,7 @@ Single responsibility works through selection interference, not code hygiene. An
 
 ## When this backfires
 
-- Guidance without a detector. Best-practice advice is already near-universally violated ([Gao et al., 2026](https://arxiv.org/abs/2607.01456)); adding another standard without an automated check changes nothing.
+- Guidance without a detector. Best-practice advice is already near-universally violated ([Hong et al., 2026](https://arxiv.org/abs/2607.01456)); adding another standard without an automated check changes nothing.
 - Optimizing the token budget first. Shortening bodies targets a channel measured as indistinguishable from zero, leaving the dominant loss untouched ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)).
 - Small libraries. Under roughly 30 candidates the degradation single responsibility protects against has not started ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275)), so the discipline costs attention and returns nothing.
 - Reading a passed evaluation as a runtime guarantee. Fuzzing 402 marketplace skills found 120 (29.9%) violate their own declared specifications on benign inputs ([SEFZ, 2026](https://arxiv.org/abs/2605.13044v1)). A well-structured declaration is not an enforced one.
@@ -81,7 +81,7 @@ The failure lands before either skill body is read, because the selector compare
 - Single responsibility and interface separation transfer, on the selection-time mechanism rather than the modularity argument.
 - Demote token economy — context overhead measures as indistinguishable from zero next to skill shadowing ([Song and Wei, 2026](https://arxiv.org/abs/2605.24050)).
 - Two questions pick the mechanism: who decides it runs, and what guarantee it provides. Judgement-dependent steps become skills; must-happen-every-time steps become hooks ([Destefanis, 2026](https://arxiv.org/abs/2607.25032)).
-- Pair any authoring standard with an automated detector, because published guidance alone leaves over 99% of real skills non-compliant ([Gao et al., 2026](https://arxiv.org/abs/2607.01456v2)).
+- Pair any authoring standard with an automated detector, because published guidance alone leaves over 99% of real skills non-compliant ([Hong et al., 2026](https://arxiv.org/abs/2607.01456v2)).
 
 ## Related
 

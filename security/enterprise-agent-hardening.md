@@ -139,6 +139,7 @@ This setup satisfies all three gates: denied operations and hook rejections are 
 
 ## Related
 
+- [Agent Governance Plane: Audit Events and Message-Content Surfaces](agent-governance-plane.md) — the vendor-side surfaces that supply the observability gate's evidence, and where their coverage stops
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Managed Settings Drop-In for Claude Code](../tools/claude/managed-settings-drop-in.md)
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](../observability/agent-observability-otel.md)

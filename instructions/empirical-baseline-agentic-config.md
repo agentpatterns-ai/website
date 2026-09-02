@@ -91,6 +91,7 @@ The data reflects this. Shallow adoption may be partly rational scoping, not jus
 - [Cross-Tool Translation](../human/cross-tool-translation.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../standards/mcp-protocol.md)
 - [Progressive Autonomy: Scaling Trust with Model Evolution](../human/progressive-autonomy-model-evolution.md)
+- [RAMP: Committed AI Configuration and the Quality Cost](committed-ai-configuration-quality-cost.md) — the same prevalence question graded as a maturity scale, with post-adoption quality outcomes attached
 - [The Bottleneck Migration When Humans Supervise Agents](../human/bottleneck-migration.md)
 - [Initiatives and Community: Tracking the Agentic Engineering](../human/initiatives-community.md)
 - [Rigor Relocation](../human/rigor-relocation.md)

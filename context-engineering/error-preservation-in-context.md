@@ -83,6 +83,8 @@ When you choose tools for agent workflows, prefer those with descriptive error o
 
 Anthropic frames tool misuse as [context pollution](../patterns/anti-patterns/session-partitioning.md) and recommends clearing tool results as compaction ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Manus takes the opposite position: those dead-ends are the signal. The practical rule: preserve during active recovery, compact once recovery succeeds.
 
+One boundary applies to small models. Preserving the *fact* of a failure differs from echoing the call string back, which is its own copying target below roughly 1.7B parameters — see [Verbatim Failure Records in Small-Model Agent Transcripts](../patterns/anti-patterns/verbatim-failure-records.md). Keep the lesson, replace the literal call.
+
 ## Anchoring recovery in deterministic signals
 
 Preserved errors help most when the agent verifies recovery against deterministic signals rather than its own judgment. The nibzard agentic handbook warns that "self-critique without objective checks is also brittle — models can rationalize" ([nibzard](https://www.nibzard.com/agentic-handbook)).

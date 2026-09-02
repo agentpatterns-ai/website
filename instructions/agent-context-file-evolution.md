@@ -10,7 +10,7 @@ aliases:
   - ACF maintenance lifecycle
   - agent context file maintenance
   - CLAUDE.md evolution discipline
-last_reviewed: 2026-06-25
+last_reviewed: 2026-08-30
 maturity: adopted
 ---
 
@@ -51,7 +51,7 @@ graph LR
 | Add-on-drift | PR modifies build system, test runner, lint config, or core architectural module | Reviewer checklist asks whether the ACF needs an update ([Eisele, 2026](https://www.the-main-thread.com/p/coding-agent-operating-manual)) |
 | Compact-on-add | ACF receives a new rule | Same PR (or a follow-up audit) removes a now-stale rule, consolidates an overlapping section, or moves a rule to a hook |
 
-The compact loop is what most teams skip. Without it, the discipline produces what one practitioner observed: "after a few weeks, the file is 400 lines long and Claude is ignoring more rules than ever" ([Pan, 2026](https://tianpan.co/blog/2026-02-14-writing-effective-agent-instruction-files)).
+The compact loop is what most teams skip. Without it, the discipline produces what one practitioner observed: "after a few weeks, the file is 400 lines long and Claude is ignoring more rules than ever" ([Pan, 2026](https://tianpan.co/blog/2026-02-14-writing-effective-agent-instruction-files)). Addy Osmani puts a cadence on it: audit every couple of weeks, or monthly. Archive before deleting. A rule that must always hold belongs "in a test, hook, or permission rather than leaving it as prose" ([Audit Your Agent Files](https://addyo.substack.com/p/audit-your-agent-files)).
 
 ## Why it works
 
@@ -134,3 +134,4 @@ The discipline is not free, and several conditions invert its sign:
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — the structural target the compact pass aims at
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the destination for rules the compact pass moves out of prose
 - [Harness Impermanence](../patterns/agent-design/harness-impermanence.md) — the analogous discipline applied to scaffolding code rather than instruction files
+- [RAMP: Committed AI Configuration and the Quality Cost](committed-ai-configuration-quality-cost.md) — the commercial-repo study that reports the opposite lifecycle, with 73.8% of artifacts committed once and never modified

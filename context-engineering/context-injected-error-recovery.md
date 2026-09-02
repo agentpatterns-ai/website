@@ -89,6 +89,7 @@ Context injection adds tokens to every retry prompt. Three conditions make this 
 1. Near-context-limit sessions — injecting prior-attempt history and recovery hints into a prompt that is already large can push the total context past the model's limit. This truncates earlier session history and introduces new errors.
 2. High-frequency, low-variance errors — when errors repeat across many different operations, such as a systemic auth failure or a network outage, the recovery catalog produces the same generic hints on every retry. This adds tokens without adding signal.
 3. Stale suggestion catalog — if the hint mappings are not kept current as the tool surface changes, they can suggest approaches that no longer apply or that contradict current tool behavior, which misleads the model.
+4. Small models, below roughly 1.7B parameters — a second cause stacks on top of the token cost. The failed call, echoed back verbatim in the injected context, is its own copying target, so the injection raises the odds of the repeat it exists to prevent ([Verbatim Failure Records in Small-Model Agent Transcripts](../patterns/anti-patterns/verbatim-failure-records.md)). Inject the abstracted lesson, not the call string.
 
 ## Example
 

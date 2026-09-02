@@ -63,6 +63,7 @@ Wiki memory is the general form: it synthesizes arbitrary domain sources into fi
 
 ## Related
 
+- [Self-Correcting Memory: Evidence-Backed Claim Repair](self-correcting-memory-evidence-backed-claims.md) — the maintenance half, where each claim carries a versioned evidence anchor so a diff marks it stale before a model judges it
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — the narrower sibling that mines causal lessons from execution traces rather than arbitrary sources
 - [Code-Native Memory Substrates](code-native-memory-substrates.md) — structured memory rooted in codebase artifacts, the code-specific counterpart to a general wiki
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — the scope-and-temporal taxonomy this durable-knowledge layer slots into

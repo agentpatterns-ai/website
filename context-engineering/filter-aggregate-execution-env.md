@@ -7,7 +7,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
-last_reviewed: 2026-06-13
+last_reviewed: 2026-08-31
 maturity: adopted
 ---
 
@@ -46,6 +46,8 @@ The same pattern applies to any large intermediate representation:
 - API payloads: extract specific fields from large JSON responses before the agent sees them
 - Images and binary data: thumbnails, metadata extraction, format conversion — return the derived representation, not the raw bytes
 - Code analysis results: AST traversal, dependency graphs — return the answer to the query, not the full graph
+
+Sourcegraph's Deep Search applies this to code search. Its scripts wrap the search APIs and return a structured artifact, a CSV or an SVG, not the file contents they read. On a code-migration audit, that artifact is the deliverable ([Sourcegraph on code migrations with less LLM context](https://sourcegraph.com/blog/a-smarter-way-to-run-code-migrations-with-less-llm-context)).
 
 ## Why code beats tool chains
 

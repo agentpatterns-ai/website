@@ -120,4 +120,5 @@ The two studies also used different model and agent sets. So it is unclear wheth
 - [Convention Over Configuration](convention-over-configuration.md)
 - [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md)
 - [Agent Context File Evolution: Treating ACFs as Configuration Code](agent-context-file-evolution.md) — for ACFs that already help, the empirical maintenance lifecycle on the same Chatlatanagulchai dataset
+- [RAMP: Committed AI Configuration and the Quality Cost](committed-ai-configuration-quality-cost.md) — the longitudinal counterpart, where committed configuration tracks lower complexity drift even though task success does not move
 - [Documentation Read Counts Measure Retrievability, Not Value](documentation-read-counts.md) — the behavioral traces showing agents read these files most, and why that is not an argument for writing more of them

@@ -70,7 +70,7 @@ Contract failures are mechanical, not capability-bound. [ContractBench](https://
 - Single-step tools with no second call. The artifact has no validator on a follow-up, so preservation adds ceremony without benefit. Idempotency-key plumbing in particular is wasted on read-only chains.
 - Opaque-handle harnesses. When the harness already mediates artifacts (MCP `_meta` persistence, sealed-envelope adapters, server-side opaque handle indirection), prompt-level discipline fights the layer below it. The right fix is to push more state behind the harness, not to add more rules ([Towards Verifiably Safe Tool Use](https://arxiv.org/abs/2601.08012)).
 - Reasoning-tuned models with deep thinking enabled. Paraphrasing during extended reasoning erodes verbatim instructions ([Yin et al., 2025](https://arxiv.org/abs/2510.22977)), so only out-of-band storage or a runtime validator survives.
-- When formal verification is available. Solver-aided runtime checks prove some violations away ([Mishra et al., 2026](https://arxiv.org/abs/2603.20449)), which is preferable to a prompt-level pattern where the option exists.
+- When formal verification is available. Solver-aided runtime checks prove some violations away ([Winston et al., 2026](https://arxiv.org/abs/2603.20449)), which is preferable to a prompt-level pattern where the option exists.
 
 ## Example
 

@@ -54,7 +54,7 @@ Independent work supports the prevalence half. SWT-Bench names "adding passing t
 - Test-writing behavior may not drive outcomes at all. Across six models on SWE-bench Verified, resolved and unresolved tasks showed similar test-writing frequencies, agent-written tests acted mainly as observational print channels rather than assertions, and prompt-induced changes in test volume did not significantly change final outcomes ([Chen et al., 2026](https://arxiv.org/abs/2602.07900v2)).
 - The replay content generalizes poorly. On gpt-5.6-terra the generic reminder alone produced -7.5 points, while the B-replay content added +2.50 points with a 95% confidence interval of [-16.08, 21.08], reported as descriptive only ([Xu and Wu, 2026](https://arxiv.org/abs/2607.28871v1)).
 - Live repair has no gold fix. Roles are assigned against the developer gold fix as reference standard, which introduces noise where that fix is incomplete or several valid fixes exist ([Xu and Wu, 2026](https://arxiv.org/abs/2607.28871v1)). Outside a benchmark only the B half transfers.
-- Evidence quality is not correctness. 29.6% of plausible SWE-bench patches induce different behavior than the ground-truth patch ([Aleithan et al., 2025](https://arxiv.org/abs/2503.15223v2)), a gap a bug-discriminating test does not close.
+- Evidence quality is not correctness. 29.6% of plausible SWE-bench patches induce different behavior than the ground-truth patch ([Wang et al., 2025](https://arxiv.org/abs/2503.15223v2)), a gap a bug-discriminating test does not close.
 
 ## Example
 

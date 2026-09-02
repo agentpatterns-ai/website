@@ -33,7 +33,7 @@ The shift from context to harness requires treating memory, skills, protocols, a
 
 ## Why it works
 
-Externalization converts reconstruction tasks (inferring state from weights) into retrieval tasks — operations LLMs perform more consistently. A system with vast storage but weak retrieval still presents the wrong problem representation. Strong indexing and contextual selection make downstream reasoning much easier ([Zhou et al., 2025](https://arxiv.org/abs/2604.08224v1)). Active memory management with deliberate curation achieves 58% memory reuse and 17–18% net efficiency gains over passive retrieval ([Shi et al., 2025](https://arxiv.org/abs/2508.13171v1)).
+Externalization converts reconstruction tasks (inferring state from weights) into retrieval tasks — operations LLMs perform more consistently. A system with vast storage but weak retrieval still presents the wrong problem representation. Strong indexing and contextual selection make downstream reasoning much easier ([Zhou et al., 2025](https://arxiv.org/abs/2604.08224v1)). Active memory management with deliberate curation achieves 58% memory reuse and 17–18% net efficiency gains over passive retrieval ([An et al., 2025](https://arxiv.org/abs/2508.13171v1)).
 
 ## Four externalization components
 

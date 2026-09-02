@@ -67,3 +67,4 @@ Spending on reasoning effort is the wrong call when:
 - [Indiscriminate Structured Reasoning](../anti-patterns/reasoning-overuse.md) — the failure mode when effort is spent past the point it helps
 - [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — the complementary lever: iterative feedback quality over raw model strength
 - [Interactive Effort Sliders: Per-Turn Reasoning-Budget Controls](interactive-effort-sliders.md) — expose the effort dial as an operator control
+- [Verification Surface: Match the Tool to the Failure](../../verification/verification-surface-reach-and-cost.md) — the same author's controlled follow-up, which holds model capability fixed and ranks the tools against each other on reach and token cost

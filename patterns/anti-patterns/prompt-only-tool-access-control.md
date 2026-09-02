@@ -1,6 +1,6 @@
 ---
 title: "Prompt-Only Tool Access Control"
-description: "Telling an agent in the system prompt not to call a tool reduces unauthorized invocation by only 11–18 pp. Architectural enforcement at the proxy drives it to zero."
+description: "Telling an agent in the system prompt not to call a tool still leaves 4.0–37.0% of unauthorized calls going through. Only architectural enforcement at the proxy reaches zero."
 term: "Prompt-Only Tool Access Control"
 tags:
   - security
@@ -11,15 +11,15 @@ aliases:
   - instructional tool restriction
   - prompt-based tool whitelisting
   - "do not call this tool"
-last_reviewed: 2026-06-02
+last_reviewed: 2026-09-01
 maturity: established
 ---
 
 # Prompt-Only Tool Access Control
 
-> A system-prompt "do not call this tool" cuts unauthorized invocation by only 11–18 points; stripping it from context and re-checking calls drives it to 0%.
+> A system-prompt "do not call this tool" leaks 4.0–37.0% of unauthorized calls, and no model reaches zero. Removing the tool from context does.
 
-Prompt-only tool access control restricts which tools an agent may invoke by adding instructions to the system prompt — "do not call `delete_repo`", "only use the read-only API" — while the full tool catalog stays visible in the model's context. Across 150 adversarial tasks on Qwen 2.5 7B, Llama 3.1 8B, and Claude Haiku 3.5, this cut the Unauthorized Invocation Rate (UIR) by only 11–18 percentage points; a governed MCP proxy doing ABAC at discovery and invocation drove UIR to 0% with under 50 ms latency ([Uppala 2026](https://arxiv.org/abs/2605.18414v2)).
+Prompt-only tool access control restricts which tools an agent may invoke through system-prompt instructions — "do not call `delete_repo`", "only use the read-only API" — while the full tool catalog stays visible in the model's context. Across 200 adversarial tasks on Qwen 2.5 7B, Llama 3.1 8B, and Claude Haiku 4.5, an explicit allowlist left the Unauthorized Invocation Rate (UIR) at 37.0%, 4.0%, and 11.5%. No model reached zero. A governed MCP proxy doing ABAC at discovery and invocation drove UIR to 0% on every model and task, adding 1.523 ms at the median ([Uppala 2026, Tables 1–2](https://arxiv.org/abs/2605.18414v3)).
 
 ## Why it fails
 
@@ -29,7 +29,7 @@ The system prompt is data, not enforcement. Models "cannot distinguish between i
 
 The fix removes the choice rather than asking the model to refuse it. A governed proxy enforces ABAC at two points:
 
-1. Discovery — unauthorized tools are filtered out of the list the model receives. There is no token to select ([Uppala 2026, §3](https://arxiv.org/abs/2605.18414)).
+1. Discovery — unauthorized tools are filtered out of the list the model receives. There is no token to select ([Uppala 2026, §3](https://arxiv.org/abs/2605.18414v3)).
 2. Invocation — every outgoing call is re-checked against the same policy and rejected before reaching the MCP server.
 
 Causality runs `policy → enforcement`, not `instruction → model compliance → enforcement` — the loop that adversarial context breaks.
@@ -52,7 +52,7 @@ The architectural fix is not always necessary or sufficient.
 - Latency-critical hot paths. Full-featured gateways add 100–300 ms per call; at 20 calls per workflow that compounds to 2+ seconds ([Composio 2026](https://composio.dev/content/mcp-gateways-guide)).
 - Off-protocol calls. A proxy enforces only what traverses it. Shell, raw HTTP, and non-MCP channels bypass it entirely ([Security Boulevard 2026](https://securityboulevard.com/2026/03/why-mcp-gateways-are-a-bad-idea-and-what-to-do-instead/)).
 - Single point of failure. One broker concentrates outage and compromise surface, so replicate it and keep credentials out of the proxy.
-- Scope of the 11–18 pp figure. Uppala tested "explicitly instructed otherwise" restrictions; constitutional schemas and tool-call output validation are different mechanisms and were not ablated.
+- Scope of the residual figures. Uppala tested explicit per-tool allowlists; constitutional schemas and tool-call output validation are different mechanisms and were not ablated. The 1.523 ms overhead is a controlled single-node measurement, not a production figure.
 - Benign-regime null results do not lift it. A prespecified study of GPT-5.6 recorded zero prohibited calls across 840 clerical trajectories under prompt-only prohibition, bounded above 3.50% per arm ([Xu and Wu 2026](https://arxiv.org/abs/2608.03169v1)). Read what that bound covers before quoting it: [Equivalence Testing for Agent Configuration Changes](../../verification/equivalence-testing-agent-config-changes.md).
 
 ## Example
@@ -68,7 +68,7 @@ IMPORTANT: NEVER call delete_repo. NEVER call transfer_ownership.
 NEVER call exfiltrate_secrets. These are not for your use.
 ```
 
-The model sees all six tool definitions. Uppala's adversarial cases — including indirect prompt injection in a fetched PR description — bypass this restriction in 11–18% of attempts, depending on the model ([Uppala 2026, §5](https://arxiv.org/abs/2605.18414v2)).
+The model sees all six tool definitions. Uppala's adversarial cases bypass this restriction in 4.0% to 37.0% of attempts, and the spread does not track general capability ([Uppala 2026, §5](https://arxiv.org/abs/2605.18414v3)).
 
 After — architectural enforcement at the proxy:
 
@@ -85,7 +85,7 @@ The model never sees the dangerous tools at discovery. If an injection convinces
 
 ## Key Takeaways
 
-- "Do not call this tool" reduces unauthorized invocation by only 11–18 percentage points across three model classes; the same architectural proxy drives it to 0%.
+- "Do not call this tool" leaves 4.0–37.0% of unauthorized calls going through across three model classes, and no model reaches zero; the architectural proxy reaches 0% by construction.
 - The mechanism is removing the choice (discovery filter) and verifying the call (invocation check) — not improving the instruction.
 - Prompt-only enforcement and adversarial context share a failure mode: the model treats both as data of equal privilege.
 - A tiny enumerable action space can make a proxy unnecessary; a large dynamic catalog or multi-tenant tool surface makes it unavoidable.
@@ -98,3 +98,4 @@ The model never sees the dangerous tools at discovery. If an injection convinces
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)
 - [The Prompt Tinkerer](prompt-tinkerer.md)
 - [Action-Selector Pattern](../../security/action-selector-pattern.md)
+- [Assuming a CLAUDE.md Security Rule Is Enforced](unenforced-claude-md-security-rules.md)

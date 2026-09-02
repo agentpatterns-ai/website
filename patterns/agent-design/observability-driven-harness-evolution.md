@@ -51,7 +51,7 @@ Score-only loops produce one bit per round: better or worse. A predicted outcome
 
 An improvement with a falsified prediction signals an accidental win: the edit worked for a reason the agent did not understand. A regression with a matched prediction means the agent correctly anticipated it, which helps rule out a hypothesis. This is [hypothesis-driven debugging](hypothesis-driven-debugging.md) applied to harness mutations: the prediction is the hypothesis, the eval round is the experiment, the mismatch is the diagnostic.
 
-Reflective optimization without this discipline collapses on defective seeds. [Gao et al., 2026](https://arxiv.org/abs/2603.18388v2) measured GEPA dropping GSM8K accuracy from 23.81% to 13.50% on a poor seed prompt — opaque, label-free trajectories cannot escape local optima. Decision observability is the interpretable trace such optimizers lack.
+Reflective optimization without this discipline collapses on defective seeds. [Liu et al., 2026](https://arxiv.org/abs/2603.18388v2) measured GEPA dropping GSM8K accuracy from 23.81% to 13.50% on a poor seed prompt — opaque, label-free trajectories cannot escape local optima. Decision observability is the interpretable trace such optimizers lack.
 
 ## Empirical result
 
@@ -107,7 +107,7 @@ The next round scores 67.1% — within range; the edit is kept and the accuracy 
 
 - The unique mechanism is predictions paired with edits, not the loop — the contribution is per-edit attribution, not autonomy
 - Component observability and revertible edits are prerequisites: without them, predictions cannot be scoped to a single change
-- Verified-prediction discipline is the interpretable trace that opaque reflective optimizers ([Gao et al., 2026](https://arxiv.org/abs/2603.18388)) lack
+- Verified-prediction discipline is the interpretable trace that opaque reflective optimizers ([Liu et al., 2026](https://arxiv.org/abs/2603.18388)) lack
 - Evidence is on frontier models against held-out benchmarks; defective seeds, weak benchmarks, and sub-frontier models are documented failure modes
 - Combine with single-variable discipline from [harness hill-climbing](harness-hill-climbing.md) — narrow edits make narrow predictions, which are easier to falsify
 

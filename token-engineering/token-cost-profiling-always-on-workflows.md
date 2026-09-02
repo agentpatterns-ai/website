@@ -122,3 +122,4 @@ The instrumentation surface differs by tool; the loop is tool-agnostic.
 - [Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints](../workflows/prototype-before-optimizing.md) — why deferring optimization until the workflow stabilizes is the same logic at a different scope
 - [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — a complementary token-cost lever under the same cheaper-than-the-savings precondition
 - [Request Shaping to Cut Wasted Agent Turns](request-shaping-wasted-turns.md) — the per-request lever to reach for once profiling shows retrieval, not model choice, dominates the spend
+- [Probe-Run Calibration for Predicting Agent Token Spend](probe-run-cost-calibration.md) — the forward-looking counterpart: estimate a task's cost before you run it, instead of attributing spend after

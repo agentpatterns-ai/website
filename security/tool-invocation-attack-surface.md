@@ -18,7 +18,7 @@ maturity: emerging
 
 ## Why tool invocation is different
 
-Standard [prompt injection](prompt-injection-threat-model.md) targets instruction-following through untrusted content. Tool-invocation attacks target argument generation and return processing — a different mechanism. A red-team of six agents across five LLM backends achieved RCE on every agent-LLM pair tested ([Li et al., 2025](https://arxiv.org/abs/2509.05755)).
+Standard [prompt injection](prompt-injection-threat-model.md) targets instruction-following through untrusted content. Tool-invocation attacks target argument generation and return processing — a different mechanism. A red-team of six agents across five LLM backends achieved RCE on every agent-LLM pair tested ([Xie et al., 2025](https://arxiv.org/abs/2509.05755)).
 
 ```mermaid
 graph LR
@@ -43,7 +43,7 @@ A malicious tool defines an argument field like `"note": "system prompt"`. The m
 | Gemini 2.5 Pro | Blocked by content filtering | N/A |
 | GPT-5 | Limited — output sanitization effective | N/A |
 
-ToolLeak achieved 0.997 semantic similarity to actual system prompts on Claude Sonnet 4, compared to 0.900 for the best traditional extraction baseline ([Li et al., 2025](https://arxiv.org/abs/2509.05755), Table III).
+ToolLeak achieved 0.997 semantic similarity to actual system prompts on Claude Sonnet 4, compared to 0.900 for the best traditional extraction baseline ([Xie et al., 2025](https://arxiv.org/abs/2509.05755), Table III).
 
 ## Attack 2: Two-channel prompt injection
 
@@ -77,7 +77,7 @@ RCE success rates by agent and backend:
 | Claude Code | — | 60% | 70% | — | — |
 | Trae | 80% | — | — | 80% | 20% |
 
-Source: [Li et al., 2025](https://arxiv.org/abs/2509.05755), Table IV. Dash indicates untested combination.
+Source: [Xie et al., 2025](https://arxiv.org/abs/2509.05755), Table IV. Dash indicates untested combination.
 
 ## What makes agents resilient
 
@@ -89,7 +89,7 @@ Source: [Li et al., 2025](https://arxiv.org/abs/2509.05755), Table IV. Dash indi
 | Command whitelisting | Restrict execution to predefined safe operations | Claude Code, Cline, Trae |
 | Non-disclosure directives | Instructions not to reveal system prompts | Trae, Cursor, Copilot |
 
-Guard models are necessary but insufficient. Claude Code's guard flagged commands as "UNSAFE," yet the main model overrode the rejection when both channels reinforced context ([Li et al., 2025](https://arxiv.org/abs/2509.05755), Section VI-C).
+Guard models are necessary but insufficient. Claude Code's guard flagged commands as "UNSAFE," yet the main model overrode the rejection when both channels reinforced context ([Xie et al., 2025](https://arxiv.org/abs/2509.05755), Section VI-C).
 
 ## Defensive patterns
 
@@ -115,7 +115,7 @@ Require [human confirmation](human-in-the-loop-confirmation-gates.md) for first 
 - ToolLeak bypasses refusal training by framing prompt extraction as routine argument population
 - Two-channel injection achieved RCE on every tested agent-LLM pair
 - Guard models help but can be overridden — layer with harness-level whitelisting and tool isolation
-- Treat every MCP tool return as untrusted input — demonstrated as an injection vector across every tested agent-LLM pair ([Li et al., 2025](https://arxiv.org/abs/2509.05755))
+- Treat every MCP tool return as untrusted input — demonstrated as an injection vector across every tested agent-LLM pair ([Xie et al., 2025](https://arxiv.org/abs/2509.05755))
 
 ## When this backfires
 

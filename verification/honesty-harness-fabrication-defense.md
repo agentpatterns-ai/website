@@ -49,7 +49,7 @@ Implement the gate as a hook, not a prompt instruction. Prompts compete for atte
 
 A read-only reviewer in a fresh context examines the diff before commit. The independence is structural: Anthropic notes that a subagent reviewer "sees only the diff and the criteria you give it, not the reasoning that produced the change, so it evaluates the result on its own terms" ([Best practices](https://code.claude.com/docs/en/best-practices)).
 
-The reviewer must hold external tools. Intrinsic self-correction, meaning re-reasoning without an oracle, overturns 21.9% of correct GPT-4o code solutions and 28.3% of correct GPT-3.5 solutions to wrong answers ([Liu et al., 2024 — arXiv:2412.14959](https://arxiv.org/abs/2412.14959v2)). A fact-checker without LSP, doc lookup, or test execution shares the original agent's prior and either rubber-stamps fabrications or invents new ones.
+The reviewer must hold external tools. Intrinsic self-correction, meaning re-reasoning without an oracle, overturns 21.9% of correct GPT-4o code solutions and 28.3% of correct GPT-3.5 solutions to wrong answers ([Zhang et al., 2024 — arXiv:2412.14959](https://arxiv.org/abs/2412.14959v2)). A fact-checker without LSP, doc lookup, or test execution shares the original agent's prior and either rubber-stamps fabrications or invents new ones.
 
 Constrain the reviewer to correctness gaps. Anthropic's caution is explicit: "A reviewer prompted to find gaps will usually report some, even when the work is sound, because that is what it was asked to do… tell the reviewer to flag only gaps that affect correctness or the stated requirements."
 
@@ -71,7 +71,7 @@ The harness is risk reduction, not elimination. LangChain reported moving Termin
 - Strong-model deployments: frontier models (Claude Opus 4.6, GPT-5) show near-zero premature termination and lower hallucination rates, so Layer 3 and Layer 4 add cost without measurable benefit ([Premature Completion](../patterns/anti-patterns/premature-completion.md)).
 - Overloaded Layer 1: a CLAUDE.md past the ~150 instruction ceiling drops compliance across all rules, including the honesty ones. Honest abstention has to compete with style, workflow, and project conventions for attention.
 - Silent Layer 3: hook output that writes to a log file instead of stderr never enters the session. The agent never sees the failure and never self-corrects.
-- Pure-reasoning Layer 4: a fact-checker without LSP, type checker, doc lookup, or test execution re-reasons against the draft and overturns correct code 22–28% of the time ([Liu et al., 2024](https://arxiv.org/abs/2412.14959v2)).
+- Pure-reasoning Layer 4: a fact-checker without LSP, type checker, doc lookup, or test execution re-reasons against the draft and overturns correct code 22–28% of the time ([Zhang et al., 2024](https://arxiv.org/abs/2412.14959v2)).
 - Layer 4 scope creep: a reviewer trained for thoroughness flags gaps that do not affect correctness, so the implementing session burns turns chasing them and may regress (Anthropic explicit warning).
 - Layer 2 over-applied to trivial edits: requiring "read the definition before using" on a typo or rename is friction without value. Skip plan mode and Layer 2 for single-sentence diffs.
 - Punitive reactions to "I don't know": the abstention license is partly a human commitment. Sessions where confident-but-wrong is praised and "uncertain" is corrected train the agent, through in-session pattern matching, toward confident guessing.
@@ -95,14 +95,14 @@ claim. For every named symbol or file: grep the working tree to confirm it
 exists. Report VERIFIED / WRONG / UNVERIFIABLE per claim. Do not edit files.
 ```
 
-The reviewer holds external tools: WebFetch for source verification, and Bash plus Grep for symbol existence. Without those, Liu et al.'s overcorrection risk applies. The Copilot equivalent is the [Copilot coding agent's pre-PR self-review](../code-review/agent-self-review-loop.md), which runs code review, security scanning, and dependency checks before opening the PR. The structural shape is the same — fresh context, scoped tools, gate before commit.
+The reviewer holds external tools: WebFetch for source verification, and Bash plus Grep for symbol existence. Without those, Zhang et al.'s overcorrection risk applies. The Copilot equivalent is the [Copilot coding agent's pre-PR self-review](../code-review/agent-self-review-loop.md), which runs code review, security scanning, and dependency checks before opening the PR. The structural shape is the same — fresh context, scoped tools, gate before commit.
 
 ## Key Takeaways
 
 - The four-layer harness is risk reduction, not elimination — frame and measure it that way.
 - Layer 1 fails when instruction files exceed the ~150 rule budget; rule the honesty section first or convert it to a hook.
 - Layer 3's load-bearing detail is that hook output flows back to the agent — silent hooks change nothing.
-- Layer 4 must hold external tools (LSP, type checker, doc lookup, tests) or it overturns correct code via the Huang–Liu self-correction failure.
+- Layer 4 must hold external tools (LSP, type checker, doc lookup, tests) or it overturns correct code via the Huang–Zhang self-correction failure.
 - The "I don't know" license is partly a human commitment; punitive reactions to abstention re-train confident guessing within the session.
 
 ## Related

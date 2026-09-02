@@ -105,7 +105,7 @@ InCoder led across 12 languages, but mainstream ones (Python, Java) scored highe
 The 66 / 24 / 9 split is a useful prior, not a fixed budget:
 
 - Ratios are model- and cohort-specific. The study used first-gen code LMs (InCoder, UniXcoder, CodeGPT). Better models shrink the model-oriented share and raise the relative weight of integration errors.
-- Integration gains plateau. Smart-invocation work raised acceptance from ~4.9% to ~18.6% [Source: [Koohestani et al., arxiv 2405.14753](https://arxiv.org/abs/2405.14753v1)]. Past that, gains come from model capability and context quality, not more timing heuristics.
+- Integration gains plateau. Smart-invocation work raised acceptance from ~4.9% to ~18.6% [Source: [de Moor et al., arxiv 2405.14753](https://arxiv.org/abs/2405.14753v1)]. Past that, gains come from model capability and context quality, not more timing heuristics.
 - Narrow cohorts may skip harness work. Single-language teams on recent models often clear the bar off-the-shelf; the "just upgrade the model" steelman holds in that regime.
 - Non-mainstream languages invert priorities. For Rust, Kotlin, or niche DSLs, thin training data dominates; invocation tuning cannot compensate.
 - Override data needs good instrumentation. If telemetry cannot separate "rejected because wrong" from "rejected because already typed", the 9.3% bucket is noise.

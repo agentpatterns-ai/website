@@ -81,3 +81,4 @@ One caveat about the evidence. Every TypeCompact baseline is itself a lossy comp
 - [Context Lifecycle Management](context-lifecycle-management.md) — the five-stage lifecycle that decides what is stored before anything is compacted
 - [CoALA Memory Taxonomy as a Classifier for Harness Artifacts](../patterns/agent-design/coala-memory-taxonomy-classifier.md) — a different classification target: harness artifacts to find capability gaps, not knowledge lines to set fidelity
 - [Addressable Recall Compaction](addressable-recall-compaction.md) — keeping the verbatim record recoverable after a summary replaces it
+- [Shortening Old Tool Results Under Context Pressure (Half-Life Truncation)](half-life-tool-result-truncation.md) — setting fidelity by result age instead of content type, and the window condition that decides whether it pays

@@ -24,7 +24,7 @@ maturity: established
 
 Most production coding prompts read like everyday tickets: "make this endpoint faster", "simplify the validation logic", "add a CSV export". Usability requirements (features, performance, simplicity) are explicit and high-signal. Security requirements (input sanitization, bounds checking, authorization invariants) are usually absent from the prompt and present only in the model's pretraining priors.
 
-[Usability as a Weapon (Wang et al., 2026)](https://arxiv.org/abs/2605.10133v1) names the resulting attack class UPAttack. It also ships an automated framework, U-SPLOIT, that generates realistic usability pressure across three vectors — Functionality, Implementation, and Trade-off — against initially-secure tasks. Across 25 CWEs x 3 cases in Python, C, and JavaScript, attack success rates reach 98.1% on GPT-5.2-chat and Gemini-3-Flash-Preview.
+[Usability as a Weapon (Li et al., 2026)](https://arxiv.org/abs/2605.10133v1) names the resulting attack class UPAttack. It also ships an automated framework, U-SPLOIT, that generates realistic usability pressure across three vectors — Functionality, Implementation, and Trade-off — against initially-secure tasks. Across 25 CWEs x 3 cases in Python, C, and JavaScript, attack success rates reach 98.1% on GPT-5.2-chat and Gemini-3-Flash-Preview.
 
 The attack does not name security. It does not adversarially reframe the goal. It just over-specifies usability and lets the model do the rest.
 
@@ -88,7 +88,7 @@ Security invariant (MUST hold): all user input is bound via
 parameterized queries — never concatenated into SQL strings (CWE-89).
 ```
 
-The usability ask is unchanged. The implicit constraint is now explicit; in published UPAttack mitigation runs that re-include the security requirement, attack success rates drop sharply ([Wang et al., 2026](https://arxiv.org/abs/2605.10133)).
+The usability ask is unchanged. The implicit constraint is now explicit; in published UPAttack mitigation runs that re-include the security requirement, attack success rates drop sharply ([Li et al., 2026](https://arxiv.org/abs/2605.10133)).
 
 The same idea generalizes via a constitution: rather than restating the invariant on every prompt, the agent harness injects the relevant CWE clauses for the file's language and framework.
 

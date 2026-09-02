@@ -68,7 +68,7 @@ Most agentic coding workflows should optimize for Recall: an agent that takes mo
 
 ## Models cannot self-evaluate
 
-A critical enabler: models perform "very poorly" at detecting their own correctness or safety issues. Only with explicit feedback from external tools — test runners, static analyzers, type checkers — do repair capabilities emerge ([Fakhoury et al., 2024](https://arxiv.org/abs/2412.14841)).
+A critical enabler: models perform "very poorly" at detecting their own correctness or safety issues. Only with explicit feedback from external tools — test runners, static analyzers, type checkers — do repair capabilities emerge ([Dolcetti et al., 2024](https://arxiv.org/abs/2412.14841)).
 
 This confirms that [agent backpressure](agent-backpressure.md) is not optional: self-assessment is unreliable, and external feedback signals are the mechanism that enables iterative improvement.
 

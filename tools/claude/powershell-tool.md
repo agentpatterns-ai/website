@@ -16,9 +16,9 @@ status: current
 
 > Run PowerShell commands natively from Claude Code — no Git Bash translation, direct cmdlet access. Rolling out on Windows; opt-in on Linux, macOS, WSL.
 
-The [PowerShell tool](https://code.claude.com/docs/en/tools-reference#powershell-tool), added in Claude Code v2.1.84 (2026-03-26) as an opt-in preview, replaces Git Bash command routing with a direct `pwsh.exe` or `powershell.exe` spawn. Claude Code's default Bash tool assumes a POSIX environment. On Windows this produces path translation errors (`C:\` vs `/c/`), POSIX flags that fail on cmdlets, and encoding mismatches. The PowerShell tool removes the shim layer.
+The [PowerShell tool](https://code.claude.com/docs/en/tools-reference#powershell-tool), added in Claude Code v2.1.84 (2026-03-26) as an opt-in preview ([changelog](https://code.claude.com/docs/en/changelog)), replaces Git Bash command routing with a direct `pwsh.exe` or `powershell.exe` spawn. Claude Code's default Bash tool assumes a POSIX environment. On Windows this produces path translation errors (`C:\` vs `/c/`), POSIX flags that fail on cmdlets, and encoding mismatches. The PowerShell tool removes the shim layer.
 
-The tool is rolling out gradually on Windows. It is opt-in on Linux, macOS, and WSL. Non-Windows platforms require PowerShell 7+ (`pwsh`) on `PATH`. [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference#powershell-tool)]
+Enablement is conditional, not a gradual rollout. On Windows without Git Bash the tool "is enabled automatically". On Windows with Git Bash it is "on by default for claude.ai and Console accounts", and Bedrock, Google Cloud, and Foundry sessions need `CLAUDE_CODE_USE_POWERSHELL_TOOL=1`. On Linux, macOS, and WSL it is opt-in and needs PowerShell 7+ (`pwsh`) on `PATH`. [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference#powershell-tool)]
 
 This is a preview feature with documented limitations. Read the [preview limitations](#preview-limitations) before you turn it on.
 
@@ -100,7 +100,7 @@ This cmdlet pipeline has no direct Bash equivalent — `Get-Service` is Windows-
 - Once enabled, PowerShell becomes the primary shell automatically — no need to ask Claude to prefer it; `defaultShell` only scopes the REPL's `!` commands, not tool calls
 - A hook's own `"shell": "powershell"` entry runs PowerShell even with the tool disabled, because hooks spawn the shell directly
 - The two current preview gaps — no profile loading, no Windows sandboxing — mean an org-managed PowerShell setup may still need Bash-in-WSL
-- Versions before v2.1.89 carried a trailing `&` background-job permission bypass; upgrade before relying on the tool for gated commands
+- Versions before v2.1.90 carried a trailing `&` background-job permission bypass; upgrade before relying on the tool for gated commands
 
 ## Related
 

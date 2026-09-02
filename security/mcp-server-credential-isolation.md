@@ -14,53 +14,51 @@ maturity: established
 
 > Spawn each MCP server with its own minimal environment scope so one server's credentials never leak to every other server.
 
-Per-server MCP environment scoping is a configuration posture. The host spawns every MCP server with its own explicit, minimal environment block, rather than letting it inherit the agent host's full environment. A GitHub MCP server sees `GITHUB_TOKEN`. A Postgres server sees `DATABASE_URL`. A Stripe server sees `STRIPE_KEY`. None sees the others. So the credential blast radius of any single compromised, buggy, or tricked server stays bounded by what the operator deliberately granted.
+Per-server MCP environment scoping is a configuration posture. The host spawns each MCP server with its own explicit, minimal environment block, not the agent host's full environment. A GitHub server sees `GITHUB_TOKEN`. A Postgres server sees `DATABASE_URL`. A Stripe server sees `STRIPE_KEY`. None sees the others, so a compromised or tricked server's blast radius stays bounded by what the operator granted.
 
 ## The default that leaks
 
-Without per-server scoping, the host spawns each MCP server with `os.environ` as its env block. So every server can see every secret the operator exported into the agent's shell. A backdoored MCP server with no business seeing a Stripe key can call `getenv("STRIPE_KEY")` and exfiltrate it through its own egress channel. This is the Unix default: `execve(2)` passes the calling process's `environ` unless the caller builds a fresh block.
+Without per-server scoping, the host spawns each MCP server with `os.environ` as its env block, so every server can see every secret the operator exported into the agent's shell. A backdoored server with no business seeing a Stripe key can call `getenv("STRIPE_KEY")` and exfiltrate it through its own egress channel. This is the Unix default: `execve(2)` passes the calling process's `environ` unless the caller builds a fresh block.
 
-The MCP specification does not mandate env scoping. Each host decides. The reference [MCP Python SDK's `stdio_client`](https://github.com/modelcontextprotocol/python-sdk) builds the spawned server's env from `StdioServerParameters.env` merged with a hard-coded allowlist: `HOME`, `PATH`, `SHELL`, `USER`, and a handful of platform variables. Application secrets are not on it. The SDK ships default-deny. Whether a host preserves that is a host choice.
+The MCP specification does not mandate env scoping. The reference [MCP Python SDK's `stdio_client`](https://github.com/modelcontextprotocol/python-sdk) builds the spawned server's env from `StdioServerParameters.env` merged with a hard-coded allowlist (`HOME`, `PATH`, `SHELL`, `USER`, and a few platform variables), not application secrets. The SDK ships default-deny; whether a host preserves that is a host choice.
 
 ## How each host exposes the knob
 
-Three first-party host implementations name the configuration:
+Three hosts expose the configuration:
 
 | Host | Surface | Scope shape |
 |------|---------|-------------|
 | Claude Code | `.mcp.json` per-server `env: {}` map; `claude mcp add --env KEY=value` | Explicit map per server; `${VAR}` and `${VAR:-default}` expansion ([Claude Code MCP](https://code.claude.com/docs/en/mcp)) |
-| VS Code Copilot | `.vscode/mcp.json` per-server `env: {}` + `envFile` path; `${input:id}` references | Per-server map; `password: true` inputs stored in OS credential store ([VS Code MCP configuration](https://code.visualstudio.com/docs/copilot/reference/mcp-configuration)) |
-| Codex CLI 0.134.0 (2026-05-26) | Per-server environment targeting plus OAuth options for streamable HTTP servers | Explicit per-server env declaration paired with OAuth-token routing ([Codex changelog](https://developers.openai.com/codex/changelog)) |
+| VS Code Copilot | `.vscode/mcp.json` per-server `env: {}` + `envFile` path; `${input:id}` references | Per-server map; `password: true` inputs securely stored for reuse ([VS Code MCP configuration](https://code.visualstudio.com/docs/copilot/reference/mcp-configuration)) |
+| Codex CLI | `config.toml` per-server `mcp_servers.<name>.env` map | Explicit per-server env map, forwarded to the stdio server ([Codex config reference](https://learn.chatgpt.com/docs/config-file/config-reference)) |
 
-In all three, the operator chooses which variables cross the boundary. Default-deny differs from runtime allowlisting because the credential never enters the server's process address space. So no confused or malicious server can bypass a later check.
+In all three, the operator chooses which variables cross the boundary. Default-deny differs from runtime allowlisting because the credential never enters the server's process address space, so no confused or malicious server can bypass a later check.
 
 ## OAuth for streamable HTTP servers
 
-For remote MCP servers over HTTP, the env field is not the right surface. Tokens belong in a per-server credential store, not in exported variables. Claude Code stores OAuth client secrets in the OS keychain or a credentials file, not in `.mcp.json`, and scopes a server's tokens to that server's identifier. The `oauth.scopes` field pins the requested scope set, so a server cannot widen its authority beyond what the operator approved ([Claude Code MCP OAuth](https://code.claude.com/docs/en/mcp)). Codex CLI 0.134.0 adds the same posture for streamable HTTP servers ([Codex changelog](https://developers.openai.com/codex/changelog)). The credential never exists in env at all. It lives in a per-server keychain entry the agent retrieves on demand.
-
-## Diagnostic signal vs silent inheritance
-
-Per-server scoping produces a useful failure mode. An MCP server that needs a credential the operator forgot to grant fails to authenticate, loudly, at startup. Under env inheritance, the same mistake succeeds silently. The server picks up an unrelated credential from the ambient env, then either fails confusingly downstream or, worse, authenticates as the wrong principal. Explicit grants turn silent credential misrouting into visible authentication errors.
+For remote MCP servers over HTTP, the env field is not the right surface — tokens belong in a per-server credential store. Claude Code stores OAuth client secrets in the OS keychain or a credentials file, scoped to that server's identifier. The `oauth.scopes` field pins the requested scope when the upstream authorization server advertises more than the operator wants to grant ([Claude Code MCP OAuth](https://code.claude.com/docs/en/mcp)). Codex CLI 0.134.0 adds the same posture for streamable HTTP servers ([Codex changelog](https://developers.openai.com/codex/changelog)). The credential lives in a per-server keychain entry, never in env.
 
 ## Why it works
 
-Process boundaries give kernel-enforced isolation of address space, file descriptors, and the environment block passed at `execve(2)`. The MCP Python SDK's `stdio_client` builds the spawned server's env from a parameter-supplied map merged with a default allowlist, not from `os.environ` directly ([python-sdk stdio](https://github.com/modelcontextprotocol/python-sdk)). An agent host that builds the env block per server cannot leak credentials it never copied into that block. Even an LLM tricked by indirect prompt injection into enumerating the server's environment sees only what the host granted. Default-deny at the env layer differs from runtime checks because the secret never reaches the server process. This is the env-layer version of the structural argument in [Scoped Credentials via Proxy](scoped-credentials-proxy.md).
+Process boundaries give kernel-enforced isolation of address space, file descriptors, and the environment block passed at `execve(2)`. A host that builds the env block per server cannot leak a credential it never copied into that block. The secret never reaches the server process, which is why default-deny beats a runtime check here. This is the env-layer version of the structural argument in [Scoped Credentials via Proxy](scoped-credentials-proxy.md).
+
+The pattern also produces a useful failure mode. A server missing a granted credential fails to authenticate, loudly, at startup, instead of silently picking up an ambient credential and authenticating as the wrong principal. Explicit grants turn silent misrouting into a visible error.
 
 ## When this backfires
 
-Per-server scoping has costs and limits:
+Costs and limits:
 
-- Trusted single-tenant dev environments with only operator-authored MCP servers running audited code: the configuration overhead is real and the attacker model is theoretical
-- Hosts that already isolate at a lower layer: separate containers, separate user accounts, or `setresuid`-separated processes make env scoping redundant
-- Servers that need broad ambient access: build-tooling wrappers around `make`, `cargo`, `npm`, or language runtimes need many `LANG`, `LC_*`, `PYTHONPATH`, `NODE_OPTIONS`, `JAVA_HOME`, and `CARGO_*` variables, and listing each one is operationally expensive
-- Residual env in the agent process itself: env scoping protects servers, not the agent. If the agent's own process holds `STRIPE_KEY` and runs arbitrary Bash, an indirect injection that gets the agent to run `printenv` bypasses every per-server grant. [Workload Identity Federation for Agent Runtimes](workload-identity-federation-for-agents.md) and [Scoped Credentials via Proxy](scoped-credentials-proxy.md) close that gap. Env scoping is the configuration layer, not the structural one
-- Misconfigured grants: pasting `env: ${env:GITHUB_TOKEN}` into one server's block and then copy-pasting it into another server's block silently widens access. Treat the per-server env block as a security-relevant config artifact under review
+- Trusted single-tenant dev environments running only operator-authored, audited MCP servers: the configuration overhead is real and the attacker model is theoretical
+- Hosts that already isolate lower down: separate containers, user accounts, or `setresuid`-separated processes make env scoping redundant
+- Servers needing broad ambient access: `make`, `cargo`, or `npm` wrappers need many `LANG`, `PYTHONPATH`, `NODE_OPTIONS`, and `JAVA_HOME` variables, expensive to enumerate
+- Residual env in the agent process itself: env scoping protects servers, not the agent. If the agent's own process holds `STRIPE_KEY` and runs arbitrary Bash, an indirect injection that triggers `printenv` bypasses every per-server grant. [Workload Identity Federation for Agent Runtimes](workload-identity-federation-for-agents.md) and [Scoped Credentials via Proxy](scoped-credentials-proxy.md) close that gap
+- Misconfigured grants: pasting `env: ${env:GITHUB_TOKEN}` into one block, then copying it into another, silently widens access. Treat the env block as a security-relevant artifact under review
 
-This pattern is the cheapest hardening available, because the mechanism exists in every host that supports stdio MCP servers. The question is whether the operator opts into default-deny or accepts the host's default. It is not a substitute for proxy-based credential isolation or federated identity. It is a complement that closes the configuration-layer path.
+This pattern is the cheapest hardening available, because the mechanism exists in every host that supports stdio MCP servers. The question is whether the operator opts into default-deny or accepts the host's default. It complements proxy-based credential isolation and federated identity, closing the configuration-layer path.
 
 ## Example
 
-A team running an agent with three MCP servers — GitHub, Postgres, Stripe — using per-server env scoping in Claude Code's `.mcp.json`:
+A team running an agent with three MCP servers — GitHub, Postgres, Slack — using per-server env scoping in Claude Code's `.mcp.json`:
 
 ```json
 {
@@ -79,24 +77,24 @@ A team running an agent with three MCP servers — GitHub, Postgres, Stripe — 
       "args": ["-y", "@bytebase/dbhub", "--dsn", "${DATABASE_URL}"],
       "env": {}
     },
-    "stripe": {
+    "slack": {
       "type": "http",
-      "url": "https://mcp.stripe.com",
+      "url": "https://mcp.slack.com/mcp",
       "oauth": {
-        "scopes": "balance:read"
+        "scopes": "channels:read chat:write search:read"
       }
     }
   }
 }
 ```
 
-The GitHub server sees only `GITHUB_PERSONAL_ACCESS_TOKEN`. The Postgres server sees an empty application-env block. Its DSN passes as a command argument instead, which is its own trade-off but at least keeps the credential out of `os.environ` for the spawned process. The Stripe server holds no env credential. OAuth-minted tokens with `balance:read` scope live in the OS keychain ([Claude Code MCP OAuth](https://code.claude.com/docs/en/mcp)). A prompt injection that tricks the GitHub server into enumerating its environment exfiltrates the GitHub PAT and nothing else.
+The GitHub server sees only `GITHUB_PERSONAL_ACCESS_TOKEN`. The Postgres server sees an empty application-env block. Its DSN passes as a command argument instead, which is its own trade-off but at least keeps the credential out of `os.environ` for the spawned process. The Slack server holds no env credential. OAuth-minted tokens scoped to `channels:read chat:write search:read` live in the OS keychain ([Claude Code MCP OAuth](https://code.claude.com/docs/en/mcp)). A prompt injection that tricks the GitHub server into enumerating its environment exfiltrates the GitHub PAT and nothing else.
 
 ## Key Takeaways
 
 - Per-server MCP environment scoping bounds the credential blast radius of any single MCP server to what the operator explicitly granted it
 - The MCP specification does not mandate env scoping — each host implementation decides; the reference Python SDK ships a hard-coded `DEFAULT_INHERITED_ENV_VARS` allowlist that does not include application secrets
-- Claude Code, VS Code Copilot, and Codex CLI 0.134.0 all expose per-server `env` configuration; the question is whether your team opts into default-deny or accepts the host default
+- Claude Code, VS Code Copilot, and Codex CLI all expose per-server `env` configuration; the question is whether your team opts into default-deny or accepts the host default
 - OAuth options for streamable HTTP MCP servers keep credentials in a per-server keychain entry rather than env at all — the credential never reaches a spawnable env block
 - Explicit per-server grants convert silent credential misrouting into visible authentication errors at startup — a diagnostic improvement on top of the security improvement
 - The pattern is the configuration-layer complement to [Scoped Credentials via Proxy](scoped-credentials-proxy.md) and [Workload Identity Federation](workload-identity-federation-for-agents.md), not a substitute

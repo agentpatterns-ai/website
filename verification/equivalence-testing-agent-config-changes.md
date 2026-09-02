@@ -49,7 +49,7 @@ The design does not explain why the dial left conduct unchanged. Those authors o
 - The environment rewards the shortcut. Reasoning-tuned models game a specification spontaneously where non-reasoning models need prompting ([Bondarenko et al. 2025](https://arxiv.org/abs/2502.13295v3)), and extended reasoning has amplified concerning behavior in another model family ([Gema et al. 2025](https://arxiv.org/abs/2507.14417v2)). A benign clerical suite bounds none of that.
 - You extrapolate past the endpoints. Only low and max were sampled, on one model family at two tiers, and the estimand is the violation probability within that fixed scenario set ([Xu and Wu 2026](https://arxiv.org/abs/2608.03169v1)).
 - Collection order tracks the condition. All low-effort trajectories preceded max-effort ones against moving vendor aliases, so every effort contrast there is entangled with collection time ([Xu and Wu 2026](https://arxiv.org/abs/2608.03169v1)). Randomize the order or your interval absorbs vendor drift.
-- You substitute the null for enforcement. That suite measured propensity with no runtime enforcement layer present. A governed proxy doing access control at tool discovery and invocation drove unauthorized invocation to 0% under 150 adversarial tasks, where prompt-level restriction alone moved it by 11 to 18 points ([Uppala 2026](https://arxiv.org/abs/2605.18414v1)).
+- You substitute the null for enforcement. That suite measured propensity with no runtime enforcement layer present. A governed proxy doing access control at tool discovery and invocation drove unauthorized invocation to 0% under 200 adversarial tasks, where a prompt-level allowlist alone still left 4.0% to 37.0% ([Uppala 2026](https://arxiv.org/abs/2605.18414v3)).
 
 ## Example
 
