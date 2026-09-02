@@ -29,7 +29,7 @@ In propose-evaluate-revise loops — kernel generation, hyperparameter search, c
 - The acceptance rule barely matters; the prior carries the load. Simulated annealing, parallel investigators, and a second model give no benefit over greedy hill climbing while costing 2 to 3x more evaluations across four optimization tasks ([Yitao Li, "Greedy Is a Strong Default"](https://arxiv.org/abs/2603.27415v1)).
 - LLMs show three reliable failure modes under feedback: greediness, frequency bias, and a knowing-doing gap. They can describe what to explore while still sampling the prior's mode. RL fine-tuning on self-generated chain-of-thought reduces but does not eliminate the bias ([Schmied et al., "LLMs are Greedy Agents"](https://arxiv.org/abs/2504.16078)).
 - Training on optimal exploration makes agents greedier. Models supervised on UCB and Thompson Sampling demonstrations beat their teacher on average reward by abandoning exploration earlier, at the cost of catastrophic early failures ([Chen et al., "When Greedy Wins"](https://arxiv.org/abs/2509.24923)).
-- Returns decay roughly exponentially across iterations until the loop plateaus. Compute past the plateau is waste ([Bhattacharjee et al.](https://arxiv.org/abs/2411.19043)).
+- Returns decay roughly exponentially across iterations until the loop plateaus. Compute past the plateau is waste ([Palavalli et al.](https://arxiv.org/abs/2411.19043)).
 
 ## Why it works
 
@@ -41,7 +41,7 @@ Added iterations rarely find the optimum when any of these hold:
 
 - The prior on the problem family is weak — uncommon GPU shapes, low-resource languages, novel ISAs, bespoke DSLs.
 - The feedback channel is scalar-only. Bare loss or score values trigger greedy exploitation ([Schmied et al.](https://arxiv.org/abs/2504.16078)).
-- The compute budget runs past the plateau ([Bhattacharjee et al.](https://arxiv.org/abs/2411.19043)).
+- The compute budget runs past the plateau ([Palavalli et al.](https://arxiv.org/abs/2411.19043)).
 - The optimum needs exploration past the prior's mode — tricks or structures the model would not propose unprompted.
 
 ## When propose-evaluate-revise still works

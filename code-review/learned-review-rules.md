@@ -77,7 +77,7 @@ Rules encode team blind spots. If a team consistently dismisses a class of secur
 
 Suppression rules degrade over time. A rule that was correct 6 months ago may become wrong after a refactor. Without a TTL or periodic review, stale suppression rules cause the agent to miss real issues.
 
-Rule quality depends on signal clarity. "Dismiss" means different things: incorrect finding, not applicable here, low priority, or simply annoying. Without structured dismiss reasons, rule extraction conflates these signals.
+Rule quality depends on signal clarity. "Dismiss" means different things: incorrect finding, not applicable here, low priority, or simply annoying. Without structured dismiss reasons, rule extraction conflates these signals. [Dismissal reason capture](dismissal-reason-capture.md) covers the collection side and the two conditions a reason field has to meet before its distribution means anything.
 
 ## Key Takeaways
 

@@ -119,6 +119,7 @@ When you control the code that calls the API. A proxy that attaches tokens to un
 ## Related
 
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
+- [Public Placeholder Credentials with a Fail-Closed Injecting Proxy](public-placeholder-credentials-injecting-proxy.md)
 - [Secrets Management for AI Agents: Credential Injection](secrets-management-for-agents.md)
 - [Hostname-Allowlist Proxy: The TLS-Inspection Blind Spot](hostname-allowlist-tls-blind-spot.md)
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md)

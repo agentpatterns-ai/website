@@ -83,3 +83,4 @@ The prompt-only run bought 30 points of safety and gave up nearly all useful wor
 - [Prompted Uncertainty Decomposition for Clarification Routing](prompted-uncertainty-decomposition-clarification.md) — the in-model counterpart, eliciting two confidence scalars when no wrapper is available
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — what the clarification recovery route does once a specification gap fires
 - [Human-in-the-Loop Checkpoints as Loop Control](../../loop-engineering/human-in-the-loop-checkpoints.md) — the handoff route treated as a loop primitive, with the four decision verbs a human can return
+- [Tool Operability: Interfaces That Survive a Lost Response](tool-operability-lost-responses.md) — the mirror case, where the call already ran and its outcome is unreadable rather than its precondition unmet

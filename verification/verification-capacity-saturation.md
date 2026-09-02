@@ -77,3 +77,5 @@ Read against the three levers, curl chose intake. The response it announced was 
 - [The Software Factory Model: Industrializing Agent Loops](../workflows/software-factory-model.md) — the production model whose review gate is the station that saturates
 - [Audit-Budget Allocation for Agent Fleets](audit-budget-allocation-agent-fleets.md) — how to order the review queue once capacity is genuinely fixed
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the gate type that blocks rather than degrades under load
+- [Per-Task Verification Budget: Size the Task to Fit the Check](../workflows/per-task-verification-budget.md) — one concrete way to reduce intake: fix the check time and let it bound admissible task size
+- [Verification Surface: Match the Tool to the Failure](verification-surface-reach-and-cost.md) — which checks to run at all, priced per tool; this page starts once the checks you chose have saturated

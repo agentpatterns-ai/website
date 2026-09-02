@@ -32,7 +32,7 @@ Outside these conditions, a strong agent loop with on-demand search recovers the
 
 ## How the mechanism works
 
-Code agents navigate repositories through keyword search ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)). The first grep result biases the next tool call, which biases the next, and stochastic decoding compounds across the trajectory. Even at temperature 0, multi-step agent runs diverge in code modifications and reasoning paths because numerical non-determinism and decoding randomness accumulate ([Yao et al., 2026 — How Consistent Are LLM Agents?](https://arxiv.org/abs/2605.28840), [Saghir et al., 2025 — Numerical Sources of Nondeterminism in LLM Inference](https://arxiv.org/abs/2506.09501)).
+Code agents navigate repositories through keyword search ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)). The first grep result biases the next tool call, which biases the next, and stochastic decoding compounds across the trajectory. Even at temperature 0, multi-step agent runs diverge in code modifications and reasoning paths because numerical non-determinism and decoding randomness accumulate ([Yagubyan et al., 2026 — How Consistent Are LLM Agents?](https://arxiv.org/abs/2605.28840), [Yuan et al., 2025 — Numerical Sources of Nondeterminism in LLM Inference](https://arxiv.org/abs/2506.09501)).
 
 Anchoring inserts the same plain-text structural facts in the same prompt position every run. The agent sees identical call-graph edges before it decides where to look, so navigation converges on the same code regions regardless of decoding noise. The reported link-following rate rising from 0.15–0.18 to 0.21–0.24 is the measurable footprint of this discipline: when structural facts are surfaced, the agent follows them, and those facts are deterministic ([Lin et al., 2026](https://arxiv.org/abs/2606.26979)).
 
@@ -72,7 +72,7 @@ This matches the broader retrieval finding that graph-based retrieval outperform
 - Very large monorepos with high churn. The anchor either does not fit the budget or goes stale before the session completes. Either way the determinism benefit collapses, and the failure mode is silent.
 - Single-shot tasks where reproducibility is irrelevant. The headline benefit is run-to-run stability. If you run once and ship, the 10% token premium is dead weight.
 - Strong agent with a good search tool. Claude Code deliberately skips indexing because early RAG experiments showed agentic search outperformed pre-built indexes for its harness ([Vadim, 2026 — Claude Code Doesn't Index Your Codebase](https://vadim.blog/claude-code-no-indexing)). When the agent loop can recover the same call graph at need, pre-injecting it is dead weight.
-- The anchor is treated as more authoritative than the source. Adjacent work on graph-augmented localization warns that unfiltered exploration produces "an overly broad search space and leads to the retrieval of irrelevant context" ([Liu et al., 2025 — Issue Localization via LLM-Driven Iterative Code Graph Searching](https://arxiv.org/abs/2503.22424v3)). Keep anchors small and relevance-ranked, not exhaustive dumps.
+- The anchor is treated as more authoritative than the source. Adjacent work on graph-augmented localization warns that unfiltered exploration produces "an overly broad search space and leads to the retrieval of irrelevant context" ([Jiang et al., 2025 — Issue Localization via LLM-Driven Iterative Code Graph Searching](https://arxiv.org/abs/2503.22424v3)). Keep anchors small and relevance-ranked, not exhaustive dumps.
 
 ## Example
 

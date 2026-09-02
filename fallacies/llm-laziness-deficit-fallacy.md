@@ -33,7 +33,7 @@ Attitude instructions have a documented backfire mode. Cursor found that telling
 
 Empirical signal without restraint gates:
 
-- Median PR size grew 33% between March and November 2025 (57 to 76 lines) as AI adoption rose ([Greptile, State of AI Coding 2025](https://www.greptile.com/state-of-ai-coding-2025)); "too large" is a documented rejection reason for agentic PRs ([Xiao et al., 2025](https://arxiv.org/abs/2509.14745v3)).
+- Median PR size grew 33% between March and November 2025 (57 to 76 lines) as AI adoption rose ([Greptile, State of AI Coding 2025](https://www.greptile.com/state-of-ai-coding-2025)); "too large" is a documented rejection reason for agentic PRs ([Watanabe et al., 2025](https://arxiv.org/abs/2509.14745v3)).
 - Lines of code rose 76% and cognitive complexity 39% in agent-assisted repositories ([Agile Pain Relief](https://agilepainrelief.com/blog/ai-generated-code-quality-problems/)).
 - Agents scaffold "1,000 lines where 100 would suffice" ([Addy Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
 
@@ -43,7 +43,7 @@ Human laziness emerges from time scarcity. The agent equivalent must emerge from
 
 Three gate categories bind:
 
-- Diff-size budgets — hard limits per change, with the split enforced by tooling. Oversized PRs are a documented rejection cause ([Xiao et al., 2025](https://arxiv.org/abs/2509.14745)); a cap forces consolidation because the tool rejects sprawl.
+- Diff-size budgets — hard limits per change, with the split enforced by tooling. Oversized PRs are a documented rejection cause ([Watanabe et al., 2025](https://arxiv.org/abs/2509.14745)); a cap forces consolidation because the tool rejects sprawl.
 - Complexity budgets — thresholds in CI for cyclomatic complexity, function length, and duplication detect bloat mechanically ([Addy Osmani](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
 - Deletion targets — a "delete more than you add" rule, or periodic garbage-collection passes. Martin Fowler documents this as harness-engineered cleanup ([Fowler/Böckeler](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 

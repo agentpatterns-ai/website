@@ -32,7 +32,7 @@ The shape generalizes beyond GNNs. Any deterministic sub-model an agent calls â€
 
 The mechanism is automation bias, or complacency, from human-factors research: a confident-looking automated output pulls attention away from cross-checking ([Parasuraman & Manzey, 2010](https://journals.sagepub.com/doi/10.1177/0018720810376055)). With no orthogonal signal about the GNN's per-node confidence, the cheapest policy is to narrate the tool's output. Stronger backbones reach that minimum-loss policy more reliably, which is why deference rises with capability ([Wang & Vemuri, 2026](https://arxiv.org/abs/2606.14476)).
 
-The latent capacity is there but unused: tool necessity is linearly decodable from pre-generation representations at AUROC 0.89-0.96, well above the model's verbalized reasoning ([Hung et al., 2026](https://arxiv.org/abs/2605.09252)). Nothing in the standard tool-call interface surfaces it.
+The latent capacity is there but unused: tool necessity is linearly decodable from pre-generation representations at AUROC 0.89-0.96, well above the model's verbalized reasoning ([Sun et al., 2026](https://arxiv.org/abs/2605.09252)). Nothing in the standard tool-call interface surfaces it.
 
 ```mermaid
 graph LR

@@ -43,7 +43,7 @@ Maintain task-specific prompts with known-good outputs. Run them on every versio
 
 ### Use statistical tests, not eyeballing
 
-[McNemar's test adapted for LLMs](https://arxiv.org/html/2602.10144) distinguishes genuine degradation from noise, detecting drops as small as 0.3%.
+[McNemar's test adapted for LLMs](https://arxiv.org/html/2602.10144v2) distinguishes genuine degradation from noise, detecting drops as small as 0.3%.
 
 ### Separate capability evals from regression evals
 

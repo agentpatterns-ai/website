@@ -72,7 +72,7 @@ Four conditions push against headless ([Brandur Leach, 2026](https://brandur.org
 
 Pricing is unresolved. Simon Willison notes per-seat SaaS pricing "is going to play havoc" with agent-driven usage ([Willison, 2026](https://simonwillison.net/2026/Apr/19/headless-everything/)). Primary sources propose no replacement, so treat pricing redesign as part of a headless rollout.
 
-Two caveats from recent work. Pure-API is not always the best agent surface: a comparative study found hybrid GUI+API agents beat API-only ones, lifting success rates 6.1% for GPT-4o and 8.2% for o1 ([Song et al., 2025](https://arxiv.org/abs/2503.11069v2)) — if your GUI still encodes capability the API does not, ship both. And headless rollout assumes agent-identity governance most orgs lack: only 23% have a formal agent-identity strategy ([Strata, 2026](https://www.strata.io/blog/agentic-identity/the-ai-agent-identity-crisis-new-research-reveals-a-governance-gap/)) — treat identity, not surface count, as the gating constraint.
+Two caveats from recent work. Pure-API is not always the best agent surface: a comparative study found hybrid GUI+API agents beat API-only ones, lifting success rates 6.1% for GPT-4o and 8.2% for o1 ([Zhang et al., 2025](https://arxiv.org/abs/2503.11069v2)) — if your GUI still encodes capability the API does not, ship both. And headless rollout assumes agent-identity governance most orgs lack: only 23% have a formal agent-identity strategy ([Strata, 2026](https://www.strata.io/blog/agentic-identity/the-ai-agent-identity-crisis-new-research-reveals-a-governance-gap/)) — treat identity, not surface count, as the gating constraint.
 
 ## Example
 

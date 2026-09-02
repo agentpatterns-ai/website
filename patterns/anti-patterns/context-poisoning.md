@@ -35,7 +35,7 @@ An agent hallucinates an incorrect detail early in a session -- a wrong API sign
 
 ## Why detection is hard
 
-Output stays coherent, confident, and internally consistent. The agent does not hedge or self-correct. Early mistakes trigger a cascade: the model predicts each token from the tokens before it, so an initial error compounds into a snowball of downstream errors ([Chen et al., 2025](https://arxiv.org/abs/2510.06265)).
+Output stays coherent, confident, and internally consistent. The agent does not hedge or self-correct. Early mistakes trigger a cascade: the model predicts each token from the tokens before it, so an initial error compounds into a snowball of downstream errors ([Alansari et al., 2025](https://arxiv.org/abs/2510.06265)).
 
 ## Common causes
 

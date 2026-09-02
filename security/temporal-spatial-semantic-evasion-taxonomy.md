@@ -35,7 +35,7 @@ If any precondition is missing, the relevant vector collapses to known single-tu
 
 ### Temporal evasion
 
-A payload split into fragments delivered across sequential turns. No single message is harmful in isolation; the harmful state composes in agent memory, plan, or accumulated tool outputs. Per-prompt classifiers evaluate one message's visible features and miss the joint sequence ([Ma et al., 2026](https://arxiv.org/abs/2605.22321); [Lan et al., 2026](https://arxiv.org/abs/2602.13379)).
+A payload split into fragments delivered across sequential turns. No single message is harmful in isolation; the harmful state composes in agent memory, plan, or accumulated tool outputs. Per-prompt classifiers evaluate one message's visible features and miss the joint sequence ([Ma et al., 2026](https://arxiv.org/abs/2605.22321); [Li et al., 2026](https://arxiv.org/abs/2602.13379)).
 
 [MOSAIC-Bench](compositional-vulnerability-induction.md) is the canonical instance: three innocuous engineering tickets compose a known-exploitable vulnerability at 53–86% ASR across nine production coding agents versus 0–20.4% for direct single-prompt requests ([Steinberg and Gal, 2026](https://arxiv.org/abs/2605.03952v1)). [AgentLAB](https://arxiv.org/abs/2602.16901v1) catalogs five long-horizon attack types across 28 environments and 644 cases. [AgentSentry](https://arxiv.org/abs/2602.22724v1) models the same threat as a "temporal causal takeover".
 

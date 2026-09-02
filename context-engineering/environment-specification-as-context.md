@@ -23,7 +23,7 @@ Learn it hands-on with [the Mind the Version Gap lesson](https://learn.agentpatt
 
 ## The version gap
 
-Standard code-generation benchmarks (HumanEval+, MBPP) test isolated functions with no version constraints. Models score 80%+ on these tasks. When the same models must generate code that runs under specific library versions, accuracy drops to 13–28% Pass@1 ([Liu et al., "Environment-Aware Code Generation," ICSE 2026](https://arxiv.org/abs/2601.12262v1)).
+Standard code-generation benchmarks (HumanEval+, MBPP) test isolated functions with no version constraints. Models score 80%+ on these tasks. When the same models must generate code that runs under specific library versions, accuracy drops to 13–28% Pass@1 ([Wu et al., "Environment-Aware Code Generation," ICSE 2026](https://arxiv.org/abs/2601.12262v1)).
 
 The gap is a context problem. Models default to the most common API patterns in training data, which skew toward popular (often outdated) versions. Without environment context, the model has no signal to deviate.
 
@@ -36,9 +36,9 @@ graph TD
 
 ## Why models default to deprecated APIs
 
-Models trained on web-scale code corpora see more examples of older API surfaces than current ones. The result: a systematic preference for deprecated patterns, with 3–30% gaps between strict and lenient evaluation ([Liu et al., 2026](https://arxiv.org/abs/2601.12262v1)).
+Models trained on web-scale code corpora see more examples of older API surfaces than current ones. The result: a systematic preference for deprecated patterns, with 3–30% gaps between strict and lenient evaluation ([Wu et al., 2026](https://arxiv.org/abs/2601.12262v1)).
 
-This compounds in fast-evolving domains. ML libraries — `torch`, `transformers`, `datasets` — show the steepest accuracy drops because their API surfaces change across minor versions ([Liu et al., 2026](https://arxiv.org/abs/2601.12262v1)). An independent benchmark (GitChameleon) confirms: enterprise models achieve only 48–51% on version-conditioned Python tasks across 26 libraries ([Vidal et al., "GitChameleon 2.0," 2025](https://arxiv.org/abs/2507.12367v2)).
+This compounds in fast-evolving domains. ML libraries — `torch`, `transformers`, `datasets` — show the steepest accuracy drops because their API surfaces change across minor versions ([Wu et al., 2026](https://arxiv.org/abs/2601.12262v1)). An independent benchmark (GitChameleon) confirms: enterprise models achieve only 48–51% on version-conditioned Python tasks across 26 libraries ([Misra et al., "GitChameleon 2.0," 2025](https://arxiv.org/abs/2507.12367v2)).
 
 31.7% of AI-generated code fails at runtime due to environment mismatches in reproducibility studies ([Vangala et al., "AI-Generated Code Is Not Reproducible (Yet)," 2025](https://arxiv.org/pdf/2512.22387v3)).
 
@@ -58,7 +58,7 @@ This shifts the model toward the correct API surface — strongest for libraries
 
 ### Prefer migration over generation
 
-The three adaptation strategies tested — RAG, LoRA MoE, and prefix-KV caching — show models are 2–3x better at adapting existing code to a target environment than generating version-correct code from scratch. MoE improves partial correctness; memory-based approaches (prefix-KV) excel at migration tasks; RAG tends to overfit retrieved examples ([Liu et al., 2026](https://arxiv.org/abs/2601.12262v1)).
+The three adaptation strategies tested — RAG, LoRA MoE, and prefix-KV caching — show models are 2–3x better at adapting existing code to a target environment than generating version-correct code from scratch. MoE improves partial correctness; memory-based approaches (prefix-KV) excel at migration tasks; RAG tends to overfit retrieved examples ([Wu et al., 2026](https://arxiv.org/abs/2601.12262v1)).
 
 When possible, give the agent working code to migrate rather than generating from scratch.
 
@@ -118,8 +118,8 @@ The renamed parameter triggers a `FutureWarning` or an outright failure dependin
 
 ## Sources
 
-- [Liu et al., "Environment-Aware Code Generation: How far are We?" ICSE 2026](https://arxiv.org/abs/2601.12262) — EACG framework, VersiBCB benchmark, three adaptation strategies
-- [Vidal et al., "GitChameleon 2.0," 2025](https://arxiv.org/abs/2507.12367) — version-conditioned coding benchmark, 328 problems across 26 Python libraries
+- [Wu et al., "Environment-Aware Code Generation: How far are We?" ICSE 2026](https://arxiv.org/abs/2601.12262) — EACG framework, VersiBCB benchmark, three adaptation strategies
+- [Misra et al., "GitChameleon 2.0," 2025](https://arxiv.org/abs/2507.12367) — version-conditioned coding benchmark, 328 problems across 26 Python libraries
 - [Vangala et al., "AI-Generated Code Is Not Reproducible (Yet)," 2025](https://arxiv.org/pdf/2512.22387v3) — 31.7% runtime failure rate from environment mismatches
 
 ## Related

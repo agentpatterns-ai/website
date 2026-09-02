@@ -107,3 +107,4 @@ Nothing here depends on the agent honoring a rule; the file is not in the reposi
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — design-side taxonomy to place these field-reported categories against
 - [Delegating Dependabot Pull Request Triage to an Agent](../workflows/dependabot-pr-triage-delegation.md) — a vendor stating that its own approval panel is advisory, not enforced
 - [Permission Gates That Deny the Agent's Own Cleanup (Denied Remediation Path)](../patterns/anti-patterns/denied-remediation-path.md) — a best-effort gate that stays advisory in one direction and enforcing in the other
+- [Reading a Coding-Agent Vendor's Security Certificate](../verification/vendor-security-certification-scope.md) — how to check which of a vendor's named safeguards an outside auditor actually exercised

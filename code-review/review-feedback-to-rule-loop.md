@@ -71,7 +71,7 @@ That structure states what is wrong, what to do instead, and where the rationale
 
 Every rule has a finite shelf life. Refactors obviate boundaries, model upgrades eliminate failure modes, conventions solidify until no one would write the violation. Without retirement, the rule library accumulates dead weight and the priority-saturation failure mode of [standards as agent instructions](../instructions/standards-as-agent-instructions.md) kicks in: when every rule has equal weight, nothing signals priority and adherence degrades.
 
-Periodic decay pairs this loop with [harness impermanence](../patterns/agent-design/harness-impermanence.md): rules whose hits trend toward zero are deletion candidates. Annotate each rule with its obsolescence condition, the observable signal that it has done its job.
+Periodic decay pairs this loop with [harness impermanence](../patterns/agent-design/harness-impermanence.md): rules whose hits trend toward zero are deletion candidates. Annotate each rule with its obsolescence condition, the observable signal that it has done its job. Where the rule fires on an agent reviewer, [dismissal reason capture](dismissal-reason-capture.md) supplies the sharper input: a per-rule split of dismissals into wrong versus correct-but-unwanted, which separates a rule to retire from a rule to narrow.
 
 ## Why mechanical enforcement beats repeated comments
 

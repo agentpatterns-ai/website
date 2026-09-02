@@ -23,7 +23,7 @@ Baseline-aware test evaluation is a differential-testing gate for agent-generate
 
 The pattern's headline result holds only when three preconditions are met. That result is Phoenix's zero pass-to-pass regressions on a 24-instance SWE-bench Lite subset, plus 100% correctness preservation across a 42-issue real-world pilot ([Koech et al., 2026](https://arxiv.org/abs/2606.20243v2)). Lead with these preconditions. The guarantee collapses when any one fails.
 
-1. The test suite already catches semantic errors. On SWE-bench, 7.8% of test-passing patches fail the developer-written test suite outright, and 29.6% diverge in behavior from the ground-truth patch ([Aleithan et al., 2025](https://arxiv.org/abs/2503.15223v2)). After adversarial test strengthening, the suite rejects 19.71% of previously-passing patches ([SWE-ABS, 2026](https://arxiv.org/abs/2603.00520v1)). A pass-to-pass guarantee on a weak suite is a probabilistic filter, not a correctness signal.
+1. The test suite already catches semantic errors. On SWE-bench, 7.8% of test-passing patches fail the developer-written test suite outright, and 29.6% diverge in behavior from the ground-truth patch ([Wang et al., 2025](https://arxiv.org/abs/2503.15223v2)). After adversarial test strengthening, the suite rejects 19.71% of previously-passing patches ([SWE-ABS, 2026](https://arxiv.org/abs/2603.00520v1)). A pass-to-pass guarantee on a weak suite is a probabilistic filter, not a correctness signal.
 2. Planner localization is solved or sidestepped. The Phoenix authors say roughly half of generated PRs place code at incorrect paths, a planner localization limit they address through retrieval enhancement ([Koech et al., 2026](https://arxiv.org/abs/2606.20243)). Baseline-aware tests cannot detect a misplaced patch whose tests pass for the wrong reason.
 3. The CI baseline is deterministic. Differential testing depends on a stable reference. Flaky tests — network races, timing-sensitive integration suites, container ordering — corrupt the baseline. They either mask regressions (a false negative) or block valid patches (a false positive).
 
@@ -36,7 +36,7 @@ A regression is a test that changes from passing to failing ([Koech et al., 2026
 - The "I broke something I didn't" false positive: an agent sees a red test, blames its own patch, and reverts or opens a doomed remediation loop, when the baseline run would show the test was already red.
 - The "all green, ship it" false-green: the suite reads green only because the test exercising the new behavior did not exist yet. The reproducer step requires the failing test to be present in the baseline before the patch is judged ([Koech et al., 2026](https://arxiv.org/abs/2606.20243)).
 
-This is differential testing applied to the agent's own changes. It is the same primitive PatchDiff uses adversarially to expose semantic divergence between agent and developer patches ([Aleithan et al., 2025](https://arxiv.org/abs/2503.15223)). The multi-agent layering complements it by separating concerns: the Reproducer confirms the bug exists in baseline, and the Tester confirms the patch lands without regression. A failure then traces to one role rather than tangling into a single prompt.
+This is differential testing applied to the agent's own changes. It is the same primitive PatchDiff uses adversarially to expose semantic divergence between agent and developer patches ([Wang et al., 2025](https://arxiv.org/abs/2503.15223)). The multi-agent layering complements it by separating concerns: the Reproducer confirms the bug exists in baseline, and the Tester confirms the patch lands without regression. A failure then traces to one role rather than tangling into a single prompt.
 
 ## How the gate sits in the pipeline
 
@@ -63,7 +63,7 @@ The result traces directly to the baseline run. Without it, the Tester cannot te
 
 ## When this backfires
 
-Weak test suites yield false confidence. Phoenix's "no pass-to-pass regressions" headline applies only against the baseline suite, and around 20% of test-passing patches across SWE-bench are semantically wrong because the suite under-specifies behavior ([SWE-ABS, 2026](https://arxiv.org/abs/2603.00520v1); [Aleithan et al., 2025](https://arxiv.org/abs/2503.15223v2)). On a low-coverage codebase the differential gate green-lights wrong patches.
+Weak test suites yield false confidence. Phoenix's "no pass-to-pass regressions" headline applies only against the baseline suite, and around 20% of test-passing patches across SWE-bench are semantically wrong because the suite under-specifies behavior ([SWE-ABS, 2026](https://arxiv.org/abs/2603.00520v1); [Wang et al., 2025](https://arxiv.org/abs/2503.15223v2)). On a low-coverage codebase the differential gate green-lights wrong patches.
 
 Planner-localization failures slip through. When the planner places a patch at the wrong path, the patched run may pass baseline tests for reasons unrelated to the bug. The Phoenix authors report this on roughly half of generated PRs ([Koech et al., 2026](https://arxiv.org/abs/2606.20243)). The baseline-aware gate cannot detect "the patch passes because it does not touch the broken code." The [precise debugging benchmark](precise-debugging-benchmark.md) shows frontier LLMs often pass tests by regenerating large chunks of unrelated code, the same failure pattern.
 

@@ -122,3 +122,4 @@ Order-of-addition is a real artifact: a different order yields different per-sta
 - [pass@k and pass^k Metrics](../../verification/pass-at-k-metrics.md) — multi-trial scoring needed when per-run variance is high
 - [Incident-to-Eval Synthesis](../../verification/incident-to-eval-synthesis.md) — sourcing the graded benchmark slice the methodology requires
 - [Grade Agent Outcomes](../../verification/grade-agent-outcomes.md) — deterministic outcome grading that keeps ablation drops interpretable
+- [Agent Determinism Moves to the Last Unconstrained Axis](last-unconstrained-axis.md) — why a subsystem can show a negative drop: it constrained an axis that was already at ceiling

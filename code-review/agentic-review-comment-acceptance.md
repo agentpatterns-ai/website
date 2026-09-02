@@ -59,6 +59,7 @@ Optimizing for acceptance rate is the wrong target in several conditions:
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — the PR-level counterpart: signal ratio and merge outcomes rather than per-comment acceptance
 - [Inline Suggestion Attachment](inline-suggestion-attachment.md) — what raises action once validity is handled: a ready-to-apply patch outranks clearer prose as a resolution lever
 - [Learned Review Rules](learned-review-rules.md) — persist accept/reject signals to suppress recurring invalid comments automatically
+- [Capturing Dismissal Reasons for Agent Review Findings](dismissal-reason-capture.md) — decomposing the reject half of this rate into a per-rule reason distribution
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — the 16.6% vs 56.5% adoption baseline behind the reception gap
 - [Tiered Code Review](tiered-code-review.md) — route high-stakes diffs where a low acceptance rate is an accepted trade
 

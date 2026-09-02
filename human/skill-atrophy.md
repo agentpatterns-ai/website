@@ -35,7 +35,7 @@ The METR perception gap compounds the problem: developers cannot self-diagnose c
 
 Junior developers are most acutely affected. The Anthropic study measured this directly: participants who fully delegated code generation showed the steepest learning deficits.
 
-Senior developers are not immune. The same cognitive offloading mechanism applies when experienced engineers consistently delegate specific domains, for example CSS, database migrations, or build configuration. Less practice in those areas reduces depth over time, so the reviewer slowly loses the ability to catch subtle errors there ([Addy Osmani on the 80% problem in agentic coding](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)).
+Senior developers are not immune. The same cognitive offloading mechanism applies when experienced engineers consistently delegate specific domains, for example CSS, database migrations, or build configuration. Less practice in those areas reduces depth over time, so the reviewer slowly loses the ability to catch subtle errors there ([Addy Osmani on the 80% problem in agentic coding](https://addyo.substack.com/p/the-80-problem-in-agentic-coding)). Which domains go and which hold is not random; [agentic skill decay](agentic-skill-decay.md) sets out the two conditions that predict it.
 
 ## Interaction patterns that preserve or erode skill
 
@@ -121,3 +121,4 @@ Fatigue makes you tired during work. Atrophy makes you less capable between sess
 - [The Bottleneck Migration](bottleneck-migration.md) — review and verification become the scarce resource when code generation is cheap
 - [Developer Control Strategies for AI Agents](developer-control-strategies-ai-agents.md) — structuring delegation boundaries and autonomy levels to preserve oversight
 - [Polya Small Steps](polya-small-steps.md) — incremental problem decomposition that preserves comprehension while delegating
+- [Absorbing Entry-Level Work into Senior-Agent Workflows](../patterns/anti-patterns/entry-level-work-absorption.md) — the organizational counterpart: the tasks a junior would practice on stop arriving at all

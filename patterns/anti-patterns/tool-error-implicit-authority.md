@@ -112,3 +112,4 @@ The anti-pattern label is over-broad in five cases:
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](../../security/authority-confusion-untrusted-context.md) — dispatch-layer primitive that makes error-stream content informational only, never authorizing.
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md) — the broader anti-pattern that "filter tool output but not tool errors" exemplifies.
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — developer mental-model failure that error streams inherit when treated as system diagnostics rather than artifacts.
+- [Verbatim Failure Records in Small-Model Agent Transcripts](verbatim-failure-records.md) — the non-adversarial cost of the same error frame: the failed call's own text raises the odds the model sends it again.

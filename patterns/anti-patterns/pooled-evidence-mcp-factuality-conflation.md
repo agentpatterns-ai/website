@@ -33,7 +33,7 @@ For low-stakes, single-source agents, the cost of per-source claim routing is no
 
 ## The pattern
 
-Most factuality verifiers ask one question: is this claim supported anywhere in the pooled evidence? That includes the lightweight NLI-based RAG checkers in production today ([Sansford et al., 2024 — arxiv:2411.01022](https://arxiv.org/abs/2411.01022)). An MCP agent that emits a citation is making two claims, not one: the factual claim, and "source X supports this claim." Pooled-evidence verifiers conflate the two checks. A claim with a wrong source ID but accurate content passes.
+Most factuality verifiers ask one question: is this claim supported anywhere in the pooled evidence? That includes the lightweight NLI-based RAG checkers in production today ([Sankararaman et al., 2024 — arxiv:2411.01022](https://arxiv.org/abs/2411.01022)). An MCP agent that emits a citation is making two claims, not one: the factual claim, and "source X supports this claim." Pooled-evidence verifiers conflate the two checks. A claim with a wrong source ID but accurate content passes.
 
 Alvarez et al. name this cross-source conflation: a claim "may be supported somewhere in the evidence while being attributed to the wrong source" ([arxiv:2606.18037v2](https://arxiv.org/abs/2606.18037v2)). On 50 controlled clinical conflation probes against source-blind baselines, every injected attribution swap was retained. The verifier could not tell the swap apart from a correct answer.
 

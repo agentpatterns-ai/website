@@ -97,3 +97,4 @@ It complements the [four-layer threat taxonomy](four-layer-agent-security-taxono
 - [Agent Network Egress Policy](agent-network-egress-policy.md) — F4 control: target validation at the network boundary
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — F3 control: module-level integrity for executing code
 - [Artifact-Level Accountability Mapping for Agent Workflows](../human/artifact-level-accountability-mapping.md) — the workflow-audit counterpart: whether the log's schema carries the endorsement/comment/authorship distinctions accountability needs, once you know the runtime honored it
+- [Covert Success Rate for Indirect Prompt Injection](covert-success-rate-injection.md) — the same divergence measured against the user-facing reply rather than the audit record, and the share of injections that leave it clean

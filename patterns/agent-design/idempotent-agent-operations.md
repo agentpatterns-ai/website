@@ -126,6 +126,7 @@ The unique identifier (`issue.number`) is the key throughout: it names the branc
 
 ## Related
 
+- [Tool Operability: Interfaces That Survive a Lost Response](tool-operability-lost-responses.md) — the interface-side half; what a tool must expose so the caller can tell a committed effect from an uncommitted one
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md)
 - [Agent Circuit Breaker](agent-circuit-breaker.md)
 - [Circuit Breakers for Agent Loops](../../observability/circuit-breakers.md)

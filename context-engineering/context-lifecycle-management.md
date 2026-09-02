@@ -52,7 +52,7 @@ Providers bill per input token, so a naive full-history append costs O(n²) over
 
 - Crude summarization to hit the budget can cause an accuracy cliff. A validated compaction step — one that checks whether compressed output still preserves the critical facts — is what avoids it ([Dadhich, 2026](https://arxiv.org/abs/2607.21503)).
 - Poor upstream extraction defeats every later stage. One audit in the paper found a 99.6% junk rate (38 usable entries out of 10,134) when ingestion quality failed ([Dadhich, 2026](https://arxiv.org/abs/2607.21503v1)).
-- Always-on memory injection can underperform doing nothing. Selective intervention beat always-on injection and passive memory exposure in ablations, so a relevance gate on the consolidate and recall stages is load-bearing ([Yang et al., 2026](https://arxiv.org/abs/2607.08716)).
+- Always-on memory injection can underperform doing nothing. Selective intervention beat always-on injection and passive memory exposure in ablations, so a relevance gate on the consolidate and recall stages is load-bearing ([Wu et al., 2026](https://arxiv.org/abs/2607.08716)).
 - More memory is more attack surface. Persistent stores accumulate poisoning and stale-fact risk over time ([longitudinal memory risk](https://arxiv.org/abs/2605.17830)), the failure mode behind the [trojan hippo memory attack](../security/trojan-hippo-memory-attack.md).
 
 ## Example

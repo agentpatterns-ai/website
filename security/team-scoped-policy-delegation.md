@@ -105,3 +105,4 @@ Members of `ai-pioneers` pick their own model and can enable bypass mode. Everyo
 - [Tenant Model Policy: Organization-Scoped Rules for AI Model Selection](../patterns/agent-design/tenant-model-policy.md) — org-level targeting of the model key this pattern delegates to teams.
 - [Agent Governance Policies for AI Agent Development](../workflows/agent-governance-policies.md) — the enterprise, organization, and user tiers the team dimension cuts across.
 - [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md) — the other place membership decides agent capability, with a fail-closed default.
+- [Agent Governance Plane: Audit Events and Message-Content Surfaces](agent-governance-plane.md) — the audit surface that records which delegated value was in force, and its coverage limits.

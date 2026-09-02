@@ -107,3 +107,4 @@ The sign is not fixed. MCCom pairs a 121M local model that is genuinely faster t
 - [Stuck-Loop Recovery](stuck-loop-recovery.md) — what an unbounded escalation ladder turns into without the `max_escalations` cap
 - [Routing Decision Framework](../token-engineering/routing-decision-framework.md) — selects among the between-task routing patterns; this page is the within-task complement to that set
 - [Comparison-Only Advisor](../patterns/agent-design/comparison-only-advisor.md) — the inverse direction: a small model that never produces the answer and only ranks the large model's proposed actions
+- [The Handoff Tax: What a Receiving Model Should Inherit](../context-engineering/handoff-tax-model-switch-context.md) — once the gate fires, what the receiving model should inherit from the cheap rung's trajectory

@@ -37,6 +37,7 @@ last_reviewed: 2026-05-27
 - [Review-Comment-Derived Benchmarks for Code Review Agents](review-comment-derived-benchmarks.md) — Curate comments trusted reviewers left on merged PRs into frozen-context tasks with a verifier, so the benchmark scores the codebase-specific contracts public benchmarks never encode
 - [Policy-Graded Evaluation of Coding Agents](policy-graded-agent-evaluation.md) — Score agents at each enforced security tier and report success rate and token cost as separate columns; under a NIST-derived policy success fell up to 18.3 points and cost rose up to 167.3%, on different models
 - [Head-to-Head Evaluation of Competing MCP Servers](head-to-head-mcp-server-evaluation.md) — Score competing MCP servers under one fixed agent configuration and decide on consistency, duration, and cost per quality point, because a small eval rarely separates them on quality
+- [Reading a Coding-Agent Vendor's Security Certificate](vendor-security-certification-scope.md) — A certificate attests organizational controls, product behavior, or both; read the scope statement for which half, which surfaces, which configuration, and how recently
 - [Completion Failure Taxonomy](completion-failure-taxonomy.md) — Two-thirds of code completion failures are model errors, but one quarter are integration failures — fix both to improve acceptance rates
 - [LLM Agent Bug Fix Taxonomy](agent-bug-fix-taxonomy.md) — 23 recurrent fix patterns from 930 real LLM-agent bugs; the tools component dominates and framework version churn drives most fixes
 - [Symptom-First Bug Triage for Agent Code](symptom-first-agent-bug-triage.md) — 1,268 annotated agent bugs put 57.1% in the agent core and map non-terminating runs to planning and amnesiac runs to memory, for single-agent framework codebases
@@ -61,6 +62,7 @@ last_reviewed: 2026-05-27
 - [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](multi-run-shuffled-order-evaluation.md) — Memory-based agents amplify run-to-run variance and inherit a hidden easy-to-hard curriculum from the benchmark's default order; repeat the suite and shuffle before believing a reported gain
 - [Audit the Noise Floor Before Trusting a Benchmark Gap](benchmark-noise-floor-audit.md) — Repeat runs and semantics-preserving prompt rewrites give two noise floors 11x to 58x apart; measure both, then compare any reported gap against the wider one
 - [Specification-Path Testing: Same Contract, Different History](specification-path-testing.md) — Contract-equivalent requirement histories leave the pass rate flat while flipping which individual tasks succeed; report per-item conditional agreement rather than rate parity
+- [Severity-Stratified Evaluation of Security Prompts](severity-stratified-security-prompt-evaluation.md) — Security-oriented prompts move GPT-4o findings from 20.8% high severity to 13.6% while low severity rises 32.0% to 43.5%; report per-band counts and condition on generation compliance, or a refusal-rate fix scores as a security fix
 
 ## Behavioral Testing
 
@@ -98,6 +100,7 @@ last_reviewed: 2026-05-27
 - [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](agent-driven-eval-flywheel.md) — Drive the eval-generation loop from your coding agent so each fix is graded against the whole accumulated case set, proving it generalizes instead of patching one case
 - [Eval Difficulty as a Product Smell](eval-difficulty-product-smell.md) — Hard-to-write evals usually signal a product that was not designed for users to verify; redesign the artifact for checkability before scaling the scorer
 - [Agent-Authored Eval Suites From Repo Context and Traces](agent-authored-eval-suites.md) — Let a coding agent map the agent surface and scaffold a runnable task from repo and traces, while capability selection and verifier auditing stay human
+- [Building Agent Eval Environments With a World Spec](world-spec-eval-environments.md) — Hold the domain knowledge every eval task shares in one versioned world spec so task construction parallelizes, worth doing for a dataset rather than a handful of cases and only with an audit budget for what the pipeline emits
 
 ## Review Techniques
 
@@ -153,6 +156,7 @@ last_reviewed: 2026-05-27
 - [Generative Provenance Records for Tool-Using Agents](generative-provenance-records.md) — Emit a structured record (tool turn, evidence span, relation) alongside each output sentence so a mechanical verifier can check claim-level grounding before the answer leaves the loop
 - [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — Cite a requirement ID on every generated line so a set-difference check flags any citation to a requirement absent from the spec as a hallucination — detection at a determinism cost
 - [Typed Generation Contracts for Grounded Extraction](typed-generation-contract.md) — Split a wrong grounded answer by context sufficiency first, then make the extraction half checkable with typed fields, verbatim evidence spans, and a validator that runs
+- [Semantic Validation for Schema-Valid Agent Output](semantic-validation-schema-valid-output.md) — Schema conformance proves shape and says nothing about values; check identifiers against a register, values against a real bound, and fields against each other, and escalate where no anchor exists
 - [Defense-in-Depth Against Coding Agent Fabrication (Honesty Harness)](honesty-harness-fabrication-defense.md) — Four uncorrelated layers — instruction-level honesty rules, verify-before-write, real-time hooks that feed output back, and an external-tool fact-checker subagent — that reduce fabrication survival without claiming elimination
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — Stack scanner-pass, full-scanner, validate, plan, and plan-diff oracles so LLM-generated infrastructure-as-code security fixes have to clear behavioral checks — first-pass agent repairs cleared the targeted Checkov finding 83.3 percent of the time but 71.4 percent of plan-compared repairs were deceptive fixes
 
@@ -161,3 +165,4 @@ last_reviewed: 2026-05-27
 - [Eval Environment Containment for Cyber-Capable Agents](eval-environment-containment.md) — An agent that cannot reach its fictional target attacks a real one; enforce isolation at the network layer and verify egress from inside the environment, because a scope statement in the prompt is not a boundary
 - [Test Harness Design for LLM Context Windows](llm-context-test-harness.md) — Terse stdout, verbose log files, and grep-friendly error lines that keep agent context clean and actionable during evaluation runs
 - [Runnable Documentation as Agent Verification](runnable-documentation.md) — Extract inline code examples into standalone files that CI executes on every build so doc rot fails the build the same way broken code does
+- [Verification Surface: Match the Tool to the Failure](verification-surface-reach-and-cost.md) — A controlled study of 1,116 agent builds ranks self-check tools by reach and token cost: a boot probe costs less than no tool at all, a shell costs 2.35x, a linter bought nothing

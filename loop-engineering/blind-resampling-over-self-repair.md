@@ -89,3 +89,4 @@ A gap between A and B is the cost of exposure. A gap between B and C is the valu
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](loop-budgeting.md) — where the k≈2 cap and the token comparison fit into a wider budget.
 - [Local Model Viability Factors for Coding](../patterns/agent-design/local-model-viability-for-coding.md) — the deployment context in which sub-7B quantized models are the ones doing the retrying.
 - [Calibrated Early Termination and Warm Restart for Agent Runs (FailFast-RestartSmart)](early-termination-and-warm-restart.md) — the repo-scale counterpart, where a restart keeps the failed attempt's diff behind an optional tool rather than in the prompt.
+- [Verbatim Failure Records in Small-Model Agent Transcripts](../patterns/anti-patterns/verbatim-failure-records.md) — the tool-calling counterpart, which asks what a kept failure record should say rather than whether to keep one.

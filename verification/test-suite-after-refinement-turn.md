@@ -39,7 +39,7 @@ The regression rate is monotonic across turns and scales inversely with model st
 
 Frontier models lose a fifth of their correctness over nine turns; weaker open models lose two thirds ([Guo et al., 2026](https://arxiv.org/abs/2606.25747)).
 
-Independent corroboration from a different benchmark and 32 additional models: MT-Sec reports a consistent 20 – 27% drop in "correct and secure" outputs from single-turn to multi-turn settings, even on state-of-the-art models, and notes that single-turn agent scaffoldings transfer poorly to the multi-turn setting ([Mishra et al., 2026](https://arxiv.org/abs/2510.13859v1)).
+Independent corroboration from a different benchmark and 32 additional models: MT-Sec reports a consistent 20 – 27% drop in "correct and secure" outputs from single-turn to multi-turn settings, even on state-of-the-art models, and notes that single-turn agent scaffoldings transfer poorly to the multi-turn setting ([Rawal et al., 2026](https://arxiv.org/abs/2510.13859v1)).
 
 ## Refinement-type signal
 
@@ -72,7 +72,7 @@ Preserving behavior across a refinement is not in the model's loss function for 
 
 The gate is not free, and the suite has to be load-bearing for the diff to mean anything.
 
-- The test suite is weak. SWE-bench analysis shows 7.8% of test-passing patches fail developer-written tests, and 29.6% diverge from the ground-truth patch even when tests pass ([Aleithan et al., 2025](https://arxiv.org/abs/2503.15223v2)). A thin suite re-run after every turn produces a stream of false-greens. Strengthen the suite first, or treat it as a filter rather than a guarantee.
+- The test suite is weak. SWE-bench analysis shows 7.8% of test-passing patches fail developer-written tests, and 29.6% diverge from the ground-truth patch even when tests pass ([Wang et al., 2025](https://arxiv.org/abs/2503.15223v2)). A thin suite re-run after every turn produces a stream of false-greens. Strengthen the suite first, or treat it as a filter rather than a guarantee.
 - Tests are flaky. A flaky baseline corrupts the differential signal. False positives train the developer to ignore real regressions, and the gate becomes anti-signal.
 - Per-turn CI cost exceeds the catch rate. For multi-minute integration or browser suites, the per-turn cost can exceed the regression-catch value in short two- or three-turn sessions. Gate at end-of-session for short interactive sessions; reserve per-turn execution for autonomous loops and longer dialogues where the Phi-0.089 gap compounds.
 - The session is purely cosmetic or removal-only. The 7 – 13% cosmetic rate is non-trivial but lower than the 21% semantic rate; the marginal benefit narrows in style-only sessions and pure deletions ([Guo et al., 2026](https://arxiv.org/abs/2606.25747v2)).

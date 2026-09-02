@@ -71,3 +71,4 @@ Each diff is justified on its own; the attack exists only when the three compose
 - [The Security Review Gap in AI-Authored PRs](../code-review/security-review-gap-in-ai-prs.md) — why per-PR review under-catches security defects in agent-authored diffs, the review layer this attack targets.
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the automated PR-time review control that stateful cross-PR monitoring extends beyond a single diff.
 - [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md) — narrowing task scope shrinks both the attack surface and the payload an agent can distribute.
+- [Cross-Iteration Safety State for Agent Loops (LoopHarness)](cross-iteration-safety-state.md) — the proof that no per-unit monitor can close this gap, and the availability cost of the retained-state fix.

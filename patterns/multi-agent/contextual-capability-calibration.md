@@ -59,7 +59,7 @@ CADMAS-CTX on GPT-4o agents ([Qiao, 2026](https://arxiv.org/abs/2604.17950)):
 | GAIA | 0.381 | 0.354 | 0.442 |
 | SWE-bench Lite | 22.3% resolve | — | 31.4% resolve |
 
-Treat both as research claims pending independent replication. SWE-bench Lite has documented contamination concerns ([Mündler et al., 2025](https://arxiv.org/abs/2510.08996)); the resolve-rate gain has not been validated on mutated or held-out sets.
+Treat both as research claims pending independent replication. SWE-bench Lite has documented contamination concerns ([Garg et al., 2025](https://arxiv.org/abs/2510.08996)); the resolve-rate gain has not been validated on mutated or held-out sets.
 
 ## When the pattern pays off
 

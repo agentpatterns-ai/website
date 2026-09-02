@@ -10,7 +10,7 @@ aliases:
   - repo-derived eval generation
   - eval engineering skill
   - trace-derived eval tasks
-last_reviewed: 2026-08-19
+last_reviewed: 2026-08-31
 maturity: emerging
 ---
 
@@ -30,6 +30,8 @@ Two inputs answer different questions ([Trivedy](https://www.langchain.com/blog/
 - Traces fix how dependencies behave. They "show how tools behave in practice such as their arguments, results, and errors," and those observed contracts let the eval reproduce relevant production behavior in a controlled environment.
 
 The output is a runnable task triple: an instruction given to the agent at start, an environment supplied as a Dockerfile, and a verifier that scores completion. The same task then runs unchanged "against different models, prompts, tools, and agent versions."
+
+LangChain's August 2026 follow-up adds a two-step spec-to-task pipeline and a reusable "world spec" that holds project-specific scripts and definitions ([LangChain on building agent environments and tasks](https://www.langchain.com/blog/building-agent-environments-and-tasks)).
 
 ## What stays a human decision
 
@@ -76,6 +78,7 @@ The skill's docs-search worked example shows how such a corpus avoids leaking. F
 
 ## Related
 
+- [Building Agent Eval Environments With a World Spec](world-spec-eval-environments.md) — the scaling layer above this one, where shared domain knowledge moves into a reusable spec.
 - [Incident-to-Eval Synthesis: Production Failures as Evals](incident-to-eval-synthesis.md) — the post-production counterpart, where each incident becomes a regression case.
 - [Agent-Driven Eval Flywheel: Prove a Fix Generalizes](agent-driven-eval-flywheel.md) — runs the improvement loop once a case set exists.
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — rubric-side defenses against the shortcuts the verifier trajectory exposes.

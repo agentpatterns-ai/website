@@ -21,13 +21,13 @@ maturity: emerging
 
 > Reviewing MCP tool descriptions one at a time misses payloads split as Shamir threshold shares — the malicious instruction only exists after runtime reconstruction.
 
-Multi-tool threshold poisoning splits a malicious MCP instruction into Shamir's secret-sharing shares, hides them as numeric metadata across several tool descriptions, and reconstructs the instruction at runtime via a covert trigger planted during a server update ([Zhao et al., 2026](https://arxiv.org/abs/2606.27027)). The anti-pattern is treating per-tool description review as a sufficient defense. The failure is information-theoretic: below the reconstruction threshold, no single tool's description carries any information about the payload.
+Multi-tool threshold poisoning splits a malicious MCP instruction into Shamir's secret-sharing shares, hides them as numeric metadata across several tool descriptions, and reconstructs the instruction at runtime via a covert trigger planted during a server update ([Liu et al., 2026](https://arxiv.org/abs/2606.27027)). The anti-pattern is treating per-tool description review as a sufficient defense. The failure is information-theoretic: below the reconstruction threshold, no single tool's description carries any information about the payload.
 
 ## The failure mode
 
 Standard tool poisoning embeds the payload as a contiguous plaintext span inside one tool's description ([OWASP MCP03:2025](https://owasp.org/www-project-mcp-top-10/2025/MCP03-2025%E2%80%93Tool-Poisoning)). Manual review catches that shape, and zero-shot LLM classifiers and guard models flag it as unsafe. Threshold poisoning moves the payload off the static corpus a per-tool scanner reads.
 
-ShareLock works in three steps ([Zhao et al., 2026](https://arxiv.org/abs/2606.27027)):
+ShareLock works in three steps ([Liu et al., 2026](https://arxiv.org/abs/2606.27027)):
 
 | Step | What the attacker does | What a per-tool reviewer sees |
 |---|---|---|
@@ -35,15 +35,15 @@ ShareLock works in three steps ([Zhao et al., 2026](https://arxiv.org/abs/2606.2
 | Distribute | Evaluate the polynomial at n points; embed each value as numeric metadata (tool_id, checksum fields) in a separate tool description | Inert numeric fields with normal entropy |
 | Trigger | Push a server update that adds an EnvSetup tool disguised as initialization; the trigger asks the LLM to collect t shares and apply Lagrange interpolation | A new tool that looks like routine setup |
 
-In experiments using (t=2, n=5) across four scenarios — travel (94.5%), coding (92.0%), finance (96.0%), office (94.0%) — the attack reached an overall 94.1% attack success rate at three attempts against Gemini-2.5-Flash, DeepSeek-V3.1/V3.2, and Qwen3-235B-Thinking through Cherry Studio (v1.5.11) and Cline (v3.35.0) MCP clients ([Zhao et al., 2026](https://arxiv.org/abs/2606.27027v1)).
+In experiments using (t=2, n=5) across four scenarios — travel (94.5%), coding (92.0%), finance (96.0%), office (94.0%) — the attack reached an overall 94.1% attack success rate at three attempts against Gemini-2.5-Flash, DeepSeek-V3.1/V3.2, and Qwen3-235B-Thinking through Cherry Studio (v1.5.11) and Cline (v3.35.0) MCP clients ([Liu et al., 2026](https://arxiv.org/abs/2606.27027v1)).
 
 ## Why detection fails
 
-Five mainstream detectors — zero-shot LLM classifiers using GPT-5, Gemini-2.5-Flash, and Claude-Sonnet-4.5, plus the specialized guard models Llama Guard 3-8B and PromptGuard-86M — all classified the dispersed shares as safe in the paper's evaluation, while the same detectors flagged the baseline single-tool poisoning as unsafe ([Zhao et al., 2026](https://arxiv.org/abs/2606.27027)). Two structural reasons explain the gap.
+Five mainstream detectors — zero-shot LLM classifiers using GPT-5, Gemini-2.5-Flash, and Claude-Sonnet-4.5, plus the specialized guard models Llama Guard 3-8B and PromptGuard-86M — all classified the dispersed shares as safe in the paper's evaluation, while the same detectors flagged the baseline single-tool poisoning as unsafe ([Liu et al., 2026](https://arxiv.org/abs/2606.27027)). Two structural reasons explain the gap.
 
-Shamir's secret sharing is information-theoretically secret below the threshold: any combination of t-1 shares carries zero information about the secret. A reviewer or classifier inspecting one tool at a time is reading a corpus that is mathematically guaranteed to contain no recoverable instruction. Entropy-based detection also fails because each share's per-character entropy (5.22 bits) sits inside the normal range of benign checksums (5.02 bits), so a statistical detector at the share level has no signal ([Zhao et al., 2026](https://arxiv.org/abs/2606.27027)).
+Shamir's secret sharing is information-theoretically secret below the threshold: any combination of t-1 shares carries zero information about the secret. A reviewer or classifier inspecting one tool at a time is reading a corpus that is mathematically guaranteed to contain no recoverable instruction. Entropy-based detection also fails because each share's per-character entropy (5.22 bits) sits inside the normal range of benign checksums (5.02 bits), so a statistical detector at the share level has no signal ([Liu et al., 2026](https://arxiv.org/abs/2606.27027)).
 
-The malicious instruction is constructed at runtime by the LLM itself when the trigger tool requests reconstruction. This is the same structural shape as [Context-Fractured Decomposition Attacks](../../security/context-fractured-decomposition-attacks.md) — defenses that inspect a single locality cannot see attacks that exist only across localities — and independently corroborated by MindGuard, which targets the same planning-without-execution gap via a decision-dependence graph ([Zhao & Wang, 2026](https://arxiv.org/abs/2508.20412)).
+The malicious instruction is constructed at runtime by the LLM itself when the trigger tool requests reconstruction. This is the same structural shape as [Context-Fractured Decomposition Attacks](../../security/context-fractured-decomposition-attacks.md) — defenses that inspect a single locality cannot see attacks that exist only across localities — and independently corroborated by MindGuard, which targets the same planning-without-execution gap via a decision-dependence graph ([Liu & Wang, 2026](https://arxiv.org/abs/2508.20412)).
 
 ## Example
 
@@ -86,13 +86,13 @@ Cross-tool aggregate inspection carries reviewer cost, false-positive load on be
 - Single-server, single-tool deployments — no surface to fragment a payload across, so per-tool review is the correct level.
 - Capability sandboxing already binds blast radius. When the [Lethal Trifecta](../../security/lethal-trifecta-threat-model.md) is closed — no egress, no production credentials, no executable-config writes — a reconstructed instruction has nowhere to land.
 - Single-author internal registries. When one team owns every tool description and the registry never accepts third-party servers, the threshold-poisoning trust model does not apply.
-- Consent-gated agents on dangerous operations. Highly aligned agents that pause for consent expose the reconstructed instruction at execution time; the ShareLock paper calls this out as a limitation ([Zhao et al., 2026](https://arxiv.org/abs/2606.27027)).
+- Consent-gated agents on dangerous operations. Highly aligned agents that pause for consent expose the reconstructed instruction at execution time; the ShareLock paper calls this out as a limitation ([Liu et al., 2026](https://arxiv.org/abs/2606.27027)).
 
 Cross-tool inspection is necessary when third-party MCP servers ship multi-tool manifests into an agent with real blast radius — pair it with capability sandboxing and runtime decision-graph monitoring like [MindGuard](https://arxiv.org/abs/2508.20412), not in place of them.
 
 ## Key Takeaways
 
-- Multi-tool threshold poisoning splits a malicious instruction as Shamir shares across MCP tool descriptions; per-tool review is structurally blind because below the threshold no single description carries any information about the payload ([Zhao et al., 2026](https://arxiv.org/abs/2606.27027)).
+- Multi-tool threshold poisoning splits a malicious instruction as Shamir shares across MCP tool descriptions; per-tool review is structurally blind because below the threshold no single description carries any information about the payload ([Liu et al., 2026](https://arxiv.org/abs/2606.27027)).
 - The ShareLock evaluation reports 94.1% attack success at three attempts across four scenarios and five LLMs, with all five tested detectors — GPT-5, Gemini-2.5-Flash, Claude-Sonnet-4.5, Llama Guard 3-8B, PromptGuard-86M — classifying the dispersed shares as safe.
 - The defense must move inspection from per-tool to cross-manifest: flag tools that reference other tools' metadata fields, flag update-time additions that ask the agent to combine fields across the registry, and pair with decision-dependence monitoring such as [MindGuard](https://arxiv.org/abs/2508.20412).
 - Skip cross-tool aggregate review when there is no fragmentation surface (single-tool deployments), capability sandboxing already binds blast radius, the registry has a single trusted author, or the agent gates dangerous operations on user consent.

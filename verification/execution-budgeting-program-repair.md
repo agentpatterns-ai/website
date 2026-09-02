@@ -59,7 +59,7 @@ The model is not a frontier commercial agent. Smaller models, fine-tunes, or ope
 
 The codebase is unfamiliar to the model. Lin et al. measured on SWE-bench Verified — popular Python open-source projects the frontier models have seen. On private monorepos, in-house DSLs, embedded firmware, or any setting where the model has no learned prior, execution is the agent's only correctness signal. Capping it blinds the loop.
 
-The test suite is the only correctness oracle. SWE-bench's developer tests are themselves an unreliable signal — 7.8% of test-passing patches fail the developer suite outright, and 29.6% diverge behaviorally from the ground-truth patch ([Aleithan et al., 2025](https://arxiv.org/abs/2503.15223v2)). When tests are the deployment gate and there is no human review or separate spec, fewer test runs means fewer chances to catch a near-miss. Pair execution budgeting with [baseline-aware test evaluation](baseline-aware-test-evaluation-issue-resolution.md) and [staged evidence gates](staged-evidence-gates-program-repair.md) rather than substituting it for them.
+The test suite is the only correctness oracle. SWE-bench's developer tests are themselves an unreliable signal — 7.8% of test-passing patches fail the developer suite outright, and 29.6% diverge behaviorally from the ground-truth patch ([Wang et al., 2025](https://arxiv.org/abs/2503.15223v2)). When tests are the deployment gate and there is no human review or separate spec, fewer test runs means fewer chances to catch a near-miss. Pair execution budgeting with [baseline-aware test evaluation](baseline-aware-test-evaluation-issue-resolution.md) and [staged evidence gates](staged-evidence-gates-program-repair.md) rather than substituting it for them.
 
 The test suite is flaky. A single test run under-samples a stochastic outcome, and the agent that runs more often gets a better read on whether a failure is real or noise. Capping execution under flakiness turns a recoverable signal into a hidden one. Stabilize the suite before you budget how often it runs.
 
@@ -111,7 +111,7 @@ The shape is the load-bearing part: a hard cap with an explicit "submit your bes
 - Prohibiting execution drops the resolve rate by only about 1.25 points on commercial models against SWE-bench Verified, and that result narrows hard to frontier-model, in-distribution, expensive-execution settings.
 - Execution feedback is causally load-bearing during training and on weaker models — RLEF shows execution-grounded small models beat un-grounded large models ([Gehring et al., 2024](https://arxiv.org/abs/2410.02089)). Do not generalize budgeting to those settings.
 - Encode the budget in both the tool description and harness enforcement, because both are policy. Cost-aware tool descriptions guide model behavior, and hard limits catch it when guidance fails.
-- Budget execution alongside other verification gates, not instead of them. The test signal itself is weak — about 20% of test-passing patches are semantically wrong on SWE-bench ([Aleithan et al., 2025](https://arxiv.org/abs/2503.15223v2)) — so fewer runs of a weak oracle is no substitute for stronger gates.
+- Budget execution alongside other verification gates, not instead of them. The test signal itself is weak — about 20% of test-passing patches are semantically wrong on SWE-bench ([Wang et al., 2025](https://arxiv.org/abs/2503.15223v2)) — so fewer runs of a weak oracle is no substitute for stronger gates.
 
 ## Related
 

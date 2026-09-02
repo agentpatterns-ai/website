@@ -103,6 +103,7 @@ Two findings the bill alone would have hidden: Opus-medium-effort is dominated �
 ## Related
 
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the loop this measurement frame compares configurations within
+- [Probe-Run Calibration for Predicting Agent Token Spend](probe-run-cost-calibration.md) — how to place a new configuration on the cost axis from one measured run
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — the per-request routing pattern that consumes the map this page builds
 - [Per-Plugin Token-Cost Attribution](../observability/plugin-token-cost-attribution.md) — per-component attribution that aggregates up to the cost axis on the plot
 - [BYOK Model Token Visibility](../observability/byok-model-token-visibility.md) — in-IDE telemetry that supplies the per-turn input the cost axis needs on self-hosted routes

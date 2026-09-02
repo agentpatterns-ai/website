@@ -142,3 +142,4 @@ On Agent-SafetyBench with DeepSeek-V3.2 across three configurations (ReAct, Mult
 - [Tool Signing and Signature Verification](tool-signing-verification.md)
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)
 - [Computer-Systems Lens for Always-On Agent Security](computer-systems-lens-agent-security.md) — maps runtime, Skills, and Plugins onto OS components to locate the same cross-component gaps
+- [Cross-Iteration Safety State for Agent Loops (LoopHarness)](cross-iteration-safety-state.md) — the loop-level layer outside this harness, for deployments where the per-trajectory reset here is the exploited property

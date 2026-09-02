@@ -106,3 +106,4 @@ jobs:
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md) — Same single-control-surface mistake applied to injection defense.
 - [Tool-Use Sim-to-Real Perturbation Taxonomy](../../verification/tool-use-sim-to-real-perturbation-taxonomy.md) — Perturbation framing for tool-use agents; the prompt-perturbation result is the code-generation analogue.
 - [Model Confidence as Security Verification](model-confidence-as-security-verification.md) — The output-side twin: the model's own confidence in its code is no more a security guarantee than the prompt was.
+- [Severity-Stratified Evaluation of Security Prompts](../../verification/severity-stratified-security-prompt-evaluation.md) — The measurement half: security prompts redistribute weakness severity rather than reducing it, so pick the metric before reading the result.

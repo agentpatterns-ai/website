@@ -40,7 +40,7 @@ Different skills hold different operational anchors. The Xing et al. paper ident
 | Workflow guarding | Ordered steps, validation checks, constraints, named pitfalls | Procedurally-drifting tasks where step reordering produces silent failures |
 | Rule/formula anchoring | Definitions, formulas, thresholds, schemas, conventions | Scientific and rule-governed tasks where one mis-stated threshold invalidates the output |
 
-A skill profile — token count, code ratio, validator markers, API call frequency — determines which strategy fits. A learned task-conditioned policy picks the strategy from these structural features. It cut total agent cost by 7.0% and downstream agent-token cost by 6.0% on a 20-task held-out evaluation. In cross-model transfer across 86 tasks, reductions averaged 14.7% and 13.7% ([arxiv:2606.09421 §4](https://arxiv.org/html/2606.09421)).
+A skill profile — token count, code ratio, validator markers, API call frequency — determines which strategy fits. A learned task-conditioned policy picks the strategy from these structural features. It cut total agent cost by 7.0% and downstream agent-token cost by 6.0% on a 20-task held-out evaluation. In cross-model transfer across 86 tasks, reductions averaged 14.7% and 13.7% ([arxiv:2606.09421 §4](https://arxiv.org/html/2606.09421v3)).
 
 ## Why it works
 
@@ -114,3 +114,4 @@ The anchor-preservation framing has real costs that the 7.0% headline win must j
 - [Skill Library Technical Debt](../tool-engineering/skill-library-technical-debt.md) — library-level debt patterns including stale anchors and missing validators
 - [The No-Op Test: Prune Agent Docs by Behavior, Not Length](behavioral-no-op-test.md) — the behavioral deletion check, and why an operational anchor reads as a no-op on a happy-path task
 - [Skill Over-Trust](../patterns/anti-patterns/skill-over-trust.md) — the paired-run method for attributing a cost regression to one skill, and why mandatory procedure outweighs body length
+- [Typed Pseudocode for Skill Libraries](typed-pseudocode-skill-libraries.md) — a rewrite that cuts tokens and raises task wins by keeping the concrete invocation template as the surviving anchor

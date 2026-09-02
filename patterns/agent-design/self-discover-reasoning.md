@@ -21,7 +21,7 @@ maturity: adopted
 
 ## The technique
 
-Fixed reasoning strategies — CoT, ReAct, Chain-of-Thought Self-Consistency — apply the same cognitive approach to every problem. SELF-DISCOVER ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)) inverts this: the model first identifies which reasoning primitives fit the task, composes them into an explicit JSON plan, then executes that plan.
+Fixed reasoning strategies — CoT, ReAct, Chain-of-Thought Self-Consistency — apply the same cognitive approach to every problem. SELF-DISCOVER ([Zhou et al., 2024](https://arxiv.org/abs/2402.03620)) inverts this: the model first identifies which reasoning primitives fit the task, composes them into an explicit JSON plan, then executes that plan.
 
 Stage 1 (structure composition) runs once per task type, not per instance. The model then reuses the composed plan across every instance of that task. This makes the approach 10–40x more compute-efficient than CoT-Self-Consistency, while still exceeding its accuracy.
 
@@ -49,7 +49,7 @@ graph LR
 
 ## Benchmark results
 
-On PaLM 2-L ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)):
+On PaLM 2-L ([Zhou et al., 2024](https://arxiv.org/abs/2402.03620)):
 
 | Benchmark | SELF-DISCOVER | Chain-of-Thought | Direct |
 |-----------|--------------|-----------------|--------|
@@ -81,7 +81,7 @@ Skip it when:
 
 ## Why it works
 
-SELF-DISCOVER outperforms fixed reasoning strategies through three mechanisms identified in the original paper ([Wang et al., 2024](https://arxiv.org/abs/2402.03620)):
+SELF-DISCOVER outperforms fixed reasoning strategies through three mechanisms identified in the original paper ([Zhou et al., 2024](https://arxiv.org/abs/2402.03620)):
 
 1. Multi-perspective integration — a single CoT pass applies one reasoning lens. Composing multiple modules (for example, root-cause analysis + constraint identification + verification) draws on the complementary strengths of each. Tasks that need world knowledge and structured state benefit most — the T4D grounded-agent-reasoning gain of +29pp over CoT is the clearest case.
 2. Task-specific composition — generic prompting applies the same approach no matter the problem category. Selecting modules that match the task's actual structure (algorithmic decomposition for code, backward reasoning for constraint problems) from the 39-primitive library removes mismatched reasoning overhead.
@@ -95,7 +95,7 @@ The "explicit structure helps" claim is also contested. An instance-level reprod
 
 Stage 1 costs 3 additional LLM calls (Select, Adapt, Implement) per task type. After that, each instance costs one inference call — the same as plain CoT, with no extra overhead per instance.
 
-The meaningful comparison is against CoT-Self-Consistency (multiple CoT passes per instance): SELF-DISCOVER needs 10–40x fewer inference calls while exceeding CoT-SC accuracy ([Wang et al., 2024](https://arxiv.org/abs/2402.03620v1)). Stage 1 overhead is pure cost for a one-off task type, but amortizes quickly across any recurring one.
+The meaningful comparison is against CoT-Self-Consistency (multiple CoT passes per instance): SELF-DISCOVER needs 10–40x fewer inference calls while exceeding CoT-SC accuracy ([Zhou et al., 2024](https://arxiv.org/abs/2402.03620v1)). Stage 1 overhead is pure cost for a one-off task type, but amortizes quickly across any recurring one.
 
 ## Key Takeaways
 

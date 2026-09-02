@@ -81,7 +81,7 @@ Six patterns ([Beurer-Kellner et al., 2025](https://arxiv.org/abs/2506.08837)) h
 | Code-Then-Execute | Untrusted input | LLM generates code; sandboxed runtime executes without LLM re-evaluation |
 | [LLM Map-Reduce](../patterns/multi-agent/llm-map-reduce.md) | None — isolates untrusted input | Each isolated instance processes one untrusted partition; only constrained, format-checked map outputs reach the reducer, so an injection in one partition cannot steer the whole run |
 
-[CaMeL](camel-control-data-flow-injection.md) ([Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813)) enforces separation via control- and data-flow primitives — 77% task completion with provable security.
+[CaMeL](camel-control-data-flow-injection.md) ([Debenedetti et al., 2025](https://arxiv.org/abs/2503.18813v2)) enforces separation via control- and data-flow primitives — 77% task completion with provable security.
 
 ## Attack chains
 

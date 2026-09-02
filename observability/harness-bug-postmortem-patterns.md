@@ -61,7 +61,7 @@ Aggregate evals average. A change that regresses one model and improves another 
 Structure the ablation as:
 
 - One pass with the change enabled, one without, for every model the harness serves.
-- Report per-model deltas with a significance test. [McNemar's test adapted for LLMs](https://arxiv.org/html/2602.10144) distinguishes real regressions from noise down to ~0.3%.
+- Report per-model deltas with a significance test. [McNemar's test adapted for LLMs](https://arxiv.org/html/2602.10144v2) distinguishes real regressions from noise down to ~0.3%.
 - Gate on non-regression for every supported model, not on aggregate improvement.
 
 The signal extends to the reviewer layer: the thinking-history bug was caught by a code-review eval with Opus 4.7 and missed with Opus 4.6 ([Anthropic postmortem](https://www.anthropic.com/engineering/april-23-postmortem)). Reviewer-model choice is itself a harness variable.
@@ -89,7 +89,7 @@ graph TD
 
 The patterns are detection insurance, not free coverage:
 
-- Per-model ablation inflates CI cost. Running every suite twice for every model multiplies CI minutes by 2N. Reserve it for changes touching system prompts, tool-call formatting, or reasoning defaults. The [McNemar's-test paper](https://arxiv.org/html/2602.10144) sets the floor at ~0.3% empirical loss; below that, signal does not justify spend.
+- Per-model ablation inflates CI cost. Running every suite twice for every model multiplies CI minutes by 2N. Reserve it for changes touching system prompts, tool-call formatting, or reasoning defaults. The [McNemar's-test paper](https://arxiv.org/html/2602.10144v2) sets the floor at ~0.3% empirical loss; below that, signal does not justify spend.
 - Idle-state evals introduce wall-clock flakiness. Sleeping past a one-hour TTL is either expensive (real wait) or unfaithful (mocked clock that diverges from production). Scope to the specific TTLs the harness declares, not every temporal boundary.
 - Build-parity gates block legitimate experimentation. A rigid gate treats every internal flag as a defect; track the diff as a release artifact and route only high-risk divergences through a [canary lane](../patterns/multi-agent/rainbow-deployments-agents.md).
 - Skip all three for prototypes and single-turn apps — they presume multi-turn harnesses with caches, model fan-out, and an internal/public split.

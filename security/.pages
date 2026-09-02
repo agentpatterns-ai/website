@@ -23,6 +23,8 @@ nav:
       - trojan-hippo-memory-attack.md
       - unbounded-consumption-resource-bounds.md
       - workspace-topology-injection-attack-vector.md
+      - bug-class-hints-as-exploit-input.md
+      - task-choice-poisoned-repository-exposure.md
   - "Sandboxing":
       - browser-sandbox-agent-generated-html.md
       - docker-sbx-adoption.md
@@ -45,7 +47,9 @@ nav:
       - skill-supply-chain-poisoning.md
       - tool-signing-verification.md
   - "Auditing & Governance":
+      - agent-governance-plane.md
       - agent-retrieval-provenance.md
+      - cross-iteration-safety-state.md
       - cryptographic-governance-audit-trail.md
       - defense-in-depth-agent-safety.md
       - enforced-versus-advisory-controls.md
@@ -83,6 +87,7 @@ nav:
   - code-injection-multi-agent-defence.md
   - cognitive-poisoning-tool-feedback.md
   - constraint-substrate-scalable-oversight.md
+  - covert-success-rate-injection.md
   - credential-hygiene-agent-skills.md
   - customer-hosted-mcp-tunnel.md
   - destyling-untrusted-input.md
@@ -92,6 +97,7 @@ nav:
   - evidence-based-allowlist-auto-discovery.md
   - fail-closed-remote-settings-enforcement.md
   - foresight-guided-multi-agent-jailbreak-defense.md
+  - framing-gap-exfiltration-defenses.md
   - gate-agent-writes-to-executable-config.md
   - heartbeat-bound-hierarchical-credentials.md
   - history-anchor-consistency-injection.md
@@ -124,6 +130,7 @@ nav:
   - prompt-injection-resistant-agent-design.md
   - prompt-injection-threat-model.md
   - protecting-sensitive-files.md
+  - public-placeholder-credentials-injecting-proxy.md
   - provenance-aware-decision-auditing.md
   - recall-before-send-memory-poisoning-detection.md
   - restricted-access-defensive-ai.md
