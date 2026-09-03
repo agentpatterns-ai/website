@@ -181,6 +181,7 @@ nav:
       - embedded-harness-integration-layer.md
       - agent-sdk-hosting-topology.md
       - cloud-agent-state-layer-decoupling.md
+      - continuation-authority-agent-migration.md
       - agent-harness.md
       - agent-runtime-middleware.md
       - agent-pushback-protocol.md
