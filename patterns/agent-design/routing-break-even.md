@@ -10,7 +10,7 @@ aliases:
   - minimum offload fraction
   - router judge cost break-even
   - model routing break-even calculation
-last_reviewed: 2026-08-16
+last_reviewed: 2026-09-02
 maturity: emerging
 ---
 
@@ -19,6 +19,8 @@ maturity: emerging
 > Routing pays only when the judge's cost is small against the price gap between the two models it chooses between.
 
 `minimum offload = judge cost / (expensive cost - cheap cost)` gives the fraction of turns you must send to the cheap model before routing costs less than sending everything to the frontier model. LangChain publishes the rule after benchmarking NVIDIA's [NeMo Switchyard](https://github.com/NVIDIA-NeMo/Switchyard) router across 145 agent tasks ([LangChain, 11 August 2026](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
+
+Replit routes between models per request rather than pinning every request to one model, the arrangement this formula prices ([Replit, 26 August 2026](https://replit.com/blog/intelligent-model-routing)). The announcement carries no prices, so it confirms the decision is live in production and settles none of the numbers.
 
 ## What the calculation can decide
 

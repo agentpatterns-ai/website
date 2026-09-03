@@ -11,7 +11,7 @@ aliases:
   - model id as dependency
   - model deprecation migration protocol
   - versioned model dependency
-last_reviewed: 2026-06-12
+last_reviewed: 2026-09-02
 maturity: adopted
 ---
 
@@ -42,6 +42,8 @@ Between 2026-05-01 and 2026-05-08, GitHub Copilot announced four model deprecati
 | 2026-05-08 | Grok Code Fast 1 | 2026-05-15 | GPT-5 mini or Claude Haiku 4.5 | [GitHub Changelog](https://github.blog/changelog/2026-05-08-upcoming-deprecation-of-grok-code-fast-1/) |
 
 The Claude Sonnet 4 row shows a deprecation date before the announcement date — the announcement came after the fact. The Grok Code Fast 1 window is seven days. Anthropic's own table shows `claude-sonnet-4-20250514` and `claude-opus-4-20250514` deprecated 2026-04-14 for retirement 2026-06-15 — a 62-day window that fits inside the 60-day commitment ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)). A codebase that sits on both providers must accommodate the tighter window, not the looser one.
+
+The churn continued past that week. GitHub deprecated another selection of Copilot models on 2026-08-31 ([GitHub Changelog: Selected GitHub Copilot models deprecated](https://github.blog/changelog/2026-08-31-selected-github-copilot-models-deprecated)). Read the changelog for the current list; the table above is a May snapshot.
 
 ## The five surfaces
 

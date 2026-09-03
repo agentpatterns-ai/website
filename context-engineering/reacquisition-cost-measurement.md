@@ -76,3 +76,4 @@ Read alone, the completion row says the setting is safe and possibly better. The
 - [Choosing a Compression Budget for Agent Control Context](control-context-compression-budget.md) — setting compression severity from environment-verified success rather than a ratio.
 - [Token Reduction Mistaken for Cost Reduction](../patterns/anti-patterns/token-reduction-not-cost-reduction.md) — the same misjudgement measured in billed dollars rather than tool calls.
 - [Context Budget Allocation](context-budget-allocation.md) — deciding what occupies the window before compaction has to remove any of it.
+- [Four Reporting Levels for Agent Working Memory Evaluation](working-memory-evaluation-levels.md) — the wider reporting frame this metric sits inside, including whether two arms at one cap delivered the same context.

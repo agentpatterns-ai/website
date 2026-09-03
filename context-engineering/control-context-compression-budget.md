@@ -89,3 +89,4 @@ No. Input-token reduction can be offset or reversed by output expansion, measure
 - [Context Compression Strategies: Offloading and Summarization](context-compression-strategies.md) — the dynamic counterpart, compressing conversation history rather than the static control layer
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — the caching economics that decide whether compressing this surface pays
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md) — the finite-budget framing this technique applies to the control layer
+- [Four Reporting Levels for Agent Working Memory Evaluation](working-memory-evaluation-levels.md) — what to record when comparing two budget settings, given that a shared cap does not fix delivered context
