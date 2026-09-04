@@ -98,6 +98,7 @@ You cannot reduce what you do not measure — instrument spend before cutting it
 - [Pricier-Per-Token Models That Cost Less Per Task](pricier-per-token-cheaper-per-task.md) — comparing two models under one harness: a 2x per-token premium inverted into a lower bill once the lead could delegate
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the instrument-attribute-fix-verify loop
 - [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — plot each configuration on the (cost, quality) frontier so quality-trading downgrades are visible
+- [GitHub's Copilot Cost Levers at Constant Task Quality](copilot-cost-levers-fixed-quality.md) — a primary operator account: four harness levers that cut per-task token cost by low single digits each (5.5% at most) with task quality held flat, and which ones a team can copy
 - [Probe-Run Calibration for Predicting Agent Token Spend](probe-run-cost-calibration.md) — one $0.11 run cuts median cost-prediction error on an unseen task from 161% to 36%
 - [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — cleaner code cut token use 7-8% with no pass-rate change
 - [Measuring Refactoring Payback in Tokens](refactoring-payback-in-tokens.md) — replay one frozen change prompt after every refactoring step, because agents never learn between runs
