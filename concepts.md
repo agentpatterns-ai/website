@@ -795,6 +795,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-engineering/token-cost-profiling-always-on-workflows.md)
 - [Code Cleanliness as an Agent Cost Lever](token-engineering/code-cleanliness-agent-cost-lever.md)
 - [Cost-Quality Pareto Measurement for Agent Configurations](token-engineering/cost-quality-pareto-measurement.md)
+- [GitHub's Copilot Cost Levers at Constant Task Quality](token-engineering/copilot-cost-levers-fixed-quality.md)
 - [Probe-Run Calibration for Predicting Agent Token Spend](token-engineering/probe-run-cost-calibration.md)
 - [Routing Decision Framework: Which Routing Pattern Fits Which Signal](token-engineering/routing-decision-framework.md)
 - [Temporal Token Routing: Batch and Flex Tiers for Non-Urgent Work](token-engineering/temporal-token-routing.md)
