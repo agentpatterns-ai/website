@@ -129,3 +129,4 @@ On the first response — 1,200 input tokens split 300 ordinary / 400 cached / 5
 - [Per-Call Budget Hints on Tool Invocations](per-call-budget-hints-tool-calls.md) — caller-side knob that raises the ceiling on one call; the reservation sees the raised ceiling as the worst case
 - [Centralized LLM Gateway for Per-Dimension Agent Budgets](../../observability/llm-gateway-per-dimension-budgets.md) — the fleet-scope enforcement point that per-run reservation complements at the run scope
 - [Tail Control for Agent Workflows](tail-control-for-agent-workflows.md) — engineering for worst-case behavior; the reservation is the cost-side analogue
+- [Fleet-Level Irreversibility Budgets for Agent Effects](fleet-irreversibility-budget.md) — the same reserve-before-commit shape applied to residual risk across a fleet rather than dollars inside one run

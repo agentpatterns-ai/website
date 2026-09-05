@@ -60,3 +60,4 @@ The corrective — read the findings and decide, do not obey the verdict — has
 - [Trust Without Verify](trust-without-verify.md) — the general form: accepting a clean-looking output because it looks clean, of which the green check is the scanner case.
 - [Skill Supply Chain Poisoning](../../security/skill-supply-chain-poisoning.md) — the threat the scanner is meant to catch, and why install-time signatures are only part of the defense.
 - [Vetting Tool Definitions for Exfiltration Signatures](../../security/vetting-tool-definitions-before-install.md) — the manual-judgment complement: what to read in a definition that no pass or fail captures.
+- [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the case where the scan has no finding to compress, because the steering lives in the choice distribution rather than in the file.

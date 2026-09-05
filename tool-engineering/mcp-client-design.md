@@ -182,6 +182,7 @@ One `ServerSession` per MCP server; tool calls route through the namespace map; 
 - [MCP Server Design](mcp-server-design.md)
 - [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md)
 - [MCP Elicitation: Servers Requesting Structured Input Mid-Task](mcp-elicitation.md)
+- [Judging MCP Capability Readiness by Client Adoption](mcp-capability-readiness.md)
 - [MCP LLM Sampling: Servers Requesting AI Inference Mid-Tool](mcp-llm-sampling.md)
 - [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)

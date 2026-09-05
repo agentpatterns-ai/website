@@ -157,4 +157,5 @@ Gateways and proxies can break elicitation without warning. Many MCP gateways re
 - [MCP Client/Server Architecture](mcp-client-server-architecture.md)
 - [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md)
 - [MCP Client Design](mcp-client-design.md)
+- [Judging MCP Capability Readiness by Client Adoption](mcp-capability-readiness.md)
 - [Override Interactive Commands](override-interactive-commands.md)

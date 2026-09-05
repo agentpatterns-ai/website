@@ -82,3 +82,4 @@ The Stop hook runs the entry whether or not the model remembered it, and `"sever
 - [Pre-Completion Checklists for AI Agent Development](../../verification/pre-completion-checklists.md) — the harness-run checklist as the low-cost form of procedure as program structure.
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — the same silent gap seen from the completion signal rather than the step trace.
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md) — the general rule this instance follows: prompts request, hooks require.
+- [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the other way output checks come back clean: every mandated step runs, and the skill steers which candidate wins.

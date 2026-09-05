@@ -107,3 +107,4 @@ Search-replace is the practical choice for a frontier API model on this file. Be
 - [Batch File Operations via Bash Scripts](batch-file-operations.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
 - [Repository Map Pattern](../context-engineering/repository-map-pattern.md)
+- [Field-Change Intent Instead of Model-Written Diffs](../patterns/agent-design/field-change-intent-over-generated-diffs.md) — the option outside this spectrum, where the model emits no edit format at all.

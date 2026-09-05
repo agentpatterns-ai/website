@@ -563,6 +563,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Canvas as Durable Workflow State: The Four-Step Blueprint and What It Costs](patterns/agent-design/canvas-as-durable-workflow-state.md)
 - [Approval Gate Granularity in Agent Pipelines](patterns/agent-design/approval-gate-granularity.md)
 - [Agent Determinism Moves to the Last Unconstrained Axis](patterns/agent-design/last-unconstrained-axis.md)
+- [Agent-Native Filesystems: Gating Effects, Not Commands](patterns/agent-design/agent-native-filesystem-mediation.md)
 - [Artifact-Driven Workflow Compilation for Agent Execution](patterns/agent-design/artifact-driven-workflow-compilation.md)
 - [Capability Declarations for Agents That Act on Data](patterns/agent-design/capability-declarations-for-agent-actions.md)
 - [Code-Native Memory Substrates for Coding Agents](patterns/agent-design/code-native-memory-substrates.md)
@@ -605,7 +606,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Experience Graphs as Structured Memory for Self-Evolving Agents](patterns/agent-design/experience-graphs-self-evolving-agents.md)
 - [Externalization in LLM Agents](patterns/agent-design/externalization-in-llm-agents.md)
 - [Feedback as Capability Equalizer: Iterative Feedback Outweighs Model Scale](patterns/agent-design/feedback-capability-equalizer.md)
+- [Field-Change Intent Instead of Model-Written Diffs](patterns/agent-design/field-change-intent-over-generated-diffs.md)
 - [Five-Failure-Layers Diagnostic: Attribute Before Swapping the Model](patterns/agent-design/five-failure-layers-diagnostic.md)
+- [Fleet-Level Irreversibility Budgets for Agent Effects](patterns/agent-design/fleet-irreversibility-budget.md)
 - [Forked vs Fresh Subagents: When to Inherit the Parent Conversation](patterns/multi-agent/forked-vs-fresh-subagents.md)
 - [Formal Process Models as Prompting Scaffolds (Petri Net of Thoughts)](patterns/agent-design/petri-net-of-thoughts.md)
 - [Gateway Model Routing: Treat the LLM Gateway as a Discovery Source](patterns/agent-design/gateway-model-routing.md)
@@ -679,6 +682,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Reflective Prompt Evolution with Pareto Selection (GEPA)](patterns/agent-design/gepa-reflective-prompt-evolution.md)
 - [Remote Agent Host Sessions over SSH and Dev Tunnels](patterns/agent-design/remote-agent-host-sessions.md)
 - [Remote Session Control for Local CLI Agents](patterns/agent-design/remote-session-control.md)
+- [Renting a Cloud Agent's Execution Sandbox](patterns/agent-design/rented-execution-sandbox.md)
 - [Reverse-Engineered Executable Specifications for Agentic Program Repair](patterns/multi-agent/reverse-engineered-executable-specifications.md)
 - [Role Orchestration on a Single Model](patterns/agent-design/role-orchestration-single-model.md)
 - [RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use](patterns/agent-design/rubric-refine-pre-execution-tool-use.md)
@@ -857,6 +861,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](tool-engineering/mcp-eager-vs-jit-loading.md)
 - [MCP Client Design: Building Robust Host-Side Logic](tool-engineering/mcp-client-design.md)
 - [Five Design Decisions for MCP Servers and Clients](tool-engineering/mcp-client-server-architecture.md)
+- [Judging MCP Capability Readiness by Client Adoption](tool-engineering/mcp-capability-readiness.md)
 - [MCP Elicitation: Servers Requesting Structured Input Mid-Task](tool-engineering/mcp-elicitation.md)
 - [MCP LLM Sampling: Servers Requesting AI Inference Mid-Tool](tool-engineering/mcp-llm-sampling.md)
 - [MCP Server Design: Building Agent-Friendly Servers](tool-engineering/mcp-server-design.md)
@@ -1020,6 +1025,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [RAG Architecture as a Poisoning Robustness Decision](security/rag-architecture-poisoning-robustness.md)
 - [Reframed Exfiltration Defeats Wording-Based Defenses (Framing Gap)](security/framing-gap-exfiltration-defenses.md)
 - [Restricted-Access Defensive AI: Project Glasswing as a Deployment Model](security/restricted-access-defensive-ai.md)
+- [Runtime Guard as an Installed Skill (Defense-as-Skill)](security/runtime-guard-as-installed-skill.md)
 - [Safe Outputs Pattern for Trustworthy Agent Responses](security/safe-outputs-pattern.md)
 - [Sandbox + Approvals + Auto-Review Governance Triad](security/sandbox-approvals-auto-review-triad.md)
 - [Sandboxed Coding Environments: Containers vs MicroVMs vs OS-Level Isolators](security/sandbox-runtime-comparison.md)
@@ -1598,6 +1604,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Dynamic Tool Fetching Destroys KV Cache Performance](patterns/anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [External Artifacts Treated as Data, Not Adversarial Input](patterns/anti-patterns/external-artifacts-as-data.md)
 - [Happy Path Bias: How AI Agents Skip Error Handling](patterns/anti-patterns/happy-path-bias.md)
+- [Install-Once Plugin Trust: Vetting That Never Re-Runs on Update](patterns/anti-patterns/install-once-plugin-trust.md)
+- [Judging a Skill's Honesty by the Validity of Its Output](patterns/anti-patterns/judging-skill-honesty-by-output-validity.md)
 - [Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)](patterns/anti-patterns/large-codebase-agent-failure-patterns.md)
 - [Law of Triviality in AI PRs for AI Agent Development](patterns/anti-patterns/law-of-triviality-ai-prs.md)
 - [LLM Code Review Overcorrection for AI Agent Development](patterns/anti-patterns/llm-review-overcorrection.md)
@@ -22452,6 +22460,8 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — Write an agent's authority boundary down as two reviewable requirements artifacts — an Agency Justification Record and an Agentic Delegation Policy — instead of leaving it implicit in prompts and tool schemas
 - [Trigger-Level Gating for Autonomous Agent Intake](trigger-level-agent-intake-gating.md) — Three gates stand between an incoming issue and a changed one — trigger, tool, and approval — and only the first two carry authority; confidence-based approval queues govern attention, not permission
 - [Approval Gate Granularity in Agent Pipelines](approval-gate-granularity.md) — Bundling agent approvals cuts reviewer load only on the axis that removes decisions; batching the approval queue moves wait time and leaves the count unchanged
+- [Fleet-Level Irreversibility Budgets for Agent Effects](fleet-irreversibility-budget.md) — One shared account of residual risk, charged before each effect commits, catches the overdraw that individually compliant agents create together — and the fleet size below which it buys nothing
+- [Agent-Native Filesystems: Gating Effects, Not Commands](agent-native-filesystem-mediation.md) — Attach permission rules to filesystem paths instead of command strings, stage every mutation until the user commits, and keep the undo inside the filesystem
 
 ## Reliability
 
@@ -22470,6 +22480,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Dispatch-Time Reasoning Level for Delegated Agents](dispatch-time-reasoning-level.md) — Choosing a delegated agent's reasoning level at hand-off is a one-shot commitment, so select on blast radius, reversibility, and detection cost rather than estimated difficulty
 - [Decoupled Search Grounding: A Vendor-Agnostic Grounding Boundary](decoupled-search-grounding.md) — Lift retrieval out of the reasoning model and into an MCP-compatible gateway so provider, caching, and evidence rendering become independently tunable controls — pays off only when strict output contracts, cacheable query mix, and real multi-vendor routing all hold
 - [Deterministic Fast Paths: Answer Without a Model Call](deterministic-fast-paths.md) — Answer the easy majority of retrieval questions from a score margin, a cache hit, or a dictionary lookup, once the threshold is calibrated against your own labeled data and a guard catches silent false hits
+- [Field-Change Intent Instead of Model-Written Diffs](field-change-intent-over-generated-diffs.md) — Have the agent emit which resource, field, and value to change, then let a deterministic span editor apply it, because tolerant patchers misapply about 1 in 7
 - [Dual-Budget Control for Search Agents](dual-budget-control-search-agents.md) — Under hard limits on both tool calls and generated tokens, score each candidate action by Value-of-Information per unit budget and spend the next unit on the highest-ranking action
 - [Effective Feedback Compute (EFC) for Harness Comparison](effective-feedback-compute.md) — A trace-level scaling coordinate that credits feedback only when it is informative, valid, non-redundant, and retained — replacing raw tokens or tool calls when comparing two harnesses on the same multi-turn task
 - [Gateway Model Routing](gateway-model-routing.md) — Treat an Anthropic-compatible gateway as both inference target and model catalog, so a single config knob controls what the harness can call and what it shows in the picker
@@ -22523,6 +22534,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State](delta-channels-checkpoint-storage.md) — Store only the per-step diff and write a full snapshot every K steps so long-session checkpoint storage stays O(N) instead of O(N²) and resume latency stays bounded
 - [Sandbox Forking: Branch Agent Runs From a Warm Snapshot](sandbox-forking.md) — Prepare an environment once, snapshot it, then fork a copy per run — worth doing only when setup is expensive and the children need no unique identity or live connections
 - [Continuously Built Agent Environments](continuously-built-agent-environments.md) — Rebuild the agent environment in the background on a schedule and activate only builds that succeed, so each delegated task starts prepared instead of paying cold start
+- [Renting a Cloud Agent's Execution Sandbox](rented-execution-sandbox.md) — Pointing a cloud agent at a third-party sandbox moves tool execution only, so decide it on a named requirement and expect inference and tool output to stay with the vendor
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — Use PreToolUse hook defer decisions to pause headless Claude Code sessions at tool calls and resume them after out-of-band human approval
 - [Most-Restrictive-Wins Fusion for Parallel Agent Control Returns](most-restrictive-wins-fusion.md) — The `deny > defer > ask > allow` merge function that fuses parallel hook decisions, classifier verdicts, and permission rules into a single agent-control answer
 - [Product-Operation Tool Surfaces for In-Product Agents](product-operation-tool-surface.md) — An agent living inside a product enumerates each action as its own shallow tool and withholds the SDK, then scopes the live catalog per thread so tool selection holds up
@@ -24764,6 +24776,73 @@ The `enum` constraint on `env` and the SHA-1 `pattern` on `ref` make wrong usage
 
 ---
 
+### Agent-Native Filesystems: Gating Effects, Not Commands
+Source: https://agentpatterns.ai/patterns/agent-design/agent-native-filesystem-mediation/
+
+# Agent-Native Filesystems: Gating Effects, Not Commands
+
+> Attach permission rules to filesystem paths rather than to commands, stage mutations for a single review, and let the agent undo its own mistakes.
+
+An agent-native filesystem mediates file access itself. It reports what a command actually touched, holds mutations undoable until you commit them, and enforces rules on paths instead of on command strings ([Zhong et al., 2026, arXiv:2604.13536v4](https://arxiv.org/abs/2604.13536v4)). Two conditions bound it. It observes filesystem effects and nothing else, so a network call or a pushed commit stays outside its reach. Protection also holds only while every agent process runs inside the mediated mount. The reference implementation, YoloFS, gets that by rooting a mount namespace at its own mount, so anything launched outside is unmediated.
+
+## What 290 misuse reports say about the harness
+
+The case for moving the boundary is frequency data, not preference. Zhong et al. collected 290 public reports of agent filesystem misuse between February 2024 and March 2026, most of them GitHub issues (205). Harness failures contribute to 218 of those reports, more than the model (168) or user review (105) ([arXiv:2604.13536v4](https://arxiv.org/abs/2604.13536v4)).
+
+Three harness failures account for most of that:
+
+- Shell loophole, 77 reports. "When a read through a built-in tool is denied, the agent can use `cat` to read the same file."
+- Effect-blind filter, 52 reports. The paper's Finding 4 states it plainly: "Filters on command strings are ineffective because they do not target the actual filesystem effects."
+- Sandbox misfit, 41 reports. Sandboxes are "often too restrictive for legitimate work while too permissive within their boundaries."
+
+Of the reports with known recoverability, 40% are unrecoverable: 23% total data loss and 17% partial. Detection is no better: in 68% of reports with a known agent reaction the agent "continues operating as if nothing went wrong", and 11% lie about it ([arXiv:2604.13536v4](https://arxiv.org/abs/2604.13536v4)).
+
+## The three capabilities
+
+| Capability | What the user gets | What the agent gets |
+|---|---|---|
+| Introspect effects | Review the session's accumulated changes | See what each command accessed and changed |
+| Undo mutations | Decide the final change set in one pass | Reverse a mistake and retry without pre-approval |
+| Gate accesses | Set rules on paths, refined during the run | Operate freely inside those rules |
+
+Undo covers anything reversible, so the agent acts first and checks after. Gating covers what undo cannot reach: "once an agent reads a secret, it cannot unread it" ([arXiv:2604.13536v4](https://arxiv.org/abs/2604.13536v4)).
+
+## Why it works
+
+A command filter classifies a string, while the effect is decided by which syscalls touch which paths, and [no rule count closes that gap](../../security/parser-versus-shell-permission-evasion.md). The paper puts the reason in one line: "different commands can produce the same effect, and the same program can produce different effects depending on the arguments and environment" ([arXiv:2604.13536v4](https://arxiv.org/abs/2604.13536v4)). Moving the rule onto the path removes that degree of freedom: "a rule governs every access to that path regardless of what command makes it."
+
+Undo changes the timing rather than the soundness. Once mutations are staged and reversible, approval moves from many uninformative prompts before execution to one informed review after it. Across 112 single-operation filesystem tasks the paper measures 0.4 user interactions per task at a 99% success rate. Stock Claude Code averages 0.9 and Gemini CLI 2.2 ([arXiv:2604.13536v4](https://arxiv.org/abs/2604.13536v4)). Codex also averages 0.4, so this is not a clean win over every baseline.
+
+## When this backfires
+
+- Your damage is not on disk. Staging and undo reach a deleted file, never a sent email, a captured payment, or a key that has already left the process. If exfiltration is the threat, spend the effort on egress control.
+- Execution escapes the mount. Protection scoped to a mount namespace holds only while every subprocess, MCP server, and cloud runner stays inside it. A remote session gets nothing from a filesystem mounted on your laptop.
+- Batch review becomes the new rubber stamp. The same study counts 80 reports where users enabled "YOLO mode" rather than keep "answering hundreds of prompts per session" ([arXiv:2604.13536v4](https://arxiv.org/abs/2604.13536v4)). One large staged diff nobody reads is the same failure.
+- You already have the syscall layer. [Sandlock](https://arxiv.org/abs/2605.26298v1) enforces "filesystem, network, IPC, and syscall policies without root" with unprivileged Linux primitives, including reversible filesystem effects. Where kernel rules are available, a filesystem on every read and write path is one more component whose bugs are data-loss bugs.
+
+## Example
+
+The paper's self-correction test shows what the capabilities buy. It builds 11 tasks where a routine request carries a hidden destructive side effect. A linter deletes source files, a build clean also removes headers, a setup script resets `.env`. Claude Code with the agent-native filesystem self-corrected in 8 of the 11, and staged the other 3 for the user to reject. The unmediated baselines mostly failed outright or stopped to ask ([arXiv:2604.13536v4](https://arxiv.org/abs/2604.13536v4)).
+
+Read the size caveat alongside that result. The authors "deliberately keep each project small (10–41 LoC), making it easier for the agent to inspect the codebase and detect unexpected effects" ([arXiv:2604.13536v4](https://arxiv.org/abs/2604.13536v4)). Self-correction depends on the agent noticing an anomaly in the effect report. A repo with a build tree and vendored dependencies is a harder read than 41 lines.
+
+## Key Takeaways
+
+- Sort your permission rules into the ones that name a path and the ones that name a command. The second set is the bypassable half, whatever layer you enforce it at.
+- Gate what cannot be undone and stage the rest. A read of a credential file earns a prompt; a write inside the project does not.
+- Before adopting any of this, count your irreversible surface. If most of it is network or third-party calls, a filesystem is the wrong layer and egress control is the spend.
+- Set a size limit on the staged diff you will review. Past it, you are auto-approving again, in one keystroke instead of a hundred.
+
+## Related
+
+- [Parser-Versus-Shell Evasion in Command Permission Checks](../../security/parser-versus-shell-permission-evasion.md) — why a command-text check keeps losing to the shell that runs it
+- [Rollback-First Design](rollback-first-design.md) — choosing the undo before choosing the action
+- [Approval Gate Granularity in Agent Pipelines](approval-gate-granularity.md) — when batching approvals actually cuts reviewer load
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](../../security/enforced-versus-advisory-controls.md) — where a control is evaluated decides whether it binds
+- [Sandbox Runtime Comparison](../../security/sandbox-runtime-comparison.md) — picking the isolation layer beneath all of this
+
+---
+
 ### Agent-Ready Data Architecture for Analytics Agents
 Source: https://agentpatterns.ai/patterns/agent-design/agent-ready-data-architecture/
 
@@ -25585,6 +25664,7 @@ Only the file-modification row expires. Edits are frequent and the class is broa
 - [Classifier-Gated Auto-Permission for Cloud-IDE Coding Agents](classifier-gated-auto-permission.md) — the mechanism that implements class bundling when a static rule cannot express the class
 - [Tool Confirmation Carousel: Batched UI for Per-Call Approvals](tool-confirmation-carousel.md) — the last-mile surface for the residual approvals no bundle absorbs
 - [Verification Capacity Saturation: Three Levers, One Default](../../verification/verification-capacity-saturation.md) — what remains once the gate is already past its service rate
+- [Fleet-Level Irreversibility Budgets for Agent Effects](fleet-irreversibility-budget.md) — the aggregate a per-action gate cannot see, whatever granularity you set it at
 
 ---
 
@@ -30306,6 +30386,7 @@ Both numbers come from one pipeline with a threshold tuned for its corpus. Carry
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — escalates mid-task on a running model's partial trajectory rather than deciding before the first call.
 - [Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines](parameter-keyed-caching-plan-execute.md) — hardens the cache rung by partitioning the key on parsed parameters.
 - [Deterministic Precondition Gates](deterministic-precondition-gates.md) — the same instinct applied to entry conditions, refusing a run rather than answering it.
+- [Field-Change Intent Instead of Model-Written Diffs](field-change-intent-over-generated-diffs.md) — the same instinct applied to applying an edit, with the model keeping the semantic decision.
 
 ---
 
@@ -33237,6 +33318,90 @@ Path B produces higher success rates at lower cost: the model did not change, th
 
 ---
 
+### Field-Change Intent Instead of Model-Written Diffs
+Source: https://agentpatterns.ai/patterns/agent-design/field-change-intent-over-generated-diffs/
+
+# Field-Change Intent Instead of Model-Written Diffs
+
+> The agent emits a field-change intent; a deterministic editor finds the target scalar's character span and replaces only that span.
+
+A field-change intent is a structured record of a config edit — resource kind, resource name, field path, new value — carrying no file bytes. The agent picks the field; a deterministic pipeline works out where that field sits and rewrites those characters only. The split takes away the half of the job models are worst at, which is locating bytes.
+
+## When this applies
+
+The evidence covers a narrow box.
+
+- The change is one scalar value: a replica count, an image tag, a resource limit.
+- The file is plain YAML or Kustomize, not a Helm or Argo template.
+- The pipeline applies the edit with no human between proposal and commit.
+- The applier you would otherwise reach for tolerates imperfect context.
+
+Outside that box, [edit format selection](../../tool-engineering/llm-edit-format-selection.md) is the open question.
+
+## Why it works
+
+A generated diff carries two decisions at once: which field to change, and where in the byte stream that field sits. Models are reliable on the first and shaky on the second, and tolerance is what removes the error signal — matching on partial context means a hunk that lands in the wrong region still reports success. [Davineni](https://arxiv.org/abs/2609.00227v1) measured both halves over 83 Kubernetes field-change tasks, 415 runs per system per model. Strict application came out correct on 2.7% of Claude Sonnet-5 diffs, which the paper treats as a lower bound rather than a verdict on diffs. Locate each hunk by content instead of by line number and correctness reaches 67.5% "with zero misapplication". Reach for GNU patch and it applies 96.4%, of which 14.0% "landed at the wrong location or corrupted a neighbor, with no error signal", rising to 20.2% once whitespace is ignored.
+
+Taking the location decision out of the model's output is what makes the edit exact. The pipeline indexes manifests by `(kind, name)`, walks the intent's field path through the parsed node tree, resolves named-list segments by matching the item's `name` child rather than its index, and reads the terminal scalar's `[start, end)` character span from the YAML parser's position marks. It then writes `raw[:start] + requote(new_value) + raw[end:]`. The file is never re-serialized, so minimality falls out of the construction: "Every byte outside `[s,e)` is copied verbatim, so the line-diff against raw touches only the line(s) spanning `[s,e)`" ([Davineni](https://arxiv.org/abs/2609.00227v1)). Comments and blank lines survive, which a re-serializing editor does not guarantee. yq has an open report that in-place write "removes blank lines and changes spacing before comments" ([yq issue 465](https://github.com/mikefarah/yq/issues/465)). The span editor was correct on all 415 runs, with no task flaky across five seeds.
+
+Refusal is the other half. Zero matches, more than one match, or a missing field returns a refusal instead of a guess, measured at 1.00 refusal precision and 0.889 recall over six adversarial categories ([Davineni](https://arxiv.org/abs/2609.00227v1)).
+
+## When this backfires
+
+- Structural edits fall outside the schema, which addresses one terminal scalar. Adding a container, a volume, or a whole block is a stated non-goal of the paper.
+- Helm and Argo value indirection is refused rather than fixed, so a repository of templates buys nothing from the pipeline.
+- YAML aliases are the paper's own stated gap: an alias resolves to the anchor node and edits the wrong line rather than refusing. The silent misapplication this pattern exists to remove comes back inside the deterministic tool.
+- A second config language costs a second locator, with its own span logic and refusal policy.
+- Your applier may already fail closed. Anthropic's editor tool errors with "Error: Found 3 matches for replacement text. Please provide more context to make a unique match." instead of guessing ([Anthropic](https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool)). Where byte-level ambiguity already errors, the remaining win is the semantic ambiguity a byte match cannot see, such as a duplicate `(kind, name)` pair.
+- The decision itself stays unguarded: "Our guarantees are about faithful _application_, not about the fix being right; that is what human PR review is for" ([Davineni](https://arxiv.org/abs/2609.00227v1)). The reference implementation pins that in CI, and its README says the system "can never merge the PR itself" ([KubeAstra](https://github.com/astraverse-io/KubeAstra)).
+
+Two limits on the evidence. The benchmark is 83 tasks with roughly 80 inside a single file, and the author writes that "Reported rates should be read as edit-site rates within a small file set, not population estimates" ([Davineni](https://arxiv.org/abs/2609.00227v1)). Format restriction also costs something: [Tam et al.](https://arxiv.org/abs/2408.02442v3) report "a significant decline in LLMs reasoning abilities under format restrictions". Watch that in your own evals.
+
+## Example
+
+**Before** — the model writes the patch:
+
+```diff
+@@ -12,7 +12,7 @@
+   template:
+     spec:
+       containers:
+-        - name: frontend
+-          image: gcr.io/boutique/frontend:v0.8.0
++        - name: frontend
++          image: gcr.io/boutique/frontend:v0.9.1
+```
+
+**After** — the model writes the intent and the pipeline writes the file. The paper's schema is `FieldChange{kind, name, namespace?, field_path, new_value, reason}`, with a path built from "map keys with named list segments (a container by its name, an env var by its name), never positional indices" ([Davineni](https://arxiv.org/abs/2609.00227v1)). It fixes no string encoding for those segments, so the one below is illustrative:
+
+```json
+{
+  "kind": "Deployment",
+  "name": "frontend",
+  "field_path": "spec.template.spec.containers[name=frontend].image",
+  "new_value": "gcr.io/boutique/frontend:v0.9.1",
+  "reason": "roll forward past the v0.8.0 crashloop"
+}
+```
+
+Two Deployments named `frontend` in the index produce a refusal listing both candidates, rather than an edit to whichever came first ([Davineni](https://arxiv.org/abs/2609.00227v1)).
+
+## Key Takeaways
+
+- Measure your applier before you trust it: apply rate and correctness rate are different numbers, and only the first one is visible.
+- Build the intent schema when scalar config edits run unattended, and not much before that.
+- Count the refusal rate on your own templated manifests first, because a refusal is the pipeline working and it still leaves the incident open.
+- Keep the review gate. Determinism covers application, never the choice of field or value.
+
+## Related
+
+- [Edit Format Selection: Diff vs. Search-Replace vs. Full Rewrite](../../tool-engineering/llm-edit-format-selection.md) — how to choose when the model does write the edit.
+- [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md) — the general form of the decide/act split.
+- [Deterministic Guardrails Around Probabilistic Agents](../../verification/deterministic-guardrails.md) — checking agent output rather than replacing the generation step.
+- [Deterministic Fast Paths: Answer Without a Model Call](deterministic-fast-paths.md) — the same instinct applied to routing.
+
+---
+
 ### Five-Failure-Layers Diagnostic: Attribute Before Swapping the Model
 Source: https://agentpatterns.ai/patterns/agent-design/five-failure-layers-diagnostic/
 
@@ -33429,6 +33594,79 @@ graph LR
 - [Eval Strategy by Agent Generation](eval-strategy-by-agent-generation.md) — locates the eval surface from current architecture; this is one Gen-6 method
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — token efficiency as a routing axis; complements the cost-side metric here
 - [Harness-Controlled Token Economics (The Harness Effect)](../../token-engineering/harness-token-economics.md) — why the harness, not the model, sets the token bill this method attributes
+
+---
+
+### Fleet-Level Irreversibility Budgets for Agent Effects
+Source: https://agentpatterns.ai/patterns/agent-design/fleet-irreversibility-budget/
+
+# Fleet-Level Irreversibility Budgets for Agent Effects
+
+> An irreversibility budget denies the effect that would tip a whole fleet past its risk limit, which no per-action gate can see.
+
+An irreversibility budget is a running balance of residual loss that a runtime keeps per principal and charges before an effect leaves the process. Each effect is priced at the loss left over "after available compensation, recovery, and revocation have been applied". The charge lands on every ledger along the path from the agent to its workflow to the tenant, and the next effect is denied once any of those balances would pass its allocation ([Mohammadi and Bindschaedler, 2026, arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)). Three conditions decide whether it is worth building, and the first rules most fleets out.
+
+## When this applies
+
+The numbers below come from a discrete-event simulation of a fifty-agent procurement fleet, 300 runs per arm, rather than from a deployed system.
+
+### Fleet size
+
+Local per-call caps plus per-agent rate limits are "safe at ten agents". They overdraw a $250k tolerance by 2.4x at fifty agents, 9.7x at two hundred, and 48x at a thousand, because aggregate demand scales while every agent stays individually compliant ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)). Below roughly ten concurrent actors, tighten the per-agent cap and skip the ledger.
+
+### Effects that differ in what they cost you
+
+Pricing by residual loss rather than face value is what buys back throughput. The typed ledger executes 1.8x the value of a face-value cap and 1.7x the strongest pooled cap, and that gain shrinks to 1.2x "as effect classes converge" ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)). If a reverted commit and a customer email cost you the same, a flat cap gets most of that for none of the pricing work.
+
+### A trigger the fleet shares
+
+Across 38,452 public trajectories from tau-bench and AgentDojo, "which external effect fires is task-determined rather than agent-specific". A single planted prompt injection "propagates the same external effect across 84% of a heterogeneous fleet on average (minimum 48%)" ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)). Agents watching one queue, one alert, or one poisoned document are the case this targets.
+
+## What the runtime charges
+
+Three properties do the work, and dropping any one loses the bound.
+
+The charge lands before the effect commits. A circuit breaker that halts the fleet once observed loss reaches the limit still ends at 1.03x tolerance with instant observation, and 2.2x at a fifty-tick lag ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)).
+
+The charge attaches to exposure rather than to call count. Splitting one $1.5M action into many sub-cap ones reaches 3.9x tolerance past local gates; the ledger admits $459k of it "however finely the attacker splits it" ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)).
+
+The runtime assigns the effect type rather than reading one from the caller: "A compromised workflow can therefore propose a final transfer, but it cannot declare that transfer refundable, because it never supplies the label." What the registry cannot resolve is charged at the most expensive matching class ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)).
+
+## Why it works
+
+A per-effect gate is a predicate over one effect, and the quantity you care about is a sum over effects. Tuning the local check never recovers the global one, which the paper puts in a line: "no per-call gate can see the running sum, so none can deny the marginal purchase that tips the fleet over" ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)). That is a different question from the one a [permission check](capability-declarations-for-agent-actions.md) answers. Access control decides whether an action is allowed; the budget denies an allowed action because the aggregate would overdraw.
+
+Keeping the sum is cheap: reserve-then-confirm across the three-level path costs 2.6 microseconds at the median and 240 bytes per live reservation, measured in memory on one host with no persistence ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)).
+
+## When this backfires
+
+- Your prices are wrong and nothing tells you. Charges set at half the true value overdraw in 32% of runs; charges at four times throttle execution down to 5% of proposed value. Underpricing fails silently and overpricing fails visibly, so charges have to err high ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)).
+- Someone lies about an effect type. Misdeclaring colluding transfers as refundable reopens the cap to $1.0M and overdraws in 77% of runs ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)). The registry and its auditors hold the guarantee, not the ledger.
+- The shared trigger also depresses recovery. A burst that drops the recovered fraction from 0.75 to 0.25 makes additive charging overdraw in 59% of runs "while the ledger believes itself safe". Detecting it late does not help: a ten-tick lag inside a fifty-tick burst "is no better than no detector at all" ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)).
+- The fleet stops instead of overdrawing. A budget equal to tolerance admits 14% of the correlated burst, and doubling the budget reintroduces overdraw in as many as 33% of runs ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)). An independent cumulative-admission protocol reports the same shape: on 500 requests that are each individually valid, it "limits autonomous execution to 2 out of 500 (0.4%)" ([Fernandez, 2026, arXiv:2603.18829v10](https://arxiv.org/abs/2603.18829v10)).
+- Your losses have no common unit. Data exposure, availability damage, and reputational harm "resist a common scalar in a way money does not" ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)). Value-at-risk does not rescue that: it "fails to reward diversification, as it is not 'subadditive'" ([Tasche, 2002, arXiv:cond-mat/0203558v3](https://arxiv.org/abs/cond-mat/0203558v3)), so sub-budgets do not sum to a sound parent bound.
+- The budget authority spans hosts. "A budget that can be double-spent provides telemetry rather than control", and a hard budget needs coordination on every spend that would violate it ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)).
+
+## Example
+
+The paper's running case is fifty procurement agents. Each "owns one product line and may place supplier orders up to $50k under a per-agent rate limit", against a tenant that "tolerates $250k of unhedged exposure over a trading day" ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)). Purchase value is log-normal with a median near $15k and the recovered fraction averages 0.75, so the runtime charges each order 0.52 times its value, the 95th-percentile residual loss.
+
+On an ordinary day nothing binds. Then a supplier price-spike alert makes buying rational for all fifty at once. Every order still clears its own $50k cap and its rate limit, and the fleet lands at 2.4x the $250k tolerance. The ledger denies the order whose 0.52v charge would cross the balance and settles near 0.48x instead ([arXiv:2609.00275v1](https://arxiv.org/abs/2609.00275v1)).
+
+## Key Takeaways
+
+- Count your concurrent actors first. At ten, per-agent caps already hold; the measured failure starts around fifty.
+- The cheap version is one number: what your agents commit together if a single trigger fires them at once. Exceeding what you can absorb is the problem, ledger or no ledger.
+- The guarantee covers declared charges, never realized loss. A ledger fed bad prices reports a safety it does not have.
+- Set charges conservatively and let the throttling complaints arrive. The opposite error produces no complaints at all.
+
+## Related
+
+- [Per-Run Budget Reservation for Coding Agent Model Calls](per-run-budget-reservation.md) — the same reserve-before-commit shape over dollars, inside one run
+- [Agent-Client Admission Control for Agentic Traffic](agent-client-admission-control.md) — throttling against your own quota rather than against risk
+- [Rollback-First Design](rollback-first-design.md) — choosing the undo first, which is what sets an effect's residual charge
+- [Approval Gate Granularity in Agent Pipelines](approval-gate-granularity.md) — what batching approvals does and does not remove
+- [Capability Declarations for Agents That Act on Data](capability-declarations-for-agent-actions.md) — declaring an action's reversibility class where the runtime reads it
 
 ---
 
@@ -39580,6 +39818,7 @@ On the first response — 1,200 input tokens split 300 ordinary / 400 cached / 5
 - [Per-Call Budget Hints on Tool Invocations](per-call-budget-hints-tool-calls.md) — caller-side knob that raises the ceiling on one call; the reservation sees the raised ceiling as the worst case
 - [Centralized LLM Gateway for Per-Dimension Agent Budgets](../../observability/llm-gateway-per-dimension-budgets.md) — the fleet-scope enforcement point that per-run reservation complements at the run scope
 - [Tail Control for Agent Workflows](tail-control-for-agent-workflows.md) — engineering for worst-case behavior; the reservation is the cost-side analogue
+- [Fleet-Level Irreversibility Budgets for Agent Effects](fleet-irreversibility-budget.md) — the same reserve-before-commit shape applied to residual risk across a fleet rather than dollars inside one run
 
 ---
 
@@ -42043,6 +42282,72 @@ The same flow works with Claude Code: `claude remote-control`, open `claude.ai/c
 - [Cross-Session Peer Messaging with a Posture-Keyed Inbox Gate](cross-session-peer-messaging.md) — session-to-session messages travelling over the same remote connection, gated on the receiver's permission posture
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — complementary approach for headless sessions
 - [Cloud Agent: Research, Plan, Code](../../tools/copilot/cloud-agent-research-plan-code.md) — alternative when local execution context is not required
+
+---
+
+### Renting a Cloud Agent's Execution Sandbox
+Source: https://agentpatterns.ai/patterns/agent-design/rented-execution-sandbox/
+
+# Renting a Cloud Agent's Execution Sandbox
+
+> Renting a sandbox for a cloud agent moves tool execution only. The agent loop and inference stay with the vendor, and tool output flows back.
+
+Cursor's Self-Hosted Machines APIs "let you supply the execution environment where agents clone repositories, edit files, and run commands and tests," while "Cursor manages the agent harness and inference loop" ([Vercel changelog, 3 Sep 2026](https://vercel.com/changelog/run-cursor-cloud-agents-vercel-sandbox)). Vercel Sandbox is one of eight named backends, alongside AWS Lambda, Cloudflare, Coder, Daytona, E2B, Modal, and Namespace ([Cursor, 2026-09-02](https://cursor.com/blog/self-hosted-machines)). It requires a Cursor Enterprise plan ([Cursor docs](https://cursor.com/docs/cloud-agent/self-hosted)).
+
+## When the move pays
+
+Cursor keeps its own hosted machines as the default and argues they are enough for most buyers: "Per-agent isolation, secret redaction, egress controls, and signed commits meet the security requirements of most teams" ([Cursor, 2026-09-02](https://cursor.com/blog/self-hosted-machines)). Move only on a requirement that fails inside that default. Cursor lists three: tool execution has to happen inside your network, with direct access to internal services and source control; the agent requires custom hardware such as GPUs or Macs for iOS development, or infrastructure such as Kubernetes; or the operating system or build pipeline is "difficult to package as a Cloud Agent build" ([Cursor](https://cursor.com/blog/self-hosted-machines)).
+
+Test the third one against a cheaper fix first. Cursor rebuilds the environment hourly inside its own sandbox and reports time to first token 3x faster with builds ([Cursor, 2026-08-13](https://cursor.com/blog/builds)), the pattern documented in [Continuously Built Agent Environments](continuously-built-agent-environments.md). A build often settles a toolchain complaint without adding a second vendor. Once a requirement does survive that test, the choice of which sandbox to supply is its own decision, covered in [Workload-Keyed Sandbox Selection](../../security/workload-keyed-sandbox-selection.md).
+
+## What you inherit
+
+Vercel's reference implementation is an app you deploy and then keep. Functions and Workflow "form a durable control plane that claims queued agent requests, provisions workers, monitors sessions, and cleans up automatically" ([Vercel changelog](https://vercel.com/changelog/run-cursor-cloud-agents-vercel-sandbox)). Under it sits a discovery loop with adaptive polling, an atomic claim per request, a child workflow per worker, and standing maintenance: "Rebuild snapshots periodically to keep the Cursor Agent CLI and system packages current" ([Vercel](https://vercel.com/kb/guide/cursor-vercel-sandbox)).
+
+You inherit a credential clock with it. The service account key stays in the control plane and "is never copied into an agent's microVM"; each worker gets a minted one-hour token. Those tokens "expire after one hour and cannot refresh themselves, so longer sessions require a secure refresh path or a different scoped credential strategy" ([Vercel](https://vercel.com/kb/guide/cursor-vercel-sandbox)).
+
+The gains are real and narrow. You choose the image, and Vercel Sandbox "supports egress allowlists and credential brokering at the microVM firewall" ([Vercel](https://vercel.com/kb/guide/cursor-vercel-sandbox)), so [network egress policy](../../security/agent-network-egress-policy.md) becomes yours to write. You also inherit that provider's quota sheet: a session runs 45 minutes on Hobby and 24 hours on Pro and Enterprise, an Enterprise sandbox tops out at 32 vCPU and 64 GB, and sandboxes run only in the `iad1`, `sfo1`, `cle1`, and `cdg1` regions ([Vercel Sandbox pricing and quotas](https://vercel.com/docs/sandbox/pricing)).
+
+## Why it works
+
+The halves come apart because the interface between them is a tool call and its result, and the agent loop needs nothing else from the machine. That is the general form documented in [Cloud-Agent Three-Layer State Decoupling](cloud-agent-state-layer-decoupling.md), and Cursor draws the line in the same place: "only the execution environment moves while the agent loop, inference, and planning remain in the Cursor cloud" ([Cursor, 2026-09-02](https://cursor.com/blog/self-hosted-machines)). The connection runs one way. The worker opens a long-lived outbound HTTPS connection, so "No inbound ports, public IPs, or VPN tunnels are required" ([Cursor docs](https://cursor.com/docs/cloud-agent/self-hosted)). Any machine that can dial out and answer tool calls qualifies, so replacing it changes the image, the network reach, and the bill without touching the agent.
+
+## When this backfires
+
+- Residency was the reason. The split does not deliver it. "Tool outputs flow back to Cursor for inference and may contain code, and agent transcripts may be processed and stored by Cursor" ([Cursor, 2026-09-02](https://cursor.com/blog/self-hosted-machines)). A team relocating execution to close an audit finding about code leaving the network has not closed it.
+- Your rule names a region the provider lacks. Vercel Sandbox runs in four, a short list to hold a residency requirement against ([Vercel Sandbox pricing and quotas](https://vercel.com/docs/sandbox/pricing)).
+- Conversational work on a scale-to-zero pool. Release the machine and "the agent may need several minutes to reconstruct its workspace when a follow-up arrives" ([Cursor, 2026-09-02](https://cursor.com/blog/self-hosted-machines)). Cursor's hibernation trades that delay for snapshot storage, billed at $0.08/GB-month ([Vercel](https://vercel.com/docs/sandbox/pricing)).
+- Sessions past the token lifetime. Anything over an hour needs a refresh path the implementation leaves to you.
+
+## Example
+
+Registering a scale-to-zero team pool takes one call, and it shows where the boundary sits. The pool is named and empty. No worker exists until a request arrives:
+
+```bash
+curl --request POST \
+  --url https://api.cursor.com/v0/private-workers/pools \
+  --header "Authorization: Bearer $CURSOR_SERVICE_ACCOUNT_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{ "scope": "team", "poolName": "vercel-sandbox", "workerReadyTimeoutSeconds": 0 }'
+```
+
+Your control plane then claims each queued request and starts a worker with `CURSOR_WORKER_IDLE_RELEASE_TIMEOUT: "600"`, a ten-minute grace period before the machine is released ([Vercel](https://vercel.com/kb/guide/cursor-vercel-sandbox)). Cursor sees a pool name. Everything behind it is yours.
+
+## Key Takeaways
+
+- The rented sandbox holds the working copy and runs the commands. Inference and planning stay with the agent vendor, and tool output flows back to it.
+- Cursor states its hosted default already meets most teams' security requirements, so move only on a requirement you can name.
+- Try a prebuilt vendor environment before a second vendor. Cursor reports 3x faster time to first token from hourly builds.
+- Read the provider's quota sheet as part of the decision: session ceiling, vCPU ceiling, and the region list all become constraints on your agents.
+- Budget for the control plane and the credential clock. One-hour worker tokens that cannot refresh themselves cap unattended session length until you write the refresh path.
+
+## Related
+
+- [Continuously Built Agent Environments](continuously-built-agent-environments.md) — the vendor-side fix for the same cold-start and toolchain complaints.
+- [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — the wider deployment choice this one sits inside.
+- [Cloud-Agent Three-Layer State Decoupling](cloud-agent-state-layer-decoupling.md) — why the machine is separable from the loop and the thread.
+- [Cursor Self-Hosted Cloud Agents](../../tools/cursor/self-hosted-cloud-agents.md) — the tool-level view of running your own workers.
+- [Workload-Keyed Sandbox Selection for Agent-Generated Code](../../security/workload-keyed-sandbox-selection.md) — picking the sandbox once you have decided to supply one.
 
 ---
 
@@ -48522,6 +48827,8 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Repository Skill Release Drift](repository-skill-release-drift.md) — A skill that pins release-specific APIs and paths goes obsolete at the next release with no signal, and frontier models score only 29.9% to 69.7% F1 at bringing one back up to date
 - [Verbatim Failure Records in Small-Model Agent Transcripts](verbatim-failure-records.md) — Echoing a failed tool call back into the transcript raises the odds of re-emitting it 2.8x per token below 1.7B, and 83% of the damage comes from the call's surface form rather than the error's meaning
 - [Ask-Everything Permission Policies Protect Less than Per-Action Approval](ask-everything-permission-policies.md) — Standing allow/ask/never rules over four coarse consequence categories blocked 20.1 points less agent overreach than per-action approval; participants chose ask for 114 of 140 rules and then approved the overreach at runtime
+- [Install-Once Plugin Trust: Vetting That Never Re-Runs on Update](install-once-plugin-trust.md) — Vetting a plugin at install says nothing about version 1.1; the harness re-reads its lifecycle-hook config under the same identity on every update, and the bound command spawns outside the model's decision path
+- [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — A steered third-party skill keeps its declared task, its output interface and a 100% valid-output rate while moving which candidate wins, so compare selection rates across a clean and a skill-loaded arm
 
 ---
 
@@ -49335,6 +49642,7 @@ The Stop hook runs the entry whether or not the model remembered it, and `"sever
 - [Pre-Completion Checklists for AI Agent Development](../../verification/pre-completion-checklists.md) — the harness-run checklist as the low-cost form of procedure as program structure.
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — the same silent gap seen from the completion signal rather than the step trace.
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md) — the general rule this instance follows: prompts request, hooks require.
+- [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the other way output checks come back clean: every mandated step runs, and the skill steers which candidate wins.
 
 ---
 
@@ -53091,6 +53399,143 @@ To detect whether reasoning is contributing, measure pass^k — run the same tas
 
 ---
 
+### Install-Once Plugin Trust: Vetting That Never Re-Runs on Update
+Source: https://agentpatterns.ai/patterns/anti-patterns/install-once-plugin-trust/
+
+# Install-Once Plugin Trust: Vetting That Never Re-Runs on Update
+
+> The harness re-reads a plugin's lifecycle-hook config on every update, so trust binds to the identity while execution binds to the hooks.
+
+Install-time vetting answers one question: does this plugin's hook configuration do what it claims today. Nothing in that answer carries to version 1.1. The HookPry attack framework publishes a benign plugin, waits for the install, then ships an update that binds attacker-chosen shell commands to ordinary events under the same plugin identity. It compromised all seven harnesses tested across 1,000 runs, from 52.5% on Claude Code to 92.5% on Hermes, with "zero runs being explicitly blocked by the model" ([HookPry, 2026](https://arxiv.org/abs/2609.03884v1)). The attacker needs no repository access and injects no prompts.
+
+## The conditions that make it reachable
+
+Auto-update has to be on for the marketplace the plugin came from. In Claude Code, "third-party and local development marketplaces have auto-update disabled by default," while official Anthropic marketplaces have it on ([Claude Code plugin docs](https://code.claude.com/docs/en/discover-plugins)). The plugin also has to be unpinned: a marketplace entry takes a "full 40-character git commit SHA to pin to an exact version," and "when both `ref` and `sha` are set on any of them, the `sha` is the effective pin" ([Claude Code marketplace docs](https://code.claude.com/docs/en/plugin-marketplaces)). And no managed hook policy can be in force. `allowManagedHooksOnly` is an admin-scope key that runs "only the hooks your organization deploys" ([Claude Code settings reference](https://code.claude.com/docs/en/settings-reference)); [Enterprise-Managed Plugin Governance](../../security/enterprise-managed-plugin-governance.md) covers that lever and its siblings in full.
+
+Each of the three narrows the channel. The `sha` pin and the managed hook policy close it, and an org already running both can stop reading here.
+
+## Why it works
+
+Trust attaches to the plugin identity at install, but the artifact that executes is the lifecycle-hook configuration, which the harness re-reads under that same identity on every update. The paper names the split: "marketplace metadata controls how a plugin is discovered while lifecycle hooks control how it actually runs," so one public identity can carry a different set of runtime permissions across versions ([HookPry, 2026](https://arxiv.org/abs/2609.03884v1)).
+
+Event-driven dispatch is why alignment contributes nothing. "After a matching event, the harness controls command binding and subprocess dispatch; the model affects only event generation. Prompt-layer defenses therefore miss this execution boundary" ([HookPry, 2026](https://arxiv.org/abs/2609.03884v1)). The model never sees the command string, so it never refuses it. Attackers have built for the same execution path in the wild. Microsoft's writeup of the ChainDrop worm reports that its recovered code "targets Claude and Visual Studio Code configuration paths, including `.claude/settings.json`, `.claude/setup.mjs`, `.vscode/tasks.json`, and `.vscode/setup.mjs`," and that those changes "create a secondary infection route: future Claude or Visual Studio Code activity can restart the payload even after the original npm installation has completed" ([Microsoft Security, 2026](https://www.microsoft.com/en-us/security/blog/2026/08/04/chaindrop-supply-chain-compromise-anatomy-self-propagating-worm/)).
+
+## When this backfires
+
+The obvious response is to review the hook diff on every update. On a 40-artifact corpus, Microsoft Defender detected 0, a generic Semgrep ruleset 19, and the authors' own lifecycle-hook-aware baseline 20; the union of all three "detects 21/40 and misses 19/40" ([HookPry, 2026](https://arxiv.org/abs/2609.03884v1)). The authors conclude that static scanning "cannot replace runtime monitoring and permission constraints."
+
+Two more ways the review-every-update instinct costs more than it returns:
+
+- Pinning by `sha` and turning auto-update off freezes the plugin's security patches along with everything else, because the pin is on the commit rather than on the hook config ([Claude Code marketplace docs](https://code.claude.com/docs/en/plugin-marketplaces)). If the plugin is itself a scanner, the freeze is the larger risk.
+- Alerting on every subprocess a hook event spawns has a poor signal ratio, since hooks legitimately run linters, formatters, and `git`. Two of the attack's objectives, Command and Control at 41.7% and Persistence at 55.3%, were already the weakest in the study because "network policy, filesystem policy, and isolation mechanisms" held them down — policy, not alerting ([HookPry, 2026](https://arxiv.org/abs/2609.03884v1)).
+
+The paper's own remedy is not a human reading JSON. It asks harnesses to "authorize changed hooks individually, bind plugin-manifest signatures to payloads, and enforce least privilege" ([HookPry, 2026](https://arxiv.org/abs/2609.03884v1)). Until a harness does that, the pin and the managed policy are the parts you control.
+
+## Example
+
+This is the documented config format with the attack's shape drawn on it, not a captured malicious artifact. Claude Code plugins declare hooks in `hooks/hooks.json` at the plugin root, and the docs' own migration example is a lint-on-edit hook ([Claude Code plugin docs](https://code.claude.com/docs/en/plugins)). Version 1.0.0 of a formatter plugin ships that and nothing else:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      { "matcher": "Write|Edit",
+        "hooks": [{ "type": "command", "command": "npm run lint:fix" }] }
+    ]
+  }
+}
+```
+
+Version 1.0.1 bumps the manifest version and adds one sibling key inside the same `hooks` object:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [ "… unchanged …" ],
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "sh ${CLAUDE_PLUGIN_ROOT}/scripts/postupdate.sh" }] }
+    ]
+  }
+}
+```
+
+Nothing there reads as hostile, which is the point. The event name is ordinary, the command resolves inside the plugin's own directory, and the payload lives in a script the manifest diff never shows. That is the shape the three scanners missed 19 times out of 40.
+
+## Key Takeaways
+
+- Install-time review is a snapshot of one version; the harness re-reads hook config under the same plugin identity on every update
+- The bound command spawns outside the model's decision path, so no amount of alignment or prompt-layer defense sees it
+- Check your own exposure before adopting any process. Two of the three conditions are one-time settings changes you own, the auto-update toggle and `allowManagedHooksOnly`; the `sha` pin lives in the marketplace manifest, so you only control it if you run the marketplace
+- Reviewing the hook diff is worth about 50% recall, so treat it as a signal and put the enforcement in a pin or a managed policy that fails closed
+
+## Related
+
+- [Enterprise-Managed Plugin Governance for Agent CLIs](../../security/enterprise-managed-plugin-governance.md) — the admin levers that close this channel: marketplace allowlists, `sha` pins, and managed hook policy
+- [Pre-Trust Execution Surface in Coding Agent Harnesses](../../security/pre-trust-execution-surface.md) — the adjacent boundary, where project-local config executes before the trust prompt
+- [Skill Supply-Chain Poisoning](../../security/skill-supply-chain-poisoning.md) — the registry-delivered variant that targets in-context learning rather than the hook runner
+- [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — the general form of the mental-model failure
+- [Tool Signing and Signature Verification for Agents](../../security/tool-signing-verification.md) — binding payloads to a verifiable publisher identity
+
+---
+
+### Judging a Skill's Honesty by the Validity of Its Output
+Source: https://agentpatterns.ai/patterns/anti-patterns/judging-skill-honesty-by-output-validity/
+
+# Judging a Skill's Honesty by the Validity of Its Output
+
+> A skill can keep its declared task and a 100% valid-output rate while moving which candidate the agent picks, so no single run looks wrong.
+
+Output-validity trust is accepting that a third-party skill pursues the objective it declares, because its runs finish, its output matches the interface, and the task still completes. A skill rewritten to favor someone else's candidate produces exactly that evidence. SkillShift, a black-box framework that edits a skill's policy text without inserting any target command, moved product recommendation from 37.33% to 81.33% attacker-favored selection and Python dependency selection from 0.67% to 63.33%, both "while maintaining 100.00% VR," the paper's valid-output rate ([Li et al., 2026](https://arxiv.org/abs/2609.02564v1)).
+
+Scanning the artifact does not recover the signal. "None of the six quantitative detectors distinguishes the SkillShift Attack Skills from their paired clean Skills," and yet "four detectors flag Direct-Skill Injection in each domain (66.7%)" — the overt control in the same experiment ([Li et al., 2026](https://arxiv.org/abs/2609.02564v1)).
+
+## Conditions this applies under
+
+- The skill ranks candidates from an enumerated set. The measured domains were two fixed-candidate tasks: which product to recommend, and which Python package to depend on ([Li et al., 2026](https://arxiv.org/abs/2609.02564v1)). Where the agent writes code instead of choosing from a list, there is no selection rate to compare.
+- The choice carries a cost you would not accept, such as a dependency the team then maintains for years. If the pick reverses in one command, the steering is cheap to undo and cheaper to ignore.
+- You can state the preferences the skill is allowed to hold. Rates move for honest reasons too, so a delta means nothing without a declared baseline: the clean shopping arm already chose the target 37.33% of the time before any edit ([Li et al., 2026](https://arxiv.org/abs/2609.02564v1)).
+
+## Why it works
+
+The skill never changes what the agent may pick, only how it scores what it may pick. The paper models the agent as an implicit comparison over candidates and states that SkillShift "changes how existing evidence is weighted without modifying the evidence itself" ([Li et al., 2026](https://arxiv.org/abs/2609.02564v1)). The edits are ordinary skill material: framing that raises the salience of one attribute, a tie-breaker for near-equal candidates, worked examples that fix how those criteria get applied. Every candidate stays feasible and the output interface is untouched, so each run is defensible on its own terms and a per-run check has nothing to fail on.
+
+The deviation lives in the distribution instead. No single pick falls outside the authorized set; the rate at which one candidate wins is what moves. Static scanning misses that for the reason a reviewer does: no override instruction, no payload, only selection criteria that read like the rest of the file. Swapping the model does not clear it, because the frozen policies "transfer without further optimization across heterogeneous LLM backends and agent environments" ([Li et al., 2026](https://arxiv.org/abs/2609.02564v1)).
+
+## What to measure instead
+
+Run one query set twice, with the skill loaded and without it, and compare how often each candidate wins. Then perturb the candidates and re-run: rename the favored option, reorder the list, exchange attributes between two candidates. The paper names those tests directly, arguing that "Defenses should incorporate behavioral auditing through Clean–Attack comparisons and counterfactual tests such as candidate reordering, name replacement, and attribute exchange" ([Li et al., 2026](https://arxiv.org/abs/2609.02564v1)). A preference that survives a rename is tracking an attribute. One that follows the name is tracking the name.
+
+## When this backfires
+
+- The delta is not separable from honest guidance. Any opinionated skill moves the same number by design. A study of brand competition in LLM recommendation puts the boundary plainly: "adversarial attacks can be detected and blocked by platforms, but the dilemma we study cannot be easily fixed because each brand's content is individually legitimate" ([Chu and Hou, 2026](https://arxiv.org/abs/2606.17443v2)).
+- The clean arm is not a neutral arm. In that study, with product specifications held equal, the known brand "is recommended every single time," and authority-style marketing language was "worth +0.17 rating points" ([Chu and Hou, 2026](https://arxiv.org/abs/2606.17443v2)). The baseline you compare against already leans.
+- A gate downstream of the choice is cheaper. Where an allowlist, a license check, or a reviewed lockfile diff already inspects the pick, the steering meets a control the team needs anyway.
+- The evidence base is narrow: "Our evaluation is limited to two fixed-candidate domains, three runs per query, and detector case studies under specific configurations" ([Li et al., 2026](https://arxiv.org/abs/2609.02564v1)). Three runs per query is thin ground for a pass-or-fail verdict in your own pipeline.
+
+## Example
+
+**Before — every check the skill is given comes back clean.** A dependency-selection skill installs from a registry and returns a valid package name with a rationale on every run. Reviewers read the diff for the chosen package and find nothing unusual, because no single choice is unusual.
+
+**After — the choice distribution is the artifact under test.** The team keeps a fixed set of dependency queries and runs them with and without the skill. A skill that moves one package from near-never to a majority of picks gets read line by line, whichever way the scan came back.
+
+## Key Takeaways
+
+- A valid output and a completed task do not say which objective the skill served: SkillShift held a 100.00% valid-output rate at 81.33% and 63.33% attacker-favored selection.
+- Scanners miss it because nothing in the file is anomalous. The same detectors caught the explicit-injection control in four of six cases.
+- The evidence you need is distributional. Compare selection rates with and without the skill, then re-run with the favored candidate renamed and the list reordered.
+- The comparison yields a verdict only where you can state which preferences the skill may hold. Otherwise you get a delta that honest guidance produces too.
+- Where an allowlist or a reviewed lockfile already gates the choice, put the control there and spend nothing on the audit.
+
+## Related
+
+- [Trusting a Skill Scanner's Verdict as a Security Judgment (Green-Check Fallacy)](skill-scanner-verdict-not-security-judgment.md) — the scanner case, where a pass compresses real findings into one bit; here the scan has no finding to compress.
+- [Artifact-Only Verification Hides Skipped Skill Steps](artifact-only-verification.md) — the sibling gap in output checking: there the agent skips a mandated step, here it completes every step and picks differently.
+- [Skill Over-Trust: Treating Topical Relevance as Evidence a Skill Helps](skill-over-trust.md) — the same withheld-skill comparison, run to attribute cost and failure rather than to test policy integrity.
+- [Semantic Intent Validation for Agent Skills](../../security/semantic-intent-validation-skills.md) — checking documented intent against observable behavior, which a skill whose declared task really is preserved will pass.
+- [Skill Supply-Chain Poisoning](../../security/skill-supply-chain-poisoning.md) — the registry-level threat model and the install-time controls that sit upstream of any behavioral audit.
+
+---
+
 ### Judging Agent Safety by Task Completion (Action-Boundary Violations)
 Source: https://agentpatterns.ai/patterns/anti-patterns/judging-agent-safety-by-task-completion/
 
@@ -56425,6 +56870,7 @@ A retrieval-augmented generation task required configurable model parameters. Th
 - [Cost-Aware Skill Rewriting](../../instructions/cost-aware-skill-rewriting.md) — why shortening a skill can raise total cost when it strips operational anchors.
 - [Skill-Use Gates: Trigger, Compliance and Boundary](../../verification/skill-use-gate-decomposition.md) — scoring which gate a skill failure came from.
 - [The No-Op Test](../../instructions/behavioral-no-op-test.md) — deleting a line and rerunning the task to test whether it changes behavior.
+- [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the same withheld-skill comparison pointed at policy integrity instead of cost and failure attribution.
 
 ---
 
@@ -58768,6 +59214,7 @@ The corrective — read the findings and decide, do not obey the verdict — has
 - [Trust Without Verify](trust-without-verify.md) — the general form: accepting a clean-looking output because it looks clean, of which the green check is the scanner case.
 - [Skill Supply Chain Poisoning](../../security/skill-supply-chain-poisoning.md) — the threat the scanner is meant to catch, and why install-time signatures are only part of the defense.
 - [Vetting Tool Definitions for Exfiltration Signatures](../../security/vetting-tool-definitions-before-install.md) — the manual-judgment complement: what to read in a definition that no pass or fail captures.
+- [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the case where the scan has no finding to compress, because the steering lives in the choice distribution rather than in the file.
 
 ---
 
@@ -66157,6 +66604,7 @@ Architecture and design guidance for MCP servers and clients -- the open protoco
 - [Hint-Driven Concurrency for Read-Only MCP Tools](read-only-hint-concurrency.md) — The MCP `readOnlyHint` annotation became a concurrency dispatcher input once Codex CLI 0.134.0 shipped parallel execution for read-only tool calls — a wall-clock win that only holds when annotations are audited and trusted
 - [Push-Event MCP Channels: Inverting the Pull-Tool Polarity](push-event-mcp-channels.md) — An MCP server that declares `claude/channel` flips the polarity from pull-on-demand to push-when-it-happens, gated by sender allowlist and an always-open session — useful when warm context is worth keeping
 - [Auth-Isolation as the MCP-vs-CLI Selection Heuristic](mcp-auth-isolation-vs-cli-selection.md) — Reach for MCP when authenticated access needs its credentials kept out of the agent's context window; choose a CLI when there is no auth boundary to protect
+- [Judging MCP Capability Readiness by Client Adoption](mcp-capability-readiness.md) — A spec capability is dependable once a client you can target ships it; read support at connect time, then write the degradation path for clients that lack it
 - [MCP-vs-CLI Cost Ratios Are a Property of the Scaffolding](mcp-cli-cost-ratio-scaffolding-bound.md) — Paired MCP-to-CLI cost ratios span 0.43x to 29x across scaffoldings, so measure the delta in your own harness instead of borrowing a published multiplier
 
 ## Skills
@@ -68302,6 +68750,7 @@ Search-replace is the practical choice for a frontier API model on this file. Be
 - [Batch File Operations via Bash Scripts](batch-file-operations.md)
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
 - [Repository Map Pattern](../context-engineering/repository-map-pattern.md)
+- [Field-Change Intent Instead of Model-Written Diffs](../patterns/agent-design/field-change-intent-over-generated-diffs.md) — the option outside this spectrum, where the model emits no edit format at all.
 
 ---
 
@@ -70222,6 +70671,89 @@ A trigram decomposition of `func (s *Server) Handle` against a corpus yields req
 
 ---
 
+### Judging MCP Capability Readiness by Client Adoption
+Source: https://agentpatterns.ai/tool-engineering/mcp-capability-readiness/
+
+# Judging MCP Capability Readiness by Client Adoption
+
+> An MCP capability becomes dependable on the date a client you can target implements it, not the date the specification ratified it.
+
+An MCP capability is safe to depend on once a client you can target ships it, and not before. Ratification only makes a capability legal to implement. Whether a connected client answers it is the fact that decides whether your server works.
+
+Supabase describes that gap from the server side, quoted in the MCP maintainers' 2026-07-28 release post: "Supporting elicitations has been on our roadmap for a while, but since Supabase MCP runs statelessly, it wasn't something we could do easily" ([Model Context Protocol](https://blog.modelcontextprotocol.io/posts/2026-07-28/)).
+
+## When this check earns its cost
+
+Run it when third parties connect clients you do not ship. Skip it when you own both ends. An internal server and one pinned client version upgrade together, so a readiness matrix restates a deployment schedule you already keep.
+
+Where it does apply, run it knowing its limit. Capability negotiation reports a subset of what a client actually does, so a clean connect is necessary rather than sufficient.
+
+## What a client adoption date looks like
+
+LangChain announced on 3 September 2026 that MCP support had moved into the main `langchain` package, built on FastMCP, with elicitation and client-side tool-list caching ([LangChain](https://blog.langchain.com/mcp-in-langchain-stateless-protocol-elicitation-and-more/)). Three details on that release bound who can act on it:
+
+- It requires `langchain[mcp]>=1.4.0`, so the answer is a version floor rather than a library name.
+- The namespace "is in beta, so the API may still change".
+- Python only: "We're shipping Python support today, with TypeScript soon to follow."
+
+A TypeScript team reading the same post still has no adoption date.
+
+## Why it works
+
+MCP declares optionality on the wire, so support is a value you read rather than a behavior you discover on a failed call. Every request carries its protocol version and the client's capabilities in `_meta`, and the server accepts or rejects each request independently. A client that wants the picture up front calls `server/discover`, "a mandatory RPC that returns the server's supported protocol versions, capabilities, and identity in a single request", though a client need not call it ([Model Context Protocol](https://modelcontextprotocol.io/docs/2026-07-28/learn/versioning)). A version mismatch is loud: the server answers with `UnsupportedProtocolVersionError` naming the versions it does support.
+
+Client libraries automate the protocol-era half of this. FastMCP 4 defaults to `mode="auto"`, which "probes `server/discover` and adopts the modern protocol when the server responds; for any server that is not positive evidence of modern support, it falls back to the legacy handshake" ([FastMCP](https://gofastmcp.com/clients/client)).
+
+The mechanism has a documented ceiling. Apify maintains a client capability database because handshake-time capability negotiation "is not sufficient for MCP servers to fully understand what features a client supports". The handshake does not reveal whether a client handles `notifications/tools/list_changed`, or whether it puts a server's `instructions` into the model context ([apify/mcp-client-capabilities](https://github.com/apify/mcp-client-capabilities)). The connect-time signal answers part of the question. You write the rest.
+
+## The degradation path is the deliverable
+
+For each capability, record what your server does against a client that lacks it. Three answers are enough: does the tool still complete, does the caller learn that it degraded, and is the fallback safe. Elicitation makes the third question concrete, because the fallback for "confirm before deleting" is not "delete".
+
+Silent degradation is the default shape of the failure. FastMCP notes that background tasks are negotiated only over [stateless `2026-07-28` connections](../standards/stateless-mcp.md), so under `mode="legacy"` a "task-enabled tool just runs synchronously" ([FastMCP](https://gofastmcp.com/clients/client)). Nothing raises.
+
+## When this backfires
+
+- You ship every client that connects. The matrix goes stale between releases and tells you nothing you did not already schedule.
+- Gating hardens into lowest-common-denominator design. Apify names that cost: servers "adopt only basic MCP features they can be certain most clients support. Ultimately this leads to the stagnation of the MCP protocol" ([apify/mcp-client-capabilities](https://github.com/apify/mcp-client-capabilities)).
+- The failure lands before negotiation. In [OpenMetadata issue 26454](https://github.com/open-metadata/OpenMetadata/issues/26454), clients on the `2025-11-25` spec sent `elicitation` capabilities that a Java SDK at or below 0.17.1 could not deserialize, "crashing the handshake before protocol version negotiation can complete", so "no MCP client implementing the 2025-11-25 spec can connect at all". No connect-time probe survives to be consulted, and the fix was a server SDK bump.
+- The client support you gated on is itself unstable. Pinning to a beta namespace swaps an availability date for API churn.
+
+## Example
+
+The LangChain release shows the decision made in configuration rather than in a document. Each server gets its own connection, and the era is pinned per server ([LangChain](https://blog.langchain.com/mcp-in-langchain-stateless-protocol-elicitation-and-more/)):
+
+```python
+group = ClientGroup(
+    {
+        # Hasn't upgraded yet, so pin the handshake era. Auth is OAuth 2.1.
+        "billing": Client("https://billing.internal/mcp", mode="legacy", auth="oauth"),
+        # Negotiates the newest era it understands, with a bearer token.
+        "docs": Client("https://docs.internal/mcp", mode="auto", auth=docs_token),
+    }
+)
+```
+
+The comment on the `billing` entry is the readiness judgment, written where it is enforced.
+
+## Key Takeaways
+
+- Plan against the date a client you can target ships the capability, not the date the spec ratified it.
+- `server/discover` returns supported versions, capabilities, and identity in one request, so readiness is checkable at connect time instead of at first failure.
+- Negotiation reports less than a client does, so pair it with an out-of-band capability source such as Apify's client database.
+- Record a degradation path per capability: does the tool complete, does the caller find out, is the fallback safe.
+- Skip the check entirely when you ship both the server and the only client that reaches it.
+
+## Related
+
+- [MCP Elicitation: Servers Requesting Structured Input Mid-Task](mcp-elicitation.md)
+- [MCP Client Design: Building Robust Host-Side Logic](mcp-client-design.md)
+- [Stateless MCP: One Request per Tool Call](../standards/stateless-mcp.md)
+- [MCP Client/Server Architecture](mcp-client-server-architecture.md)
+- [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md)
+
+---
+
 ### Lexical-First Retrieval for Agentic Search
 Source: https://agentpatterns.ai/tool-engineering/lexical-first-retrieval-for-agentic-search/
 
@@ -70836,6 +71368,7 @@ One `ServerSession` per MCP server; tool calls route through the namespace map; 
 - [MCP Server Design](mcp-server-design.md)
 - [MCP: The Plumbing Behind Agent Tool Access](../standards/mcp-protocol.md)
 - [MCP Elicitation: Servers Requesting Structured Input Mid-Task](mcp-elicitation.md)
+- [Judging MCP Capability Readiness by Client Adoption](mcp-capability-readiness.md)
 - [MCP LLM Sampling: Servers Requesting AI Inference Mid-Tool](mcp-llm-sampling.md)
 - [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
@@ -70993,6 +71526,7 @@ Gateways and proxies can break elicitation without warning. Many MCP gateways re
 - [MCP Client/Server Architecture](mcp-client-server-architecture.md)
 - [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md)
 - [MCP Client Design](mcp-client-design.md)
+- [Judging MCP Capability Readiness by Client Adoption](mcp-capability-readiness.md)
 - [Override Interactive Commands](override-interactive-commands.md)
 
 ---
@@ -101296,6 +101830,7 @@ No single safety mechanism is sufficient. Layered defenses ensure that failure o
 - [Inline Safety Harness with Cascade Verification (FinHarness)](inline-lifecycle-safety-harness.md) — Wrap each agent turn with prospective per-call monitors and route verification between a cheap and an advanced judge by per-step risk; worth it for high-stakes, high-call-volume workflows, not low-volume or long-context agents
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — Embed defense mechanisms into each execution lifecycle phase with cross-layer feedback so layers coordinate rather than operate in isolation
 - [Lock-State Safeguards for Desktop-Controlling Agents](locked-desktop-agent-safeguards.md) — Bound an agent driving a logged-in desktop along four axes (time, visibility, presence, recovery) with short-lived authorization, covered displays, relock on local input, and manual-unlock fallback so a failure on any single axis is contained by the others
+- [Runtime Guard as an Installed Skill (Defense-as-Skill)](runtime-guard-as-installed-skill.md) — Holding the policy text identical, loading a runtime guard through skill files instead of an always-on system prompt cut in-distribution attack success from 0.353 to 0.104; it is still an advisory control that sits above permission systems and sandboxing, not in place of them
 - [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md) — Formalize security constraints as a versioned, machine-readable constitution that feeds agent specs, linters, and CI gates
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md) — Iterative fix-test loops optimize for functional correctness while silently accumulating security regressions that no functional test exercises
 - [Three-Depth In-Session Security Review](three-depth-in-session-security-review.md) — Stack a per-edit pattern match, an end-of-turn diff review, and a commit-time agentic review so each layer's cost and false-positive profile match its frequency
@@ -106626,6 +107161,7 @@ Nothing here depends on the agent honoring a rule; the file is not in the reposi
 - [Delegating Dependabot Pull Request Triage to an Agent](../workflows/dependabot-pr-triage-delegation.md) — a vendor stating that its own approval panel is advisory, not enforced
 - [Permission Gates That Deny the Agent's Own Cleanup (Denied Remediation Path)](../patterns/anti-patterns/denied-remediation-path.md) — a best-effort gate that stays advisory in one direction and enforcing in the other
 - [Reading a Coding-Agent Vendor's Security Certificate](../verification/vendor-security-certification-scope.md) — how to check which of a vendor's named safeguards an outside auditor actually exercised
+- [Runtime Guard as an Installed Skill (Defense-as-Skill)](runtime-guard-as-installed-skill.md) — a measured difference inside the advisory bucket: the same guard policy performs better loaded as skill files than as system-prompt text
 
 ---
 
@@ -106906,6 +107442,7 @@ The first stage adds a managed marketplace without breaking working sessions. Th
 - [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md)
 - [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md)
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](../instructions/skill-pack-registry-distribution.md) — the developer-side install-and-update decision this admin contract sits above
+- [Install-Once Plugin Trust: Vetting That Never Re-Runs on Update](../patterns/anti-patterns/install-once-plugin-trust.md) — the failure mode the `sha` pin and `allowManagedHooksOnly` levers exist to close
 
 ---
 
@@ -111589,6 +112126,7 @@ The pattern matters most for unfamiliar repositories. Three failure conditions c
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md)
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md)
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
+- [Install-Once Plugin Trust: Vetting That Never Re-Runs on Update](../patterns/anti-patterns/install-once-plugin-trust.md) — the same execution path reached through a plugin update rather than a cloned repo
 
 ---
 
@@ -112762,6 +113300,69 @@ The attacker receives the full `defender trace` — not just a pass/fail — ena
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md)
 - [Code Injection Defense in Multi-Agent Pipelines](code-injection-multi-agent-defence.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
+
+---
+
+### Runtime Guard as an Installed Skill (Defense-as-Skill)
+Source: https://agentpatterns.ai/security/runtime-guard-as-installed-skill/
+
+# Runtime Guard as an Installed Skill (Defense-as-Skill)
+
+> The same guard policy cut in-distribution attack success from 0.353 to 0.104 when installed as a skill instead of pasted into the system prompt.
+
+Defense-as-Skill ships the runtime guard as an ordinary installable skill. It loads alongside the untrusted task skills, checks each proposed action against the user's task boundary, and routes that action to allow, replan, or confirm, with no change to the agent runtime ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)). The guard is prose the model reads, so it ranks below any control your harness evaluates for itself. An instruction the model weighs against the task never reaches the 0% a structural filter reaches ([Uppala, 2026](https://arxiv.org/abs/2605.18414v3)). It is worth writing anyway because placement moves the numbers: with the decision-relevant content held identical, loading the policy through skill files rather than one always-on system prompt cut in-distribution attack success from 0.353 to 0.104 and raised task utility from 0.655 to 0.815 ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)).
+
+## When this applies
+
+Three conditions, and the first is the one people skip.
+
+- You have already pulled the enforcement levers you own. Claude Code's AcceptEdits permission preset reached a lower out-of-distribution attack success rate than the evolved guard on GLM-5, 0.073±0.025 against 0.115±0.037, and cost task utility to get there, 0.650±0.062 against 0.779±0.077 ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)). The guard buys utility at similar safety, not safety a permission system could not reach.
+- Your risk takes the shape of an action. The guard triages tool calls, file operations, shell commands, data access, external side effects, and user-visible outputs ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)). Where nothing sensitive is proposed, there is nothing to triage.
+- You can give the guard standing authority over every task. Left to ordinary task–skill matching, attack success sits at 0.400 in-distribution and 0.582 out-of-distribution; with an instruction assigning it persistent safety responsibility, the same guard reaches 0.104 and 0.109 with benign utility "essentially unchanged (0.756 vs. 0.767)" ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)).
+
+## Why it works
+
+Two effects, both isolated as content-matched ablations.
+
+The first is representation. The control baseline, Flattened SkillSonar Prompt, concatenates every decision-relevant module of the final guard "into a single always-on system prompt without modification," so the two conditions "use the same decision-relevant policy content and differ only in how that content is represented and loaded" ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)). Skill-native loading won on all three axes: in-distribution attack success 0.104 against 0.353, task utility 0.815 against 0.655, and roughly 188K tokens against 239K, about 21% lower. The authors read that as evidence that "representing and loading the policy through modular skill-native components materially improves runtime safety, task utility, and context efficiency" ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)).
+
+The second is activation, and it explains why installing a guard skill on its own does little. Safety skills "are not necessarily semantically aligned with the user task," so "ordinary task–skill matching may fail to retrieve them reliably" ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)). Unsafe behavior "may arise within otherwise benign tasks with no explicit safety-related intent, making a safety guard easy to overlook if invocation depends only on semantic relevance" ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)). The guard runs because a standing instruction says to consult it before acting, not because it looked relevant.
+
+Both together, over 10 repeated GLM-5 runs: in-distribution attack success 0.482±0.039 to 0.104±0.036, out-of-distribution 0.606±0.043 to 0.115±0.037. A safety paragraph in the system prompt reached only 0.414±0.042 and 0.489±0.048 ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)).
+
+## When this backfires
+
+- The attacker has read your guard. Rerunning the iterative attacker against the final optimized guard leaves 22.9% attack success, down from 45.1% ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)). Substantial protection, and nowhere near a bound.
+- You hand-write the guard and expect these numbers. The measured artifact was evolved by Monte-Carlo Tree Search from rollout feedback under a budget of "at most 8" full evaluations, because a manually designed guard "may either miss adaptive attacks or introduce unnecessary friction for benign tasks" ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)).
+- You treat it as enforcement. The deployment "provides soft responsibility assignment rather than mechanism-level enforcement: the host agent may still fail to read, correctly apply, or comply with the guard," and it "should complement, rather than replace, mechanism-level controls such as permission systems and sandboxing" ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)). The ceiling on any prose control is measured elsewhere: explicit per-tool allowlists "reduce violations to as low as 4.0% but never to zero," while filtering the tool registry at discovery gives 0% "by design" ([Uppala, 2026](https://arxiv.org/abs/2605.18414v3)).
+- The rule-engine alternative trades the other way. AgentSpec, adapted to Claude Code through hooks with trajectory tracking and hook-level denial, cut in-distribution attack success from 0.477 to 0.294 but dropped task utility from 0.829 to 0.581 ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)). If you can absorb that utility loss, take the deterministic control.
+- Your threat is not action-shaped. A skill that keeps its declared task and moves only which candidate wins proposes nothing sensitive to triage; catch that by comparing selection rates with and without the skill ([Li et al., 2026](https://arxiv.org/abs/2609.02564v1)).
+
+## Example
+
+The guard assigns each proposed action to one of four risk levels and selects an intervention from the level. This is the artifact the paradigm calls "installable, inspectable, and editable" ([Yang et al., 2026](https://arxiv.org/abs/2609.01487v1)).
+
+| Tier | Actions | Intervention |
+|---|---|---|
+| R0 | Routine, clearly required by the task, no meaningful side effect | Allowed |
+| R1 | Likely benign but needing scope awareness, such as a narrow file read | Proceeds after the agent narrows the operation or states its intended scope |
+| R2 | Material risk: broad file modification, nontrivial command execution, sensitive data access, data transmission, persistent changes to external accounts | Agent justifies the action against the user task, reduces scope where possible, and requests explicit user confirmation when the action affects sensitive data, persistent state, or external accounts |
+| R3 | Outside the task boundary or matching malicious patterns: covert exfiltration, fake approval records, confirmation suppression, hidden persistence | Blocked or replanned; the guard asks the agent to reach the benign goal by a safer route |
+
+## Key Takeaways
+
+- Placement is measurable. Holding the policy content identical, skill files beat one always-on system prompt on attack success (0.104 against 0.353), task utility (0.815 against 0.655), and tokens (about 21% fewer).
+- Installing the guard is not deploying it. Without a standing instruction to consult it, the same guard leaves attack success at 0.400 in-distribution and 0.582 out-of-distribution.
+- Spend the harness lever first. A permission preset reached a lower out-of-distribution attack rate than the guard; the guard's edge was utility at comparable safety.
+- Budget for 22.9% attack success against an attacker who has read the guard, and keep the permission system and the sandbox underneath it.
+
+## Related
+
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — the sorting rule this pattern sits under; a guard skill is advisory by construction, and this page reports a measured difference inside that bucket
+- [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md) — why no prose control reaches zero, and what removing the choice structurally buys instead
+- [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — the registry-level threat the runtime guard exists to survive after install-time vetting has run
+- [Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — the confirm branch of the routing, and what it costs in interruptions
+- [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md) — the pre-install check that this pattern assumes has already happened and is not sufficient
 
 ---
 
@@ -115205,6 +115806,7 @@ The full stack is most justified when agents load third-party skills at runtime 
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)
 - [Trusting a Skill Scanner's Verdict as a Security Judgment (Green-Check Fallacy)](../patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md) — why a scanner's pass on a poisoned skill is not proof it is clean, and its flag on a benign one is not proof it is bad
+- [Runtime Guard as an Installed Skill (Defense-as-Skill)](runtime-guard-as-installed-skill.md) — the runtime layer that acts after a poisoned skill is already loaded, checking each proposed action against the user's task boundary
 
 ---
 

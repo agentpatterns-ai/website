@@ -89,3 +89,4 @@ The pattern matters most for unfamiliar repositories. Three failure conditions c
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md)
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md)
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
+- [Install-Once Plugin Trust: Vetting That Never Re-Runs on Update](../patterns/anti-patterns/install-once-plugin-trust.md) — the same execution path reached through a plugin update rather than a cloned repo

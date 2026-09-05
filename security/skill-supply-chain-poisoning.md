@@ -165,3 +165,4 @@ The full stack is most justified when agents load third-party skills at runtime 
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md)
 - [Trusting a Skill Scanner's Verdict as a Security Judgment (Green-Check Fallacy)](../patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md) — why a scanner's pass on a poisoned skill is not proof it is clean, and its flag on a benign one is not proof it is bad
+- [Runtime Guard as an Installed Skill (Defense-as-Skill)](runtime-guard-as-installed-skill.md) — the runtime layer that acts after a poisoned skill is already loaded, checking each proposed action against the user's task boundary
