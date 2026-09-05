@@ -58,6 +58,7 @@ nav:
       - inline-lifecycle-safety-harness.md
       - lifecycle-security-architecture.md
       - locked-desktop-agent-safeguards.md
+      - runtime-guard-as-installed-skill.md
       - security-constitution-ai-code-gen.md
       - security-drift-iterative-refinement.md
       - three-depth-in-session-security-review.md

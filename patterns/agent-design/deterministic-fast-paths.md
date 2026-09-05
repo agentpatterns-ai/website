@@ -89,3 +89,4 @@ Both numbers come from one pipeline with a threshold tuned for its corpus. Carry
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — escalates mid-task on a running model's partial trajectory rather than deciding before the first call.
 - [Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines](parameter-keyed-caching-plan-execute.md) — hardens the cache rung by partitioning the key on parsed parameters.
 - [Deterministic Precondition Gates](deterministic-precondition-gates.md) — the same instinct applied to entry conditions, refusing a run rather than answering it.
+- [Field-Change Intent Instead of Model-Written Diffs](field-change-intent-over-generated-diffs.md) — the same instinct applied to applying an edit, with the model keeping the semantic decision.

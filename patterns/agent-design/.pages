@@ -128,6 +128,8 @@ nav:
       - delegated-autonomy-boundary-artifacts.md
       - trigger-level-agent-intake-gating.md
       - approval-gate-granularity.md
+      - fleet-irreversibility-budget.md
+      - agent-native-filesystem-mediation.md
   - "Reliability":
       - agent-circuit-breaker.md
       - agent-client-admission-control.md
@@ -140,6 +142,7 @@ nav:
       - cross-vendor-competitive-routing.md
       - decoupled-search-grounding.md
       - deterministic-fast-paths.md
+      - field-change-intent-over-generated-diffs.md
       - dispatch-time-reasoning-level.md
       - dual-budget-control-search-agents.md
       - effective-feedback-compute.md
@@ -222,6 +225,7 @@ nav:
       - recursive-agent-harnesses.md
       - sandbox-forking.md
       - continuously-built-agent-environments.md
+      - rented-execution-sandbox.md
       - scoped-devtools-access-runtime-diagnosis.md
       - session-harness-sandbox-separation.md
       - temporary-compensatory-mechanisms.md

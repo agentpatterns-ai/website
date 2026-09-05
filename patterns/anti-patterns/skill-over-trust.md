@@ -87,3 +87,4 @@ A retrieval-augmented generation task required configurable model parameters. Th
 - [Cost-Aware Skill Rewriting](../../instructions/cost-aware-skill-rewriting.md) — why shortening a skill can raise total cost when it strips operational anchors.
 - [Skill-Use Gates: Trigger, Compliance and Boundary](../../verification/skill-use-gate-decomposition.md) — scoring which gate a skill failure came from.
 - [The No-Op Test](../../instructions/behavioral-no-op-test.md) — deleting a line and rerunning the task to test whether it changes behavior.
+- [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the same withheld-skill comparison pointed at policy integrity instead of cost and failure attribution.

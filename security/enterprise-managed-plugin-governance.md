@@ -153,3 +153,4 @@ The first stage adds a managed marketplace without breaking working sessions. Th
 - [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md)
 - [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md)
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](../instructions/skill-pack-registry-distribution.md) — the developer-side install-and-update decision this admin contract sits above
+- [Install-Once Plugin Trust: Vetting That Never Re-Runs on Update](../patterns/anti-patterns/install-once-plugin-trust.md) — the failure mode the `sha` pin and `allowManagedHooksOnly` levers exist to close

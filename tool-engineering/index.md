@@ -58,6 +58,7 @@ Architecture and design guidance for MCP servers and clients -- the open protoco
 - [Hint-Driven Concurrency for Read-Only MCP Tools](read-only-hint-concurrency.md) — The MCP `readOnlyHint` annotation became a concurrency dispatcher input once Codex CLI 0.134.0 shipped parallel execution for read-only tool calls — a wall-clock win that only holds when annotations are audited and trusted
 - [Push-Event MCP Channels: Inverting the Pull-Tool Polarity](push-event-mcp-channels.md) — An MCP server that declares `claude/channel` flips the polarity from pull-on-demand to push-when-it-happens, gated by sender allowlist and an always-open session — useful when warm context is worth keeping
 - [Auth-Isolation as the MCP-vs-CLI Selection Heuristic](mcp-auth-isolation-vs-cli-selection.md) — Reach for MCP when authenticated access needs its credentials kept out of the agent's context window; choose a CLI when there is no auth boundary to protect
+- [Judging MCP Capability Readiness by Client Adoption](mcp-capability-readiness.md) — A spec capability is dependable once a client you can target ships it; read support at connect time, then write the degradation path for clients that lack it
 - [MCP-vs-CLI Cost Ratios Are a Property of the Scaffolding](mcp-cli-cost-ratio-scaffolding-bound.md) — Paired MCP-to-CLI cost ratios span 0.43x to 29x across scaffoldings, so measure the delta in your own harness instead of borrowing a published multiplier
 
 ## Skills
