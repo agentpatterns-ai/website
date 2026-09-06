@@ -9,7 +9,7 @@ aliases:
   - deep agent runtime
   - agent runtime layer
   - production agent runtime
-last_reviewed: 2026-06-02
+last_reviewed: 2026-09-05
 maturity: established
 ---
 
@@ -40,6 +40,8 @@ graph TD
 A twenty-minute research agent cannot restart from scratch when the worker dies. An agent waiting for human approval cannot hold a worker for three days. Both demand checkpointed execution.
 
 LangChain ships a managed task queue with automatic checkpointing keyed by `thread_id`: "any run can be retried, replayed, or resumed from the exact point of interruption" ([Runkle & Trivedy, LangChain, 2026-04-20](https://www.langchain.com/blog/runtime-behind-production-deep-agents)). Each super-step writes to PostgreSQL; on crash, another worker picks up the lease; on HITL pause, the process hands off its slot and the run sleeps indefinitely. Cursor exposes the same property as durable agents with run-scoped operations — only one run active per agent, `409 agent_busy` on contention ([Cursor Cloud Agents API](https://cursor.com/docs/cloud-agent/api/endpoints)). Anthropic: "Any Harness instance can pick up any Session and continue from where it left off" ([Anthropic, 2026](https://www.anthropic.com/engineering/managed-agents)).
+
+Vercel argues durable execution belongs in the programming language rather than in a separate workflow engine ([Vercel, 2026-08-27](https://vercel.com/blog/the-best-workflow-engine-is-a-programming-language)).
 
 ### 2. Lifecycle controls
 

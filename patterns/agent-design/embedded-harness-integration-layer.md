@@ -10,7 +10,7 @@ aliases:
   - embedding an agent harness
   - agent harness integration layer
   - host application harness ownership split
-last_reviewed: 2026-08-20
+last_reviewed: 2026-09-05
 maturity: adopted
 ---
 
@@ -40,7 +40,7 @@ The same ladder appears in a second vendor's stack, which suggests it tracks the
 
 The split is one sentence: "Your application owns product context, business rules, and tools; Codex app-server provides the agent loop and sandboxed execution" ([OpenAI](https://developers.openai.com/blog/codex-as-a-platform)). Interface stays on the application side too, which is the point of embedding instead of adopting an assistant. OpenAI names the anti-goal directly: "Instead of asking every team to move its work into a general-purpose coding assistant, you can bring the agent into software designed around the actual job."
 
-A vendor-neutral protocol draws the same line. The Agent Client Protocol "standardizes communication between code editors ... and coding agents" ([Agent Client Protocol](https://github.com/agentclientprotocol/agent-client-protocol)). Its specification puts the split in the same place: clients "provide the interface between users and agents" and "manage the environment, handle user interactions, and control access to resources", with `session/request_permission` reserved for requesting "user authorization for tool calls", while agents are the programs that "autonomously modify code" ([ACP, Architecture](https://agentclientprotocol.com/protocol/overview)). Transport follows deployment rather than being fixed: "local agents run as sub-processes of the code editor, communicating via JSON-RPC over stdio", while remote agents communicate "over HTTP or WebSocket" — for which the protocol notes "full support for remote agents is a work in progress" ([ACP, Overview](https://agentclientprotocol.com/)).
+A vendor-neutral protocol draws the same line. The Agent Client Protocol "standardizes communication between code editors ... and coding agents" ([Agent Client Protocol](https://github.com/agentclientprotocol/agent-client-protocol)). Its specification puts the split in the same place: clients "provide the interface between users and agents" and "manage the environment, handle user interactions, and control access to resources", with `session/request_permission` reserved for requesting "user authorization for tool calls", while agents are the programs that "autonomously modify code" ([ACP, Architecture](https://agentclientprotocol.com/protocol/overview)). Transport follows deployment rather than being fixed: "local agents run as sub-processes of the code editor, communicating via JSON-RPC over stdio", while remote agents communicate "over HTTP or WebSocket" — for which the protocol notes "full support for remote agents is a work in progress" ([ACP, Overview](https://agentclientprotocol.com/)). Vercel's AI SDK harness layer added support for ACP-compatible harnesses on 13 August 2026 ([Vercel changelog](https://vercel.com/changelog/use-acp-compatible-harnesses-with-the-ai-sdk-harness-layer)).
 
 ## Why it works
 
