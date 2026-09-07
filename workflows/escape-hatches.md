@@ -199,3 +199,4 @@ Then start a new attempt with the corrected approach.
 - [Agent Debugging](../observability/agent-debugging.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
 - [Error Preservation in Context](../context-engineering/error-preservation-in-context.md) — keeping failed actions visible as negative examples
+- [Escalation Channels: A Reporting Tool Instead of a Reward Hack](../patterns/agent-design/escalation-channels-defect-disclosure.md) — the tool-level form of the escalation instruction above, measured against a prompt-only baseline

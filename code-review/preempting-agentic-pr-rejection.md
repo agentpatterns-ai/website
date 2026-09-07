@@ -98,6 +98,7 @@ The Approach-hints and Approaches-to-avoid blocks target Implementation Issues; 
 - [PR Description Style as a Lever](pr-description-style-lever.md) — how PR description structure affects merge outcomes, an adjacent preemption lever
 - [Agent-Authored PR Integration](agent-authored-pr-integration.md) — reviewer engagement as the strongest merge predictor, the back-end counterpart to preemption
 - [Implicit Knowledge Problem](../patterns/anti-patterns/implicit-knowledge-problem.md) — the underlying anti-pattern preemption prompts target
+- [Review Constraint Tests as a Second Acceptance Gate](../verification/review-constraint-acceptance-gate.md) — what a stated convention buys and costs once the agent has it, measured
 
 ## Sources
 
