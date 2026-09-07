@@ -87,3 +87,4 @@ Non-mutation and deep-merge are the two the stated suite cannot reach, because n
 - [Assumption Propagation](../patterns/anti-patterns/assumption-propagation.md) — the behavior underneath the number: one committed reading that stays internally consistent until checked.
 - [Verification Capacity as the Agent Quality Ceiling](verification-capacity-quality-ceiling.md) — budgets how much checking you can run; this page argues one specific check is worth the budget.
 - [Unstated-Contract Bugs: Sort Tickets by Information Gap](unstated-contract-bug-triage.md) — the same blindness one step further out, where the constraint sits in user behavior rather than in a prompt you wrote.
+- [Review Constraint Tests as a Second Acceptance Gate](review-constraint-acceptance-gate.md) — the repository-scale case, where the constraint was stated to the agent and still needs its own suite.

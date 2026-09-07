@@ -146,6 +146,7 @@ nav:
       - dispatch-time-reasoning-level.md
       - dual-budget-control-search-agents.md
       - effective-feedback-compute.md
+      - escalation-channels-defect-disclosure.md
       - gateway-model-routing.md
       - exception-handling-recovery-patterns.md
       - failure-trajectory-recovery-window.md
