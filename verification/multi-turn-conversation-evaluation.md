@@ -43,7 +43,7 @@ Conversations carry state across turns. Three failure classes only emerge in tha
 - Intent drift — the conversation gradually leaves the original goal. Stateful drift detection (RNN over per-turn embeddings, DeepContext) reaches F1 0.84 versus 0.67 for stateless filters like Llama-Prompt-Guard-2 and Granite-Guardian — the gap is the multi-turn signal stateless eval cannot see. ([DeepContext, 2026](https://arxiv.org/abs/2602.16935))
 - Circular exchange — every turn is locally fine but the conversation makes no progress. The trace-level resolution check is the first metric to fail on a polite loop.
 
-Drift-Bench extends the taxonomy to input faults that only surface across clarification turns — implicit intent, missing parameters, false presuppositions, ambiguous expressions — and shows agents that handle each turn in isolation drop substantially under iterative disambiguation. ([Drift-Bench, 2026](https://arxiv.org/abs/2602.02455))
+Drift-Bench extends the taxonomy to input faults that only surface across clarification turns — implicit intent, missing parameters, false presuppositions, ambiguous expressions — and shows agents that handle each turn in isolation drop substantially under iterative disambiguation. ([Bao et al., 2026](https://arxiv.org/abs/2602.02455))
 
 ## What to wire
 
@@ -57,7 +57,7 @@ Online scoring rules then run both scorers asynchronously against new production
 
 ## Why it works
 
-Failures emerging from accumulated state must be scored where that state is observable. Per-turn scoring projects the conversation into independent slices, the projection in which context loss, intent drift, and circular exchange vanish. The trace is the smallest unit that exposes all three. This generalizes beyond chatbots: the 2025 multi-turn agent survey names five evaluation dimensions (task completion, response quality, user experience, memory and context retention, planning and tool integration) and only the first two are cleanly observable per-turn. ([Survey, 2025](https://arxiv.org/abs/2503.22458))
+Failures emerging from accumulated state must be scored where that state is observable. Per-turn scoring projects the conversation into independent slices, the projection in which context loss, intent drift, and circular exchange vanish. The trace is the smallest unit that exposes all three. This generalizes beyond chatbots: the 2025 multi-turn agent survey names five evaluation dimensions (task completion, response quality, user experience, memory and context retention, planning and tool integration) and only the first two are cleanly observable per-turn. ([Guan et al., 2025](https://arxiv.org/abs/2503.22458))
 
 ## When this backfires
 

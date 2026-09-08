@@ -66,6 +66,7 @@ A crosswalk is a discovery aid, not a threat model — five conditions make it a
 
 ## Related
 
+- [OWASP 2026 Update for Agent Builders](owasp-2026-update-agent-control-standard.md) — what the 2026 edition does to the entry IDs used above, and the Agent Control Standard this crosswalk predates
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — mechanism-organized navigation grid that pairs with the framework-organized crosswalk above
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — lifecycle-phase taxonomy these named threats map onto; the crosswalk is a lookup table, not a competing frame
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — capability-based threat model for the trifecta that underlies LLM01 / LLM02 / LLM06

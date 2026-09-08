@@ -18,11 +18,11 @@ maturity: emerging
 
 > Give the agent its own self-compaction tool and a firing rubric so it compacts on trajectory structure, not a fixed token count.
 
-Agent-initiated self-compaction gives the model both a tool that condenses its own accumulated context and an explicit rubric for when to use it. The condition that makes it work leads the pattern: ship the two together. On its own the compaction tool is used unevenly across models and does not reliably help; the rubric supplies the firing signal the model cannot generate for itself ([Self-Compacting Language Model Agents, arxiv 2606.23525](https://arxiv.org/abs/2606.23525)).
+Agent-initiated self-compaction gives the model both a tool that condenses its own accumulated context and an explicit rubric for when to use it. The condition that makes it work leads the pattern: ship the two together. On its own the compaction tool is used unevenly across models and does not reliably help; the rubric supplies the firing signal the model cannot generate for itself ([Self-Compacting Language Model Agents, arxiv 2606.23525](https://arxiv.org/abs/2606.23525v2)).
 
 ## The two elements
 
-The pattern pairs one inference-time tool with one lightweight instruction, and both are load-bearing ([arxiv 2606.23525](https://arxiv.org/abs/2606.23525)):
+The pattern pairs one inference-time tool with one lightweight instruction, and both are load-bearing ([arxiv 2606.23525](https://arxiv.org/abs/2606.23525v2)):
 
 - Compaction tool: the model calls it to replace accumulated context with a summary it writes itself.
 - Firing rubric: a short instruction telling the model when to fire and when to hold off.
@@ -46,7 +46,7 @@ This is the agent-initiated point on the compaction spectrum. It differs from us
 
 A token threshold is structure-blind. Token count is uncorrelated with whether the trajectory sits at a safe compaction boundary, so a threshold trigger risks summarizing away partial results mid-derivation. A rubric keyed to sub-task resolution and convergence fires when accumulated context has already delivered its value, and holds during derivation when that context is still in use.
 
-The tool alone is not enough because models cannot see the state they would need to time compaction well. Frontier models are "proprioceptively blind to their own context": from the prompt alone they cannot tell how large, how old, or how used each block is ([LLM Agents Are Latent Context Managers, arxiv 2606.30005](https://arxiv.org/abs/2606.30005v5)), and their metacognition is limited in resolution and unreliable ([Evidence for Limited Metacognition in LLMs, arxiv 2509.21545](https://arxiv.org/abs/2509.21545)). The rubric supplies that missing signal from outside the model. No fine-tuning is required ([arxiv 2606.23525](https://arxiv.org/abs/2606.23525)). The payoff of compacting at the right moment is attention-budget recovery: replacing accumulated token mass with a dense summary restores per-token attention to the relevant remainder ([Anthropic: effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+The tool alone is not enough because models cannot see the state they would need to time compaction well. Frontier models are "proprioceptively blind to their own context": from the prompt alone they cannot tell how large, how old, or how used each block is ([LLM Agents Are Latent Context Managers, arxiv 2606.30005](https://arxiv.org/abs/2606.30005v5)), and their metacognition is limited in resolution and unreliable ([Evidence for Limited Metacognition in LLMs, arxiv 2509.21545](https://arxiv.org/abs/2509.21545v2)). The rubric supplies that missing signal from outside the model. No fine-tuning is required ([arxiv 2606.23525](https://arxiv.org/abs/2606.23525v2)). The payoff of compacting at the right moment is attention-budget recovery: replacing accumulated token mass with a dense summary restores per-token attention to the relevant remainder ([Anthropic: effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
 
 Across six benchmarks spanning competitive math and agentic search, and seven models, the paired approach matched or beat fixed-interval summarization at 30 to 70% lower per-question cost ([arxiv 2606.23525](https://arxiv.org/abs/2606.23525v2); figures grounded in the paper's abstract).
 
@@ -54,7 +54,7 @@ Across six benchmarks spanning competitive math and agentic search, and seven mo
 
 The pattern rests on the model following the rubric, so it degrades where that assumption weakens:
 
-- Weak instruction-followers: on smaller or open-weight models the compaction tool is used unevenly, so self-firing misfires without reliable rubric adherence ([arxiv 2606.23525](https://arxiv.org/abs/2606.23525)).
+- Weak instruction-followers: on smaller or open-weight models the compaction tool is used unevenly, so self-firing misfires without reliable rubric adherence ([arxiv 2606.23525](https://arxiv.org/abs/2606.23525v2)).
 - Mis-timed firing: because the model cannot see its own context state ([arxiv 2606.30005](https://arxiv.org/abs/2606.30005)), a self-fired compaction can still land mid-derivation and discard a partial result. That is the same failure a threshold has.
 - Short or bounded sessions: when the window is never under pressure, the rubric, tool definition, and per-turn deliberation are pure token overhead. A plain threshold, or no compaction, is cheaper.
 - Reference-heavy work: when verbatim artifacts such as specs, schemas, or API contracts must persist, any summary at any trigger loses them, and better timing does not help ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
@@ -63,7 +63,7 @@ Where the boundaries are externally observable (a sub-agent return, a passing te
 
 ## Example
 
-The rubric operationalizes the firing conditions from the paper as a short system-prompt instruction paired with the tool ([arxiv 2606.23525](https://arxiv.org/abs/2606.23525)):
+The rubric operationalizes the firing conditions from the paper as a short system-prompt instruction paired with the tool ([arxiv 2606.23525](https://arxiv.org/abs/2606.23525v2)):
 
 ```markdown
 You have a `compact_context` tool that summarizes everything so far.

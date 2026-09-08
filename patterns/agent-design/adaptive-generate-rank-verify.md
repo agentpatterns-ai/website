@@ -26,7 +26,7 @@ Adaptive Generate-Rank-Verify is a cost-sensitive search policy that runs at inf
 
 Three conditions must hold together. If any one fails, fixed-budget best-of-N is the right tool.
 
-- Verifier cost far exceeds generator cost. Hidden-test execution for code candidates runs roughly 300 ms per sample, against negligible cost for exact-match rank scoring — a 300× ratio in code agents ([Aletheia, 2026](https://arxiv.org/pdf/2601.12186)). Below about 10×, orchestration overhead exceeds the saved verifier calls.
+- Verifier cost far exceeds generator cost. Execution-based verification pays the "code execution and environment-setup overheads" that an execution-free verifier avoids, which is why such verifiers are studied for exactly this position in the loop ([Aletheia, 2026](https://arxiv.org/abs/2601.12186v4)). The ratio is workload-specific and worth measuring before you build around it; below about 10×, orchestration overhead exceeds the saved verifier calls.
 - Ranker is calibrated. Higher rank must mean higher verifier-pass probability. The formal assumption is monotonicity of the score-label relationship ([Dughmi et al., 2026](https://arxiv.org/abs/2605.17609)). Without it, the algorithm's optimality bound vanishes.
 - N is large enough for the tail to matter. Below about 16 candidates with parallel verification, fixed-budget best-of-N wins on wall-clock latency, because the head of the rank distribution is sparse.
 

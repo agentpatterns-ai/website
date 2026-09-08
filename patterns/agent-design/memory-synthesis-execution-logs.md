@@ -117,7 +117,7 @@ Anthropic's [harness engineering](harness-engineering.md) pattern -- [progress f
 
 Skipping synthesis is the better call under three conditions:
 
-- N=1 generalization: a single failure can produce a confidently stated "lesson" ("never use library X") that reflects a one-off quirk, not a transferable rule. The form of the synthesized memory matters. Distilled heuristics transfer across tasks better than replaying raw trajectories as few-shot examples ([Experiential Reflective Learning, 2026](https://arxiv.org/abs/2603.24639)).
+- N=1 generalization: a single failure can produce a confidently stated "lesson" ("never use library X") that reflects a one-off quirk, not a transferable rule. The form of the synthesized memory matters. Distilled heuristics transfer across tasks better than replaying raw trajectories as few-shot examples ([Allard et al., 2026](https://arxiv.org/abs/2603.24639)).
 - Tool or model churn: a workaround for a 2024-era context limit becomes wrong advice once the limit lifts, but the lesson sits in `MEMORY.md` for months. The deeper cost is trusting aged advice without re-verification.
 - Context budget pressure: retained lessons compete with task-relevant context, and accumulated memory inflates cost and degrades selectivity ([SSGM Framework, 2026](https://arxiv.org/abs/2603.11768)). When the lesson library exceeds what retrieval can selectively surface, environmental scaffolding (progress files, git state) often pays off more reliably.
 

@@ -72,7 +72,7 @@ Binary feedback collapses the supervision signal to its minimum while preserving
 
 - Functionality-critical output — Pattern adherence and functional correctness can diverge. DeepSeek Coder lost 9.8 pp on functional tests while improving Singleton compliance; Gemma3 (4B) lost 21.3 pp ([Kjellberg et al., 2026](https://arxiv.org/abs/2605.26898v1)). Gate exits on test pass and pattern match
 - Multi-predicate or interacting patterns — Three predicates fit a 10-iteration probe budget; ten do not. FeedbackEval points to structured feedback as the safer default for richer patterns ([Dai et al., 2025](https://arxiv.org/abs/2504.06939v2))
-- No deterministic judge — When the check requires semantic understanding (thread-safety, race conditions), an LLM judge replaces the regex and becomes the new failure surface, with reasoning-trace manipulation driving false positives above 80% ([Gaming the Judge, 2026](https://arxiv.org/pdf/2601.14691))
+- No deterministic judge — When the check requires semantic understanding (thread-safety, race conditions), an LLM judge replaces the regex and becomes the new failure surface, where rewriting an agent's reasoning trace while holding actions and observations fixed "can inflate false positive rates of state-of-the-art VLM judges by up to 90% across 800 trajectories" ([Gaming the Judge, 2026](https://arxiv.org/abs/2601.14691v2))
 - Already-converged instructions — Llama 3.3 hit 100% on instructions alone; the feedback loop then spends tokens and latency for no lift
 - General code repair — The result does not generalize to debugging or test-failure repair, where FeedbackEval shows detailed feedback wins by ~10 pp ([Dai et al., 2025](https://arxiv.org/abs/2504.06939v2))
 

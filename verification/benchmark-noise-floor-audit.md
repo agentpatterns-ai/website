@@ -78,3 +78,4 @@ The audit carries one confound of its own: its Gemini endpoint differs from the 
 - [Tool-Use Sim-to-Real Perturbation Taxonomy](tool-use-sim-to-real-perturbation-taxonomy.md) — perturbations that change the environment rather than the wording, and where robustness collapses under each.
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — measurement gaps a stronger model cannot close.
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — reporting capability and consistency as two numbers.
+- [Measure the Judge Before You Freeze a Gate on It](judge-instrument-stability-check.md) — the judge arm neither floor here covers, plus the across-day axis a same-window rerun misses.

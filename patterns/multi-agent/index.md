@@ -75,6 +75,7 @@ Patterns that leverage multiple distinct models — using diversity of reasoning
 - [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md) — Get independent plans from multiple frontier models, then synthesize a hybrid architecture from the strongest ideas of each before writing code
 - [Voting / Ensemble Pattern](voting-ensemble-pattern.md) — Run the same task N times in parallel, then aggregate results through voting to trade compute for confidence
 - [Opponent Processor / Multi-Agent Debate](opponent-processor-debate.md) — Deploy two agents with structurally opposed incentives to independently critique each other's reasoning, then synthesize into a higher-quality decision
+- [Runtime Workflow Selection Across Models (Project HydraFusion)](runtime-workflow-selection-hydrafusion.md) — Pick the orchestration shape per request (single call, cascade, or cross-family critique) instead of pinning one model; the published payoff is cost at parity, not better answers
 
 ## Operational
 

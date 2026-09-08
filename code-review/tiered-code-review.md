@@ -85,6 +85,8 @@ Configure [Copilot automatic code review](https://docs.github.com/en/copilot/how
 
 Require CODEOWNERS approval in branch protection. PRs that touch only Tier 1 paths (no CODEOWNERS match) need only AI review and passing CI. PRs touching Tier 2 or 3 paths require the designated human reviewers.
 
+This layout assumes the AI pass cannot satisfy the approval requirement itself. That assumption is now a setting rather than a given, so check where your reviewer holds [agent approval authority](agent-approval-authority.md) before you rely on the tier boundary.
+
 ## Severity-driven merge gates
 
 Within each tier, classify AI findings by severity to prevent critical issues from drowning under cosmetic noise:

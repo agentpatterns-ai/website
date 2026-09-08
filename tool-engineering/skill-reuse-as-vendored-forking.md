@@ -20,7 +20,7 @@ maturity: emerging
 
 > A reused SKILL.md is a one-time verbatim copy that silently forks from its source — treat it as a vendored dependency, not a live one.
 
-Reusing a skill from a registry is not subscribing to it. The first large-scale study of `SKILL.md` files as software artifacts found that adoption "largely behaves as a one-time copy that developers rarely synchronise with upstream revisions" ([Gao et al., 2026](https://arxiv.org/abs/2607.00911)). Across 2,462 recovered reuse links, 1,841 (74.8%) were adopted near-verbatim at ≥0.99 body similarity; the remaining 621 (25.2%) diverged at all on entry ([Gao et al., 2026](https://arxiv.org/abs/2607.00911v2)). You own the copy the moment you make it, and it will not keep itself current.
+Reusing a skill from a registry is not subscribing to it. The first large-scale study of `SKILL.md` files as software artifacts found that "reuse is largely a one-time copy operation", and that adopted skills "rarely incorporate subsequent updates of the centralised source" ([Gao et al., 2026](https://arxiv.org/abs/2607.00911v2)). Across 2,462 recovered reuse links, 1,841 (74.8%) were adopted near-verbatim at ≥0.99 body similarity; the remaining 621 (25.2%) diverged at all on entry ([Gao et al., 2026](https://arxiv.org/abs/2607.00911v2)). You own the copy the moment you make it, and it will not keep itself current.
 
 ## When the vendored-fork stance pays off
 

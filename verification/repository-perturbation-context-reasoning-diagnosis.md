@@ -59,7 +59,7 @@ Perturbation diagnostics over-predict failure or measure the wrong thing under s
 
 Other sources of inflated scores also confound it. Test-suite inadequacy lets 31.08% of accepted patches pass because the tests cannot reject incorrect or incomplete solutions ([UTBoost, 2026](https://arxiv.org/pdf/2506.09289v1)) — a gap that remains even after perturbation removes shortcut leakage.
 
-A second confound cuts the other way. Meaning-preserving perturbations degrade LLM accuracy even on tasks with no multi-file context to reason about — answer-flip rates of 28.8–45.1% are reported on semantically equivalent arithmetic variants ([Fragile Reasoning, 2026](https://arxiv.org/abs/2604.01639v1)). Part of RepoMirage's drop is therefore generic surface-form brittleness rather than invalidated shortcuts, inflating the attributed share. The lower-bound framing holds only if you net out brittleness with a no-context perturbation baseline; without one, the drop conflates two effects.
+A second confound cuts the other way. Meaning-preserving perturbations degrade LLM accuracy even on tasks with no multi-file context to reason about — answer-flip rates of 28.8–45.1% are reported on semantically equivalent arithmetic variants ([Han et al., 2026](https://arxiv.org/abs/2604.01639v1)). Part of RepoMirage's drop is therefore generic surface-form brittleness rather than invalidated shortcuts, inflating the attributed share. The lower-bound framing holds only if you net out brittleness with a no-context perturbation baseline; without one, the drop conflates two effects.
 
 ## Composing with the sibling family
 

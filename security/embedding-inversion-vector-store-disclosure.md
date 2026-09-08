@@ -56,7 +56,7 @@ Layer defenses against the realistic threat model — the index leaks and the at
 | Treat the index as confidential as the corpus | Same ACLs, audit, retention as the source documents | [OWASP LLM08:2025](https://genai.owasp.org/llmrisk/llm082025-vector-and-embedding-weaknesses/) |
 | Gaussian noise on stored vectors | λ≈0.01 perturbation defeats vec2text while preserving retrieval — the cheapest practical defense | [Seputis et al., 2025](https://arxiv.org/abs/2507.07700) |
 | Never embed secrets | API keys, passwords, and high-entropy short strings face the strongest password-recovery vector; scrub before embedding | [Seputis et al., 2025](https://arxiv.org/abs/2507.07700) |
-| Projection or mutual-information defense | Heavier options like Eguard report ~95% token-level protection without major utility loss | [Liu et al., 2024](https://arxiv.org/abs/2411.05034) |
+| Projection or mutual-information defense | Heavier options like Eguard report ~95% token-level protection without major utility loss | [Liu et al., 2024](https://arxiv.org/abs/2411.05034v2) |
 | Index access logging | An inversion attack starts with an index read; logging turns silent confidentiality failure into a detectable event | [OWASP LLM08:2025](https://genai.owasp.org/llmrisk/llm082025-vector-and-embedding-weaknesses/) |
 
 ## Example

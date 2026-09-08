@@ -70,7 +70,7 @@ The PROJECTMEM design has three components:
 - Summary projection layer — read tools that project the event log into compact [summaries the agent consumes on demand](memory-synthesis-execution-logs.md). Only summaries enter context, never raw events.
 - Deterministic pre-action gate — a harness check that fires before a tool call. It consults the log and emits a structured warning when the proposed action matches a recorded failure or a fragile-file label; the warning re-enters the agent's context.
 
-Independent proposals describe the same structural move: SSGM frames it as Governance Middleware over agent–memory interactions with constrained retrieval, gated writing, and asynchronous reconciliation ([Wang et al. 2026 — arXiv:2603.11768](https://arxiv.org/abs/2603.11768v2)); Springdrift implements it with auditable axiom trails in a 23-day single-operator case study ([Springdrift, 2026 — arXiv:2604.04660](https://arxiv.org/abs/2604.04660v1)). Multiple implementations, equally thin empirical evidence under each.
+Independent proposals describe the same structural move: SSGM frames it as Governance Middleware over agent–memory interactions with constrained retrieval, gated writing, and asynchronous reconciliation ([Wang et al. 2026 — arXiv:2603.11768](https://arxiv.org/abs/2603.11768v2)); Springdrift implements it with auditable axiom trails in a 23-day single-operator case study ([Brady, 2026 — arXiv:2604.04660](https://arxiv.org/abs/2604.04660v1)). Multiple implementations, equally thin empirical evidence under each.
 
 ## Why the pre-action gate works and when it backfires
 

@@ -209,6 +209,7 @@ Without the research phase, the agent would have missed the WebSocket constraint
 - [Pre-Execution Codebase Exploration](pre-execution-codebase-exploration.md) — Structured exploration before making changes
 - [Context Priming](../context-engineering/context-priming.md) — Loading relevant context before implementation
 - [7 Phases of AI Development](7-phases-ai-development.md) — The outer feature lifecycle in which this per-task loop runs
+- [Four-Phase Agent Delegation with Curated Artifacts](four-phase-agent-delegation.md) — the same decomposition with a task-definition phase between plan and implement, and a curated artifact replacing the conversation at each boundary
 - [Copilot Cloud Agent Three-Phase Execution Model](../tools/copilot/cloud-agent-research-plan-code.md) — Copilot's implementation of this pattern with explicit UI gates between Research, Plan, and Code
 - [CARE: Three-Party Stage-Gated Engineering of LLM Agents](care-three-party-agent-engineering.md) — a stage-gated methodology extending research-plan-implement to teams where domain knowledge sits with non-engineers
 

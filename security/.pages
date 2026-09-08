@@ -15,6 +15,7 @@ nav:
       - lethal-trifecta-threat-model.md
       - oracle-poisoning-knowledge-graph.md
       - owasp-llm-top-10-2025-agent-crosswalk.md
+      - owasp-2026-update-agent-control-standard.md
       - pre-trust-execution-surface.md
       - rag-architecture-poisoning-robustness.md
       - replayable-encrypted-reasoning-blocks.md
@@ -25,6 +26,7 @@ nav:
       - workspace-topology-injection-attack-vector.md
       - bug-class-hints-as-exploit-input.md
       - task-choice-poisoned-repository-exposure.md
+      - post-authorization-execution-trust-gap.md
   - "Sandboxing":
       - browser-sandbox-agent-generated-html.md
       - docker-sbx-adoption.md

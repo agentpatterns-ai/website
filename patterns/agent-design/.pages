@@ -82,6 +82,7 @@ nav:
       - tiered-memory-architecture.md
       - wiki-memory-agent-maintained-knowledge-base.md
       - self-correcting-memory-evidence-backed-claims.md
+      - typed-memory-provenance-assertion-gating.md
       - filesystem-memory-organization.md
       - persistent-teammate-workspace.md
       - weakest-consistent-learning.md

@@ -143,3 +143,4 @@ Layer 3 decides where the rule ends up. A parsed-result-versus-intent assertion 
 - [Accumulated Behavioral Rules from Review Feedback](accumulated-behavioral-rules.md) — the intake half, turning accepted review comments into rules this loop then retires.
 - [Continuous Agent Improvement](continuous-agent-improvement.md) — the broader observe-and-update cycle this governance loop specializes.
 - [Enforcing Agent Behavior with Hooks](../instructions/enforcing-agent-behavior-with-hooks.md) — the mechanization step that ends a rule's time in prose.
+- [Why an Encoded Rule Still Fails After a Passing Eval](../instructions/encoded-rule-failure-diagnosis.md) — what to check when detection reports drift: the four defects behind a rule that keeps failing, only one of which is its wording.

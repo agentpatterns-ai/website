@@ -61,7 +61,7 @@ Tiering pays off when:
 - Operation windows exceed a day or two. The 14-percentage-point degradation over 72 hours that motivates the design ([MEMTIER abstract](https://arxiv.org/abs/2605.03675v3)) is the regime where consolidation fires often enough to matter.
 - Task structure is recurring. The PPO policy learns from outcome feedback. Without recurring task signatures it never converges, and tier-aware retrieval underperforms a static recency-weighted baseline.
 - Retrieval is dilution-bound, not relevance-bound. Below a few thousand entries the embedding model dominates, and tier separation contributes little.
-- Cross-tenant isolation is required. A separate semantic tier with controlled promotion is the natural place for provenance and pruning policies once stored episodes become an attack surface ([Memory Poisoning and Secure Multi-Agent Systems, arxiv:2603.20357](https://arxiv.org/abs/2603.20357)).
+- Cross-tenant isolation is required. A separate semantic tier with controlled promotion is the natural place for provenance and pruning policies once stored episodes become an attack surface ([Torra and Bras-Amorós, arxiv:2603.20357](https://arxiv.org/abs/2603.20357)).
 
 ## When a flat store is the right answer
 

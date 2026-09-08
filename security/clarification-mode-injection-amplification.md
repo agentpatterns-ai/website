@@ -64,7 +64,7 @@ The amplification effect only causes harm under specific conditions:
 - Model handles solicited-input provenance correctly. Claude-Opus-4.7 held near-zero ASR in both modes on ASPI; the property is measurable per model, not assumed ([ASPI, 2026](https://arxiv.org/abs/2605.17324)).
 - Action gates restrict the post-clarification turn. If consequential actions require a [confirmation gate](human-in-the-loop-confirmation-gates.md), a successful injection cannot ride elevated trust into a destructive call.
 
-Removing clarification regresses the agent to silent assumption-making, which has its own large failure surface ([Ask or Assume?, 2026](https://arxiv.org/abs/2603.26233); [Ambig-SWE, 2026](https://arxiv.org/abs/2502.13069)). Keep clarification and layer defenses.
+Removing clarification regresses the agent to silent assumption-making, which has its own large failure surface ([Ask or Assume?, 2026](https://arxiv.org/abs/2603.26233); [Vijayvargiya et al., 2026](https://arxiv.org/abs/2502.13069)). Keep clarification and layer defenses.
 
 ## Key Takeaways
 
