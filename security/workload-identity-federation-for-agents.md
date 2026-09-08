@@ -101,3 +101,4 @@ WIF also does not close the workload attestation gap. Token exchange verifies th
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — Broader credential injection patterns for agent runtimes
 - [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md) — Keep credentials out of skill files at authoring time
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — Removing credentials from agent-readable surfaces closes one leg of the trifecta
+- [The Post-Authorization Execution Trust Gap in Remote MCP](post-authorization-execution-trust-gap.md) — What a short-lived token still fails to establish about the workload on the far side of the call

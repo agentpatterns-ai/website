@@ -51,7 +51,7 @@ Task shape supplies the other half. Scoring 170 tasks against the time a human n
 ## When this backfires
 
 - You route on capability. The measured within-model gap across harnesses is 0 to 8 points, with confidence intervals crossing zero for all but the largest pair ([arXiv:2607.22585v1](https://arxiv.org/abs/2607.22585v1)). Picking the smarter agent for a task is chasing noise.
-- You treat cross-agent agreement as a check. Coding agents repeat one misinterpretation rather than failing randomly: silent semantic failure covers "80% of Llama 4's failing runs and 68% of GPT-5's", and "completion-based and consistency-based monitoring both look healthy exactly when the agent should not be trusted" ([Confident and Wrong](https://arxiv.org/abs/2603.25764v3)). Two agents agreeing is weaker evidence than it feels.
+- You treat cross-agent agreement as a check. Coding agents repeat one misinterpretation rather than failing randomly: silent semantic failure covers "80% of Llama 4's failing runs and 68% of GPT-5's", and "completion-based and consistency-based monitoring both look healthy exactly when the agent should not be trusted" ([Mehta, 2026](https://arxiv.org/abs/2603.25764v3)). Two agents agreeing is weaker evidence than it feels.
 - The task carries long-lived context. Handing work to a second harness mid-flight discards everything the session accumulated.
 - You work under audit. A second sandbox and approval model doubles the surface a security review must cover, once per audit.
 - Nobody owns the second harness. Fingerprints are learned by exposure, so a team split across two recognizes neither quickly. Depth on one returns more than the gap ever will.

@@ -89,7 +89,7 @@ EnterpriseLab ([Agarwal et al., 2026](https://arxiv.org/abs/2603.21630)) validat
 - Cross-benchmark generalization: +10% over GPT-4o on EnterpriseBench and CRMArena
 - Training wall time: SFT in 2 hours, online RL in 24 to 30 hours on 4xH200 GPUs
 
-For comparison, prior work required 26,000 to 60,000 manually curated examples to achieve similar tool-use competence — for instance, ToolBench ([Qin et al., 2023](https://arxiv.org/abs/2307.16789)) used 126,486 instances across 16,000+ APIs to train ToolLLaMA. The data efficiency of the closed-loop approach comes from using environment structure rather than brute-force annotation.
+For comparison, prior work required 26,000 to 60,000 manually curated examples to achieve similar tool-use competence — for instance, ToolBench ([Qin et al., 2023](https://arxiv.org/abs/2307.16789v2)) used 126,486 instances across 16,000+ APIs to train ToolLLaMA. The data efficiency of the closed-loop approach comes from using environment structure rather than brute-force annotation.
 
 ## Why it works
 

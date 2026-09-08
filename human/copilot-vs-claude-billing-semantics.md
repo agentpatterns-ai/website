@@ -35,14 +35,14 @@ flowchart LR
 
 ## Seat pricing and included usage
 
-At standard rates, included credits are denominated at exactly the seat price, so a paid seat is a floor on spend rather than a discount on it. The promotional allowances running to 1 September 2026 break that parity in the buyer's favor: a $19 Business seat currently carries $30 of credits.
+At standard rates, included credits are denominated at exactly the seat price, so a paid seat is a floor on spend rather than a discount on it. The promotional allowances GitHub announced for 1 June to 1 September 2026 broke that parity in the buyer's favor: a $19 Business seat carried $30 of credits under that promotion. That announced window has passed. Confirm current allowances against GitHub's billing documentation before you budget against the promotional numbers below.
 
 | Plan | Price | Included credits/month | Notes |
 |------|-------|------------------------|-------|
 | Copilot Pro | $10/mo | 1,000 base + 500 flex | Individual |
 | Copilot Pro+ | $39/mo | 3,900 base + 3,100 flex | Individual |
-| Copilot Business | $19/user/mo | 1,900/user | 3,000/user promotionally, 1 June–1 Sept 2026 |
-| Copilot Enterprise | $39/user/mo | 3,900/user | 7,000/user promotionally, same window |
+| Copilot Business | $19/user/mo | 1,900/user | 3,000/user under the announced 1 June–1 Sept 2026 promotion |
+| Copilot Enterprise | $39/user/mo | 3,900/user | 7,000/user under the same announced promotion |
 | Claude Pro | $20/mo ($17 annual) | Per-seat allowance | Rolling 5-hour + weekly windows |
 | Claude Team | $25/seat/mo standard; $125 premium | Per-seat allowance | Premium seat is 5× standard |
 | Claude API | Per-token | None | No seat floor; scales to zero |
@@ -102,10 +102,10 @@ Ten developers, 22 active days, agentic coding. Anthropic reports Claude Code av
 |---------|----------|---------|-------|
 | Copilot Business | 19,000 credits ($190 of seats) | $2,670 | $2,860 |
 | Copilot Enterprise | 39,000 credits ($390 of seats) | $2,470 | $2,860 |
-| Copilot Business, promotional | 30,000 credits | $2,560 | $2,750 |
+| Copilot Business, 1 Jun–1 Sept 2026 promotion | 30,000 credits | $2,560 | $2,750 |
 | Claude API | — | $2,860 | $2,860 |
 
-The three standard-rate rows land in the same place, because included credits are priced at exactly the seat fee; only the promotional allowance, which expires on 1 September 2026, breaks the tie. The comparison only separates at the edges: below the allowance a Copilot seat is a floor you pay anyway, while API spend scales to zero; above it, Anthropic's batch and caching levers have no Copilot equivalent.
+The three standard-rate rows land in the same place, because included credits are priced at exactly the seat fee; only the allowance GitHub announced for 1 June to 1 September 2026 broke the tie. The comparison only separates at the edges: below the allowance a Copilot seat is a floor you pay anyway, while API spend scales to zero; above it, Anthropic's batch and caching levers have no Copilot equivalent.
 
 ## Agentic session billing
 

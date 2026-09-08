@@ -109,3 +109,4 @@ The second form pins the child below the parent, so the delegation stops widenin
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — the issuer being the wrong principal in the first place
 - [Verification-Gated Agent Autonomy via Automated Review](../patterns/agent-design/verification-gated-agent-autonomy.md) — screening output instead of re-approving each action
 - [Progressive Autonomy: Scaling Trust with Model Evolution](../human/progressive-autonomy-model-evolution.md) — turning the autonomy dial up as evidence accumulates
+- [The Post-Authorization Execution Trust Gap in Remote MCP](post-authorization-execution-trust-gap.md) — the same survival question when the workload on the far side of the grant changes instead of the agent

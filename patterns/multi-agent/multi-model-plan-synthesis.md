@@ -93,7 +93,7 @@ Diverse reasoning paths sample different regions of the hypothesis space. When m
 
 The mechanism is analogous to [ensemble learning](voting-ensemble-pattern.md): agreement across diverse sources raises confidence precisely because each source was likely to produce different errors. Disagreement surfaces tradeoffs that a single planner would make implicitly. Forcing those tradeoffs into the open allows deliberate human review rather than a silent default.
 
-Research on LLM ensembles for software architecture decisions confirms that combining outputs from multiple models (GPT-4, Claude, and Mixtral) improves stability and representativeness of architectural recommendations ([Rodriguez Sanchez et al., 2025](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5775315)). A parallel result from LLM ensemble research shows that feeding a model a diverse set of prompts in parallel elicits varied reasoning paths and improves performance over a single prompt ([Dipper, 2024](https://arxiv.org/abs/2412.15238)).
+Research on LLM ensembles for software architecture decisions confirms that combining outputs from multiple models (GPT-4, Claude, and Mixtral) improves stability and representativeness of architectural recommendations ([Rodriguez Sanchez et al., 2025](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5775315)). A parallel result from LLM ensemble research shows that feeding a model a diverse set of prompts in parallel elicits varied reasoning paths and improves performance over a single prompt ([Lau et al., 2024](https://arxiv.org/abs/2412.15238)).
 
 ## When to use
 

@@ -72,3 +72,4 @@ Every standard correction is partial. The measured limits matter more than the r
 - [Comparative Judging for Config Ranking](comparative-judging-config-ranking.md) — position-bias control in pairwise judging
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md) — the pipeline this check instruments
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — the umbrella for measurement gaps a stronger model cannot close
+- [Measure the Judge Before You Freeze a Gate on It](judge-instrument-stability-check.md) — the stability axis, which a biased judge can pass

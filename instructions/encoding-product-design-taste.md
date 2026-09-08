@@ -102,3 +102,4 @@ Encoded conventions narrow the agent's generation distribution to forms the team
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — negative constraints individually help; positive directives individually hurt — informs which design rules to encode.
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the structural-rails complement: lint and hooks forbid what the skill cannot.
 - [Encode Project Conventions in Distributed AGENTS.md Files](agents-md-distributed-conventions.md) — the broader pattern of encoding team conventions; design taste is one slice.
+- [Publishing Agent Instructions Outside the Repo (design.md)](publishing-agent-instructions-outside-the-repo.md) — what changes when the same guidance is published at a URL and the components it describes are no longer readable.

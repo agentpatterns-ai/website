@@ -134,7 +134,7 @@ False positives run 5–15% for well-configured tools and higher when poorly tun
 ## Key Takeaways
 
 - Split the queue by what each reviewer is good at, then hold the line: the moment humans stop owning design, the agent's clean pass starts reading as approval it was never scoped to give
-- Advisory by construction is a feature, not a limitation. Because [Claude Code Review](../tools/claude/code-review.md) subagents and Copilot both comment without approving, neither can be mistaken for the required review
+- Advisory by construction is no longer automatic. [Claude Code Review](../tools/claude/code-review.md) subagents still only comment, but Copilot code review can now hold [approval authority](agent-approval-authority.md) where an admin enables it — check which of your reviewers can satisfy the required-approvals rule
 - Withholding `Edit` and `Write` from a reviewer is what keeps its findings falsifiable — an agent that can apply its own fix has no incentive to be right about it
 - Calibrate before you trust, not after. At a 16.6% adoption rate the failure is invisible: correct findings and false positives are both simply ignored
 - Independence has to be structural. An agent asked to review itself will agree, because it is re-deriving the same assumptions rather than testing them

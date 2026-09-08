@@ -54,7 +54,7 @@ The signature is cheap and mechanism-grounded, but narrow:
 
 - Benign reasoning agents trip it. On frontier reasoning models whose sessions recall facts often, the false-positive rate reaches 23.0%. On one model the benign and attack score distributions invert entirely (AUC 0.083) ([Leong, 2026](https://arxiv.org/abs/2606.30566v2)).
 - No true-benign baseline was measured. False positives were counted only against poisoned-but-defended sessions, never against ordinary unpoisoned agent traffic ([Leong, 2026](https://arxiv.org/abs/2606.30566)).
-- Adaptive attackers evade it. Storing the address as a key, using a different retrieval path, or moving stolen data into an unmonitored argument field defeats an operation-only rule — the same field-level evasion that content-aware tool-call detectors report ([Content-Aware Attack Detection, 2026](https://arxiv.org/abs/2605.11053)).
+- Adaptive attackers evade it. Storing the address as a key, using a different retrieval path, or moving stolen data into an unmonitored argument field defeats an operation-only rule — the same field-level evasion that content-aware tool-call detectors report ([Zavrak, 2026](https://arxiv.org/abs/2605.11053)).
 - Non-tool retrieval is invisible. A memory-sandbox bypass that pulls the payload without an observable recall call evades the detector completely ([Leong, 2026](https://arxiv.org/abs/2606.30566)).
 
 Treat it as one detection layer, not a control. It pairs with an architectural fix that removes a [lethal-trifecta](lethal-trifecta-threat-model.md) leg — a [default-deny egress allowlist](url-exfiltration-guard.md) or provenance-tagged memory writes — rather than replacing one.

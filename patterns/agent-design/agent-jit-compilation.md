@@ -26,7 +26,7 @@ Agent JIT compilation translates a task description into a code program that the
 | Condition | Why it matters |
 |----------|----------------|
 | Task spans many steps (≥ ~5 tool calls) | Compilation, validation, and scheduling add fixed overhead — short tasks pay the cost without recovering enough per-step inference savings |
-| Underlying model is a capable code generator | The planner-coder interface drops information when the coder is weak; in one systematic study, 52% of cases needed coordinated multi-file edits the planner failed to express ([arXiv:2510.10460](https://arxiv.org/pdf/2510.10460)) |
+| Underlying model is a capable code generator | The planner-coder interface drops information when the coder is weak. One systematic study attributes 75.3% of failures to that gap, which "arises from information loss in the multi-stage transformation process where planning agents decompose requirements into underspecified plans, and coding agents subsequently misinterpret intricate logic" ([arXiv:2510.10460v2](https://arxiv.org/abs/2510.10460v2)) |
 | Tools expose precondition and postcondition contracts | Plan-time validation is the source of the accuracy gain — without contracts there is nothing to validate against ([arXiv:2605.21470](https://arxiv.org/abs/2605.21470)) |
 | Target UI or API is stable enough that pre-validated preconditions stay true at execution time | A page that re-renders or A/B-tests selectors between plan time and execute time silently violates the contract the validator just approved |
 

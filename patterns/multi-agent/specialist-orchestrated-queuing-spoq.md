@@ -68,7 +68,7 @@ Separating producer from validator removes self-judgment bias: LLMs prefer their
 - No human available for HaaA. Without a specialist, teams drop to the automated-only envelope (0.34 → 0.20) and pay the orchestration cost regardless.
 - Single-tier provider access. The tiered roster assumes three model tiers; teams capped to one capability tier lose the cost-asymmetric routing.
 - Small task surface (≤5 files). Up-front graph construction, wave assignment, three-tier scheduling, and dual gates exceed the parallelism gain.
-- Strong single-agent baseline closes the gap. Frontier single-agent systems match multi-agent orchestration on many SE tasks while avoiding the 36.9% inter-agent misalignment failure class ([arXiv:2511.08475](https://arxiv.org/abs/2511.08475); [arXiv:2503.13657](https://arxiv.org/abs/2503.13657v3)).
+- Strong single-agent baseline closes the gap. Frontier single-agent systems match multi-agent orchestration on many SE tasks while avoiding inter-agent misalignment altogether — one of the three categories MAST clusters its 14 failure modes into, alongside system design issues and task verification ([arXiv:2511.08475v2](https://arxiv.org/abs/2511.08475v2); [arXiv:2503.13657v3](https://arxiv.org/abs/2503.13657v3)).
 
 The paper's own §7.2 lists 17-repository sample size, Anthropic-only reference implementation, and unquantified human effort as known limitations ([arXiv:2606.03115](https://arxiv.org/abs/2606.03115v1)).
 

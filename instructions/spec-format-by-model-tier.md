@@ -64,6 +64,7 @@ One system was tested, all six models were proprietary, and one author group wro
 ## Related
 
 - [The Specification as Prompt](specification-as-prompt.md) — Use types, schemas, and API definitions as instructions rather than prose descriptions.
+- [Diagram as the Shared Spec](diagram-as-shared-spec.md) — When one diagram should be both the human's picture and the agent's spec, and what that costs.
 - [Multi-Layer Specification Redundancy](multi-layer-specification-redundancy.md) — Independent spec layers absorb prompt noise that prose repetition does not.
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — Reformatting constraints changes tokens, not compliance.
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — Accuracy falls as simultaneous constraint count rises.

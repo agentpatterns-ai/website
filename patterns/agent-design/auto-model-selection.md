@@ -197,7 +197,7 @@ graph TD
     E --> F
 ```
 
-Both gates must pass for the local completion to ship. The pipeline is training-free (off-the-shelf models, hand-tuned thresholds, no router fine-tuning) but thresholds couple to the specific small model and language: perplexity, the basis of the confidence gate, varies systematically by language ([Kotti et al., 2026](https://arxiv.org/abs/2508.16131)), so one cutoff rarely transfers across a polyglot codebase. The paper reports routine pass@1 of 78.9%, 7.4 points higher than always invoking the 480B model, and 58% lower accelerator usage ([Thangarajah et al., 2026](https://arxiv.org/abs/2605.04894v1)).
+Both gates must pass for the local completion to ship. The pipeline is training-free (off-the-shelf models, hand-tuned thresholds, no router fine-tuning) but thresholds couple to the specific small model and language: perplexity, the basis of the confidence gate, varies systematically by language ([Kotti et al., 2026](https://arxiv.org/abs/2508.16131v3)), so one cutoff rarely transfers across a polyglot codebase. The paper reports routine pass@1 of 78.9%, 7.4 points higher than always invoking the 480B model, and 58% lower accelerator usage ([Thangarajah et al., 2026](https://arxiv.org/abs/2605.04894v1)).
 
 How the three tier-routing signals compose:
 

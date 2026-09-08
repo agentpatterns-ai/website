@@ -9,7 +9,7 @@ tags:
 aliases:
   - workflow vs agent
   - what is an AI agent
-last_reviewed: 2026-06-12
+last_reviewed: 2026-09-05
 maturity: established
 ---
 
@@ -25,7 +25,7 @@ The disambiguation here is vendor-aware and time-bound:
 
 - Anthropic's framing is canonical on this site because we structure the pattern catalog around control-flow ownership. Readers on OpenAI's Agents SDK or LangGraph state machines meet alternative framings — none is "the" right one.
 - Categories are spectrum points, not boxes. Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) treats workflow-versus-agent as a continuum.
-- Definitions shift each quarter. Use this page to recognize which patterns to reach for today, not as a permanent taxonomy. Simon Willison crowdsourced 211 "agent" definitions, and convergence is still in progress ([agent-definitions tag](https://simonwillison.net/tags/agent-definitions/)).
+- Definitions shift each quarter. Use this page to recognize which patterns to reach for today, not as a permanent taxonomy. Simon Willison crowdsourced 211 "agent" definitions, and convergence is still in progress ([agent-definitions tag](https://simonwillison.net/tags/agent-definitions/)). A GitHub Podcast companion post walks through terms developers are meeting now, among them loops, harnesses, squads, and hill climbing, and says the vocabulary is still moving ([Cassidy Williams, GitHub, 2026-09-02](https://github.blog/ai-and-ml/decoding-the-new-ai-lingo-loops-harnesses-squads-hill-climbing-oh-my/)).
 
 ## Terms distinguishing control flow and duration
 

@@ -1,6 +1,6 @@
 ---
 title: "Cursor Self-Hosted Cloud Agents"
-description: "Run Cursor cloud agents in your own infrastructure — code, secrets, and artifacts stay on your network while Cursor's cloud handles inference."
+description: "Run Cursor cloud agents on machines you manage. The checkout, build cache, and local credentials stay put, but file contents and diffs still go to Cursor for inference."
 tags:
   - cursor
   - agent-design
@@ -9,7 +9,7 @@ aliases:
   - cursor self-hosted agents
   - cursor bring your own runner
 applies_to: "cursor@3.x"
-last_reviewed: 2026-06-14
+last_reviewed: 2026-09-08
 status: current
 ---
 
@@ -17,7 +17,7 @@ status: current
 
 > Run Cursor cloud agents in your own infrastructure — inference stays in Cursor's cloud, tool execution runs locally.
 
-Cursor [announced self-hosted cloud agents on March 25, 2026](https://cursor.com/changelog). The feature lets organizations keep code, secrets, and build artifacts inside their own network while still accessing Cursor's agent orchestration and multi-model harness. This is the primary use case for regulated industries, air-gapped networks, and teams whose policy blocks vendor-hosted code execution.
+Cursor [announced self-hosted cloud agents on March 25, 2026](https://cursor.com/changelog). The feature "moves Cloud Agent tool execution to a machine you manage", while "Cursor runs the agent loop, inference, and planning" ([Cursor docs](https://cursor.com/docs/cloud-agent/self-hosted)). It suits teams that need the agent to reach internal resources, or that need particular hardware. Read the next section before you reach for it as a data-residency control, because it is a weaker one than the name suggests.
 
 This is distinct from bring-your-own-key (BYOK) patterns. BYOK addresses model API access and its [token visibility](../../observability/byok-model-token-visibility.md). Self-hosted agents address where tool calls execute and where code artifacts reside.
 
@@ -40,7 +40,19 @@ sequenceDiagram
     CC->>Dev: Agent output
 ```
 
-The worker connects outbound via HTTPS to Cursor's cloud — no inbound ports, firewall changes, or VPN tunnels required. The worker receives tool calls, executes them against your local environment (filesystem, internal APIs, private registries), and returns results to the cloud for the next inference round. Code never leaves your network.
+The worker connects outbound via HTTPS to Cursor's cloud. No inbound ports, firewall changes, or VPN tunnels are required. The worker receives tool calls, executes them against your local environment (filesystem, internal APIs, private registries), and returns results to the cloud for the next inference round. Those results are the part people misread, so they get their own section.
+
+## What leaves your network
+
+Cursor documents this under a heading of the same name, and the answer is not "nothing".
+
+"The full checkout, build cache, and machine-local credentials stay on your machine." But "during a run, the worker sends Cursor the content the agent needs, such as file contents, terminal output, diffs, screenshots, local MCP results, and routing metadata" ([Cursor docs](https://cursor.com/docs/cloud-agent/self-hosted)).
+
+So code crosses the boundary. It goes as the file contents and diffs the model reasons over, rather than as a clone of the repository. Cursor's Privacy Mode sentence concedes the point: when enabled, "code sent from the worker is not used for training by Cursor or model providers" (same source). Privacy Mode governs training. Transmission happens either way.
+
+Artifacts travel on a separate, blockable path. Screenshots, videos, and log references upload to `cloud-agent-artifacts.s3.us-east-1.amazonaws.com`; block that host and the docs say it "only prevents artifacts from uploading" while tool calls and results continue (same source). The session itself runs over `api2.cursor.sh` and `api2direct.cursor.sh`, which you cannot block and keep the feature.
+
+If your requirement is that no source code reaches a vendor, self-hosted machines do not meet it and no flag changes that. What you do get is the checkout, the build cache, and the worker's credentials. For the tool-output channel Cursor offers a procedure, not a boundary: "keep secrets out of tool output and artifacts" (same source).
 
 ## Worker deployment
 
@@ -59,7 +71,7 @@ Workers run in one of two modes:
 
 Long-lived workers suit always-on environments (CI runners, shared team infrastructure). Single-use workers suit ephemeral compute (Lambda, container jobs) where you want clean state between tasks.
 
-On Kubernetes, deploy at scale with a Helm chart and a Kubernetes operator. Define the pool size you want, and the controller manages scaling, rolling updates, and lifecycle. A fleet management API covers non-Kubernetes environments, with utilization monitoring.
+On Kubernetes, a Helm chart and operator manage pool size, scaling, and rolling updates. A fleet management API covers everything else.
 
 The June 2026 [Cursor SDK](cursor-sdk.md) update tightens self-hosted control further. It adds custom `LocalAgentStore` backends, so a self-hosted deployment can persist agent state to its own storage rather than Cursor's. It also adds `customTools` defined through the built-in MCP layer, plus recursive sub-agent nesting ([Cursor changelog](https://cursor.com/changelog)).
 
@@ -67,12 +79,12 @@ The June 2026 [Cursor SDK](cursor-sdk.md) update tightens self-hosted control fu
 
 Use self-hosted execution when:
 
-- Policy prohibits code leaving the organizational network (regulated industries, government, defense)
-- The agent needs access to internal resources — private package registries, internal APIs, airgapped build systems — not reachable from Cursor's infrastructure
-- Compliance requires data residency: code, secrets, and build artifacts must stay in a specific region or network boundary
-- You need agents to run with the same credentials and environment access as your CI system — workers run with whatever secrets and permissions are present in the host environment
+- The agent needs internal resources not reachable from Cursor's infrastructure: private package registries, internal APIs, airgapped build systems
+- You need particular hardware, such as GPU machines or Macs for iOS builds
+- The checkout itself must not be cloned onto vendor infrastructure, and sending file contents and diffs over the session is acceptable
+- You need agents to run with the same credentials and environment access as your CI system
 
-Use vendor-hosted execution (the default) when you have no residency constraints and want zero operational overhead. Vendor-hosted agents require no infrastructure provisioning, patching, or monitoring.
+Use vendor-hosted execution, the default, when none of those hold. It needs no provisioning, patching, or monitoring.
 
 ## Trade-offs
 
@@ -81,10 +93,11 @@ Use vendor-hosted execution (the default) when you have no residency constraints
 | Setup | None | Worker provisioning, Kubernetes config or fleet API |
 | Operational overhead | Zero | Patching, monitoring, scaling worker pool |
 | Internal resource access | No | Yes — private registries, internal APIs |
-| Code residency | Cursor's cloud | Your network |
+| Where the checkout lives | Cursor's cloud | Your machine |
+| What still reaches Cursor | Everything | File contents, terminal output, diffs, screenshots, MCP results |
 | Compliance posture | Depends on Cursor's certifications | Under your control |
 
-Both modes offer the same agent capabilities: parallel execution, long-horizon tasks, multi-model harnesses, and plugin support. Self-hosted does not add capability — it relocates execution.
+Both modes carry the same agent capabilities. Self-hosted adds no capability; it relocates execution.
 
 ### What self-hosted does not solve
 
@@ -108,11 +121,11 @@ agent worker start --pool
 npm install --registry https://npm.internal.corp
 ```
 
-The inference (planning which commands to run) happens in Cursor's cloud. The `npm install` executes on the worker inside the corporate network, where the registry is reachable.
+Cursor's cloud plans the commands. The `npm install` runs on the worker, where the registry is reachable, and its terminal output goes back to Cursor for the next round.
 
 ## Key Takeaways
 
-- Cursor self-hosted agents split inference (Cursor cloud) from execution (your worker) — code never leaves your network
+- Self-hosted agents split inference (Cursor's cloud) from execution (your worker). The checkout stays local; file contents and diffs do not
 - Workers connect outbound via HTTPS only — no inbound firewall changes needed
 - Kubernetes deployment uses a Helm chart and operator for pool management; a fleet API covers non-Kubernetes environments
 - The trade-off is operational overhead (worker provisioning and maintenance) versus data residency and internal resource access

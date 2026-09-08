@@ -137,3 +137,4 @@ After the second pass the surface dropped from 130 to 71 rules — under the cei
 - [Weakest Consistent Learning: What Agent Loops Should Persist](../patterns/agent-design/weakest-consistent-learning.md) — how broadly to scope a rule an agent writes for itself, before the lifecycle metadata governs its removal
 - [The No-Op Test: Prune Agent Docs by Behavior, Not Length](behavioral-no-op-test.md) — the per-line deletion check that decides which of the flagged rules actually goes
 - [The Error-Class Governance Loop for Instruction Libraries](../workflows/instruction-library-governance-loop.md) — the running cycle that consumes this metadata: recurrence classification, the retirement pathway, and a standing cut list
+- [Why an Encoded Rule Still Fails After a Passing Eval](encoded-rule-failure-diagnosis.md) — the four defects behind a rule that keeps failing, and why three of them survive any rewrite of the wording

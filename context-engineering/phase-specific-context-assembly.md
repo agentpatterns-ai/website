@@ -41,6 +41,8 @@ flowchart LR
 
 Failures route back to an earlier stage. A blocked implementer means the plan was incomplete — return to planning with the specific gap identified.
 
+The complementary question is which context *operation* each phase performs, rather than what content it receives. [Four-Phase Agent Delegation with Curated Artifacts](../workflows/four-phase-agent-delegation.md) maps a four-phase workflow onto write, select, compress, and isolate.
+
 ## Orchestrators versus workers
 
 - Orchestrators need condensed summaries — enough to route and decompose tasks. File contents waste attention on decisions they do not make.

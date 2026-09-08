@@ -85,3 +85,4 @@ Consider a confused-deputy attempt: a poisoned tool description asks the runtime
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — the coverage view of deny-path audit and gate-bypass failure modes
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — the principle behind metadata non-authority: runtime content informs but never authorizes
 - [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — the upstream question these invariants assume away: whether the reviewer even sees the metadata the model reads
+- [The Post-Authorization Execution Trust Gap in Remote MCP](post-authorization-execution-trust-gap.md) — the remote case, where the invariants have to hold on a workload the client never sees

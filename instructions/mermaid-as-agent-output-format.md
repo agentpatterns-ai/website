@@ -116,6 +116,7 @@ The same prompt sent to an agent posting to a plain Slack channel produces a fen
 
 ## Related
 
+- [Diagram as the Shared Spec: One Artifact for the Picture and the Prompt](diagram-as-shared-spec.md)
 - [HTML as Agent Output Format: When to Ask for HTML Instead of Markdown](html-as-output-format.md)
 - [Domain-Specific System Prompts with Concrete Examples](domain-specific-system-prompts.md)
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md)

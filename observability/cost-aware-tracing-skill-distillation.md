@@ -72,7 +72,7 @@ For teams already on OTel, a cheaper first move is to add redundancy detection a
 
 ## Why cost is the right signal
 
-Counterfactual-based distillation works without per-step cost ([Few-Shot Knowledge Distillation with Counterfactual Explanations, 2025](https://arxiv.org/abs/2510.21631)), and inference-time routing achieves cost savings without rewriting skills at all ([Inference-Time Distillation, 2025](https://arxiv.org/abs/2512.02543)). Per-step cost is one signal among several, not the only path to cheaper agents.
+Counterfactual-based distillation works without per-step cost ([Few-Shot Knowledge Distillation with Counterfactual Explanations, 2025](https://arxiv.org/abs/2510.21631)), and inference-time routing achieves cost savings without rewriting skills at all ([Sarukkai et al., 2025](https://arxiv.org/abs/2512.02543)). Per-step cost is one signal among several, not the only path to cheaper agents.
 
 Its specific contribution is prune transferability: cost identifies which redundant steps are safe to remove across tasks rather than just within one. The aggregate payoff is bounded — in the paper's full transfer, preserve-patch regressions offset prune gains, so net cost barely moved — but cost grounding is what lets a portable skill library prune defensibly instead of guessing, distinct from [memory synthesis from execution logs](../patterns/agent-design/memory-synthesis-execution-logs.md), which extracts lessons without cost grounding.
 

@@ -56,7 +56,7 @@ A practical split for harness authors:
 2. Trust boundary: show the prompt with the parsed structure visible, so the user accepts or rejects knowing what would activate.
 3. Post-trust phase: spawn MCP servers, register hooks, evaluate environment overrides, and open localhost listeners.
 
-The fix generalizes. Any harness that loads project-local config (Codex `.codex/`, Cursor `.cursor/rules/`, Copilot `.github/copilot/`, future tools) has the same surface and needs the same sequencing. The Cuckoo Attack research showed the class is reproducible across nine agent and AI-IDE combinations ([Cuckoo Attack, 2025](https://arxiv.org/abs/2509.15572)).
+The fix generalizes. Any harness that loads project-local config (Codex `.codex/`, Cursor `.cursor/rules/`, Copilot `.github/copilot/`, future tools) has the same surface and needs the same sequencing. The Cuckoo Attack research showed the class is reproducible across nine agent and AI-IDE combinations ([Liu et al., 2025](https://arxiv.org/abs/2509.15572)).
 
 VS Code 1.126 ships a concrete instance of this sequencing: new folders open in Restricted Mode with the trust prompt deferred to a banner, and the over-trust-prone "Trust Parent" button was removed ([VS Code 1.126 release notes](https://code.visualstudio.com/updates/v1_126)).
 

@@ -119,7 +119,7 @@ Skills can reference other skills by name ([source](https://x.com/trq212/status/
 
 Reference skills by their exact `name` field, not by filename.
 
-Decomposing a monolithic skill into smaller composed units has a research-backed rationale beyond reuse: a microservices-inspired "microskill" decomposition has been proposed as a remedy for mid-context information loss, token-cost spiral, and architecture drift, explicitly tying skill granularity to context-window degradation ([Microskill Architecture, 2026](https://arxiv.org/abs/2606.05720)).
+Decomposing a monolithic skill into smaller composed units has a research-backed rationale beyond reuse: a microservices-inspired "microskill" decomposition has been proposed as a remedy for mid-context information loss, token-cost spiral, and architecture drift, explicitly tying skill granularity to context-window degradation ([Zare and Abdolrahmani, 2026](https://arxiv.org/abs/2606.05720)).
 
 ## CLI-first design (recommended for executable skills)
 

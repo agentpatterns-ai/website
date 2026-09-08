@@ -24,7 +24,7 @@ Agent Context Files (ACFs) — `CLAUDE.md`, `AGENTS.md`, `.github/copilot-instru
 
 The evidence applies under specific conditions. Lead with these or the recommendation backfires:
 
-- Active multi-contributor codebase with a load-bearing ACF: the 67.4% multi-commit cohort is real projects whose agents work daily. On a prototype, a pinned-model deployment, or a well-documented OSS repo, the empirical baseline is different — added context files traded ~19% cost for marginal or negative accuracy in [Gloaguen et al.'s evaluation](https://arxiv.org/abs/2602.11988) ([Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)).
+- Active multi-contributor codebase with a load-bearing ACF: the 67.4% multi-commit cohort is real projects whose agents work daily. On a prototype, a pinned-model deployment, or a well-documented OSS repo, the empirical baseline is different — added context files traded ~19% cost for marginal or negative accuracy in [Gloaguen et al.'s evaluation](https://arxiv.org/abs/2602.11988v2) ([Evaluating AGENTS.md: When Context Files Hurt More Than Help](evaluating-agents-md-context-files.md)).
 - The ACF is human-written, not auto-generated: auto-generated files reduced success rates by 3% and increased cost 20% in the same study, and running `/init` more often is not the lever. Maintenance discipline applies to files that already contain non-inferable signal.
 - The codebase evolves faster than the ACF tracks: build commands move, test runners change, and architectural invariants shift. Drift is what the discipline corrects.
 
@@ -104,7 +104,7 @@ The agent author runs the compact pass and finds three rules describing the old 
 The discipline is not free, and several conditions invert its sign:
 
 - Prototypes and short-lived repos: the 67.4% multi-commit cohort comes from active projects. A repo with three contributors and six weeks of life will not accumulate enough drift to justify the review overhead.
-- Auto-generated ACFs: a file produced by running `/init` and never edited is duplicating discoverable context already in the codebase. Maintaining the duplicate raises cost without raising accuracy ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988)). The fix is deletion, not cadence.
+- Auto-generated ACFs: a file produced by running `/init` and never edited is duplicating discoverable context already in the codebase. Maintaining the duplicate raises cost without raising accuracy ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988v2)). The fix is deletion, not cadence.
 - High update frequency without the compact pass: running only the add loop reproduces the monotonic-growth pattern the empirical data already shows. The Chatlatanagulchai numbers (deletions <15 words/commit) are the warning, not the prescription.
 - Reviewers without prompt-engineering literacy: PR-gated ACF changes degrade into rubber-stamps when reviewers cannot predict the behavioral delta of a wording change — addressed in [Prompt Governance via PR](prompt-governance-via-pr.md).
 - Pinned-model deployments: maintenance overhead assumes that future model updates will reveal new ACF-vs-code drift. On a frozen model with a stable codebase, the rationale collapses; see also [Harness Impermanence](../patterns/agent-design/harness-impermanence.md) for the related discipline applied to scaffolding rather than ACFs.
@@ -135,3 +135,4 @@ The discipline is not free, and several conditions invert its sign:
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the destination for rules the compact pass moves out of prose
 - [Harness Impermanence](../patterns/agent-design/harness-impermanence.md) — the analogous discipline applied to scaffolding code rather than instruction files
 - [RAMP: Committed AI Configuration and the Quality Cost](committed-ai-configuration-quality-cost.md) — the commercial-repo study that reports the opposite lifecycle, with 73.8% of artifacts committed once and never modified
+- [Why an Encoded Rule Still Fails After a Passing Eval](encoded-rule-failure-diagnosis.md) — what to check when an add-on-drift update passes its eval and the failure it targeted keeps arriving
