@@ -99,3 +99,4 @@ The cue is short, task-relevant, and pre-selected — two plausible CWEs are lis
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — why ≤5 CWE entries works and a full Top-25 list backfires
 - [Context Priming](../context-engineering/context-priming.md) — the general lever the security cue specializes
 - [Severity-Stratified Evaluation of Security Prompts](../verification/severity-stratified-security-prompt-evaluation.md) — how to score the distribution shift a cue produces, so a redistribution is not read as a reduction
+- [Explained Feedback for LLM Vulnerability Repair](../verification/explained-feedback-vulnerability-repair.md) — the other half of the loop: what to hand the model after the scanner flags what the cue failed to prevent

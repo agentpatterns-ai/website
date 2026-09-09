@@ -71,3 +71,4 @@ Treating every prompt-side gain as illusory costs a cheap control, and the resul
 - [Security Drift in Iterative LLM Code Refinement](../security/security-drift-iterative-refinement.md) — A different drift: security regressions accumulate across fix-test iterations while functional tests keep passing.
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — The umbrella page for measurement gaps a stronger model cannot close.
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Severity stratification applied to red-team results, where a 0% attack success rate can still hide cross-scope leakage.
+- [Explained Feedback for LLM Vulnerability Repair](explained-feedback-vulnerability-repair.md) — Post-detection rather than pre-generation: how the wording of a scanner finding changes whether the model removes the weakness.

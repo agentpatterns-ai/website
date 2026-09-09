@@ -9,7 +9,7 @@ tags:
 aliases:
   - OWASP LLM Top 10 2026 changes
   - OWASP GenAI Agent Control Standard
-last_reviewed: 2026-09-02
+last_reviewed: 2026-09-08
 maturity: emerging
 ---
 
@@ -17,7 +17,7 @@ maturity: emerging
 
 > The 2026 OWASP LLM Top 10 adds nothing and renumbers eight entries; the new Agent Control Standard covers runtime controls at v0.1 preview.
 
-The 2026 edition keeps all ten 2025 categories. Set the [2025 list](https://genai.owasp.org/llm-top-10/) against the [2026 crosswalk explorer](https://genai-security-project.github.io/crosswalk/#/explorer) entry by entry and eight change position, with none added, merged, or dropped; the table below is that comparison. The one renaming is System Prompt Leakage, "renamed and broadened to Hidden Context Exposure" ([Help Net Security, August 2026](https://www.helpnetsecurity.com/2026/08/06/owasp-2026-llm-top-10-released/)). So the change that reaches a coding-agent builder is narrow and mechanical: an entry ID written without its edition year no longer names one risk. The [Agent Control Standard](https://genai.owasp.org/resource/agent-control-standard-acs/) (ACS) is the new artifact, and it catalogs runtime interception points rather than ranking risks.
+The 2026 edition keeps all ten 2025 categories. The OWASP GenAI Security Project announced the 2026 list and the new Agent Control Standard together in one post ([OWASP GenAI Security Project](https://genai.owasp.org/2026/09/01/owasp-genai-security-project-unveils-2026-top-10-for-llm-applications-new-agent-control-standard-and-sponsors-as-community-tops-30000-members/)). Set the [2025 list](https://genai.owasp.org/llm-top-10/) against the [2026 crosswalk explorer](https://genai-security-project.github.io/crosswalk/#/explorer) entry by entry and eight change position, with none added, merged, or dropped; the table below is that comparison. The one renaming is System Prompt Leakage, "renamed and broadened to Hidden Context Exposure" ([Help Net Security, August 2026](https://www.helpnetsecurity.com/2026/08/06/owasp-2026-llm-top-10-released/)). So the change that reaches a coding-agent builder is narrow and mechanical: an entry ID written without its edition year no longer names one risk. The [Agent Control Standard](https://genai.owasp.org/resource/agent-control-standard-acs/) (ACS) is the new artifact, and it catalogs runtime interception points rather than ranking risks.
 
 ## What moved in the 2026 list
 
