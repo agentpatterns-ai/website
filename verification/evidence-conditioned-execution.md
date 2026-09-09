@@ -90,3 +90,4 @@ The last two rows are the ones to act on. Writing the expectations as prose cost
 - [State-Bound Evidence and Typed Revision Contracts for Repair Loops](state-bound-repair-evidence.md) — binds each test result to the code state that produced it so revision cannot discard a correct patch.
 - [Pre-Change Impact Analysis: Dependency Maps That Prevent Agent Regressions](pre-change-impact-analysis.md) — supplies the code-to-test dependency evidence an edit-time gate can condition on.
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the hard, deterministic checks a gate's satisfaction predicates are built from.
+- [Pre-Execution Failure Scoring with a Draft Model (Speculative Uncertainty)](speculative-uncertainty-draft-model-gate.md) — the same gate position filled by a learned failure score instead of observation conditions.

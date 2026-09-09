@@ -910,6 +910,7 @@
   "security/multi-tenant-isolation-knobs-agent-sdk.md": "2026-05-30T09:56:24+00:00",
   "security/multitenant-rag-authorization-gap.md": "2026-05-08T20:06:39+00:00",
   "security/network-less-container-unix-socket-egress.md": "2026-05-30T09:56:56+00:00",
+  "security/neutral-prompting-hallucination-steering.md": "2026-09-08T21:24:29+00:00",
   "security/non-human-event-provenance-markers.md": "2026-07-14T22:13:26+00:00",
   "security/npm-signing-channel-containment-playbook.md": "2026-05-18T22:21:53+00:00",
   "security/oracle-poisoning-knowledge-graph.md": "2026-05-12T15:09:07+00:00",
@@ -1283,6 +1284,7 @@
   "verification/evidence-conditioned-execution.md": "2026-08-07T21:04:49+00:00",
   "verification/evidence-gated-lifecycle-control.md": "2026-07-18T21:23:14+00:00",
   "verification/execution-budgeting-program-repair.md": "2026-06-26T19:42:35+00:00",
+  "verification/explained-feedback-vulnerability-repair.md": "2026-09-08T21:24:29+00:00",
   "verification/five-pass-blunder-hunt.md": "2026-03-28T09:17:05+00:00",
   "verification/flare-multi-agent-fuzzing.md": "2026-04-10T04:57:18+00:00",
   "verification/generative-provenance-records.md": "2026-05-12T15:10:14+00:00",
@@ -1352,6 +1354,7 @@
   "verification/spec-driven-test-generation-contract-coverage.md": "2026-08-23T21:21:18+00:00",
   "verification/specification-grounded-test-generation.md": "2026-07-10T21:41:11+00:00",
   "verification/specification-path-testing.md": "2026-08-11T20:57:00+00:00",
+  "verification/speculative-uncertainty-draft-model-gate.md": "2026-09-08T21:23:08+00:00",
   "verification/staged-evidence-gates-program-repair.md": "2026-05-27T09:17:42+00:00",
   "verification/state-bound-repair-evidence.md": "2026-07-28T22:08:59+00:00",
   "verification/stateful-agent-state-and-transition-evals.md": "2026-06-28T22:53:14+00:00",
@@ -1501,6 +1504,7 @@
   "workflows/tiled-agent-layout.md": "2026-04-30T01:17:13+00:00",
   "workflows/velocity-quality-asymmetry.md": "2026-03-29T04:15:33+00:00",
   "workflows/verification-centric-development.md": "2026-03-28T09:17:05+00:00",
+  "workflows/verification-tax.md": "2026-09-08T21:24:29+00:00",
   "workflows/whole-codebase-visibility-migration-prerequisite.md": "2026-06-28T21:58:18+00:00",
   "workflows/worktree-isolation.md": "2026-03-28T09:17:05+00:00"
 }

@@ -41,6 +41,7 @@ nav:
   - "Supply Chain":
       - setup-documentation-install-time-attacks.md
       - slopsquatting-hallucinated-package-names.md
+      - neutral-prompting-hallucination-steering.md
       - npm-signing-channel-containment-playbook.md
       - enterprise-managed-plugin-governance.md
       - agent-emitted-dependency-ranges.md

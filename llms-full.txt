@@ -969,6 +969,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Always-On Agentic PR Security Review](security/always-on-pr-security-review.md)
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](security/authority-confusion-untrusted-context.md)
 - [Behavioral Firewall for Tool-Call Trajectories](security/behavioral-firewall-tool-call-trajectories.md)
+- [Benign Skill Wording That Steers Package Hallucination (Neutral Prompting Attack)](security/neutral-prompting-hallucination-steering.md)
 - [Bug-Class Hints as Exploit Input for Coding Agents](security/bug-class-hints-as-exploit-input.md)
 - [Clarification Mode Amplifies Prompt Injection](security/clarification-mode-injection-amplification.md)
 - [Code Injection Defense in Multi-Agent Pipelines](security/code-injection-multi-agent-defence.md)
@@ -1174,6 +1175,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Detecting Self-Preference in a Single LLM Judge](verification/judge-self-preference-detection.md)
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](verification/eval-blind-spots.md)
 - [Evidence-Grounded Disagreement in Agentic Code Review (Adversarial Review)](code-review/evidence-grounded-disagreement.md)
+- [Explained Feedback for LLM Vulnerability Repair](verification/explained-feedback-vulnerability-repair.md)
 - [Handoff-Boundary Fault Injection (llmmas-otel)](verification/handoff-boundary-fault-injection.md)
 - [Human-AI Review Synergy in Agentic Code Review](code-review/human-ai-review-synergy.md)
 - [Human-Review-Driven Curation of Golden Eval Datasets](verification/human-review-golden-dataset-curation.md)
@@ -1199,6 +1201,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](verification/planted-bug-observability-calibration.md)
 - [PR Description Style as a Lever for Agent PR Merge Rates](code-review/pr-description-style-lever.md)
 - [Pre-Change Impact Analysis: Dependency Maps That Prevent Agent Regressions](verification/pre-change-impact-analysis.md)
+- [Pre-Execution Failure Scoring with a Draft Model (Speculative Uncertainty)](verification/speculative-uncertainty-draft-model-gate.md)
 - [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](verification/precise-debugging-benchmark.md)
 - [Predicting Reviewable Code: Pre-Flagging Functions Reviewers Will Delete](code-review/predicting-reviewable-code.md)
 - [RAG/Agent Reliability Problem Map: 16-Domain Failure Taxonomy](verification/rag-agent-reliability-problem-map.md)
@@ -1462,6 +1465,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Labels as Locks: Pipelined Backlog Processing with Stage Gates](workflows/labels-as-locks-pipeline.md)
 - [Late Requirement Arrival in Agent Sessions](workflows/late-requirement-arrival.md)
 - [Lazy Worktree Isolation: Enter the Worktree on First Write, Not on Dispatch](workflows/lazy-worktree-isolation.md)
+- [Measuring the Verification Tax on Agent Output](workflows/verification-tax.md)
 - [Mise en Place for Agentic Coding](workflows/mise-en-place-agentic-coding.md)
 - [Model Deprecation Lifecycle for Agent Workloads](workflows/model-deprecation-lifecycle.md)
 - [Model-ID-as-Dependency: Migration Protocol for Deprecation Churn](workflows/model-deprecation-migration-protocol.md)
@@ -20495,6 +20499,7 @@ The cue is short, task-relevant, and pre-selected — two plausible CWEs are lis
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — why ≤5 CWE entries works and a full Top-25 list backfires
 - [Context Priming](../context-engineering/context-priming.md) — the general lever the security cue specializes
 - [Severity-Stratified Evaluation of Security Prompts](../verification/severity-stratified-security-prompt-evaluation.md) — how to score the distribution shift a cue produces, so a redistribution is not read as a reduction
+- [Explained Feedback for LLM Vulnerability Repair](../verification/explained-feedback-vulnerability-repair.md) — the other half of the loop: what to hand the model after the scanner flags what the cue failed to prevent
 
 ---
 
@@ -59666,6 +59671,7 @@ The corrective — read the findings and decide, do not obey the verdict — has
 - [Skill Supply Chain Poisoning](../../security/skill-supply-chain-poisoning.md) — the threat the scanner is meant to catch, and why install-time signatures are only part of the defense.
 - [Vetting Tool Definitions for Exfiltration Signatures](../../security/vetting-tool-definitions-before-install.md) — the manual-judgment complement: what to read in a definition that no pass or fail captures.
 - [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the case where the scan has no finding to compress, because the steering lives in the choice distribution rather than in the file.
+- [Benign Skill Wording That Steers Package Hallucination (Neutral Prompting Attack)](../../security/neutral-prompting-hallucination-steering.md) — the measured version of that case: static scanners flag nothing, and ten of ten human reviewers rated the skill as unsuspicious.
 
 ---
 
@@ -86902,6 +86908,7 @@ Source: https://agentpatterns.ai/verification/
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces
 - [Slop Detectors Fail as Per-Item Review Gates](slop-detection-as-review-gate.md) — Model-free AI-content signals are corpus-level estimators whose strongest code features an autoformatter erases; gate on build, test, diff-versus-description, and changed-line coverage instead
 - [Evidence-Conditioned Execution: Gate Edits on Observations](evidence-conditioned-execution.md) — Hold an agent's edit or patch submission until its trajectory satisfies machine-checked conditions naming the repository entities it should have observed first; the gain shrinks as the model strengthens
+- [Pre-Execution Failure Scoring with a Draft Model (Speculative Uncertainty)](speculative-uncertainty-draft-model-gate.md) — A 4B draft model scores a black-box agent's emitted tokens in one forward pass and vetoes actions likely to fail; it cut token cost 14-19% and cut SWE-Bench Verified resolve rate from 49% to 44%, so it buys cost and not quality
 - [Evidence-Gated Lifecycle Control for Coding Agents (Proof-or-Stop)](evidence-gated-lifecycle-control.md) — Advance an agent's lifecycle states (reviewed, tested, done, ready-to-merge) only when fresh, source-bound, mechanically verifiable evidence clears the gate — the agent's own assertion never advances the state
 - [Non-Compensatory Readiness Gates Before Agent Release](non-compensatory-readiness-gates.md) — Score release evidence on separate axes (evaluation, context, compliance, governance) and aggregate so a failure on one cannot be averaged away — the blocking rules do the work, not the composite score
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Order cheap evidence gates ahead of expensive ones in agentic repair loops — retrieval-grounded context, compile gate, target-test gate, then full regression — to filter invalid candidates before paying full-suite cost
@@ -86920,6 +86927,7 @@ Source: https://agentpatterns.ai/verification/
 - [Semantic Validation for Schema-Valid Agent Output](semantic-validation-schema-valid-output.md) — Schema conformance proves shape and says nothing about values; check identifiers against a register, values against a real bound, and fields against each other, and escalate where no anchor exists
 - [Defense-in-Depth Against Coding Agent Fabrication (Honesty Harness)](honesty-harness-fabrication-defense.md) — Four uncorrelated layers — instruction-level honesty rules, verify-before-write, real-time hooks that feed output back, and an external-tool fact-checker subagent — that reduce fabrication survival without claiming elimination
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — Stack scanner-pass, full-scanner, validate, plan, and plan-diff oracles so LLM-generated infrastructure-as-code security fixes have to clear behavioral checks — first-pass agent repairs cleared the targeted Checkov finding 83.3 percent of the time but 71.4 percent of plan-compared repairs were deceptive fixes
+- [Explained Feedback for LLM Vulnerability Repair](explained-feedback-vulnerability-repair.md) — Pass the raw scanner diagnostic back first; rewriting it into an attack mechanism plus ordered repair steps adds roughly 1 to 1.5 points, and reverses on weak instruction-followers, multi-CWE tasks, and the self-explained variant
 
 ## Tooling
 
@@ -92776,6 +92784,7 @@ The last two rows are the ones to act on. Writing the expectations as prose cost
 - [State-Bound Evidence and Typed Revision Contracts for Repair Loops](state-bound-repair-evidence.md) — binds each test result to the code state that produced it so revision cannot discard a correct patch.
 - [Pre-Change Impact Analysis: Dependency Maps That Prevent Agent Regressions](pre-change-impact-analysis.md) — supplies the code-to-test dependency evidence an edit-time gate can condition on.
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the hard, deterministic checks a gate's satisfaction predicates are built from.
+- [Pre-Execution Failure Scoring with a Draft Model (Speculative Uncertainty)](speculative-uncertainty-draft-model-gate.md) — the same gate position filled by a learned failure score instead of observation conditions.
 
 ---
 
@@ -92971,6 +92980,66 @@ The shape is the load-bearing part: a hard cap with an explicit "submit your bes
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md) — adjacent tool-level cost lever; reduces the cost per execution rather than the count of executions.
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — why "execution prohibited" sounds dangerous but isn't on the measured slice — the slice itself is the load-bearing claim.
 - [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — the performance-optimization case, where a run is the objective signal rather than a cost to cap.
+
+---
+
+### Explained Feedback for LLM Vulnerability Repair
+Source: https://agentpatterns.ai/verification/explained-feedback-vulnerability-repair/
+
+# Explained Feedback for LLM Vulnerability Repair
+
+> Explaining a scanner finding as an attack mechanism with ordered repair steps beats the raw diagnostic for strong instruction-followers on single-weakness findings.
+
+Hand the model the scanner's own diagnostic first. Averaged over the eight models Yan et al. tested, that alone cuts the target-vulnerability rate by 1.7 to 5.5 percentage points depending on the benchmark, though individual models show no change ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)). Rewriting it into an explanation buys another point or two, and on one of their three benchmarks nothing. Even their best prevention hints left "a non-trivial residual of vulnerable code", and repair lowered the rate rather than clearing it ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)). The detector and the merge gate carry the security. Feedback wording is a tuning knob inside that loop.
+
+## When this applies
+
+Rewrite the finding only when all three hold. Otherwise pass the raw diagnostic through and spend the effort on detection coverage.
+
+1. The repairing model executes multi-step instructions reliably. The gain tracks instruction-following, not security knowledge. GPT-4o and GPT-3.5-turbo are the study's strongest instruction-followers and "translate the explanations into coherent patches", while smaller open-weight models "often fail to coordinate the necessary updates" on longer, multi-CWE explanations ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)).
+2. Each finding is one weakness with a localized fix. The benefit "diminishes as the required changes become more distributed or configuration-heavy" ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)).
+3. A model stronger than the repairer writes the explanation. A GPT-4o teacher wrote every explanation in the study; the self-explained variant regresses, covered below.
+
+## What the explanation has to add
+
+The raw diagnostic says where. The explanation says why it is exploitable and what to change. Yan et al. draw four requirements from their case study: name the attack mechanism and its security impact, give fine-grained repair guidance rather than leaving the model to infer remediation from tool output, state the security invariant instead of an isolated syntactic change, and order the steps ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)).
+
+Averaged over eight models against a vanilla prompt, teacher explanations move the target-vulnerability rate by −2.9 points on SecCodePLT and −5.8 on SecurityEval, against −1.7 and −4.7 for the raw diagnostic. The authors size that gap themselves: "the marginal value of an explanation on top of a precise detector is modest to begin with, and whether it is net-positive depends on the model's ability to use it" ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)).
+
+## Why it works
+
+Naming a weakness and removing it are separate capabilities, and the raw diagnostic only exercises the first. Yan et al. state the gap directly: "raw diagnostics identify where a vulnerability exists, but provide insufficient guidance on how to safely remediate it." A model given only the finding produces edits that "appear security-related" while leaving the weakness reachable. Stating the invariant instead of the symptom changes what the model edits. In their archive-extraction case the same model "does not merely patch the flagged line, but restructures the extraction logic to enforce a global security invariant." Their summary of the study is the mechanism: "recognizing a vulnerability is not the same as being able to act on it" ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)).
+
+## When this backfires
+
+- The model explains its own finding. Self-explained feedback, with no external teacher, averaged −2.0 points on SecurityEval against −4.7 for the untouched diagnostic, and pushed several models above the do-nothing baseline: Llama3.1-8B rose 3.1 points on the target rate and 10.9 on the any-vulnerability rate ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)). Huang et al. report the same shape outside security: models "struggle to self-correct their responses without external feedback, and at times, their performance even degrades after self-correction" ([Huang et al., 2024](https://arxiv.org/abs/2310.01798v2)).
+- Several weaknesses land in one task. CyberSecEval averages 3.6 distinct CWEs per sample against 2.8 elsewhere, so the explanation runs to roughly 300 words and asks for coordinated edits in one pass. Averaged over all eight models it came in below the raw diagnostic on both rates, −4.2 against −5.5 on the target rate ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)).
+- The repairer is a weak instruction-follower. On that same benchmark, swapping the terse diagnostic for the explanation moved StarCoder2-15B from −10.9 to −4.0 and DeepSeekCoderV2-16B from −4.7 to −0.6 ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)). Partly applying a long instruction leaves the code globally insecure where the terse diagnostic had kept the fix narrow.
+- Fixing the weakness needs configuration-level reasoning. Path traversal (CWE-22) and XML external entity processing (CWE-611) resisted both prevention and repair throughout the study.
+- CodeQL never raises the weakness. Every result here is measured with that scanner, which "fails to capture dynamic vulnerabilities or those that manifest under specific runtime conditions" ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)). Nothing it misses gets feedback of any grade.
+- The repair breaks the feature. Vulnerability rates are all the study reports, so a fix that clears the finding and regresses behavior scores as a success. Keep the functional suite in the loop alongside the scanner.
+
+## Example
+
+Yan et al. walk through a tar extraction that lets a crafted archive entry escape the target directory. Handed the raw CodeQL finding, the model applied surface fixes that left containment unenforced. Handed feedback that named the attack mechanism, stated the containment invariant, and ordered the steps, the same model added a check validating each entry before extraction and aborted on a traversal attempt, restructuring the extraction path rather than patching the flagged line ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)).
+
+The four requirements above come from that single case study. The authors call them "consistent with the empirical improvements observed for explained feedback in our larger-scale experiments" rather than separately measured ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)).
+
+## Key Takeaways
+
+- Pass the raw scanner diagnostic back first. It is the oracle-free condition in the study and it captures most of the available reduction on its own ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)).
+- Budget the rewrite as roughly 1 to 1.5 percentage points, not as the control. Gate the merge on a re-scan.
+- Never let the repairing model explain its own finding without a stronger explainer. That variant regressed past the do-nothing baseline on several models ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)).
+- Split multi-weakness findings into one explanation each. The advantage disappears at 3.6 CWEs per task ([Yan et al., 2026](https://arxiv.org/abs/2506.23034v2)).
+- Track functional correctness separately. These benchmarks measure vulnerability rates only.
+
+## Related
+
+- [Security Knowledge Priming for Code Generation (SPARK)](../instructions/security-knowledge-priming.md) — the prevention half of the same loop: what to put in the prompt before generation, rather than in the feedback after detection.
+- [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — how many repair rounds to run; this page governs what each round is told.
+- [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — orders the evidence a repair must clear before it counts as done.
+- [Severity-Stratified Evaluation of Security Prompts](severity-stratified-security-prompt-evaluation.md) — why a falling headline count can be redistribution rather than removal.
+- [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — the verification side: stacked oracles that catch a fix which clears the finding without fixing the behavior.
 
 ---
 
@@ -97283,6 +97352,74 @@ The gate becomes a deadlock. If the agent cannot make a failing test pass — be
 
 ---
 
+### Pre-Execution Failure Scoring with a Draft Model (Speculative Uncertainty)
+Source: https://agentpatterns.ai/verification/speculative-uncertainty-draft-model-gate/
+
+# Pre-Execution Failure Scoring with a Draft Model (Speculative Uncertainty)
+
+> A small draft model scores a black-box agent's emitted tokens in one forward pass and predicts whether its next action will execute cleanly.
+
+Speculative Uncertainty runs speculative decoding backwards. Rather than a small model proposing tokens for a large one to check, a 4B open-weight draft reads the large agent's already-generated trajectory and reports how surprised it is, with no access to the agent's logits, weights, activations, or repeated samples ([Grotov and Malykh, arXiv:2609.05274v1](https://arxiv.org/abs/2609.05274v1)). Wired as a veto gate between code generation and execution on a Qwen3-Coder-480B agent, it cut per-call execution error from 21% to 15% on SWE-Bench Verified and average tokens per task by 14%. It also moved the resolved rate from 49% down to 44%. Both numbers are the result, and the second one decides whether you want the first.
+
+## Five conditions before this pays
+
+The authors are explicit about which axis the gate moves. The deployment value "lies in the cost and silent-failure axes, fewer wasted execute-fail-retry cycles and 14–19% lower token spend, rather than in raising the benchmark scores" ([arXiv:2609.05274v1](https://arxiv.org/abs/2609.05274v1)).
+
+1. Your accountability is per-call error rate and token spend, not end-to-end resolve rate. If a dashboard tracks tasks completed, this gate reads as a regression.
+2. You can collect and label roughly 10,000 trajectories from your own agent. Alignment is not a tuning detail, it is the method. An untrained Qwen3-4B draft scores .61 AUROC on SWE-Bench Verified against verbalized confidence's .57; distilled on 327,098 labeled action calls it reaches .76 ([arXiv:2609.05274v1](https://arxiv.org/abs/2609.05274v1), Table 1).
+3. Your objective is binary and machine-checkable. The paper's oracle is exit code 0 against any error, and it claims nothing beyond that: "we provide no quantitative evidence for other settings."
+4. Retries cost real money. The savings come from swapping the execute-fail-retry loop for a cheaper replan. Where a failed attempt costs a second in a local sandbox, there is nothing to recover.
+5. You have a GPU on the serving path. The draft adds about 100 ms per step on a single A100, and training it cost about 50 GPU-hours on four ([arXiv:2609.05274v1](https://arxiv.org/abs/2609.05274v1), Table 7).
+
+## Why it works
+
+Two mechanisms carry it, and the second is easy to skip. In speculative decoding a drafted token is accepted with probability `min(1, p/q)`, and the agent's `p` is hidden. The authors' argument is that when the draft tracks the agent well, a high speculative surprisal means the agent "too would face a low acceptance rate there", so the draft's surprisal stands in for the agent's own uncertainty ([arXiv:2609.05274v1](https://arxiv.org/abs/2609.05274v1)). An aligned draft that finds the agent's tokens improbable is reporting that the agent has wandered off its own well-modeled behavior.
+
+The second mechanism is the phase split. An agent trajectory alternates a high-entropy reasoning span with an action span "pinned down by syntax and tool-call structure", so identical surprisal carries different meaning in each. Computing the features separately "keeps the noisy reasoning signal from masking the small, failure-relevant deviations in the action span". The ablation is the evidence: pooling both phases costs 5 to 6 AUROC points, .71 against .76 on SWE-Bench Verified ([arXiv:2609.05274v1](https://arxiv.org/abs/2609.05274v1), Table 1).
+
+## Example
+
+The gate is a threshold on one score. The threshold is fitted on the training split and frozen for every reported evaluation ([arXiv:2609.05274v1](https://arxiv.org/abs/2609.05274v1), Algorithm 1):
+
+```text
+features  = draft.teacher_force(window)   # one forward pass, no generation
+p_success = calibrator(features)          # L1 logistic regression, 50 features
+
+if p_success >= tau:   execute the action
+elif retries < K:      replan: append a failure hint, re-invoke the agent
+else:                  abstain and return a low-confidence flag
+```
+
+The 50 features are eight statistics for each of three signals (surprisal, gap, entropy) across two phases, plus the two span lengths. The window covers the three most recent steps.
+
+## When this backfires
+
+A high AUROC does not entitle you to intervene. Vasudev and colleagues ran a binary LLM critic with an offline AUROC of 0.94 and measured a 26 percentage point performance collapse on one model while a second was affected by close to zero, naming the cause a "disruption-recovery tradeoff: interventions may recover failing trajectories but also disrupt trajectories that would have succeeded" ([arXiv:2602.03338v1](https://arxiv.org/abs/2602.03338v1)). The Speculative Uncertainty gate is a mild case of the same effect. Its false-veto rate is 0.14 on SWE-Bench Verified and 0.16 on DA-Code, so roughly one blocked action in six or seven would have run fine, and a replan is not guaranteed to recover the ones that would not.
+
+Frozen thresholds are the second exposure. Across 19 uncertainty estimation methods, Bakman and colleagues found most "are highly sensitive to threshold selection when there is a distribution shift in the calibration dataset" ([arXiv:2506.01114v1](https://arxiv.org/abs/2506.01114v1)). Speculative Uncertainty fits its threshold once and carries it to two out-of-distribution benchmarks, which is the move that survey found fragile.
+
+Semantic failures sit outside the objective entirely. Code that runs and computes the wrong answer earns a positive label from an exit-code oracle, so the gate is blind to it by construction. Reach for [evidence-conditioned execution](evidence-conditioned-execution.md) or a behavioral oracle for that class.
+
+The evidence is one preprint and one run. The authors report "single-run point estimates on fixed evaluation sets" with no seed variance or confidence intervals, and say the 5 percentage point task-success change should be read with that in mind ([arXiv:2609.05274v1](https://arxiv.org/abs/2609.05274v1)).
+
+## Key Takeaways
+
+- Buy this for the token bill and the silent-failure rate. On resolve rate the paper's own headline experiment lost 5 points.
+- An unaligned draft is close to useless at .61 AUROC. Budget for the trajectory corpus and the distillation run before budgeting for the gate.
+- A draft aligned to one agent still transfers. The Qwen-distilled draft reached .69 AUROC scoring Claude 3.5 Sonnet, against .60 untrained ([arXiv:2609.05274v1](https://arxiv.org/abs/2609.05274v1), Table 4).
+- The score is not a probability. The authors call it "a failure-likelihood score rather than a calibrated probability", enough for a threshold gate, not for anything that reads the number itself.
+- Re-fit the threshold when your task distribution moves, and measure false vetoes, not only true ones.
+
+## Related
+
+- [Evidence-Conditioned Execution: Gate Edits on Observations](evidence-conditioned-execution.md) — the other pre-execution gate, conditioned on what the agent observed rather than on how it wrote
+- [Deterministic Precondition Gates for Tool-Using Agents](../patterns/agent-design/deterministic-precondition-gates.md) — the deterministic counterpart, where a predicate replaces a learned score
+- [Static Difficulty Estimation for Agent Issue Triage](static-difficulty-estimation-issue-triage.md) — success prediction one level up, at the task rather than the step
+- [Execution Budgeting in Agentic Program Repair](execution-budgeting-program-repair.md) — the cost side of the same trade, capping executions instead of vetoing them
+- [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — what to do when the signal you gate on is itself unreliable
+
+---
+
 ### Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate
 Source: https://agentpatterns.ai/verification/precise-debugging-benchmark/
 
@@ -98977,6 +99114,7 @@ Treating every prompt-side gain as illusory costs a cheap control, and the resul
 - [Security Drift in Iterative LLM Code Refinement](../security/security-drift-iterative-refinement.md) — A different drift: security regressions accumulate across fix-test iterations while functional tests keep passing.
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — The umbrella page for measurement gaps a stronger model cannot close.
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Severity stratification applied to red-team results, where a 0% attack success rate can still hide cross-scope leakage.
+- [Explained Feedback for LLM Vulnerability Repair](explained-feedback-vulnerability-repair.md) — Post-detection rather than pre-generation: how the wording of a scanner finding changes whether the model removes the weakness.
 
 ---
 
@@ -102563,6 +102701,7 @@ Agents dynamically load tools from MCP servers, plugins, and registries at runti
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — Malicious skills injected into public registries exploit in-context learning to execute payloads hidden in documentation examples, bypassing alignment that blocks explicit instruction injection
 - [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md) — Setup docs are unverified install authority; editing only a README, requirements file, or Makefile redirects an agent's install to a wrong name, untrusted registry, or vulnerable version, and the payload runs at install time — agents catch typosquats but miss source-based redirects almost everywhere
 - [Slopsquatting: Hallucinated Package Names as a Supply-Chain Vector](slopsquatting-hallucinated-package-names.md) — Coding LLMs hallucinate package names at 5.2%-21.7%; 43% of those names persist across re-runs, making them enumerable — attackers register the persistent names and the agent's install step pulls the malicious package
+- [Benign Skill Wording That Steers Package Hallucination (Neutral Prompting Attack)](neutral-prompting-hallucination-steering.md) — A skill naming no package and giving no malicious instruction raised hallucination attack success from 4.54% to 78.99%; a strict allowlist measured 0.00% while a registry existence check measured no reduction at all
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — Require cryptographic signature verification (Sigstore/Cosign) before an agent loads or invokes a tool
 
 ## Defense in Depth
@@ -103889,6 +104028,118 @@ The pDFA firewall layers cleanly with the rest of the security stack:
 - [Permission-Gated Custom Commands](permission-gated-commands.md) — exact-match whitelists that close the synonym-substitution gap
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — layering principle the pDFA firewall plugs into rather than replaces
 - [Single-Layer Prompt Injection Defense](../patterns/anti-patterns/single-layer-injection-defence.md) — anti-pattern the residual 5.6% ASR confirms
+
+---
+
+### Benign Skill Wording That Steers Package Hallucination (Neutral Prompting Attack)
+Source: https://agentpatterns.ai/security/neutral-prompting-hallucination-steering/
+
+# Benign Skill Wording That Steers Package Hallucination (Neutral Prompting Attack)
+
+> Skill wording that only asks for imagination and exhaustiveness raised one model's package-hallucination rate from 4.5% to 79%, with no malicious instruction to detect.
+
+A Neutral Prompting Attack (NPA) is a persistent instruction artifact, usually a skill file, whose text names no package and asks for nothing forbidden, and which still makes the agent invent dependencies far more often than it otherwise would. On Qwen2.5-Coder-32B-Instruct, NPA "raises Hallucination ASR from 4.54% under Normal Skill to 78.99% on LLM_LY, and from 3.53% to 57.76% on LLM_AT", two prompt sets built around Python packages ([arXiv:2605.29354v2](https://arxiv.org/abs/2605.29354v2)). The attacker registers the names that start appearing, and the ordinary [slopsquatting](slopsquatting-hallucinated-package-names.md) chain runs from there.
+
+Two conditions decide whether this matters to you. You have to load skills, rules files, or project templates that someone outside your team wrote. And your agent's install path has to accept a package name that no human endorsed. Close the second and the paper's own strict-allowlist row measures 0.00% on both attack metrics. Close the first and there is no artifact left to carry the wording.
+
+## What is different about it
+
+Three attacks share the same registry endgame and differ in what the defender can see.
+
+| | Slopsquatting | Dependency steering | Neutral prompting |
+|---|---|---|---|
+| Source of the bad name | The model's own prior | A skill naming the target package | A skill naming nothing |
+| Attacker control of rate | None, enumerate what exists | High, one package | High, the whole distribution |
+| What a scanner can match | Nothing, no artifact | Target package reference | Nothing |
+| Reference | [arXiv:2406.10279](https://arxiv.org/abs/2406.10279) | [arXiv:2605.09594v1](https://arxiv.org/abs/2605.09594v1) | [arXiv:2605.29354v2](https://arxiv.org/abs/2605.29354v2) |
+
+The middle column is what this site covers under [skill supply-chain poisoning](skill-supply-chain-poisoning.md), where the skill carries a payload or a target. Neutral prompting removes the artifact and keeps the effect. The authors build it by mutating an ordinary skill through "three evolutionary operations: Rewrite, Inject, and Framing", scored on how often the model emits a nonexistent package name ([arXiv:2605.29354v2](https://arxiv.org/abs/2605.29354v2)).
+
+## Why it works
+
+The authors give an additive account: "creativity-oriented instructions broaden the model's candidate space, while exhaustiveness-oriented instructions pressure the model to avoid omissions even when grounded knowledge is insufficient", and their combination "encourages speculative package generation" ([arXiv:2605.29354v2](https://arxiv.org/abs/2605.29354v2)). The second half carries the weight. A demand for completeness turns "I know of no library for this" into an emitted name, because the instruction has priced omission higher than invention.
+
+The explanation is behavioral, and the authors say so: the analysis rests on output behavior rather than internal mechanistic study. It describes what the wording does to the output distribution, not why the model responds that way.
+
+## What the measurements cover
+
+The effect survives the trip from a benchmark into a running agent. Running the skill in three closed-loop harnesses, the paper reports generated hallucination, proposed install, and executed install rates of 84.01%, 88.03%, and 90.77% in Claude Code; 80.96%, 75.81%, and 82.29% in OpenHands; and 65.59%, 61.40%, and 60.34% in OpenCode. Every normal-skill figure in the same table sits below 3.5% ([arXiv:2605.29354v2](https://arxiv.org/abs/2605.29354v2)).
+
+Transfer is real but uneven. The cross-model table lifts GPT-5 from 1.28% to 29.29% hallucination attack success and Nemotron-3-Nano-30B-A3B from 37.22% to 47.01%, while Llama-3.1-8B-Instruct moves only from 16.43% to 17.74% ([arXiv:2605.29354v2](https://arxiv.org/abs/2605.29354v2)). Treat the headline figures as the ceiling for a well-fitted target, not the number to expect on your model.
+
+Detection is where the result bites. "Static analysis tools fail to flag the generated Skills as malicious, while among LLM/agent-based tools, only Snyk Agent Scan can detect them" ([arXiv:2605.29354v2](https://arxiv.org/abs/2605.29354v2)). Ten computer-science students grading on a 7-point suspicion scale rated a normal skill 1.0, an unoptimized NPA 5.0, and the stealth-optimized variant 1.2, and all ten said they would enable that variant. A clean scan and a clean read carry no information here, which is the same trap as [trusting a skill scanner's verdict](../patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md).
+
+Stealth can cost the attacker, which is the defender's leverage, though not reliably. Folding Snyk evasion into the optimization loop (NPA-Snyk) dropped pip-install attack success on Qwen2.5-Coder-32B-Instruct from 50.63% to 8.32%, roughly five sixths of the payoff. On Gemma-3-12b-it the same variant went the other way, from 17.44% under a normal skill to 53.69% ([arXiv:2605.29354v2](https://arxiv.org/abs/2605.29354v2)). Pressure on detection buys something on some targets, and you cannot count on which.
+
+## Which controls hold
+
+Ranked by what the paper measured, against an unprotected baseline of 57.76% hallucination and 50.63% pip-install attack success on the same model and dataset ([arXiv:2605.29354v2](https://arxiv.org/abs/2605.29354v2)):
+
+- Strict allowlist: 0.00% and 0.00%. It closes the vector and costs dependency flexibility, which is the whole trade.
+- Package-existence check: 59.60% and 51.12%. No reduction. The paper reports the number without a cause; the reading that fits the sibling evidence is that existence stops being a useful predicate once someone registers the name first, which is [the documented slopsquatting sequence](slopsquatting-hallucinated-package-names.md).
+- Lockfile-enforced install: the allowlist predicate applied per project, and the control the [slopsquatting page](slopsquatting-hallucinated-package-names.md) already recommends.
+- Inference-time mitigation: retrieval grounding cuts the cross-model average package-hallucination rate from 29.7% to 18.1%, while decoding-only defenses give "inconsistent protection under adversarial prompting", with rates rising by up to 45 percentage points ([arXiv:2608.22652v1](https://arxiv.org/abs/2608.22652v1)). Useful as depth, useless as the only layer.
+
+## Example
+
+A gate here has to answer whether a human committed this name, which is a different question from whether the package exists. Two `uv` flags divide on that line, and the difference is easy to get backwards.
+
+**Before** — the manifest gains a dependency and nothing compares it to the lockfile:
+
+```bash
+$ uv sync --frozen          # datasets-cache-utils was just added to pyproject.toml
+Audited in 0.00ms
+```
+
+`uv sync --help` (uv 0.8.17) describes `--frozen` as "Sync without updating the `uv.lock` file", and that is all it does: the added name produces no install and no error, because nothing compared the two files.
+
+**After** — the lockfile has to agree with the manifest:
+
+```bash
+$ uv sync --locked
+  × No solution found when resolving dependencies:
+  ╰─▶ Because datasets-cache-utils was not found in the package registry and
+      your project depends on datasets-cache-utils, we can conclude that your
+      project's requirements are unsatisfiable.
+```
+
+`--locked` asserts "that the `uv.lock` will remain unchanged", so in CI it forces every new name through a `uv lock` run and a lockfile diff someone reads. Once the attacker registers the name the resolution stops failing, and that diff is the control that remains.
+
+## When this backfires
+
+Treating this as a new skill-review problem is the wrong response for most teams.
+
+- You already install from a lockfile, an internal mirror, or an allowlist. A skill-review program aimed at this attack buys nothing on top of the control the paper measured at 0.00%.
+- You author every skill internally. The attack needs an instruction artifact you did not write, and reviewing your own skills for suspicious wording finds nothing, because the wording is not suspicious.
+- You work outside Python. The authors state the evaluation covers Python packages and that generalization to JavaScript and Rust is unclear.
+- You start deleting quality wording from your own skills. The paper optimizes wording adversarially against a hallucination score. It never shows that asking your own agent to be thorough harms you.
+- You adopt a registry existence check as the answer. That is the one control the paper measured as ineffective here.
+
+The marginal risk may also be small. A user who installs a third-party skill has already granted it persistent instruction authority over the agent, which in most harnesses includes shell execution. Nudging the package-name distribution is a smaller capability than the ones that skill already holds.
+
+## Key Takeaways
+
+- Wording that asks only for imagination and exhaustiveness raised hallucination attack success from 4.54% to 78.99% on Qwen2.5-Coder-32B-Instruct, with no package named and no malicious instruction present ([arXiv:2605.29354v2](https://arxiv.org/abs/2605.29354v2))
+- Static scanners have nothing to match, and ten of ten human evaluators rated the stealth variant 1.2 on a 7-point suspicion scale and would enable it, so a clean review is not evidence
+- A strict allowlist measured 0.00% on both attack metrics; a package-existence check measured 59.60% against a 57.76% unprotected baseline, which is no reduction at all
+- Evading the one scanner that detected the attack cut pip-install attack success from 50.63% to 8.32%, so pressure on detection still costs the attacker most of the payoff
+- Two conditions make this yours: third-party skill intake, and an install path that accepts an unendorsed name
+
+## Related
+
+- [Slopsquatting: Hallucinated Package Names as a Supply-Chain Vector](slopsquatting-hallucinated-package-names.md) — the passive case this attack turns active; the attacker there enumerates a fixed prior instead of moving it
+- [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — the same delivery channel carrying a payload, which is what makes it detectable and this variant not
+- [Trusting a Skill Scanner's Verdict as a Security Judgment (Green-Check Fallacy)](../patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md) — why a pass on a skill with no artifact to match tells you nothing
+- [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md) — the intake-gate layer, and its limit when the intent under review is benign
+- [Judging a Skill's Honesty by the Validity of Its Output](../patterns/anti-patterns/judging-skill-honesty-by-output-validity.md) — the same class of payload-free skill steering aimed at a different target: which real candidate wins, rather than how often a nonexistent name appears
+- [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — the third agent-authored-manifest failure, where the name is real and the range admits a future compromise
+
+## Sources
+
+- [arXiv:2605.29354v2](https://arxiv.org/abs/2605.29354v2) — Hsu, Yu, Huang, Sakuma, "Harmless Yet Harmful: Neutral Prompting Attacks for Stealthy Hallucination Steering in Agent Skills"
+- [arXiv:2605.09594v1](https://arxiv.org/abs/2605.09594v1) — Liu et al., "Trust Me, Import This: Dependency Steering Attacks via Malicious Agent Skills", the targeted sibling attack
+- [arXiv:2608.22652v1](https://arxiv.org/abs/2608.22652v1) — Djire et al., "Evaluating Inference-Time Defenses against Package Hallucination in LLM-Generated Code"
+- [arXiv:2406.10279](https://arxiv.org/abs/2406.10279) — Spracklen et al., USENIX Security 2025, the baseline package-hallucination measurement
 
 ---
 
@@ -112081,7 +112332,7 @@ Source: https://agentpatterns.ai/security/owasp-2026-update-agent-control-standa
 
 > The 2026 OWASP LLM Top 10 adds nothing and renumbers eight entries; the new Agent Control Standard covers runtime controls at v0.1 preview.
 
-The 2026 edition keeps all ten 2025 categories. Set the [2025 list](https://genai.owasp.org/llm-top-10/) against the [2026 crosswalk explorer](https://genai-security-project.github.io/crosswalk/#/explorer) entry by entry and eight change position, with none added, merged, or dropped; the table below is that comparison. The one renaming is System Prompt Leakage, "renamed and broadened to Hidden Context Exposure" ([Help Net Security, August 2026](https://www.helpnetsecurity.com/2026/08/06/owasp-2026-llm-top-10-released/)). So the change that reaches a coding-agent builder is narrow and mechanical: an entry ID written without its edition year no longer names one risk. The [Agent Control Standard](https://genai.owasp.org/resource/agent-control-standard-acs/) (ACS) is the new artifact, and it catalogs runtime interception points rather than ranking risks.
+The 2026 edition keeps all ten 2025 categories. The OWASP GenAI Security Project announced the 2026 list and the new Agent Control Standard together in one post ([OWASP GenAI Security Project](https://genai.owasp.org/2026/09/01/owasp-genai-security-project-unveils-2026-top-10-for-llm-applications-new-agent-control-standard-and-sponsors-as-community-tops-30000-members/)). Set the [2025 list](https://genai.owasp.org/llm-top-10/) against the [2026 crosswalk explorer](https://genai-security-project.github.io/crosswalk/#/explorer) entry by entry and eight change position, with none added, merged, or dropped; the table below is that comparison. The one renaming is System Prompt Leakage, "renamed and broadened to Hidden Context Exposure" ([Help Net Security, August 2026](https://www.helpnetsecurity.com/2026/08/06/owasp-2026-llm-top-10-released/)). So the change that reaches a coding-agent builder is narrow and mechanical: an entry ID written without its edition year no longer names one risk. The [Agent Control Standard](https://genai.owasp.org/resource/agent-control-standard-acs/) (ACS) is the new artifact, and it catalogs runtime interception points rather than ranking risks.
 
 ## What moved in the 2026 list
 
@@ -116792,6 +117043,7 @@ Same shape as the LLM-pinned-CVE finding: a measurement-grounded threat that ord
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — the version analogue: real package, vulnerable release; same training-distribution mechanism, different exploit shape
 - [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — the third leg of the agent-authored-manifest threat surface; caret ranges admit future-compromised releases of names that already exist
 - [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md) — the attacker-authored counterpart: the same unverified install authority, but the bad name or source arrives in an edited README or Makefile rather than the model's output
+- [Benign Skill Wording That Steers Package Hallucination (Neutral Prompting Attack)](neutral-prompting-hallucination-steering.md) — the active case: a third-party skill raises the hallucination rate instead of leaving the attacker to enumerate a fixed prior, and the registry existence check above measures no reduction against it
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — adjacent supply-chain attack via the skill registry rather than the package registry
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — the principle that gates agent install authority in the first place
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the CI surface where manifest changes get reviewed before install
@@ -150828,6 +151080,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Specification-First Convergence Without a Test Oracle](specification-first-convergence.md) — Freeze a specification audited against the source, generate against it, then audit the code back against the frozen document until two consecutive passes find nothing
 - [Bounding a Headless Codex Run Without a Turn Cap](headless-codex-bounding.md) — `codex exec` has no `--max-turns` equivalent, so an unattended Codex run is bounded by its sandbox policy, the caller's wall clock, and a JSON Schema output contract
 - [Per-Task Verification Budget: Size the Task to Fit the Check](per-task-verification-budget.md) — Fix the human check on each agent task at 30 to 60 seconds and treat that number as an admission rule, so work too large to verify inside the budget leaves the daily batch for its own thread
+- [Measuring the Verification Tax on Agent Output](verification-tax.md) — Divide CI, review, security, and rework cost by generation cost per change class, then read the ratio as a diagnostic with five candidate causes rather than a number to drive down
 
 ---
 
@@ -160406,6 +160659,103 @@ Rubric scoring identifies what failed; observability data helps locate where. Fa
 - [Eval-Driven Development](eval-driven-development.md)
 - [Closed-Loop Agent Training](closed-loop-agent-training.md)
 - [Continuous Agent Improvement](continuous-agent-improvement.md)
+
+---
+
+### Measuring the Verification Tax on Agent Output
+Source: https://agentpatterns.ai/workflows/verification-tax/
+
+# Measuring the Verification Tax on Agent Output
+
+> The Verification Tax divides CI, review, security, and rework cost by generation cost, and the ratio diagnoses rather than targets.
+
+Measure it per change class, only where per-stage cost is already collected, and never as a score for a person or a team. Outside those conditions the number is an accounting artifact. Inside them it answers what the model bill cannot: whether the money spent proving an agent's change is safe buys reliability, or covers for a weak generator.
+
+## The measurement problem
+
+Commit counts stopped meaning much once an agent could produce them at will. Happy Bhati lists the failures in order: "Lines of code are easy to inflate. Commits can be split or merged. Pull-request count can rise because an agent produces many small changes." The arithmetic behind that is specific. A 2026 study of more than 100,000 GitHub developers found a cumulative increase in coding activity from autonomous agents of "180% at the commit level" that "fell to 50% at the project level and 30% at actual releases". Bhati summarizes what that study's authors concluded from it: "The authors describe a weak-link production structure: writing code accelerates faster than the human and organizational stages needed to turn changes into shipped software" ([Bhati, arXiv:2609.04681v1](https://arxiv.org/abs/2609.04681v1)).
+
+Google's 2025 DORA report reaches the same shape from survey data. It finds "a positive relationship between AI adoption on both software delivery throughput and product performance", and in the same breath that "AI adoption does continue to have a negative relationship with software delivery stability", because "an increase in change volume leads to instability" without strong automated testing and fast feedback ([Google Cloud, 2025](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report)).
+
+Both readings point at the same missing number. The cost of moving a change through the gates is invisible in the token bill and invisible in the commit graph, so it goes unmanaged in the one place it is growing. [The velocity-quality asymmetry](velocity-quality-asymmetry.md) documents the symptom on a different dataset. The ratio below is what puts a number on it.
+
+## Three implementation layers
+
+```mermaid
+flowchart LR
+    G[Agent generates change] --> C[Attribute stage costs]
+    C --> P[Count gate-passing change]
+    P --> R[Compute ratio per class]
+    R --> A{Autonomy still in budget?}
+    A -->|yes| G
+    A -->|no| S[Narrow class or stop]
+```
+
+### Layer 1: attribute the four downstream costs
+
+Bhati defines the ratio for a set of agent-generated candidate changes as `V_tax = (C_CI + C_review + C_security + C_rework) / C_generation`, where "C_generation includes model, context, and agent execution cost" ([arXiv:2609.04681v1](https://arxiv.org/abs/2609.04681v1)). Rework is the bucket that goes missing, and it sits in the half of the bill nobody reads: "The direct model bill is easy to see. The rest is distributed across context construction, repeated attempts, tool calls, sandboxes, CI minutes, security scans, reviewer attention, rework, incidents, and the infrastructure required to observe all of it."
+
+Attribute each bucket to a change class rather than to an individual pull request. Bhati's own cost taxonomy carries the caveat: it is "not a claim that every organization can perfectly allocate every term to an individual pull request. Its value is to prevent optimization of the easiest visible number while downstream cost grows unnoticed" ([arXiv:2609.04681v1](https://arxiv.org/abs/2609.04681v1)). The class is the level at which the gate set is constant, so it is the coarsest unit that still answers the question.
+
+Reviewer time is the bucket with a published anchor. Bhati reports that Google sees "about 60 minutes of active author shepherding time between sending a change for review and submitting it", which gives a defensible starting figure when your own review telemetry is thin ([arXiv:2609.04681v1](https://arxiv.org/abs/2609.04681v1)).
+
+### Layer 2: count output after the gates, not before
+
+The denominator of any delivery metric has to survive an agent producing many small changes. Bhati's unit is the Production-Qualified Change: "A candidate change i receives PQC credit only if it satisfies the organization's relevant qualification vector", written `PQC_i = ∏_{g∈G_i} 1{g(i)=pass}` over the gate set required for that change class ([arXiv:2609.04681v1](https://arxiv.org/abs/2609.04681v1)). A documentation edit carries a small gate set. A migration or an authentication change carries a large one, and it earns credit only once every gate in it passes.
+
+Counting this way makes the two halves of the ratio commensurate. Generation cost is spent per attempt; qualified output accrues per survivor. [Cost-quality Pareto measurement](../token-engineering/cost-quality-pareto-measurement.md) does the same job for a single agent configuration, plotting cost against quality so a downgrade shows as a drop off the frontier rather than a smaller bill.
+
+### Layer 3: bind the ratio to an autonomy decision
+
+A ratio nobody spends is telemetry, not control. Bhati treats autonomy as a budgeted privilege rather than a capability level: each task consumes a money and compute budget, a reliability and risk budget, and a human-attention budget, and the rule is to "increase autonomy only if all three budgets remain within policy" ([arXiv:2609.04681v1](https://arxiv.org/abs/2609.04681v1)). The Verification Tax is the reading that tells you which of the three you are about to breach. A class whose ratio climbs while its qualified-change rate holds is consuming reviewer capacity, not compute.
+
+The stop rule sits in the same layer. Bhati is blunt about long-horizon runs: "Long-horizon agents need token/time ceilings and progress checkpoints. Unlimited iteration is not autonomy; it is an unbounded variable bill."
+
+## Triggers and constraints
+
+Compute the ratio on a schedule, per change class, over a window wide enough that one incident does not set it. Recompute on a policy change, a model swap, or a harness change, since all three move the denominator without touching the gates.
+
+The practice is tool-agnostic. The buckets are CI minutes, reviewer hours, security scanning, and rework, and none of them depend on which assistant produced the change.
+
+One constraint outranks the rest: the ratio has no good direction to move in. Bhati states it directly. "The goal is not 'minimize verification.' A low Verification Tax can be dangerous if it results from skipping tests or rubber-stamping reviews. The useful objective is to reduce verification cost for a fixed reliability target, or improve reliability for a fixed assurance budget." Fix one side before moving the other. A ratio that fell because reviewers started approving faster records a drop in assurance, and the chart cannot tell you which of the two happened.
+
+## Why it works
+
+Delivery is a weak-link chain, so a metric taken before the constrained stage measures the stage that is not constrained. That is the whole mechanism: commit-level counting samples the part that got faster, which is why the attenuation above runs the direction it does. DORA supplies the same causal chain from an independent population, where higher change volume raises throughput and lowers stability at once ([Google Cloud, 2025](https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report)).
+
+The ratio earns its place because it is ambiguous on purpose. Bhati lists five things a high reading can mean: the task is inherently high risk and deserves expensive assurance, the chosen model or context is producing weak candidates, the agent is working beyond its reliability envelope, the test and review infrastructure is inefficient or overloaded, or policy requires redundant evidence without reducing risk ([arXiv:2609.04681v1](https://arxiv.org/abs/2609.04681v1)). Each cause has a different fix, and each fix is expensive. The number does not choose for you. It narrows five candidates to the one your qualified-change rate and reviewer telemetry can distinguish, which is more than a token bill does.
+
+## When this backfires
+
+- Low change volume. With a handful of qualified changes a month, one incident's rework dominates the numerator and the ratio swings by an order of magnitude between quarters. Bhati says as much: the ratio "is not expected to be stable across repositories or task types."
+- Cross-team comparison. CI capacity, scanning subscriptions, and reviewer salaries are largely shared fixed costs, so per-change attribution is an allocation policy. Two defensible allocations produce two different ratios, and a dashboard invites exactly the comparison they cannot support.
+- Promotion from diagnostic to target. Driving the number down rewards thinner tests and faster approvals, which is the failure Bhati names.
+- Use as an individual score. Bhati's own warning: Production-Qualified Change "must not become an individual developer productivity score; doing so could encourage gaming and penalize engineers who work on difficult, high-risk systems." Engineers on high-blast-radius systems carry larger gate sets by design and would score worst.
+- Safety-critical and regulated work. Verification already dominates cost there by intent and is already accounted for under compliance. A high ratio is the correct state, and the measurement adds a second set of books with no decision attached.
+
+The strongest case against building this at all is the instrumentation bill. Splitting cost into four buckets per change class needs telemetry most teams do not have, and that engineering time could go straight into the automated gates the ratio would tell them to build. The constructs are also young. Bhati says so: Production-Qualified Change, Verification Tax, and the autonomy budget "are not claimed as validated standards. They are hypotheses intended to make future studies comparable." Treat the practice as a hypothesis you are testing on your own delivery system, not a standard you are adopting.
+
+## Example
+
+The decision point the measurement feeds is a marginal one, and Bhati puts numbers on both sides of it: "If the next US$10 of model inference avoids an hour of expert work and does not raise risk, it is likely worthwhile. If the next US$100 of retries creates a larger patch that still needs the same expert review, the agent has not created equivalent value" ([arXiv:2609.04681v1](https://arxiv.org/abs/2609.04681v1)).
+
+Read against the layers, the second case has a signature you can see before the invoice. Generation cost rises across retries, qualified-change count for the class stays flat, and reviewer hours per qualified change hold steady or climb. The ratio goes up with no reliability bought. That is the reading that should trip the Layer 3 stop rule rather than a longer run.
+
+## Key Takeaways
+
+- Attribute CI, review, security, and rework cost per change class; rework is the bucket that goes uncounted, because it never reaches the model bill.
+- Count output as gate-passing change, not commits or pull requests, so the denominator survives an agent producing many small diffs.
+- A high ratio has five candidate causes, each with a different fix, so treat the reading as a prompt to diagnose rather than an instruction to cut.
+- Give the ratio a decision to feed: a class whose cost climbs while qualified output holds flat is spending reviewer capacity and should lose autonomy, not gain a longer token ceiling.
+- Keep it off individual dashboards and out of cross-team comparisons; the allocation choices underneath it do not survive either use.
+
+## Related
+
+- [The Velocity-Quality Asymmetry: Why AI Speed Gains Fade Without QA Investment](velocity-quality-asymmetry.md) — the empirical symptom this measurement is built to detect
+- [Verification Capacity Saturation: Three Levers, One Default](../verification/verification-capacity-saturation.md) — the response set once the checking station is the constraint
+- [Per-Task Verification Budget: Size the Task to Fit the Check](per-task-verification-budget.md) — the human-attention budget expressed as a per-task admission rule
+- [Cost-Quality Pareto Measurement for Agent Configurations](../token-engineering/cost-quality-pareto-measurement.md) — the same cost-against-quality frame applied to one agent configuration
+- [Intervention Rate as a Diagnostic North Star, Not a Target](../human/intervention-rate-diagnostic-north-star.md) — a sibling metric governed by the same diagnostic-not-target rule
 
 ---
 
