@@ -31,6 +31,7 @@ nav:
       - browser-sandbox-agent-generated-html.md
       - docker-sbx-adoption.md
       - dual-boundary-sandboxing.md
+      - enterprise-managed-agent-sandbox.md
       - sandbox-runtime-comparison.md
       - sandbox-rules-harness-tools.md
       - subprocess-pid-namespace-sandboxing.md
@@ -122,6 +123,7 @@ nav:
   - network-less-container-unix-socket-egress.md
   - non-human-event-provenance-markers.md
   - org-membership-gated-agent-entitlement.md
+  - per-agent-capability-scoping.md
   - permission-framework-over-model.md
   - permission-gated-commands.md
   - parser-versus-shell-permission-evasion.md

@@ -121,3 +121,4 @@ The authority context `α` was issued by the user at task start with `scope = {r
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat model authority confusion most directly mitigates against.
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](non-human-event-provenance-markers.md) — the live-transcript sibling; a fabricated in-transcript approval is untrusted content trying to authorize an action, blocked here at the event-provenance layer.
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — the issuer is correct here but the subject has changed since the grant was evaluated.
+- [Per-Agent Capability Stores Beat One Task-Wide Allowlist](per-agent-capability-scoping.md) — the issuer is correct and fixed before any read, and one ceiling for the whole task is still the union of every subtask's needs.

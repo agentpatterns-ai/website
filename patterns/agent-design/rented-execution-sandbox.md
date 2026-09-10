@@ -9,7 +9,7 @@ aliases:
   - third-party agent execution sandbox
   - self-hosted machines for cloud agents
   - rented agent execution environment
-last_reviewed: 2026-09-04
+last_reviewed: 2026-09-09
 maturity: emerging
 ---
 
@@ -24,6 +24,8 @@ Cursor's Self-Hosted Machines APIs "let you supply the execution environment whe
 Cursor keeps its own hosted machines as the default and argues they are enough for most buyers: "Per-agent isolation, secret redaction, egress controls, and signed commits meet the security requirements of most teams" ([Cursor, 2026-09-02](https://cursor.com/blog/self-hosted-machines)). Move only on a requirement that fails inside that default. Cursor lists three: tool execution has to happen inside your network, with direct access to internal services and source control; the agent requires custom hardware such as GPUs or Macs for iOS development, or infrastructure such as Kubernetes; or the operating system or build pipeline is "difficult to package as a Cloud Agent build" ([Cursor](https://cursor.com/blog/self-hosted-machines)).
 
 Test the third one against a cheaper fix first. Cursor rebuilds the environment hourly inside its own sandbox and reports time to first token 3x faster with builds ([Cursor, 2026-08-13](https://cursor.com/blog/builds)), the pattern documented in [Continuously Built Agent Environments](continuously-built-agent-environments.md). A build often settles a toolchain complaint without adding a second vendor. Once a requirement does survive that test, the choice of which sandbox to supply is its own decision, covered in [Workload-Keyed Sandbox Selection](../../security/workload-keyed-sandbox-selection.md).
+
+GitHub made the sandbox in Copilot for JetBrains enterprise-managed, so an enterprise administrator now manages it ([GitHub changelog, 8 Sep 2026](https://github.blog/changelog/2026-09-08-enterprise-managed-sandbox-in-copilot-for-jetbrains)). Check what your own vendor already administers before a control requirement pushes you to supply the machine.
 
 ## What you inherit
 
