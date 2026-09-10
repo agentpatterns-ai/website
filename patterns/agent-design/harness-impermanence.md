@@ -8,7 +8,7 @@ tags:
 aliases:
   - build-to-delete agent harness
   - architect for model impermanence
-last_reviewed: 2026-06-12
+last_reviewed: 2026-09-09
 maturity: established
 ---
 
@@ -27,6 +27,8 @@ Evidence across teams:
 - Manus refactored their harness five times in six months to remove rigid assumptions ([philschmid.de](https://www.philschmid.de/agent-harness-2026)).
 - LangChain re-architected their Open Deep Research agent three times in a single year ([philschmid.de](https://www.philschmid.de/agent-harness-2026)).
 - Vercel removed 80% of their agent's tools, producing fewer steps, fewer tokens, and faster responses ([Vercel](https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools)).
+
+Vendor deprecation sets a second deadline. On 2026-09-03 GitHub announced the upcoming deprecation of selected Copilot models ([GitHub Changelog](https://github.blog/changelog/2026-09-03-upcoming-deprecation-of-selected-github-copilot-models)). Scaffolding pinned to a withdrawn model expires when the vendor says so, and the capability it wraps may still have no native replacement.
 
 ## The smell
 

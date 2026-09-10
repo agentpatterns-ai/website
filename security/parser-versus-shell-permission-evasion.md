@@ -76,3 +76,4 @@ The effect a rule protects is the tractable half. A file write, an outbound conn
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — the same sorting question one level up: where a safeguard is evaluated decides whether it binds
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — the layer the conclusion points at, and the one a parser gap falls through to
 - [Dual-Boundary Sandboxing: Filesystem and Network Isolation](dual-boundary-sandboxing.md) — what enforcement below the shell looks like when it is built deliberately
+- [Scoped-Looking Permission Grants](../patterns/anti-patterns/scoped-looking-permission-grants.md) — the sibling failure that needs no respelling at all: the rule matches correctly and still permits every command

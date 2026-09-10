@@ -9,7 +9,7 @@ tags:
 aliases:
   - WASM sandbox for agent code
   - WebAssembly code execution sandbox
-last_reviewed: 2026-06-08
+last_reviewed: 2026-09-09
 maturity: adopted
 ---
 
@@ -60,7 +60,7 @@ The substrate beats V8-in-Python alternatives because browser JS engines, althou
 
 ## When this backfires
 
-- Hostile-multi-tenant production on shared hardware. A wasmtime CVE in the VMM, compiler backend, or WASI layer becomes a same-host escape across tenants. [GHSA-2r75-cxrj-cmph](https://github.com/bytecodealliance/wasmtime/security/advisories) (May 2026) — a WASI `path_open(TRUNCATE)` bypass of `FilePerms::WRITE` — is the reminder. Hostile-tenant workloads warrant a hypervisor boundary (Firecracker microVMs) rather than in-process isolation.
+- Hostile-multi-tenant production on shared hardware. A wasmtime CVE in the VMM, compiler backend, or WASI layer becomes a same-host escape across tenants. [GHSA-2r75-cxrj-cmph](https://github.com/bytecodealliance/wasmtime/security/advisories) (May 2026) — a WASI `path_open(TRUNCATE)` bypass of `FilePerms::WRITE` — is the reminder. Hostile-tenant workloads warrant a hypervisor boundary (Firecracker microVMs) rather than in-process isolation. Vendors selling that boundary pay to have it attacked. Vercel opened a one-million-dollar challenge against the Vercel Sandbox boundary in August 2026 ([Vercel's hacker challenge](https://vercel.com/blog/one-million-dollar-hacker-challenge-for-vercel-sandbox)). An in-process embedding gets no equivalent outside scrutiny of the host-function surface you wrote.
 - Workloads needing the full CPython standard library. MicroPython runs a small subset of the standard library. Pyodide handles more of CPython but is documented as "browser or Node.js" only on the server side ([Pyodide guidance, Oct 2024](https://github.com/pyodide/pyodide/discussions/5145)), so server-side embedders cannot use it today.
 - Alpha reference implementations. The motivating package — [micropython-wasm](https://github.com/simonw/micropython-wasm) — is self-described as alpha and "vibe-coded"; the author "deliberately slapped an alpha release version on it" and is "not ready to recommend it to anyone who isn't willing to take a significant risk." Adopt the pattern, not this specific package, for anything load-bearing. Wait for an audited implementation or accept the maturity risk explicitly.
 - Wall-clock CPU budgets without measurement. Fuel is deterministic per program but not per wall-time. Teams that need wall-clock bounds layer epoch interruption on top of fuel, or run calibration sweeps before fixing a budget.

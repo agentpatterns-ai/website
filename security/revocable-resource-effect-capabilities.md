@@ -112,3 +112,4 @@ The mechanisms compose: value-level attenuation, hierarchy-level liveness, and s
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md)
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
+- [Per-Agent Capability Stores Beat One Task-Wide Allowlist](per-agent-capability-scoping.md) — the same capability idea cut across principals instead of across a subgoal's lifetime.

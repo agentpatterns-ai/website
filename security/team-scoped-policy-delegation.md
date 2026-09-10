@@ -106,3 +106,4 @@ Members of `ai-pioneers` pick their own model and can enable bypass mode. Everyo
 - [Agent Governance Policies for AI Agent Development](../workflows/agent-governance-policies.md) — the enterprise, organization, and user tiers the team dimension cuts across.
 - [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md) — the other place membership decides agent capability, with a fail-closed default.
 - [Agent Governance Plane: Audit Events and Message-Content Surfaces](agent-governance-plane.md) — the audit surface that records which delegated value was in force, and its coverage limits.
+- [Working Inside an Enterprise-Managed Agent Sandbox Policy](enterprise-managed-agent-sandbox.md) — the developer's side of one non-delegable key, and what a locked sandbox control leaves them able to do.

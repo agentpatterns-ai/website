@@ -9,7 +9,7 @@ tags:
 aliases:
   - agent quality flywheel
   - coding-agent eval loop
-last_reviewed: 2026-07-03
+last_reviewed: 2026-09-09
 maturity: adopted
 ---
 
@@ -63,6 +63,8 @@ Generalization becomes measurable because the loop promotes the one behavior und
 Google ran the loop on `travel-concierge`, a trip planner that keeps the itinerary in session state. The developer asked only whether the agent honored mid-conversation changes, such as different dates or a different hotel. The agent read the code, then promoted that concern to a custom rubric, `revision_honored`, with a categorical verdict (HONORED, IGNORED, PARTIAL, NO_REVISION), and bootstrapped 25 scenarios across the revision types. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
 
 The first pass returned 21% IGNORED. The verdicts located the failure precisely: in three of four failures the internal state was correct, but the agent's final message to the user echoed the stale value. Nothing in the root instruction told it to check its final response against the user's most recent message. A three-sentence instruction change took IGNORED from 21% to 5% on a re-run of the same set. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
+
+The same loop widens to compare agents against each other. Vercel documents how Ora continuously benchmarks every major AI agent on its platform. [Source: [Vercel — How Ora Benchmarks Every Major AI Agent on Vercel](https://vercel.com/blog/how-ora-benchmarks-every-major-ai-agent-on-vercel)]
 
 ## Key Takeaways
 

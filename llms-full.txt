@@ -1022,6 +1022,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [OWASP 2026 Update for Agent Builders: Top 10 Renumbering and the Agent Control Standard](security/owasp-2026-update-agent-control-standard.md)
 - [OWASP LLM Top 10 (2025): Agent Security Crosswalk](security/owasp-llm-top-10-2025-agent-crosswalk.md)
 - [Parser-Versus-Shell Evasion in Command Permission Checks](security/parser-versus-shell-permission-evasion.md)
+- [Per-Agent Capability Stores Beat One Task-Wide Allowlist](security/per-agent-capability-scoping.md)
 - [Per-Server MCP Environment Scoping for Credential Isolation](security/mcp-server-credential-isolation.md)
 - [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](security/permission-framework-over-model.md)
 - [Plan-Then-Execute as the Default for Web Agents](security/plan-then-execute-web-agents.md)
@@ -1062,6 +1063,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Verifying LLM-Generated Cryptographic Code](security/llm-cryptographic-code-verification.md)
 - [Which Task You Delegate Changes Poisoned-Repo Exposure](security/task-choice-poisoned-repository-exposure.md)
 - [Windows Sandboxing for Coding Agents](security/windows-sandbox-primitives-coding-agents.md)
+- [Working Inside an Enterprise-Managed Agent Sandbox Policy](security/enterprise-managed-agent-sandbox.md)
 - [Workload Identity Federation for Agent Runtimes](security/workload-identity-federation-for-agents.md)
 - [Skill Composition Risk in Agent Ecosystems](security/skill-composition-risk.md)
 - [Browser Sandbox for Agent-Generated HTML (Sandboxed Iframe + Immutable CSP)](security/browser-sandbox-agent-generated-html.md)
@@ -1645,6 +1647,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Refactoring Runaway: Tangled Refactorings in Agent Patches](patterns/anti-patterns/refactoring-runaway.md)
 - [Repository Skill Release Drift](patterns/anti-patterns/repository-skill-release-drift.md)
 - [Run-Status vs Task-Status Confusion in Autonomous Agent Runs](patterns/anti-patterns/run-status-vs-task-status-confusion.md)
+- [Scoped-Looking Permission Grants](patterns/anti-patterns/scoped-looking-permission-grants.md)
 - [Shadow Tech Debt Created by Autonomous AI Agent Commits](patterns/anti-patterns/shadow-tech-debt.md)
 - [Skill Over-Trust: Treating Topical Relevance as Evidence a Skill Helps](patterns/anti-patterns/skill-over-trust.md)
 - [Skill Review Without a Token Cost Baseline](patterns/anti-patterns/skill-review-without-cost-baseline.md)
@@ -35608,6 +35611,8 @@ Evidence across teams:
 - LangChain re-architected their Open Deep Research agent three times in a single year ([philschmid.de](https://www.philschmid.de/agent-harness-2026)).
 - Vercel removed 80% of their agent's tools, producing fewer steps, fewer tokens, and faster responses ([Vercel](https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools)).
 
+Vendor deprecation sets a second deadline. On 2026-09-03 GitHub announced the upcoming deprecation of selected Copilot models ([GitHub Changelog](https://github.blog/changelog/2026-09-03-upcoming-deprecation-of-selected-github-copilot-models)). Scaffolding pinned to a withdrawn model expires when the vendor says so, and the capability it wraps may still have no native replacement.
+
 ## The smell
 
 Scaffolding most likely to be obsoleted wraps a single model call with machinery the next-generation model handles natively:
@@ -42598,6 +42603,8 @@ Cursor keeps its own hosted machines as the default and argues they are enough f
 
 Test the third one against a cheaper fix first. Cursor rebuilds the environment hourly inside its own sandbox and reports time to first token 3x faster with builds ([Cursor, 2026-08-13](https://cursor.com/blog/builds)), the pattern documented in [Continuously Built Agent Environments](continuously-built-agent-environments.md). A build often settles a toolchain complaint without adding a second vendor. Once a requirement does survive that test, the choice of which sandbox to supply is its own decision, covered in [Workload-Keyed Sandbox Selection](../../security/workload-keyed-sandbox-selection.md).
 
+GitHub made the sandbox in Copilot for JetBrains enterprise-managed, so an enterprise administrator now manages it ([GitHub changelog, 8 Sep 2026](https://github.blog/changelog/2026-09-08-enterprise-managed-sandbox-in-copilot-for-jetbrains)). Check what your own vendor already administers before a control requirement pushes you to supply the machine.
+
 ## What you inherit
 
 Vercel's reference implementation is an app you deploy and then keep. Functions and Workflow "form a durable control plane that claims queued agent requests, provisions workers, monitors sessions, and cleans up automatically" ([Vercel changelog](https://vercel.com/changelog/run-cursor-cloud-agents-vercel-sandbox)). Under it sits a discovery loop with adaptive polling, an atomic claim per request, a child workflow per worker, and standing maintenance: "Rebuild snapshots periodically to keep the Cursor Agent CLI and system packages current" ([Vercel](https://vercel.com/kb/guide/cursor-vercel-sandbox)).
@@ -49195,6 +49202,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Install-Once Plugin Trust: Vetting That Never Re-Runs on Update](install-once-plugin-trust.md) — Vetting a plugin at install says nothing about version 1.1; the harness re-reads its lifecycle-hook config under the same identity on every update, and the bound command spawns outside the model's decision path
 - [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — A steered third-party skill keeps its declared task, its output interface and a 100% valid-output rate while moving which candidate wins, so compare selection rates across a clean and a skill-loaded arm
 - [Compound Prompt Constraints Degrade More Than Their Parts Predict](compound-prompt-constraints.md) — Prompt constraints that each test clean can combine into a super-additive accuracy loss; one such trio landed 12.2 points below its own additive prediction on GPT-4o-mini, while the GPT-4.1 family barely moved
+- [Scoped-Looking Permission Grants](scoped-looking-permission-grants.md) — A permission rule naming one interpreter or runner permits every command; 3.1% of 2,660 scanned agent setups write one and 3.8% ship one inside a published skill
 
 ---
 
@@ -50831,6 +50839,7 @@ const options = {
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — same shape one layer up: instructions cannot enforce a closed set either
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — why the restricted-bypass trap is dangerous in the first place
 - [Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)](response-path-control-gap.md) — the other way a correctly-set permission mode fails: a router on the path chooses the response the mode evaluates
+- [Scoped-Looking Permission Grants](scoped-looking-permission-grants.md) — the allow list working exactly as documented and still granting arbitrary execution, one entry at a time
 
 ---
 
@@ -56823,6 +56832,78 @@ The two-axis split routes the silent failure to a human without making the opera
 - [Making Application Observability Legible to Agents](../../observability/observability-legible-to-agents.md) — the inverse direction: surfacing application signals into agent context so agents can verify their own work
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — deterministic Stop-hook gate when the evaluator's leniency bias is unacceptable
 - [Objective Drift: When Agents Lose the Thread](objective-drift.md) — adjacent failure where the agent completes a subtly different objective than the one it started with
+
+---
+
+### Scoped-Looking Permission Grants
+Source: https://agentpatterns.ai/patterns/anti-patterns/scoped-looking-permission-grants/
+
+# Scoped-Looking Permission Grants
+
+> A permission rule that names one interpreter or one runner permits every command, and the syntax gives no hint.
+
+`Bash(python:*)` grants what `Bash(*)` grants, and Kapner et al. put it exactly that way ([arxiv:2609.07360v1](https://arxiv.org/abs/2609.07360v1)). So do `Bash(awk:*)`, `Bash(sed:*)`, `Bash(npx:*)`, and any rule naming a program whose argument is itself a program. Scanning 3,171 public GitHub repositories, Kapner et al. found 3.1% of 2,660 assembled agent setups pre-approving arbitrary execution this way, and another 3.8% carrying a skill whose `allowed-tools` list ships that pre-approval to whoever installs it ([arxiv:2609.07360v1](https://arxiv.org/abs/2609.07360v1)).
+
+## When the grant is the boundary
+
+Two conditions decide whether this costs anything. The first is containment: if a sandbox already bounds the process, the allow list is a prompt-reduction setting and tightening it buys friction. The second is distribution. A grant in your own repo risks the machine you already trust, while a grant inside a published skill executes on every machine that installs it. That difference decides where the check runs. A skill's `allowed-tools` is readable at publication, so a marketplace can scan it; an allow list only exists once components are assembled, so a team has to check it on the pull request that adds one ([arxiv:2609.07360v1](https://arxiv.org/abs/2609.07360v1)).
+
+## Why it works (the grant inherits the interpreter's input language)
+
+A Bash rule matches command text. The program that text names then accepts a program as an argument, so the rule's real scope is the scope of that program's input language, which has no upper bound. Claude Code's documentation states the mechanism for runners: "Because these tools execute their arguments as a command, a rule like `Bash(devbox run *)` matches whatever comes after `run`, including `devbox run rm -rf .`" ([Configure permissions](https://code.claude.com/docs/en/permissions)). Kapner et al. enumerate the same reachability for utilities: "awk evaluates commands via `system()`, `python -c` runs anything, `find -exec` spawns processes, and GNU sed runs commands through its e flag" ([arxiv:2609.07360v1](https://arxiv.org/abs/2609.07360v1)). Anthropic acts on the same reading: entering auto mode drops "blanket shell access, wildcarded script interpreters (python, node, ruby, and similar), and package manager run commands" so the classifier still reviews them ([How we built Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)).
+
+No respelling is involved, so this is not [parser-versus-shell evasion](../../security/parser-versus-shell-permission-evasion.md). The check reads the string correctly, and the string permits everything.
+
+## When this backfires
+
+Rewriting an allow list to remove these grants is worth less than it looks in several common setups.
+
+- A setup that already allows a build, test, or package-manager script reaches the same capability through repo-controlled code. Anthropic classes "package manager run commands" with the interpreters for this reason ([How we built Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)). Removing the interpreter grant narrows the visible surface only.
+- Enumerating one rule per inner command ages badly. Every new script needs an entry, and the list drifts back toward a broad grant.
+- The finding may sit in a template, example, or fixture directory. On the 18 gating and provisional pairs carrying a headline figure, the study's independent reviewer agreed with its adjudicator on 10, and "every disagreement is an unpinned package inside a shipped template, an example directory, or a test fixture" ([arxiv:2609.07360v1](https://arxiv.org/abs/2609.07360v1)).
+- Intent is not measurable from bytes, and the authors say so: "Whether they understood that `Bash(python:*)` is `Bash(*)` is a claim about expectations that no static audit can measure." The study also confirmed no credential-exfiltration path, so this is a hygiene finding rather than an incident report.
+
+Consequences are dated too. A `Bash(find *)` rule in Claude Code no longer covers `find -exec` or `-delete`, and exec wrappers such as `watch` and `flock` cannot be auto-approved by a prefix rule at all ([Configure permissions](https://code.claude.com/docs/en/permissions)). `python`, `awk`, `npx`, and `docker exec` remain open.
+
+## Example
+
+The grant that reads as narrow:
+
+```json
+{
+  "permissions": {
+    "allow": ["Bash(python:*)", "Bash(npx:*)", "Bash(awk:*)"]
+  }
+}
+```
+
+Each entry approves every command the named program can be told to run. Claude Code's remedy is to name both halves: "write a specific rule that includes both the runner and the inner command, such as `Bash(devbox run npm test)`. Add one rule per inner command you want to allow." ([Configure permissions](https://code.claude.com/docs/en/permissions))
+
+```json
+{
+  "permissions": {
+    "allow": ["Bash(python scripts/build.py)", "Bash(npx tsc --noEmit)"]
+  }
+}
+```
+
+Anthropic says a list of this kind "will inevitably be incomplete" ([How we built Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)). That is the argument for putting the durable boundary in a sandbox.
+
+## Key Takeaways
+
+- A permission rule naming an interpreter, a shell-escape utility, or a package runner grants arbitrary execution. The narrow-looking syntax is the whole problem.
+- Read the measured rates as a floor. The authors call every headline figure "a lower bound on the defects the instrument can express", and their corpus over-represents repositories that advertise their tooling ([arxiv:2609.07360v1](https://arxiv.org/abs/2609.07360v1)).
+- Audit your own allow list by asking one question of each entry: does the named program take a program as an argument? If yes, the entry is `Bash(*)`.
+- Fix by naming the runner and the inner command together, and accept that the list needs maintenance.
+- Do this work only where the allow list is the boundary. Under a sandbox it is prompt reduction, and the effort is better spent on the sandbox.
+
+## Related
+
+- [Parser-Versus-Shell Evasion in Command Permission Checks](../../security/parser-versus-shell-permission-evasion.md) — the adjacent failure where the check and the shell disagree about one command string
+- [bypassPermissions Silently Overrides allowedTools](bypass-permissions-overrides-allowlist.md) — the other way a permission config reads as restrictive and is not
+- [Safe Command Allowlisting: Reducing Approval Fatigue](../../security/safe-command-allowlisting.md) — the practice this anti-pattern is a failure mode of
+- [Skill Shell Execution Gate](../../security/skill-shell-execution-gate.md) — the managed-settings control for shell side-effects arriving through skills
+- [Agent Config as a Managed Supply Chain](../../instructions/agent-config-as-managed-supply-chain.md) — pinning and hashing for the same harness layer these grants live in
 
 ---
 
@@ -87287,6 +87368,8 @@ Google ran the loop on `travel-concierge`, a trip planner that keeps the itinera
 
 The first pass returned 21% IGNORED. The verdicts located the failure precisely: in three of four failures the internal state was correct, but the agent's final message to the user echoed the stale value. Nothing in the root instruction told it to check its final response against the user's most recent message. A three-sentence instruction change took IGNORED from 21% to 5% on a re-run of the same set. [Source: [Google](https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/)]
 
+The same loop widens to compare agents against each other. Vercel documents how Ora continuously benchmarks every major AI agent on its platform. [Source: [Vercel — How Ora Benchmarks Every Major AI Agent on Vercel](https://vercel.com/blog/how-ora-benchmarks-every-major-ai-agent-on-vercel)]
+
 ## Key Takeaways
 
 - The coding agent runs the whole loop: it builds the dataset, grades traces, reads verdicts, and proposes a fix, so you describe the goal rather than drive the eval tool.
@@ -102580,6 +102663,7 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — Mandatory checkpoints before irreversible actions let humans catch injection-driven misbehavior before it causes harm
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — Tag every value with a sink-specific capability budget and intersect budgets through tool composition; closes permission laundering only with expert-crafted manifests and explicit-flow attacks
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](non-human-event-provenance-markers.md) — Stamp every system- and harness-injected event as non-human input so an autonomous agent cannot act on a fabricated in-transcript approval; pair the marker with a consent gate that traces to genuine human input
+- [Per-Agent Capability Stores Beat One Task-Wide Allowlist](per-agent-capability-scoping.md) — One task-scoped policy must grant the union of every subtask's needs and hands it to whichever sub-agent read the poisoned file; a separate attenuated store per principal cut executed injections from 33/75 to 3/75 at equal task success, costing 316 s against 194 s
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — External content consumed by agents is an attack surface; malicious instructions can override agent instructions at the model level
 - [Provenance-Aware Decision Auditing for LLM Agents](provenance-aware-decision-auditing.md) — Build an influence provenance graph at runtime, trace each tool-call argument to its source span, and release actions only when benign evidence alone justifies them
 - [RL-Trained Automated Red Teamers for Prompt Injection Discovery](rl-automated-red-teamers.md) — Train an LLM-based attacker with reinforcement learning to discover novel injection vectors before adversaries do
@@ -102594,6 +102678,7 @@ Isolation limits what a compromised or misbehaving agent can affect.
 - [Browser Sandbox for Agent-Generated HTML (Sandboxed Iframe + Immutable CSP)](browser-sandbox-agent-generated-html.md) — Run untrusted agent- or LLM-generated HTML safely in the browser by composing a `sandbox="allow-scripts allow-forms"` iframe, an immutable `<meta>` Content-Security-Policy, and a MessageChannel-scoped allow-listed parent API
 - [Capability-Additive Code Interpreters for Untrusted Agent Code](capability-additive-interpreter.md) — Run agent-written orchestration code in an in-process WASM interpreter that starts with zero authority and bridges in each capability with explicit limits, so the blast radius is what you added, not what you forgot to remove
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) — Enforce both filesystem and network isolation simultaneously; neither boundary alone prevents exfiltration
+- [Working Inside an Enterprise-Managed Agent Sandbox Policy](enterprise-managed-agent-sandbox.md) — When the org sets the sandbox centrally, the policy composes as a floor your settings can only tighten, so the effective-policy report is the only statement of the boundary and an administrator is the only route to widening it
 - [Network-less Container + Unix-Socket Egress Proxy for Agent Sandboxes](network-less-container-unix-socket-egress.md) — `--network none` plus a mounted Unix socket makes the egress proxy the only path off the container, turning policy into topology
 - [Permitted Egress Routes as Agent Sandbox Attack Surface](permitted-egress-attack-surface.md) — An allowlisted destination grants transitive reach to whatever that service can reach; the July 2026 OpenAI and Hugging Face incident escaped a sanctioned package registry cache proxy, and credential scope, not the escape, set the impact
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party MCP Tools](sandbox-rules-harness-tools.md) — Define guardrail rules only for tools your harness controls; external tools must enforce their own
@@ -103824,6 +103909,7 @@ The authority context `α` was issued by the user at task start with `scope = {r
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat model authority confusion most directly mitigates against.
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](non-human-event-provenance-markers.md) — the live-transcript sibling; a fabricated in-transcript approval is untrusted content trying to authorize an action, blocked here at the event-provenance layer.
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — the issuer is correct here but the subject has changed since the grant was evaluated.
+- [Per-Agent Capability Stores Beat One Task-Wide Allowlist](per-agent-capability-scoping.md) — the issuer is correct and fixed before any read, and one ceiling for the whole task is still the union of every subtask's needs.
 
 ---
 
@@ -110478,7 +110564,7 @@ The substrate beats V8-in-Python alternatives because browser JS engines, althou
 
 ## When this backfires
 
-- Hostile-multi-tenant production on shared hardware. A wasmtime CVE in the VMM, compiler backend, or WASI layer becomes a same-host escape across tenants. [GHSA-2r75-cxrj-cmph](https://github.com/bytecodealliance/wasmtime/security/advisories) (May 2026) — a WASI `path_open(TRUNCATE)` bypass of `FilePerms::WRITE` — is the reminder. Hostile-tenant workloads warrant a hypervisor boundary (Firecracker microVMs) rather than in-process isolation.
+- Hostile-multi-tenant production on shared hardware. A wasmtime CVE in the VMM, compiler backend, or WASI layer becomes a same-host escape across tenants. [GHSA-2r75-cxrj-cmph](https://github.com/bytecodealliance/wasmtime/security/advisories) (May 2026) — a WASI `path_open(TRUNCATE)` bypass of `FilePerms::WRITE` — is the reminder. Hostile-tenant workloads warrant a hypervisor boundary (Firecracker microVMs) rather than in-process isolation. Vendors selling that boundary pay to have it attacked. Vercel opened a one-million-dollar challenge against the Vercel Sandbox boundary in August 2026 ([Vercel's hacker challenge](https://vercel.com/blog/one-million-dollar-hacker-challenge-for-vercel-sandbox)). An in-process embedding gets no equivalent outside scrutiny of the host-function surface you wrote.
 - Workloads needing the full CPython standard library. MicroPython runs a small subset of the standard library. Pyodide handles more of CPython but is documented as "browser or Node.js" only on the server side ([Pyodide guidance, Oct 2024](https://github.com/pyodide/pyodide/discussions/5145)), so server-side embedders cannot use it today.
 - Alpha reference implementations. The motivating package — [micropython-wasm](https://github.com/simonw/micropython-wasm) — is self-described as alpha and "vibe-coded"; the author "deliberately slapped an alpha release version on it" and is "not ready to recommend it to anyone who isn't willing to take a significant risk." Adopt the pattern, not this specific package, for anything load-bearing. Wait for an audited implementation or accept the maturity risk explicitly.
 - Wall-clock CPU budgets without measurement. Fuel is deterministic per program but not per wall-time. Teams that need wall-clock bounds layer epoch interruption on top of fuel, or run calibration sweeps before fixing a budget.
@@ -112546,6 +112632,59 @@ The effect a rule protects is the tractable half. A file write, an outbound conn
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — the same sorting question one level up: where a safeguard is evaluated decides whether it binds
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — the layer the conclusion points at, and the one a parser gap falls through to
 - [Dual-Boundary Sandboxing: Filesystem and Network Isolation](dual-boundary-sandboxing.md) — what enforcement below the shell looks like when it is built deliberately
+- [Scoped-Looking Permission Grants](../patterns/anti-patterns/scoped-looking-permission-grants.md) — the sibling failure that needs no respelling at all: the rule matches correctly and still permits every command
+
+---
+
+### Per-Agent Capability Stores Beat One Task-Wide Allowlist
+Source: https://agentpatterns.ai/security/per-agent-capability-scoping/
+
+# Per-Agent Capability Stores Beat One Task-Wide Allowlist
+
+> A task-wide allowlist must grant the union of every subtask's needs, so split the ceiling into one capability store per agent.
+
+Giving each sub-agent its own attenuated capability store, rather than sharing one task-scoped policy, cut executed prompt injections from 33 of 75 runs to 3 of 75 with task success unchanged at 68/75 ([Bouras et al., 2026v1](https://arxiv.org/abs/2609.08371v1)). The load-bearing comparison there is against a task-specific policy generated for that same run, the control most hardened harnesses already have. Ambient authority admitted 47/75 and a static global denylist 46/75, so the denylist bought one run out of seventy-five.
+
+## When this is worth the cost
+
+Four conditions decide whether the split pays. Where any one fails, the measured gain either does not apply or is bought at a cost the paper also measures.
+
+- More than one principal. The measured delta is the split itself, so a single-agent workflow has no union to divide and collapses back into the task-global policy.
+- A typed, mediated tool catalog. Exec scope is a parsed argument-vector prefix, so it can permit `pytest` and refuse `curl`. A wildcard `bash` tool makes every Exec grant a wildcard grant, the same limit that bounds [monotonic capability attenuation](monotonic-capability-attenuation.md).
+- Slack in the latency budget. Mean wall-clock time was 145 s under ambient authority, 194 s under the task-global policy, and 316 s under the split. Read the mean with its tail: the split's median is 208 s, and five runs hit the 900 s timeout ([Bouras et al., 2026v1](https://arxiv.org/abs/2609.08371v1)).
+- A threat model about unauthorized action rather than disclosure. The authors state the non-goal plainly: "CapScope is not a confidentiality mechanism. A permitted read followed by a permitted write can still move data, and an injection can misuse authority deliberately granted to its reader" ([Bouras et al., 2026v1](https://arxiv.org/abs/2609.08371v1)).
+
+## What a store holds
+
+Each capability pairs an effect type with a scope predicate ([Bouras et al., 2026v1](https://arxiv.org/abs/2609.08371v1)). Read and Write scopes are canonicalized path prefixes; Exec scopes are argument-vector prefixes. The stores sit host-side, one per principal, outside the model's context, so text the model reads later cannot widen them. At dispatch the harness needs a capability matching the effect type and a predicate that accepts the concrete arguments; an uncovered proposal returns a refusal instead of a tool result.
+
+## Why it works
+
+The union property is the whole mechanism. Whatever a single allowlist covers reaches every principal, including the one reading attacker-controlled text. The paper puts it directly: "Because one policy is shared by every principal, it must grant the union of everything the task needs—reads, a source write, the test commands—just to let the repair finish, and that broad authority then reaches _every_ sub-agent, the runner that reads the poisoned output included" ([Bouras et al., 2026v1](https://arxiv.org/abs/2609.08371v1)). Split the ceiling and the runner that read the injection can still run the tests but cannot write source, so the backdoor never lands while the patcher keeps the write that finishes the repair ([Bouras et al., 2026v1](https://arxiv.org/abs/2609.08371v1)). That the payload looks ordinary is the point: the paper's own injected request names no `.env` and no `curl`, so no deny rule would flag it. The model still proposed the injected action in 34 of 75 runs; only 3 were permitted to run. Nothing had to recognize the text as malicious, which is why this survives attacks that defeat [detection-based defenses](prompt-injection-resistant-agent-design.md).
+
+## When this backfires
+
+- Scoping is not per-call authorization. An audit of LangChain/LangGraph, LlamaIndex, and the Stripe Agent Toolkit found all three gate which tool an agent may call and none re-authorizes concrete argument values; a correctly scoped agent still executed an unauthorized payout ([Mellafe Zuvic, 2026v1](https://arxiv.org/abs/2606.28679v1)). A store bounds the effect type, never the amount.
+- The preflight can under-grant. Two of the seven task failures came from it omitting a required source-write capability. Freezing the ceiling before repository contents are read trades availability for containment, and file-tree names will not always predict what the work needs.
+- Sub-agent instruction files stay inside the ceiling. All three residual executions arrived through one surface: "Under C, all three executed attacks occur through AGENTS.md; the other four surfaces admit none" ([Bouras et al., 2026v1](https://arxiv.org/abs/2609.08371v1)). README, skill file, source comment and tool output each fell to 0/15. [Workspace topology](workspace-topology-injection-attack-vector.md) covers the cheap levers for that surface.
+- The evidence base is small. Five Python repairs, one model, three trials per cell. The authors put large refactors, dependency migrations, and long-running workflows outside what the corpus represents.
+- A hermetic runner may already cover it. Where a throwaway container holds no production credentials, the store's marginal gain shrinks while the preflight's availability cost and the typed catalog's authorship cost stay. Reach for [blast radius containment](blast-radius-containment.md) first.
+
+## Key takeaways
+
+- The task-scoped authority ceiling most hardening advice stops at is the weak link, because one shared policy must be the union of every subtask's needs.
+- Splitting that ceiling per principal took executed injections from 33/75 to 3/75 at identical task success, with the model still proposing the injected action 34 times ([Bouras et al., 2026v1](https://arxiv.org/abs/2609.08371v1)).
+- The cost is a mean of 316 s against 194 s, though the split's median is 208 s and five runs timed out, plus two task failures from a preflight that under-granted.
+- It is not a confidentiality control and it does not authorize argument values ([Mellafe Zuvic, 2026v1](https://arxiv.org/abs/2606.28679v1)). Pair it with per-call value checks where money or destructive scope is in reach.
+- `AGENTS.md`-shaped files remain the residual surface; treat them as untrusted content no store can help with.
+
+## Related
+
+- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — fixes the issuer of task authority before runtime content is read; this page argues that one such ceiling for the whole task is still too wide.
+- [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — scopes a capability across a subgoal's lifetime with revocation on closure; per-agent stores scope across principals within one task and never revoke.
+- [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — scopes a value's budget across composition, the third axis alongside time and principal.
+- [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — narrows a static manifest per request; the narrowing here is per principal instead.
+- [Workspace Topology as an Indirect Injection Attack Vector](workspace-topology-injection-attack-vector.md) — the residual `AGENTS.md` surface, and the cheap levers that reduce it.
 
 ---
 
@@ -114248,6 +114387,7 @@ The mechanisms compose: value-level attenuation, hierarchy-level liveness, and s
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md)
 - [CaMeL: Defeating Prompt Injections by Separating Control and Data Flow](camel-control-data-flow-injection.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
+- [Per-Agent Capability Stores Beat One Task-Wide Allowlist](per-agent-capability-scoping.md) — the same capability idea cut across principals instead of across a subgoal's lifetime.
 
 ---
 
@@ -117829,6 +117969,7 @@ Members of `ai-pioneers` pick their own model and can enable bypass mode. Everyo
 - [Agent Governance Policies for AI Agent Development](../workflows/agent-governance-policies.md) — the enterprise, organization, and user tiers the team dimension cuts across.
 - [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md) — the other place membership decides agent capability, with a fail-closed default.
 - [Agent Governance Plane: Audit Events and Message-Content Surfaces](agent-governance-plane.md) — the audit surface that records which delegated value was in force, and its coverage limits.
+- [Working Inside an Enterprise-Managed Agent Sandbox Policy](enterprise-managed-agent-sandbox.md) — the developer's side of one non-delegable key, and what a locked sandbox control leaves them able to do.
 
 ---
 
@@ -119404,6 +119545,72 @@ The AND-gate is not airtight. Because `Everyone` sits in the restricted SID list
 
 ---
 
+### Working Inside an Enterprise-Managed Agent Sandbox Policy
+Source: https://agentpatterns.ai/security/enterprise-managed-agent-sandbox/
+
+# Working Inside an Enterprise-Managed Agent Sandbox Policy
+
+> A managed sandbox is a floor your settings can only tighten, so no local edit widens it and no single file states where it sits.
+
+An enterprise-managed sandbox policy is a set of administrator-owned restrictions that a coding agent composes into your local sandbox configuration, taking the most restrictive value at every point. GitHub shipped one for Copilot in JetBrains IDEs on 8 September 2026, in public preview. It covers "sandbox enablement, filesystem and network access, proxy settings, developer-tool access, macOS Keychain access, and more", and "Copilot locks affected controls in the IDE and identifies settings managed by your organization" ([GitHub Changelog](https://github.blog/changelog/2026-09-08-enterprise-managed-sandbox-in-copilot-for-jetbrains/)).
+
+## Read it as a floor, not an override
+
+The settings screen says precedence, and that is the wrong model to carry into a denial. GitHub's reference states that "managed sandbox settings impose restrictions rather than defaults": a managed `true` on a force-on setting enforces it, a managed `false` on a capability prohibits it, and any other value leaves your configuration unchanged ([enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)). You keep every tightening move you had. You lose the loosening ones.
+
+You therefore need two things you did not need before. A way to print the boundary, since it is not in any one file. And an escalation route away from the keyboard, since the only widening act available is an administrator changing a source.
+
+## What the org can pin
+
+| Managed value | Effect on you |
+|---|---|
+| `enabled: true` | Sandboxing cannot be turned off through your configuration, `--no-sandbox`, or `/sandbox disable` |
+| `allowBypass: false` | No per-command escape, and no session-wide opt-out from a bypass prompt |
+| `failIfUnavailable: true` | With `enabled: true`, model and tool execution is blocked outright when no sandbox backend can enforce the policy |
+| `readwritePaths` / `readonlyPaths` | Your grants survive only where the exact path string also appears in the managed list |
+| `deniedPaths` | Managed denials add to yours |
+| `allowDevToolAccess: false` | Package restoration, authenticated registry operations, and shared-cache builds can fail until each path is granted explicitly |
+
+All six rows come from the `sandbox` key of the managed settings reference ([GitHub Docs](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)). Read the path rows twice. Managed grant lists "are matched against user-configured lists by exact path string, not by parent or child path coverage", so a managed grant of `/Users/octocat/projects` does not preserve your grant of `/Users/octocat/projects/app`.
+
+## Why it works
+
+The enforcement point moves out of a file you can write, and it stays out because the merge is an intersection rather than a lookup. Copilot composes the sandbox policy "from every source in force at once", with server-managed, MDM, and file-based sources combining "with each other, and with your own settings, in the most restrictive direction rather than one source overriding another" ([understanding local sandboxing](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/understanding-local-sandboxing)). Your settings can only narrow that result. This is the general [most-restrictive-wins merge](../patterns/agent-design/most-restrictive-wins-fusion.md) applied across policy channels instead of across hooks.
+
+The key names above are Copilot's; the merge rule is what transfers. Where a vendor composes policy by restriction, no local edit widens the boundary and no single file states it. Where managed policy replaces your configuration instead, both consequences change, so confirm which shape you have.
+
+The same property is why you cannot answer "am I denied or is this broken?" by reading configuration. Several sources are live at once and none of them holds the answer. In the CLI, `/sandbox policy` prints "the read/write, read-only, and denied paths that a command launched from here would actually receive... not just a copy of your saved settings" ([understanding local sandboxing](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/understanding-local-sandboxing)). The JetBrains release ships enterprise policy diagnostics for the same job, to "verify that policies are correctly detected and enforced on your device" ([GitHub Changelog](https://github.blog/changelog/2026-09-08-enterprise-managed-sandbox-in-copilot-for-jetbrains/)).
+
+So the first move on a denial is that report. A path listed as denied gives you a policy question; a path absent from every list gives you a defect worth filing. Take the policy question to an administrator as a sub-property and an exact path string. Those are the units the merge operates on, and "my build fails" cannot be actioned against them.
+
+## When this backfires
+
+Mandatory sandboxing on a fleet that cannot run one stops work rather than degrading it. With `failIfUnavailable: true`, Copilot "blocks model and tool execution instead of allowing commands to fail or run unsandboxed" ([GitHub Docs](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)), and local sandboxing on Windows requires a Windows Insiders build ([configuring local sandbox settings](https://docs.github.com/en/copilot/how-tos/cloud-and-local-sandboxes/configuring-local-sandbox-settings)). A stock Windows machine under that policy runs nothing.
+
+The network leg is weaker than the settings screen implies on two of the three platforms. "On Linux and macOS, the proxy is cooperative: it is applied through standard proxy environment variables and depends on each tool honoring them. On Windows, the sandbox enforces the proxy" ([configuring local sandbox settings](https://docs.github.com/en/copilot/how-tos/cloud-and-local-sandboxes/configuring-local-sandbox-settings)). A managed proxy URL is enforcement on Windows and [advice everywhere else](enforced-versus-advisory-controls.md).
+
+Leaving `allowBypass` unset keeps a session-wide off switch reachable from an active bypass prompt, and that prompt arrives at the worst available moment for judgement. Set it to `false` and the hole closes, but then every blocked build becomes a ticket.
+
+Hardening also costs throughput on tasks with no security relevance. Across 12 coding agents on Terminal-Bench 2.1, "under the strictest policy, success losses reach 18.3 points and cost inflation 167.3%", and runs "grind into timeouts or wrong solutions rather than stopping early" ([arXiv:2608.02670v1](https://arxiv.org/abs/2608.02670v1)). That failure shape is what costs the developer time, because a denied run does not look denied.
+
+## Key Takeaways
+
+- Managed sandbox values impose restrictions, not defaults. On a denial the question is never which setting to change, it is which source contributes the restriction.
+- Run the effective-policy report before filing a bug. Server-managed, MDM, and file-based sources compose at once, so no configuration file answers the question.
+- Check the exact path string when a grant disappears. Managed and user path lists intersect by string, and a parent directory in the managed list does not cover your child path.
+- Ask whether `allowBypass` is set before assuming the boundary holds. Left unset, it puts a session-wide opt-out one prompt away.
+- On Linux and macOS, treat a managed proxy as a request to your tools, and put egress control somewhere the tools cannot decline.
+
+## Related
+
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — where to sort each leg of an inherited policy, and why the cooperative proxy lands on the advisory side.
+- [Most-Restrictive-Wins Fusion for Parallel Agent Control Returns](../patterns/agent-design/most-restrictive-wins-fusion.md) — the general merge function this policy composition is an instance of.
+- [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md) — the administrator's side, and why sandbox keys are not among the delegable ones.
+- [Policy-Graded Evaluation of Coding Agents](../verification/policy-graded-agent-evaluation.md) — what enforced tiers cost in success rate and tokens, measured per model.
+- [Enterprise-Managed Plugin Governance for Agent CLIs](enterprise-managed-plugin-governance.md) — the same managed-settings channel applied to the plugin code-load path.
+
+---
+
 ### Workload Identity Federation for Agent Runtimes
 Source: https://agentpatterns.ai/security/workload-identity-federation-for-agents/
 
@@ -119599,6 +119806,7 @@ Workload typing narrowed six platforms to four. The team's operational constrain
 - [Capability-Additive Code Interpreters for Untrusted Agent Code](capability-additive-interpreter.md) — the lighter in-process interpreter to reach for when the workload is orchestration code rather than general code execution
 - [Session Harness Sandbox Separation](../patterns/agent-design/session-harness-sandbox-separation.md) — the architectural pattern that makes the stateful-session feature set structural rather than configurational
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat model the untrusted-code workload shape inherits
+- [Working Inside an Enterprise-Managed Agent Sandbox Policy](enterprise-managed-agent-sandbox.md) — what changes when the feature set is not yours to pick because an administrator composed it centrally
 
 ---
 

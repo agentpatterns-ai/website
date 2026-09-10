@@ -111,3 +111,4 @@ Workload typing narrowed six platforms to four. The team's operational constrain
 - [Capability-Additive Code Interpreters for Untrusted Agent Code](capability-additive-interpreter.md) — the lighter in-process interpreter to reach for when the workload is orchestration code rather than general code execution
 - [Session Harness Sandbox Separation](../patterns/agent-design/session-harness-sandbox-separation.md) — the architectural pattern that makes the stateful-session feature set structural rather than configurational
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the threat model the untrusted-code workload shape inherits
+- [Working Inside an Enterprise-Managed Agent Sandbox Policy](enterprise-managed-agent-sandbox.md) — what changes when the feature set is not yours to pick because an administrator composed it centrally
