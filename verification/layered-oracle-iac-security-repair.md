@@ -140,4 +140,5 @@ A reasonable practitioner can argue the 71.4 percent figure is a function of pro
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — The cost-ascending ordering of cheap-to-expensive verification gates applied to bug repair instead of security repair.
 - [Layered Accuracy Defense for Reliable Agent Outputs](layered-accuracy-defense.md) — Defense-in-depth framing for stacking independent verification checkpoints across a pipeline.
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Where compile/validate/plan gates sit on the deterministic-vs-probabilistic verification spectrum.
+- [Classification Before Repair in an Analyzer Backlog](classification-before-repair-analyzer-backlog.md) — The step upstream of the oracle stack: deciding which scanner findings should reach an agent at all.
 - [Honesty Harness: Defense-in-Depth Against Coding Agent Fabrication](honesty-harness-fabrication-defense.md) — The fabrication-defense analogue: four uncorrelated layers instead of five, same defense-in-depth principle.

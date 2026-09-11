@@ -163,6 +163,7 @@ last_reviewed: 2026-05-27
 - [Defense-in-Depth Against Coding Agent Fabrication (Honesty Harness)](honesty-harness-fabrication-defense.md) — Four uncorrelated layers — instruction-level honesty rules, verify-before-write, real-time hooks that feed output back, and an external-tool fact-checker subagent — that reduce fabrication survival without claiming elimination
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — Stack scanner-pass, full-scanner, validate, plan, and plan-diff oracles so LLM-generated infrastructure-as-code security fixes have to clear behavioral checks — first-pass agent repairs cleared the targeted Checkov finding 83.3 percent of the time but 71.4 percent of plan-compared repairs were deceptive fixes
 - [Explained Feedback for LLM Vulnerability Repair](explained-feedback-vulnerability-repair.md) — Pass the raw scanner diagnostic back first; rewriting it into an attack mechanism plus ordered repair steps adds roughly 1 to 1.5 points, and reverses on weak instruction-followers, multi-CWE tasks, and the self-explained variant
+- [Classification Before Repair in an Analyzer Backlog](classification-before-repair-analyzer-backlog.md) — Handing a static-analysis backlog to an agent puts the expensive errors in deciding whether each finding is real, not in the patch; gate the queue on classification and read a falling finding count as fixed-or-silenced
 
 ## Tooling
 

@@ -107,3 +107,4 @@ The same idea generalizes via a constitution: rather than restating the invarian
 - [Safe Outputs Pattern](safe-outputs-pattern.md)
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](../verification/anti-reward-hacking.md)
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md)
+- [Next Edit Suggestions Carry Context You Never Curated](next-edit-suggestion-uncurated-context.md) — the same constraint dropped by an uncurated retrieval window instead of an under-specified prompt

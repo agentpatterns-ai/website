@@ -163,6 +163,7 @@ Then the injected variables may never reach them. Some agent frameworks spawn sa
 
 ## Related
 
+- [Per-Caller Identity: Who an Agent's Tool Call Acts As](per-caller-identity-for-agent-tool-calls.md)
 - [Credential Hygiene for Agent Skills](credential-hygiene-agent-skills.md)
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
 - [Blast Radius Containment](blast-radius-containment.md)

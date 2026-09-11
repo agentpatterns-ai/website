@@ -27,6 +27,7 @@ nav:
       - bug-class-hints-as-exploit-input.md
       - task-choice-poisoned-repository-exposure.md
       - post-authorization-execution-trust-gap.md
+      - next-edit-suggestion-uncurated-context.md
   - "Sandboxing":
       - browser-sandbox-agent-generated-html.md
       - docker-sbx-adoption.md
@@ -122,8 +123,10 @@ nav:
   - multitenant-rag-authorization-gap.md
   - network-less-container-unix-socket-egress.md
   - non-human-event-provenance-markers.md
+  - non-retirable-approval-rules.md
   - org-membership-gated-agent-entitlement.md
   - per-agent-capability-scoping.md
+  - per-caller-identity-for-agent-tool-calls.md
   - permission-framework-over-model.md
   - permission-gated-commands.md
   - parser-versus-shell-permission-evasion.md
