@@ -92,3 +92,4 @@ The measured outcome on the A/B was ["a 23% reduction in tool failures per sessi
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
 - [Recursive Sub-Agent Delegation Depth](../multi-agent/recursive-sub-agent-delegation-depth.md)
+- [Subagent vs In-Context Skill Execution](subagent-vs-in-context-skill-execution.md)

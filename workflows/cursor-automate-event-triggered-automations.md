@@ -12,7 +12,7 @@ aliases:
   - cursor automate skill
   - cursor event triggered automations
   - cursor slack emoji trigger
-last_reviewed: 2026-06-29
+last_reviewed: 2026-09-10
 maturity: emerging
 ---
 
@@ -25,6 +25,8 @@ Cursor 3.8 (2026-06-18) turns Cursor Automations from a scheduled-job surface in
 ## When to use this trigger surface
 
 Adopt the 3.8 trigger surface only when all four conditions hold. If any one is missing, stay on a scheduled trigger or a manual dispatch path until the gap is closed.
+
+Other vendors ship that scheduled fallback too. VS Code 1.137 put Automations into preview on 2026-09-09, with hourly, daily and weekly schedules ([VS Code 1.137 release notes](https://code.visualstudio.com/updates/v1_137)). Its starting templates cover catching up on changes, issue triage and bug finding. A clock trigger carries no outside dispatcher, which is the condition the first table row is trying to hold.
 
 | Condition | Why it is load-bearing |
 |-----------|----------------------|

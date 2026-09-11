@@ -103,6 +103,7 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 Patterns for steering agent behavior, detecting convergence, and managing execution flow.
 
 - [Agent as Tool vs Handoff: Who Keeps the Conversation](agent-as-tool-vs-handoff.md) — Registering a specialist as a callable tool keeps the parent in control with a clean context window, while a handoff transfers the conversation to the specialist
+- [Subagent vs In-Context Skill Execution](subagent-vs-in-context-skill-execution.md) — Invoke a skill package as a subagent when it declares an input-output contract, and load it in-context when it does not; the measured result reverses on contract-less packages
 - [Background Todo Agent](background-todo-agent.md) — Route the agent's todo-list maintenance loop to a small background model so the frontier model spends its attention budget on the active sub-task instead of bookkeeping
 - [In-Agent Task Prioritization: Ranking the Next Action](in-agent-task-prioritization.md) — Rank pending work by a composite score (urgency, value, dependency, blast radius, staleness) — distinct from routing and scheduling — so the agent's scarce attention lands on the item that pays back most per turn
 - [Controlling Agent Output: Concise Answers, Not Essays](../../instructions/controlling-agent-output.md) — Matching the agent's response format to what you actually need reduces noise and preserves context budget

@@ -103,3 +103,4 @@ The decoupled measurement reveals which side of the Pareto frontier the workload
 - [Validating Token-Optimized Formats Inside Agentic Loops](validate-token-optimized-formats-in-agentic-loops.md) — A parallel input-side compression trade-off in tool-schema notation, with the same input-vs-end-to-end measurement gap.
 - [Prompt Compression](prompt-compression.md) — Compressing instruction prose for the same goal at a different layer; lower accuracy risk than code minification.
 - [Context Budget Allocation](context-budget-allocation.md) — Distributing the token budget across sources; minification is one lever, but not the only one.
+- [Comment Content as Code-Generation Context](comment-content-as-generation-context.md) — What stripping comments costs on the output side, where suppression moved pass@1 in opposite directions across models.

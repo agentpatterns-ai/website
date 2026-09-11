@@ -197,3 +197,4 @@ An agent editing `ingest_raw.py` reads the package AGENTS.md, encounters the dec
 - [Prompt Layering](prompt-layering.md)
 - [Repository Map Pattern](repository-map-pattern.md)
 - [Grounding Agents in Code the Model Has Never Seen](grounding-zero-prior-code.md) — the subset of seeding where the model has no prior to fall back on, so breadcrumbs must include an explicit identity layer
+- [Comment Content as Code-Generation Context](comment-content-as-generation-context.md) — the measured cost of a breadcrumb that describes the wrong problem, and why comment content beats comment placement

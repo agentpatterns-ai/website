@@ -38,6 +38,7 @@ Models do not attend uniformly across the context window. These pages cover wher
 - [Context Window Anxiety](context-window-anxiety.md) — Advanced models exhibit behavioral shortcuts as context limits approach; strategic buffers, counter-prompting, and token budget transparency counteract premature task closure
 - [Turn-Level Context Decisions](turn-level-context-decisions.md) — Every completed turn is a branching point with five options: continue, rewind, clear, compact, or delegate to a subagent; choosing well is the core skill of context management
 - [Conversation Registers for AI Coding Sessions](conversation-registers.md) — Name which of four interaction modes you are in with an LLM — exploring, brainstorming, deciding, implementing — and start a fresh context when the register changes
+- [Comment Content as Code-Generation Context](comment-content-as-generation-context.md) — A model conditions the code it writes on the comments it just wrote; only content correctness moves pass@1, and a comment written for a different problem costs 20.8%
 
 ## Compression & Caching
 

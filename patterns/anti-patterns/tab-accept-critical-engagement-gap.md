@@ -74,3 +74,4 @@ The cheapest cross-check is the accept-rate distribution against the downstream 
 - [The Effortless AI Fallacy](effortless-ai-fallacy.md) — the belief that AI tools should work without effort, which reinforces low-scrutiny acceptance
 - [Suggestion Gating: Fewer Completions, Better DX](../../human/suggestion-gating.md) — the fix-side pattern that lifts accept rate by discarding low-value suggestions before display
 - [Intervention Rate as a Diagnostic North Star, Not a Target](../../human/intervention-rate-diagnostic-north-star.md) — parallel argument that a single-number user-interaction metric hides its diagnostic value in the segments underneath
+- [Next Edit Suggestions Carry Context You Never Curated](../../security/next-edit-suggestion-uncurated-context.md) — the security side of the same tab loop, where the accepted change is wider than the highlighted region

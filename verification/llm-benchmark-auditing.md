@@ -72,3 +72,4 @@ The same paper's deployment on ScienceAgentBench produced 12 author-confirmed is
 - [Eval Awareness: Designing Evals Agents Cannot Recognize](eval-awareness.md) — models detecting eval prompts as another measurement-validity threat
 - [Anti-Reward Hacking](anti-reward-hacking.md) — agents exploiting weak graders, the failure mode rigid scripts try to prevent
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — using benchmarks for tool evaluation once you trust them
+- [Answer-Reachable Eval Environments](../patterns/anti-patterns/answer-reachable-eval-environments.md) — the defect an artifact audit misses, where the leak is in the container the agent runs in

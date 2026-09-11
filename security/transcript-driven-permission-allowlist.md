@@ -135,3 +135,4 @@ The next session runs without prompts for these four commands, while any new or 
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)
 - [Managed Settings Drop-In](../tools/claude/managed-settings-drop-in.md)
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
+- [Non-Retirable Approval Rules for Agent Operations](non-retirable-approval-rules.md)

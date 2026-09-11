@@ -74,3 +74,4 @@ Hardening also costs throughput on tasks with no security relevance. Across 12 c
 - [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md) — the administrator's side, and why sandbox keys are not among the delegable ones.
 - [Policy-Graded Evaluation of Coding Agents](../verification/policy-graded-agent-evaluation.md) — what enforced tiers cost in success rate and tokens, measured per model.
 - [Enterprise-Managed Plugin Governance for Agent CLIs](enterprise-managed-plugin-governance.md) — the same managed-settings channel applied to the plugin code-load path.
+- [Non-Retirable Approval Rules for Agent Operations](non-retirable-approval-rules.md) — the `permissions` key beside this one, where the middle state demands a fresh approval no saved grant satisfies.

@@ -88,6 +88,7 @@ nav:
       - weakest-consistent-learning.md
   - "Control & Orchestration":
       - agent-as-tool-vs-handoff.md
+      - subagent-vs-in-context-skill-execution.md
       - background-todo-agent.md
       - in-agent-task-prioritization.md
       - interactive-clarification-underspecified-tasks.md
