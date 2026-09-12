@@ -74,3 +74,4 @@ If a plugin works in your app session and the cloud agent behaves as though it i
 - [copilot-instructions.md as a Repo-Level Instruction Convention](copilot-instructions-md-convention.md) — the file this tab does not replace
 - [GitHub Copilot Custom Agents and Skills Extensibility Guide](custom-agents-skills.md) — what a plugin bundles, and the repo paths each part lives at
 - [GitHub Copilot MCP Integration for AI Agent Development](mcp-integration.md) — the customization type the tab surfaces as trending and by category
+- [Copilot App Diff, Terminal, and Browser Panels](copilot-app-diff-terminal-browser.md) — the app's other undocumented-in-docs surfaces, and what each one does to the session worktree

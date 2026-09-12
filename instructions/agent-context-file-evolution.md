@@ -134,5 +134,6 @@ The discipline is not free, and several conditions invert its sign:
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — the structural target the compact pass aims at
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the destination for rules the compact pass moves out of prose
 - [Harness Impermanence](../patterns/agent-design/harness-impermanence.md) — the analogous discipline applied to scaffolding code rather than instruction files
+- [Reproducibility Artifacts as Agent Context](../context-engineering/reproducibility-artifacts-as-agent-context.md) — which project artifacts belong in the always-on file and which load on demand
 - [RAMP: Committed AI Configuration and the Quality Cost](committed-ai-configuration-quality-cost.md) — the commercial-repo study that reports the opposite lifecycle, with 73.8% of artifacts committed once and never modified
 - [Why an Encoded Rule Still Fails After a Passing Eval](encoded-rule-failure-diagnosis.md) — what to check when an add-on-drift update passes its eval and the failure it targeted keeps arriving

@@ -353,6 +353,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Phase-Specific Context Assembly for AI Agent Development](context-engineering/phase-specific-context-assembly.md)
 - [Repository Map Pattern: AST + PageRank for Dynamic Code](context-engineering/repository-map-pattern.md)
 - [Repository-Level Retrieval for Code Generation](context-engineering/repository-level-retrieval-code-generation.md)
+- [Reproducibility Artifacts as Agent Context](context-engineering/reproducibility-artifacts-as-agent-context.md)
 - [Schema-Guided Graph Retrieval](context-engineering/schema-guided-graph-retrieval.md)
 - [Selective Rewind Summarization: Compress Earlier Turns, Keep Recent Ones Intact](context-engineering/selective-rewind-summarization.md)
 - [Semantic Density Optimization for Agent Codebases](context-engineering/semantic-density-optimization.md)
@@ -569,6 +570,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent Determinism Moves to the Last Unconstrained Axis](patterns/agent-design/last-unconstrained-axis.md)
 - [Agent-Native Filesystems: Gating Effects, Not Commands](patterns/agent-design/agent-native-filesystem-mediation.md)
 - [Artifact-Driven Workflow Compilation for Agent Execution](patterns/agent-design/artifact-driven-workflow-compilation.md)
+- [Auto-Merging a Wiki Agent's Documentation Pull Requests](patterns/agent-design/auto-merged-documentation-updates.md)
 - [Capability Declarations for Agents That Act on Data](patterns/agent-design/capability-declarations-for-agent-actions.md)
 - [Code-Native Memory Substrates for Coding Agents](patterns/agent-design/code-native-memory-substrates.md)
 - [Cohesion-Aware Task Partitioning for Multi-Agent Coding](patterns/multi-agent/cohesion-aware-task-partitioning.md)
@@ -679,6 +681,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Proactive Idle-Time Anticipation (ProAct)](patterns/agent-design/proactive-idle-time-anticipation.md)
 - [Production Hosting Topology for Self-Hosted Agent SDK Runtimes](patterns/agent-design/agent-sdk-hosting-topology.md)
 - [Progressive Spend Threshold Alerting for Agent Cost Governance](patterns/agent-design/progressive-spend-threshold-alerting.md)
+- [Project-Scoped Agent Workspace: Durable Context for Clean-Context Subagents](patterns/agent-design/project-scoped-agent-workspace.md)
 - [Quality Score Rubric and Simplification Log for Agent Harnesses](patterns/agent-design/quality-score-rubric.md)
 - [RAG over Thinking Traces: Index Reasoning Trajectories Instead of Documents](patterns/agent-design/rag-over-thinking-traces.md)
 - [Rainbow Deployments for Agents: Gradual Version Migration](patterns/multi-agent/rainbow-deployments-agents.md)
@@ -1830,6 +1833,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Claude Code Sub-Agents for Delegating Complex Tasks](tools/claude/sub-agents.md)
 - [Cloud-Scheduled Routines vs Local Session Scheduling](tools/claude/cloud-scheduled-routines.md)
 - [Copilot App Customize Tab vs Repo Configuration Files](tools/copilot/copilot-app-customize-tab.md)
+- [Copilot App Diff, Terminal, and Browser Panels](tools/copilot/copilot-app-diff-terminal-browser.md)
 - [Copilot CLI Agentic Workflows for AI Agent Development](tools/copilot/copilot-cli-agentic-workflows.md)
 - [Copilot CLI BYOK and Local Model Support](tools/copilot/copilot-cli-byok-local-models.md)
 - [Copilot Cloud Agent Organization Controls](tools/copilot/cloud-agent-org-controls.md)
@@ -2056,6 +2060,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Query-Conditioned Reuse of Retrieved Agent Trajectories](query-conditioned-trajectory-reuse.md) — Hand the agent a four-field target-bound note instead of the retrieved trajectory, so the procedure transfers and the source run's stale values do not
 - [Live Browser as Agent Context Channel](live-browser-context-channel.md) — Subscribe an agent to the developer's running browser tabs as live context — lower friction than copy-paste, but the developer's logged-in session enters the indirect-injection blast radius
 - [App-Window Snapshot as Agent Context](app-window-snapshot-context.md) — Bind one hotkey to send the active app window — rendered screenshot plus accessibility-tree text — as a single context unit; the richer payload changes which cross-app handoffs are plausible to delegate
+- [Reproducibility Artifacts as Agent Context](reproducibility-artifacts-as-agent-context.md) — Tests, commit history, layout, instructions, and decision records are agent context, but each loads through a different channel and only the non-discoverable slice belongs in always-on instructions
 - [Repository Map Pattern](repository-map-pattern.md) — Parse source files with tree-sitter to extract structural symbols, rank them by graph importance, then binary-search fit the most relevant entries into the agent's available token budget
 - [Deterministic Anchoring](deterministic-anchoring.md) — Inject call-graph, inheritance, and config-dependency facts as plain-text comments so code-agent navigation converges run-to-run; the win is reproducibility, not capability
 - [Context Compiler](context-compiler.md) — Compile a task-scoped payload — full target file, skeletonized dependencies, everything else excluded — instead of buying a bigger window; the dependable payoff is reproducibility, not accuracy
@@ -3499,6 +3504,7 @@ It converts a conditional cost into fixed overhead paid on every task, whether o
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
 - [Phase-Specific Context Assembly](phase-specific-context-assembly.md)
 - [Context Compression Strategies](context-compression-strategies.md)
+- [Reproducibility Artifacts as Agent Context](reproducibility-artifacts-as-agent-context.md)
 - [Long Context vs Retrieval: The Break-Even Decision](long-context-vs-retrieval-break-even.md)
 - [Semantic Density Optimization for Agent Codebases](semantic-density-optimization.md)
 
@@ -5439,6 +5445,7 @@ The split breaks down in 3 cases:
 - [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
 - [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) -- bootstrap an instruction file with only non-discoverable content
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
+- [Reproducibility Artifacts as Agent Context](reproducibility-artifacts-as-agent-context.md) -- this test applied to tests, commit history, layout, and decision records
 - [Layered Context Architecture](layered-context-architecture.md)
 
 ---
@@ -10094,6 +10101,77 @@ The resulting prompt contains cross-file type signatures and conventions that a 
 
 ---
 
+### Reproducibility Artifacts as Agent Context
+Source: https://agentpatterns.ai/context-engineering/reproducibility-artifacts-as-agent-context/
+
+# Reproducibility Artifacts as Agent Context
+
+> Reproducibility artifacts double as agent context, but each loads through a different channel, and only the non-discoverable slice belongs in always-on instructions.
+
+The artifacts a project maintains so a stranger can rerun its work are the same artifacts an agent reads to work in it. Two conditions decide what that is worth. The five reach the agent through different channels at different costs, so treating them as one block of always-on context spends budget on items that should be executed or queried instead. And the argument inverts when the agent's job is to check the claim an artifact asserts rather than build on it.
+
+## Five artifacts, five loading channels
+
+Lorena Barba tabulates five artifacts against a context category each: the agent instruction file as always-on semantic memory, the test suite as executable semantic memory, commit history as episodic memory, repository structure as pre-processed context, and the decision record as static context, where "settled questions are not relitigated" ([arXiv:2609.11728v1](https://arxiv.org/abs/2609.11728v1)). Her table costs each artifact by what it takes to produce. It does not cost what it takes to keep in context, and those are different budgets.
+
+| Artifact | Context role | How it reaches the agent | What it charges |
+|---|---|---|---|
+| Instruction file | Always-on semantic memory | Loaded whole, every session | Tokens, unconditionally |
+| Decision record | Static context | Read when a settled question resurfaces | Tokens, on demand |
+| Commit history | Episodic memory | Queried through `git log` | Tokens, on demand |
+| Repository structure | Pre-processed context | Walked with the agent's own file tools | Turns, not tokens |
+| Test suite | Executable semantic memory | Run as a self-check, not read | One tool call |
+
+Only the first row charges on every session whatever the task, and it is also the row that grows: a study of 2,303 context files from 1,925 repositories found them "not static documentation but complex, difficult-to-read artifacts that evolve like configuration code" ([arXiv:2511.12884v2](https://arxiv.org/abs/2511.12884v2)).
+
+Apply the test from [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) row by row and the set splits. Layout and commit history are discoverable, so describing them in always-on context pays twice for one fact. The decision record survives outright, because reasoning nobody committed cannot be recovered from the tree.
+
+## Why it works
+
+Barba's mechanism is that reproducibility practice externalizes an author's tacit knowledge into durable, legible artifacts, and an agent is the extreme case of the reader they were written for, because it arrives "with no shared history at the start of every session"; the artifact "does not know whether the stranger consulting it is human or machine" ([arXiv:2609.11728v1](https://arxiv.org/abs/2609.11728v1)). The paper argues this and measures nothing.
+
+The nearest independent support is behavioral. On SocSci-Repro-Bench, 221 reproduction tasks across four disciplines, two frontier coding agents reproduced a large share of published social-science findings from the data and code alone ([arXiv:2606.11447v1](https://arxiv.org/abs/2606.11447v1)). Two corpora show developers already writing down most of the same set, under different labels. Matt Nigh's analysis of over 2,500 `agents.md` files reports that the top tier covers "commands, testing, project structure, code style, git workflow, and boundaries" ([GitHub Blog](https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/)). The 2,303-file study finds test procedures in 75.9% of files, implementation detail in 70.8%, and architecture in 68.1% ([arXiv:2511.12884v2](https://arxiv.org/abs/2511.12884v2)). Both count what developers wrote. Neither measures whether it helped, which is the standing caution in [Public Rules-File Corpora as Evidence](../instructions/rules-file-corpus-evidence.md).
+
+## When this backfires
+
+### The agent is verifying, not producing
+
+Supplying the artifact that states the expected result biases the agent toward producing that result. When Alizadeh et al. handed agents the original paper PDF alongside the replication materials, Claude Code's accuracy on non-reproducible tasks fell from 100.0% to 63.3% and Codex's from 100% to 90.0%; the agents "tend to extract the expected numerical output rather than correctly diagnosing an execution failure" ([arXiv:2606.11447v1](https://arxiv.org/abs/2606.11447v1)). More context made overall performance better and diagnosis worse.
+
+### Everything lands in the instruction file
+
+Describing all five artifacts in the always-on file charges per-session tokens for four that are executed or queried. [Context Budget Allocation](context-budget-allocation.md) covers the trade; [Agent Context File Evolution](../instructions/agent-context-file-evolution.md) covers the drift that follows.
+
+### The artifacts are agent-written and unread
+
+Barba names this failure directly: "A test you do not read is worthless; a decision record you did not reason through records nothing you know" ([arXiv:2609.11728v1](https://arxiv.org/abs/2609.11728v1)). A generated suite raises the coverage number and lowers the signal.
+
+### The repository is short-lived
+
+The cost case is bound to the timescale of a codebase. A prototype discarded in three weeks never reaches the horizon where commit discipline or a decision record repays its cost.
+
+### Regeneration does not reproduce
+
+Barba raises this against her own case: "AI generation is probabilistic; models change underneath you; the same prompt on the same code may produce different output next month." Her answer is that the argument runs at a different layer: "The claim is not that the path by which code came to exist is reproducible; it is that the code, once it exists, is legible, tested, and accounted for" ([arXiv:2609.11728v1](https://arxiv.org/abs/2609.11728v1)). That holds for the test suite, which pins behavior whatever wrote it. It holds less well for the instruction file and the decision record, whose worth is the reasoning they carry rather than a behavior anything can re-run.
+
+## Key Takeaways
+
+- Sort reproducibility artifacts by loading channel before deciding what to write down. Only the instruction file charges tokens on every session, so that is the row to ration.
+- Name the layout and the log in the instruction file; do not transcribe them. The agent's own file and git tools supply the rest.
+- Write the decision record first if you write only one artifact. It is the one whose content no tool can recover.
+- Withhold the artifact that asserts the answer when the agent's task is to verify it. Paper access cut Claude Code's accuracy on non-reproducible tasks from 100.0% to 63.3% ([arXiv:2606.11447v1](https://arxiv.org/abs/2606.11447v1)).
+- Treat the convergence argument as a position, not a result. The corpus studies behind it count authorship rather than effect.
+
+## Related
+
+- [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) — the test that splits the five artifacts into always-on and on-demand
+- [Context Budget Allocation](context-budget-allocation.md) — what a token preloaded into always-on context displaces
+- [Agent Context File Evolution](../instructions/agent-context-file-evolution.md) — how instruction files grow once every convention lands in them
+- [Public Rules-File Corpora as Evidence](../instructions/rules-file-corpus-evidence.md) — why corpus convergence is authorship evidence, not efficacy evidence
+- [Encoding Tacit Knowledge into Agent Improvement Loops](../workflows/encoding-tacit-knowledge.md) — eliciting the judgment that never reached an artifact
+
+---
+
 ### Retrieval-Augmented Agent Workflows: On-Demand Context
 Source: https://agentpatterns.ai/context-engineering/retrieval-augmented-agent-workflows/
 
@@ -12990,6 +13068,7 @@ The discipline is not free, and several conditions invert its sign:
 - [AGENTS.md as Table of Contents, Not Encyclopedia](agents-md-as-table-of-contents.md) — the structural target the compact pass aims at
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the destination for rules the compact pass moves out of prose
 - [Harness Impermanence](../patterns/agent-design/harness-impermanence.md) — the analogous discipline applied to scaffolding code rather than instruction files
+- [Reproducibility Artifacts as Agent Context](../context-engineering/reproducibility-artifacts-as-agent-context.md) — which project artifacts belong in the always-on file and which load on demand
 - [RAMP: Committed AI Configuration and the Quality Cost](committed-ai-configuration-quality-cost.md) — the commercial-repo study that reports the opposite lifecycle, with 73.8% of artifacts committed once and never modified
 - [Why an Encoded Rule Still Fails After a Passing Eval](encoded-rule-failure-diagnosis.md) — what to check when an add-on-drift update passes its eval and the failure it targeted keeps arriving
 
@@ -22717,9 +22796,11 @@ How agents persist, retrieve, and synthesize information across turns and sessio
 - [Cue-Anchored Working Memory (Delivery, Not Storage)](cue-anchored-working-memory.md) — A second memory tier the harness delivers by injecting operational facts deterministically when a context cue fires, so the agent never has to remember to look them up
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — Run an agent over raw sources to build and maintain a compact, file-based knowledge layer future agents read instead of re-deriving structure via query-time RAG — for durable domain knowledge with enough query volume to amortize
 - [Self-Correcting Memory: Evidence-Backed Claim Repair](self-correcting-memory-evidence-backed-claims.md) — Bind each stored claim to a versioned line range so a deterministic diff marks it stale before any model judges it — the repair half of wiki memory, and only where the source of truth is versioned
+- [Auto-Merging a Wiki Agent's Documentation Pull Requests](auto-merged-documentation-updates.md) — One named deployment merges its doc agent's nightly pull requests without review, which keeps the wiki current and removes the only step that compared the generated text against the code
 - [Typed Memory Provenance and Assertion Release Gating](typed-memory-provenance-assertion-gating.md) — Record each stored claim's role, validity window, and disclosure scope, then check candidate output against it before release — tagging origin alone stopped 1 unsafe release in 19
 - [Organizing Filesystem Agent Memory for Retrieval Cost](filesystem-memory-organization.md) — Organizing a markdown memory tree roughly halves per-query retrieval cost on large stores while leaving answer quality unchanged — a cost optimization with a size threshold
 - [Persistent Teammate Workspace: Durable State for Agent Teams](persistent-teammate-workspace.md) — A per-teammate directory on disk that survives compaction and process exit — worth its token and security cost only when the team's work genuinely outlives one session
+- [Project-Scoped Agent Workspace: Durable Context for Clean-Context Subagents](project-scoped-agent-workspace.md) — A synced project file set is the only durable channel between subagents that start with clean context, so its write policy decides the quality of every future dispatch
 - [Weakest Consistent Learning: What Agent Loops Should Persist](weakest-consistent-learning.md) — Persist the learning that permits the most future cases while staying consistent with what was observed, under three stated conditions
 
 ## Control & Orchestration
@@ -26577,6 +26658,56 @@ Code-health routing decides before the small model runs; syntax-aware routing de
 - [Verification-Centric Development](../../workflows/verification-centric-development.md) — the deterministic gate that makes tier equivalence measurable for code-health-gated routing.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — a small model behind a tool boundary rather than a routed completion peer.
 - [Deterministic Fast Paths](deterministic-fast-paths.md) — the rung below every routing policy, which answers a request without reaching any model.
+
+---
+
+### Auto-Merging a Wiki Agent's Documentation Pull Requests
+Source: https://agentpatterns.ai/patterns/agent-design/auto-merged-documentation-updates/
+
+# Auto-Merging a Wiki Agent's Documentation Pull Requests
+
+> Auto-merging a doc agent's pull requests keeps a codebase wiki current and removes the last point where a person could check it against code.
+
+Credit Genie, "a mobile-first financial wellness platform," runs LangChain's OpenWiki across its repositories and lets the output merge unreviewed ([LangChain, 2026](https://www.langchain.com/blog/how-credit-genie-uses-openwiki-to-keep-codebase-knowledge-fresh-searchable-and-automated)). Documentation lives in an `openwiki/` folder inside each repository, and OpenWiki "runs nightly, checks for commit changes, and generates documentation updates when it finds meaningful differences, opening a pull request in the repo." Credit Genie then took the review step out: "To eliminate merge bottlenecks, Credit Genie added an action to automatically approve and merge OpenWiki update PRs." A sweep job runs daily across every onboarded repository, merges what is pending, and rebuilds a GitHub Pages portal.
+
+Two audiences read the result. Engineers and non-technical stakeholders search the portal. Coding agents "are instructed to check the openwiki/ folder in a repository before taking action" ([LangChain, 2026](https://www.langchain.com/blog/how-credit-genie-uses-openwiki-to-keep-codebase-knowledge-fresh-searchable-and-automated)).
+
+The account carries no figures. No repository count, no running cost, no update volume, no accuracy rate, no before-and-after. Its "Early impact" section reports adoption and perceived benefit. It is a vendor case study of a vendor product, and nobody independent has checked it.
+
+## When the trade is worth making
+
+Auto-merge answers a staleness problem, so reach for it when staleness is the problem you actually have. Credit Genie's earlier Notion pages, README files, and `AGENTS.md` files went obsolete because "writing and maintaining good docs takes time away from other pressing work" ([LangChain, 2026](https://www.langchain.com/blog/how-credit-genie-uses-openwiki-to-keep-codebase-knowledge-fresh-searchable-and-automated)). A review queue nobody drains reproduces that outcome with a backlog attached.
+
+It also needs a reader who can catch the error. An engineer reading the portal has the repository open and pays a confused minute for a wrong line. Generation cost is not the constraint on either side of the trade: a comparable pipeline generated a full architecture document for $0.35 to $2.48 per repository, averaging $1.19, in under five minutes ([De Luca et al., 2026](https://arxiv.org/abs/2604.08293v1)).
+
+## Why it works
+
+Every step that needs a person is a step where the work stalls, and documentation had three of them: write, review, merge. Moving the trigger to a nightly CI diff removes the first. Auto-approve and the daily sweep remove the other two, so the wiki now tracks commits rather than anyone's intention to write it up.
+
+That mechanism buys freshness and nothing else. A diff says the code changed, not that the new text is right. Kang and colleagues put numbers on the gap: code-comment consistency detection techniques have "no statistically significant relationship with comment accuracy," and roughly a fifth of the comments from the best of three evaluated models "contained demonstrably inaccurate statements" ([Kang et al., 2024](https://arxiv.org/abs/2406.14836v1)). Review was the one point where a person could catch those. Credit Genie's own verification was a one-time check during onboarding, when two teams "added a number of their team repositories and verified the accuracy of the generated docs" ([LangChain, 2026](https://www.langchain.com/blog/how-credit-genie-uses-openwiki-to-keep-codebase-knowledge-fresh-searchable-and-automated)).
+
+## When this backfires
+
+- Agents act on the docs. A wrong line stops being one reader's confusion once coding agents consult the folder before changing code, because no human sees it in between.
+- The weakest sections are the ones newcomers need. In one study, 22 developers each reviewed generated documentation for a repository they had contributed to. The Components section drew the highest positive ratings; System Overview and Architectural Context "accumulated the highest numbers of negative ratings" ([De Luca et al., 2026](https://arxiv.org/abs/2604.08293v1)).
+- A confident wrong page still reaches readers. Auto-generated wiki content has asserted build systems that a project does not use ([BigGo Finance, 2025](https://finance.biggo.com/news/202508270142_DeepWiki_Accuracy_Concerns)).
+- Scope stops at the repository boundary. Cross-repository awareness is Credit Genie's stated next phase, not a shipped capability ([LangChain, 2026](https://www.langchain.com/blog/how-credit-genie-uses-openwiki-to-keep-codebase-knowledge-fresh-searchable-and-automated)). A wiki can be accurate per repo and still hide where a change lands.
+- Nothing is measured, so nothing tells you the loop has stopped paying. Adoption is not accuracy, and a wiki that drifts gets quieter, not noisier.
+
+## Key Takeaways
+
+- Auto-merging a doc agent's pull requests removes the maintenance tax and the accuracy check in one move. Decide which of the two you were relying on.
+- A code diff is a freshness trigger, not a correctness signal. One study found no statistically significant relationship between the two ([Kang et al., 2024](https://arxiv.org/abs/2406.14836v1)).
+- If coding agents read the wiki before acting, put a verification step back in the loop, because they will not supply one.
+- Treat the Credit Genie account as an existence proof of the workflow, not as evidence about its results. It reports no numbers.
+
+## Related
+
+- [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — the pattern this deployment runs, covering when an agent-maintained synthesis beats query-time retrieval
+- [Self-Correcting Memory: Evidence-Backed Claim Repair](self-correcting-memory-evidence-backed-claims.md) — OpenWiki's claims runtime, the mechanism that pins each statement to a versioned line range
+- [AST-Grounded Critic Loop for Documentation Maintenance](ast-grounded-doc-critic-loop.md) — the verification step an auto-merge loop drops, framed as structural doc-versus-code checking
+- [Code-Native Memory Substrates for Coding Agents](code-native-memory-substrates.md) — the alternative to prose synthesis, keeping the memory layer in typed artifacts the code already produces
+- [Emergent Architecture in AI-Driven Codebases](agent-driven-codebase-fingerprint.md) — what agents build when their picture of a codebase comes from a generated description of it
 
 ---
 
@@ -40539,6 +40670,7 @@ For a teammate, disk is the only channel available. A teammate loads CLAUDE.md, 
 - [Long-Running Agents: Durability, Checkpoints, and Resumability](long-running-agents.md) — the broader operating shape for work that outlives one session
 - [Organizing Filesystem Agent Memory for Retrieval Cost](filesystem-memory-organization.md) — the measured cost and quality trade-offs of curated filesystem state
 - [Git-Bound Memory](git-bound-memory.md) — the alternative durable substrate when review, not restore, is what the state needs
+- [Project-Scoped Agent Workspace](project-scoped-agent-workspace.md) — the same idea one level up, where the container is the project rather than one teammate inside a run
 
 ---
 
@@ -40976,6 +41108,7 @@ Shared checkouts collide. Agents woken by concurrent events against one working 
 - [Steering Running Agents](steering-running-agents.md) — how follow-up messages redirect a long-lived agent without halting its current tool call
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — the retry-budget and stop-condition mechanism this pattern needs to replace the removed trigger
 - [Self-Healing Production Agent](self-healing-production-agent.md) — the same closed-loop shape applied to post-deploy regressions rather than pre-merge CI
+- [Project-Scoped Agent Workspace](project-scoped-agent-workspace.md) — where the woken agents write what they learn, and why the subscription's trust boundary reaches that store
 
 ---
 
@@ -41589,6 +41722,67 @@ The 50/80/100 split is the Cursor implementation; the pattern itself is "progres
 - [Circuit Breakers for Agent Loops](../../observability/circuit-breakers.md) — loop-level stops including a single cost threshold; this pattern decomposes that signal
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — controls per-turn cost; progressive alerts catch what the per-turn allocation lets through over a period
 - [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — defines the unit (GitHub AI credits vs Anthropic token rates) over which the budget window is measured, plus credit pooling and forfeiture
+
+---
+
+### Project-Scoped Agent Workspace: Durable Context for Clean-Context Subagents
+Source: https://agentpatterns.ai/patterns/agent-design/project-scoped-agent-workspace/
+
+# Project-Scoped Agent Workspace: Durable Context for Clean-Context Subagents
+
+> A project workspace is the only durable channel between subagents that start clean, so its write policy decides what every future dispatch reads.
+
+A project-scoped agent workspace is a file set that outlives every session in it. A coordinator directs subagents against those files, each agent appends what it learned, and the set syncs to whichever machine the next agent runs on. Cursor shipped this as Projects in beta on 2026-09-10: "Each Project maintains a set of files that sync across every cloud and local machine its agents use. Agents add research and artifacts, along with what they learn about the codebase and how you prefer work to be done" ([Introducing Projects](https://cursor.com/blog/projects)).
+
+## Three conditions before you run one
+
+The pattern pays under conditions, not in general. Check all three before you let agents write into a store that steers later work.
+
+- The work outlives a single chat. Cursor scopes the feature that way itself: "It works best on work that will outlive a single chat, whether that's a feature with several PRs, a migration, or a job you want handled while you're away" ([Introducing Projects](https://cursor.com/blog/projects)). A one-PR fix writes to the workspace and reads nothing back.
+- Every event source that can wake the coordinator is one you trust. Cursor's coordinator "can watch a Slack channel, run on a schedule, or follow all your PRs" ([Introducing Projects](https://cursor.com/blog/projects)), and Cursor says subscriptions are "available for cloud agents only, for now" ([Cursor Changelog, 2026-08-19](https://cursor.com/changelog/08-19-26)). A bug-report channel is outside text that starts a dispatch whose agents then write into the shared files.
+- Writes carry provenance and an expiry. A note on how to test a service reads the same whether it is right or wrong. The file records neither which agent wrote it nor when it was last true.
+
+Cursor reports that "new users merge 30% more PRs while users who primarily use Projects merge six times as many" ([Introducing Projects](https://cursor.com/blog/projects)). No methodology is given, and that second group is self-selected.
+
+## Why it works
+
+Subagents in Cursor "start with a clean context" and "don't have access to prior conversation history", so the parent has to put what they need into the dispatch prompt ([Cursor Docs — Subagents](https://cursor.com/docs/subagents)). Of the two channels that leaves, only the file set survives the session. Every dispatched agent re-derives how the system builds, tests and deploys, or reads a file that already says so. The workspace turns a repeated derivation into one read: "If one agent figures out how to test a service, for example, every future agent can use those instructions" ([Introducing Projects](https://cursor.com/blog/projects)).
+
+Independent work supports the causal step. Agent Workflow Memory induces reusable routines from past runs and reports 24.6% and 51.1% relative success-rate gains on Mind2Web and WebArena ([arXiv:2409.07429v1](https://arxiv.org/abs/2409.07429v1)). Those are web-navigation numbers; they transfer as direction, not as a figure to quote for code.
+
+The same feedback loop is what makes the store brittle. A survey of agent memory puts it plainly: "one bad write can pollute the store for many steps downstream" ([arXiv:2603.07670v1](https://arxiv.org/abs/2603.07670v1)).
+
+## When this backfires
+
+An untrusted source reaches files that are read as instruction. Payloads planted in agent memory files reached mean attack success rates of 30.0% on Opus 4.7 and 63.3% on Haiku 4.5, measured over ten trials of a single probe session in a sandboxed Claude Code and Codex workspace ([arXiv:2607.14611v1](https://arxiv.org/abs/2607.14611v1)). The awkward half of that result is worth keeping: the same study found it "difficult to make an agent overwrite its own memory files using untrusted external content", so the danger is persistence more than the write.
+
+Self-improvement then reinforces the bad procedure instead of correcting it. An agent that synthesizes its execution traces into reusable steps has "no mechanism to distinguish legitimate from injected steps", and "the self-improvement loop then reinforces the poisoned procedure across sessions" ([arXiv:2606.04329v2](https://arxiv.org/abs/2606.04329v2)).
+
+Accumulation without forgetting degrades the store on its own. Long-lived memory collects stale records with no way to tell a current fact from a superseded one, and the survey adds that "the severity of the reflective memory failure mode scales with agent lifetime" ([arXiv:2603.07670v1](https://arxiv.org/abs/2603.07670v1)). Across 11 memory substrates, ones "that perform well at moderate history lengths can become costly or brittle at longer horizons" ([arXiv:2608.15008v1](https://arxiv.org/abs/2608.15008v1)).
+
+Review also falls off on a schedule rather than on evidence. Cursor describes reviewing each migration PR closely early, then: "As the fixes hold up, you review less, and the coordinator keeps working through the migration on its own" ([Introducing Projects](https://cursor.com/blog/projects)). Early batches are weak evidence about later, less similar ones.
+
+The alternative is to keep context session-scoped and put durable instructions in the repository. Cursor's project rules live in `.cursor/rules`, "version-controlled and scoped to your codebase" ([Cursor Docs — Rules](https://cursor.com/docs/rules)), so every change to agent behavior has an author, a diff, and a revert. An agent-written workspace has none of those and still steers the next dispatch. Where you cannot state a write policy, take that trade instead.
+
+## Example
+
+Cursor describes one engineer running a design-system Project on subscriptions. The coordinator "scans every new PR, extracts components that belong in the design system, and adds a lint rule whenever it sees the same mistake twice" ([Introducing Projects](https://cursor.com/blog/projects)). The lint rule is what makes this hold at volume. It is reviewable, versioned, and enforced by the build, so the durable artifact leaves the workspace instead of staying there as a note the next agent may or may not read. Cursor says the Project is "on track to touch 20 to 100 PRs a day", which is a forecast rather than a measurement.
+
+## Key Takeaways
+
+- Ask what reads the workspace before asking what writes it. If no later agent reads a file, the write was overhead.
+- Name the trusted event sources explicitly. A subscription is an ingestion path into a store that later agents obey.
+- Give every workspace write an author and a review date, and delete it on that date unless something reconfirms it.
+- Promote anything durable out of the workspace and into the repository, where code review and version control already apply.
+- Size the investment from how often your own agents re-read workspace files, not from a vendor's merged-PR multiples.
+
+## Related
+
+- [PR-Subscribed Agent Ownership](pr-subscribed-agent-ownership.md) — the subscription primitive, and the four conditions for removing the human trigger.
+- [Git-Bound Memory for the Agentic Development Lifecycle](git-bound-memory.md) — the reviewed alternative: bind memory to version control instead of a bespoke store.
+- [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — precomputed synthesis from raw sources, rather than a supervised container.
+- [Shared Agent Context Store API](shared-agent-context-store-api.md) — the API-backed variant, where the writer is a system and ingestion is controlled.
+- [Persistent Teammate Workspace](persistent-teammate-workspace.md) — per-teammate directories inside one agent-team run.
 
 ---
 
@@ -43820,12 +44014,15 @@ Durability is the other half. Uncertainty lives in the stored version rather tha
 
 A replay benchmark reports stale claims falling from 3.5% to 0.5% and hallucinated claims from 0.7% to zero across 2,000 claims per arm ([LangChain, 2026](https://www.langchain.com/blog/self-correcting-memory-openwiki)). The vendor built and ran it, nobody has replicated it, and no variance is reported, so treat the figures as a direction rather than a measurement.
 
+A named deployment has since been published, and it changes that assessment very little. The AI and ML engineering teams at Credit Genie, a financial wellness platform, run OpenWiki across their repositories ([LangChain, 2026](https://www.langchain.com/blog/how-credit-genie-uses-openwiki-to-keep-codebase-knowledge-fresh-searchable-and-automated)). Docs live in an `openwiki/` folder per repo, and coding agents are told to read it before acting. OpenWiki there "runs nightly, checks for commit changes, and generates documentation updates when it finds meaningful differences, opening a pull request in the repo." No repository size, claim count, or change volume appears anywhere in the account, so the ratio the cost argument turns on is still unmeasured on real code. Nor does it mention claims, evidence anchors, or staleness detection, and it comes from that same vendor. The loop runs somewhere real. That is all it establishes.
+
 ## When this backfires
 
 - The anchor is wrong. A claim's link to its evidence is model-produced, and the best model in a 2025 evaluation reached F1 scores of 79.4% and 80.4% on documentation-to-code trace links ([Alor et al., 2025](https://arxiv.org/abs/2506.16440v1)). A claim anchored to the wrong lines never fires when the code it truly depends on changes, and fires whenever the wrong lines churn.
 - Mechanical edits flood the queue. Staleness over-approximates by design, so a formatting sweep or a file move marks every claim anchored in the touched ranges. Detection stays free; the per-claim verification the agent then performs does not.
 - Cold pages never heal. Repair reaches only a page an update reads, so a page nobody touches carries its stale claims indefinitely.
 - The repair itself is wrong. A model that misjudges a stale claim against current code rewrites a correct entry into a false one and stamps it with a fresh version, which makes the damage look verified. Nothing checks the corrector, and the flip is documented: without external feedback "the model is more likely to modify a correct answer to an incorrect one than to revise an incorrect answer" ([Huang et al., 2024](https://arxiv.org/abs/2310.01798v2)).
+- Auto-merge removes the last check. Merging the agent's doc pull requests without review leaves the failure above with nothing downstream of it. The one public deployment does that by design. Credit Genie "added an action to automatically approve and merge OpenWiki update PRs" to clear merge bottlenecks ([LangChain, 2026](https://www.langchain.com/blog/how-credit-genie-uses-openwiki-to-keep-codebase-knowledge-fresh-searchable-and-automated)). Engineers from two other teams there "verified the accuracy of the generated docs" for the repositories they added, which covers a first snapshot and not the updates after it.
 - Regeneration is simpler at small scale. Rebuilding the store from current source has no claim schema, no anchor rot, and no way for a claim to stay stale forever. The claims runtime earns its complexity only once regeneration cost scales with store size while change volume stays low.
 
 ## Key Takeaways
@@ -43834,6 +44031,7 @@ A replay benchmark reports stale claims falling from 3.5% to 0.5% and hallucinat
 - Keep detection deterministic and model-free, and invoke the model only after the diff has already said that something changed.
 - The pattern does not transfer to memory over unversioned sources, where it collapses into the intrinsic self-correction the literature says fails.
 - Budget for two failure modes the mechanism cannot see: an anchor pointing at the wrong code, and a repair pass that overwrites a true claim and marks it fresh.
+- Every public number comes from the vendor, and the one named deployment adds none. Pilot on a single repository before a store depends on this.
 
 ## Related
 
@@ -43842,6 +44040,7 @@ A replay benchmark reports stale claims falling from 3.5% to 0.5% and hallucinat
 - [Knowledge Graphs as Provenance-Carrying Agent Memory](knowledge-graph-shared-memory.md) — the same check-rather-than-judge idea applied to typed relations that each record their source document
 - [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — the query-time half, gating what reaches the agent where this pattern governs what stays trusted at write time
 - [Detecting Memory-Poisoning Exfiltration by Tool-Call Order](../../security/recall-before-send-memory-poisoning-detection.md) — the adversarial neighbor, where bad entries are planted rather than left behind by change
+- [Auto-Merging a Wiki Agent's Documentation Pull Requests](auto-merged-documentation-updates.md) — a named OpenWiki deployment, where the update PRs merge unreviewed and the only accuracy control left is the generator
 
 ---
 
@@ -49105,6 +49304,7 @@ Wiki memory is the general form: it synthesizes arbitrary domain sources into fi
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — the scope-and-temporal taxonomy this durable-knowledge layer slots into
 - [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — the query-time retrieval side that wiki memory precomputes away
 - [Organizing Filesystem Agent Memory for Retrieval Cost](filesystem-memory-organization.md) — measured evidence on what organizing a file-based store actually buys, and the store size at which it starts paying
+- [Auto-Merging a Wiki Agent's Documentation Pull Requests](auto-merged-documentation-updates.md) — one named production deployment of this pattern, and what removing review from the maintenance loop costs
 
 ---
 
@@ -147904,6 +148104,7 @@ Source: https://agentpatterns.ai/tools/copilot/
 - [Cloud Agent: Research, Plan, and Code Phases](cloud-agent-research-plan-code.md) — Three-phase execution model with explicit developer checkpoints between Research, Plan, and Code
 - [Coding Agent](coding-agent.md) — Asynchronous agent that works via GitHub Actions to plan, implement, and open PRs
 - [Copilot Dedicated App (Desktop)](copilot-dedicated-app.md) — Standalone Windows/macOS/Linux desktop client where the agent session is the primary tenant of the window; one thin client over backend-held session state, not a unified app spanning web, mobile, and IDE
+- [Copilot App Diff, Terminal, and Browser Panels](copilot-app-diff-terminal-browser.md) — The three working surfaces beside the chat pane: two diffs with different exits, a terminal you drive against a session worktree, and a browser panel whose governance is published for VS Code and absent here
 - [Copilot App Customize Tab vs Repo Configuration Files](copilot-app-customize-tab.md) — What the app's Customize tab installs per user, the two app-side surfaces with no repo copy, and why the committed file is still the only config the cloud agent reads
 - [Copilot Extensions](copilot-extensions.md) — Build agents and skillsets that integrate into Copilot Chat via GitHub Marketplace (deprecated — see [migration guide](../../tool-engineering/copilot-extensions-to-mcp-migration.md))
 - [copilot-instructions.md Convention](copilot-instructions-md-convention.md) — Repository-level instruction file for persistent project context
@@ -148285,6 +148486,7 @@ If a plugin works in your app session and the cloud agent behaves as though it i
 - [copilot-instructions.md as a Repo-Level Instruction Convention](copilot-instructions-md-convention.md) — the file this tab does not replace
 - [GitHub Copilot Custom Agents and Skills Extensibility Guide](custom-agents-skills.md) — what a plugin bundles, and the repo paths each part lives at
 - [GitHub Copilot MCP Integration for AI Agent Development](mcp-integration.md) — the customization type the tab surfaces as trending and by category
+- [Copilot App Diff, Terminal, and Browser Panels](copilot-app-diff-terminal-browser.md) — the app's other undocumented-in-docs surfaces, and what each one does to the session worktree
 
 ---
 
@@ -150126,6 +150328,7 @@ A small team runs three concurrent Copilot sessions against one monorepo from th
 - [GitHub Copilot Agent Mode](agent-mode.md) — the IDE-embedded sibling for tactical inline work
 - [Copilot Unified Sessions View and CLI Agent in JetBrains](unified-sessions-view.md) — the in-IDE registry that aggregates the same kind of session list the dedicated app surfaces standalone
 - [GitHub Copilot App Slash Commands and What They Change](slash-commands-copilot-app.md) — the command surface inside this app, mapped by the session state each command changes
+- [Copilot App Diff, Terminal, and Browser Panels](copilot-app-diff-terminal-browser.md) — the working surfaces the "reviews diffs and approves merges more than they type" claim rests on
 
 ---
 
@@ -150921,6 +151124,67 @@ A developer renames a TypeScript interface property from `userId` to `accountId`
 - [Agent Backpressure](../../patterns/agent-design/agent-backpressure.md)
 - [Codebase Readiness](../../patterns/agent-design/codebase-readiness.md)
 - [Convenience Loops and AI-Friendly Code](../../human/convenience-loops-ai-friendly-code.md)
+
+---
+
+### Verifying Agent Changes in the Copilot App
+Source: https://agentpatterns.ai/tools/copilot/copilot-app-diff-terminal-browser/
+
+# Verifying Agent Changes in the Copilot App
+
+> The Copilot app's diff, terminal, and browser panels all address one session workspace, so the code you read is the code you ran.
+
+These three panels pay off when the change renders a UI you can open, you can check it without a debugger, and nobody has to audit which sites the agent reached. Drop the debugger condition and you return to the IDE mid-review, with the app as a fourth window instead of a replacement for three. Drop either of the others and a panel sits idle or a compliance question goes unanswered. GitHub compresses the loop into one sentence: "Review the diff, validate in the integrated terminal and browser, and open a pull request that uses your team's existing checks and merge requirements" ([GitHub Changelog, 2026-06-17](https://github.blog/changelog/2026-06-17-github-copilot-app-generally-available/)).
+
+## The two diff surfaces
+
+The app shows diffs in two places, and they exit differently. Inside a session, click **Changes** above the prompt box to see what the agent did, then click **Create PR** to keep it ([GitHub Docs — Getting started with the GitHub Copilot app](https://docs.github.com/en/copilot/get-started/quickstart-copilot-app)). On an existing pull request, open **Files changed**, start a session to comment or ask for changes, then click **Review** at the top of the pull request view to submit ([GitHub Docs — Managing issues and pull requests](https://docs.github.com/en/copilot/how-tos/github-copilot-app/managing-issues-and-pull-requests)).
+
+Both render the same before-and-after comparison ([GitHub Blog, 2026-09-10](https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-using-the-diff-terminal-and-browser/)). What differs is what your comment becomes. In the session it is a prompt the agent acts on. On the pull request it is a review other people read.
+
+## What accepting does to your checkout
+
+Usually nothing, because the session was never in your checkout. You pick where it runs when you start it: "in a new working tree, in your local repository, or in a cloud sandbox" ([GitHub Docs — Working with agent sessions](https://docs.github.com/en/copilot/how-tos/github-copilot-app/agent-sessions)). Only the middle option writes to the tree you already have open. The default shape is parallel sessions "each on its own branch and worktree" ([GitHub Changelog, 2026-06-17](https://github.blog/changelog/2026-06-17-github-copilot-app-generally-available/)).
+
+That bites on the first terminal command. A fresh worktree has no `node_modules`, no `.env`, and no build output, so `npm run dev` fails for reasons unrelated to the diff in front of you.
+
+## Who drives the terminal
+
+You do. "You can run the code by hand or configure it as a script (available through the Run button)." Several can run side by side: "You can have multiple terminal windows open at once, so you can switch between them and keep running commands" ([GitHub Blog, 2026-09-10](https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-using-the-diff-terminal-and-browser/)). The agent is not locked out of the surface. GitHub describes canvases as "bidirectional surfaces where you and the agent operate on the same plan, pull request, terminal, or browser session" ([GitHub Changelog, 2026-06-17](https://github.blog/changelog/2026-06-17-github-copilot-app-generally-available/)), which is the [canvas control surface](../../patterns/agent-design/canvas-as-control-surface.md) applied to a shell.
+
+## What the browser panel sends back
+
+One route is documented. The Pick and Polish tool lets you "select an element and adjust it with the agent" ([GitHub Blog, 2026-09-10](https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-using-the-diff-terminal-and-browser/)). Past that, the app's documentation sets out no context behavior for the browser panel: no consent gate, no statement on tab isolation, no domain controls.
+
+The same vendor's IDE browser documents all three. An agent "can't read or interact with a page you opened until you select **Share with Agent**", agent-opened pages carry "no access to the cookies or storage from your everyday browsing", and admins get `chat.agent.allowedNetworkDomains` and `chat.agent.deniedNetworkDomains` ([GitHub Changelog, 2026-07-01](https://github.blog/changelog/2026-07-01-browser-tools-for-github-copilot-in-vs-code-are-generally-available/)). Before you assume parity, check the heading: the element-level feedback improvement that reads like an app feature shipped under VS Code 1.132 ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-github-copilot-weekly-releases-august-3/)).
+
+## Why it works
+
+The isolated workspace is the reason. Each session "runs in its own isolated workspace" ([GitHub Docs — Working with agent sessions](https://docs.github.com/en/copilot/how-tos/github-copilot-app/agent-sessions)), so the lines the diff renders, the commands the terminal runs, and the page the browser loads all resolve against one checkout. Split those across three tools and nothing enforces the correspondence: you read a branch diff in an editor while a terminal elsewhere sits on a different tree with different uncommitted state, and they disagree silently. The panels do not make review sharper. They remove the chance that the artifact you read and the artifact you ran are different artifacts.
+
+## When this backfires
+
+- Nothing renders. An API service, a CLI, a library, or a data pipeline gets two useful panels and an empty third.
+- Verification needs a debugger. The app's documented feature list runs from parallel workspaces to canvases and names no debugger, breakpoints, or test explorer ([GitHub Docs — About the GitHub Copilot app](https://docs.github.com/en/copilot/concepts/agents/github-copilot-app)), so a change checked by stepping through it sends you back to the IDE.
+- Someone has to audit browser reach. VS Code ships a documented consent gate and domain allow and deny lists; the app's own documentation sets out no equivalent for its browser panel.
+- The evidence is cheaper than the reading. A dev server that starts proves the happy path compiles, at far less effort than reading 600 changed lines. Treat a green preview as one signal, not as the review.
+- The documentation is one blog post. Neither panel appears in the app's feature list or its workflow walkthrough ([GitHub Docs — About the GitHub Copilot app](https://docs.github.com/en/copilot/concepts/agents/github-copilot-app)), so every description of them is vendor-authored and none of it is reference documentation.
+
+## Key Takeaways
+
+- Two diffs, two meanings. A comment in the session diff is a prompt; a comment on the Files changed diff is a review someone else reads.
+- Pick the session's run location deliberately. Choose your local repository only when you want the agent writing into the tree you have open; the other two options keep it out.
+- Budget for a cold tree when you pick a new working tree. The first terminal command runs against a checkout with no installed dependencies and no local environment file.
+- You hold the terminal prompt, and the agent can still act on the same surface through a canvas.
+- The browser panel's only documented path back into agent context is Pick and Polish. Its governance story is published for VS Code and missing from the app's docs.
+
+## Related
+
+- [GitHub Copilot Dedicated App as Agent-First Surface](copilot-dedicated-app.md) — the surface-choice argument these panels sit inside, and the session-as-unit claim they make concrete
+- [GitHub Copilot App Slash Commands and What They Change](slash-commands-copilot-app.md) — the prompt-box surface beside these panels, mapped by the session state each command changes
+- [Canvas as Control Surface: Steering a Long-Running Agent Mid-Run](../../patterns/agent-design/canvas-as-control-surface.md) — the bidirectional-surface pattern the terminal and browser panels instantiate
+- [Browser as Agent Action Space](../../patterns/agent-design/browser-as-agent-action-space.md) — when handing an agent a browser is worth its failure modes, and when a script is the better answer
+- [Scoped Browser DevTools Access for Runtime Diagnosis](../../patterns/agent-design/scoped-devtools-access-runtime-diagnosis.md) — the narrower runtime-observation surface to reach for when a preview is not enough
 
 ---
 
