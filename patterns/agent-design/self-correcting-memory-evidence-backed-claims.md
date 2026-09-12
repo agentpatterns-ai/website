@@ -11,7 +11,7 @@ aliases:
   - evidence-backed claim staleness
   - agent memory staleness detection
   - self-correcting knowledge base
-last_reviewed: 2026-08-26
+last_reviewed: 2026-09-11
 maturity: emerging
 ---
 
@@ -50,12 +50,15 @@ Durability is the other half. Uncertainty lives in the stored version rather tha
 
 A replay benchmark reports stale claims falling from 3.5% to 0.5% and hallucinated claims from 0.7% to zero across 2,000 claims per arm ([LangChain, 2026](https://www.langchain.com/blog/self-correcting-memory-openwiki)). The vendor built and ran it, nobody has replicated it, and no variance is reported, so treat the figures as a direction rather than a measurement.
 
+A named deployment has since been published, and it changes that assessment very little. The AI and ML engineering teams at Credit Genie, a financial wellness platform, run OpenWiki across their repositories ([LangChain, 2026](https://www.langchain.com/blog/how-credit-genie-uses-openwiki-to-keep-codebase-knowledge-fresh-searchable-and-automated)). Docs live in an `openwiki/` folder per repo, and coding agents are told to read it before acting. OpenWiki there "runs nightly, checks for commit changes, and generates documentation updates when it finds meaningful differences, opening a pull request in the repo." No repository size, claim count, or change volume appears anywhere in the account, so the ratio the cost argument turns on is still unmeasured on real code. Nor does it mention claims, evidence anchors, or staleness detection, and it comes from that same vendor. The loop runs somewhere real. That is all it establishes.
+
 ## When this backfires
 
 - The anchor is wrong. A claim's link to its evidence is model-produced, and the best model in a 2025 evaluation reached F1 scores of 79.4% and 80.4% on documentation-to-code trace links ([Alor et al., 2025](https://arxiv.org/abs/2506.16440v1)). A claim anchored to the wrong lines never fires when the code it truly depends on changes, and fires whenever the wrong lines churn.
 - Mechanical edits flood the queue. Staleness over-approximates by design, so a formatting sweep or a file move marks every claim anchored in the touched ranges. Detection stays free; the per-claim verification the agent then performs does not.
 - Cold pages never heal. Repair reaches only a page an update reads, so a page nobody touches carries its stale claims indefinitely.
 - The repair itself is wrong. A model that misjudges a stale claim against current code rewrites a correct entry into a false one and stamps it with a fresh version, which makes the damage look verified. Nothing checks the corrector, and the flip is documented: without external feedback "the model is more likely to modify a correct answer to an incorrect one than to revise an incorrect answer" ([Huang et al., 2024](https://arxiv.org/abs/2310.01798v2)).
+- Auto-merge removes the last check. Merging the agent's doc pull requests without review leaves the failure above with nothing downstream of it. The one public deployment does that by design. Credit Genie "added an action to automatically approve and merge OpenWiki update PRs" to clear merge bottlenecks ([LangChain, 2026](https://www.langchain.com/blog/how-credit-genie-uses-openwiki-to-keep-codebase-knowledge-fresh-searchable-and-automated)). Engineers from two other teams there "verified the accuracy of the generated docs" for the repositories they added, which covers a first snapshot and not the updates after it.
 - Regeneration is simpler at small scale. Rebuilding the store from current source has no claim schema, no anchor rot, and no way for a claim to stay stale forever. The claims runtime earns its complexity only once regeneration cost scales with store size while change volume stays low.
 
 ## Key Takeaways
@@ -64,6 +67,7 @@ A replay benchmark reports stale claims falling from 3.5% to 0.5% and hallucinat
 - Keep detection deterministic and model-free, and invoke the model only after the diff has already said that something changed.
 - The pattern does not transfer to memory over unversioned sources, where it collapses into the intrinsic self-correction the literature says fails.
 - Budget for two failure modes the mechanism cannot see: an anchor pointing at the wrong code, and a repair pass that overwrites a true claim and marks it fresh.
+- Every public number comes from the vendor, and the one named deployment adds none. Pilot on a single repository before a store depends on this.
 
 ## Related
 
@@ -72,3 +76,4 @@ A replay benchmark reports stale claims falling from 3.5% to 0.5% and hallucinat
 - [Knowledge Graphs as Provenance-Carrying Agent Memory](knowledge-graph-shared-memory.md) — the same check-rather-than-judge idea applied to typed relations that each record their source document
 - [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — the query-time half, gating what reaches the agent where this pattern governs what stays trusted at write time
 - [Detecting Memory-Poisoning Exfiltration by Tool-Call Order](../../security/recall-before-send-memory-poisoning-detection.md) — the adversarial neighbor, where bad entries are planted rather than left behind by change
+- [Auto-Merging a Wiki Agent's Documentation Pull Requests](auto-merged-documentation-updates.md) — a named OpenWiki deployment, where the update PRs merge unreviewed and the only accuracy control left is the generator

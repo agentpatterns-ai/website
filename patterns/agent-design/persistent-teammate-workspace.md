@@ -67,3 +67,4 @@ For a teammate, disk is the only channel available. A teammate loads CLAUDE.md, 
 - [Long-Running Agents: Durability, Checkpoints, and Resumability](long-running-agents.md) — the broader operating shape for work that outlives one session
 - [Organizing Filesystem Agent Memory for Retrieval Cost](filesystem-memory-organization.md) — the measured cost and quality trade-offs of curated filesystem state
 - [Git-Bound Memory](git-bound-memory.md) — the alternative durable substrate when review, not restore, is what the state needs
+- [Project-Scoped Agent Workspace](project-scoped-agent-workspace.md) — the same idea one level up, where the container is the project rather than one teammate inside a run

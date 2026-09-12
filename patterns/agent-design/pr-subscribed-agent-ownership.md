@@ -78,3 +78,4 @@ Shared checkouts collide. Agents woken by concurrent events against one working 
 - [Steering Running Agents](steering-running-agents.md) — how follow-up messages redirect a long-lived agent without halting its current tool call
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — the retry-budget and stop-condition mechanism this pattern needs to replace the removed trigger
 - [Self-Healing Production Agent](self-healing-production-agent.md) — the same closed-loop shape applied to post-deploy regressions rather than pre-merge CI
+- [Project-Scoped Agent Workspace](project-scoped-agent-workspace.md) — where the woken agents write what they learn, and why the subscription's trust boundary reaches that store

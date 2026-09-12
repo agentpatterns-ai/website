@@ -84,3 +84,4 @@ A small team runs three concurrent Copilot sessions against one monorepo from th
 - [GitHub Copilot Agent Mode](agent-mode.md) — the IDE-embedded sibling for tactical inline work
 - [Copilot Unified Sessions View and CLI Agent in JetBrains](unified-sessions-view.md) — the in-IDE registry that aggregates the same kind of session list the dedicated app surfaces standalone
 - [GitHub Copilot App Slash Commands and What They Change](slash-commands-copilot-app.md) — the command surface inside this app, mapped by the session state each command changes
+- [Copilot App Diff, Terminal, and Browser Panels](copilot-app-diff-terminal-browser.md) — the working surfaces the "reviews diffs and approves merges more than they type" claim rests on

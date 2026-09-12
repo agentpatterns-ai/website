@@ -137,4 +137,5 @@ The split breaks down in 3 cases:
 - [Context Engineering: The Discipline of Designing Agent Context](context-engineering.md)
 - [Getting Started: Setting Up Your Instruction File](../instructions/getting-started-instruction-files.md) -- bootstrap an instruction file with only non-discoverable content
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
+- [Reproducibility Artifacts as Agent Context](reproducibility-artifacts-as-agent-context.md) -- this test applied to tests, commit history, layout, and decision records
 - [Layered Context Architecture](layered-context-architecture.md)
