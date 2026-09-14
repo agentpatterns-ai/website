@@ -109,6 +109,7 @@ The block is readable, locatable, and reviewable in five seconds. It enforces no
 ## Related
 
 - [Skill File Linting](skill-file-linting.md) — the three mechanical checks that catch most structural defects before a governance schema is worth adding
+- [Per-Step Preconditions and Postconditions in Skill Files](per-step-skill-preconditions.md) — the per-step layer under the nine fields, where declared intent becomes comparable against implementation
 - [Typed Pseudocode for Skill Libraries](typed-pseudocode-skill-libraries.md) — the same typed-field idea aimed at execution correctness instead of audit, where the measured gain came from the invocation template rather than the schema
 - [Skill Library Technical Debt](../tool-engineering/skill-library-technical-debt.md) — library-time maintenance signals and named actions that complement per-skill contracts
 - [Skill Specification Violation Fuzzing](../verification/skill-specification-violation-fuzzing.md) — empirical evidence that declared rules silently fail on benign inputs; the testing layer contractual fields do not replace

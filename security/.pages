@@ -27,6 +27,7 @@ nav:
       - bug-class-hints-as-exploit-input.md
       - task-choice-poisoned-repository-exposure.md
       - post-authorization-execution-trust-gap.md
+      - vibe-coded-vulnerability-root-causes.md
       - next-edit-suggestion-uncurated-context.md
   - "Sandboxing":
       - browser-sandbox-agent-generated-html.md
@@ -50,6 +51,7 @@ nav:
       - supply-chain-security-debt-agent-prs.md
       - llm-pinned-vulnerable-versions.md
       - skill-supply-chain-poisoning.md
+      - skill-closure-declaration-gap.md
       - tool-signing-verification.md
   - "Auditing & Governance":
       - agent-governance-plane.md

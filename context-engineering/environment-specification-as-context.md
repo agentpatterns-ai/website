@@ -130,3 +130,4 @@ The renamed parameter triggers a `FutureWarning` or an outright failure dependin
 - [Context Hub](context-hub.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
+- [Runtime Resource Limits as Prompt Context](runtime-resource-limits-as-prompt-context.md) — the same execution context on the memory and wall-time axis rather than the dependency-version one

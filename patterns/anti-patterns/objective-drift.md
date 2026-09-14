@@ -113,3 +113,4 @@ On short sessions that never reach compaction, where it is pure overhead, and on
 - [The Infinite Context Anti-Pattern](infinite-context.md) — context overload dilutes attention, accelerating drift
 - [Token Preservation Backfire](token-preservation-backfire.md) — token-saving instructions create a competing objective that undermines task completion
 - [Spec Complexity Displacement](spec-complexity-displacement.md) — constraints that grow too complex to track reliably, compounding drift risk
+- [Scoring Constraint Loss and Tool Reach as Separate Risks](constraint-loss-and-tool-reach-scored-separately.md) — the mirror case, where the goal survives compaction and the operating limit does not

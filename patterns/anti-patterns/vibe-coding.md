@@ -155,6 +155,7 @@ The entire session takes 10 minutes. The developer never read a diff. The tool w
 
 ## Related
 
+- [Root Causes of Vibe-Coded Application Vulnerabilities](../../security/vibe-coded-vulnerability-root-causes.md)
 - [The Plan-First Loop: Design Before Code](../../workflows/plan-first-loop.md)
 - [Trust Without Verify](trust-without-verify.md)
 - [CLI Scripts as Agent Tools](../../tool-engineering/cli-scripts-as-agent-tools.md)

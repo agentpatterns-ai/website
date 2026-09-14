@@ -80,3 +80,4 @@ A month later a second failure mode appears: the agent marks its own reviews as 
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — *model-tier* escalation (Haiku → Sonnet → Opus) by task complexity; orthogonal axis to this ladder's *control-mechanism* escalation by failure mode
 - [Cargo Cult Agent Setup](../anti-patterns/cargo-cult-agent-setup.md) — the anti-pattern this ladder exists to defuse: stacking sophisticated controls upfront without a failure mode that justifies them
 - [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — records the authority boundary this ladder's controls enforce; the ADP's static tiers complement the ladder's failure-mode escalation
+- [Enforcement Modes in Spec-First Agent Frameworks](spec-first-framework-enforcement-modes.md) — grades a control already in place by whether the agent can edit it; this ladder decides whether to add one

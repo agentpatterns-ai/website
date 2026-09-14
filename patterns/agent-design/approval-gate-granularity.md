@@ -76,5 +76,6 @@ Only the file-modification row expires. Edits are frequent and the class is broa
 - [Human-in-the-Loop Checkpoints as Loop Control](../../loop-engineering/human-in-the-loop-checkpoints.md) — the loop-internal placement and the four decision verbs a checkpoint exposes
 - [Classifier-Gated Auto-Permission for Cloud-IDE Coding Agents](classifier-gated-auto-permission.md) — the mechanism that implements class bundling when a static rule cannot express the class
 - [Tool Confirmation Carousel: Batched UI for Per-Call Approvals](tool-confirmation-carousel.md) — the last-mile surface for the residual approvals no bundle absorbs
+- [Binding an Agent's Effect to the Approval It Claims](interaction-effect-obligations.md) — what happens to an approval during the wait this page measures, and what the effect must carry to prove it still holds
 - [Verification Capacity Saturation: Three Levers, One Default](../../verification/verification-capacity-saturation.md) — what remains once the gate is already past its service rate
 - [Fleet-Level Irreversibility Budgets for Agent Effects](fleet-irreversibility-budget.md) — the aggregate a per-action gate cannot see, whatever granularity you set it at

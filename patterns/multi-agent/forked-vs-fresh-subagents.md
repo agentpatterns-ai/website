@@ -10,7 +10,7 @@ aliases:
   - fork vs fresh subagent
   - subagent context inheritance
   - forked subagent
-last_reviewed: 2026-08-18
+last_reviewed: 2026-09-13
 maturity: emerging
 ---
 
@@ -36,6 +36,8 @@ A forked subagent inherits the parent's entire system prompt, tools, and message
 A fork's first request shares the parent's prefix exactly — same system prompt, same tool definitions, same message history. The Claude API prompt cache matches on exact prefix, so the fork reads from cached tokens and bills only the appended fork directive. From the [Claude Code prompt-caching docs](https://code.claude.com/docs/en/prompt-caching#subagents-and-the-cache): "A fork ... inherits the parent's system prompt, tools, and conversation history exactly, so its first request reads the parent's cache." Cache reads bill at roughly 10% of the standard input rate ([same page](https://code.claude.com/docs/en/prompt-caching#check-cache-performance)).
 
 A fresh named subagent has a different system prompt and tool set, so its prefix does not match the parent's cache. Its first call has no cache hits and it warms its own (5-minute TTL) cache from scratch ([Claude docs](https://code.claude.com/docs/en/prompt-caching#subagents-and-the-cache)).
+
+LangChain's deepagents framework exposes the same choice as an explicit `mode` setting on subagents, defaulting to `isolated` with `fork` as opt-in. LangChain reports that isolated subagents "may redo context-gathering operations, like file reads, already done by the supervisor." Forking, it says, "takes advantage of prompt caching and reduces repeated work" ([Organizing context in a multi-agent harness](https://www.langchain.com/blog/organizing-context-in-a-multi-agent-harness)).
 
 The mechanism has a downside too. Forks are cheap because they carry the parent's entire input distribution. That is also why they inherit its biases, blind spots, and accumulated tool results. Fresh subagents reset that distribution, which makes them useful for adversarial work.
 
@@ -86,4 +88,5 @@ Both delegations happen in the same session. The fork-vs-fresh choice is per-tas
 - [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — orchestrator-side concurrency model that pairs with the fork/fresh choice on each spawn.
 - [Agent as Tool vs Handoff: Who Keeps the Conversation](../agent-design/agent-as-tool-vs-handoff.md) — the control-return axis, orthogonal to the context-inheritance axis this page covers.
 - [The Subagent Inheritance Contract: What Crosses Down](subagent-inheritance-contract.md) — what a fresh spawn still carries, and how Codex and Claude Code invert their defaults.
+- [Role-Declared Context Mode](role-declared-context-mode.md) — harnesses that fix this choice in the subagent definition rather than at each spawn.
 - [Subagent vs In-Context Skill Execution](../agent-design/subagent-vs-in-context-skill-execution.md) — whether to spawn at all for a skill package, decided by the contract the package declares.

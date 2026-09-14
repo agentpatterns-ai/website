@@ -10,7 +10,7 @@ aliases:
   - bulk apply agent suggestions
   - batched remediation on pull requests
   - fix all batch action
-last_reviewed: 2026-06-13
+last_reviewed: 2026-09-10
 maturity: established
 ---
 
@@ -41,6 +41,8 @@ Apply the same discipline at the PR surface. Cluster on `(rule × severity × fi
 - One severity tier per batch. High-severity findings get individual review; medium and low can batch.
 - Bounded file scope. Ten files in one module is reviewable; ten files across six modules has lost the locality that made the cost spread.
 - Cap batch size. Beyond ~10 fixes, the diff stops fitting working memory. SmartBear/Cisco's code-review study (cited in [diff-based review](diff-based-review.md)) found defect detection peaks at 200–400 lines and degrades sharply beyond.
+
+Delegating a batch does not escape the boundaries. On 2026-09-09 GitHub extended agentic autofix from code-scanning security alerts to Code Quality findings ([Remediate code quality findings with agentic autofix](https://github.blog/changelog/2026-09-09-remediate-code-quality-findings-with-agentic-autofix)). A reviewer selects up to 25 standard findings on a page and assigns them to Copilot in one action; the agent fixes them on a branch, validates its own changes, and opens a pull request. The cap sets batch size. Rule, severity, and file scope stay the reviewer's call, now made at assignment time rather than while reading each suggestion. Assign a mixed set and the result is one pull request that cannot be checked rule by rule.
 
 ## Failure modes
 

@@ -69,3 +69,4 @@ Two contributing factors explain the destructive half. Agents dropped negative c
 - [Deterministic Precondition Gates](../agent-design/deterministic-precondition-gates.md) — the read-only predicate that blocks a forbidden write before it lands
 - [Risk-Based Task Sizing](../../verification/risk-based-task-sizing.md) — scaling verification depth to task risk
 - [Defense-in-Depth Against Coding Agent Fabrication](../../verification/honesty-harness-fabrication-defense.md) — layered checks for the deception half
+- [Scoring Constraint Loss and Tool Reach as Separate Risks](constraint-loss-and-tool-reach-scored-separately.md) — why tool reach only becomes a violation once the constraint is gone

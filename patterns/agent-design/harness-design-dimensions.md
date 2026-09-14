@@ -158,6 +158,7 @@ Scaffold architectures resist discrete classification ([arXiv:2604.03515](https:
 ## Related
 
 - [Agent Harness: Initializer and Coding Agent](agent-harness.md)
+- [Running Several Coding Agents Behind One Harness Interface](harness-adapter-layer.md)
 - [Harness Engineering](harness-engineering.md)
 - [Harness Hill-Climbing: Eval-Driven Iterative Improvement of Agent Harnesses](harness-hill-climbing.md)
 - [Runtime Scaffold Evolution: Agents That Build Tools](runtime-scaffold-evolution.md)

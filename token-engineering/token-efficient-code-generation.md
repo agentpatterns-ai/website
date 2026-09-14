@@ -147,3 +147,4 @@ Both functions produce identical output. The idiomatic version consumes fewer to
 - [Context Budget Allocation](../context-engineering/context-budget-allocation.md) — Distributing token budget across sources
 - [Prompt Caching: Architectural Discipline for Agents](../context-engineering/prompt-caching-architectural-discipline.md) — Cost savings and cross-provider economics of caching prompt prefixes
 - [Semantic Density Optimization](../context-engineering/semantic-density-optimization.md) — Codebase conventions that raise information-per-token for agents
+- [Runtime Resource Limits as Prompt Context](../context-engineering/runtime-resource-limits-as-prompt-context.md) — The narrow prompt-level intervention that did move generated implementations: stated numbers, not an instruction to be efficient

@@ -71,6 +71,7 @@ The record, the action, the tools, and the refreshed view stay in the applicatio
 
 ## Related
 
+- [Running Several Coding Agents Behind One Harness Interface](harness-adapter-layer.md) — the next decision, once more than one harness is in play.
 - [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — the deployment axis of the same adoption decision.
 - [Production Hosting Topology for Self-Hosted Agent SDK Runtimes](agent-sdk-hosting-topology.md) — what running the adopted harness costs operationally.
 - [The Harness as Product: What Listed-Rate Pricing Buys](harness-as-product.md) — what a paid harness layer includes when you do not self-host.

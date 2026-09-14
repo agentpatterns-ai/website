@@ -12,7 +12,7 @@ aliases:
   - coordinator-supervised agent workspace
   - persistent project context files
 applies_to: "cursor@3.x"
-last_reviewed: 2026-09-11
+last_reviewed: 2026-09-13
 maturity: emerging
 ---
 
@@ -35,6 +35,8 @@ Cursor reports that "new users merge 30% more PRs while users who primarily use 
 ## Why it works
 
 Subagents in Cursor "start with a clean context" and "don't have access to prior conversation history", so the parent has to put what they need into the dispatch prompt ([Cursor Docs — Subagents](https://cursor.com/docs/subagents)). Of the two channels that leaves, only the file set survives the session. Every dispatched agent re-derives how the system builds, tests and deploys, or reads a file that already says so. The workspace turns a repeated derivation into one read: "If one agent figures out how to test a service, for example, every future agent can use those instructions" ([Introducing Projects](https://cursor.com/blog/projects)).
+
+Cursor's changelog entry for Projects says the coordinator "doesn't write code itself; it plans the work, delegates it to agents that implement it" ([Projects](https://cursor.com/changelog/projects)). The same entry credits Subscriptions with starting that delegation on the trigger types above, with no person typing a prompt ([Projects](https://cursor.com/changelog/projects)).
 
 Independent work supports the causal step. Agent Workflow Memory induces reusable routines from past runs and reports 24.6% and 51.1% relative success-rate gains on Mind2Web and WebArena ([arXiv:2409.07429v1](https://arxiv.org/abs/2409.07429v1)). Those are web-navigation numbers; they transfer as direction, not as a figure to quote for code.
 

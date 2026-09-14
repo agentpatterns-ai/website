@@ -97,6 +97,7 @@ Leveraging existing artifacts — specs, schemas, standards files — as agent i
 - [Match Architecture Spec Format to Model Capability](spec-format-by-model-tier.md) — Spec format barely moves a frontier model and decides what a weak one ships; pick the format from the tier you drive
 - [Specification Portability Across Coding Agents](specification-portability-across-agents.md) — Handing one agent's specification to another moves the generated code in both directions; measure the swap against a baseline instead of assuming the artifact is agent-neutral
 - [Diagram as the Shared Spec: One Artifact for the Picture and the Prompt](diagram-as-shared-spec.md) — One diagram source serves the human's picture and the agent's spec, which removes the sync step; it does not raise output quality, and the rules still belong somewhere a checker can read
+- [Per-Step Preconditions and Postconditions in Skill Files](per-step-skill-preconditions.md) — Give each skill step a precondition and a postcondition so a reviewer can compare declared intent against implementation; it finds silent mismatches and enforces nothing
 
 ## Governance & Maintenance
 
