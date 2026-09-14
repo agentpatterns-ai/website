@@ -174,3 +174,4 @@ Practitioners have flagged a further constraint at scale. Because A2A uses direc
 - [Agent Composition Patterns](../patterns/agent-design/agent-composition-patterns.md)
 - [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)
 - [Governance Layer for Agent Interoperability Protocols](protocol-governance-layer.md)
+- [Treating Agent Delegation as Routing, Not Authorization](../patterns/anti-patterns/agent-delegation-as-routing.md)

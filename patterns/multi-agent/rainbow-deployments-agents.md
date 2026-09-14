@@ -164,3 +164,4 @@ Rollback: change `version: e5f6` to `version: c3d4`. Old pods are still running 
 - [Continuous AI-Agentic CI/CD](../../workflows/continuous-ai-agentic-cicd.md)
 - [Agent Harness](../agent-design/agent-harness.md)
 - [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)
+- [Assuming Agent Interchangeability in Long-Running Teams](../anti-patterns/assuming-agent-interchangeability.md) — what a version cutover costs in coordination effort when the replaced agent carried partner-specific conventions

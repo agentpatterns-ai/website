@@ -11,7 +11,7 @@ aliases:
   - cloud agent auto model selection
   - harness-side model routing
   - vendor-side model broker
-last_reviewed: 2026-08-07
+last_reviewed: 2026-09-09
 maturity: established
 ---
 
@@ -77,7 +77,7 @@ Issue #4421 assigned to copilot/cloud-agent
 → Metric records: model_id = "claude-sonnet-4-6" (not "Auto")
 ```
 
-The published pool: "Auto routes to models like GPT-5.4, GPT-5.3-Codex, Sonnet 4.6, and Haiku 4.5 based on your plan and policies" ([GitHub Changelog 2026-04-17](https://github.blog/changelog/2026-04-17-github-copilot-cli-now-supports-copilot-auto-model-selection/)). Under the retired request-based model, business and enterprise pools carried only 0x–1x-multiplier models, which capped the per-call cost; since 2026-06-01 the cost of a call is the tokens it consumes, priced at the routed model's published rate ([GitHub Blog: usage-based billing](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/)). Either way, "the models auto will route to will change over time" — the model that ran is not stable across weeks.
+The published pool: "Auto routes to models like GPT-5.4, GPT-5.3-Codex, Sonnet 4.6, and Haiku 4.5 based on your plan and policies" ([GitHub Changelog 2026-04-17](https://github.blog/changelog/2026-04-17-github-copilot-cli-now-supports-copilot-auto-model-selection/)). Under the retired request-based model, business and enterprise pools carried only 0x–1x-multiplier models, which capped the per-call cost; since 2026-06-01 the cost of a call is the tokens it consumes, priced at the routed model's published rate ([GitHub Blog: usage-based billing](https://github.blog/news-insights/company-news/github-copilot-is-moving-to-usage-based-billing/)). Either way, "the models auto will route to will change over time" — the model that ran is not stable across weeks. GitHub made GPT-6 Astra generally available in Copilot on 2026-09-04 ([GitHub Changelog 2026-09-04](https://github.blog/changelog/2026-09-04-gpt-6-astra-is-generally-available-in-github-copilot)). Check the current pool before you rely on the list above.
 
 To pin instead — when any failure condition above applies — the cloud agent switches the picker to a specific model per issue or per-PR. The escape hatch is per-request, not a permanent client-side default ([Disable Auto Model Selection discussion](https://github.com/orgs/community/discussions/187429)).
 

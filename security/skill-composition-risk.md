@@ -100,6 +100,7 @@ Each skill is benign under isolated review. Skill A reads private repo content b
 ## Related
 
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md)
+- [The Skill Closure Declaration Gap](skill-closure-declaration-gap.md) — the artifact-side counterpart: what a skill root declares versus the files, packages, and services one run of it can reach
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md)
 - [Compositional Vulnerability Induction in Coding Agents](compositional-vulnerability-induction.md)
 - [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md)

@@ -64,6 +64,7 @@ The honesty check is one query. If a rule's dismissals are never "Incorrect", th
 - [Agentic Review Comment Acceptance](agentic-review-comment-acceptance.md) — the accept/reject baseline this reason field decomposes
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — the design goal the measurement serves
 - [Reviewer Theme Distribution Audit](reviewer-theme-distribution-audit.md) — the adjacent audit, by comment theme rather than by resolution
+- [Agent-Resolved Review Threads](agent-resolved-review-threads.md) — the agent closing threads itself, which removes the human click this reason field hangs on
 
 ## Sources
 

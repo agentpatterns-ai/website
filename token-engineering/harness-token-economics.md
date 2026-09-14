@@ -93,6 +93,7 @@ Because the prefix bytes never change, the provider serves them as cache reads. 
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — the complementary lever: match model tier to task complexity before engineering the harness
 - [Fleet Harness Attribution](../patterns/agent-design/fleet-harness-attribution.md) — how to measure whether the harness, not the model, caused a cost delta
 - [Isometric Harness Ablation](../patterns/agent-design/isometric-harness-ablation.md) — rank which harness subsystem earns its token cost
+- [Model-Set Parity: Reading Harness Efficiency Claims](../patterns/agent-design/model-set-parity-harness-claims.md) — the precondition a published harness figure must meet before it counts as this effect
 - [Prompt Caching: Architectural Discipline for Agents](../context-engineering/prompt-caching-architectural-discipline.md) — the caching mechanism that drives the effective-input-price lever
 - [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the quality guardrail that cutting tokens must respect
 - [The Harness as Product: What Listed-Rate Pricing Buys](../patterns/agent-design/harness-as-product.md) — the build-vs-buy view of the same harness layer: what you pay for beyond tokens when a product bills at listed API rates

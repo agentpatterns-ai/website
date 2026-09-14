@@ -90,3 +90,4 @@ Swapping `"user"` for `"agent"` moves the call to a different cell of the table 
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — why inheriting a privileged caller's access is the cost of per-caller identity
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — what happens to a grant when the subject it names changes
 - [Deep Agent Runtime: The Layer Beneath the Harness](../patterns/agent-design/deep-agent-runtime.md) — the runtime layer that attaches caller identity to a run
+- [Treating Agent Delegation as Routing, Not Authorization](../patterns/anti-patterns/agent-delegation-as-routing.md) — the same question one hop further out, where the caller is another agent

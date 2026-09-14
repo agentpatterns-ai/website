@@ -117,3 +117,4 @@ agent = create_agent(
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md) — host-side enforcement when OS-level guarantees matter more than runtime composition.
 - [Hooks Invoking MCP Tools](../../tool-engineering/hooks-invoking-mcp-tools.md) — when hook handlers need to call into the same MCP surface middleware governs.
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md) — the iteration count that determines middleware overhead per task.
+- [Reliability of an Automatically Selected Agent Harness](harness-selection-reliability.md) — what happens when an optimizer, not a person, writes the tool-boundary handlers.

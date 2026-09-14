@@ -68,6 +68,7 @@ A check the model's own reading can influence is not a check. Wu and Gong moved 
 
 - [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — the runtime predicate that evaluates a rule; this page covers where that rule is written down and curated.
 - [Informed Abstention as a Tool-Boundary Runtime Gate](informed-abstention-tool-boundary-gate.md) — what the agent does when a declared precondition is unmet or unconfirmable.
+- [Binding an Agent's Effect to the Approval It Claims](interaction-effect-obligations.md) — the case a declared precondition cannot cover, where the human endorsement itself has gone stale.
 - [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — the whole-agent authority boundary reviewed before shipping, one level above a per-action declaration.
 - [Agent-Ready Data Architecture for Analytics Agents](agent-ready-data-architecture.md) — the warehouse facts the read path needs, beneath the acting path this page governs.
 - [Governed Sources of Truth for Analytics Agents (Structure Over Access)](governed-sources-of-truth-analytics-agents.md) — the read-side counterpart, routing questions through governed metrics instead of raw tables.

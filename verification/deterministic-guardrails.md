@@ -175,3 +175,4 @@ Guardrails impose fixed costs that don't scale with value, so they backfire in s
 - [Test-Driven Agent Development: Tests as Spec and Guardrail](tdd-agent-development.md)
 - [Verification Ledger](verification-ledger.md)
 - [Slop Detectors Fail as Per-Item Review Gates](slop-detection-as-review-gate.md)
+- [Enforcement Modes in Spec-First Agent Frameworks](../patterns/agent-design/spec-first-framework-enforcement-modes.md)

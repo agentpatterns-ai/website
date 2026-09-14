@@ -10,7 +10,7 @@ tags:
 aliases:
   - inverse token-price effect
   - harness-conditional cost ordering
-last_reviewed: 2026-07-28
+last_reviewed: 2026-09-12
 maturity: emerging
 ---
 
@@ -34,6 +34,8 @@ Cognition ran 3,000 evaluation sessions on the FrontierCode 1.1 benchmark with F
 Read the bottom two rows first. Without a sidekick, the 2x per-token premium lands as a 32% higher bill, exactly as the price table predicts. The inversion appears only in the top two rows, where each lead can hand work to a cheaper model. So the finding is not that expensive models are secretly cheap. It is that a delegating harness moves the cost ordering far enough to cross over, and a plain loop does not.
 
 Treat these as vendor-reported figures. Cognition sells Devin and the [Fusion architecture](https://cognition.com/blog/devin-fusion) credited for the result, no public harness reproduces the run, and a separate study measured a 23.8 percentage-point score spread across six harnesses on identical tasks and model backends ([Harness-Bench, arXiv:2605.27922](https://arxiv.org/abs/2605.27922v1)). Carry the method across to your own setup, not the numbers.
+
+Cognition shipped the same delegation architecture directly to users in September 2026, built into Devin Desktop and CLI as Fusion. It reports Fusion is "up to 39% more efficient compared to other model harnesses across major coding benchmarks" — vendor-reported, like the score table above ([Cognition, "Introducing Fusion in Devin Desktop & CLI"](https://cognition.com/blog/local-fusion)).
 
 ## Why it works
 
@@ -76,4 +78,5 @@ That is the shape Cognition ran, and it is what makes the result interpretable: 
 - [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — the third axis: hold the model fixed and swap the orchestration layer
 - [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — the standing frame for plotting each configuration on the cost-quality frontier
 - [Utility-Model Split: Background Tasks on a Cheaper Model](../patterns/agent-design/utility-model-split.md) — the sidekick architecture this result depends on
+- [Model-Set Parity: Reading Harness Efficiency Claims](../patterns/agent-design/model-set-parity-harness-claims.md) — how to read the vendor's later cross-harness figures, whose efficient arm adds a second model
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — matching model tier to task complexity once the per-task numbers exist

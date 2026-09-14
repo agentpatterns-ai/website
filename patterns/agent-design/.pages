@@ -128,10 +128,12 @@ nav:
       - verification-gated-agent-autonomy.md
       - capability-declarations-for-agent-actions.md
       - deterministic-precondition-gates.md
+      - spec-first-framework-enforcement-modes.md
       - informed-abstention-tool-boundary-gate.md
       - delegated-autonomy-boundary-artifacts.md
       - trigger-level-agent-intake-gating.md
       - approval-gate-granularity.md
+      - interaction-effect-obligations.md
       - fleet-irreversibility-budget.md
       - agent-native-filesystem-mediation.md
   - "Reliability":
@@ -177,6 +179,7 @@ nav:
       - rubric-refine-pre-execution-tool-use.md
       - scout-then-route.md
       - selective-checkpoint-restore.md
+      - selective-revalidation-pending-actions.md
       - specialized-slm-as-agent-tool.md
       - tail-control-for-agent-workflows.md
       - task-feasibility-awareness.md
@@ -187,6 +190,7 @@ nav:
   - "Harness & Tools":
       - agent-composition-patterns.md
       - embedded-harness-integration-layer.md
+      - harness-adapter-layer.md
       - agent-sdk-hosting-topology.md
       - cloud-agent-state-layer-decoupling.md
       - continuation-authority-agent-migration.md
@@ -217,6 +221,8 @@ nav:
       - harness-as-product.md
       - situated-harness-layers.md
       - isometric-harness-ablation.md
+      - model-set-parity-harness-claims.md
+      - harness-selection-reliability.md
       - last-unconstrained-axis.md
       - suspect-the-harness-not-the-model.md
       - lane-based-execution-queueing.md

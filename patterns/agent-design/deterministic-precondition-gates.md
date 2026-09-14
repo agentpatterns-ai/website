@@ -31,7 +31,7 @@ The gate pays off only under specific conditions. Outside them it does nothing o
 
 ## How the gate works
 
-Gates run as an ordered suite; the first rejecting gate wins. Each is a pure predicate over the proposed call and the live state, so it is cheap, auditable, and reproducible. The airline suite used in the study was four gates: a cancellation-eligibility check, a baggage-allowance check, a passenger-count immutability check, and a must-read-before-write check that blocks writes to records the agent has not read that session ([2607.07405](https://arxiv.org/abs/2607.07405)). A rejection returns a structured message the agent can act on, not a raw exception. Because the gate reads ground-truth state rather than the model's account of it, a rejection holds even when the agent has been misled about state.
+Gates run as an ordered suite; the first rejecting gate wins. Each is a pure predicate over the proposed call and the live state, so it is cheap, auditable, and reproducible. The airline suite used in the study was four gates: a cancellation-eligibility check, a baggage-allowance check, a passenger-count immutability check, and a must-read-before-write check that blocks writes to records the agent has not read that session ([2607.07405](https://arxiv.org/abs/2607.07405)). A rejection returns a structured message the agent can act on, not a raw exception. Because the gate reads ground-truth state rather than the model's account of it, a rejection holds even when the agent has been misled about state. The gate assumes no gap between check and write; where the action waits on approval, [selective revalidation](selective-revalidation-pending-actions.md) carries the predicates across the pause.
 
 ## Why it works
 

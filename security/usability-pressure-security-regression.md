@@ -100,6 +100,7 @@ The same idea generalizes via a constitution: rather than restating the invarian
 
 ## Related
 
+- [Root Causes of Vibe-Coded Application Vulnerabilities](vibe-coded-vulnerability-root-causes.md)
 - [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md)
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md)
 - [Goal Reframing: The Primary Exploitation Trigger for LLM Agents](goal-reframing-exploitation-trigger.md)

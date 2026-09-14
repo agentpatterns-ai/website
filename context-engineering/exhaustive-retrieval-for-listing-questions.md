@@ -96,3 +96,4 @@ Against the Transformer paper, the first extraction found two regularization tec
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md) — the on-demand retrieval pattern this technique modifies
 - [Loop Budgeting](../loop-engineering/loop-budgeting.md) — choosing the iteration cap that bounds the enumeration sweep
 - [Long Context vs Retrieval: The Break-Even Decision](long-context-vs-retrieval-break-even.md) — what the top-*k* completeness gap costs to close by reading the whole corpus instead
+- [Gate Generation on Retrieval Sufficiency, Not Model Confidence](retrieval-sufficiency-gate.md) — the same outside-the-ranker signal applied to private code, where the call graph supplies it instead of an enumeration loop

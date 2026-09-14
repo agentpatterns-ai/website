@@ -71,6 +71,8 @@ Mitigations:
 - Held-out validation: run a final check on a task set that never touched the tuning loop before promoting a harness change
 - Monitor production: treat the eval score as a leading indicator; production outcomes are ground truth
 
+When a search procedure rather than a person picks the winning configuration, run-to-run selection variance is a second failure mode on top of overfitting — see [Reliability of an Automatically Selected Agent Harness](harness-selection-reliability.md).
+
 ## When this backfires
 
 Hill-climbing finds a local optimum, not a global one — if the baseline sits in a poor region of configuration space, iteration converges to the nearest local peak. Three further conditions degrade the loop:

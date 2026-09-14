@@ -106,6 +106,7 @@ graph LR
 ## Related
 
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — within-harness subsystem ranking; pair this method with fleet attribution for the inside-vs-outside view
+- [Model-Set Parity: Reading Harness Efficiency Claims](model-set-parity-harness-claims.md) — the same control applied to a figure someone else published, where the arms may not match
 - [Harness Hill-Climbing](harness-hill-climbing.md) — single-dimension iterative tuning that runs after you have picked the harness
 - [Per-Model Harness Tuning](per-model-harness-tuning.md) — what to do when fleet attribution exposes per-model interaction
 - [Eval Strategy by Agent Generation](eval-strategy-by-agent-generation.md) — locates the eval surface from current architecture; this is one Gen-6 method

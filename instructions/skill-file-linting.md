@@ -113,3 +113,4 @@ Two of the three checks are this cheap to clear. The third, externalizing code, 
 - [Skill Authoring as Software Engineering](../tool-engineering/skill-authoring-software-engineering.md) — which construction principles independent measurement supports, and why guidance without a detector changes nothing
 - [Skill Library Technical Debt](../tool-engineering/skill-library-technical-debt.md) — library-level defects that per-file linting cannot see
 - [Skill Specification Violation Fuzzing](../verification/skill-specification-violation-fuzzing.md) — the behavioral layer a structural gate leaves untouched
+- [Per-Step Preconditions and Postconditions in Skill Files](per-step-skill-preconditions.md) — the semantic check to reach for once the structural defects are gone

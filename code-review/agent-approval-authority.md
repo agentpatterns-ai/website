@@ -79,5 +79,6 @@ The strongest published objection goes further. Monperrus argues that "the naive
 - [Tiered Code Review](tiered-code-review.md) — routes review depth by path criticality while humans stay the only approvers; this page covers what changes when they are not
 - [Risk-Score Threshold Calibration for Auto-Approval](risk-score-threshold-calibration.md) — a learned diff-risk score deciding whether a human reviews at all, the bespoke counterpart to a vendor path allowlist
 - [Agent-Assisted Code Review](agent-assisted-code-review.md) — the commenting posture this feature departs from
+- [Agent-Resolved Review Threads](agent-resolved-review-threads.md) — the conversation-resolution rule clearing the same way, with no admin setting to decide first
 - [Reviewer Habituation in Agent PR Review](reviewer-habituation-decay.md) — why the human approval slot decays into a signature over repeat exposure
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — the reviewer-composition evidence behind keeping a reader in the loop
