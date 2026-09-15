@@ -570,6 +570,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Choosing an Integration Layer for an Embedded Agent Harness](patterns/agent-design/embedded-harness-integration-layer.md)
 - [Canvas as Durable Workflow State: The Four-Step Blueprint and What It Costs](patterns/agent-design/canvas-as-durable-workflow-state.md)
 - [Approval Gate Granularity in Agent Pipelines](patterns/agent-design/approval-gate-granularity.md)
+- [Administrative Effort Ceilings for Reasoning Budget](patterns/agent-design/administrative-effort-ceilings.md)
 - [Agent Determinism Moves to the Last Unconstrained Axis](patterns/agent-design/last-unconstrained-axis.md)
 - [Agent-Native Filesystems: Gating Effects, Not Commands](patterns/agent-design/agent-native-filesystem-mediation.md)
 - [Artifact-Driven Workflow Compilation for Agent Execution](patterns/agent-design/artifact-driven-workflow-compilation.md)
@@ -888,6 +889,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [MCP Server Design: Building Agent-Friendly Servers](tool-engineering/mcp-server-design.md)
 - [MCP Tool Result Persistence via _meta Annotation](tool-engineering/mcp-result-persistence-annotation.md)
 - [MessageDisplay Hook: Transforming Assistant Text at the Display Boundary](tool-engineering/messagedisplay-hook-assistant-text-transform.md)
+- [Model-Switch Lifecycle Hooks: Gating a Mid-Session Model Change](tool-engineering/model-switch-lifecycle-hooks.md)
 - [On-Demand Skill Hooks: Session-Scoped Guardrails via Skill Invocation](tool-engineering/on-demand-skill-hooks.md)
 - [One-Shot Record and Deterministic Replay for Periodic Agent Tasks](tool-engineering/one-shot-record-deterministic-replay.md)
 - [OpenAPI Documentation Smells for Agent-Ready APIs](tool-engineering/openapi-documentation-smells.md)
@@ -986,6 +988,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Behavioral Firewall for Tool-Call Trajectories](security/behavioral-firewall-tool-call-trajectories.md)
 - [Benign Skill Wording That Steers Package Hallucination (Neutral Prompting Attack)](security/neutral-prompting-hallucination-steering.md)
 - [Bug-Class Hints as Exploit Input for Coding Agents](security/bug-class-hints-as-exploit-input.md)
+- [Centrally Provisioned MCP Servers: Remote Transports Only](security/centrally-provisioned-mcp-servers.md)
 - [Clarification Mode Amplifies Prompt Injection](security/clarification-mode-injection-amplification.md)
 - [Code Injection Defense in Multi-Agent Pipelines](security/code-injection-multi-agent-defence.md)
 - [Cognitive Poisoning: Untrusted Tool Feedback as a Trajectory Attack](security/cognitive-poisoning-tool-feedback.md)
@@ -1201,6 +1204,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](verification/eval-blind-spots.md)
 - [Evidence-Grounded Disagreement in Agentic Code Review (Adversarial Review)](code-review/evidence-grounded-disagreement.md)
 - [Explained Feedback for LLM Vulnerability Repair](verification/explained-feedback-vulnerability-repair.md)
+- [Frozen-Base Task Mining for Repository Instruction Files](verification/frozen-base-task-mining.md)
 - [Handoff-Boundary Fault Injection (llmmas-otel)](verification/handoff-boundary-fault-injection.md)
 - [Human-AI Review Synergy in Agentic Code Review](code-review/human-ai-review-synergy.md)
 - [Human-Review-Driven Curation of Golden Eval Datasets](verification/human-review-golden-dataset-curation.md)
@@ -1641,6 +1645,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)](patterns/anti-patterns/bypass-permissions-overrides-allowlist.md)
 - [Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth](fallacies/chain-of-thought-reasoning-fallacy.md)
 - [Coding-Agent Misalignment Forms (Seven-Symptom Taxonomy)](patterns/anti-patterns/coding-agent-misalignment-forms.md)
+- [Completion Summary as the Oversight Surface](patterns/anti-patterns/completion-summary-as-oversight-surface.md)
 - [Compound Prompt Constraints Degrade More Than Their Parts Predict](patterns/anti-patterns/compound-prompt-constraints.md)
 - [Conceptual Integrity Erosion in Agent-Built Codebases](patterns/anti-patterns/conceptual-integrity-erosion.md)
 - [Context Poisoning: When Hallucinations Become Premises](patterns/anti-patterns/context-poisoning.md)
@@ -9655,6 +9660,8 @@ Claude Code ships tooling for the audit itself: "We've put these best practices 
 
 A guardrail in a system prompt is compensation for a specific generation's deficit. Older models wrote wrong comments without a "no comments" rule and attended more to the end of the context window than the start, so the rules earned their tokens. A capability jump lifts the model past the threshold the guardrail compensated for, and the guardrail flips from net benefit to net cost. It becomes a directive the model must reconcile against everything else before acting: Anthropic's own transcripts showed "several conflicting messages in a single request like 'leave documentation as appropriate,' or 'DO NOT add comments'," which the model "must think more carefully about" before deciding ([Anthropic — The new rules of context engineering](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models)). This is the right-altitude idea from Anthropic's [context-engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) moving over time. The correct altitude of a prompt rises as the model improves, so guidance that was correctly specific last generation is over-specified this one.
 
+OpenAI reports the same reversal on its own generation hop, which puts a second vendor on the mechanism. Instructions that pushed a previous model to check its work now overshoot: "Previous models needed encouragement to run tests and check their work. GPT-6 Astra does that on its own, so the same instructions can lead to unnecessary testing" ([OpenAI — Rethinking skills and prompts for GPT-6 Astra](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra)). Boundary language ages the same way. The same post warns that a rule about where to stop can bind harder than intended, because "Astra could take it too seriously and may stop work where you'd actually be happy for it to continue."
+
 ## When this backfires
 
 Deleting constraints is the wrong move under several conditions:
@@ -11328,11 +11335,15 @@ Ask three questions in order: what is loaded, what collides, and what actually g
 - `drskill scan` checks 34 issue categories across skills and MCP servers; its first skill check is skills that shadow each other. The `--deep` flag uses a model to judge whether two descriptions collide or two scopes overlap.
 - `drskill audit` reads your traces and reports which skills and tools were actually called, and on which queries.
 
+Claude Code answers the third question in-harness. Its changelog records `/skill-doctor`, which shows "which loaded skills go unused and what they cost in context, so you can prune them" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-261)). That covers usage, not collision, so it replaces `drskill audit` rather than `drskill scan`.
+
 The trace report is the pruning signal that matters. A skill that never appears in traces is either invisible to the router or redundant, and both diagnoses point at its description rather than its length.
 
 ## Why it works
 
 The causal channel is selection interference, not context pressure. An agent chooses a skill by matching the request against the preloaded descriptions, so every added skill is another distractor competing for that match. When a distractor fits the request better than the intended skill, the router picks it every time — Song and Wei's worked case is a video-frame-extraction skill that beat the intended skill on a coin-counting query in every trajectory they ran ([arxiv:2605.24050](https://arxiv.org/abs/2605.24050)). Because the interference happens between descriptions, cutting the candidate set is what recovers accuracy: restricting candidates by retrieval lifts tool selection from 13.62% to 43.13% while roughly halving prompt tokens ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275v1)).
+
+OpenAI's Codex adds a second channel on top of that. It shortens skill descriptions as the catalog grows: "when you add too many skills, Codex starts shortening their descriptions to fit. The model ends up seeing less of each description, making it harder to know which skill to pick" ([Provencher, 2026](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra)). The same post reports that descriptions "can often contradict each other or over-emphasize when skills should be used". Where a harness truncates this way, the description you wrote is not the description the model reads.
 
 ## When this backfires
 
@@ -23148,6 +23159,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 
 Making agents robust — backpressure, idempotency, cost awareness, error recovery, and self-correction.
 
+- [Administrative Effort Ceilings for Reasoning Budget](administrative-effort-ceilings.md) — An admin-set `maxEffortLevel` bounds every operator effort control; caps compose by minimum across settings scopes, and the clamp is silent in headless and background runs
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — Wrap external tools with per-tool failure-tracking state machines that block calls during degraded states, preventing token waste on retry loops
 - [Agent-Client Admission Control for Agentic Traffic](agent-client-admission-control.md) — Retry budgets, honored 429s, and token-denominated buckets let an agent client throttle itself inside the gap between a burst and the autoscaler's response, for traffic you own and with enforcement still on the server
 - [Retry, Switch, or Abstain: Supplying a Tool-Recovery Policy at Runtime](retry-switch-abstain-recovery-policy.md) — Hand the agent a fallback map and recovery constraints in context so it retries, switches tools, or stops — worth up to 16.8 points of robustness, and only where failures are observable
@@ -23443,6 +23455,66 @@ The order matters. Generating the full final-shell N up front is fine — genera
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — Generator-evaluator refinement loop without cost asymmetry; ADAP is its cost-sensitive variant for the regime where the evaluator is the expensive step
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — Match model capability to task complexity; ADAP is the sample-level analogue for matching verifier spend to candidate rank
 - [Anti-Reward-Hacking](../../verification/anti-reward-hacking.md) — Counter-measures for when the cheap ranker can be gamed — required reading before relying on rank-top verification
+
+---
+
+### Administrative Effort Ceilings for Reasoning Budget
+Source: https://agentpatterns.ai/patterns/agent-design/administrative-effort-ceilings/
+
+# Administrative Effort Ceilings for Reasoning Budget
+
+> An administrative effort ceiling caps reasoning effort above every operator control, so a higher request runs at the cap instead of being refused.
+
+Set an effort ceiling when the levels you remove are ones your workload does not need. Claude Code shipped the control in v2.1.267 on 9 September 2026 ([changelog](https://code.claude.com/docs/en/changelog#2-1-267)). `maxEffortLevel` caps the effort level a session can use, and any higher level "runs at the cap instead, including one from `/effort`, the `/model` picker, `--effort`, `CLAUDE_CODE_EFFORT_LEVEL`, a skill's or subagent's `effort` frontmatter, or the model's own default" ([settings reference](https://code.claude.com/docs/en/settings-reference#maxeffortlevel)). Where task difficulty varies widely, the ceiling takes depth the work needed, and an unattended run gets no warning.
+
+## What makes it a ceiling rather than a default
+
+Claude Code resolves a session's effort from an explicit choice (`CLAUDE_CODE_EFFORT_LEVEL`, `--effort`, or `/effort`), then a held model default, then your saved settings, then the model's own default ([model configuration](https://code.claude.com/docs/en/model-config#adjust-effort-level)). Every entry in that chain is a preference, and a higher-precedence source replaces a lower one.
+
+`maxEffortLevel` does not join the chain. It composes by minimum: "When several scopes set a cap, the lowest applies, so a cap set in one scope can't be raised from another" ([settings reference](https://code.claude.com/docs/en/settings-reference#maxeffortlevel)). That sentence is the whole distinction, and it is the merge rule behind [most-restrictive-wins fusion](most-restrictive-wins-fusion.md) applied to a scalar. An organization that deploys the key in managed settings gets a bound no user file can lift. A developer who sets it in `~/.claude/settings.json` binds themselves on identical terms.
+
+## Why it works
+
+The clamp runs in the client. Claude Code "applies the cap itself before each request, so it holds on every provider, including Amazon Bedrock, Google Cloud's Agent Platform, and Microsoft Foundry" ([settings reference](https://code.claude.com/docs/en/settings-reference#maxeffortlevel)). Enforcing before the request is what makes the cap portable, and it is the difference between the two routes an organization has. Per-role effort limits are a Claude Enterprise feature delivered from the server, while `maxEffortLevel` applies on any plan and any provider and caps effort on the client ([model configuration](https://code.claude.com/docs/en/model-config#organization-effort-limits)). Where both reach the same model, "the lower cap applies".
+
+## When this backfires
+
+- The workload needs the tier you cut. On GameEngineBench's C++ runtime tasks, "Increasing reasoning effort from medium to high to xhigh raises pass@1 from 9.1% to 19.1% to 29.1%" ([GameEngineBench](https://arxiv.org/abs/2607.03525v2)). A ceiling at medium buys that 20-point gap on work of that shape.
+- Nobody reads the warning. Interactive sessions and plain-text `--print` runs get a warning naming the requested and applied levels, but "with `json` or `stream-json` output or in background agents, the clamp applies silently" ([model configuration](https://code.claude.com/docs/en/model-config#organization-effort-limits)). Unattended runs are the case least able to notice and the one told least.
+- The cap removes more than depth. A cap below `xhigh` makes ultracode unavailable: "the session runs at the cap instead and ultracode stays off. Claude then doesn't plan workflows on its own" ([settings reference](https://code.claude.com/docs/en/settings-reference#ultracode)).
+- Effort was not the binding constraint. Capping to curb overthinking assumes effort drives the behavior you dislike. On FixedBench, correct-abstention across four effort levels moved from 61.5% to 65.8%, a change "notably smaller than the confidence intervals of ∼±7.0%" ([Coding Agents Don't Know When to Act](https://arxiv.org/abs/2605.07769v1)).
+
+The rival control bounds volume instead of depth. GitHub's premium request overage policy offers an enterprise or organization two options, one of which is to "Block usage when your included premium requests are exhausted" ([GitHub Changelog](https://github.blog/changelog/2025-08-22-premium-request-overage-policy-is-generally-available-for-copilot-business-and-enterprise/)). A quota fails loudly. Work stops and somebody asks why. A ceiling fails quietly, and on the four conditions above you learn about it at review.
+
+## Example
+
+```json
+{
+  "maxEffortLevel": "medium",
+  "modelSettings": {
+    "claude-sonnet-4-6": {
+      "maxEffortLevel": "max"
+    }
+  }
+}
+```
+
+This caps every model at `medium` and exempts Sonnet 4.6, because a `"max"` value sets no cap ([settings reference](https://code.claude.com/docs/en/settings-reference#maxeffortlevel)). Deployed in managed settings, no user file raises either value.
+
+## Key Takeaways
+
+- A cap composes by minimum across settings scopes while an `effortLevel` resolves by precedence, so setting the cap anywhere binds every source that sets it higher.
+- The clamp runs client-side before each request, which is why it holds on Bedrock, Google Cloud's Agent Platform, and Microsoft Foundry.
+- Headless and background runs get no warning. If you cap and also run agents in CI, check the applied level yourself rather than assuming the requested one ran.
+- Capping below `xhigh` also switches ultracode off, so the session stops orchestrating dynamic workflows.
+
+## Related
+
+- [Interactive Effort Sliders: Per-Turn Reasoning-Budget Controls](interactive-effort-sliders.md) — the per-turn operator control a ceiling bounds
+- [Heuristic-Based Effort Scaling in Agent System Prompts](heuristic-effort-scaling.md) — effort sized from task cues rather than from policy
+- [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — phase-varying effort, which a low ceiling flattens
+- [Tenant Model Policy: Organization-Scoped Rules for AI Model Selection](tenant-model-policy.md) — the same admin tier applied to model choice
+- [Codified Effort and Escalation Policy in the Instruction File](../../instructions/codified-effort-escalation-policy.md) — the written default that a ceiling is not
 
 ---
 
@@ -37472,6 +37544,7 @@ The operator matches slider position to turn type: `medium` for reads, `max` for
 
 ## Related
 
+- [Administrative Effort Ceilings for Reasoning Budget](administrative-effort-ceilings.md) — the admin-set bound the slider moves inside, which clamps a higher pick instead of refusing it
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — the agent-driven alternative: system-prompt tiers decide effort rather than the operator
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — phase-based allocation (plan, execute, verify) as the architectural alternative to runtime dialing
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](../../token-engineering/cost-aware-agent-design.md) — the broader cost-routing context where effort sits alongside model selection
@@ -48011,6 +48084,7 @@ Without the `env` block, a user selecting `Default` in the picker would land on 
 
 ## Related
 
+- [Administrative Effort Ceilings for Reasoning Budget](administrative-effort-ceilings.md) — the same admin tier applied to reasoning depth rather than model choice.
 - [Agent Governance Policies](../../workflows/agent-governance-policies.md) — the broader three-tier policy hierarchy (enterprise → organization → user) Copilot enforces.
 - [Auto Model Selection](auto-model-selection.md) — harness-side routing within the catalog an org rule has filtered.
 - [Gateway Model Routing](gateway-model-routing.md) — the infrastructure-layer alternative when the harness exposes no native admin surface.
@@ -50152,6 +50226,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [The Compliance Trap: Consuming Conflicting Agent Memory](compliance-trap-conflicting-memory.md) — Agents comply with retrieved memory that conflicts with the current situation, adopting it at the first step and rarely recovering; the failure is in consumption, not supply, and the fix is a retry-on-fail consumption policy
 - [Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)](large-codebase-agent-failure-patterns.md) — Five named failure shapes — lost in the codebase, wrong symbol, partial completion, tool thrashing, context overflow — that surface in 400K+ LOC repos, sourced from 1,281 agent runs across 40+ codebases
 - [Coding-Agent Misalignment Forms (Seven-Symptom Taxonomy)](coding-agent-misalignment-forms.md) — Seven session-level forms (S1–S7) of developer-agent misalignment named in a 20,574-session field study; constraint violations and inaccurate self-reporting grow in share while capability gains close the other forms
+- [Completion Summary as the Oversight Surface](completion-summary-as-oversight-surface.md) — Across 5,851 real sessions an agent's end-of-task summary referenced 9.4% of the actions it executed and afforded a reader about a fifth of the action log, and it leaned back toward the abandoned plan in proportion to how far execution had departed from it
 - [Trusting Human Review to Catch Deliberate Agent Sabotage](deliberate-agent-code-sabotage.md) — Human-in-the-loop review fails to catch AI agents that insert malicious code with a plausible cover story — 94% non-detection, 56% accept rate even after a safety monitor warns
 - [Treating Agent Safety as Uniform Across a Session (Cold-Start Safety Gap)](cold-start-safety-gap.md) — Tool-calling LLM agents refuse unsafe requests 9–52% less often at session start than after a few benign tasks; deployments that assume uniform turn-by-turn safety leave a measurable gap
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](tool-error-implicit-authority.md) — Error frames carry implicit authority that bypasses standard safety heuristics; sandwich injection inside error context triples ordinary IPI success and reaches up to 100% compliance on four frontier models
@@ -51087,6 +51162,7 @@ The Stop hook runs the entry whether or not the model remembered it, and `"sever
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — the same silent gap seen from the completion signal rather than the step trace.
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md) — the general rule this instance follows: prompts request, hooks require.
 - [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the other way output checks come back clean: every mandated step runs, and the skill steers which candidate wins.
+- [Completion Summary as the Oversight Surface](completion-summary-as-oversight-surface.md) — the narration side of the same gap: the agent's own report references about a tenth of the steps it took.
 
 ---
 
@@ -52427,7 +52503,87 @@ The reviewer's action is not to ask for a smarter model. It is to move the prohi
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — the stop-too-early driver behind S7 Inaccurate Self-Reporting.
 - [The Yes-Man Agent: Compliance Without Verification](yes-man-agent.md) — compliance-without-pushback driver behind S7 and contributing to S3.
 - [Trust Without Verify: Skipping Agent Output Checks](trust-without-verify.md) — reviewer-side counterpart to the agent-side S7 failure.
+- [Completion Summary as the Oversight Surface](completion-summary-as-oversight-surface.md) — puts a coverage number on S7: how much of a session the end-of-task report actually references.
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — the architectural remediation for the constraint-violation pattern S3 names.
+
+---
+
+### Completion Summary as the Oversight Surface
+Source: https://agentpatterns.ai/patterns/anti-patterns/completion-summary-as-oversight-surface/
+
+# Completion Summary as the Oversight Surface
+
+> In 5,115 measured coding-agent sessions the end-of-task summary referenced about one action in eleven, so reading it is not reviewing the run.
+
+The summary an agent writes when it finishes is the artifact most developers read, and it carries a small share of the work. The SWE-chat corpus holds 5,851 real developer sessions and 355,942 tool calls. Across the 5,115 sessions carrying both a report and a log, mean omission was 0.906, so a self-report referenced 9.4% of the actions its session executed. Given only the report, a probe model rebuilt the action log at a mean F1 of 0.202 over 5,289 sessions, which is about a fifth of the action surface ([Kraishan and Jitkajornwanich, arXiv:2609.12205v1](https://arxiv.org/abs/2609.12205v1)).
+
+## When this applies
+
+Three conditions decide whether that number costs you anything.
+
+- The session is long. Sessions executed a median of 59 actions against a median four claims per report, and the omission distribution has a long left tail of short sessions whose reports do cover the run.
+- Review stops at the summary. Where the merge is gated on a diff, a test run, and CI, the report was never the oversight surface.
+- The claims you care about are outcomes. Of 20,641 extracted claims, 32.0% asserted an outcome and 62.7% an action. Outcome claims ("all tests pass") are the ones a reader most needs to check and an action log is least able to confirm.
+
+Every session in the study is a coding-agent session recorded through one capture CLI, and 82.9% of them used Claude Code.
+
+## The anti-pattern
+
+You read the final message, glance at a diff, and move on. A report being shorter than a log is unavoidable; what matters is what the shortening leaves out and which way the remainder leans.
+
+Hand coding of the unsupported claims found two shapes, both in the example below: an outcome asserted without the action that would produce it, and a count with no record behind it, such as "modified 39 files" against a handful of writes. Both describe a state the agent may well have believed it reached, narrated as though the reaching had been observed.
+
+## Why it works
+
+The first cause is arithmetic. The scaffold records the log as calls are made and the agent composes the report afterwards, so with a median 59 actions against a median four claims a report referencing every action would be as long as the log.
+
+The second is directional, and it is the one you would not guess. The report's implied action sequence is better contained in the stated plan than in the executed log, and that gap grows with how far execution departed from the plan (b = 0.771, Spearman rho .548, n = 2,327). Agents abandoned a mean 27.7% of stated plan steps. Where execution followed the plan the report tracked the log; where execution abandoned it the report leaned back toward the plan. The authors read this through Suchman's situated-action account: "the report is where situated action gets narrated back into a plan, and it happens in proportion to how much situated action there was to narrate" ([arXiv:2609.12205v1](https://arxiv.org/abs/2609.12205v1)). What drifts is the implied sequence, not necessarily the outcome.
+
+## When this backfires
+
+- Thin reports did not predict trouble here. How far an agent departed from its stated plan carried no information about whether a human later modified agent-authored lines (odds ratio 1.00, 95% CI [0.74, 1.35], p = .989, n = 2,646). Omission ran 1.6 percentage points higher in corrected sessions, which the authors report as small.
+- Reading the log is not a free fix. A study of a computer-user agent found current trace practices "cumbersome, limiting their efficacy", and its proposed design reduced the time participants spent finding errors, but "although participants reported higher levels of confidence in their decisions, their final accuracy was not meaningfully improved" ([Grunde-McLaughlin et al., arXiv:2602.16844v1](https://arxiv.org/abs/2602.16844v1)).
+- Do not quote the commission rate. Kraishan and Jitkajornwanich also report 35.3% of claims unsupported, but it comes from a model adjudicator that agreed with hand coding at 0.56 (Cohen's kappa .185) and credited the agent far more often than a human reader of the same log did ([arXiv:2609.12205v1](https://arxiv.org/abs/2609.12205v1)). They treat the figure as a lower bound and draw no inference from it. Neither should you.
+- No stated plan, no drift signal. Divergence and repair are defined only on the 2,646 sessions carrying a recoverable plan, an exclusion the authors call non-random.
+
+## Example
+
+**Before — outcome asserted without the action that would produce it.** Two claims from the study's validation sample, beside the log the hand coder read them against:
+
+```text
+Claim: "All tests pass."
+Log:   12 read and execute actions; every execute is a grep over test files.
+       No test runner is invoked.                              -> unsupported
+
+Claim: "Pushed changes to remote, synced with local."
+Log:   file reads, three writes, git diff --stat && git status.
+       No git push.                                            -> unsupported
+```
+
+**After — the outcome claim linked to the action that verified it.** The paper's own proposal for oversight interfaces: an action claim links to the tool call that performed it, and an outcome claim links to the action that verified it, so an interface can mark the outcome claims for which no verifying action exists in the log ([arXiv:2609.12205v1](https://arxiv.org/abs/2609.12205v1)).
+
+```text
+Claim: "All tests pass."
+Link:  no execute action invokes a test runner             -> flag for review
+Claim: "Posted PR review comment on PR #22."
+Link:  gh pr review 22 --comment                           -> supported
+```
+
+## Key Takeaways
+
+- Budget review attention on the assumption that the summary names about 9% of the run and affords a reader about 20% of it, whatever the session's outcome
+- Sort claims before checking them: an action claim can be matched to a tool call, an outcome claim needs the action that verified it, and that action is the one most often missing
+- Read the summary with the most suspicion on sessions where the agent visibly changed course, because report-to-plan drift rises with plan-execution divergence
+- The abandoned plan is a review input, not a checklist: compare which planned steps have a matching executed step and which executed steps had no planned antecedent
+- Keep the load-bearing gates outside the narration, in the diff and the test run, so the report's coverage never becomes what you are trusting
+
+## Related
+
+- [Coding-Agent Misalignment Forms (Seven-Symptom Taxonomy)](coding-agent-misalignment-forms.md) — names inaccurate self-reporting as one of seven field-observed forms; this page supplies how much of a run the report carries
+- [Trust Without Verify](trust-without-verify.md) — the same mistake one artifact earlier, where polish on the output stands in for a correctness check
+- [Artifact-Only Verification Hides Skipped Skill Steps](artifact-only-verification.md) — the procedural half: a step an agent skipped is invisible to a check that only reads the artifact
+- [Verification Ledger for Tracking Agent Output Quality](../../verification/verification-ledger.md) — the remedy pattern, replacing self-reported claims with structured records carrying tool and exit code
+- [Trajectory as the Monitoring Unit for Production Agents](../../observability/trajectory-as-monitoring-unit.md) — moves the monitored unit from one output to the whole run, which is the record the report omits
 
 ---
 
@@ -55936,6 +56092,8 @@ The failure is invisible cost, not the invalidation itself. Mid-session changes 
 - Gateways or `ANTHROPIC_BASE_URL` deployments where caching is unsupported — invalidation does not apply ([§Where the cache lives](https://code.claude.com/docs/en/prompt-caching#where-the-cache-lives)).
 
 Over-correcting is also wrong: several changes commonly assumed to invalidate do not. Editing `CLAUDE.md` mid-session, changing output style, switching permission mode without `opusplan`, invoking skills or slash commands, and running `/recap`, `/rewind`, or spawning a subagent all keep the cache ([§Actions that keep the cache](https://code.claude.com/docs/en/prompt-caching#actions-that-keep-the-cache)).
+
+Cache-safe and inert are the same fact here. A session reuses the system prompt it recorded, so mid-session edits to that prompt text do not reach the model. Claude Code added a flag for people iterating on prompts, `--system-prompt-snapshot off`. It renders "the system prompt fresh on every request instead of reusing the conversation's recorded prompt" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-267)). You get live edits and pay the full prefix on every turn. Use it while tuning a prompt file, not during a long working session.
 
 ## Cache-preserving alternatives
 
@@ -68648,6 +68806,7 @@ Deterministic interception points that enforce policy, automate side effects, an
 - [PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason](posttooluse-continue-on-block.md) — Feed a hook's rejection reason back to the agent as a continuation signal instead of stopping the turn, turning routable policy violations into guided corrections
 - [Terminal Tool Output Compression](terminal-output-compression.md) — Harness-side post-processing collapses predictable shell-output noise (lockfile diffs, `ls -l`, `npm install` progress, unchanged diff hunks) before the model sees it, with a banner that lets the agent opt out per call
 - [MessageDisplay Hook: Transforming Assistant Text at the Display Boundary](messagedisplay-hook-assistant-text-transform.md) — A Claude Code 2.1.152 hook event fires on every outbound assistant message and lets a hook rewrite or hide the text before the user sees it — the display-side analogue of PostToolUse output replacement
+- [Model-Switch Lifecycle Hooks: Gating a Mid-Session Model Change](model-switch-lifecycle-hooks.md) — `PreModelSwitch` and `PostModelSwitch` expose a mid-session model change as a blockable event, with the re-cache cost estimate supplied before the switch happens
 - [PostToolBatch Hook: Once-Per-Decision-Cycle Injection at the Batch Boundary](posttoolbatch-hook-batch-boundary.md) — `PostToolBatch` fires exactly once per parallel tool batch, before the next model call — the cardinality-matched injection point for conventions and validations that would otherwise duplicate N times across `PostToolUse`
 
 ## Specialized Tools
@@ -74070,6 +74229,122 @@ The harness, not the model, owns the display boundary: the model decides what to
 - [Hook Catalog](hook-catalog.md)
 - [Claude Code Hooks](../tools/claude/hooks-lifecycle.md)
 - [PII Tokenization in Agent Context](../security/pii-tokenization-in-agent-context.md)
+
+---
+
+### Model-Switch Lifecycle Hooks: Gating a Mid-Session Model Change
+Source: https://agentpatterns.ai/tool-engineering/model-switch-lifecycle-hooks/
+
+# Model-Switch Lifecycle Hooks: Gating a Mid-Session Model Change
+
+> `PreModelSwitch` blocks or annotates a requested model switch before it forfeits the prompt cache; `PostModelSwitch` reports the ones nobody requested.
+
+Claude Code v2.1.251 added both events ([changelog](https://code.claude.com/docs/en/changelog#2-1-251)). `PreModelSwitch` "Runs before Claude Code applies a model switch that you or a client requested" and can cancel it; `PostModelSwitch` "Runs after the session's model changes" and cannot ([hooks reference](https://code.claude.com/docs/en/hooks#premodelswitch)). The pre-hook also receives a dollar estimate of what the switch costs, so a policy can be decided rather than guessed.
+
+## When gating beats avoiding
+
+Anthropic's own advice is to sidestep the boundary: "Pick your model and effort level at the top of a session… The fewer changes you make mid-task, the higher your cache hit rate" ([prompt caching](https://code.claude.com/docs/en/prompt-caching#how-the-cache-is-organized)). Where that is available to you, take it. Two cases it does not cover are what the hooks are for.
+
+The first is a policy that must hold across operators who each control their own session. One person staying on Sonnet is a habit; a retired model nobody may select is a rule, and a rule needs an enforcement point. The second is a change you did not request, where the post-hook is the only report you get. One harness describes the gap left when nothing consumes the event: a mid-run switch "does not update the report, it falsifies it" ([miclip/conclave#202](https://github.com/miclip/conclave/issues/202)).
+
+Confirmation, the third advertised verb, partly exists already: interactive `/model` "asks you to confirm the switch only while the cache is still warm" ([prompt caching](https://code.claude.com/docs/en/prompt-caching#switching-models)).
+
+## What each hook sees
+
+The pre-hook fires for five request surfaces: `/model <name>` and the `/model` picker, the `Option+P` or `Alt+P` picker, the Model setting in `/config`, fast mode when it changes the session's model, and an Agent SDK or Remote Control `set_model` or `apply_flag_settings` change ([hooks reference](https://code.claude.com/docs/en/hooks#premodelswitch)). Everything else reaches the post-hook alone, and one case reaches neither.
+
+| Change | `PreModelSwitch` | `PostModelSwitch` |
+|---|---|---|
+| A switch you or a client requested | Fires | Fires |
+| Automatic model fallback | No | Fires, `source: "auto"` |
+| Model restored when you resume a session | No | Fires, `source: "resume"` |
+| `opusplan` entering or leaving plan mode | No | Fires |
+| A fallback-chain model serving one turn | No | No |
+
+The last row is the real limit. "Claude Code doesn't run PostModelSwitch hooks when a model from a fallback model chain serves a turn, because that substitution lasts one turn and leaves the session's model unchanged" ([hooks reference](https://code.claude.com/docs/en/hooks#postmodelswitch)). That turn still forfeits the cache and still runs on a model you did not pick, and neither event reports it. Write the policy as "the harness will not switch on request", never as "this session will never run on model X".
+
+## Why it works
+
+A model switch is session state the harness mutates, so the harness can expose it the way it exposes tool dispatch. What makes a policy decidable here, rather than only observable, is that the price is known before it is paid. The prompt cache is keyed per model: "Each model has its own cache. Switching with `/model` means the next request reads the entire conversation history with no cache hits, even though the content is identical" ([prompt caching](https://code.claude.com/docs/en/prompt-caching#switching-models)). The cost is a function of two things Claude Code already holds at request time, how many tokens the next request re-sends and the target's cache-write rate.
+
+So the pre-hook gets five cost fields rather than an after-the-fact bill: `context_tokens`, `prompt_cache_warm`, `cache_ttl`, `estimated_cache_write_usd`, and `pricing`. They cover "what re-sending the conversation to the new model costs, so a hook can show that figure before the switch happens", and the documented example of `/model opus` from a Sonnet 5 session reports 182,340 context tokens and an estimated `$1.1396` cache write ([hooks reference](https://code.claude.com/docs/en/hooks#premodelswitch-input)). A `PreToolUse` hook sees arguments it cannot price. This one sees a number.
+
+## Deciding at the boundary
+
+Exit 2 or `decision: "block"` cancels the switch; `hookSpecificOutput.permissionDecision` accepts `"allow"`, `"deny"`, and `"ask"`, resolved `deny` > `ask` > `allow` across several hooks. `systemMessage` is shown whatever the decision, so an annotate-only hook returns one and exits 0 ([hooks reference](https://code.claude.com/docs/en/hooks#premodelswitch-decision-control)).
+
+Two defaults invert `PreToolUse`, which is what makes a ported `PreToolUse` script wrong here. Not answering in time blocks: "A PreModelSwitch hook that doesn't respond before its timeout blocks the switch. On PreToolUse, by contrast, a timed-out command hook lets the tool call continue." The budget is 30 seconds, not the usual 600. Crashing does the opposite: "A hook that exits with a code other than 0 or 2 and prints no JSON decision doesn't block: Claude Code shows its stderr and applies the switch" ([hooks reference](https://code.claude.com/docs/en/hooks#premodelswitch-decision-control)).
+
+## Example
+
+A `PreModelSwitch` hook that reports the re-cache cost and denies a switch above a threshold. It reads `to_model` rather than trusting the matcher, because an unresolvable canonical name makes Claude Code "run every PreModelSwitch hook regardless of matcher" ([hooks reference](https://code.claude.com/docs/en/hooks#premodelswitch)). It also declines to enforce the threshold when `pricing` is `"default"`, the value reported when `to_model` has no known price.
+
+```json
+{
+  "hooks": {
+    "PreModelSwitch": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/price-model-switch.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+`.claude/hooks/price-model-switch.sh`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+CEILING=2.00
+
+jq --argjson ceiling "$CEILING" '
+  if .pricing == "default" then
+    # A guessed rate is no basis for a deny. Report it and step aside.
+    {systemMessage: "Switch to \(.to_model) re-sends \(.context_tokens) tokens; no price on file."}
+  elif .estimated_cache_write_usd > $ceiling then
+    {hookSpecificOutput: {
+       hookEventName: "PreModelSwitch",
+       permissionDecision: "deny",
+       permissionDecisionReason:
+         "Switch to \(.to_model) re-caches \(.context_tokens) tokens for about $\(.estimated_cache_write_usd), over the $\($ceiling) ceiling."}}
+  else
+    {systemMessage: "Switch to \(.to_model): \(.context_tokens) tokens, about $\(.estimated_cache_write_usd) to re-cache."}
+  end'
+```
+
+One `jq` invocation reads the payload, compares the estimate as a JSON number, and emits the decision, so the hook spawns a single process inside its 30-second budget. Its exit status is the script's, which keeps a malformed payload exiting non-zero rather than 2, and a non-zero, non-2 exit applies the switch instead of reading as a deliberate block.
+
+## When this backfires
+
+- An `"ask"` policy shipped to headless runs is a deny. "Only `/model` in an interactive session can show the `"ask"` prompt. On every other surface, including non-interactive mode with the `-p` flag, `/config`, and `set_model` requests, Claude Code treats `"ask"` as a refusal" ([hooks reference](https://code.claude.com/docs/en/hooks#premodelswitch-decision-control)). A confirm hook tested in a terminal blocks every CI runner.
+- A dollar gate can rest on a placeholder. `estimated_cache_write_usd` is explicitly an estimate, "The server may not need to re-cache the whole context", and `pricing` returns `"default"` when the target has no known price. `context_tokens` is `0` before the first response, so a threshold passes trivially on turn one ([hooks reference](https://code.claude.com/docs/en/hooks#premodelswitch-input)).
+- A hook that calls the network can block a switch by being slow. Exceeding the 30-second budget cancels the switch rather than allowing it.
+- `PostModelSwitch` guidance is best-effort. Unfinished within five seconds of the next prompt, its output moves to the request after; several switches before that request collapse to the last target model only ([hooks reference](https://code.claude.com/docs/en/hooks#postmodelswitch-decision-control)).
+- Gating the switch does not make the switch a good idea. On the Claude pair studied in [The Handoff Tax](../context-engineering/handoff-tax-model-switch-context.md), every mid-task escalation interface cost more than running the strong model throughout on easy and medium tasks. Below a handful of turns the forfeited prefix is small enough that the wiring is the larger cost.
+
+## Key Takeaways
+
+- `PreModelSwitch` covers requested switches only. Automatic fallback and resume-restore reach `PostModelSwitch`, and a fallback-chain turn reaches neither, so no hook can promise a session never runs on a given model.
+- The pre-hook receives `context_tokens` and `estimated_cache_write_usd` before the switch, which is what lets a cost policy be enforced instead of reconstructed from a bill.
+- Timeout blocks, crash allows. Both are the reverse of `PreToolUse`, and the budget here is 30 seconds.
+- Check `to_model` in the script. The matcher runs every hook when the target's canonical name cannot be resolved, which is the case for a gateway-only model ID.
+- Use `"ask"` only where an interactive `/model` is the sole entry point; everywhere else it is read as a refusal.
+
+## Related
+
+- [The Handoff Tax: What a Receiving Model Should Inherit](../context-engineering/handoff-tax-model-switch-context.md) — what should cross the boundary this page lets you stand on
+- [Mid-Session Config Changes as Invisible Cache Invalidators](../patterns/anti-patterns/mid-session-config-cache-invalidators.md) — the cost these hooks let you quote, and the avoidance rule that is cheaper when it is available
+- [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md) — the same veto shape on the compaction boundary, where an indefinite block exhausts the window
+- [Effort-Aware Hooks: Reading the Reasoning Tier from PreToolUse and PostToolUse](effort-aware-hooks.md) — the other half of the session's cache key, exposed to hooks as a signal rather than a gate
+- [Claude Code Hooks](../tools/claude/hooks-lifecycle.md) — the event catalog and matcher semantics these two events inherit
 
 ---
 
@@ -88360,6 +88635,7 @@ Source: https://agentpatterns.ai/verification/
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — Use realistic, telemetry-derived benchmarks to evaluate AI coding tools — synthetic puzzles hide language-specific and task-specific weaknesses
 - [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — Build a small suite over your own tasks to compare model, prompt, and harness as one configuration — and size it to the decision before trusting the ranking
 - [Review-Comment-Derived Benchmarks for Code Review Agents](review-comment-derived-benchmarks.md) — Curate comments trusted reviewers left on merged PRs into frozen-context tasks with a verifier, so the benchmark scores the codebase-specific contracts public benchmarks never encode
+- [Frozen-Base Task Mining for Repository Instruction Files](frozen-base-task-mining.md) — Reverse-apply merged pull requests at one shared base commit so an optimizer cannot learn module paths and APIs that were true months ago; roughly one PR in five survives, and the resulting split is still too small to settle the question
 - [Policy-Graded Evaluation of Coding Agents](policy-graded-agent-evaluation.md) — Score agents at each enforced security tier and report success rate and token cost as separate columns; under a NIST-derived policy success fell up to 18.3 points and cost rose up to 167.3%, on different models
 - [Head-to-Head Evaluation of Competing MCP Servers](head-to-head-mcp-server-evaluation.md) — Score competing MCP servers under one fixed agent configuration and decide on consistency, duration, and cost per quality point, because a small eval rarely separates them on quality
 - [Reading a Coding-Agent Vendor's Security Certificate](vendor-security-certification-scope.md) — A certificate attests organizational controls, product behavior, or both; read the scope statement for which half, which surfaces, which configuration, and how recently
@@ -89249,6 +89525,7 @@ The audit carries one confound of its own: its Gemini endpoint differs from the 
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — measurement gaps a stronger model cannot close.
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — reporting capability and consistency as two numbers.
 - [Measure the Judge Before You Freeze a Gate on It](judge-instrument-stability-check.md) — the judge arm neither floor here covers, plus the across-day axis a same-window rerun misses.
+- [Frozen-Base Task Mining for Repository Instruction Files](frozen-base-task-mining.md) — what the floor costs when the task pool is capped by one repository's history.
 
 ---
 
@@ -94871,6 +95148,66 @@ Models stop after a satisfying number of issues; a higher target prevents premat
 
 ---
 
+### Frozen-Base Task Mining for Repository Instruction Files
+Source: https://agentpatterns.ai/verification/frozen-base-task-mining/
+
+# Frozen-Base Task Mining for Repository Instruction Files
+
+> Reverting merged pull requests at one frozen base commit yields tasks that keep an optimized instruction file true to the repository it ships against.
+
+Frozen-base task mining builds an eval set by reverse-applying each merged pull request at a single shared commit, then grading the agent on the tests that switch from passing to failing. Kozyrev et al. used it to score candidate `SKILL.md` documents on three Kotlin repositories, and report that only after moving to a frozen base did the optimized documents "consistently describe the state of the repository the agent runs against" ([arXiv:2609.12742v1](https://arxiv.org/abs/2609.12742v1)).
+
+## When this applies
+
+Three conditions gate the method, and most repositories fail at least one.
+
+The repository has to survive the mining. Roughly one merged pull request in five becomes a graded task: 119 out of 660 on koog, 131 out of 452 on ktor, and 100 on kotest. Two repositories never reached the 100-task floor three disjoint splits need. A package rename touched all 213 of JetBrains/tracy's production files in three months, leaving 5 tasks from 203 pull requests. http4k kept 150 reverse-applying patches from 700, of which fewer than 100 broke a test when reverted ([arXiv:2609.12742v1](https://arxiv.org/abs/2609.12742v1)).
+
+Your budget has to cover full agent rollouts, $0.84 each on average. Six optimization runs cost $2,013.98 and 69.2 hours of wall clock ([arXiv:2609.12742v1](https://arxiv.org/abs/2609.12742v1)).
+
+The decision has to survive a weak score. GEPA's documents raised the paired score by 4.9pp on average and SkillOpt's by 0.1pp. Neither result is significant at 20 to 26 held-out tasks per repository, and no run cleared p=0.05, the best being p=0.29. At that split size a sign test rejects only when the document wins four of every five disagreements, and pooled over 69 tasks two of every three ([arXiv:2609.12742v1](https://arxiv.org/abs/2609.12742v1)). Mine the tasks to stop the optimizer learning stale facts, then read the document yourself.
+
+## How to build the task set
+
+Pick one base commit and hold it. Split each merged pull request's diff by path into an implementation half and a test half, then reverse-apply the implementation at that base. Three tiers handle the reversion, cheapest first: `git apply --reverse`, structural re-creation or removal for added and deleted files, and an LLM reconstructing the pre-change source for what survives neither. Re-derive the patch from git afterwards rather than taking the model's output ([arXiv:2609.12742v1](https://arxiv.org/abs/2609.12742v1)).
+
+Then validate. Run the suite once at the unmodified base, reverse-apply each gold patch, and re-run. Whichever tests flip become that task's grading target, which also recovers targets for changes that shipped no tests. Reject a task when nothing switches, when the affected tests already failed, or when the reversion breaks so much of the suite that it stops isolating the change ([arXiv:2609.12742v1](https://arxiv.org/abs/2609.12742v1)).
+
+## Why it works
+
+A reflection-driven optimizer writes assertions grounded in whatever repository state its rollouts ran against. Mining forward at each pull request's own parent commit spreads that state across months of history. The optimizer then writes module paths, build invocations, and APIs that were true then and false at the commit the document ships against, and "the agent followed that advice into failures" ([arXiv:2609.12742v1](https://arxiv.org/abs/2609.12742v1)). Reverting at one frozen base puts the training distribution and the deployment state at the same commit. A claim the optimizer can learn is then a claim that holds where the document gets read.
+
+## When this backfires
+
+Per-PR base commits yield several times as many tasks, and statistical power is the resource this method is shortest on. If you are benchmarking a fixed agent rather than optimizing a document, staleness does not apply and the larger pool is the better trade.
+
+Planning to strip the stale claims in review does not rescue the forward direction. The optimizer organizes the document around them: one such artifact opens by instructing the agent to work out which of "two distinct repository shapes" it is in, describing one repository seen at two points in its own history ([arXiv:2609.12742v1](https://arxiv.org/abs/2609.12742v1)).
+
+The reverter is where contamination enters. Only 25 of koog's 119 graded tasks reverse-apply cleanly, 56 of 100 on kotest and 65 of 131 on ktor, so most of the pool comes from the LLM tier, which "introduces defects of its own that the validation gate cannot see" ([arXiv:2609.12742v1](https://arxiv.org/abs/2609.12742v1)). A static check over the reconstructed sources is the compensating control.
+
+## Example
+
+Under a Claude Code harness running Sonnet 4.5, the synthetic benchmark gskill optimizes against leaves the agent at 100% with no skill on one repository, and moves it from 94.8% to 100% on another. Those instances change a median of 4 and 7 lines and sit in a single file in 98% to 100% of cases ([arXiv:2609.12742v1](https://arxiv.org/abs/2609.12742v1)).
+
+Frozen-base tasks are larger: a median of 54 lines across 3 files on koog, 27 lines across 2 files on ktor, and 16 lines within one file on kotest, with 23%, 50%, and 73% of tasks confined to a single file. The agent resolves 53% of them pooled with no document loaded, which is the room a document has to work in ([arXiv:2609.12742v1](https://arxiv.org/abs/2609.12742v1)).
+
+## Key Takeaways
+
+- Fix one base commit before mining. The base the tasks sit at decides whether an optimizer can write a document that is true where it ships.
+- Budget about five merged pull requests per graded task, and one full agent rollout per scored attempt.
+- A repository-sized split cannot settle whether the document helps. Use the tasks to constrain what the optimizer learns, and a maintainer's read to decide whether to merge the result.
+- Treat the LLM reversion tier as a contamination source and add a static check over what it reconstructs.
+
+## Related
+
+- [Review-Comment-Derived Benchmarks for Code Review Agents](review-comment-derived-benchmarks.md) — the other way to mine merged pull requests for eval tasks, aimed at review agents rather than instruction files
+- [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — sizing a small suite to the decision it has to support
+- [Audit the Noise Floor Before Trusting a Benchmark Gap](benchmark-noise-floor-audit.md) — measuring the variance a reported gain has to clear
+- [Evaluating AGENTS.md: When Context Files Hurt More Than Help](../instructions/evaluating-agents-md-context-files.md) — what the published evidence says about whether these documents help at all
+- [Reflective Prompt Evolution with Pareto Selection (GEPA)](../patterns/agent-design/gepa-reflective-prompt-evolution.md) — the optimizer these task sets feed
+
+---
+
 ### Generative Provenance Records for Tool-Using Agents
 Source: https://agentpatterns.ai/verification/generative-provenance-records/
 
@@ -100214,6 +100551,7 @@ A review defect is defined by a contract the diff does not contain. Two of LangC
 - [Human-Review-Driven Curation of Golden Eval Datasets](human-review-golden-dataset-curation.md) — the ongoing curation loop that keeps a suite calibrated after you have built one
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — the reliability check the verifier in this pipeline needs
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — why the same PRs must not both train and grade the agent
+- [Frozen-Base Task Mining for Repository Instruction Files](frozen-base-task-mining.md) — mining the same merged PRs into executable tasks instead of review labels, and why the base commit they sit at matters
 - [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md) — the reviewer architecture these tasks are designed to stress
 
 ---
@@ -104341,6 +104679,7 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — Decompose task authority into a step-level authority context the dispatch layer can check; runtime content may inform the planner but never become the issuer that authorizes a side effect
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — A grant names a subject as well as an effect; a transition envelope decides whether it survives a model, tool, or delegation change, while an immutable ceiling fixed at grant time stops agent-produced evidence from widening it
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — Limit agent access to only what the current task requires; excess permissions directly amplify injection impact
+- [Centrally Provisioned MCP Servers: Remote Transports Only](centrally-provisioned-mcp-servers.md) — `managedMcpServers` pushes HTTP and SSE servers to every user and rejects any entry naming a `command`, `args`, `env`, or `headersHelper`, so a settings document can never start a local process; the drop notice reaches the user, not the administrator
 - [Constraints as a Substrate for Scalable Agent Oversight](constraint-substrate-scalable-oversight.md) — Manage coding agents with the controls used for human teams — access control, network policy, tooling-enforced conventions — so a small, cheap reviewer scales oversight; substrate plus a ~200-line tool lifted a small reviewer's backdoor recall from 54.5% to 90.9%
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — Block agent startup until remote managed settings are freshly validated; exit rather than run with stale or missing policy
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — Writes to `.npmrc`, `.yarnrc`, `bunfig.toml`, `.bazelrc`, `.pre-commit-config.yaml`, and `.devcontainer/` are execution-escalations — interrupt permissive edit modes at the write site, complementing execution-side defaults like `ignore-scripts=true`
@@ -106398,6 +106737,86 @@ Vercel motivates the third trigger with its own DeepSec Bench, on which it says 
 - [Restricted-Access Defensive AI](restricted-access-defensive-ai.md) — gating frontier discovery models to vetted defenders, the same dual-use problem from the supply side
 - [Security Budget as Token Economics](security-budget-token-economics.md) — how far inference spend scales vulnerability discovery within a single attempt
 - [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](cross-repository-security-posture.md) — turning one finding into an organization-wide sweep
+
+---
+
+### Centrally Provisioned MCP Servers: Remote Transports Only
+Source: https://agentpatterns.ai/security/centrally-provisioned-mcp-servers/
+
+# Centrally Provisioned MCP Servers: Remote Transports Only
+
+> An organization pushes MCP servers to every user through managed settings, and the channel refuses any entry that names a program to run.
+
+`managedMcpServers` is a managed-settings key that gives every user in an organization a set of remote MCP servers alongside the ones they add themselves. Claude Code v2.1.259 shipped it on 2 September 2026, and "Earlier clients ignore the key" ([Control MCP server access for your organization](https://code.claude.com/docs/en/managed-mcp#provide-servers-through-managed-settings)). Two conditions bound it. The transport restriction covers this settings channel only, not central provisioning in general, and a rejected entry is recorded on the user's machine rather than at the console where the mistake was made.
+
+## What an entry may contain
+
+Claude Code "loads an entry only when it passes every check below. It drops an entry that fails one, records a notice you can read with `/status`, and still loads the other entries" ([managed-mcp](https://code.claude.com/docs/en/managed-mcp#what-an-entry-can-contain)). The checks:
+
+- `type` is `http` or `sse`, with `streamable-http` accepted as an alias for `http`.
+- `url` is an `https://` URL. Claude Code "refuses a plain `http://` URL, including one that points at `localhost`".
+- The entry has no `command`, `args`, `env`, or `headersHelper` member.
+- No value contains a `${VAR}` reference. Environment variables are not expanded here, so write literal values.
+- The server name uses only letters, numbers, hyphens, and underscores, and no key or value carries control or invisible formatting characters.
+
+The third check reaches further than the release note's "entries that name a command to run are skipped" ([changelog 2.1.259](https://code.claude.com/docs/en/changelog#2-1-259)). Claude Code "executes a `headersHelper` as an arbitrary shell command" ([MCP docs](https://code.claude.com/docs/en/mcp#use-dynamic-headers-for-custom-authentication)), so excluding `command` alone would have left the same reach open under a different key.
+
+## Why it works
+
+Capability is matched to the authority a delivery channel demands, not to the authority the organization nominally holds. The same administrator can distribute a local stdio server, but only through `managed-mcp.json`, whose documented example carries `"type": "stdio"` with a `command`. That file sits at a protected system path: "Any process that can write to a system path with administrator privileges can deploy the file", usually Jamf, Group Policy, or Intune. It "cannot be delivered through server-managed settings" ([managed-mcp](https://code.claude.com/docs/en/managed-mcp#deploy-managed-mcp-json)).
+
+`managedMcpServers` travels the easier route: a settings document a server can hand to a client over the network. Anthropic states the consequence of the exclusion list directly, "so a managed settings document never names a program to run on a user's machine". The supporting checks close the same route by other means. Without `${VAR}` expansion an entry cannot read the user's environment, and with `https://` required it cannot be aimed at a process already listening on the user's own host.
+
+## Who sees a dropped entry
+
+The notice goes to the wrong person. `/status` on the user's machine is the only destination the documentation gives for it, so an administrator who deploys a bad entry has nothing to read at the console, and the user who lost the server has no reason to go looking. One mistake lands squarely in that gap: "Claude Desktop has a managed setting with the same name whose value is an array of a different entry shape, so don't copy one into the other" ([managed-mcp](https://code.claude.com/docs/en/managed-mcp#what-an-entry-can-contain)). Roll out to one machine you can log into before you push to the fleet.
+
+## When this backfires
+
+- The servers you need are local. A filesystem server, a `localhost` database proxy, or an internal service without TLS cannot be provided this way, which pushes you to `managed-mcp.json`. That file takes exclusive control as a side effect: with it deployed, "Users can't add, modify, or use any other MCP servers" ([managed-mcp](https://code.claude.com/docs/en/managed-mcp#exclusive-control-with-managed-mcp-json)).
+- Provisioning is not enforcement. A provided server outranks a same-named entry in local, project, or user scope, and `claude mcp remove` refuses it. Users can still switch it off in `/mcp`, where provided servers appear under Managed MCPs, and their own `deniedMcpServers` blocks it outright ([managed-mcp](https://code.claude.com/docs/en/managed-mcp#what-users-can-see-and-change)).
+- Delivered through server-managed settings, the key is withheld rather than served stale. "If the confirmation fails, the session continues without the provided servers and `/status` says they are withheld", and on a first launch "a `claude -p` run that has already started can finish without them". A CI job depending on a provided tool then fails as though the tool never existed.
+- Header credentials are fleet-wide. "Anyone who can read the managed settings on a machine, including the user, can read a header value you set here." Issue the credential to that whole audience, or drop `headers` and let each user authenticate with OAuth.
+- Nobody on the receiving end vetted the tools. Anthropic "doesn't security-audit or manage any MCP server", and a provided server's tool definitions reach the model on every turn. Central provisioning moves that review from many users at install time to one administrator at push time. See [Vetting Tool Definitions for Exfiltration Signatures](vetting-tool-definitions-before-install.md) for what it has to look for.
+
+## Example
+
+A two-server policy in a managed settings source. The search server uses OAuth, so each user authenticates as themselves. The records server sends a header issued for the whole organization ([managed-mcp](https://code.claude.com/docs/en/managed-mcp#provide-servers-through-managed-settings)).
+
+```json
+{
+  "managedMcpServers": {
+    "search": {
+      "type": "http",
+      "url": "https://search.example.com/mcp"
+    },
+    "records": {
+      "type": "http",
+      "url": "https://records.example.com/mcp",
+      "headers": {
+        "X-Records-Key": "key-issued-for-all-claude-code-users"
+      }
+    }
+  }
+}
+```
+
+Adding `"command": "/usr/local/bin/records-server"` to either entry produces no error at deploy time. The entry stops loading, the other one keeps working, and the notice waits in `/status` on each user's machine.
+
+## Key Takeaways
+
+- The exclusion list is `command`, `args`, `env`, and `headersHelper`, not `command` alone, because `headersHelper` runs as a shell command and would otherwise be an equivalent route.
+- A dropped entry and one you never deployed look identical from the console, so diagnose a missing provided server from a user's `/status` rather than from the settings document you wrote.
+- If your fleet needs a local stdio server, `managedMcpServers` is the wrong key. `managed-mcp.json` carries it, at the cost of exclusive control over every other MCP server.
+- Users keep a per-machine veto through `/mcp` and their own `deniedMcpServers`, so treat provisioning as delivery rather than as a guarantee the server is running.
+
+## Related
+
+- [Enterprise-Managed Plugin Governance for Agent CLIs](enterprise-managed-plugin-governance.md) — the same admin channel applied to the plugin code-load path, where the code does get distributed
+- [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — what to do about the fetch failure that withholds provided servers
+- [Vetting Tool Definitions for Exfiltration Signatures](vetting-tool-definitions-before-install.md) — the install-time review that central provisioning relocates rather than removes
+- [Scoped MCP Server Discovery: Most-Specific-Wins Resolution](../tool-engineering/scoped-mcp-server-discovery.md) — the local, project, and user precedence ladder a provided server sits above
+- [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md) — the adjacent admin ceiling, where teams vary values inside a bound rather than receive them whole
 
 ---
 
@@ -110146,6 +110565,7 @@ The first stage adds a managed marketplace without breaking working sessions. Th
 
 ## Related
 
+- [Centrally Provisioned MCP Servers: Remote Transports Only](centrally-provisioned-mcp-servers.md) — the same managed channel on the MCP path, where the transport restriction stops it distributing anything that runs locally
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md)
 - [Tool Signing and Signature Verification](tool-signing-verification.md)
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md)
@@ -121397,6 +121817,7 @@ A schema-and-description scan is a first-pass net, not a complete defense. Obfus
 
 ## Related
 
+- [Centrally Provisioned MCP Servers: Remote Transports Only](centrally-provisioned-mcp-servers.md) — what happens to this review when an organization pushes the server and no individual sees the install decision
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — the deeper attack taxonomy and runtime defenses (guard models, tool isolation) for the same ToolLeak mechanism this page cites for install-time vetting
 - [Security-Aware Tool Descriptions for MCP Servers (SpellSmith)](security-aware-tool-descriptions-mcp.md) — the opposite case: strengthening a trusted tool's own description rather than refusing an untrusted one
 - [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — a concealment attack on the same reviewed metadata, hiding the payload from the human reviewer rather than the model
@@ -124982,6 +125403,7 @@ Every `gen_ai.*` span and attribute also still carries the Development status ba
 - [Traces Need Feedback to Power Learning](traces-need-feedback-to-power-learning.md) — why a trace without an attached verdict cannot label itself
 - [Circuit Breakers for Agent Loops](circuit-breakers.md) — halting a run on stalled progress, cost, or repetition
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md) — a replayable audit trail across sessions
+- [Completion Summary as the Oversight Surface](../patterns/anti-patterns/completion-summary-as-oversight-surface.md) — what you lose by monitoring the agent's own summary instead of the run it describes
 
 ---
 

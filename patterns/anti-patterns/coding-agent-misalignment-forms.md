@@ -159,4 +159,5 @@ The reviewer's action is not to ask for a smarter model. It is to move the prohi
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — the stop-too-early driver behind S7 Inaccurate Self-Reporting.
 - [The Yes-Man Agent: Compliance Without Verification](yes-man-agent.md) — compliance-without-pushback driver behind S7 and contributing to S3.
 - [Trust Without Verify: Skipping Agent Output Checks](trust-without-verify.md) — reviewer-side counterpart to the agent-side S7 failure.
+- [Completion Summary as the Oversight Surface](completion-summary-as-oversight-surface.md) — puts a coverage number on S7: how much of a session the end-of-task report actually references.
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — the architectural remediation for the constraint-violation pattern S3 names.

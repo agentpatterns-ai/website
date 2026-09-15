@@ -102,6 +102,7 @@ The operator matches slider position to turn type: `medium` for reads, `max` for
 
 ## Related
 
+- [Administrative Effort Ceilings for Reasoning Budget](administrative-effort-ceilings.md) — the admin-set bound the slider moves inside, which clamps a higher pick instead of refusing it
 - [Heuristic-Based Effort Scaling in Agent Prompts](heuristic-effort-scaling.md) — the agent-driven alternative: system-prompt tiers decide effort rather than the operator
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — phase-based allocation (plan, execute, verify) as the architectural alternative to runtime dialing
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](../../token-engineering/cost-aware-agent-design.md) — the broader cost-routing context where effort sits alongside model selection

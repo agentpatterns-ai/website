@@ -83,3 +83,4 @@ The Stop hook runs the entry whether or not the model remembered it, and `"sever
 - [Premature Completion: Agents That Declare Success Too Early](premature-completion.md) — the same silent gap seen from the completion signal rather than the step trace.
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md) — the general rule this instance follows: prompts request, hooks require.
 - [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the other way output checks come back clean: every mandated step runs, and the skill steers which candidate wins.
+- [Completion Summary as the Oversight Surface](completion-summary-as-oversight-surface.md) — the narration side of the same gap: the agent's own report references about a tenth of the steps it took.

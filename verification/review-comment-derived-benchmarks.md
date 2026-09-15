@@ -70,4 +70,5 @@ A review defect is defined by a contract the diff does not contain. Two of LangC
 - [Human-Review-Driven Curation of Golden Eval Datasets](human-review-golden-dataset-curation.md) — the ongoing curation loop that keeps a suite calibrated after you have built one
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — the reliability check the verifier in this pipeline needs
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — why the same PRs must not both train and grade the agent
+- [Frozen-Base Task Mining for Repository Instruction Files](frozen-base-task-mining.md) — mining the same merged PRs into executable tasks instead of review labels, and why the base commit they sit at matters
 - [Agentic Code Review Architecture](../code-review/agentic-code-review-architecture.md) — the reviewer architecture these tasks are designed to stress

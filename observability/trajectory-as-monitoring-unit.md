@@ -86,3 +86,4 @@ Every `gen_ai.*` span and attribute also still carries the Development status ba
 - [Traces Need Feedback to Power Learning](traces-need-feedback-to-power-learning.md) — why a trace without an attached verdict cannot label itself
 - [Circuit Breakers for Agent Loops](circuit-breakers.md) — halting a run on stalled progress, cost, or repetition
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md) — a replayable audit trail across sessions
+- [Completion Summary as the Oversight Surface](../patterns/anti-patterns/completion-summary-as-oversight-surface.md) — what you lose by monitoring the agent's own summary instead of the run it describes

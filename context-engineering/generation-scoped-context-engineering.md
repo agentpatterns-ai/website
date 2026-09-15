@@ -10,7 +10,7 @@ aliases:
   - generation-scoped context engineering
   - context engineering per model generation
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-07-25
+last_reviewed: 2026-09-14
 maturity: emerging
 ---
 
@@ -36,6 +36,8 @@ Claude Code ships tooling for the audit itself: "We've put these best practices 
 ## Why it works
 
 A guardrail in a system prompt is compensation for a specific generation's deficit. Older models wrote wrong comments without a "no comments" rule and attended more to the end of the context window than the start, so the rules earned their tokens. A capability jump lifts the model past the threshold the guardrail compensated for, and the guardrail flips from net benefit to net cost. It becomes a directive the model must reconcile against everything else before acting: Anthropic's own transcripts showed "several conflicting messages in a single request like 'leave documentation as appropriate,' or 'DO NOT add comments'," which the model "must think more carefully about" before deciding ([Anthropic — The new rules of context engineering](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models)). This is the right-altitude idea from Anthropic's [context-engineering guidance](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) moving over time. The correct altitude of a prompt rises as the model improves, so guidance that was correctly specific last generation is over-specified this one.
+
+OpenAI reports the same reversal on its own generation hop, which puts a second vendor on the mechanism. Instructions that pushed a previous model to check its work now overshoot: "Previous models needed encouragement to run tests and check their work. GPT-6 Astra does that on its own, so the same instructions can lead to unnecessary testing" ([OpenAI — Rethinking skills and prompts for GPT-6 Astra](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra)). Boundary language ages the same way. The same post warns that a rule about where to stop can bind harder than intended, because "Astra could take it too seriously and may stop work where you'd actually be happy for it to continue."
 
 ## When this backfires
 
