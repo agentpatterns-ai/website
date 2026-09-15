@@ -52,6 +52,7 @@ A schema-and-description scan is a first-pass net, not a complete defense. Obfus
 
 ## Related
 
+- [Centrally Provisioned MCP Servers: Remote Transports Only](centrally-provisioned-mcp-servers.md) — what happens to this review when an organization pushes the server and no individual sees the install decision
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — the deeper attack taxonomy and runtime defenses (guard models, tool isolation) for the same ToolLeak mechanism this page cites for install-time vetting
 - [Security-Aware Tool Descriptions for MCP Servers (SpellSmith)](security-aware-tool-descriptions-mcp.md) — the opposite case: strengthening a trusted tool's own description rather than refusing an untrusted one
 - [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — a concealment attack on the same reviewed metadata, hiding the payload from the human reviewer rather than the model

@@ -56,6 +56,7 @@ nav:
   - "Auditing & Governance":
       - agent-governance-plane.md
       - agent-retrieval-provenance.md
+      - centrally-provisioned-mcp-servers.md
       - cross-iteration-safety-state.md
       - cryptographic-governance-audit-trail.md
       - defense-in-depth-agent-safety.md

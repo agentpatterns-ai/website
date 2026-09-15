@@ -145,6 +145,7 @@ The first stage adds a managed marketplace without breaking working sessions. Th
 
 ## Related
 
+- [Centrally Provisioned MCP Servers: Remote Transports Only](centrally-provisioned-mcp-servers.md) — the same managed channel on the MCP path, where the transport restriction stops it distributing anything that runs locally
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md)
 - [Tool Signing and Signature Verification](tool-signing-verification.md)
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md)

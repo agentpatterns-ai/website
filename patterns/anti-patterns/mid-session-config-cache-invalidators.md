@@ -7,7 +7,7 @@ tags:
   - context-engineering
   - anti-pattern
   - tool-agnostic
-last_reviewed: 2026-06-02
+last_reviewed: 2026-09-14
 maturity: adopted
 ---
 
@@ -52,6 +52,8 @@ The failure is invisible cost, not the invalidation itself. Mid-session changes 
 - Gateways or `ANTHROPIC_BASE_URL` deployments where caching is unsupported — invalidation does not apply ([§Where the cache lives](https://code.claude.com/docs/en/prompt-caching#where-the-cache-lives)).
 
 Over-correcting is also wrong: several changes commonly assumed to invalidate do not. Editing `CLAUDE.md` mid-session, changing output style, switching permission mode without `opusplan`, invoking skills or slash commands, and running `/recap`, `/rewind`, or spawning a subagent all keep the cache ([§Actions that keep the cache](https://code.claude.com/docs/en/prompt-caching#actions-that-keep-the-cache)).
+
+Cache-safe and inert are the same fact here. A session reuses the system prompt it recorded, so mid-session edits to that prompt text do not reach the model. Claude Code added a flag for people iterating on prompts, `--system-prompt-snapshot off`. It renders "the system prompt fresh on every request instead of reusing the conversation's recorded prompt" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-267)). You get live edits and pay the full prefix on every turn. Use it while tuning a prompt file, not during a long working session.
 
 ## Cache-preserving alternatives
 

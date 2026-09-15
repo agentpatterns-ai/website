@@ -12,7 +12,7 @@ tags:
   - skills
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-08-03
+last_reviewed: 2026-09-14
 maturity: adopted
 ---
 
@@ -49,11 +49,15 @@ Ask three questions in order: what is loaded, what collides, and what actually g
 - `drskill scan` checks 34 issue categories across skills and MCP servers; its first skill check is skills that shadow each other. The `--deep` flag uses a model to judge whether two descriptions collide or two scopes overlap.
 - `drskill audit` reads your traces and reports which skills and tools were actually called, and on which queries.
 
+Claude Code answers the third question in-harness. Its changelog records `/skill-doctor`, which shows "which loaded skills go unused and what they cost in context, so you can prune them" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-261)). That covers usage, not collision, so it replaces `drskill audit` rather than `drskill scan`.
+
 The trace report is the pruning signal that matters. A skill that never appears in traces is either invisible to the router or redundant, and both diagnoses point at its description rather than its length.
 
 ## Why it works
 
 The causal channel is selection interference, not context pressure. An agent chooses a skill by matching the request against the preloaded descriptions, so every added skill is another distractor competing for that match. When a distractor fits the request better than the intended skill, the router picks it every time — Song and Wei's worked case is a video-frame-extraction skill that beat the intended skill on a coin-counting query in every trajectory they ran ([arxiv:2605.24050](https://arxiv.org/abs/2605.24050)). Because the interference happens between descriptions, cutting the candidate set is what recovers accuracy: restricting candidates by retrieval lifts tool selection from 13.62% to 43.13% while roughly halving prompt tokens ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275v1)).
+
+OpenAI's Codex adds a second channel on top of that. It shortens skill descriptions as the catalog grows: "when you add too many skills, Codex starts shortening their descriptions to fit. The model ends up seeing less of each description, making it harder to know which skill to pick" ([Provencher, 2026](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra)). The same post reports that descriptions "can often contradict each other or over-emphasize when skills should be used". Where a harness truncates this way, the description you wrote is not the description the model reads.
 
 ## When this backfires
 

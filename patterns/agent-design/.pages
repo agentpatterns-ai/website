@@ -137,6 +137,7 @@ nav:
       - fleet-irreversibility-budget.md
       - agent-native-filesystem-mediation.md
   - "Reliability":
+      - administrative-effort-ceilings.md
       - agent-circuit-breaker.md
       - agent-client-admission-control.md
       - retry-switch-abstain-recovery-policy.md

@@ -156,6 +156,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 
 Making agents robust — backpressure, idempotency, cost awareness, error recovery, and self-correction.
 
+- [Administrative Effort Ceilings for Reasoning Budget](administrative-effort-ceilings.md) — An admin-set `maxEffortLevel` bounds every operator effort control; caps compose by minimum across settings scopes, and the clamp is silent in headless and background runs
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — Wrap external tools with per-tool failure-tracking state machines that block calls during degraded states, preventing token waste on retry loops
 - [Agent-Client Admission Control for Agentic Traffic](agent-client-admission-control.md) — Retry budgets, honored 429s, and token-denominated buckets let an agent client throttle itself inside the gap between a burst and the autoscaler's response, for traffic you own and with enforcement still on the server
 - [Retry, Switch, or Abstain: Supplying a Tool-Recovery Policy at Runtime](retry-switch-abstain-recovery-policy.md) — Hand the agent a fallback map and recovery constraints in context so it retries, switches tools, or stops — worth up to 16.8 points of robustness, and only where failures are observable

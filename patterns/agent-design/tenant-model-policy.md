@@ -100,6 +100,7 @@ Without the `env` block, a user selecting `Default` in the picker would land on 
 
 ## Related
 
+- [Administrative Effort Ceilings for Reasoning Budget](administrative-effort-ceilings.md) — the same admin tier applied to reasoning depth rather than model choice.
 - [Agent Governance Policies](../../workflows/agent-governance-policies.md) — the broader three-tier policy hierarchy (enterprise → organization → user) Copilot enforces.
 - [Auto Model Selection](auto-model-selection.md) — harness-side routing within the catalog an org rule has filtered.
 - [Gateway Model Routing](gateway-model-routing.md) — the infrastructure-layer alternative when the harness exposes no native admin surface.
