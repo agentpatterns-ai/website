@@ -146,6 +146,7 @@ The orchestrator fans out 20 workers at a time (to stay within API rate limits),
 ## Related
 
 - [Whole-Codebase Visibility as a Migration Prerequisite](../../workflows/whole-codebase-visibility-migration-prerequisite.md) — the scoping check that decides whether a swarm migration needs whole-codebase visibility infrastructure first, and supplies the complete file list this pattern consumes.
+- [Sizing an Agent Migration Fan-Out by Diff Uniformity](../../workflows/agent-fanout-migration-diff-uniformity.md) — the downstream sizing rule that decides how wide this fan-out should go before review becomes the constraint.
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md)

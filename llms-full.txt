@@ -584,6 +584,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Contextual Capability Calibration for Multi-Agent Delegation](patterns/multi-agent/contextual-capability-calibration.md)
 - [Continual Learning for AI Agents: Three Layers of Knowledge Accumulation](patterns/agent-design/continual-learning-layers.md)
 - [Continuation Authority in Agent Migration](patterns/agent-design/continuation-authority-agent-migration.md)
+- [Copilot Auto Tiers: Weighting Cost Against Quality](patterns/agent-design/copilot-auto-tier-selection.md)
 - [Critic Agent Pattern: Dual-Model Plan Review](patterns/agent-design/critic-agent-plan-review.md)
 - [Cross-Cycle Consensus Relay](patterns/agent-design/cross-cycle-consensus-relay.md)
 - [Cross-Tool Subagent Comparison](patterns/multi-agent/cross-tool-subagent-comparison.md)
@@ -1226,6 +1227,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Nonstandard Errors in AI Agents: Model-Family Variance](verification/nonstandard-errors-ai-agents.md)
 - [Overeager-Behavior Elicitation: Scope + Trap Fragments as a Diagnostic for Out-of-Scope Tool Calls](verification/overeager-behavior-elicitation-scope-trap-fragments.md)
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](verification/pass-at-k-t-agentic-rl-eval.md)
+- [Per-Attempt Sandboxes for Agents That Change the Filesystem](verification/per-attempt-eval-sandboxes.md)
 - [Phantom Symbol Detection for LLM API Migration](verification/phantom-symbol-detection.md)
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](verification/planted-bug-observability-calibration.md)
 - [PR Description Style as a Lever for Agent PR Merge Rates](code-review/pr-description-style-lever.md)
@@ -1518,6 +1520,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Semantic Issue Search from Chat vs Query Syntax](workflows/semantic-issue-search-natural-language.md)
 - [Single-Branch Git for Agent Swarms: A Trade-Off Pattern](workflows/single-branch-git-agent-swarms.md)
 - [Single-CLI Agent Platform: Create to Production in One CLI](workflows/single-cli-agent-platform.md)
+- [Sizing an Agent Migration Fan-Out by Diff Uniformity](workflows/agent-fanout-migration-diff-uniformity.md)
 - [Skill Library Refinement Loops: Organizational Feedback for Shared Skills](workflows/skill-library-refinement-loops.md)
 - [Spec-Driven Development with Spec Kit](workflows/spec-driven-development.md)
 - [Staged Literal Porting with a Per-Stage Numeric Oracle](workflows/staged-literal-port-with-numeric-oracle.md)
@@ -23167,6 +23170,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [The Advisor Strategy: Frontier Model as Strategic Advisor](advisor-strategy.md) — Pair a cost-effective executor model with a frontier advisor that provides strategic guidance on hard decisions — within a single API call, no orchestration required
 - [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md) — Automated tooling — type systems, test suites, linters, CI pipelines — creates feedback loops that agents use to self-correct without human intervention
 - [Auto Model Selection: Harness-Driven Routing per Task](auto-model-selection.md) — Vendor-side Auto modes let the harness pick the model per request based on availability, policy, and plan — useful for executor-class work, costly for long sessions and eval-gated CI
+- [Copilot Auto Tiers: Weighting Cost Against Quality](copilot-auto-tier-selection.md) — The efficiency, balance, and intelligence tiers reweight which model auto prefers per prompt; they set no price, no quality floor, and no org policy
 - [Behavioral Drivers of Coding Agent Success and Failure](behavioral-drivers-agent-success.md) — Why agents fail the tasks humans call easy, and the trajectory structure that predicts success — derived from trajectory analysis of 19 agents across 8 frameworks and 14 LLMs
 - [Comparison-Only Advisor: Steering a Large Actor With a Tiny Comparator](comparison-only-advisor.md) — A 0.5B comparator ranks the actor's proposed action against sampled alternatives and hands back the winner as non-binding advice, conditional on an environment you can rewind
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — Assign competing vendor agents to the same task, collect independent results, and let a human or automated gate select the winner
@@ -27016,6 +27020,7 @@ Code-health routing decides before the small model runs; syntax-aware routing de
 
 ## Related
 
+- [Copilot Auto Tiers: Weighting Cost Against Quality](copilot-auto-tier-selection.md) — the per-user efficiency/balance/intelligence setting that reweights this broker's preference without changing its model pool or its billing.
 - [Gateway Model Routing](gateway-model-routing.md) — infrastructure layer that exposes many models behind one endpoint; Auto routing is the policy layer that picks among them.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — within-harness tier selection by task complexity; Auto is the vendor-side counterpart.
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — fan-out across vendors at the agent level, complementary to within-vendor pool routing.
@@ -27023,7 +27028,6 @@ Code-health routing decides before the small model runs; syntax-aware routing de
 - [BYOK Model Token Visibility](../../observability/byok-model-token-visibility.md) — the parallel observability contract for self-hosted routes; both fail the same way when `model_id` is missing.
 - [Utility Model Split](utility-model-split.md) — background-vs-foreground model routing and vendor model fleet partitioning; complements Auto's within-pool selection.
 - [Per-Task Agent Routing Across Coding Harnesses](per-task-agent-routing.md) — the human-side counterpart: picking the harness per task where Auto picks the model per request.
-- [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the taxonomic framework for per-task tier routing across an entire harness; upstream of the tiered, code-health-gated, and syntax-aware variants folded above.
 - [Verification-Centric Development](../../workflows/verification-centric-development.md) — the deterministic gate that makes tier equivalence measurable for code-health-gated routing.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — a small model behind a tool boundary rather than a routed completion peer.
 - [Deterministic Fast Paths](deterministic-fast-paths.md) — the rung below every routing policy, which answers a request without reaching any model.
@@ -30018,6 +30022,75 @@ The promotion gate works for a different reason. Gating activation on a successf
 - [Agent Environment Bootstrapping](../../workflows/agent-environment-bootstrapping.md) — the fresh-provisioning path when no prepared build is available
 - [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — the architectural split that lets a run begin before its sandbox is ready
 - [Cursor Self-Hosted Cloud Agents](../../tools/cursor/self-hosted-cloud-agents.md) — when the runner is yours, the build pipeline and its storage bill are yours too
+
+---
+
+### Copilot Auto Tiers: Weighting Cost Against Quality
+Source: https://agentpatterns.ai/patterns/agent-design/copilot-auto-tier-selection/
+
+# Copilot Auto Tiers: Weighting Cost Against Quality
+
+> Copilot's auto tiers reweight which model auto prefers per prompt. They do not cap spend, pin quality, or reach every surface.
+
+GitHub added three tiers to Copilot auto model selection on 2026-09-14: efficiency, balance, and intelligence ([GitHub Changelog, 2026-09-14](https://github.blog/changelog/2026-09-14-configure-cost-and-quality-in-copilot-auto-model-selection)). Pick one and auto weighs cost, quality, and response time differently on every prompt. That is all of it. The tier reorders preference inside a router that was already choosing for you, and changes nothing about which models are reachable, what a response costs, or who can hold the team to the choice.
+
+## What the tier moves
+
+| Tier | Priority | Typical use |
+|---|---|---|
+| Efficiency | Cost | Fast, straightforward tasks |
+| Balance | Cost, quality, and latency together | Everyday work |
+| Intelligence | Quality | Complex tasks |
+
+Source: [GitHub Docs: about Copilot auto model selection](https://docs.github.com/en/copilot/concepts/models/auto-model-selection).
+
+The same docs draw the limit: "The same models remain available in each tier, but tiered routing changes how preferred models are selected for each task." The changelog states the consequence, and it is the line teams will get wrong: a docstring prompt "may use a small, efficient model even when auto is optimizing for intelligence" ([GitHub Changelog, 2026-09-14](https://github.blog/changelog/2026-09-14-configure-cost-and-quality-in-copilot-auto-model-selection)). Intelligence expresses a preference, not a floor under model capability.
+
+Billing does not move with the tier either. Usage "is still charged based on the model auto selects, regardless of tier", alongside the 10% discount paid plans already receive on auto usage ([GitHub Docs](https://docs.github.com/en/copilot/concepts/models/auto-model-selection)). Efficiency buys a cheaper model mix, not a cheaper rate, so nobody can put a figure on the saving until they have measured one.
+
+## Who owns the setting
+
+GitHub addresses the choice to the individual developer: "Choose the tier that reflects how you want auto to weigh cost, quality, and response time for each prompt" ([GitHub Changelog, 2026-09-14](https://github.blog/changelog/2026-09-14-configure-cost-and-quality-in-copilot-auto-model-selection)). The docs then draw the boundary around where that choice exists: "Auto tiers are only available on VS Code, Copilot CLI, and GitHub Copilot app" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/models/auto-model-selection)). Auto itself runs in more places, including Copilot Chat on the GitHub website, JetBrains, Eclipse, Xcode, Visual Studio, and the cloud agent. None of those take a tier.
+
+Administrators govern the pool, not the dial. Auto will not select models excluded by administrator policies, by plan, by data-residency or FedRAMP restrictions, or by the evaluation-model policy ([GitHub Docs](https://docs.github.com/en/copilot/concepts/models/auto-model-selection)). Neither the announcement nor the docs place the tier under an org or repository setting, so "we run efficiency" is a convention any developer can drop without leaving a trace.
+
+## The acceptance signal you need first
+
+GitHub calls the release "the first step" toward "more visibility into the tradeoffs you're making" ([GitHub Changelog, 2026-09-14](https://github.blog/changelog/2026-09-14-configure-cost-and-quality-in-copilot-auto-model-selection)). Until that visibility lands, the signal in hand is per response: Copilot shows which model answered, on hover in Chat, in the terminal in CLI, and beside Auto in the app ([GitHub Docs](https://docs.github.com/en/copilot/concepts/models/auto-model-selection)).
+
+A per-response label is enough to compare two runs of a fixed task set. It is not enough to watch a team drift over a quarter. The independent case for caring comes from work on routing transparency: "Without clear rationale, developers cannot distinguish between intelligent efficiency -- using specialized models for appropriate tasks -- and latent failures caused by budget-driven model selection" ([Explainable Model Routing for Agentic Workflows, arXiv:2604.03527v1](https://arxiv.org/abs/2604.03527v1)). Move the dial down on a workload you already score, or you will not learn which of the two you got.
+
+## Why it works
+
+The tier reweights an objective inside a scorer that already runs. GitHub describes auto with task optimization as two systems: "One system tracks real-time system health and availability, while the other evaluates task complexity" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/models/auto-model-selection)). A tier tells the second system which of cost, quality, and latency to favor and leaves the candidate set untouched, which is why the same model can answer under any tier. The payoff comes from deciding per prompt across a wide capability spread. GitHub states the aim as "reserving higher-cost reasoning models for problems that truly need it, while routing straightforward tasks to faster, lower-cost models".
+
+The decision also fires where it is cheap. GitHub reports that "Routing occurs along natural cache boundaries to avoid additional cache related costs. Switching models mid-session has shown increased cost without ample improvements in quality." That is GitHub's measurement of its own product, published without its numbers, so read it as design rationale rather than a result.
+
+## When this backfires
+
+- Mixed surfaces. A tier set in VS Code does not travel to a cloud-agent session, to Chat on github.com, or to JetBrains, so a team spanning those clients has a standard covering part of its work.
+- No enforcement. Nothing records that a developer switched back, so the setting holds only while each one remembers it.
+- Reproducibility. Eval-gated CI and compliance attestation need the same model twice, and a preference cannot supply that. Pin instead, as [Auto Model Selection](auto-model-selection.md) sets out, then budget for the pin going stale: "Available models may change over time" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/models/auto-model-selection)).
+- Moving the dial with no per-model quality signal. That is the [Cost-Driven Model Routing Without Quality Monitoring](../anti-patterns/cost-routing-without-quality-monitoring.md) failure arriving through a vendor setting rather than a router you built.
+
+## Example
+
+A team on Copilot CLI wants the cheaper end for a backlog of dependency bumps and changelog edits. Score the current tier on twenty representative tasks, recording the model the terminal shows for each response. Switch to efficiency, rerun the same twenty, and compare review rejections and retries rather than spend. Rejections holding means the mix moved and quality did not. Rejections rising means the dial caught a task class that needed the capable end, which individual results will hide: auto evaluates each prompt on its own, so a tier change shows up as a distribution rather than one swapped model.
+
+## Key Takeaways
+
+- Treat the tier as an intent, not a guarantee. Nothing about it is enforceable: the model set is identical across all three, the rate is identical, and no admin scope sets it.
+- Reach for balance as the standing default and move to efficiency per workload, once you can score that workload. Efficiency on unscored work is the dial doing damage you will not see.
+- Reach for a pin, not intelligence, whenever you need the same model twice. Budget for the pin going stale.
+- If your team works across the cloud agent, JetBrains, or Chat on github.com, write the standard per surface. Tiers reach VS Code, Copilot CLI, and the GitHub Copilot app, and nothing else.
+
+## Related
+
+- [Auto Model Selection: Harness-Driven Routing per Task](auto-model-selection.md) — the routing policy the tiers configure, including the pool, the billing history, and when to pin instead.
+- [Dispatch-Time Reasoning Level for Delegated Agents](dispatch-time-reasoning-level.md) — the cloud agent's own effort control, on a surface the tiers do not reach.
+- [Cost-Driven Model Routing Without Quality Monitoring](../anti-patterns/cost-routing-without-quality-monitoring.md) — what an unmeasured move to the cheap end costs, and the per-tier observability that prevents it.
+- [Routing Break-Even: When a Cheaper Model Actually Pays](routing-break-even.md) — the arithmetic for a router you control, useful for sizing whether the mix shift is worth chasing.
+- [Routing Decision Framework](../../token-engineering/routing-decision-framework.md) — the tool-agnostic map of routing patterns this vendor control sits inside.
 
 ---
 
@@ -68011,6 +68084,7 @@ The orchestrator fans out 20 workers at a time (to stay within API rate limits),
 ## Related
 
 - [Whole-Codebase Visibility as a Migration Prerequisite](../../workflows/whole-codebase-visibility-migration-prerequisite.md) — the scoping check that decides whether a swarm migration needs whole-codebase visibility infrastructure first, and supplies the complete file list this pattern consumes.
+- [Sizing an Agent Migration Fan-Out by Diff Uniformity](../../workflows/agent-fanout-migration-diff-uniformity.md) — the downstream sizing rule that decides how wide this fan-out should go before review becomes the constraint.
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
@@ -81404,6 +81478,7 @@ Four documented failure modes. Each one is the reason the matrix is a *picker*, 
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — the complexity-routing row's canonical page
 - [Gateway Model Routing](../patterns/agent-design/gateway-model-routing.md) — the infrastructure-portability row's canonical page
 - [Auto Model Selection](../patterns/agent-design/auto-model-selection.md) — the vendor-capacity row's canonical page
+- [Copilot Auto Tiers: Weighting Cost Against Quality](../patterns/agent-design/copilot-auto-tier-selection.md) — the one vendor control that exposes the cost-versus-quality weighting directly, and what it does not bound
 - [Cross-Vendor Competitive Routing](../patterns/agent-design/cross-vendor-competitive-routing.md) — the capability-uncertainty row's canonical page
 - [Parsimonious Agent Routing](../patterns/multi-agent/parsimonious-agent-routing.md) — the joint-decomposition-and-budget row's canonical page
 - [Pattern Selection Map](../patterns/selection-map.md) — the model this page applies to routing specifically
@@ -88768,6 +88843,7 @@ Source: https://agentpatterns.ai/verification/
 ## Tooling
 
 - [Eval Environment Containment for Cyber-Capable Agents](eval-environment-containment.md) — An agent that cannot reach its fictional target attacks a real one; enforce isolation at the network layer and verify egress from inside the environment, because a scope statement in the prompt is not a boundary
+- [Per-Attempt Sandboxes for Agents That Change the Filesystem](per-attempt-eval-sandboxes.md) — Give every trial its own clean container when the result is workspace state, emit the dataset, rows, scores and trajectory that keep runs comparable, and keep the verifier outside the container the agent controlled
 - [Test Harness Design for LLM Context Windows](llm-context-test-harness.md) — Terse stdout, verbose log files, and grep-friendly error lines that keep agent context clean and actionable during evaluation runs
 - [Runnable Documentation as Agent Verification](runnable-documentation.md) — Extract inline code examples into standalone files that CI executes on every build so doc rot fails the build the same way broken code does
 - [Verification Surface: Match the Tool to the Failure](verification-surface-reach-and-cost.md) — A controlled study of 1,116 agent builds ranks self-check tools by reach and token cost: a boot probe costs less than no tool at all, a shell costs 2.35x, a linter bought nothing
@@ -94352,6 +94428,8 @@ The prompt failed for the same reason: "you have no internet access" is a claim 
 
 [Source: [Anthropic's incident disclosure](https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals)]
 
+Anthropic later blamed reliance on a single layer of defense, the configuration of the environment itself. Its fix runs a real-time classifier that blocks the action before the tool call executes, ends the task, and alerts a human. It also modified an RL environment variant so that variant does not reward the model for evading the new monitoring. [Source: [Anthropic on improving its alignment and security efforts](https://www.anthropic.com/news/improving-alignment-security-efforts)]
+
 ## When this backfires
 
 - Non-offensive suites do not need it. A coding-agent quality or regression suite gives the agent no objective that rewards reaching an external system, and the observed base rate is three incidents in 141,006 runs.
@@ -94391,6 +94469,7 @@ No. In the most damaging of the three incidents Claude eventually recognized tha
 - [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — sizing a suite to the decision it informs
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md) — the same containment logic applied to production agents
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](../security/agent-network-egress-policy.md) — enforcing a network boundary rather than asserting it
+- [Per-Attempt Sandboxes for Agents That Change the Filesystem](per-attempt-eval-sandboxes.md) — the same container boundary read as a measurement control, where the risk is a contaminated score rather than a real target
 
 ---
 
@@ -98741,6 +98820,79 @@ Yes. pass@k assumes independent attempts, so if your harness shares context, see
 
 ---
 
+### Per-Attempt Sandboxes for Agents That Change the Filesystem
+Source: https://agentpatterns.ai/verification/per-attempt-eval-sandboxes/
+
+# Per-Attempt Sandboxes for Agents That Change the Filesystem
+
+> An agent whose output is filesystem state gets scored by reading the workspace, and that takes a clean sandbox per attempt.
+
+A per-attempt sandbox gives each eval trial its own container, built from a pinned image and thrown away once the verifier has read it. Two claims travel together under the phrase "a clean container per attempt", and only one is settled. That attempts must not inherit each other's state is measured, and it holds. That the container therefore makes the score trustworthy is false as most benchmarks build it. The gap between those two is what this page is about.
+
+## Conditions that make it worth building
+
+- The result is on disk, not in the reply. Terminal-Bench's tests "verify that all outcomes described in the instruction have been achieved by testing properties of the final container state; they do not test the agent's commands or console output" ([Duan and others, 2026](https://arxiv.org/abs/2601.11868v1)). If a grader can read the answer out of the transcript, you are paying image build time for nothing.
+- Something installs. A resettable checkout handles an agent that edits tracked files. It does not handle `apt install`, a global npm package, or a mutated virtualenv.
+- You will compare this week's numbers against last week's. Isolation without stable artifacts gets you a reproducible run you cannot chart.
+
+## Why it works
+
+A reused environment makes the score a function of run order, and the evidence is a before-and-after rather than an argument. SWE-bench first tried conda environments, then added explicit package versioning on top of them. "In hindsight, it is underspecified," its maintainers wrote, because evaluation "remained sensitive to discrepancies originating from different platforms and user-specific configurations, leading to inconsistent results." Per-sample Docker images moved ground-truth reproduction to 99.78% (2289/2294) of SWE-bench tasks and 100% (300/300) of SWE-bench Lite ([SWE-bench, 2024](https://github.com/SWE-bench/SWE-bench/tree/0c0de95298dc502afa94b49bd8384e5f3ef81790/docs/20240627_docker)). Microsoft names the same machine differences as hidden variables, from operating system and shell down to absolute file paths and silent tool updates, and warns that "a model switch that 'improves scores by 8 points' might be entirely explained by the fact that you ran it on a different machine" ([Microsoft, 2026](https://developer.microsoft.com/blog/the-hidden-variables-in-your-agent-eval/)).
+
+## Put the verifier outside the agent's container
+
+A fresh container per attempt bounds contamination between attempts. It does nothing about contamination between the agent and the thing scoring it, because the two normally share one filesystem. Terminal-Bench states it plainly: "Agents run inside a container into which the tests are copied and executed" ([Duan and others, 2026](https://arxiv.org/abs/2601.11868v1)). SWE-bench Verified has the same shape, and an audit describes the consequence. The harness "resets files enumerated in the upstream test patch but does not reset arbitrary files the agent creates, and a conftest.py dropped at the repository root survives the reset and is auto-discovered by pytest" ([Wang and others, 2026](https://arxiv.org/abs/2605.12673v1)). Ten lines of pytest hook then report every test as passing without running one.
+
+That audit found 219 distinct flaws across ten popular agent benchmarks, with synthesized exploits reaching "near-perfect scores on most of the benchmarks without solving a single task" ([Wang and others, 2026](https://arxiv.org/abs/2605.12673v1)). Its isolation checklist leads with the fix, "Run evaluation code outside the agent's container or VM", and where the two genuinely must share one it falls back to read-only mounts for test files and scoring scripts plus OS-level read and write boundaries.
+
+## What a run has to emit
+
+A job directory is per-run and local to the machine that ran it, so comparing across weeks means keeping every folder and sharing a result means zipping one ([Braintrust, 2026](https://www.braintrust.dev/blog/harbor-agent-evals)). Four artifacts survive that: the task cases as a dataset, one row per trial carrying the agent's output alongside the expected answer, verifier rewards converted into named score fields you can chart and filter, and the trajectory of tool calls and model turns behind each score. The last one earns its cost only if somebody opens a failing trial and reads back to the call where the agent went wrong.
+
+## When this backfires
+
+- The verifier lives in the agent's container. You have bought isolation against the wrong adversary and can still be handed a forged score ([Wang and others, 2026](https://arxiv.org/abs/2605.12673v1)).
+- The agent produces an answer rather than an effect. A classifier or summarizer leaves nothing on disk, so [outcome grading](grade-agent-outcomes.md) over the response is cheaper and measures the same thing.
+- Attempts share state the container does not own. A fresh image does not reset a staging database, a third-party API, or a rate-limit counter. Isolation stops at the container edge, which is where [emulated APIs](emulated-apis-for-skill-evals.md) take over.
+- The bill outruns the decision. SWE-bench needs about 120GB of free disk to start, and about 2,000GB to cache instance images for the fast path ([SWE-bench, 2024](https://github.com/SWE-bench/SWE-bench/tree/0c0de95298dc502afa94b49bd8384e5f3ef81790/docs/20240627_docker)). Terminal-Bench 2.0 ran between 32 and 100 containers in parallel to get through 32,155 trials ([Duan and others, 2026](https://arxiv.org/abs/2601.11868v1)). A three-config comparison over ten tasks does not need that machinery, and [sizing the suite to the decision](purpose-built-eval-suites.md) comes first.
+- The image is nothing like production. A developer's machine has a configured language server feeding diagnostics back mid-generation, and "an eval rig running in a container or CI environment might not" ([Microsoft, 2026](https://developer.microsoft.com/blog/the-hidden-variables-in-your-agent-eval/)). You have traded one confound for another.
+
+## Example
+
+Harbor is a Python framework for specifying sandboxed agent tasks, from the team behind Terminal-Bench, and it runs each task in an isolated Docker container. A task holds three files: an environment definition, an instruction for the agent, and a verifier that inspects the container once the agent stops ([Braintrust, 2026](https://www.braintrust.dev/blog/harbor-agent-evals)). Terminal-Bench 2.0 is distributed in that format and ran its published numbers on Daytona sandboxes, repeating each model and agent combination at least five times ([Duan and others, 2026](https://arxiv.org/abs/2601.11868v1)).
+
+One flag turns the local job directory into a synced project carrying the dataset, per-trial rows, score fields, and trajectory listed above ([Braintrust, 2026](https://www.braintrust.dev/blog/harbor-agent-evals)):
+
+```bash
+uv run harbor run \
+  --path task \
+  --agent terminus-2 \
+  --model openai/gpt-4.1-mini \
+  --job-name braintrust-harbor-example \
+  --plugin braintrust \
+  --plugin-kwarg project_name=example-harbor
+```
+
+Note what that command does not settle. Where the verifier sits is a property of the task, not of the runner. The same audit found SkillsBench running "the agent and the verifier in the same Modal-style container under Harbor", with the agent as root and sharing Python site-packages with the tooling the verifier later invokes ([Wang and others, 2026](https://arxiv.org/abs/2605.12673v1)). Portable artifacts make a bad score easier to chart, not harder to forge.
+
+## Key Takeaways
+
+- Score effect-producing agents by reading the final workspace state, because the transcript is an incomplete record of what the agent did.
+- Per-attempt containers are measured, not assumed. SWE-bench went from a conda setup its own maintainers called underspecified to 99.78% ground-truth reproduction.
+- The container boundary that matters most sits between the agent and the verifier, and almost every shipping benchmark puts them on one filesystem.
+- Emit four things per run: the dataset, one row per trial, named score fields from the verifier's rewards, and the trajectory.
+- Skip the whole apparatus when nothing installs, when the answer is in the reply, or when the disk bill is larger than the decision.
+
+## Related
+
+- [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — the grading principle this implements, with a filesystem as the outcome being read
+- [Stateful Agent Evals via State Snapshots and Transition Assertions](stateful-agent-state-and-transition-evals.md) — names a resettable environment as a precondition, then scores the span and trace behavior inside it
+- [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — sizing the suite to the decision, which is what tells you whether the container bill is justified
+- [Eval Environment Containment for Cyber-Capable Agents](eval-environment-containment.md) — the same boundary read as a safety control rather than a measurement control
+- [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — the wider class of failures a tamperable verifier belongs to
+
+---
+
 ### Per-Line Requirement Citations for Hallucination Detection
 Source: https://agentpatterns.ai/verification/per-line-requirement-citations/
 
@@ -102322,6 +102474,7 @@ The span-level check catches the wrong-order refund mid-trajectory; the trace-le
 - [Dominator-Graph Trajectory Invariants for Non-Deterministic Agents](dominator-graph-trajectory-invariants.md) — when branching is real, dominance over trajectory graphs is the trajectory-level alternative to point state assertions.
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — broader framing that situates state assertions within capability-matrix grading and end-state verification.
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — per-stage IR diagnostics that complement state assertions when the failure is "where" rather than "what state".
+- [Per-Attempt Sandboxes for Agents That Change the Filesystem](per-attempt-eval-sandboxes.md) — how to build the resettable environment this technique assumes, and where the verifier has to sit relative to it.
 
 ---
 
@@ -130144,6 +130297,8 @@ On 29 May 2026 the Copilot Usage Metrics API gained `ai_adoption_phase` (user-le
 
 Each entry carries a `version` field (starts at `v1`) so logic can evolve without breaking history. `totals_by_ai_adoption_phase` reports averages per user inside the phase — engaged users, interactions, completion/acceptance activity, lines added/deleted, PRs created/merged/reviewed, median time-to-merge ([GitHub Changelog, 2026-05-29](https://github.blog/changelog/2026-05-29-copilot-usage-metrics-api-adds-cohorts-for-ai-adoption)). Averages, not sums, so phase size never dominates intensity.
 
+On 11 September 2026 the API added `daily_active_vscode_agent_users` and `totals_by_vscode_agent` at the org level, plus a per-user `used_vscode_agent` flag ([GitHub Changelog, 2026-09-11](https://github.blog/changelog/2026-09-11-add-vs-code-agents-to-copilot-usage-metrics)). They cover the dedicated VS Code Agents window only, separate from editor-window Agent Mode. Read `totals_by_vscode_agent` as the IDE-agent population and Phase 1 undercounts.
+
 ## When this applies
 
 The cohort layer is only diagnostic at meaningful scale:
@@ -150494,6 +150649,8 @@ Organization level: org owners control runner configuration, firewall settings, 
 
 Repository level: repository admins can customize within the bounds the org permits, or receive locked settings they cannot override.
 
+GitHub applies the same precedence to AI Scan for pull requests, which it exposes at `/orgs/{org}/code-scanning/ai-scan` and `/repos/{owner}/{repo}/code-scanning/ai-scan`. Repository settings there do not override an organization-level disabled state ([AI Scan for pull request APIs in public preview](https://github.blog/changelog/2026-09-10-ai-scan-for-pull-request-apis-in-public-preview)).
+
 ## Runner configuration
 
 By default, cloud agent runs on `ubuntu-latest`. Org owners can [change the default runner type](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/configure-runner-for-coding-agent) for all repositories:
@@ -153739,6 +153896,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Factory Over Assistant: Orchestrating Parallel Agent Fleets](factory-over-assistant.md) — Shift from watching one agent to orchestrating parallel agents with automated feedback loops — and the infrastructure required to make it viable
 - [The Software Factory Model: Industrializing Agent Loops](software-factory-model.md) — Harness many agent loops into a production line bounded by verification, and decide per loop where the lights stay on for human judgment
 - [Parallel Agent Sessions Shift the Bottleneck from Writing Code to Making Decisions](parallel-agent-sessions.md) — Running multiple simultaneous agent sessions transforms the engineer's role from contributor to tech lead
+- [Sizing an Agent Migration Fan-Out by Diff Uniformity](agent-fanout-migration-diff-uniformity.md) — Script the mechanical majority, fan agents out over the judgment residue, and size the batch by the diffs no pattern and no test suite can approve
 - [Concurrent Agent Pull Requests and Merge-Conflict Cost](concurrent-agent-pr-merge-conflicts.md) — Co-active overlapping agent PRs are the norm; budget for the measured merge-conflict cost and climb a coordination ladder instead of blanket-serializing dispatch
 - [Stacked Agent Sessions on Unmerged Feature Branches](stacked-agent-sessions.md) — Found each agent session on the previous session's unmerged branch so a long modernization lands as an ordered stack of dependent, reviewable pull requests
 - [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md) — Multi-stage agent pipeline that transforms raw QA session documents into investigated, context-rich GitHub issues via codebase investigation
@@ -167004,6 +167162,102 @@ A different team — twelve engineers, multi-cloud (AWS Bedrock for one product,
 
 ---
 
+### Sizing an Agent Migration Fan-Out by Diff Uniformity
+Source: https://agentpatterns.ai/workflows/agent-fanout-migration-diff-uniformity/
+
+# Sizing an Agent Migration Fan-Out by Diff Uniformity
+
+> An agent fan-out buys per-repo adaptation by spending diff uniformity, so size the batch by the diffs no pattern and no test can approve.
+
+Count the repositories where the change needs a judgment call and the tests cannot vouch for the result. That count, not the number of repositories in scope, is the batch one reviewer can absorb. The rest of the migration should still be a script, and the vendor shipping this capability agrees. Sourcegraph's Agentic Batch Changes decides for each piece of a plan "whether the change needs judgment or just needs doing", and "Most of the time it writes a script, because a large migration is mostly the same change made over and over" ([Sourcegraph, 2026-09-14](https://sourcegraph.com/blog/introducing-agentic-batch-changes)). An agent per repository is the minority path inside the product built for this.
+
+## Why an agent fan-out costs more review than a script
+
+Scripted mass change never scaled on reviewer headcount. It scaled by making the review skippable. Google's large-scale change committee commonly directs every review for one change to a single global approver, who does not read the shards one at a time: "Instead of reviewing each change individually, global reviewers use a separate set of pattern-based tooling to review each of the changes and automatically approve ones that meet their expectations. Thus, they need to manually examine only a small subset that are anomalous because of merge conflicts or tooling malfunctions, which allows the process to scale very well" ([Software Engineering at Google, ch. 22](https://abseil.io/resources/swe-book/html/ch22.html)).
+
+The same chapter states the condition. That route applies "for most mechanical LSCs", where one expert can "understand the nature of the change and build automation around reviewing it properly", and it rests on the shards being "semantic-preserving, machine-generated changes" ([Software Engineering at Google, ch. 22](https://abseil.io/resources/swe-book/html/ch22.html)). Uniform diffs are what let one pattern stand in for the reads.
+
+An agent fan-out spends that. Sourcegraph names the purchase: "Where repositories differ, it adapts" ([Sourcegraph, 2026-09-14](https://sourcegraph.com/blog/introducing-agentic-batch-changes)). A diff shaped by per-repo reasoning matches no pattern written for the transformation, so it drops out of auto-approval and lands in a human queue. You bought correctness in the awkward repositories with the property that made the easy ones free. The [swarm migration pattern](../patterns/multi-agent/swarm-migration-pattern.md) describes how to fan the work out; this page is about how wide.
+
+## Three implementation layers
+
+```mermaid
+flowchart TD
+    A[Migration plan] --> B{Needs judgment?}
+    B -->|No| C[Script the change]
+    B -->|Yes| D{Repo has real tests?}
+    C --> E[Approve by pattern]
+    D -->|Yes| F[Approve on green CI]
+    D -->|No| G[Human reads the diff]
+    G --> H[These are the batch]
+```
+
+### Layer 1: Route each plan piece to a script or an agent
+
+Split the migration before dispatching anything. A piece is mechanical when the same edit is correct in every repository that matches it, and it goes to a codemod. A piece needs judgment when the correct edit depends on how the affected code is used locally. Sourcegraph's router makes this call per plan piece and hands the judgment cases to Claude Code or Codex with "specific instructions and codebase context" ([Sourcegraph, 2026-09-14](https://sourcegraph.com/blog/introducing-agentic-batch-changes)). Doing it by hand is cheap, because the split is the plan you already wrote.
+
+### Layer 2: Sort the agent-routed repositories by what vouches for the diff
+
+A diff reaches merge by one of three routes, and only the third costs reviewer attention.
+
+| Route | What vouches for the diff | Available when |
+|-------|---------------------------|----------------|
+| Pattern match | The transformation was reviewed once at the generator, and the diff conforms | The change is scripted and semantics-preserving |
+| Test evidence | The repository's own suite exercises the changed behavior and CI is green | The repository has real tests on the affected paths |
+| A human read | Nothing else | Always |
+
+The second route is what the agent loop supplies: "A diff is not a shipped change, so when CI fails, it reacts" ([Sourcegraph, 2026-09-14](https://sourcegraph.com/blog/introducing-agentic-batch-changes)). It is a real substitute for reading, and it is worth exactly as much as the suite behind it. Check coverage on the paths the migration touches, not overall coverage, because a repository with high overall coverage can have nothing on the call sites you are changing.
+
+### Layer 3: Dispatch the batch the must-read column supports
+
+What lands in the third column is the batch. Plan the run against that number and stage the rest behind it. A team that dispatches 80 repositories and finds 30 in the third column has not scheduled 30 reviews. Those reviews are what decide whether the migration was correct. Where the third column is larger than the week allows, split the run by repository rather than widening the reviewer's day.
+
+## Triggers and constraints
+
+This is a manually triggered workflow, not a scheduled one. The trigger is a specific migration with a known repository list, produced by the scoping step in [whole-codebase visibility as a migration prerequisite](whole-codebase-visibility-migration-prerequisite.md). Two constraints bound the agents' authority: they open pull requests and never merge them, and the mechanical pieces stay outside their reach so the scripted diffs keep the uniformity the pattern approval depends on.
+
+The workflow is tool-agnostic. Sourcegraph's product hands judgment work to Claude Code or Codex ([Sourcegraph, 2026-09-14](https://sourcegraph.com/blog/introducing-agentic-batch-changes)), and the sorting rule does not depend on which agent runs in the repository.
+
+## Why it works
+
+Review scales when a diff can be approved without being read, and each skip route rests on a property the fan-out can remove. Pattern approval rests on uniformity, which per-repo adaptation destroys by design. Test approval rests on coverage, which no agent can create where it does not exist. Google records what happens when neither holds and the batch ships anyway: "local owners don't often treat LSCs with the same rigor as regular changes—they trust the engineers generating LSCs too much... these changes are often given only cursory review" ([Software Engineering at Google, ch. 22](https://abseil.io/resources/swe-book/html/ch22.html)). Google names the asymmetry behind it, in tooling that predates coding agents: "it became easier to generate a large number of changes very cheaply, and it became equally easy for a single engineer to impose a burden on a large number of reviewers across the company" ([Software Engineering at Google, ch. 22](https://abseil.io/resources/swe-book/html/ch22.html)).
+
+Volume by itself degrades outcomes once it passes what reviewers clear. In a different population, open-source drive-by contributions rather than internal migrations, a study across "294 repositories with over 2 million pull requests and issues" found that "while PR volume increased in 2025, merge rates declined, with one-time contributors experiencing an 18.18% drop in PR merge rates relative to the counterfactual" ([Afroz et al., arXiv:2607.04003v1](https://arxiv.org/abs/2607.04003v1)). Plausible machine-authored changes do not get read more carefully when there are more of them.
+
+## When this backfires
+
+- The change is mechanical everywhere. An agent that adapts produces diffs that differ for no semantic reason, which removes the pattern-approval path a codemod would have kept. Script it.
+- Target repositories have thin tests. CI returns green on an unverified adaptation and the reviewer has nothing to read instead of the diff. This case looks safest and is not.
+- No global approver exists. Google can assign all of an LSC's shards to one person holding ownership rights throughout the repository. Where each repository has a distinct owning team, the batch fans out across as many review queues as repositories and nobody sees the change twice.
+- The judgment call is wrong the same way everywhere. A scripted change carries the same blast radius but gets inspected once at the generator. Per-repo agent reasoning has no equivalent central artifact, so a correlated error has nowhere to be caught before it lands in every repository.
+- The batch is under roughly a dozen repositories. The sorting and tracking cost more than doing the work by hand.
+
+## Example
+
+Mercari ran Agentic Batch Changes against a GitHub Actions environment-variable injection vulnerability. Team lead Patrick Klitzke reports: "I was able to fix it with one prompt on both the Help Center frontend and backend, then extended this to all repos in Mercari. I found around 80 potential repos affected." He names why a script was not enough: "you're able to handle repos that have similar, but not identical setups. A normal scripted change would most likely be a text search and replace operation without any context of how it's actually used" ([Sourcegraph, 2026-09-14](https://sourcegraph.com/blog/introducing-agentic-batch-changes)).
+
+At Canva a library migration produced "50+ pull requests across our repos", and senior software engineer William L. reports that the outcome most teams fear did not arrive. It "made the process easier for both reviewers and me" ([Sourcegraph, 2026-09-14](https://sourcegraph.com/blog/introducing-agentic-batch-changes)). Fifty adapted diffs is a batch a team absorbs.
+
+The scale gap in the same post is the part to plan against. The largest single scripted Batch Change Sourcegraph reports merged "more than 2,200 changesets", while across the whole agentic beta customers merged "nearly a thousand changesets" ([Sourcegraph, 2026-09-14](https://sourcegraph.com/blog/introducing-agentic-batch-changes)). Scripted change still runs at a scale adapted change has not reached, which is consistent with a product that routes most of each plan back to a script.
+
+## Key Takeaways
+
+- The number to plan against is the count of repositories where the change needs judgment and the tests cannot vouch for it, not the count in scope.
+- Pattern approval needs uniform diffs and test approval needs real suites. A repository with neither costs a full read.
+- Per-repo adaptation is a purchase and diff uniformity is the price. Pay it only where a script genuinely cannot do the work.
+- Thin coverage on the changed paths is the trap: CI goes green, nothing was verified, and the diff looks approved.
+- Sort the repository list into scripted, CI-vouched, and must-read before dispatching. Repositories past the batch limit get staged into a later run, not squeezed into the same week.
+
+## Related
+
+- [Swarm Migration Pattern](../patterns/multi-agent/swarm-migration-pattern.md) — the dispatch shape upstream of this sizing decision
+- [Whole-Codebase Visibility as a Migration Prerequisite](whole-codebase-visibility-migration-prerequisite.md) — the scoping check that runs before the fan-out
+- [Verification Capacity Saturation: Three Levers, One Default](../verification/verification-capacity-saturation.md) — what a saturated review gate does when nobody picks a lever
+- [Reviewer's Playbook for Agent-Authored Pull Requests](../code-review/reviewers-playbook-agent-authored-prs.md) — how to spend the reads the batch does cost
+- [AI Slop as a Process Problem: Encoding Quality Standards as Pipeline Gates](slop-as-process-problem.md) — moving the standard off the reviewer and into the pipeline
+
+---
+
 ### Skeleton Projects as Agent Scaffolding
 Source: https://agentpatterns.ai/workflows/skeleton-projects-as-scaffolding/
 
@@ -169853,6 +170107,7 @@ Contrast with the opposite case: a deprecation migration confined to one 90K-LOC
 ## Related
 
 - [Swarm Migration Pattern](../patterns/multi-agent/swarm-migration-pattern.md) — the execution layer that consumes the file list this prerequisite produces.
+- [Sizing an Agent Migration Fan-Out by Diff Uniformity](agent-fanout-migration-diff-uniformity.md) — the sizing rule that runs after this check clears, bounding the batch by the diffs nobody can approve without reading.
 - [Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)](../patterns/anti-patterns/large-codebase-agent-failure-patterns.md) — the catalog of failure shapes whose Partial Completion entry is the symptom this prerequisite prevents.
 - [Cross-Repo Agent Search](../tool-engineering/cross-repo-agent-search.md) — the org-scale discovery primitive when the visibility surface is GitHub code search rather than a vendor index.
 - [Indexed Regex Search for Agent Tools](../tool-engineering/indexed-regex-search-agent-tools.md) — the single-repo counterpart when the visibility surface is a local index rather than a remote service.

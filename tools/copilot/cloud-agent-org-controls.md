@@ -6,7 +6,7 @@ tags:
   - copilot
   - security
 applies_to: "copilot@1.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-09-15
 status: current
 ---
 
@@ -32,6 +32,8 @@ One caveat: enterprise and organization policies only control users who hold a [
 Organization level: org owners control runner configuration, firewall settings, repository access scope, and whether repositories can customize any of these defaults.
 
 Repository level: repository admins can customize within the bounds the org permits, or receive locked settings they cannot override.
+
+GitHub applies the same precedence to AI Scan for pull requests, which it exposes at `/orgs/{org}/code-scanning/ai-scan` and `/repos/{owner}/{repo}/code-scanning/ai-scan`. Repository settings there do not override an organization-level disabled state ([AI Scan for pull request APIs in public preview](https://github.blog/changelog/2026-09-10-ai-scan-for-pull-request-apis-in-public-preview)).
 
 ## Runner configuration
 

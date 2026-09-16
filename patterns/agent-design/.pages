@@ -146,6 +146,7 @@ nav:
       - agent-backpressure.md
       - behavioral-drivers-agent-success.md
       - comparison-only-advisor.md
+      - copilot-auto-tier-selection.md
       - cross-vendor-competitive-routing.md
       - decoupled-search-grounding.md
       - deterministic-fast-paths.md
