@@ -86,6 +86,7 @@ Contrast with the opposite case: a deprecation migration confined to one 90K-LOC
 ## Related
 
 - [Swarm Migration Pattern](../patterns/multi-agent/swarm-migration-pattern.md) — the execution layer that consumes the file list this prerequisite produces.
+- [Sizing an Agent Migration Fan-Out by Diff Uniformity](agent-fanout-migration-diff-uniformity.md) — the sizing rule that runs after this check clears, bounding the batch by the diffs nobody can approve without reading.
 - [Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)](../patterns/anti-patterns/large-codebase-agent-failure-patterns.md) — the catalog of failure shapes whose Partial Completion entry is the symptom this prerequisite prevents.
 - [Cross-Repo Agent Search](../tool-engineering/cross-repo-agent-search.md) — the org-scale discovery primitive when the visibility surface is GitHub code search rather than a vendor index.
 - [Indexed Regex Search for Agent Tools](../tool-engineering/indexed-regex-search-agent-tools.md) — the single-repo counterpart when the visibility surface is a local index rather than a remote service.

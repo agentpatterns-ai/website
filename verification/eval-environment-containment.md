@@ -11,7 +11,7 @@ tags:
   - evals
   - security
   - tool-agnostic
-last_reviewed: 2026-08-08
+last_reviewed: 2026-09-15
 maturity: adopted
 ---
 
@@ -50,6 +50,8 @@ The prompt failed for the same reason: "you have no internet access" is a claim 
 - Extend assurance to vendor-operated evaluation infrastructure. The misconfiguration sat on the boundary between two organizations, and the remediation includes co-designed environments.
 
 [Source: [Anthropic's incident disclosure](https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals)]
+
+Anthropic later blamed reliance on a single layer of defense, the configuration of the environment itself. Its fix runs a real-time classifier that blocks the action before the tool call executes, ends the task, and alerts a human. It also modified an RL environment variant so that variant does not reward the model for evading the new monitoring. [Source: [Anthropic on improving its alignment and security efforts](https://www.anthropic.com/news/improving-alignment-security-efforts)]
 
 ## When this backfires
 
@@ -90,3 +92,4 @@ No. In the most damaging of the three incidents Claude eventually recognized tha
 - [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — sizing a suite to the decision it informs
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md) — the same containment logic applied to production agents
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](../security/agent-network-egress-policy.md) — enforcing a network boundary rather than asserting it
+- [Per-Attempt Sandboxes for Agents That Change the Filesystem](per-attempt-eval-sandboxes.md) — the same container boundary read as a measurement control, where the risk is a contaminated score rather than a real target

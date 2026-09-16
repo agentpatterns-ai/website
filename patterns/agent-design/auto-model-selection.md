@@ -222,6 +222,7 @@ Code-health routing decides before the small model runs; syntax-aware routing de
 
 ## Related
 
+- [Copilot Auto Tiers: Weighting Cost Against Quality](copilot-auto-tier-selection.md) — the per-user efficiency/balance/intelligence setting that reweights this broker's preference without changing its model pool or its billing.
 - [Gateway Model Routing](gateway-model-routing.md) — infrastructure layer that exposes many models behind one endpoint; Auto routing is the policy layer that picks among them.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — within-harness tier selection by task complexity; Auto is the vendor-side counterpart.
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — fan-out across vendors at the agent level, complementary to within-vendor pool routing.
@@ -229,7 +230,6 @@ Code-health routing decides before the small model runs; syntax-aware routing de
 - [BYOK Model Token Visibility](../../observability/byok-model-token-visibility.md) — the parallel observability contract for self-hosted routes; both fail the same way when `model_id` is missing.
 - [Utility Model Split](utility-model-split.md) — background-vs-foreground model routing and vendor model fleet partitioning; complements Auto's within-pool selection.
 - [Per-Task Agent Routing Across Coding Harnesses](per-task-agent-routing.md) — the human-side counterpart: picking the harness per task where Auto picks the model per request.
-- [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the taxonomic framework for per-task tier routing across an entire harness; upstream of the tiered, code-health-gated, and syntax-aware variants folded above.
 - [Verification-Centric Development](../../workflows/verification-centric-development.md) — the deterministic gate that makes tier equivalence measurable for code-health-gated routing.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — a small model behind a tool boundary rather than a routed completion peer.
 - [Deterministic Fast Paths](deterministic-fast-paths.md) — the rung below every routing policy, which answers a request without reaching any model.

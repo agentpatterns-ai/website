@@ -118,3 +118,4 @@ The span-level check catches the wrong-order refund mid-trajectory; the trace-le
 - [Dominator-Graph Trajectory Invariants for Non-Deterministic Agents](dominator-graph-trajectory-invariants.md) — when branching is real, dominance over trajectory graphs is the trajectory-level alternative to point state assertions.
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — broader framing that situates state assertions within capability-matrix grading and end-state verification.
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — per-stage IR diagnostics that complement state assertions when the failure is "where" rather than "what state".
+- [Per-Attempt Sandboxes for Agents That Change the Filesystem](per-attempt-eval-sandboxes.md) — how to build the resettable environment this technique assumes, and where the verifier has to sit relative to it.
