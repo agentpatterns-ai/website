@@ -113,3 +113,4 @@ The anti-pattern label is over-broad in five cases:
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md) — the broader anti-pattern that "filter tool output but not tool errors" exemplifies.
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — developer mental-model failure that error streams inherit when treated as system diagnostics rather than artifacts.
 - [Verbatim Failure Records in Small-Model Agent Transcripts](verbatim-failure-records.md) — the non-adversarial cost of the same error frame: the failed call's own text raises the odds the model sends it again.
+- [Unsignalled Tool Failure: Returning Success With an Unusable Payload](unsignalled-tool-failure-envelope.md) — the cost of the opposite choice: suppress the error frame and the model fabricates a value instead.

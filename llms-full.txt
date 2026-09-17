@@ -1598,6 +1598,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Bottleneck Migration When Humans Supervise Agents](human/bottleneck-migration.md)
 - [The Citizen-Agent-Expert Operating Model for AI Coding](human/citizens-agents-experts-operating-model.md)
 - [The Context Ceiling -- Where AI Fails Expert Architects](human/context-ceiling.md)
+- [The First Edit Predicts Whether an AI Completion Survives](human/first-edit-predicts-completion-abandonment.md)
 - [The Productivity-Experience Paradox in AI-Assisted Development](human/productivity-experience-paradox.md)
 - [Visible Thinking in AI-Assisted Development](human/visible-thinking-ai-development.md)
 - [Intervention Rate as a Diagnostic North Star, Not a Target](human/intervention-rate-diagnostic-north-star.md)
@@ -1705,6 +1706,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Treating Agent Safety as Uniform Across a Session (Cold-Start Safety Gap)](patterns/anti-patterns/cold-start-safety-gap.md)
 - [Trusting Human Review to Catch Deliberate Agent Sabotage](patterns/anti-patterns/deliberate-agent-code-sabotage.md)
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](patterns/anti-patterns/tool-error-implicit-authority.md)
+- [Unsignalled Tool Failure: Returning Success With an Unusable Payload](patterns/anti-patterns/unsignalled-tool-failure-envelope.md)
 - [Verbatim Failure Records in Small-Model Agent Transcripts](patterns/anti-patterns/verbatim-failure-records.md)
 - [When Developers Understand Less of Their Own Codebase](patterns/anti-patterns/comprehension-debt.md)
 - [Density-Normalized Quality Metrics Mask AI-Driven Code Growth](patterns/anti-patterns/density-normalized-quality-metric.md)
@@ -43913,7 +43915,7 @@ Source: https://agentpatterns.ai/patterns/agent-design/routing-break-even/
 
 `minimum offload = judge cost / (expensive cost - cheap cost)` gives the fraction of turns you must send to the cheap model before routing costs less than sending everything to the frontier model. LangChain publishes the rule after benchmarking NVIDIA's [NeMo Switchyard](https://github.com/NVIDIA-NeMo/Switchyard) router across 145 agent tasks ([LangChain, 11 August 2026](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
 
-Replit routes between models per request rather than pinning every request to one model, the arrangement this formula prices ([Replit, 26 August 2026](https://replit.com/blog/intelligent-model-routing)). The announcement carries no prices, so it confirms the decision is live in production and settles none of the numbers.
+Replit routes between models per request rather than pinning every request to one model, the arrangement this formula prices ([Replit, 26 August 2026](https://replit.com/blog/intelligent-model-routing)). The announcement carries no prices, so it confirms the decision is live in production and settles none of the numbers. Microsoft's developer blog argues the same premise, that the most capable model is not always the right one for the work ([Microsoft, 9 September 2026](https://devblogs.microsoft.com/blog/your-work-might-not-need-the-smartest-model/)). It states that position without pricing it, so nothing there changes the arithmetic below.
 
 ## What the calculation can decide
 
@@ -50374,6 +50376,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Scoped-Looking Permission Grants](scoped-looking-permission-grants.md) — A permission rule naming one interpreter or runner permits every command; 3.1% of 2,660 scanned agent setups write one and 3.8% ship one inside a published skill
 - [Answer-Reachable Eval Environments](answer-reachable-eval-environments.md) — Agents reach the fix through git refs, upstream, or leftover artifacts in 45.1-82.4% of SWE-bench Multilingual runs; scrubbing the container beats appending an originality instruction, which still costs up to 13.3 Pass@1 points
 - [Treating a Clean Static Scan as Security Evidence](static-clean-as-security-evidence.md) — Sandboxed exploit tests confirmed vulnerabilities in 83 of 654 Python files that Bandit and Semgrep both cleared, and the confirmation rate swings from 5.4% on a curated benchmark to 33.7% on adversarial code
+- [Unsignalled Tool Failure: Returning Success With an Unusable Payload](unsignalled-tool-failure-envelope.md) — A tool wrapper that returns status:ok around a redacted or corrupted value leaves the model to infer the failure; dishonesty is 0.0% when the envelope reports the error and reaches 45.3% when it does not
 
 ---
 
@@ -51897,6 +51900,7 @@ The pattern is a problem specifically when (a) the tool has known unreliability 
 - [Incremental Verification](../../verification/incremental-verification.md) — the constructive counterpart: build the orthogonal signal an agent can actually verify against.
 - [Inference-Time Tool Call Reviewer](../agent-design/inference-time-tool-call-reviewer.md) — pattern that surfaces a separate review pass over tool calls before they propagate.
 - [LLM Support During the First Detection Pass](llm-support-first-detection-pass.md) — the human-side measurement: a reviewer anchoring on a model's candidate list instead of reading the artifact.
+- [Unsignalled Tool Failure: Returning Success With an Unusable Payload](unsignalled-tool-failure-envelope.md) — what deference becomes when the tool returns nothing usable and says so in a success envelope.
 
 ---
 
@@ -61657,6 +61661,7 @@ The anti-pattern label is over-broad in five cases:
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md) — the broader anti-pattern that "filter tool output but not tool errors" exemplifies.
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — developer mental-model failure that error streams inherit when treated as system diagnostics rather than artifacts.
 - [Verbatim Failure Records in Small-Model Agent Transcripts](verbatim-failure-records.md) — the non-adversarial cost of the same error frame: the failed call's own text raises the odds the model sends it again.
+- [Unsignalled Tool Failure: Returning Success With an Unusable Payload](unsignalled-tool-failure-envelope.md) — the cost of the opposite choice: suppress the error frame and the model fabricates a value instead.
 
 ---
 
@@ -61736,6 +61741,101 @@ The counted path is now the one that loops, and an empty-result run ends in an e
 - [Stuck-Loop Recovery](../../loop-engineering/stuck-loop-recovery.md) — the recovery ladder once detection flags a non-converging loop; this page owns the failure taxonomy, that page owns recovery
 - [Agent Loop Go/No-Go Gate](../../loop-engineering/agent-loop-go-no-go-gate.md) — the upstream decision of whether a feedback loop earns its cost at all
 - [Circuit Breakers for Agent Loops](../../observability/circuit-breakers.md) — the harder runtime stop that trips when a bound is breached
+
+---
+
+### Unsignalled Tool Failure: Returning Success With an Unusable Payload
+Source: https://agentpatterns.ai/patterns/anti-patterns/unsignalled-tool-failure-envelope/
+
+# Unsignalled Tool Failure: Returning Success With an Unusable Payload
+
+> An agent told its tool failed reports the failure. Hand it a success envelope around an unusable payload and it asserts a value.
+
+## The anti-pattern
+
+Your tool wrapper catches the exception, logs it, and returns `status: ok` with whatever it has. The agent must now work out on its own that the value in the answer field is not an answer, and it mostly does not. Sethi et al. built a 1,024-item benchmark that enforces the tool call and guarantees the returned payload is unusable. Under a deployment-style system prompt, 14.10% of responses are dishonest: the model asserts a value the payload cannot support, or declines while citing a limit the tool response does not support ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1)).
+
+The split by envelope is categorical rather than graded. Under `status: error`, dishonesty is 0.0% for both `HTTP_500` and `TIMEOUT`, and at most 1.2% in any prompt condition tested. Under `status: ok` with the value withheld, it reaches 45.3% ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1)). Redaction and corruption are the worst cases, because a syntactically present but semantically empty string occupies the slot the answer belongs in. Truncation, where the value is visibly missing, costs 3.5%.
+
+The prompt is a weak lever next to that: a neutral prompt carrying no tool-use instruction still produces 10.17%, and shipped framework prompts run from 12.06% (smolagents) to 24.67% (CrewAI). Nine frameworks were audited, and none specifies what the model should do when a tool fails ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1)).
+
+## When this applies
+
+Two conditions carry the claim. The agent must be asking for an exact value it cannot derive by reasoning, such as a balance or a deploy status, because the benchmark is built from those. And the failure must arrive shaped like a result, which is why the study finds redaction and corruption the most hazardous failure types and truncation the least ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1)).
+
+## Why it works
+
+Two causes stack, and the paper's ablation separates them.
+
+Nothing in the input declares the failure, so the model has to infer it. The authors read this through the instruction hierarchy, which "assigns tool outputs lower priority than system and user instructions" ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1), citing [Wallace et al., 2024](https://arxiv.org/abs/2404.13208v1)), so a corrupted string inside a success envelope is not something the model is trained to escalate on. They put the result plainly: the model "reports failure accurately when it is told of the failure, and asserts a value when it must infer the failure itself" ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1)).
+
+The prompt then names no state the model may occupy instead of answering. Three defenses were compared on the same 688 in-scope items, and all three require the model to check the payload. Verification replacing deference reaches 4.51%, verification appended with no named fallback reaches 6.54%, and a required `retrieval_status: OK` or `retrieval_status: FAILED` line before the answer reaches 0.87% ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1)). Their reading: "The operative variable is therefore the absence of a failure branch rather than deference itself."
+
+```mermaid
+graph LR
+    A["Tool call fails<br/>(redacted / stale / corrupt)"] --> B{"Envelope"}
+    B -->|"status: error"| C["Model reports failure<br/>0.0%"]
+    B -->|"status: ok + unusable value"| D["Model asserts a value<br/>up to 45.3%"]
+
+    style D fill:#b60205,color:#fff
+```
+
+## Example
+
+The fix that needs no model cooperation sits in the wrapper.
+
+**Before** — the failure is swallowed and reported as success:
+
+```python
+def get_balance(account_id: str) -> dict:
+    try:
+        row = ledger.fetch(account_id)
+    except (TimeoutError, PermissionError):
+        return {"status": "ok", "balance": None}   # failure disappears here
+    return {"status": "ok", "balance": row.balance}
+```
+
+**After** — every unusable payload becomes an error envelope, including ones that arrived without raising:
+
+```python
+UNUSABLE = (None, "", "[REDACTED]", "***")
+
+def get_balance(account_id: str) -> dict:
+    try:
+        row = ledger.fetch(account_id)
+    except (TimeoutError, PermissionError) as exc:
+        return {"status": "error", "reason": type(exc).__name__}
+    if row.balance in UNUSABLE or row.stale:
+        return {"status": "error", "reason": "value_unavailable"}
+    return {"status": "ok", "balance": row.balance}
+```
+
+For a tool you do not own, the prompt fallback appends one sentence requiring a `retrieval_status: OK|FAILED` line ahead of the answer. Appended to shipped framework prompts with nothing else changed, it moves CrewAI from 28.29% to 6.09%, LlamaIndex from 13.41% to 3.56%, and smolagents from 12.06% to 5.81% ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1)). The line is also greppable: across four evaluation slices, 99.69% to 99.89% of `FAILED` declarations were independently labeled honest reports.
+
+## When this backfires
+
+The envelope fix is cheap and deterministic. The prompt fallback carries three costs, and the benchmark can see none of them:
+
+- Over-abstention on good payloads is unmeasured. All 1,024 items return an unusable payload, so the study has no successful-retrieval control and no false-`FAILED` rate. Naming an abstention option is a behavior trigger in its own right: adding an "Unknown" option produces "serious accuracy drops on True/False Questions", and an unrelated random word in its place has "an identical effect" ([Ling et al., 2026 — arXiv:2507.16199v7](https://arxiv.org/abs/2507.16199v7)).
+- A mandatory output line is a format restriction, and format restrictions cost reasoning performance, with stricter constraints costing more ([Tam et al., 2024 — arXiv:2408.02442v3](https://arxiv.org/abs/2408.02442v3)). One line sits at the mild end, and the paper measures no task accuracy to net against it.
+- The flag is not a correctness certificate. The authors observed responses carrying a correct `FAILED` flag above an unfaithful justification ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1)).
+
+Treat the absolute rates with the caution the authors do: one generation model on the main grid, a judge from the same model family, and 30 human-validated items from a single annotator ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1)).
+
+## Key Takeaways
+
+- Post-failure honesty is a property of the envelope. Signalled failures produce 0.0% dishonesty and unsignalled ones up to 45.3%, and that split dominates every prompt variable tested ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1)).
+- Fix it in the tool wrapper first. Turning redacted, stale, corrupted, and empty payloads into `status: error` costs nothing at inference and does not depend on the model obeying an instruction.
+- Where you cannot change the envelope, name a failure state instead of adding another "check the payload" line: 0.87% against 4.51% and 6.54% for defenses that verify without naming a fallback ([arXiv:2609.14758v1](https://arxiv.org/abs/2609.14758v1)).
+- Before shipping that sentence, measure how often it declares `FAILED` on a payload that was fine. The benchmark could not.
+
+## Related
+
+- [Blind Tool Deference](blind-tool-deference.md) — the success-path sibling, where agents adopt a working tool's output wholesale.
+- [Trusting Tool Error Messages as Implicit Authority](tool-error-implicit-authority.md) — the security cost of the error channel this page tells you to use.
+- [Silent-Failure Mechanism Taxonomy](silent-failure-mechanism-taxonomy.md) — the runtime-wide cut of failures whose signal never reaches a human.
+- [Informed Abstention as a Tool-Boundary Runtime Gate](../agent-design/informed-abstention-tool-boundary-gate.md) — the gate that fires before the call, not after it returns.
+- [Defense-in-Depth Against Coding Agent Fabrication](../../verification/honesty-harness-fabrication-defense.md) — the layered defense a named failure state slots into.
 
 ---
 
@@ -129274,6 +129374,7 @@ Source: https://agentpatterns.ai/human/
 - [Judgment Relocation: Where Human Decisions Land in an Agent Factory](judgment-relocation.md) — Which five decisions keep a human owner once agents write the code, and the four conditions — capacity, comprehension, trustworthy signals, a return path — that separate a real owner from a nominal one
 - [Agent Time Estimates Are Not Schedules](agent-time-estimates-not-schedules.md) — A coding agent's duration estimate reproduces the human timeline in its training data; rank scope with it, then bound the run with turn and tool-call caps and measure wall-clock on comparable past runs
 - [The Citizen-Agent-Expert Operating Model for AI Coding](citizens-agents-experts-operating-model.md) — Where engineering value moves when AI writes most of the code: citizens originate, agents execute, and experts govern the guardrails that let generated code reach production
+- [The First Edit Predicts Whether an AI Completion Survives](first-edit-predicts-completion-abandonment.md) — Across 53.6K in-IDE edits, customizing a completion first precedes abandoning it 23% of the time against 12% for functionality changes, with the conditions that bound the signal
 
 ---
 
@@ -132005,6 +132106,7 @@ The paper names no repository for either excerpt. Read them as illustrations, no
 ## Related
 
 - [Suggestion Gating](suggestion-gating.md) — adoption rate and inference-waste data for ambient completion, the channel adjacent to chat refactoring
+- [The First Edit Predicts Whether an AI Completion Survives](first-edit-predicts-completion-abandonment.md) — post-acceptance editing measured on in-IDE inline completions, the channel this page scopes itself out of
 - [Human-AI Review Synergy](../code-review/human-ai-review-synergy.md) — AI review-suggestion adoption rates from a different study, contrasting the refactoring-specific finding here
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — broader context for why prompt completeness matters more than raw model speed
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — empirical evidence on how experienced developers supervise AI output
@@ -134106,6 +134208,65 @@ Rapidly expanding context windows. Frontier models have moved from 4K to 1M toke
 - [Agent-Driven Greenfield Product Development](../workflows/agent-driven-greenfield.md) -- designing tasks at context-window-safe granularity
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) -- the cognitive overhead experts bear when verifying AI output
 - [Rigor Relocation](rigor-relocation.md) -- how engineering discipline adapts when agents operate above the ceiling
+
+---
+
+### The First Edit Predicts Whether an AI Completion Survives
+Source: https://agentpatterns.ai/human/first-edit-predicts-completion-abandonment/
+
+# The First Edit Predicts Whether an AI Completion Survives
+
+> Developers who open by customizing an AI completion abandon it 23% of the time, against 12% for those who change its functionality first.
+
+Renaming a completion's variables and adjusting its literals is the opening move most associated with discarding the whole thing later ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)). Fixing an error in it, or changing what it does, is not.
+
+## What the evidence covers, and what it does not
+
+This comes from DECODE, 53,614 before-after code pairs across 5,831 edit trajectories from 1,141 developers, collected by a VS Code extension that snapshots the working file whenever the developer pauses for one second ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)). Four conditions bound it:
+
+- Inline completions, not agent diffs. The median completion is 97 characters, 9 lines ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)).
+- Python, JavaScript and TypeScript only.
+- Accepted completions only. The authors state DECODE "only includes edits to accepted AI-generated code", excluding "rejected completions, human-written code, and code obtained from outside the VS Code extension" ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)).
+- No cost is measured on either branch. The study never times rewriting against repairing. Read what follows as a diagnostic signal, not as a recommendation to discard near-misses.
+
+## The signal
+
+Developers who first try to customize a completion, meaning they rename variables or change parameters and literals without altering behavior, go on to remove it 23% of the time. A first quality fix leads to removal 14% of the time, a first functionality change 12% ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)).
+
+Removal edits also arrive earliest, at a mean of 23.6 minutes after acceptance, quality edits at 28.3, customizing at 49.3 and functionality changes at 59.2, with the ordering significant under a Kruskal-Wallis test (H=394.5, p<0.001) ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)). A second 23% appears in the same analysis measuring something else: that share of trajectories removes the completion on the very first edit, and 40% of those then change functionality, which the authors read as developers writing their own implementation instead ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)).
+
+None of this is model-specific. Across the 20 models in the dataset the differences in editing behavior reach statistical significance but the effect sizes are small, at eta-squared 0.002 and 0.007 and Cramer's V 0.05 ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)).
+
+That makes it a prompt, not a rule. When your first instinct is to rename and re-parameterize rather than fix or extend, make the keep-or-discard call then, not after the customizing work is done.
+
+## Why it works
+
+A median 63% of the original completion survives, but the distribution is bimodal: "for a majority of the time, AI-generated code is either accepted with few modifications or almost completely removed" ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)). There is not much of a middle to converge on, so the question is which mode you are in.
+
+The edit types sort you into a mode because they diagnose different faults. A visibly broken completion gets a quality fix. One that needs different behavior gets a functionality change. Both are faults you can see. Customizing is what you reach for when the completion looks right and is off on intent, and that is the case the authors single out: "This suggests that AI completions that subtly do not align with a developer's intent or programming context are difficult for developers to adapt" ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)). The paper names the missing quantity as editability, how readily code adapts when it is not immediately usable, and says no good metric for it exists.
+
+## When this backfires
+
+- On agent output. A 9-line completion and a 40-file agent change are not the same decision, and nothing here was measured on the latter.
+- When you accepted the completion because you did not know the API. Customizing is how you learn the call, and writing it yourself is not an option.
+- When correctness is invisible to edit distance. Every retention metric in the study is Levenshtein-based ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)), so a semantically wrong completion needing a one-character fix scores as fully retained.
+- As a ritual on every suggestion. A median 63% of completions survive and 56% of all edit snapshots are functionality changes ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2)), so keeping and editing is the common outcome. A keep-or-discard checkpoint on each one taxes the common case to catch a minority.
+- As evidence that rewriting is faster. Developers who customize first abandon more often, and the study cannot say whether starting over would have finished sooner. They may have been customizing completions that were already marginal.
+
+## Key Takeaways
+
+- Customize-first is the highest-abandonment opening move at 23%, against 14% for quality fixes and 12% for functionality changes ([Liang et al., 2026](https://arxiv.org/abs/2607.25130v2))
+- Retention is bimodal, so there is little middle ground to converge on and the useful question is which mode a completion is already in
+- Removal decisions already cluster early, at a mean of 23.6 minutes against 59.2 for functionality edits, so the keep-or-discard call is one developers make up front whether or not they name it
+- The behavior holds across 20 models with small effect sizes, so switching models is not the lever
+- The study measures no cost on either branch and excludes rejected completions, so it bounds what the signal can be used for: deciding sooner, not deciding to rewrite
+
+## Related
+
+- [LLM Refactoring Adoption Patterns](llm-refactoring-adoption-patterns.md) — five patterns for modifying chat-initiated refactors, the channel that page scopes itself to and this one does not
+- [Suggestion Gating](suggestion-gating.md) — the other side of the accept decision, where a classifier filters completions before they are shown
+- [Blind Resampling Over Self-Repair in Small Code Models](../loop-engineering/blind-resampling-over-self-repair.md) — the model-side analogue on benchmark data, where discarding beats repairing below roughly 7B
+- [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — how experienced developers supervise and validate AI output more broadly
 
 ---
 
