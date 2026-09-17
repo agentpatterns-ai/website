@@ -131,6 +131,7 @@ The paper names no repository for either excerpt. Read them as illustrations, no
 ## Related
 
 - [Suggestion Gating](suggestion-gating.md) — adoption rate and inference-waste data for ambient completion, the channel adjacent to chat refactoring
+- [The First Edit Predicts Whether an AI Completion Survives](first-edit-predicts-completion-abandonment.md) — post-acceptance editing measured on in-IDE inline completions, the channel this page scopes itself out of
 - [Human-AI Review Synergy](../code-review/human-ai-review-synergy.md) — AI review-suggestion adoption rates from a different study, contrasting the refactoring-specific finding here
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — broader context for why prompt completeness matters more than raw model speed
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — empirical evidence on how experienced developers supervise AI output

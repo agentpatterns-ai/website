@@ -103,3 +103,4 @@ The pattern is a problem specifically when (a) the tool has known unreliability 
 - [Incremental Verification](../../verification/incremental-verification.md) — the constructive counterpart: build the orthogonal signal an agent can actually verify against.
 - [Inference-Time Tool Call Reviewer](../agent-design/inference-time-tool-call-reviewer.md) — pattern that surfaces a separate review pass over tool calls before they propagate.
 - [LLM Support During the First Detection Pass](llm-support-first-detection-pass.md) — the human-side measurement: a reviewer anchoring on a model's candidate list instead of reading the artifact.
+- [Unsignalled Tool Failure: Returning Success With an Unusable Payload](unsignalled-tool-failure-envelope.md) — what deference becomes when the tool returns nothing usable and says so in a success envelope.
