@@ -110,10 +110,10 @@ Streaming is event-based rather than async-iterable: `assistant.message_delta` f
 ## Related
 
 - [Embedding the Copilot SDK in a Managed Java Runtime](copilot-sdk-managed-runtime.md)
+- [Bounding an Embedded Copilot SDK Agent's Tool Set](copilot-sdk-tool-scoping.md) — narrowing the runtime's tools for a non-coding application, and what a handoff orchestrator adds back at invocation
 - [Agent Mode](agent-mode.md)
 - [Coding Agent](coding-agent.md)
 - [MCP Integration](mcp-integration.md)
-- [Agent HQ (Multi-Agent Platform)](agent-hq.md)
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md)
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](../../token-engineering/cost-aware-agent-design.md)

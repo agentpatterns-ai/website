@@ -138,3 +138,4 @@ Run `/list-agents`, also available as `/peers`. An unrecognized command means th
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — what to transfer when the whole task moves rather than one fact
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](../../security/authority-confusion-untrusted-context.md) — the invariant the inbound contract implements
 - [Agent View](../../tools/claude/agent-view.md) — watching many sessions from one place, which reports to you rather than between sessions
+- [Peer Refusal as a Coordination Control](../anti-patterns/peer-refusal-as-coordination-control.md) — why a delivered message still binds nothing, and what to put in its place

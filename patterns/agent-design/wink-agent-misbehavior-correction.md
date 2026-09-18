@@ -56,6 +56,8 @@ The observer runs asynchronously — it watches the trajectory without blocking 
 
 Unlike synchronous guardrails such as [Skill Program Functions](skill-program-functions.md) that fire mid-loop on a deterministic trigger, async intervention preserves trajectory continuity and accumulated context while redirecting the agent.
 
+A separate line of work mines the same misbehavior traces offline instead, turning them into [execution guardrails loaded before the run](trace-learned-execution-guardrails.md).
+
 ## Results
 
 From the Wink A/B test on production traffic ([arXiv:2602.17037](https://arxiv.org/abs/2602.17037)):

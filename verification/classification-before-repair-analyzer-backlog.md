@@ -82,3 +82,4 @@ Applied to GitHub's flow, that means not selecting 25 findings in dashboard orde
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Cost-ascending gate ordering for the repair half, where a target test exists to constrain intent.
 - [Closed-Loop CI Failure Remediation with Cloud Coding Agents](../workflows/closed-loop-ci-failure-remediation.md) — The same delegation with a failing test as input, which removes the classification question.
 - [Explained Feedback for LLM Vulnerability Repair](explained-feedback-vulnerability-repair.md) — How much of the scanner diagnostic to pass back once a finding is queued for repair.
+- [Per-Layer Suppression Accounting in Acceptance Gates](per-layer-suppression-accounting.md) — Which layer of a stacked gate actually discards a finding, measured rather than assumed.

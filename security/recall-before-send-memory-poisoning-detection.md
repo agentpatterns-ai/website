@@ -88,3 +88,4 @@ An incident responder reads the ordering, not the payload, to tell a memory-pois
 - [Oracle Poisoning: Knowledge Graph Corruption Against Tool-Using Agents](oracle-poisoning-knowledge-graph.md) — structurally similar data-path poisoning with the same provenance-blindness root cause
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md) — architectural egress control that closes the attack this signature only detects
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the private-data plus untrusted-input plus egress conditions memory poisoning composes across sessions
+- [Treating Memory-Injection Rate as Security Evidence](../patterns/anti-patterns/memory-injection-rate-as-security-evidence.md) — why an execution-stage signal like this one is not interchangeable with a write-stage injection count

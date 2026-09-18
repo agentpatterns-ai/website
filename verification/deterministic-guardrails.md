@@ -21,6 +21,8 @@ Telling an agent "don't break any links" is a prompt — probabilistic, sometime
 
 Agents are probabilistic and will sometimes produce bad output — the premise behind [trust without verify](../patterns/anti-patterns/trust-without-verify.md). Guardrails pass or fail, every time, for every output. Use both: prompts guide agent behavior, guardrails enforce properties of the output.
 
+A guardrail enforces the properties it can decide from the output, which is not the same as filtering bad work. How much a deterministic layer actually discards is a measurable question, and [per-layer suppression accounting](per-layer-suppression-accounting.md) is how to answer it for your own gate.
+
 ## Guardrail categories
 
 ### Pre-commit hooks

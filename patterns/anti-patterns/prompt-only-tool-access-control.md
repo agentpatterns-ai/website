@@ -99,3 +99,4 @@ The model never sees the dangerous tools at discovery. If an injection convinces
 - [The Prompt Tinkerer](prompt-tinkerer.md)
 - [Action-Selector Pattern](../../security/action-selector-pattern.md)
 - [Assuming a CLAUDE.md Security Rule Is Enforced](unenforced-claude-md-security-rules.md)
+- [Treating Memory-Injection Rate as Security Evidence](memory-injection-rate-as-security-evidence.md) — the measurement counterpart, where a control that does work at its own layer still leaves the exposure in place

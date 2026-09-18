@@ -104,3 +104,4 @@ The lattice pays off only when shared mutable state is genuinely involved — a 
 - [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md)
 - [Decentralized Memory for Self-Evolving Multi-Agent Systems](../multi-agent/decentralized-memory-multi-agent.md)
 - [Emergent Behavior Sensitivity](../multi-agent/emergent-behavior-sensitivity.md)
+- [Tool-Call Success as Workflow Effect Evidence](tool-call-success-as-workflow-evidence.md) — the same catalog method applied to irreversible effects outside the runtime, where no internal rollback reaches
