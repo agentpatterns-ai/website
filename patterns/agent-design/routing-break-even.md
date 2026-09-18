@@ -76,4 +76,5 @@ Clearing the bar that far tells you little. The authors concede that "with a pai
 - [Auto Model Selection: Harness-Driven Routing per Task](auto-model-selection.md) — what a vendor-side router keys on, and a separate cost gate stated as a pass rate against the inter-tier price ratio.
 - [Gateway Model Routing](gateway-model-routing.md) — the infrastructure layer that exposes the cheap and expensive targets a router picks between.
 - [Model Economics of Agent Swarms](../multi-agent/model-economics-agent-swarms.md) — the same cost-concentration arithmetic applied to a planner and worker split.
+- [Difficulty-Aware Topology Selection for Coding Agents](difficulty-aware-topology-selection.md) — the same trade priced over collaboration structure rather than model choice.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the broader tier-routing frame this calculation sits inside.

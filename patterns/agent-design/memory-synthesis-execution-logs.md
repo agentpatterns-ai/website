@@ -182,3 +182,4 @@ No. Manus retains failure traces in context rather than summarizing them away, s
 - [Wiki Memory: Agent-Maintained Compressed Knowledge Base](wiki-memory-agent-maintained-knowledge-base.md) — the general form that synthesizes arbitrary domain sources, where this page mines lessons from execution traces
 - [Git-Bound Memory for the Agentic Development Lifecycle](git-bound-memory.md) — binds synthesized rationale to commits so the merge gate verifies it; depends on the capture this page describes
 - [Weakest Consistent Learning: What Agent Loops Should Persist](weakest-consistent-learning.md) — a selection criterion for choosing which phrasing of a synthesized lesson to keep
+- [Learning Execution Guardrails from Agent Failure Traces](trace-learned-execution-guardrails.md) — the prohibitive narrowing of this move, mining anomalous traces alone into conditional rules that load per instruction

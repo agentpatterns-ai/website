@@ -96,3 +96,4 @@ The two-axis split routes the silent failure to a human without making the opera
 - [Making Application Observability Legible to Agents](../../observability/observability-legible-to-agents.md) — the inverse direction: surfacing application signals into agent context so agents can verify their own work
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — deterministic Stop-hook gate when the evaluator's leniency bias is unacceptable
 - [Objective Drift: When Agents Lose the Thread](objective-drift.md) — adjacent failure where the agent completes a subtly different objective than the one it started with
+- [Tool-Call Success as Workflow Effect Evidence](tool-call-success-as-workflow-evidence.md) — the same gap one layer in, where every tool call reports success and the surviving external effects are still wrong

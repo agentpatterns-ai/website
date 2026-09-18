@@ -167,6 +167,7 @@ A typed boundary between coordinator and clusters. Each cluster returns a struct
 ## Related
 
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
+- [Difficulty-Aware Topology Selection for Coding Agents](../agent-design/difficulty-aware-topology-selection.md) — making the same choice per task instead of once for the system
 - [Declarative Multi-Agent Topology](declarative-multi-agent-topology.md)
 - [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
 - [Circuit Breakers for Agent Loops](../../observability/circuit-breakers.md)

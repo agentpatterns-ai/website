@@ -80,6 +80,7 @@ That lambda is the whole integration: the container hands out the thread, the SD
 ## Related
 
 - [GitHub Copilot SDK](copilot-sdk.md) — what the SDK provides, the agent-in-app pattern, and its cost and lock-in trade-offs
+- [Bounding an Embedded Copilot SDK Agent's Tool Set](copilot-sdk-tool-scoping.md) — the other half of `setAvailableTools`: excluding the built-in tools, and merging in what an orchestrator supplies at invocation
 - [MCP Integration](mcp-integration.md) — connecting the agent to external tools over Model Context Protocol
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md) — the declarative alternative to defining tools in host code
 - [Copilot CLI BYOK and Local Model Support](copilot-cli-byok-local-models.md) — pointing the same runtime at another provider

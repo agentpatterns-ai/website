@@ -129,6 +129,7 @@ nav:
       - capability-declarations-for-agent-actions.md
       - deterministic-precondition-gates.md
       - spec-first-framework-enforcement-modes.md
+      - trace-learned-execution-guardrails.md
       - informed-abstention-tool-boundary-gate.md
       - delegated-autonomy-boundary-artifacts.md
       - trigger-level-agent-intake-gating.md
@@ -151,6 +152,7 @@ nav:
       - decoupled-search-grounding.md
       - deterministic-fast-paths.md
       - field-change-intent-over-generated-diffs.md
+      - difficulty-aware-topology-selection.md
       - dispatch-time-reasoning-level.md
       - dual-budget-control-search-agents.md
       - effective-feedback-compute.md
