@@ -8,7 +8,7 @@ tags:
   - copilot
   - human-factors
   - cost-performance
-last_reviewed: 2026-08-08
+last_reviewed: 2026-09-18
 maturity: emerging
 status: current
 ---
@@ -22,6 +22,8 @@ The return-on-investment section of the Copilot impact dashboard reports three n
 ## What the panel reports
 
 The cards are keyed to the same `ai_adoption_phase` cohorts as the Copilot usage metrics API, computed over a rolling 28-day window ([GitHub Changelog, 2026-07-22](https://github.blog/changelog/2026-07-22-new-copilot-usage-metrics-impact-dashboard/)). The section sets an early-adoption cohort beside an agent-first cohort, and a salary selector picks the compensation band the cost figures recalculate against. No division happens on screen: the reader supplies the ratio and the theory of what a merged pull request is worth.
+
+GitHub added a feature-engagement breakdown to the impact dashboard on 2026-09-17 ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement)). The breakdown sits outside the ROI section, and the reading below applies to the ROI cards alone.
 
 ## The measured half and the modeled half
 
@@ -106,4 +108,5 @@ Reading the card as a ratio moves headcount on a number the vendor itself labels
 - [Cohort Segmentation in the Copilot Usage Metrics API](cohort-segmentation-copilot-usage-metrics.md) — the adoption-phase classification the ROI cards are keyed to, and why a phase is a descriptor rather than a target
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the Microsoft rollout evidence behind the throughput lift, and the conditions that make it observational
 - [Copilot vs Claude Billing Semantics for Enterprise Teams](copilot-vs-claude-billing-semantics.md) — the credit-billing mechanics the panel's metered cost figure is drawn from
+- [Reading Copilot Feature Engagement by Its Threshold](copilot-feature-engagement-threshold.md) — the feature engagement section of the same dashboard, and why its two-day bar detects trials rather than habits
 - [Stakeholder Trust Through Evals and Observability](../workflows/stakeholder-trust-evals-observability.md) — the Goodhart failure a single stakeholder-facing score invites once it becomes a target

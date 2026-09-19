@@ -115,6 +115,7 @@ Preventing sensitive data from entering agent context is cheaper than scrubbing 
 Excess permissions expand the blast radius of any failure or attack.
 
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — Restrict which domains agent tools can reach via harness-enforced allow and deny lists; remove the model from the network trust boundary
+- [Aggregation Bounds for Agent Authorization](aggregation-bounds-agent-authorization.md) — Every access in a workflow can be authorized and the synthesized answer still not be; three parts are buildable today, and both papers that name the gap state the general problem is open
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — Decompose task authority into a step-level authority context the dispatch layer can check; runtime content may inform the planner but never become the issuer that authorizes a side effect
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — A grant names a subject as well as an effect; a transition envelope decides whether it survives a model, tool, or delegation change, while an immutable ceiling fixed at grant time stops agent-produced evidence from widening it
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — Limit agent access to only what the current task requires; excess permissions directly amplify injection impact

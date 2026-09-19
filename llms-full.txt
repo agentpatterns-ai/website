@@ -474,6 +474,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Typed Pseudocode for Skill Libraries (Skill-as-Pseudocode)](instructions/typed-pseudocode-skill-libraries.md)
 - [Ubiquitous Language for AI Plans](instructions/ubiquitous-language-for-ai-plans.md)
 - [Why an Encoded Rule Still Fails After a Passing Eval](instructions/encoded-rule-failure-diagnosis.md)
+- [Workspace-Hosted Skills: Authorship Outside the Repo](instructions/workspace-hosted-skills.md)
 - [WRAP Framework for Writing Agent-Ready Issue Descriptions](instructions/wrap-framework-agent-instructions.md)
 - [Probe-and-Refine Tuning of Repository Guidance for Coding Agents](instructions/probe-and-refine-guidance-tuning.md)
 - [Security Knowledge Priming for Code Generation (SPARK)](instructions/security-knowledge-priming.md)
@@ -986,6 +987,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent-Authored Messages as a Deferred Exfiltration Channel](security/agent-authored-message-rendered-image-exfiltration.md)
 - [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](security/agent-emitted-dependency-ranges.md)
 - [Agentic Detection and Response at the MCP Boundary](security/agentic-detection-response-mcp.md)
+- [Aggregation Bounds for Agent Authorization](security/aggregation-bounds-agent-authorization.md)
 - [Always-On Agentic PR Security Review](security/always-on-pr-security-review.md)
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](security/authority-confusion-untrusted-context.md)
 - [Behavioral Firewall for Tool-Call Trajectories](security/behavioral-firewall-tool-call-trajectories.md)
@@ -1595,6 +1597,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Polya Small-Steps: Using AI to Think Better, Not Think Less](human/polya-small-steps.md)
 - [Process Amplification: Scaling Human Work with Agents](human/process-amplification.md)
 - [Progressive Autonomy: Scaling Trust with Model Evolution](human/progressive-autonomy-model-evolution.md)
+- [Reading Copilot Feature Engagement by Its Threshold](human/copilot-feature-engagement-threshold.md)
 - [Rigor Relocation: Engineering Discipline with AI Agents](human/rigor-relocation.md)
 - [Skill Atrophy: When AI Reliance Erodes Developer Capability](human/skill-atrophy.md)
 - [Strategy Over Code Generation: Why AI Speed Doesn't Fix Wrong Goals](human/strategy-over-code-generation.md)
@@ -12695,6 +12698,7 @@ Reviewing, versioning, and repairing instruction files over time so they remain 
 - [Prompt Governance via PR](prompt-governance-via-pr.md) — Store agent instructions as plain markdown files in git and use pull requests to propose, review, and merge behavior changes
 - [Agent Config as a Managed Supply Chain](agent-config-as-managed-supply-chain.md) — Treat CLAUDE.md and AGENTS.md as a content-addressed, version-pinned, permission-declaring artifact; the benefit is provenance and rollback at multi-repo scale, not model compliance
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](skill-pack-registry-distribution.md) — A registry pack gives a team one addressable, updatable skill bundle; the version pin, the review gate, and the size limit stay the team's job
+- [Workspace-Hosted Skills: Authorship Outside the Repo](workspace-hosted-skills.md) — A skill whose source of truth is a document workspace makes page edit permission the mutation gate and page view permission the install gate; mirror the workspace into git to keep a revision you can roll back to
 - [Skill File Linting: Which Three Checks to Run First](skill-file-linting.md) — Description shape, no name-as-H1, and externalized code cover most SKILL.md defects; the gate buys routing and review hygiene, never a safety verdict
 - [Plugin Component Co-Change: Scripts and Their Instructions Move Together](plugin-component-co-change.md) — Inside one plugin a bundled script and the markdown describing it are one interface; pair the edits where the prose carries operational detail, and `claude plugin validate` will not catch the gap
 - [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md) — Restore behavioral contracts after context compaction by triggering a targeted re-read of CLAUDE.md or AGENTS.md
@@ -20227,6 +20231,7 @@ The PR diff makes the severity definition change explicit. Reviewers can judge w
 - [Frozen Spec File: Preserving Intent in AI Agent Sessions](frozen-spec-file.md)
 - [CLAUDE.md Convention](claude-md-convention.md)
 - [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)
+- [Workspace-Hosted Skills: Authorship Outside the Repo](workspace-hosted-skills.md) — what the review gate becomes when the source of truth leaves git
 
 ## Sources
 
@@ -21233,6 +21238,7 @@ On the `skills.sh` route the same discipline is assembled by hand. Install with 
 - [Enterprise-Managed Plugin Governance for Agent CLIs](../security/enterprise-managed-plugin-governance.md) — the admin-side half: curating marketplaces and force-enabling plugins before any download
 - [Skill Library Evolution: Lifecycle Governance for Agents](../tool-engineering/skill-library-evolution.md) — how to prune the installed set that a pack keeps growing
 - [Trusting a Skill Scanner's Verdict as a Security Judgment](../patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md) — why a registry's clean scan is a signal rather than a decision
+- [Workspace-Hosted Skills: Authorship Outside the Repo](workspace-hosted-skills.md) — the authoring side: what changes when the skill's source of truth is a document workspace rather than a registry entry
 
 ---
 
@@ -22625,6 +22631,85 @@ Eval and production disagree because they measure different things. Fu and colle
 - [Encoding Product-Design Taste into Agent Context](encoding-product-design-taste.md) — the in-repo instruction file these corrections land in, and why design rules need observable forms.
 - [Probe-and-Refine Tuning of Repository Guidance for Coding Agents](probe-and-refine-guidance-tuning.md) — the offline counterpart, refining guidance against synthetic probes rather than production complaints.
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the density limit that bounds how many diagnosis rounds you can answer with more prose.
+
+---
+
+### Workspace-Hosted Skills: Authorship Outside the Repo
+Source: https://agentpatterns.ai/instructions/workspace-hosted-skills/
+
+# Workspace-Hosted Skills: Authorship Outside the Repo
+
+> A workspace-hosted skill's edit permission is its review gate, so mirror the workspace into git to keep a revision you can revert to.
+
+A workspace-hosted skill is an agent skill whose source of truth is a page in a document workspace rather than a file in a repository. The skills CLI added this route on 17 September 2026: `npx skills add notion` "lists the skill packs shared with you and installs every skill in the packs you select" ([Vercel changelog](https://vercel.com/changelog/skills-cli-notion-skills)). The announcement summarizes the change as "No Git repository required." That sentence is the trade. Revision identity, an approval gate, a diff and a rollback target stop coming from the repository, and start coming from page permissions and page history.
+
+## When this applies
+
+All three conditions have to hold, not one of them.
+
+- The content is owned by people who are not repo contributors: a support escalation script, a legal review checklist, a brand voice guide. If the skill encodes build commands or review policy, its owners already have repo access, so the hosted route adds a hop and removes review.
+- The skill text carries no execution authority. Notion attaches supporting files, scripts included, through a `Files` property, and the local agent "reads that file the same way it reads its own instructions" ([Notion help](https://www.notion.com/help/create-and-manage-skills)).
+- Something outside the workspace holds a revision you can return to. The workspace's own history expires, and the install records nothing.
+
+## What the workspace replaces
+
+| Repo control | Workspace equivalent | Enforced |
+|---|---|---|
+| Commit SHA as revision identity | `version_id` on the API listing, discarded by the CLI install | No |
+| Revert to any commit | Page history, capped by plan | Within the window |
+| Branch protection over who changes the bytes | Page edit permission | Yes |
+| A dependency bump someone approves | Page view permission grants install | Yes |
+| Review before the change takes effect | An `Owner` or `Status` property, by team convention | No |
+
+Two rows carry most of the difference. Notion prices page history, described as "Restore your page to a previous version", at 7 days on Free, 30 on Plus, 90 on Business and unlimited on Enterprise ([Notion pricing](https://www.notion.com/pricing)). And every plugin entry the Agent Skills API returns carries a `version_id`, with the documented sync workflow telling integrators to "Compare each plugin's `version_id` against the value you stored the last time you downloaded it" ([Notion Agent Skills API](https://developers.notion.com/guides/agent-skills/overview)). The interactive install throws that identity away. `fetchNotionPackDirectory` compares the two values and aborts when they disagree, which guards a single install against a mid-flight edit. The manifest written afterwards records each pack's `name`, `source` and skill paths, and no version at all ([`src/notion-test.ts`](https://github.com/vercel-labs/skills/blob/main/src/notion-test.ts), imported by [`src/add.ts`](https://github.com/vercel-labs/skills/blob/main/src/add.ts)).
+
+## Why it works
+
+The document's access control list becomes the agent's control plane, one for one. Notion states the mutation half: "If they can edit the skill page, their edits will change the skill" ([Notion help](https://www.notion.com/help/create-and-manage-skills)). Vercel states the distribution half: "controlling who can install a skill is the same as controlling who can view the page" ([Vercel changelog](https://vercel.com/changelog/skills-cli-notion-skills)). That equivalence is the mechanism. The pattern pays off where the workspace's permissions are already the right answer to "who decides what this says". A team that spent two years getting its escalation policy right there, with the right owners and the right readers, built the access model that skill needs along the way.
+
+The equivalence is load-bearing rather than pedantic because skill text is operational. Saha et al. changed descriptions only, with no code involved. Adversarial variants "are selected in 77.6% of paired trials on average", and semantic evasion let malicious skills "avoid a blocking verdict in 36.5%-100% of cases" — evidence that "SKILL.md is not passive documentation but operational text that shapes which third-party capabilities agents find, trust, and use" ([arxiv:2605.11418v1](https://arxiv.org/abs/2605.11418v1)). Edit access to the prose is edit access to the behavior.
+
+## When this backfires
+
+- Teamspace-wide sharing. Install rights equal page view rights, so sharing a skills database with a teamspace hands install to everyone in it and edit to every editor in it. Notion's own warning: "Anyone with edit access can change a shared skill for everyone who uses it, so pick editors with that in mind" ([Notion help](https://www.notion.com/help/create-and-manage-skills)).
+- Audit obligations that outlive the plan's retention. Past the page-history window, nobody can reconstruct who changed an agent's instruction or when, and the engineering audit trail never held that record.
+- Reproducible builds. `version_id` is an "opaque version identifier" to "compare for equality to determine whether the directory has changed", and the endpoint that returns a plugin directory takes one path parameter, its `id` ([Get a plugin directory](https://developers.notion.com/reference/agent-skills/get-plugin-directory)). You can detect that a skill moved. You cannot ask for the version it moved from.
+- Treating faster edits as better instructions. Across 15,549 agentic pull requests in 148 projects, adding instruction files raised the merge rate by at least 20% in 27.7% of projects and lowered it in 26.35% ([arxiv:2606.13449v1](https://arxiv.org/abs/2606.13449v1)). Removing the review gate speeds up both directions.
+- Assuming the copy on disk tracks the page. It does not. Notion's manual download badges a changed skill "so you know to download the latest version to your local environment" ([Notion help](https://www.notion.com/help/create-and-manage-skills)). A human is still in the pull.
+
+## Example
+
+Notion ships the mitigation as a sample: `notion-skills-github-sync` runs "a recurring script that syncs skills from Notion into a GitHub plugin marketplace" ([Notion Agent Skills API](https://developers.notion.com/guides/agent-skills/overview); [makenotion/notion-skills-github-sync](https://github.com/makenotion/notion-skills-github-sync)). The loop it automates is the documented sync workflow:
+
+```bash
+# 1. List plugins. Each entry carries id, name, description, version_id.
+curl -X GET "https://api.notion.com/v1/ai/plugins?page_size=100" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2026-03-11"
+
+# 2. Skip every plugin whose version_id matches the one you stored.
+# 3. For the rest, GET /v1/ai/plugins/$PLUGIN_ID for a signed URL, then:
+curl --fail --location "$SIGNED_URL" -o plugin.tar.gz &&
+  tar -xzf plugin.tar.gz -C ./plugins
+```
+
+Commit the extracted tree with the `version_id` beside it, and install from that repo rather than from the workspace. Domain owners keep editing pages. Engineers get a diff, a reviewer, a commit to pin and a commit to revert to. Watch the ordering the same workflow spells out: "Only after all pages have been fetched successfully, remove local directories for plugin IDs missing from the complete list. An incomplete or failed listing must not delete local plugins" ([Notion Agent Skills API](https://developers.notion.com/guides/agent-skills/overview)).
+
+## Key Takeaways
+
+- Page edit permission is the mutation gate and page view permission is the install gate. Audit the workspace's sharing settings before the first install, not the CLI's flags.
+- The API hands out a `version_id` and the interactive install throws it away, so nothing on disk says which revision you are running.
+- Page history is the revert path and it expires: 7 days on Free, 30 on Plus, 90 on Business ([Notion pricing](https://www.notion.com/pricing)).
+- Sync the workspace into git on a schedule and install from the mirror. That restores the diff and the rollback target without moving authorship back to people who do not own the content.
+- Keep any skill that directs command execution in the repository. Instruction text is operational, and an unreviewed edit to it is an unreviewed change to agent behavior ([arxiv:2605.11418v1](https://arxiv.org/abs/2605.11418v1)).
+
+## Related
+
+- [Prompt Governance via PRs: Reviewable AI Behavior](prompt-governance-via-pr.md) — the repo-review baseline this topology departs from
+- [Skill Packs: Registry Distribution Needs Pinning Discipline](skill-pack-registry-distribution.md) — the consumer-side half: lock files, `ref` pinning and content hashes once a skill is published
+- [Central Repo for Shared Agent Standards](../workflows/central-repo-shared-agent-standards.md) — the canonical-source repo this pattern moves authorship out of
+- [Enterprise Skill Marketplace: Distribution, Usage Reporting, and Quality Evals](../workflows/enterprise-skill-marketplace.md) — managed distribution and a quality cadence once the library is large
+- [Skill Over-Trust: Treating Topical Relevance as Evidence a Skill Helps](../patterns/anti-patterns/skill-over-trust.md) — the failure a faster, unreviewed edit path makes cheaper
 
 ---
 
@@ -44082,7 +44167,7 @@ Source: https://agentpatterns.ai/patterns/agent-design/routing-break-even/
 
 `minimum offload = judge cost / (expensive cost - cheap cost)` gives the fraction of turns you must send to the cheap model before routing costs less than sending everything to the frontier model. LangChain publishes the rule after benchmarking NVIDIA's [NeMo Switchyard](https://github.com/NVIDIA-NeMo/Switchyard) router across 145 agent tasks ([LangChain, 11 August 2026](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
 
-Replit routes between models per request rather than pinning every request to one model, the arrangement this formula prices ([Replit, 26 August 2026](https://replit.com/blog/intelligent-model-routing)). The announcement carries no prices, so it confirms the decision is live in production and settles none of the numbers. Microsoft's developer blog argues the same premise, that the most capable model is not always the right one for the work ([Microsoft, 9 September 2026](https://devblogs.microsoft.com/blog/your-work-might-not-need-the-smartest-model/)). It states that position without pricing it, so nothing there changes the arithmetic below.
+Replit routes between models per request rather than pinning every request to one model, the arrangement this formula prices ([Replit, 26 August 2026](https://replit.com/blog/intelligent-model-routing)). The announcement carries no prices, so it confirms the decision is live in production and settles none of the numbers. Tailscale runs a customer-facing model router on Vercel's AI Gateway ([Vercel, 11 September 2026](https://vercel.com/blog/how-tailscale-built-a-customer-facing-model-router-on-ai-gateway)). It is a second production deployment of the arrangement, and it too leaves the numbers to the benchmark below. Microsoft's developer blog argues the same premise, that the most capable model is not always the right one for the work ([Microsoft, 9 September 2026](https://devblogs.microsoft.com/blog/your-work-might-not-need-the-smartest-model/)). It states that position without pricing it, so nothing there changes the arithmetic below.
 
 ## What the calculation can decide
 
@@ -99455,7 +99540,7 @@ A job directory is per-run and local to the machine that ran it, so comparing ac
 
 ## Example
 
-Harbor is a Python framework for specifying sandboxed agent tasks, from the team behind Terminal-Bench, and it runs each task in an isolated Docker container. A task holds three files: an environment definition, an instruction for the agent, and a verifier that inspects the container once the agent stops ([Braintrust, 2026](https://www.braintrust.dev/blog/harbor-agent-evals)). Terminal-Bench 2.0 is distributed in that format and ran its published numbers on Daytona sandboxes, repeating each model and agent combination at least five times ([Duan and others, 2026](https://arxiv.org/abs/2601.11868v1)).
+Harbor is a Python framework for specifying sandboxed agent tasks, from the team behind Terminal-Bench, and it runs each task in an isolated Docker container. A task holds three files: an environment definition, an instruction for the agent, and a verifier that inspects the container once the agent stops ([Braintrust, 2026](https://www.braintrust.dev/blog/harbor-agent-evals)). Terminal-Bench 2.0 is distributed in that format and ran its published numbers on Daytona sandboxes, repeating each model and agent combination at least five times ([Duan and others, 2026](https://arxiv.org/abs/2601.11868v1)). Vercel Sandbox is another hosted option for Terminal-Bench and other Harbor evals ([Vercel, 2026](https://vercel.com/changelog/run-terminal-bench-and-other-harbor-evals-on-vercel-sandbox)).
 
 One flag turns the local job directory into a synced project carrying the dataset, per-trial rows, score fields, and trajectory listed above ([Braintrust, 2026](https://www.braintrust.dev/blog/harbor-agent-evals)):
 
@@ -105548,6 +105633,7 @@ Preventing sensitive data from entering agent context is cheaper than scrubbing 
 Excess permissions expand the blast radius of any failure or attack.
 
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — Restrict which domains agent tools can reach via harness-enforced allow and deny lists; remove the model from the network trust boundary
+- [Aggregation Bounds for Agent Authorization](aggregation-bounds-agent-authorization.md) — Every access in a workflow can be authorized and the synthesized answer still not be; three parts are buildable today, and both papers that name the gap state the general problem is open
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — Decompose task authority into a step-level authority context the dispatch layer can check; runtime content may inform the planner but never become the issuer that authorizes a side effect
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — A grant names a subject as well as an effect; a transition envelope decides whether it survives a model, tool, or delegation change, while an immutable ceiling fixed at grant time stops agent-produced evidence from widening it
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — Limit agent access to only what the current task requires; excess permissions directly amplify injection impact
@@ -106497,6 +106583,84 @@ The pattern is calibrated for enterprise deployments. Smaller or differently sha
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — formalizes what the audit record must guarantee, the safety property ADR's telemetry feeds
 - [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md) — the broader checklist ADR sits inside as the observability gate
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](../observability/agent-observability-otel.md) — adjacent observability mechanics for non-MCP signals
+
+---
+
+### Aggregation Bounds for Agent Authorization
+Source: https://agentpatterns.ai/security/aggregation-bounds-agent-authorization/
+
+# Aggregation Bounds for Agent Authorization
+
+> Every access in an agent workflow can be authorized and the synthesized answer still not be. A per-call gate never evaluates the set.
+
+An aggregation bound is a policy over which combinations of resources one principal may have synthesized, enforced before the result is returned. It answers a question no per-access check asks. Given authorized accesses to several resources and a synthesis over them, "the synthesis of results may produce information that no individual access would expose" ([Tallam, 2026, §5.2.2](https://arxiv.org/abs/2605.05440v1)). A narrative review screening 89 primary sources from roughly 180 candidates reaches the same place four months later by a different method, naming "runtime enforcement and aggregation bounds as the principal unresolved gaps" in the field ([Surapani et al., 2026](https://arxiv.org/abs/2609.15906v1)).
+
+Read this as a gap with three buildable parts, not as a control you can finish. Tallam's paper "does not solve aggregation inference in the general case" ([§9.4](https://arxiv.org/abs/2605.05440v1)), and the review lists the gap as unresolved rather than closed.
+
+## When this recommendation applies
+
+The three parts below repay their cost only where all of these hold:
+
+- A per-call authorization gate already runs. An aggregation bound reads the record of authorized accesses, so it sits on top of per-call enforcement rather than replacing it. An audit of LangChain/LangGraph, LlamaIndex and the Stripe Agent Toolkit found "all three provide capability gating by default, but none provides a deterministic fail-closed per-call value authorization gate by default" ([Mellafe Zuvic, 2026](https://arxiv.org/abs/2606.28679v1)). Build that first.
+- Every access reaches the resource through the instrumented boundary, and the harness emits a workflow-scoped trace. Per-call logs record each decision and never the set.
+- The workflow spans several resources. Aggregation inference is a workflow-level property ([Tallam, 2026, §5](https://arxiv.org/abs/2605.05440v1)), so a single-resource task has no synthesis to constrain.
+- Someone can name the combinations that are out of bounds. The policy is an enumeration, and a resource space discovered at run time gives it nothing to enumerate over.
+
+Outside these conditions, spend the effort on the per-call gate instead. Pre-action authorization cut social-engineering success from 74.6% under a permissive policy to 0% across 879 attempts under a restrictive one ([Uchibeke, 2026](https://arxiv.org/abs/2603.20953v1)).
+
+## Why a correct per-call gate misses it
+
+Authorization is evaluated per access. Disclosure is produced by the synthesis. Nothing in the first evaluation reaches the second.
+
+Write the workflow as authorized accesses to resources `d1` through `dj` and a synthesis `f(d1, …, dj) → r`. The open question is whether `r` is authorized for the requesting principal, and no per-access decision has asked it ([Tallam, 2026, §5.2.2](https://arxiv.org/abs/2605.05440v1)). The classical models inherit the same shape. ABAC "treats each access decision independently" and "cannot express constraints on the aggregation of individually authorized accesses", while XACML obligation policies "are evaluated per-access, not per-workflow" ([Tallam, 2026, §6.2](https://arxiv.org/abs/2605.05440v1)). ReBAC comes closest and still has "no native concept of workflow-scoped authorization that binds a set of accesses together and constrains their aggregation" (§6.3).
+
+An attacker therefore does not defeat a check. Decomposing the request into individually benign subtasks satisfies every check honestly. Tallam reports the Semantic Intent Fragmentation attack doing exactly this at "a 71% success rate across 14 enterprise scenarios" (§5.2.2).
+
+The older statistical-disclosure answers do not port, because the synthesis function "is a neural network whose behavior is not formally specified" and "the set of accessed resources may not be known in advance" (§5.2.2). No adversary is required either. Tallam's production evidence is that "ordinary system behavior, not only adversarial action, already produces the failures this model predicts" ([Tallam, 2026](https://arxiv.org/abs/2605.05440v1)).
+
+## The three parts you can build
+
+Tallam names what is architecturally addressable while the general problem stays open ([Tallam, 2026, §5.2.2](https://arxiv.org/abs/2605.05440v1)).
+
+| Part | What it gives you | What it does not give you |
+|---|---|---|
+| Make the contributing resource set inspectable after the fact | A reviewer can ask which resources produced this answer | Nothing at decision time; the result has already been returned |
+| Define policy boundaries limiting which resource combinations are permitted | A denial before the synthesized result is returned | Coverage of any combination nobody enumerated |
+| Track causal dependencies through the synthesis graph | The path from each access to the returned value | A bound on what the model inferred rather than read |
+
+The first and third produce evidence. Only the second denies anything: "the system must be able to define constraints on which resource combinations are permitted for a given principal, and enforce those constraints before synthesized results are returned" ([Tallam, 2026, §8](https://arxiv.org/abs/2605.05440v1)). A stack with per-call logs but no workflow identifier can do none of the three, because every part reads a trace that binds accesses to one workflow.
+
+## Why it works
+
+The bound works because it moves the decision to the only point where the whole set exists. Each access decision sees one resource and the principal's authority over it. The synthesis sees all of them, so the policy question that was unanswerable at each access becomes answerable there. That is also why the review places both its remaining gaps at the enforcement layer rather than in the credential or audit layers. Credential lifecycle, delegation propagation, injection defense and audit each cover a fragment, "while giving little attention to the authorization decision point itself" ([Surapani et al., 2026](https://arxiv.org/abs/2609.15906v1)).
+
+A good audit trail does not substitute, and the review's own completeness test is why. It asks that an agent action be "traceable to a human principal, bounded by what that human actually delegated, and contestable after the fact", and reports that "few documented deployments satisfy all three properties reliably and end to end" ([Surapani et al., 2026](https://arxiv.org/abs/2609.15906v1)). A log delivers traceability and contestability. Boundedness has to be enforced before the result leaves, and aggregation is where it currently is not.
+
+## When this backfires
+
+- The effect never passes your boundary. A shell-out, a script the agent wrote in an earlier turn, an embedded SDK call, or cached state leaves no entry in the trace the bound reads. "Tool-call guardrails miss system actions that bypass the tool layer", which is why ActPlane moves enforcement into the kernel and reports compliance gains "on indirect execution paths that tool-call interception cannot observe" ([Zheng et al., 2026](https://arxiv.org/abs/2606.25189v2)).
+- The channel is inference rather than disclosure. A combination policy bounds which resources may be read together and bounds nothing about what a model derives from the ones it may. Measuring its own boundary, the OBPE team found answers that "reconstructed a value that never entered context or used filtered row counts as an oracle", and concluded that "shaping one execution is not noninterference" ([Millstone et al., 2026](https://arxiv.org/abs/2608.27646v1)).
+- Legitimate synthesis is the product. The same OBPE trials that cut trace failure from 57.6% to 0.2% cut fulfillment from 79.1% to 60.9% ([Millstone et al., 2026](https://arxiv.org/abs/2608.27646v1)). The denial is also hard to explain, because no single access was wrong.
+- You treat the enumeration as coverage. The policy is a denylist over a space the agent may extend at run time, so an unlisted combination is permitted by construction. Tallam is explicit that the paper "does not solve aggregation inference in the general case" ([Tallam, 2026, §9.4](https://arxiv.org/abs/2605.05440v1)), and OBPE scopes the question out of its evaluation: "temporal and aggregate policies lie outside this evaluation" ([Millstone et al., 2026](https://arxiv.org/abs/2608.27646v1)).
+- The members were never checked. Where no per-call gate re-authorizes argument values, and by default none of the three audited frameworks does ([Mellafe Zuvic, 2026](https://arxiv.org/abs/2606.28679v1)), the bound constrains which unverified results may combine. That is a compliance artifact rather than a boundary.
+
+One caution on the sourcing. The review that names the gap is a version 1 preprint with no full-text rendition, so it supports the framing and nothing at the level of a mechanism or a number.
+
+## Key Takeaways
+
+- Per-access authorization and workflow-level disclosure are different questions. A stack can answer the first correctly for every call and never ask the second.
+- The classical models cannot express the constraint. ABAC evaluates each access independently, XACML obligations fire per-access, and ReBAC has no workflow-scoped binding over a set of accesses.
+- Decomposition is the exploit, and it is honest. Individually benign subtasks pass every check, at a reported 71% success across 14 enterprise scenarios, and ordinary non-adversarial behavior produces the same failures.
+- Three parts are buildable: an inspectable contributing set, a permitted-combination policy, and causal dependency tracking. Only the second denies anything, and only over combinations someone enumerated.
+- Build the per-call gate first. Most frameworks still ship without one.
+
+## Related
+
+- [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — composition safety for explicit flows, where budgets on values intersect through tool chains; aggregation inference falls outside its stated precondition, because the leak is in the synthesized result rather than in a value the proxy can read
+- [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — bounds what authority may become active when the agent changes, where an aggregation bound constrains what a set of accesses may produce
+- [Per-Caller Identity: Who an Agent's Tool Call Acts As](per-caller-identity-for-agent-tool-calls.md) — picks the principal each call acts as, which is the input an aggregation policy is written against
+- [Context-Fractured Decomposition Attacks on Tool-Using Agents](context-fractured-decomposition-attacks.md) — decomposition across tools and time as a content-harm problem rather than a disclosure one
+- [Provenance-Aware Decision Auditing](provenance-aware-decision-auditing.md) — the trace machinery the first and third parts depend on
 
 ---
 
@@ -114699,7 +114863,7 @@ The mechanism degrades or fails outside its operating envelope.
 
 - Naive manifests collapse the defense. The blocking rate falls to 27.3% when budgets are authored without security expertise — close to no defense ([Jiang et al., 2026](https://arxiv.org/abs/2605.26542v4)). The paper names manifest quality "the dominant deployment bottleneck"; teams without a dedicated security function inherit the naive number by default.
 - Implicit flows escape. The scope is bounded to "explicit-flow composition safety under trusted manifests and proxy-visible data movement." Causality laundering — exfiltrating data through denial signals — is invisible because no budgeted value changes hands ([Chinaei, 2026](https://arxiv.org/abs/2604.04035v1)).
-- Conjunctive emergent capability is missed. Per-value intersection cannot detect two individually safe values combining into an unsafe end-state. A formal result reports that 42.6% of 900 real multi-tool trajectories contain at least one conjunctive dependency ([Safety is Non-Compositional, 2026](https://arxiv.org/abs/2603.15973v2)).
+- Conjunctive emergent capability is missed. Per-value intersection cannot detect two individually safe values combining into an unsafe end-state. A formal result reports that 42.6% of 900 real multi-tool trajectories contain at least one conjunctive dependency ([Safety is Non-Compositional, 2026](https://arxiv.org/abs/2603.15973v2)). The disclosure analogue sits outside this mechanism too: see [aggregation bounds](aggregation-bounds-agent-authorization.md), where every access is authorized and the synthesized result is not.
 - Off-protocol egress bypasses the proxy. Any side channel that skips the [MCP runtime control plane](mcp-runtime-control-plane.md) — direct shell `curl`, embedded SDK calls, cached state — sits outside the mechanism's reach.
 - Token budgets compound. Capability metadata on every value adds to the [35× MCP proxy overhead](https://www.mindstudio.ai/blog/mcp-vs-cli-agentic-workflows-token-overhead-reliability) over equivalent CLI tools; agents near context ceilings cannot absorb it without truncating reasoning.
 
@@ -115764,6 +115928,7 @@ The union property is the whole mechanism. Whatever a single allowlist covers re
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — scopes a value's budget across composition, the third axis alongside time and principal.
 - [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — narrows a static manifest per request; the narrowing here is per principal instead.
 - [Workspace Topology as an Indirect Injection Attack Vector](workspace-topology-injection-attack-vector.md) — the residual `AGENTS.md` surface, and the cheap levers that reduce it.
+- [Aggregation Bounds for Agent Authorization](aggregation-bounds-agent-authorization.md) — the question left after every call is authorized: whether the set of accesses may be synthesized for this principal.
 
 ---
 
@@ -129971,6 +130136,7 @@ Source: https://agentpatterns.ai/human/
 - [AI Adoption Footprint: The Segmented Shape of Engineering Orgs](ai-adoption-footprint.md) — Engineering orgs adopt AI in three segments — power users, chat-tool middle, refusers — and the shape determines where enablement and tooling investment pays back
 - [Cohort Segmentation in the Copilot Usage Metrics API](cohort-segmentation-copilot-usage-metrics.md) — The May 2026 Copilot API exposes four AI-adoption phases per user, a diagnostic primitive that recovers the segmented shape an aggregate utilization number hides
 - [Per-Agent-App Attribution in the Copilot Usage Metrics API](per-agent-app-attribution-copilot-metrics.md) — The August 2026 agent app activity dimension attributes engineering activity to a specific agent app, readable only under the four limits GitHub states
+- [Reading Copilot Feature Engagement by Its Threshold](copilot-feature-engagement-threshold.md) — The September 2026 feature engagement breakdown counts users who returned to each Copilot surface on a second day, a floor on repeat use rather than evidence of a habit
 - [LLM Refactoring Adoption Patterns](llm-refactoring-adoption-patterns.md) — Five patterns for how developers modify ChatGPT refactoring suggestions — driven by prompt context completeness and refactor complexity
 - [Human-Facing Docs in the Agent Era: Mental Models Over Reference](human-docs-mental-models-agent-era.md) — When the audience reads alongside an agent, human docs shift from exhaustive reference to mental models, intent, and design exclusions — with the conditions under which the pivot backfires
 - [Marking Which Artifacts Are for Humans or Agents (Landmarking)](landmarking-human-vs-agent-artifacts.md) — Agree a team-wide readership contract for which repository artifacts are written to be understood by a person and which are agent context, and back it with tooling
@@ -131086,6 +131252,7 @@ The 62% headline is consistent with this org and with a uniform-60%-medium-use o
 - [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — the ROI panel built on top of these phases; how to read a cross-cohort cost and throughput comparison without treating it as causal.
 - [Per-Agent-App Attribution in the Copilot Usage Metrics API](per-agent-app-attribution-copilot-metrics.md) — the same diagnostic move on the same API, one axis over: the agent inventory instead of the user population.
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the other side of Copilot-specific instrumentation; cost telemetry that pairs with the cohort distribution.
+- [Reading Copilot Feature Engagement by Its Threshold](copilot-feature-engagement-threshold.md) — the per-feature engagement breakdown keyed to these phases, and the denominator `users_in_phase_28d` adds to them.
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the rollout that these adoption-phase cohorts instrument: seed adoption socially, then track retention as a separate number.
 
 ---
@@ -132987,6 +133154,7 @@ The first form invents 860 interactions that were never prompts. The second keep
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the credit consumption that gives each agent app in the inventory a cost to weigh against its activity.
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — why social reach confounds a low adoption number, and what to measure instead of seat count.
 - [Human-Equivalent Hours for Autonomous Coding Agent Productivity](human-equivalent-hours-agent-productivity.md) — a denominator for the outcome half of the pairing this page requires.
+- [Reading Copilot Feature Engagement by Its Threshold](copilot-feature-engagement-threshold.md) — the other non-partitioning breakdown in this API, where the residual comes from users counted under several features.
 - [Delegating Delivery Stages to GitHub Agent Apps](../workflows/agent-apps-delivery-stage-delegation.md) — the install decision this metric is joined to, decided per delivery stage.
 
 ---
@@ -133525,6 +133693,8 @@ The return-on-investment section of the Copilot impact dashboard reports three n
 
 The cards are keyed to the same `ai_adoption_phase` cohorts as the Copilot usage metrics API, computed over a rolling 28-day window ([GitHub Changelog, 2026-07-22](https://github.blog/changelog/2026-07-22-new-copilot-usage-metrics-impact-dashboard/)). The section sets an early-adoption cohort beside an agent-first cohort, and a salary selector picks the compensation band the cost figures recalculate against. No division happens on screen: the reader supplies the ratio and the theory of what a merged pull request is worth.
 
+GitHub added a feature-engagement breakdown to the impact dashboard on 2026-09-17 ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement)). The breakdown sits outside the ROI section, and the reading below applies to the ROI cards alone.
+
 ## The measured half and the modeled half
 
 Cost per developer per month comes from metered credit consumption, so it answers a question buyers previously had to estimate: what this costs per person in the cohorts that use it hardest. GitHub still asks readers to "treat these metrics as directional" ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-impact-dashboard-adds-a-return-on-investment-section)).
@@ -133608,7 +133778,91 @@ Reading the card as a ratio moves headcount on a number the vendor itself labels
 - [Cohort Segmentation in the Copilot Usage Metrics API](cohort-segmentation-copilot-usage-metrics.md) — the adoption-phase classification the ROI cards are keyed to, and why a phase is a descriptor rather than a target
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the Microsoft rollout evidence behind the throughput lift, and the conditions that make it observational
 - [Copilot vs Claude Billing Semantics for Enterprise Teams](copilot-vs-claude-billing-semantics.md) — the credit-billing mechanics the panel's metered cost figure is drawn from
+- [Reading Copilot Feature Engagement by Its Threshold](copilot-feature-engagement-threshold.md) — the feature engagement section of the same dashboard, and why its two-day bar detects trials rather than habits
 - [Stakeholder Trust Through Evals and Observability](../workflows/stakeholder-trust-evals-observability.md) — the Goodhart failure a single stakeholder-facing score invites once it becomes a target
+
+---
+
+### Reading Copilot Feature Engagement by Its Threshold
+Source: https://agentpatterns.ai/human/copilot-feature-engagement-threshold/
+
+# Reading Copilot Feature Engagement by Its Threshold
+
+> The Copilot feature engagement count reports repeat use at a two-day threshold, so read each figure as a floor rather than a habit.
+
+On 17 September 2026 the Copilot impact dashboard began reporting how many active users "engaged with each included feature on at least two days during the 28-day period" ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement)). The threshold carries the new information. A seat count says a license exists, a request count says a surface was touched, and this counter says it was touched again.
+
+## Three conditions before the number means anything
+
+The panel is readable under three constraints, all of them stated by GitHub.
+
+- Two days in 28 is 7% of the window, so treat the panel as a trial detector. The one field study that tested a recurrence bar defines retention as activity "on at least 5 of the 14 days beginning with their first use", a threshold "designed to separate 'tried and stayed' from 'tried and abandoned'" ([Murphy-Hill et al., arXiv:2607.01418v1](https://arxiv.org/abs/2607.01418v1)). Its model fits at a looser 3-of-14 too, and 3 of 14 is 21% of calendar days, three times GitHub's bar.
+- The counts overlap. "A user can be counted under more than one feature" ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement)), so a ranking by share double-counts the multi-surface developers it claims to describe.
+- Missing is not zero, in two places. `users_in_phase_28d` "is omitted when the phase population was not measured. A value of `0` means the phase was measured and had no users", and the `copilot_feature_engagement` object "can be absent or null when the calculation is unavailable" ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement)).
+
+## What the breakdown enumerates
+
+`totals_by_feature` splits engagement across seven features: code completion, agent edit, passive Copilot code review, active Copilot code review, Copilot cloud agent, Copilot CLI, and the Copilot app ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement)). In the same entry, active code review "means a user manually requested a Copilot review or applied a Copilot review suggestion", while passive code review means Copilot "was automatically assigned to review the user's pull request without the user actively engaging with the review". The passive counter therefore fires without any act by the user it counts.
+
+The same release added `users_in_phase_28d`, which reports "the full rolling 28-day population classified into each AI adoption phase as of that day", where the existing `total_engaged_users` "continues to only report users in the phase who were active that day" ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement)). That is the denominator an engagement rate per [adoption phase](cohort-segmentation-copilot-usage-metrics.md) needs. All of it is "not added to user-level reports", so enablement can target a lagging organization, never a lagging person.
+
+## Why it works
+
+First use and sustained use are separate phenomena, and their predictors can run in opposite directions. At Microsoft, prior IDE Copilot use raised the odds of trying Copilot CLI from 49% up to 83%, rising with days of prior use. Across those same groups the retention markers ran negative, between -12% and -15% ([Murphy-Hill et al., arXiv:2607.01418v1](https://arxiv.org/abs/2607.01418v1)). A counter that cannot tell a first touch from a second one answers the wrong half of that pair, and the enablement budget asks the other half. A day-count threshold is the cheapest instrument that separates them, and that study's robustness check shows the separation holds anywhere between 3 and 7 days of 14. GitHub's two-day bar performs it weakly.
+
+## When this backfires
+
+- Reading "engaged" as habitual. GitHub's own framing is that a feature is "becoming part of developers' regular workflows" ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-copilot-impact-dashboard-now-shows-feature-engagement)). The threshold does not carry that.
+- Running an enablement push across all seven surfaces at once. The one measured cross-surface result points the other way: heavier prior use of one surface predicted worse retention on another ([Murphy-Hill et al., arXiv:2607.01418v1](https://arxiv.org/abs/2607.01418v1)). That association is not causal, and it is still the only evidence on the question.
+- Treating one window as a level. Adoption at one 300-engineer deployment ran "4% engagement in month 1 to 83% peak usage by month 6, stabilizing at 60% active engagement" ([Kumar et al., arXiv:2509.19708v1](https://arxiv.org/abs/2509.19708v1)). One 28-day reading sits somewhere on that curve and cannot say where.
+- Reading recurrence as benefit. Among 415 practitioners, frequent users reported faster completion and higher output, and those gains "were offset by increased code review burden, persistent cognitive load from output verification, and unchanged collaboration patterns" ([Afroz et al., arXiv:2510.24265v2](https://arxiv.org/abs/2510.24265v2)). The panel has no field for the offset.
+- Using it as the only instrument. A survey drawing 2,989 developer responses exposed "conflicting perspectives on AI tool usefulness", and the paired interviews elicited factors including technical expertise and ownership of work ([Chen et al., arXiv:2602.03593v1](https://arxiv.org/abs/2602.03593v1)). No engagement counter carries those.
+- Publishing the number as a target. Active code review counts a manually requested review, which a developer can request on two days without reading either result.
+
+## Example
+
+The field names and the arithmetic are real; the counts below are constructed to show the two readings.
+
+**Before** — ranking the surfaces by share:
+
+```text
+agent edit               612 users   38%
+code completion          540 users   34%
+passive code review      410 users   26%   <- shares sum past 100%
+active code review       180 users   11%
+Copilot CLI               95 users    6%
+```
+
+**After** — rates against the phase population, with the overlap named:
+
+```text
+users_in_phase_28d                     1,600
+
+agent edit               612 / 1,600 = 38% returned on a 2nd day
+code completion          540 / 1,600 = 34%
+active code review       180 / 1,600 = 11%
+Copilot CLI               95 / 1,600 =  6%  <- weakest floor, enablement target
+passive code review      410 / 1,600 = auto-assignment, not a user act
+
+rows overlap: a user may appear under several features
+```
+
+The first form invents a share-of-usage split the overlapping counts cannot support, and promotes an administrator's auto-assignment setting into third place. The second reads each row as its own floor and names the weakest surface.
+
+## Key Takeaways
+
+- Query `totals_by_feature` for near-zero rows first. A surface almost nobody returned to is the one finding the two-day bar supports on its own.
+- Divide by `users_in_phase_28d`, never by `total_engaged_users`, which counts only users active that day and moves independently of the numerator.
+- Keep the passive code review row in its own column and label it a configuration signal.
+- Map a null `copilot_feature_engagement` to unknown rather than 0, or a reporting gap renders as a decline.
+
+## Related
+
+- [Cohort Segmentation in the Copilot Usage Metrics API](cohort-segmentation-copilot-usage-metrics.md) — the `ai_adoption_phase` classification that `users_in_phase_28d` now supplies a full population for
+- [Per-Agent-App Attribution in the Copilot Usage Metrics API](per-agent-app-attribution-copilot-metrics.md) — the other non-partitioning array in this API, where the residual comes from unidentified agents rather than from users counted twice
+- [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — the return-on-investment section of the same dashboard, and which half of its ratio is measured
+- [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — why a rollout tracks trials and sustained use as two numbers rather than one
+- [Intervention Rate as a Diagnostic North Star, Not a Target](intervention-rate-diagnostic-north-star.md) — the general case of a diagnostic signal that breaks once it becomes a target
 
 ---
 

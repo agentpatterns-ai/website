@@ -99,4 +99,5 @@ The 62% headline is consistent with this org and with a uniform-60%-medium-use o
 - [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — the ROI panel built on top of these phases; how to read a cross-cohort cost and throughput comparison without treating it as causal.
 - [Per-Agent-App Attribution in the Copilot Usage Metrics API](per-agent-app-attribution-copilot-metrics.md) — the same diagnostic move on the same API, one axis over: the agent inventory instead of the user population.
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the other side of Copilot-specific instrumentation; cost telemetry that pairs with the cohort distribution.
+- [Reading Copilot Feature Engagement by Its Threshold](copilot-feature-engagement-threshold.md) — the per-feature engagement breakdown keyed to these phases, and the denominator `users_in_phase_28d` adds to them.
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the rollout that these adoption-phase cohorts instrument: seed adoption socially, then track retention as a separate number.
