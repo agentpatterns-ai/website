@@ -11,7 +11,7 @@ tags:
   - evals
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-09-15
+last_reviewed: 2026-09-18
 maturity: emerging
 ---
 
@@ -51,7 +51,7 @@ A job directory is per-run and local to the machine that ran it, so comparing ac
 
 ## Example
 
-Harbor is a Python framework for specifying sandboxed agent tasks, from the team behind Terminal-Bench, and it runs each task in an isolated Docker container. A task holds three files: an environment definition, an instruction for the agent, and a verifier that inspects the container once the agent stops ([Braintrust, 2026](https://www.braintrust.dev/blog/harbor-agent-evals)). Terminal-Bench 2.0 is distributed in that format and ran its published numbers on Daytona sandboxes, repeating each model and agent combination at least five times ([Duan and others, 2026](https://arxiv.org/abs/2601.11868v1)).
+Harbor is a Python framework for specifying sandboxed agent tasks, from the team behind Terminal-Bench, and it runs each task in an isolated Docker container. A task holds three files: an environment definition, an instruction for the agent, and a verifier that inspects the container once the agent stops ([Braintrust, 2026](https://www.braintrust.dev/blog/harbor-agent-evals)). Terminal-Bench 2.0 is distributed in that format and ran its published numbers on Daytona sandboxes, repeating each model and agent combination at least five times ([Duan and others, 2026](https://arxiv.org/abs/2601.11868v1)). Vercel Sandbox is another hosted option for Terminal-Bench and other Harbor evals ([Vercel, 2026](https://vercel.com/changelog/run-terminal-bench-and-other-harbor-evals-on-vercel-sandbox)).
 
 One flag turns the local job directory into a synced project carrying the dataset, per-trial rows, score fields, and trajectory listed above ([Braintrust, 2026](https://www.braintrust.dev/blog/harbor-agent-evals)):
 

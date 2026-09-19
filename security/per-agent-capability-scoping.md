@@ -61,3 +61,4 @@ The union property is the whole mechanism. Whatever a single allowlist covers re
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — scopes a value's budget across composition, the third axis alongside time and principal.
 - [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — narrows a static manifest per request; the narrowing here is per principal instead.
 - [Workspace Topology as an Indirect Injection Attack Vector](workspace-topology-injection-attack-vector.md) — the residual `AGENTS.md` surface, and the cheap levers that reduce it.
+- [Aggregation Bounds for Agent Authorization](aggregation-bounds-agent-authorization.md) — the question left after every call is authorized: whether the set of accesses may be synthesized for this principal.

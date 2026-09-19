@@ -84,6 +84,7 @@ nav:
   - agent-authored-message-rendered-image-exfiltration.md
   - agent-network-egress-policy.md
   - agentic-detection-response-mcp.md
+  - aggregation-bounds-agent-authorization.md
   - authgraph-dual-graph-injection-defense.md
   - authority-confusion-untrusted-context.md
   - authorization-continuity-across-agent-mutation.md

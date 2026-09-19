@@ -87,3 +87,4 @@ On the `skills.sh` route the same discipline is assembled by hand. Install with 
 - [Enterprise-Managed Plugin Governance for Agent CLIs](../security/enterprise-managed-plugin-governance.md) — the admin-side half: curating marketplaces and force-enabling plugins before any download
 - [Skill Library Evolution: Lifecycle Governance for Agents](../tool-engineering/skill-library-evolution.md) — how to prune the installed set that a pack keeps growing
 - [Trusting a Skill Scanner's Verdict as a Security Judgment](../patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md) — why a registry's clean scan is a signal rather than a decision
+- [Workspace-Hosted Skills: Authorship Outside the Repo](workspace-hosted-skills.md) — the authoring side: what changes when the skill's source of truth is a document workspace rather than a registry entry

@@ -100,6 +100,7 @@ The PR diff makes the severity definition change explicit. Reviewers can judge w
 - [Frozen Spec File: Preserving Intent in AI Agent Sessions](frozen-spec-file.md)
 - [CLAUDE.md Convention](claude-md-convention.md)
 - [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)
+- [Workspace-Hosted Skills: Authorship Outside the Repo](workspace-hosted-skills.md) — what the review gate becomes when the source of truth leaves git
 
 ## Sources
 
