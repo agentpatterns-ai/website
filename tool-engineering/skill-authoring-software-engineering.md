@@ -92,3 +92,4 @@ The failure lands before either skill body is read, because the selector compare
 - [Classical SE Patterns as Agent Design Analogues](../patterns/agent-design/classical-se-patterns-agent-analogues.md) — the same transfer question asked of GoF and SOLID at the system level rather than the artifact level
 - [Skill Evals](../verification/skill-evals.md) — the behavioral evaluation layer that stands in for deterministic tests
 - [Claude Code Extension Points](../tools/claude/extension-points.md) — a tool-specific decision tree over the same mechanism choice
+- [Skill or MCP Server: Choosing a Capability's Delivery Mechanism](skill-or-mcp-server-delivery-selection.md) — the advice-against-guarantee axis applied to one fork, with the measured follow-through rate behind it

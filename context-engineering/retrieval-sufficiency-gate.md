@@ -72,3 +72,4 @@ A structural score comes from the repository rather than the model, which is why
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — the call graphs and dependency edges a structural coverage score is computed over.
 - [Corpus Shape as a Retrieval Design Constraint](corpus-shape-retrieval-architecture.md) — the diagnostic that separates retrieval failures a re-ranker can fix from recall ceilings above tuning.
 - [Evidence-Conditioned Execution: Gate Edits on Observations](../verification/evidence-conditioned-execution.md) — the sibling gate one stage later, holding the edit until the trajectory shows the observations it depends on.
+- [State-Conditioned Evidence Selection for Mid-Task Retrieval](state-conditioned-evidence-selection.md) — scores sufficiency against what the agent has not yet read, rather than against the query.
