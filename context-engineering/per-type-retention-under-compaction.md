@@ -83,3 +83,4 @@ One caveat about the evidence. Every TypeCompact baseline is itself a lossy comp
 - [Addressable Recall Compaction](addressable-recall-compaction.md) — keeping the verbatim record recoverable after a summary replaces it
 - [Shortening Old Tool Results Under Context Pressure (Half-Life Truncation)](half-life-tool-result-truncation.md) — setting fidelity by result age instead of content type, and the window condition that decides whether it pays
 - [Scoring Constraint Loss and Tool Reach as Separate Risks](../patterns/anti-patterns/constraint-loss-and-tool-reach-scored-separately.md) — why a dropped rule stays inert until an unauthorized action becomes executable
+- [Specification Memory: What a Shared Agent Workspace Keeps](specification-memory-shared-workspaces.md) — the same keep-or-drop decision at the session boundary, where the choice is binary rather than a fidelity setting

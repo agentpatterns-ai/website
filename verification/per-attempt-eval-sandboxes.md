@@ -11,7 +11,7 @@ tags:
   - evals
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-09-18
+last_reviewed: 2026-09-19
 maturity: emerging
 ---
 
@@ -29,7 +29,7 @@ A per-attempt sandbox gives each eval trial its own container, built from a pinn
 
 ## Why it works
 
-A reused environment makes the score a function of run order, and the evidence is a before-and-after rather than an argument. SWE-bench first tried conda environments, then added explicit package versioning on top of them. "In hindsight, it is underspecified," its maintainers wrote, because evaluation "remained sensitive to discrepancies originating from different platforms and user-specific configurations, leading to inconsistent results." Per-sample Docker images moved ground-truth reproduction to 99.78% (2289/2294) of SWE-bench tasks and 100% (300/300) of SWE-bench Lite ([SWE-bench, 2024](https://github.com/SWE-bench/SWE-bench/tree/0c0de95298dc502afa94b49bd8384e5f3ef81790/docs/20240627_docker)). Microsoft names the same machine differences as hidden variables, from operating system and shell down to absolute file paths and silent tool updates, and warns that "a model switch that 'improves scores by 8 points' might be entirely explained by the fact that you ran it on a different machine" ([Microsoft, 2026](https://developer.microsoft.com/blog/the-hidden-variables-in-your-agent-eval/)).
+A reused environment makes the score a function of run order, and the evidence is a before-and-after rather than an argument. SWE-bench first tried conda environments, then added explicit package versioning on top of them. "In hindsight, it is underspecified," its maintainers wrote, because evaluation "remained sensitive to discrepancies originating from different platforms and user-specific configurations, leading to inconsistent results." Per-sample Docker images moved ground-truth reproduction to 99.78% (2289/2294) of SWE-bench tasks and 100% (300/300) of SWE-bench Lite ([SWE-bench, 2024](https://github.com/SWE-bench/SWE-bench/tree/0c0de95298dc502afa94b49bd8384e5f3ef81790/docs/20240627_docker)). Microsoft names the same machine differences as hidden variables, from operating system and shell down to absolute file paths and silent tool updates, and warns that "a model switch that 'improves scores by 8 points' might be entirely explained by the fact that you ran it on a different machine" ([Microsoft, 2026](https://developer.microsoft.com/blog/the-hidden-variables-in-your-agent-eval/)). A second Microsoft post argues that the sandbox, not the model, bounds what an agent eval can tell you ([Microsoft, 2026](https://devblogs.microsoft.com/blog/your-ai-coding-agent-evaluation-is-only-as-good-as-its-sandbox/)).
 
 ## Put the verifier outside the agent's container
 

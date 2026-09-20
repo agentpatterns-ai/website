@@ -90,3 +90,4 @@ The same capability — GitHub access — flips choice depending on the auth bou
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — the threat model that makes credential isolation load-bearing in the first place
 - [Terminal-First Agent Interfaces with Browser Escalation](terminal-first-browser-escalation.md) — the cost-and-success side of the same selection question, measured across three enterprise platforms
 - [MCP-vs-CLI Cost Ratios Are a Property of the Scaffolding](mcp-cli-cost-ratio-scaffolding-bound.md) — why the token-cost bullet above cannot be settled with a borrowed multiplier: the ratio inverts across scaffoldings
+- [Skill or MCP Server: Choosing a Capability's Delivery Mechanism](skill-or-mcp-server-delivery-selection.md) — the same credential question asked against a skill rather than a CLI, with enforcement and revocation added as inputs

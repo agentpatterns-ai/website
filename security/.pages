@@ -94,6 +94,7 @@ nav:
   - capability-additive-interpreter.md
   - clarification-mode-injection-amplification.md
   - close-attack-to-fix-loop.md
+  - closed-world-tool-call-resolution.md
   - code-injection-multi-agent-defence.md
   - cognitive-poisoning-tool-feedback.md
   - constraint-substrate-scalable-oversight.md
@@ -164,6 +165,7 @@ nav:
   - skill-composition-risk.md
   - skill-shell-execution-gate.md
   - static-first-shell-command-gating.md
+  - subagent-return-framing.md
   - sufficiency-tightness-policy-decomposition.md
   - system-prompt-not-a-secret-store.md
   - task-based-access-control-hybrid-inspection.md

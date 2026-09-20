@@ -64,3 +64,4 @@ Two moves follow from the numbers above without fitting anything. Filter hard on
 - [Compositional Skill Routing](compositional-skill-routing.md) — decomposing a query into sub-tasks and retrieving one skill per sub-task at MCP-library scale
 - [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — the reach limit on a skill graph built from the retriever's own embedding neighbors
 - [Context Budget Allocation](context-budget-allocation.md) — dividing a fixed context window across competing consumers
+- [State-Conditioned Evidence Selection for Mid-Task Retrieval](state-conditioned-evidence-selection.md) — the same complementarity argument for repository source, conditioned on what the agent has already read

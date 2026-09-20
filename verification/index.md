@@ -92,6 +92,7 @@ last_reviewed: 2026-05-27
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — Run the test suite twice (baseline + patched) and gate the PR on the diff, not the absolute pass rate — under specific preconditions on test-suite strength, planner localization, and CI determinism
 - [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](bug-discriminating-validation-evidence.md) — Replay a repair agent's own passing test against the unfixed code; 46.0% of positive validation events pass there too and carry no information about the bug
 - [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — Multi-turn LLM code refinement silently breaks previously-passing code (Phi 0.089 between instruction adherence and functional correctness); pin the original suite, re-execute every turn, and gate on the pass-set diff
+- [Cut-Point Replay: Test a Fix Against a Recorded Agent Run](cut-point-replay-agent-regression-tests.md) — Serve a recorded agent run's unchanged boundaries from the record and run the changed ones live, so one production incident becomes a deterministic regression test
 
 ## Eval-Driven Development
 
@@ -173,6 +174,7 @@ last_reviewed: 2026-05-27
 
 - [Eval Environment Containment for Cyber-Capable Agents](eval-environment-containment.md) — An agent that cannot reach its fictional target attacks a real one; enforce isolation at the network layer and verify egress from inside the environment, because a scope statement in the prompt is not a boundary
 - [Per-Attempt Sandboxes for Agents That Change the Filesystem](per-attempt-eval-sandboxes.md) — Give every trial its own clean container when the result is workspace state, emit the dataset, rows, scores and trajectory that keep runs comparable, and keep the verifier outside the container the agent controlled
+- [Rented Sandboxes for Coding-Agent Benchmark Runs](rented-benchmark-sandboxes.md) — Rent a sandbox per trial when the sum of trial durations blocks the decision, and record the provider and plan alongside the dataset version because no submission rule pins them
 - [Test Harness Design for LLM Context Windows](llm-context-test-harness.md) — Terse stdout, verbose log files, and grep-friendly error lines that keep agent context clean and actionable during evaluation runs
 - [Runnable Documentation as Agent Verification](runnable-documentation.md) — Extract inline code examples into standalone files that CI executes on every build so doc rot fails the build the same way broken code does
 - [Verification Surface: Match the Tool to the Failure](verification-surface-reach-and-cost.md) — A controlled study of 1,116 agent builds ranks self-check tools by reach and token cost: a boot probe costs less than no tool at all, a shell costs 2.35x, a linter bought nothing

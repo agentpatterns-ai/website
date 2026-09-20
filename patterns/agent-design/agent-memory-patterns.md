@@ -151,3 +151,4 @@ Concurrent writes to shared project memory can introduce race conditions or leav
 - [CLAUDE.md Convention](../../instructions/claude-md-convention.md)
 - [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](../../instructions/hierarchical-claude-md.md)
 - [Seeding Agent Context: Breadcrumbs in Code](../../context-engineering/seeding-agent-context.md)
+- [Specification Memory: What a Shared Agent Workspace Keeps](../../context-engineering/specification-memory-shared-workspaces.md) — the measured cost of carrying a transcript instead of the four categories this page's "what to persist" list approximates
