@@ -61,6 +61,7 @@ nav:
       - cryptographic-governance-audit-trail.md
       - defense-in-depth-agent-safety.md
       - enforced-versus-advisory-controls.md
+      - workflow-execution-protections.md
       - enterprise-agent-hardening.md
       - harness-distributed-security-controls.md
       - inline-lifecycle-safety-harness.md

@@ -10,7 +10,7 @@ tags:
 aliases:
   - model retirement migration
   - llm deprecation workflow
-last_reviewed: 2026-06-12
+last_reviewed: 2026-09-20
 maturity: established
 ---
 
@@ -22,7 +22,7 @@ maturity: established
 
 Model IDs have finite lifespans. Anthropic defines a four-stage lifecycle — Active, Legacy, Deprecated, Retired — and commits to at least 60 days notice before retirement for publicly released models ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)). After the retirement date, requests to the retired ID fail; the API does not transparently reroute to a successor ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)).
 
-Deprecation windows are short and getting shorter. As of 2026-04-23, `claude-sonnet-4-20250514` and `claude-opus-4-20250514` were deprecated on 2026-04-14 with retirement scheduled for 2026-06-15 — a 62-day window ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)). On GitHub Copilot, deprecation windows are tighter: GPT-5.1 and its Codex variants were deprecated on 2026-04-03 with migration to GPT-5.3-Codex ([GitHub Changelog: GPT-5.1 deprecated](https://github.blog/changelog/2026-04-03-gpt-5-1-codex-gpt-5-1-codex-max-and-gpt-5-1-codex-mini-deprecated)), and Opus 4.6 Fast was retired from the Pro+ tier on the same day it was announced, 2026-04-10 ([GitHub Changelog: Opus 4.6 Fast retired](https://github.blog/changelog/2026-04-10-enforcing-new-limits-and-retiring-opus-4-6-fast-from-copilot-pro)).
+Deprecation windows are short and getting shorter. As of 2026-04-23, `claude-sonnet-4-20250514` and `claude-opus-4-20250514` were deprecated on 2026-04-14 with retirement scheduled for 2026-06-15 — a 62-day window ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)). On GitHub Copilot, deprecation windows are tighter: GPT-5.1 and its Codex variants were deprecated on 2026-04-03 with migration to GPT-5.3-Codex ([GitHub Changelog: GPT-5.1 deprecated](https://github.blog/changelog/2026-04-03-gpt-5-1-codex-gpt-5-1-codex-max-and-gpt-5-1-codex-mini-deprecated)), and Opus 4.6 Fast was retired from the Pro+ tier on the same day it was announced, 2026-04-10 ([GitHub Changelog: Opus 4.6 Fast retired](https://github.blog/changelog/2026-04-10-enforcing-new-limits-and-retiring-opus-4-6-fast-from-copilot-pro)). The same cadence held into September. On 2026-09-18 GitHub announced the upcoming deprecation of selected Copilot models in mid-October 2026, about four weeks of notice ([GitHub Changelog: Upcoming Copilot model deprecation](https://github.blog/changelog/2026-09-18-upcoming-deprecation-of-selected-github-copilot-models-in-mid-october)).
 
 The operational wrapper sits above model-routing patterns like [cost-aware agent design](../token-engineering/cost-aware-agent-design.md) and [cross-vendor competitive routing](../patterns/agent-design/cross-vendor-competitive-routing.md). Routing chooses which model handles a task; lifecycle management keeps that choice viable when providers force a change.
 

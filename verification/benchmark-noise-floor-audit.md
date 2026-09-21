@@ -74,6 +74,7 @@ The audit carries one confound of its own: its Gemini endpoint differs from the 
 ## Related
 
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — how to report a spread once you have one, and when a cell sits too near a bound to carry a verdict.
+- [Pre-Generation Complexity Scoring for Code Reliability](pre-generation-complexity-scoring.md) — the matching audit on the x-axis, for a difficulty measure computed from the code the agent produced.
 - [Decomposing Agent Output Variability by Layer](sampling-state-agent-variability-layers.md) — attributing run-to-run spread to sampling, infrastructure, or orchestration state.
 - [Tool-Use Sim-to-Real Perturbation Taxonomy](tool-use-sim-to-real-perturbation-taxonomy.md) — perturbations that change the environment rather than the wording, and where robustness collapses under each.
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — measurement gaps a stronger model cannot close.
