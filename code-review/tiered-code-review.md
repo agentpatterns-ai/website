@@ -10,7 +10,7 @@ tags:
   - testing-verification
   - code-review
   - tool-agnostic
-last_reviewed: 2026-06-13
+last_reviewed: 2026-09-20
 maturity: established
 ---
 
@@ -110,6 +110,8 @@ Deciding what counts as "critical" is the hardest part. Four heuristics:
 
 Non-critical is everything else: tests, docs, configuration, CSS, build scripts, and reversible migrations.
 
+The GitHub Blog reduces the same call to one stopping rule: review until you can explain and own the outcome ([Should you read the code?](https://github.blog/ai-and-ml/should-you-read-the-code-is-rag-dead-and-did-skills-kill-mcp/)). That post also puts the effort before generation (reading the implementation, mapping dependencies, planning), not only after it.
+
 ## Example
 
 A monorepo with `src/auth/`, `src/api/`, and `tests/` directories uses all three tiers in a single GitHub Actions workflow:
@@ -207,6 +209,5 @@ Through misclassification. A migration adding a PII column, a config change broa
 - [Committee Review Pattern](committee-review-pattern.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)
 - [Risk-Based Shipping](../verification/risk-based-shipping.md)
-- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)
 - [Diff-Based Review Over Output Review](diff-based-review.md)

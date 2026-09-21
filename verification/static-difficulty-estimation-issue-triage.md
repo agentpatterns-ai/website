@@ -62,6 +62,7 @@ For a single issue the agent run is itself the measurement, and it is cheap next
 
 ## Related
 
+- [Pre-Generation Complexity Scoring for Code Reliability](pre-generation-complexity-scoring.md) — why a difficulty axis measured on agent output is caused by the outcome it is plotted against, and what to score instead.
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — the post-hoc counterpart, decomposing a run into search, read, and edit stages once it exists.
 - [Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)](repository-perturbation-context-reasoning-diagnosis.md) — isolates repository navigation from issue resolution by perturbing the codebase before the agent runs.
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — why solve rates on public repositories overstate performance on private code.

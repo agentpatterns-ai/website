@@ -708,6 +708,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Reverse-Engineered Executable Specifications for Agentic Program Repair](patterns/multi-agent/reverse-engineered-executable-specifications.md)
 - [Role Orchestration on a Single Model](patterns/agent-design/role-orchestration-single-model.md)
 - [Role-Declared Context Mode: Where the Inherit Decision Lives](patterns/multi-agent/role-declared-context-mode.md)
+- [Router-Imposed Quality Ceiling: Committing Before Output](patterns/agent-design/router-imposed-quality-ceiling.md)
 - [RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use](patterns/agent-design/rubric-refine-pre-execution-tool-use.md)
 - [Running Several Coding Agents Behind One Harness Interface](patterns/agent-design/harness-adapter-layer.md)
 - [Runtime Scaffold Evolution: Agents That Build Tools](patterns/agent-design/runtime-scaffold-evolution.md)
@@ -1017,6 +1018,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Dormant Memory Payloads Triggered by Sensitive Topics (Trojan Hippo)](security/trojan-hippo-memory-attack.md)
 - [Dual-Graph Alignment for Indirect Prompt Injection Defense (AuthGraph)](security/authgraph-dual-graph-injection-defense.md)
 - [Embedding Inversion: Vector Stores as a Source-Text Disclosure Surface](security/embedding-inversion-vector-store-disclosure.md)
+- [Enforcing Who and What Can Trigger an Agent's CI Run](security/workflow-execution-protections.md)
 - [Enterprise Agent Hardening: Three Production Gates](security/enterprise-agent-hardening.md)
 - [Enterprise-Managed Plugin Governance for Agent CLIs](security/enterprise-managed-plugin-governance.md)
 - [Evidence-Based Allowlist Auto-Discovery for Agents](security/evidence-based-allowlist-auto-discovery.md)
@@ -1208,6 +1210,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent-Resolved Review Threads](code-review/agent-resolved-review-threads.md)
 - [Building Agent Eval Environments With a World Spec](verification/world-spec-eval-environments.md)
 - [Capturing Dismissal Reasons for Agent Review Findings](code-review/dismissal-reason-capture.md)
+- [Choosing the Judge Model That Grades Your Agent Evals](verification/judge-model-bake-off.md)
 - [Claim-to-Evidence Trace Graphs for Auditing Agent Runs](verification/claim-to-evidence-trace-graphs.md)
 - [Classification Before Repair in an Analyzer Backlog](verification/classification-before-repair-analyzer-backlog.md)
 - [Cut-Point Replay: Test a Fix Against a Recorded Agent Run](verification/cut-point-replay-agent-regression-tests.md)
@@ -1245,6 +1248,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [PR Description Style as a Lever for Agent PR Merge Rates](code-review/pr-description-style-lever.md)
 - [Pre-Change Impact Analysis: Dependency Maps That Prevent Agent Regressions](verification/pre-change-impact-analysis.md)
 - [Pre-Execution Failure Scoring with a Draft Model (Speculative Uncertainty)](verification/speculative-uncertainty-draft-model-gate.md)
+- [Pre-Generation Complexity Scoring for Code Reliability](verification/pre-generation-complexity-scoring.md)
 - [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](verification/precise-debugging-benchmark.md)
 - [Predicting Reviewable Code: Pre-Flagging Functions Reviewers Will Delete](code-review/predicting-reviewable-code.md)
 - [RAG/Agent Reliability Problem Map: 16-Domain Failure Taxonomy](verification/rag-agent-reliability-problem-map.md)
@@ -23448,6 +23452,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate maximum reasoning compute to planning and verification phases, reduced compute to execution — rather than using a fixed level throughout
 - [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — On a fixed budget for a single-shot agentic build, raising reasoning effort buys first-try functional reliability more cost-effectively than adding testing tools or design prompts — under three explicit conditions
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md) — Before choosing how an agent will perform an action, choose how you will undo it — if recovery costs more than one command, reconsider the approach
+- [Router-Imposed Quality Ceiling: Committing Before Output](router-imposed-quality-ceiling.md) — A router that picks a specialist model before any candidate output exists caps quality at that model's best answer; the bound holds for every single-commit router, and tuning the specialists never lifts it
 - [Routing Break-Even: When a Cheaper Model Actually Pays](routing-break-even.md) — Divide the router's judging cost by the price gap between the two models to get the offload fraction routing must clear; when the models sit close in price, that figure passes 100% and routing cannot pay
 - [RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use](rubric-refine-pre-execution-tool-use.md) — Generate a task- and registry-specific rubric, score candidate tool-use code against explicit contract checks, and repair failures before any execution — for multi-step tool sequences where contract violations run silently to completion
 - [Scout-Then-Route: Verify the Handoff Before Routing](scout-then-route.md) — Send a cheap scout into the repository, sandbox-verify its reproduction claims and strip what fails, then pick the fixer on price rather than skill
@@ -44307,6 +44312,67 @@ When re-running is already cheaper than building a rollback primitive. Idempoten
 
 ---
 
+### Router-Imposed Quality Ceiling: Committing Before Output
+Source: https://agentpatterns.ai/patterns/agent-design/router-imposed-quality-ceiling/
+
+# Router-Imposed Quality Ceiling: Committing Before Output
+
+> A router that commits to one specialist model before any candidate output exists caps quality at that model's best answer.
+
+A router that picks the model before any of them has produced a candidate makes a single-commit selection, and quality on that request is capped at the picked model's best answer. The router sees a cursor position, a file type, a trigger order. It sees none of the answers it is choosing between, because none exist yet. Whatever the unpicked model would have said is unreachable, and tuning the individual models does not make it reachable.
+
+GitHub named the shape when it folded three specialist inline-suggestion models into one. Unification lets "a single model [choose] the best edit for the developer's current work end-to-end instead of using programmatic logic to choose among specialized models" ([VS Code, 16 September 2026](https://code.visualstudio.com/blogs/2026/09/16/building-the-github-copilot-inline-suggestions-model-part-one)). Two exits: delay the choice until some output exists, or fold it into generation.
+
+## When the ceiling binds
+
+Three conditions have to hold together.
+
+The specialists' answer sets overlap at one trigger point. Where only one model can plausibly respond, the router dispatches rather than chooses, and nothing sits above the ceiling to reach.
+
+You can serve a model that covers both tasks. Unification is a training program, not a config change: GitHub ran over 200 offline and 20 online experiments to reach its unified inline suggestions model ([VS Code, 16 September 2026](https://code.visualstudio.com/blogs/2026/09/16/building-the-github-copilot-inline-suggestions-model-part-one)). A team consuming third-party model APIs cannot buy that, so its only lever is the router.
+
+The residual gap is worth the work. On open-model pools, 12–36% of the router-to-oracle gap is what "no single-commit router can capture", and "the majority is genuine, recoverable specialist advantage" a better router still reaches ([Chen, arxiv 2607.03436v2](https://arxiv.org/abs/2607.03436v2)). Fix the router first.
+
+## The worked case
+
+Copilot's inline suggestions ran on three specialist models: completions for ghost text at the cursor, next edit suggestions (NES) for nearby rewrites, and long-distance NES further away. From the user's perspective the client fired them in a fixed order, falling through only when the previous one produced nothing. That cost up to four model calls per opportunity and "sometimes [made] suboptimal or piecemeal edits rather than a single clear edit that best serves the context" ([VS Code](https://code.visualstudio.com/blogs/2026/09/16/building-the-github-copilot-inline-suggestions-model-part-one)).
+
+With `class Fa` typed, completions fires first. It "can only append to the prefix `Fa`", so it suggests `FastingPenguin`. The unified model rewrites `Fa` to `Fish` instead ([VS Code](https://code.visualstudio.com/blogs/2026/09/16/building-the-github-copilot-inline-suggestions-model-part-one)). The better answer was available the whole time. Trigger order hid it.
+
+Read the shipped numbers carefully. Phase 1 flighted a unified NES and long-distance model against the three-model baseline. It reported "no statistically significant regressions in any key metrics", a 10% decrease in time to show a suggestion, and a 61% reduction in output tokens ([VS Code](https://code.visualstudio.com/blogs/2026/09/16/building-the-github-copilot-inline-suggestions-model-part-one)). Latency and tokens moved. Quality held flat. The `Fish` case illustrates the ceiling; it does not measure it.
+
+## Why it works
+
+Picking a model before generating anything is a single-commit selection, and its score is bounded by the committed model's own answer distribution. Chen proves this as a recoverability asymmetry: the bound holds "for every single-commit router" whether deterministic or randomized, while the same budget spent resampling the committed model recovers what selection cannot ([arxiv 2607.03436v2](https://arxiv.org/abs/2607.03436v2)). The cap belongs to the act of committing, not to the router's judgement. A smarter router narrows it; a better specialist does not.
+
+The cap is also wide. Across 21 routing methods and five benchmarks, routers land 10 to 30 percentage points below the oracle router, and on RouterBench "the top 15 routers differ by only 0.23 percentage points" ([Lu et al., arxiv 2606.07587v1](https://arxiv.org/abs/2606.07587v1)). The authors trace that to a predictability bottleneck: routers learn averaged model-performance trends rather than per-instance signal, so they agree with each other and miss the same hard cases. Moving the decision inside the model turns selection into generation, where the alternative is reachable.
+
+## When this backfires
+
+- The specialist margin is wide. On deterministic BPMN-to-workflow transformation, a specialist beat the generalist agents Roo and Cline by "approximately 9-20 percentage points in tool-use exactness" at over 95% lower generation token cost ([Borman et al., arxiv 2607.14456v1](https://arxiv.org/abs/2607.14456v1)). That is one narrow task, and where your margin looks like it, an occasional wrong commit costs less than a constant deficit.
+- Latency forbids speculation. The cheap remedy is to run the candidates in parallel and pick after seeing output. Copilot already did some of this, "issuing parallel calls to completions and NES" depending on cursor position ([VS Code](https://code.visualstudio.com/blogs/2026/09/16/building-the-github-copilot-inline-suggestions-model-part-one)), and it multiplies cost per opportunity.
+- One path already carries the traffic. Completions handled "higher than 70% of edit opportunities", so GitHub unified the other two first and left the flagship alone ([VS Code](https://code.visualstudio.com/blogs/2026/09/16/building-the-github-copilot-inline-suggestions-model-part-one)).
+- Removing the router is not the shipped remedy. In Phase 1 the client logic was "simplified to prioritize completions, followed by the 2-in-1 model" ([VS Code](https://code.visualstudio.com/blogs/2026/09/16/building-the-github-copilot-inline-suggestions-model-part-one)). Three commitment points became two.
+- Your metrics cannot see it. GitHub's key metrics are "acceptance rate, dismissal rate, shown rate, recurring engagement, and accumulated retained characters" ([VS Code](https://code.visualstudio.com/blogs/2026/09/16/building-the-github-copilot-inline-suggestions-model-part-one)). Each scores a suggestion that was shown, so none scores the better one never generated.
+
+## Key Takeaways
+
+- A router that commits before any candidate exists caps quality at the committed model's answer. Tuning the specialists does not lift that cap.
+- The bound is provable for every single-commit router, deterministic or randomized ([arxiv 2607.03436v2](https://arxiv.org/abs/2607.03436v2)).
+- Most of the router-to-oracle gap is recoverable by a better router. Rewrite the router before rewriting the architecture.
+- Copilot's unification bought latency and token efficiency with quality held flat, on vendor-internal experiments. Do not budget a quality gain from it.
+- Acceptance and dismissal metrics cannot detect this failure, because the better suggestion was never produced.
+
+## Related
+
+- [Routing Break-Even: When a Cheaper Model Actually Pays](routing-break-even.md) — the cost screen on the same arrangement; this page is the quality bound the cost math ignores.
+- [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — defers the commitment until partial output exists, which is the cheaper half of the remedy here.
+- [Cost-Driven Model Routing Without Quality Monitoring](../anti-patterns/cost-routing-without-quality-monitoring.md) — what happens when nobody measures the routed tier at all.
+- [Auto Model Selection: Harness-Driven Routing per Task](auto-model-selection.md) — the vendor-side version of the same per-request commitment.
+- [Utility-Model Split: Background Tasks on a Cheaper Model](utility-model-split.md) — a split where the answer sets do not overlap, so no ceiling exists.
+
+---
+
 ### Routing Break-Even: When a Cheaper Model Actually Pays
 Source: https://agentpatterns.ai/patterns/agent-design/routing-break-even/
 
@@ -51523,6 +51589,7 @@ The reviewer never touched the credentialed actor's context. The actor never rea
 - [Scoped Credentials Proxy](../../security/scoped-credentials-proxy.md)
 - [Always-On Agentic PR Security Review](../../security/always-on-pr-security-review.md)
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md)
+- [Enforcing Who and What Can Trigger an Agent's CI Run](../../security/workflow-execution-protections.md)
 
 ---
 
@@ -89344,6 +89411,8 @@ Deciding what counts as "critical" is the hardest part. Four heuristics:
 
 Non-critical is everything else: tests, docs, configuration, CSS, build scripts, and reversible migrations.
 
+The GitHub Blog reduces the same call to one stopping rule: review until you can explain and own the outcome ([Should you read the code?](https://github.blog/ai-and-ml/should-you-read-the-code-is-rag-dead-and-did-skills-kill-mcp/)). That post also puts the effort before generation (reading the implementation, mapping dependencies, planning), not only after it.
+
 ## Example
 
 A monorepo with `src/auth/`, `src/api/`, and `tests/` directories uses all three tiers in a single GitHub Actions workflow:
@@ -89441,7 +89510,6 @@ Through misclassification. A migration adding a PII column, a config change broa
 - [Committee Review Pattern](committee-review-pattern.md)
 - [Human-AI Review Synergy](human-ai-review-synergy.md)
 - [Risk-Based Shipping](../verification/risk-based-shipping.md)
-- [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md)
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)
 - [Diff-Based Review Over Output Review](diff-based-review.md)
 
@@ -89593,6 +89661,7 @@ Source: https://agentpatterns.ai/verification/
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — Decompose agent trajectories into search, read, and edit stages with per-stage precision and recall to pinpoint where and why an agent went wrong
 - [Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)](repository-perturbation-context-reasoning-diagnosis.md) — Apply semantics-preserving repository perturbations before an agent runs to isolate context reasoning from end-to-end issue-resolution shortcuts; average score drops 66.8% to 25.3% on the explicit-task formulation
 - [Static Difficulty Estimation for Agent Issue Triage](static-difficulty-estimation-issue-triage.md) — Structural task features predict agent success at AUC 0.863, but the top features are computed on the gold patch, so only the repository group survives to triage time
+- [Pre-Generation Complexity Scoring for Code Reliability](pre-generation-complexity-scoring.md) — Complexity read off generated code is caused by the failure it explains; score the task from the prompt on a fixed rubric before the run, and publish the rater disagreement rather than a cutoff
 - [Canary Tools for Diagnosing Tool-Selection Reasoning](canary-tools-tool-selection-diagnosis.md) — Plant one deliberately flawed decoy per weakness in a staging tool set, then read a trap rate per type; capability mirage was the only strongly active probe on six hosted models
 - [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](precise-debugging-benchmark.md) — Frontier LLMs pass unit tests on debugging tasks by regenerating large chunks of code rather than making targeted edits — edit-level precision and bug-level recall expose the gap
 - [Review Constraint Tests as a Second Acceptance Gate](review-constraint-acceptance-gate.md) — A functional suite built from the bug report cannot see a constraint separable from it; run review-derived constraints as a second executable suite, scored on its own
@@ -89701,6 +89770,7 @@ Source: https://agentpatterns.ai/verification/
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — An LLM judge's rubric verdict hides its own error rate; measure it against human labels before scaling, because reliability varies by domain, model, and prompt (RuVerBench: 94.7 down to 51.6 balanced accuracy)
 - [Mutation Testing for LLM Judges: Scoring an Evaluator on Injected Defects](mutation-testing-llm-judges.md) — Inject defects you named into accepted inputs and score the judge on kill ratio when the task has no ground truth, then pair it with a precision measure because kill ratio is blind to over-flagging
 - [Detecting Self-Preference in a Single LLM Judge](judge-self-preference-detection.md) — A judge scoring output from its own model family inflates pass rates; stratify verdicts by generator and measure the flip rate, because aggregate human-agreement averages the biased and unbiased halves together
+- [Choosing the Judge Model That Grades Your Agent Evals](judge-model-bake-off.md) — Replay frozen traces past every candidate judge against human labels, hold decoding fixed across arms, and read each dimension only as far as the oracle supports — five items settle cost and latency, not accuracy
 
 ## Guardrails
 
@@ -90490,6 +90560,7 @@ The audit carries one confound of its own: its Gemini endpoint differs from the 
 ## Related
 
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — how to report a spread once you have one, and when a cell sits too near a bound to carry a verdict.
+- [Pre-Generation Complexity Scoring for Code Reliability](pre-generation-complexity-scoring.md) — the matching audit on the x-axis, for a difficulty measure computed from the code the agent produced.
 - [Decomposing Agent Output Variability by Layer](sampling-state-agent-variability-layers.md) — attributing run-to-run spread to sampling, infrastructure, or orchestration state.
 - [Tool-Use Sim-to-Real Perturbation Taxonomy](tool-use-sim-to-real-perturbation-taxonomy.md) — perturbations that change the environment rather than the wording, and where robustness collapses under each.
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — measurement gaps a stronger model cannot close.
@@ -91938,6 +92009,78 @@ The same draft contains an `import polars as pl` line. Do not route this through
 - [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md) — Repeated-critique technique that shares CoVe's anti-anchoring mechanism.
 - [Pre-Completion Checklists](pre-completion-checklists.md) — Stop-gate that can host factored verification as one of its steps.
 - [Incremental Verification](incremental-verification.md) — External-oracle pattern (run tests after each change) that displaces CoVe for behavior claims.
+
+---
+
+### Choosing the Judge Model That Grades Your Agent Evals
+Source: https://agentpatterns.ai/verification/judge-model-bake-off/
+
+# Choosing the Judge Model That Grades Your Agent Evals
+
+> Replay frozen traces past every candidate judge and score them against human labels. Cost separates on five examples. Accuracy does not.
+
+A judge bake-off is a controlled comparison. You capture a set of agent runs once, freeze them, and have every candidate judge score that identical set against labels a human wrote. The output tells you which judge to adopt, but only along the dimensions the design isolated. A small oracle isolates fewer of them than a results table suggests.
+
+## When to run one, and when not to
+
+Run one when you are about to swap the judge and the suite gates something a wrong verdict would ship.
+
+Skip it while the rubric is still moving. Judge prompt wording alone, with the judge model held fixed, shifted measured harmful-response rates by up to 24.2 percentage points across a safety benchmark ([arXiv:2604.24074v1](https://arxiv.org/abs/2604.24074v1)). Wording is the larger term for most suites. Settle it before spending labels on a model comparison. Skip it too on a suite you read only as a delta between agent versions, where a bias landing equally on both arms cancels in the difference.
+
+Cheapness on its own is not a reason either. When the judge is no more accurate than the model under test, "no debiasing method can decrease the required amount of ground truth labels by more than half", and the savings seen in practice sat below that ceiling ([arXiv:2410.13341v4](https://arxiv.org/abs/2410.13341v4)).
+
+## What the comparison has to hold fixed
+
+Frozen inputs, a human-written oracle, one rubric across every arm, and identical decoding across every arm. LangChain's public comparison of the Jev decision model against three LLM judges holds the first three, which makes it a worked example in both directions.
+
+Its inputs were frozen: "For each example in the dataset, we captured the weather agent's response and stored the full output as a fixed example in LangSmith", so every judge scored byte-identical text and agent stochasticity left the comparison. Its oracle was human, and one rubric ran throughout: "we had a human reviewer label each fixed response against the same rubric" ([LangChain](https://blog.langchain.com/jev-agent-evals-langsmith/)).
+
+Decoding is the control that slipped. LangChain states it plainly: "We did not set temperature, top-p, seed, or max tokens for the LLM judges, so each provider's defaults applied" ([LangChain](https://blog.langchain.com/jev-agent-evals-langsmith/)). In a five-temperature sweep, three autoregressive judges reached a McDonald's omega of 1.0 on every benchmark at temperature 0, against values as low as 0.421 at higher settings ([arXiv:2412.12509v2](https://arxiv.org/abs/2412.12509v2)). A variance gap measured against provider defaults mixes a model-class difference with a settings difference.
+
+## What that experiment settled, and what it left open
+
+| Dimension | Reported result | What the design supports |
+|---|---|---|
+| Cost | $0.00035 per call; $0.34 total against $28.17 for Claude Sonnet 4.6 | Settled. Every call is an independent measurement. |
+| Latency | 0.44s mean | Settled, on the same grounds. |
+| Score variance | Mean per-case variance 0.0000149, against competitors 92x to 913x higher | Confounded. The LLM arms ran at provider default decoding. |
+| Accuracy | 100% oracle agreement against 99.8%, 96.4% and 80.0% | Unresolved. Five labeled items, one reviewer. |
+
+Figures from [LangChain](https://blog.langchain.com/jev-agent-evals-langsmith/). The 500 repeated decisions per judge are 5 items scored 100 times. The project's own repository draws the same line: "the result describes this experiment; it is not a general ranking of judge accuracy" ([repro repository](https://github.com/danielgshea/jev-as-a-judge)).
+
+## Why it works
+
+A judge's error is invisible to the suite it grades, because the judge is what produces that suite's numbers. Sizing the error needs labels the judge did not generate, so the comparison runs against an independent oracle rather than against the agent's own scores. The resolution limit follows directly: with judge-oracle agreement `r`, "we could only reliably rank models for which the true score 𝔼s(m) differs by more than 2(1−r)" ([arXiv:2410.13341v4](https://arxiv.org/abs/2410.13341v4)). Freezing the traces is what makes `r` measurable at all, since it removes the agent as a source of variation and leaves judge behavior as the only thing moving.
+
+That bound also explains the asymmetry in the table. Cost and latency are measured on every call, so 500 calls give 500 independent measurements of each. Accuracy is measured against 5 labeled items however many times they are re-scored, so the resolvable gap stays wide.
+
+## When this backfires
+
+- A vendor ran it. TypeSafe's own benchmark for Jev uses "the predictions of the largest, smartest, and most expensive external models as reference probabilities", and its LLM comparison wrapper "tends to be slower and more expensive than giving decisions without probabilities" ([TypeSafe AI](https://typesafe.ai/blog/introducing-system-one-models-and-jev)). The oracle is a model and the opposing arm is handicapped.
+- A raw match rate stands in for chance-corrected agreement. Across 21 judges and roughly 541,000 judgments, "kappa deflation between exact match and Cohen's kappa is universal (33--41 pp on MT-Bench)" ([arXiv:2606.19544v1](https://arxiv.org/abs/2606.19544v1)).
+- One narrow task distribution stands in for yours. Five weather requests is a single domain, and judge "rankings shift by up to 14 positions across benchmarks" ([arXiv:2606.19544v1](https://arxiv.org/abs/2606.19544v1)).
+- The winner is trusted because it is stable. Test-retest reliability above 0.95 coexisted with position bias above 0.10 in two production-deployed judges ([arXiv:2606.19544v1](https://arxiv.org/abs/2606.19544v1)).
+- Single-trial scoring goes to production. Pairwise preferences flipped 13.6% of the time on re-run, and "11 repeated trials are needed for a majority vote to recover the 50-trial reference verdict with 95% probability on average" ([arXiv:2606.13685v1](https://arxiv.org/abs/2606.13685v1)).
+
+## What to re-baseline after a swap
+
+Re-baseline every threshold that was calibrated against the old judge. A new judge moves the score distribution, so pass marks, regression alerts, and any historical trend line shift with it. Size the fresh human labeling by the power you need rather than by habit. Sample sizes for the human and model halves can be chosen to hit a target power, with more human ratings allocated where model predictability is lowest ([arXiv:2605.16354v1](https://arxiv.org/abs/2605.16354v1)).
+
+## Key Takeaways
+
+- Freeze the traces before comparing judges. Otherwise you measure agent variance and judge variance together.
+- Hold decoding identical across arms, or the variance column reports a settings difference.
+- Repetitions raise precision on each item and never raise the count of independent items, which is what the accuracy ranking rests on.
+- Rank on chance-corrected agreement, not on raw match rate.
+- Re-baseline every threshold after the swap, and budget the human labels by target power.
+
+## Related
+
+- [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — measuring the error of the judge you already run, once it is chosen
+- [Measure the Judge Before You Freeze a Gate on It](judge-instrument-stability-check.md) — replaying one judge over time to find its noise floor
+- [Detecting Self-Preference in a Single LLM Judge](judge-self-preference-detection.md) — the bias a bake-off misses when every arm scores the same generator
+- [Human-Review-Driven Curation of Golden Eval Datasets](human-review-golden-dataset-curation.md) — growing the labeled oracle this comparison depends on
+- [Evaluator Templates: Portable Primitives for Agent Eval Suites](evaluator-templates.md) — the rubric layer to settle before comparing models
 
 ---
 
@@ -100641,6 +100784,95 @@ The evidence is one preprint and one run. The authors report "single-run point e
 
 ---
 
+### Pre-Generation Complexity Scoring for Code Reliability
+Source: https://agentpatterns.ai/verification/pre-generation-complexity-scoring/
+
+# Pre-Generation Complexity Scoring for Code Reliability
+
+> Complexity measured on generated code is caused by the failure it explains, so score the prompt before generation instead.
+
+Pre-generation complexity scoring rates a coding task's structural demands from the prompt alone, on a fixed rubric, before any model writes code, and keeps that rating separate from whether the run passed. The point is the timing. A number computed on the model's output cannot be an independent measure of the task, because a failed run usually emits something short.
+
+## Read the conditions before the number
+
+One study built this index and published a breakpoint with it. Take the method and leave the number.
+
+On a benchmark of 5,000 Python prompts scored before generation and solved by 21 models, mean pass rate breaks at composite 13.75, with 79.9% at or below and 87.6% above ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)). That 7.6-point gap does not survive its own controls. Adding nine task-type fixed effects moves the breakpoint to 10.75 and shrinks the gap to 2.1 points; adding a control for which of two prompt sources a task came from moves it to 8.50 and flips the raw gap to −3.5 points ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)). Switching from mean to median pooling lands on 10.75 again.
+
+The authors say it outright: the breakpoint "is not a universal failure cutoff." Most of the pooled rebound turns out to be which prompts came from where. The benchmark's two source frames average composite 7.92 against 11.42 and pass rate 0.747 against 0.880, and at the pooled threshold the later frame supplies 39.9% of the prompts below it but 94.7% of those above ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)). Neither frame on its own reproduces the pooled change.
+
+## The defect it fixes
+
+Plot agent pass rate against the cyclomatic complexity of the code the agent produced, and the x-axis is downstream of the y-axis. When a model fails, the output "is often a short stub, partial solution, syntax error, or otherwise broken program with low measured cyclomatic complexity" ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)), so a hard task lands in a low-complexity bin. The task then looks easy and the model looks unreliable on easy work.
+
+The effect is large enough to see. Among 14,776 zero-pass generations with a computable complexity value, 4,216 of them (28.5%) pair a structurally nontrivial prompt with generated-output complexity of 10 or less ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)). Better than a quarter of the failures are filed under the wrong difficulty.
+
+The argument is not specific to cyclomatic complexity. It applies to any difficulty axis read off agent output, so check your own dashboards for patch size, diff scatter, files touched, and lines changed. If the agent gave up after one edit, the change is small.
+
+## The six dimensions
+
+The rubric scores each prompt 0 to 4 on six axes, summed to a 0-to-24 composite ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)).
+
+| Dimension | Score 0 | Score 4 |
+|---|---|---|
+| Branching | No conditionals | Deeply nested or combinatorial |
+| Iteration | None | Nested recursion or complex multi-pass |
+| State | Stateless or single variable | Concurrent state tracking |
+| Data structures | Primitives only | Multiple interacting complex structures |
+| Edge cases | None | Combinatorial interacting checks |
+| Composition | Single operation | Pipeline of interdependent algorithms |
+
+Three design choices carry the method.
+
+The rubric anchors on expected solution structure, not on difficulty for a model. Asking a rater how hard a task is for an LLM builds the outcome back into the measure, which is the defect the timing change was meant to remove. Code length and language idioms are excluded for the same reason ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)).
+
+Six separate axes beat one holistic score, because they show where raters disagree. Four judges scored the prompts, disagreement was kept rather than averaged away, and composite inter-rater reliability came to ICC = 0.872 on the 4,998 prompts with all four ratings ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)).
+
+The scorers sit outside the evaluated panel. None of the four judges is one of the 21 models being measured, which the authors adopt to reduce circularity between the systems assigning index values and those whose reliability is measured ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)).
+
+The index also tracks structure rather than phrasing: across 150 plain-language paraphrases its rank correlation is Spearman ρ = 0.963, with 91.3% of pairs within one point ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)).
+
+## Why it works
+
+Output-side complexity is a post-treatment variable. The paper writes the dependence as `κ_obs = g(κ*, y, η)`, where measured complexity is a function of the latent task structure, the outcome, and noise, and notes that failed generations "often collapse to short programs with low measured complexity" ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)). Stratifying pass rate by that quantity conditions on something the outcome caused. Part of the correlation you read back is the conditioning.
+
+Scoring the prompt cuts the arrow. The index is fixed before the evaluated system acts, so nothing the model does can move it. The authors name this precisely: "the central design choice is temporal rather than causal" ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)).
+
+Timing is the whole of the claim. Fixing it removes a mechanical dependence and grants nothing about accuracy or causality, and the paper tests both and settles neither. The six dimensions fail their joint exclusion restrictions badly when used as instruments, with a Sargan statistic of 411.32 on five degrees of freedom against an expected value near five, so the authors "make no causal interpretation" of those estimates ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)). What survives is a clean measurement, not an explanation.
+
+A second study puts a price on the same timing. PET-Select predicts code complexity and "uses code complexity as a proxy to classify queries and select the most appropriate PET", reporting up to 1.9% higher pass@1 with 74.8% fewer tokens on MBPP and HumanEval ([Wang et al., 2024](https://arxiv.org/abs/2409.16416v1)). A rough score, known before you spend, is still worth having.
+
+## When this backfires
+
+Judge agreement is the one to watch. On a calibration set deliberately enriched for judge disagreement, with LLM scores hidden, a human grader's agreement with the ensemble was ICC(2,1) = 0.395 and Pearson r = 0.408, with a systematic offset of −1.18 points ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)). Four judges agreeing at 0.872 while agreeing with a person at 0.395 is what shared method looks like, not what correctness looks like. Rubric-based judging has a known failure of that shape: classifiers trained on rubric text alone, with no access to the response being evaluated, predict judge outputs at nontrivial accuracy, and judges "often fail to reliably update their decisions" when the response or the criterion is reversed ([Bagaria et al., 2026](https://arxiv.org/abs/2609.02942v1)).
+
+A keyword count may be enough, and the study's own numbers are why. On its low-end discrimination check, a plain structural keyword count separated the two easiest reference tiers by +0.58 against the rubric's +0.61 ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)), and 30 surface linguistic metrics predict LLM performance on a requirements task at R² between 0.38 and 0.42 ([Motger et al., 2026](https://arxiv.org/abs/2608.27621v1)). Four judge calls per prompt has to beat free, and on that one head-to-head it barely did. Buy the rubric for its interpretable axes and its visible disagreement, or do not buy it.
+
+Four more conditions narrow where a score means anything.
+
+- A backlog of one kind of work. Most of the pooled signal was the task mix, so little survives inside one category.
+- Routing by a threshold. Per-model breakpoints span 7.75 to 14.25 and five of 21 models move the wrong way across their own ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)). The authors call these scores "diagnostic summaries, not deployment rules without prospective validation."
+- Comparing across sampling frames. The two frames above differ by 3.5 composite points and 13 points of pass rate, so a score is comparable within a frame and not obviously across one.
+- Extrapolating past the calibrated range. An audit-clean extension added 351 prompts at the two thin display bins but only 14 above them ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)). The top of the scale stays unresolved, which is where a team would most want to use it.
+
+## Key Takeaways
+
+- Any difficulty axis computed from agent output is caused by the outcome plotted against it. Over a quarter of zero-pass generations in one study land in the wrong difficulty bin for that reason ([Hernandez and Zhao, 2026](https://arxiv.org/abs/2609.19616v1)).
+- Score the task from the prompt, before the run, on axes that describe expected solution structure rather than expected difficulty for a model.
+- Report the score as an instrument. Publish the rubric, the per-bin support counts, the rater disagreement, and the curve under alternative pooling, then let a reader decide what it means for their mix.
+- Do not carry a threshold across task types, prompt sources, or models. Every one of those controls moved the published breakpoint, and one reversed its sign.
+- Check the cheap baseline first. A keyword count nearly matched the four-judge rubric on the one head-to-head test reported.
+
+## Related
+
+- [Static Difficulty Estimation for Agent Issue Triage](static-difficulty-estimation-issue-triage.md) — the ranking problem this measurement discipline feeds, where the strongest published predictors turn out to be computed on the reference solution.
+- [Audit the Noise Floor Before Trusting a Benchmark Gap](benchmark-noise-floor-audit.md) — the companion check on the y-axis, for when a regime gap is smaller than the benchmark's own variance.
+- [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — how to report run-to-run spread so a per-bin mean is legible.
+- [Risk-Based Task Sizing for Agent Verification Depth](risk-based-task-sizing.md) — the after-the-change counterpart, sizing review effort by what a file controls.
+- [Pre-Execution Failure Scoring with a Draft Model (Speculative Uncertainty)](speculative-uncertainty-draft-model-gate.md) — the same "score before you act" idea moved inside the run, where the input is the agent's own emitted tokens.
+
+---
+
 ### Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate
 Source: https://agentpatterns.ai/verification/precise-debugging-benchmark/
 
@@ -103687,6 +103919,7 @@ For a single issue the agent run is itself the measurement, and it is cheap next
 
 ## Related
 
+- [Pre-Generation Complexity Scoring for Code Reliability](pre-generation-complexity-scoring.md) — why a difficulty axis measured on agent output is caused by the outcome it is plotted against, and what to score instead.
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — the post-hoc counterpart, decomposing a run into search, read, and edit stages once it exists.
 - [Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)](repository-perturbation-context-reasoning-diagnosis.md) — isolates repository navigation from issue resolution by perturbing the codebase before the agent runs.
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — why solve rates on public repositories overstate performance on private code.
@@ -106078,6 +106311,7 @@ No single safety mechanism is sufficient. Layered defenses ensure that failure o
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — Layer five independent safety mechanisms so no single failure point can compromise agent behavior
 - [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — A distributable harness ships OS sandboxing, skill scanning, and tool restriction to a fleet in one install, lifting composite score 52.3% to 78.3%; only declarative, boundary-local, conflict-free controls survive the trip, and injection defense is not one of them
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — A taxonomy from 446 developer reports puts 43.1% of security complaints in unauthorized file operations; sort safeguards by where they are evaluated, since ignore files and rules files are resolved inside the model's context while permissions and sandboxes are not
+- [Enforcing Who and What Can Trigger an Agent's CI Run](workflow-execution-protections.md) — GitHub Actions evaluates actor and event rules before a run starts, so the trigger rule stops being something the agent can edit; available on public repos and private ones on Team or Enterprise, with the public `pull_request_target` default enforced on 2 November 2026
 - [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md) — Move agents to production through three control gates — governance, observability, reproducibility — with MUST/SHOULD checklists for each
 - [Inline Safety Harness with Cascade Verification (FinHarness)](inline-lifecycle-safety-harness.md) — Wrap each agent turn with prospective per-call monitors and route verification between a cheap and an advanced judge by per-step risk; worth it for high-stakes, high-call-volume workflows, not low-volume or long-context agents
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — Embed defense mechanisms into each execution lifecycle phase with cross-layer feedback so layers coordinate rather than operate in isolation
@@ -111769,6 +112003,96 @@ Nothing here depends on the agent honoring a rule; the file is not in the reposi
 - [Permission Gates That Deny the Agent's Own Cleanup (Denied Remediation Path)](../patterns/anti-patterns/denied-remediation-path.md) — a best-effort gate that stays advisory in one direction and enforcing in the other
 - [Reading a Coding-Agent Vendor's Security Certificate](../verification/vendor-security-certification-scope.md) — how to check which of a vendor's named safeguards an outside auditor actually exercised
 - [Runtime Guard as an Installed Skill (Defense-as-Skill)](runtime-guard-as-installed-skill.md) — a measured difference inside the advisory bucket: the same guard policy performs better loaded as skill files than as system-prompt text
+- [Enforcing Who and What Can Trigger an Agent's CI Run](workflow-execution-protections.md) — the same sorting rule applied to GitHub Actions triggers, where the enforced half is an Actions policy
+
+---
+
+### Enforcing Who and What Can Trigger an Agent's CI Run
+Source: https://agentpatterns.ai/security/workflow-execution-protections/
+
+# Enforcing Who and What Can Trigger an Agent's CI Run
+
+> An Actions execution policy decides who may trigger a workflow and on which event, outside the file an agent can rewrite.
+
+Workflow execution protections are an allowlist in GitHub Actions settings that names which actors may trigger workflows and which events may start them. GitHub evaluates both before a run begins, so a policy that forbids `pull_request_target` stops the run whatever `.github/workflows/ai-review.yml` says. The protections reached general availability on 17 September 2026 ([GitHub Changelog](https://github.blog/changelog/2026-09-17-workflow-execution-protections-in-github-actions-generally-available)).
+
+## Check the conditions before you plan around it
+
+Three constraints decide whether the control is available to you.
+
+- Coverage. The feature is offered on "All public repositories, and private repositories on GitHub Team or GitHub Enterprise", and only repository administrators, organization owners and enterprise owners can configure it ([GitHub Docs](https://docs.github.com/en/actions/how-tos/administer/control-workflow-execution)). A private repository on the free plan is left with the workflow-file convention and nothing else.
+- Rollout. Evaluate mode runs rules in shadow and reports what would have been blocked, but the REST schema states that "`evaluate` is only available with GitHub Enterprise" ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)). Below Enterprise your first enforcement is the live one.
+- Reach. Every repository policy endpoint requires "Administration" repository permissions (write) ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)). The rule leaves the reach of a `contents: write` token and enters the reach of an admin one.
+
+## The two rules
+
+Actor rules cover who. By default "every user with write access to a repository can trigger workflows", and an actor rule separates contributing code from running CI ([GitHub Docs](https://docs.github.com/en/actions/how-tos/administer/control-workflow-execution)). Allowed actors are named by id and type: `User`, `Bot`, `Team`, `App`, `RepositoryRole` and three others ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)). If your agent runs under its own App or bot identity, list it. GitHub exempts its own features for the built-in processes they run. A workflow you wrote to run as an identity such as `dependabot[bot]` still needs that identity added as an allowed actor ([GitHub Docs](https://docs.github.com/en/actions/how-tos/administer/control-workflow-execution)).
+
+Event rules cover what, across the full trigger list including `push`, `pull_request`, `pull_request_target`, `issue_comment`, `workflow_run` and `workflow_dispatch` ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)). A policy's `workflow_path` condition takes include and exclude globs. GitHub's own example restricts `deploy.yml` to a designated team while CI workflows stay open to all contributors ([GitHub Changelog](https://github.blog/changelog/2026-09-17-workflow-execution-protections-in-github-actions-generally-available)).
+
+## The 2 November 2026 default
+
+Read the scope before treating it as your deadline. For public repositories with no applicable event policy already configured, GitHub has added a default policy that blocks `pull_request_target`. It "Does not apply to private or internal repositories", it "Does not replace an applicable event policy that you have already configured", and it runs in evaluate mode today. On 2 November 2026 GitHub enforces it "for affected repositories that were using the default `pull_request_target` policy before general availability" ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)). A public-repository agent reviewer that comments on fork pull requests with a write token is the shape most likely to stop working that day.
+
+## Why it works
+
+A rule in a workflow file is evaluated by whoever edits that file next, and on an agent-maintained repository the agent that runs the job can also rewrite the trigger. A policy is evaluated by GitHub before the run, which then fails with an error naming the workflow: `Event 'workflow_dispatch' is not allowed to trigger Actions workflows. Workflow file: '.github/workflows/0-welcome.yml'.` GitHub lists "Misconfiguration exploitation. Apply central policy that overrides any single misconfigured workflow file" among the attack patterns the protections disrupt ([GitHub Docs](https://docs.github.com/en/actions/concepts/about-actions-policies)).
+
+The field record shows the advisory version of the rule failing. The Sysdig Threat Research Team "gained access to (and reported) dozens of open source projects by exploiting insecure workflows", including repositories run by MITRE and Splunk, and a full takeover of spotipy-dev/spotipy issued as CVE-2025-47928 ([Sysdig, 2025](https://www.sysdig.com/blog/insecure-github-actions-found-in-mitre-splunk-and-other-open-source-repositories)). The same report finds the usual in-file mitigation weak: gating on a maintainer-applied label "is vulnerable to a race condition, where an attacker could push new commits to the pull request after the label has been added but before the workflow starts".
+
+## When this backfires
+
+- The agent's automation holds `administration: write`. A platform-engineering agent or a broadly-scoped token can delete the policy that bounds it, and the control collapses back into a permission-scoping problem ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)).
+- You are below Enterprise and cannot run the dry pass. An actor rule that omits the agent's App identity stops its CI on the first push, with no insights run to catch the omission.
+- You read an event allowlist as a fix for pwn requests. GitHub states that they "are also not unique to `pull_request_target`", naming `issue_comment` and `workflow_run` workflows that fetch and run a fork's code as vulnerable in the same way ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
+- You expect the policy to constrain the run itself. It governs the trigger, not the content: token permissions, secret scope and runner isolation stay workflow-file decisions. Practitioners asking for content-level policy on GitHub's 2026 roadmap were pointing at that gap ([community discussion #190621](https://github.com/orgs/community/discussions/190621)).
+- Your repositories are private and internal. The November default never reaches them, so nothing changes until somebody writes a policy.
+
+## Example
+
+Allow two events, scoped to the one workflow the agent runs:
+
+```bash
+curl -L -X POST \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer $GH_ADMIN_TOKEN" \
+  -H "X-GitHub-Api-Version: 2026-03-10" \
+  https://api.github.com/repos/OWNER/REPO/actions/policies \
+  -d '{
+    "name": "Agent reviewer triggers",
+    "enforcement": "active",
+    "conditions": {
+      "workflow_path": {
+        "include": [".github/workflows/ai-review.yml"],
+        "exclude": []
+      }
+    },
+    "rules": [
+      {
+        "type": "restrict_action_events",
+        "parameters": { "allowed_events": ["pull_request", "workflow_dispatch"] }
+      }
+    ]
+  }'
+```
+
+A later commit that changes `ai-review.yml` to `on: pull_request_target` still lands. The run does not start ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)).
+
+## Key Takeaways
+
+- Answer the availability question first: public repositories, or private ones on Team or Enterprise, and evaluate mode only on Enterprise ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)).
+- Inventory what your agent's workflow is triggered by before you write an event rule, because the run fails outright on a disallowed event ([GitHub Docs](https://docs.github.com/en/actions/concepts/about-actions-policies)).
+- Add your agent's App or bot identity to the actor allowlist before you enforce, or you switch off its CI runs ([GitHub Docs](https://docs.github.com/en/actions/how-tos/administer/control-workflow-execution)).
+- Audit which tokens and Apps hold `administration: write`, since those can delete the policy that bounds them ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)).
+- If your public repositories still run `pull_request_target`, decide before 2 November 2026 whether to move to `pull_request` or write a policy that allows the event ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
+
+## Related
+
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — the general sorting rule this page applies to CI triggers
+- [AI Agents in CI/CD with Elevated Permissions and Untrusted Content (GitInject)](../patterns/anti-patterns/ai-agents-in-ci-cd-with-elevated-permissions.md) — the workflow-file version of the same rule, and why the trigger matters
+- [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — the complementary control over edits to the workflow file itself
+- [Non-Retirable Approval Rules for Agent Operations](non-retirable-approval-rules.md) — keeping a rule in place once an agent can reach the surface that defines it
+- [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md) — layering policy across enterprise, organization and repository
 
 ---
 
@@ -165485,7 +165809,7 @@ Source: https://agentpatterns.ai/workflows/model-deprecation-lifecycle/
 
 Model IDs have finite lifespans. Anthropic defines a four-stage lifecycle — Active, Legacy, Deprecated, Retired — and commits to at least 60 days notice before retirement for publicly released models ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)). After the retirement date, requests to the retired ID fail; the API does not transparently reroute to a successor ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)).
 
-Deprecation windows are short and getting shorter. As of 2026-04-23, `claude-sonnet-4-20250514` and `claude-opus-4-20250514` were deprecated on 2026-04-14 with retirement scheduled for 2026-06-15 — a 62-day window ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)). On GitHub Copilot, deprecation windows are tighter: GPT-5.1 and its Codex variants were deprecated on 2026-04-03 with migration to GPT-5.3-Codex ([GitHub Changelog: GPT-5.1 deprecated](https://github.blog/changelog/2026-04-03-gpt-5-1-codex-gpt-5-1-codex-max-and-gpt-5-1-codex-mini-deprecated)), and Opus 4.6 Fast was retired from the Pro+ tier on the same day it was announced, 2026-04-10 ([GitHub Changelog: Opus 4.6 Fast retired](https://github.blog/changelog/2026-04-10-enforcing-new-limits-and-retiring-opus-4-6-fast-from-copilot-pro)).
+Deprecation windows are short and getting shorter. As of 2026-04-23, `claude-sonnet-4-20250514` and `claude-opus-4-20250514` were deprecated on 2026-04-14 with retirement scheduled for 2026-06-15 — a 62-day window ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)). On GitHub Copilot, deprecation windows are tighter: GPT-5.1 and its Codex variants were deprecated on 2026-04-03 with migration to GPT-5.3-Codex ([GitHub Changelog: GPT-5.1 deprecated](https://github.blog/changelog/2026-04-03-gpt-5-1-codex-gpt-5-1-codex-max-and-gpt-5-1-codex-mini-deprecated)), and Opus 4.6 Fast was retired from the Pro+ tier on the same day it was announced, 2026-04-10 ([GitHub Changelog: Opus 4.6 Fast retired](https://github.blog/changelog/2026-04-10-enforcing-new-limits-and-retiring-opus-4-6-fast-from-copilot-pro)). The same cadence held into September. On 2026-09-18 GitHub announced the upcoming deprecation of selected Copilot models in mid-October 2026, about four weeks of notice ([GitHub Changelog: Upcoming Copilot model deprecation](https://github.blog/changelog/2026-09-18-upcoming-deprecation-of-selected-github-copilot-models-in-mid-october)).
 
 The operational wrapper sits above model-routing patterns like [cost-aware agent design](../token-engineering/cost-aware-agent-design.md) and [cross-vendor competitive routing](../patterns/agent-design/cross-vendor-competitive-routing.md). Routing chooses which model handles a task; lifecycle management keeps that choice viable when providers force a change.
 
