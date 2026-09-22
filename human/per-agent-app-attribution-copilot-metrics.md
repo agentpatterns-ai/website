@@ -9,7 +9,7 @@ tags:
   - copilot
   - human-factors
   - observability
-last_reviewed: 2026-08-08
+last_reviewed: 2026-09-21
 maturity: emerging
 status: current
 ---
@@ -19,6 +19,8 @@ status: current
 > The Copilot Usage Metrics API reports activity per agent app, a breakdown that fits the per-app install decision under four stated limits.
 
 On 7 August 2026 the Copilot Usage Metrics API gained an optional `totals_by_3rd_party_agent` array carrying "one entry per recognized agent app", in the enterprise, organization, enterprise-user, and organization-user reports over both 1-day and 28-day periods ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-usage-metrics-api-adds-agent-app-activity)).
+
+GitHub extended the same API to agentic CLI customizations on 17 September 2026. That adds a second breakdown dimension the API reports, beyond the agent-app one this page covers ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-agentic-cli-customizations-now-in-the-usage-metrics-api)).
 
 ## Read the breakdown under four limits
 
