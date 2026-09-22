@@ -175,6 +175,7 @@ nav:
       - per-call-budget-hints-tool-calls.md
       - per-run-budget-reservation.md
       - per-tool-extended-reasoning-opt-in.md
+      - planning-stage-preconditions.md
       - progressive-spend-threshold-alerting.md
       - reasoning-budget-allocation.md
       - reasoning-effort-over-tool-scaffolding.md

@@ -566,6 +566,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Persistent-Connection Agent Transport](patterns/agent-design/persistent-connection-agent-transport.md)
 - [Persona-as-Code: Defining Agent Roles as Structured Docs](patterns/agent-design/persona-as-code.md)
 - [Plan Compliance in Agents: Measure What They Execute, Not What You Wrote](patterns/agent-design/plan-compliance-in-agents.md)
+- [Planning Stage Preconditions: Budget Headroom and Task Text](patterns/agent-design/planning-stage-preconditions.md)
 - [PR-Subscribed Agent Ownership: The Agent That Opened the PR Drives It to Green](patterns/agent-design/pr-subscribed-agent-ownership.md)
 - [Proactive Idle-Time Anticipation (ProAct)](patterns/agent-design/proactive-idle-time-anticipation.md)
 - [Production Hosting Topology for Self-Hosted Agent SDK Runtimes](patterns/agent-design/agent-sdk-hosting-topology.md)
