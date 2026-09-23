@@ -342,6 +342,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Four Reporting Levels for Agent Working Memory Evaluation](context-engineering/working-memory-evaluation-levels.md)
 - [Gate Generation on Retrieval Sufficiency, Not Model Confidence](context-engineering/retrieval-sufficiency-gate.md)
 - [Goal Recitation: Countering Drift in Long Sessions](context-engineering/goal-recitation.md)
+- [Injected-Context Cost Attribution in Agent Workflows](context-engineering/injected-context-cost-attribution.md)
 - [Instruction-Guided Code Completion: Controlling What Models Generate](context-engineering/instruction-guided-code-completion.md)
 - [Live Browser as Agent Context Channel](context-engineering/live-browser-context-channel.md)
 - [LLM-Driven Logical Retrieval: Boolean Queries over an Inverted Index](context-engineering/llm-driven-logical-retrieval.md)
@@ -437,6 +438,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Configuration File Structure Does Not Drive Compliance](instructions/configuration-file-structure-compliance-gap.md)
 - [Constraint Degradation in AI Code Generation](instructions/constraint-degradation-code-generation.md)
 - [Constraint Encoding Does Not Fix Constraint Compliance](instructions/constraint-encoding-compliance-gap.md)
+- [Constraint Preambles and the Gain Your Scanner Misses](instructions/constraint-preamble-before-generation.md)
 - [Content Exclusion Gap: AI Security Boundaries by Mode](instructions/content-exclusion-gap.md)
 - [Contractual Skill Files: Inspectable SKILL.md for Enterprise Agents](instructions/contractual-skill-files.md)
 - [Cost-Aware Skill Rewriting: Preserve Operational Anchors, Not Skill Tokens](instructions/cost-aware-skill-rewriting.md)
@@ -598,6 +600,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Deep Agent Runtime: The Layer Beneath the Harness](patterns/agent-design/deep-agent-runtime.md)
 - [Deferred Permission Pattern: Headless Agent Session Pausing](patterns/agent-design/deferred-permission-pattern.md)
 - [Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State](patterns/agent-design/delta-channels-checkpoint-storage.md)
+- [Designing Agent Plugins to Survive Co-Installation](patterns/agent-design/plugin-co-installation-safety.md)
 - [Deterministic Orchestration for Structured Modernization](patterns/agent-design/deterministic-orchestration-structured-modernization.md)
 - [Difficulty-Aware Topology Selection for Coding Agents](patterns/agent-design/difficulty-aware-topology-selection.md)
 - [Discrete Phase Separation](patterns/agent-design/discrete-phase-separation.md)
@@ -1532,6 +1535,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints](workflows/prototype-before-optimizing.md)
 - [Public-Channel Agent Work as Lehrwerkstatt for Team Learning](workflows/public-channel-agent-work.md)
 - [QA Session to Issues Pipeline for AI Agent Development](workflows/qa-session-to-issues-pipeline.md)
+- [Reducing Fixed CI Overhead Before Adding Shards](workflows/ci-setup-overhead-before-sharding.md)
 - [Runbooks as Agent Instructions: Agent-Followable Ops](workflows/runbooks-as-agent-instructions.md)
 - [Scheduled Instruction File Fact-Checker for Accuracy](workflows/instruction-file-fact-checker.md)
 - [SDLC-Phase Skill Taxonomy: Full-Lifecycle Skill Libraries](workflows/sdlc-skill-taxonomy.md)
@@ -1726,6 +1730,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Treating a Worktree as a Safety Boundary](patterns/anti-patterns/worktree-as-safety-boundary.md)
 - [Treating Agent Delegation as Routing, Not Authorization](patterns/anti-patterns/agent-delegation-as-routing.md)
 - [Treating Agent Safety as Uniform Across a Session (Cold-Start Safety Gap)](patterns/anti-patterns/cold-start-safety-gap.md)
+- [Treating File Secrecy as Skill Confidentiality](patterns/anti-patterns/file-secrecy-as-skill-confidentiality.md)
 - [Treating Memory-Injection Rate as Security Evidence](patterns/anti-patterns/memory-injection-rate-as-security-evidence.md)
 - [Trusting Human Review to Catch Deliberate Agent Sabotage](patterns/anti-patterns/deliberate-agent-code-sabotage.md)
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](patterns/anti-patterns/tool-error-implicit-authority.md)
@@ -2079,6 +2084,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Prompt Compression](prompt-compression.md) — Write instructions that convey the same guidance in fewer words; shorter, denser instructions improve agent compliance and reduce token cost
 - [Choosing a Compression Budget for Agent Control Context](control-context-compression-budget.md) — Set how far you compress an agent's always-loaded instructions from environment-verified task success rather than a token-reduction ratio, and keep semantic sections whole
 - [Measuring Reacquisition Cost Under Context Compaction](reacquisition-cost-measurement.md) — Split the agent's tool calls into retrieval and execution to expose the interaction cost a flat task-completion rate hides, and confirm the cause by restoring one class of dropped state
+- [Injected-Context Cost Attribution in Agent Workflows](injected-context-cost-attribution.md) — Tokenize each node's prompt twice, with and without retrieved memory, to split billed input tokens into what the node carries and what it was handed
 - [Four Reporting Levels for Agent Working Memory Evaluation](working-memory-evaluation-levels.md) — Two memory policies at the same token cap deliver different context and spend different management work, so report stored state, delivered context, and management work alongside the outcome
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — Treat prompt caching as a structural constraint on prompt composition, with cross-provider economics and extended-TTL guidance folded in
 - [Static Content First for Cache Hits](static-content-first-caching.md) — Place static content at the beginning of the prompt and variable content at the end to maximize prompt cache hits and keep inference costs linear
@@ -7099,6 +7105,77 @@ For that query the model produces something like `Furniture / Living Room / Tabl
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — one shared schema across graph construction, query decomposition, and typed retrieval
 - [LLM-Driven Logical Retrieval](llm-driven-logical-retrieval.md) — letting the model emit Boolean queries against an inverted index
 - [Component-Wise RAG Prioritization](rag-component-prioritization-software-engineering.md) — empirical evidence that retriever choice dominates generator choice, which is why the retrieval baseline comes first
+
+---
+
+### Injected-Context Cost Attribution in Agent Workflows
+Source: https://agentpatterns.ai/context-engineering/injected-context-cost-attribution/
+
+# Injected-Context Cost Attribution in Agent Workflows
+
+> Tokenize each node's prompt twice, with and without retrieved memory, and the difference is the injected cost your tracer reports as one number.
+
+Injected-context cost attribution measures how many of a node's billed input tokens came from memory rather than from the node's own prompt. Assemble the prompt twice, once from the base components alone and once with retrieved context included, tokenize both with the provider's own tokenizer, and subtract ([Singh et al., arXiv:2609.23790v1](https://arxiv.org/abs/2609.23790v1)). The measurement is cheap, and it reports something worth acting on under three conditions.
+
+## Check these conditions first
+
+- Your workflows run three nodes deep or more. A source node injects nothing by the structure of the graph: across 1,112 observations of the first node class, the recorded injected-token count was exactly zero in every case. Injection's share of billed cost climbed from 8.4 percent at depth two to 27.6 percent at depth six ([arXiv:2609.23790v1](https://arxiv.org/abs/2609.23790v1)).
+- Model routing is already settled. The same study reports that "total workflow cost is dominated by model tier assignment". Seven of its eight ablation conditions span $0.00740 to $0.00744 per task, a band the authors decline to rank; the eighth costs $0.00998 because its tier assigner escalates nodes ([arXiv:2609.23790v1](https://arxiv.org/abs/2609.23790v1)). Measure memory after routing, not before.
+- Your prompts are assembled explicitly before dispatch. The two passes run in "a decorator around the prompt-assembly step", so the method reaches "any framework that assembles the prompt explicitly before dispatch and any provider exposing a tokenizer" ([arXiv:2609.23790v1](https://arxiv.org/abs/2609.23790v1)), and nothing else.
+
+## The two passes
+
+```text
+inject(v) = count(base_prompt(v) + retrieved_memory(v)) - count(base_prompt(v))
+```
+
+Both calls are non-billable token counts that run no inference. They add roughly ten milliseconds per node against inference latencies of eighty to three thousand milliseconds, and the first pass returns base-prompt volume as a by-product ([arXiv:2609.23790v1](https://arxiv.org/abs/2609.23790v1)). That by-product is the denominator you report the injected share against.
+
+## Why it works
+
+A node writes its output back to the memory tier, where it becomes part of the next node's injection. Injected volume accumulates along the topological order while per-node output length does not, so the share of the bill climbs with depth even when a capacity-bounded retrieval window holds the absolute count to a straight line. A linear fit over depths two through six gives R² = 0.9974 and a slope of 150 tokens per level ([arXiv:2609.23790v1](https://arxiv.org/abs/2609.23790v1)).
+
+The subtraction is exact because both passes run one tokenizer over one assembly point and differ only in whether memory is present, so subword-boundary error cancels. Word and character proxies have no such property, and the authors call them "systematically wrong by a variable margin" on agent output made of identifiers and structured text rather than prose.
+
+## What the number points at
+
+Retrieval window capacity is the lever the measurement exposes. Cutting the warm window from 32 entries to 2 at fixed tier lowered injected tokens per task from 1,074 to 766, a 28.7 percent reduction ([arXiv:2609.23790v1](https://arxiv.org/abs/2609.23790v1)).
+
+Read that in tokens, not dollars. Cost per task fell 6.7 percent, of which only 4.1 percentage points is attributable to the token cut; a shorter prompt can also shorten the output, and the authors did not instrument that. Accuracy moved from 0.600 to 0.570, which they read as stochastic variation. Two settings establish that the lever acts and in which direction. They say nothing about where the trade turns bad.
+
+## When this backfires
+
+- Shallow graphs. Below three nodes deep you instrument a quantity that the graph structure already holds near zero ([arXiv:2609.23790v1](https://arxiv.org/abs/2609.23790v1)), and the fix you would reach for next, a smaller retrieval window, has almost nothing to evict.
+- Percentages carried to another provider. The injected share looked nearly tier-independent only because one price list prices input and output in the same ratio at both tiers, "a property of one price list, not a law". Token counts transfer; share-of-cost figures must be recomputed.
+- A bill already dominated by a cached prefix. Prompt caching cut agentic API costs 41 to 80 percent across three providers on DeepResearch Bench ([Lumer et al., arXiv:2601.06007v2](https://arxiv.org/abs/2601.06007v2)), but by caching the large static system prompt: "Additional caching of conversation history and tool calls provides marginal incremental benefit for cost." Caching shrinks the base-prompt term rather than the injected one, so an injected share computed against an uncached bill overstates the dollar headroom left.
+- Magnitudes read as universal. Every figure comes from 200 enterprise workflow tasks over synthetic data, one provider, one framework, uncached, graded by a keyword recall the authors treat "as a guard rather than as a result" ([arXiv:2609.23790v1](https://arxiv.org/abs/2609.23790v1)). The shape transfers. The numbers are local.
+
+## Example
+
+The same benchmark, decomposed two ways. The denominator decides how large the line looks.
+
+| Denominator | Injected share | Basis |
+|---|---|---|
+| Variable cost an optimizer can move (inference plus injection) | 13.6% | Measured directly |
+| Full billed cost (base prompt plus inference plus injection) | 11.8% | Derived from a profiler mean, "accurate to roughly a point" |
+
+Quote the first when arguing about what to tune, the second when arguing about an invoice. The base prompt was the larger input line here, at 1,233 tokens against 1,073 injected ([arXiv:2609.23790v1](https://arxiv.org/abs/2609.23790v1)).
+
+## Key Takeaways
+
+- Split each node's input tokens into base prompt and injected memory with two non-billable tokenizer passes, and report both from the same instrumentation point.
+- Expect the injected share to grow with graph depth rather than with the work the graph performs, because each node's output becomes the next node's injection.
+- Settle model routing before you measure memory. Reassigning tiers moved per-task cost by more than a third where the memory transforms moved it by under one percent.
+- Judge a retrieval-window change on token counts at fixed tier. A dollar change spanning a tier reassignment mixes a price move into a volume move.
+- Recompute every share-of-cost figure on your own price list, and treat uncached magnitudes as an upper bound if you cache a large static prefix.
+
+## Related
+
+- [Measuring Reacquisition Cost Under Context Compaction](reacquisition-cost-measurement.md) — the other half of the memory bill, counted in extra tool calls rather than injected tokens.
+- [Prompt Caching as Architectural Discipline](prompt-caching-architectural-discipline.md) — the mitigation that shrinks the base-prompt term this attribution separates out.
+- [Context-Usage Attribution](../observability/context-usage-attribution.md) — the same split taken by configuration source inside one agent's window.
+- [Token-Cost Profiling for Always-On Agentic Workflows](../token-engineering/token-cost-profiling-always-on-workflows.md) — the surrounding instrument-attribute-fix-verify loop this measurement plugs into.
+- [Recursive Sub-Agent Delegation: Depth Limits](../patterns/multi-agent/recursive-sub-agent-delegation-depth.md) — the design decision that sets the depth this cost scales with.
 
 ---
 
@@ -12834,6 +12911,7 @@ Leveraging existing artifacts — specs, schemas, standards files — as agent i
 - [Ubiquitous Language for AI Plans](ubiquitous-language-for-ai-plans.md) — A maintained domain glossary plus ADRs anchors agent plans in existing code so plans, source, and prompt share one vocabulary
 - [Standard-Grounded NFR Specs: Quality Up, Correctness Flat](standard-grounded-nfr-specification.md) — Grounding a non-functional requirement in a published quality model cuts static defect density and wording variance, but leaves correctness flat and hurts error handling
 - [Match Architecture Spec Format to Model Capability](spec-format-by-model-tier.md) — Spec format barely moves a frontier model and decides what a weak one ships; pick the format from the tier you drive
+- [Constraint Preambles and the Gain Your Scanner Misses](constraint-preamble-before-generation.md) — A fixed block of output constraints cut named defect classes in all five models tested, and the two classes that moved most sit outside every scanner's rule set
 - [Specification Portability Across Coding Agents](specification-portability-across-agents.md) — Handing one agent's specification to another moves the generated code in both directions; measure the swap against a baseline instead of assuming the artifact is agent-neutral
 - [Diagram as the Shared Spec: One Artifact for the Picture and the Prompt](diagram-as-shared-spec.md) — One diagram source serves the human's picture and the agent's spec, which removes the sync step; it does not raise output quality, and the rules still belong somewhere a checker can read
 - [Per-Step Preconditions and Postconditions in Skill Files](per-step-skill-preconditions.md) — Give each skill step a precondition and a postcondition so a reviewer can compare declared intent against implementation; it finds silent mismatches and enforces nothing
@@ -14587,6 +14665,76 @@ Compact headers are token-efficient and compliance-neutral, but the trade-off is
 - [Negative Space Instructions](negative-space-instructions.md) — ban-list and exclusion constraints as a complement to positive compliance requirements
 - [Standard-Grounded NFR Specs](standard-grounded-nfr-specification.md) — the same JSON-versus-prose neutrality for quality requirements, plus what enriching the content does buy
 - [Match Architecture Spec Format to Model Capability](spec-format-by-model-tier.md) — where format does move the outcome: architecture specs handed to weaker models
+
+---
+
+### Constraint Preambles and the Gain Your Scanner Misses
+Source: https://agentpatterns.ai/instructions/constraint-preamble-before-generation/
+
+# Constraint Preambles and the Gain Your Scanner Misses
+
+> A fixed constraint preamble moved named defect classes in all five models tested, and your scanner cannot see most of the gain.
+
+A constraint preamble is a short fixed block of text stating what must be true of the generated code, prepended unchanged to every generation prompt. Money is not a float. Timestamps carry a zone. A retryable handler checks an idempotency key. It says nothing about how the team works. That is what separates it from repository context files, where "providing context files does not generally improve task success rates, while increasing inference cost by over 20% on average" ([arXiv:2602.11988v2](https://arxiv.org/abs/2602.11988v2)).
+
+## The conditions this depends on
+
+Four conditions bound the result to a narrow floor rather than a quality control.
+
+Generation is single-turn. The evidence covers one stateless call per prompt, no tools and no retrieval ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)). In a long agent session the picture inverts for the prohibition-shaped rules. On Mistral Large 3, "omission compliance falls from 73% at turn 5 to 33% at turn 16 while commission compliance holds at 100%" ([arXiv:2604.20911v1](https://arxiv.org/abs/2604.20911v1)).
+
+The defect classes are named in advance. Nine checkers reading the abstract syntax tree scored nine classes, and correctness was never scored, so a module can clear all nine and still be wrong ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)).
+
+The task does not already carry the constraint. The two tasks whose own prompt text named a time zone produced zero findings in every model and in both arms ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)).
+
+The model has weak defaults here. Effect size ordered monotonically against bare-arm weakness: 0.16 findings per task for the cleanest baseline, against 0.70 and 0.68 for the two weakest ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)).
+
+## What was measured
+
+Fifty regulated-backend tasks ran through five models from five vendor lineages, each task twice, bare and behind a 267-word preamble, for 500 one-shot generations. Hypotheses, refuters, checkers and analysis code were pre-registered on 18 August 2026 under a rule forbidding regeneration of any output ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)).
+
+| Domain | Bare findings | Preamble findings |
+|---|---|---|
+| Money | 66 | 8 |
+| Idempotency | 32 | 2 |
+| Date and time (DA tasks) | 31 | 5 |
+| Authentication and access | 19 | 8 |
+
+Every model showed a positive mean paired difference, a bootstrap confidence interval excluding zero, and a significant Holm-adjusted sign test. It also tied 150 of the 250 pairs, and of the 100 that differed the preamble arm won 95 ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)).
+
+## Why it works
+
+The preamble supplies a constraint the model's unprompted default does not carry, in proportion to how much is missing. Two findings argue against the simpler story that any 267 words buy more deliberation. The checkers score behavior such as `Decimal` arithmetic and aware datetimes, which a model has no reason to adopt from extra thinking alone. And the timezone null above is "what a content account predicts and a deliberation account does not" ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)). The confound is not closed: no length-matched neutral preamble and no reason-first arm was run.
+
+## Measure it with checkers, not a scanner
+
+Money arithmetic and idempotency accounted for 88 of the 125 findings the preamble removed, and idempotency "has no CWE and lies outside the rule sets of security scanners such as Bandit, which is one reason tooling has not caught it" ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)). Judge this intervention on scanner output and you are reading the one instrument that cannot see most of the effect. Bandit did register the rest, falling from 53 medium-or-high findings to 11, which is why it works as corroboration and not as the primary measure ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)). Write a few syntax-tree checks for your own domain rules and run them beside the scanner.
+
+## When this backfires
+
+- Long agent loops. The constraint text drifts back through the context window and the prohibition-shaped rules decay first ([arXiv:2604.20911v1](https://arxiv.org/abs/2604.20911v1)). Re-inject before the depth where compliance drops, or write the rules in requirement form.
+- A model that already has the habit. The cleanest model's 0.16 came with the only marginal p value in the set, 0.021 ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)). Measure your own baseline before paying 267 tokens on every call.
+- Classes a generic constraint cannot reach. Authentication and access moved least, 19 findings to 8, and the study names open redirects and path traversal as "the kind that a generic constraint may not fully reach" ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)).
+- Treating it as a security control. Explicit security instructions have moved a formally verified vulnerability rate "by only 4 points" against a 55.8% baseline ([arXiv:2604.05292v2](https://arxiv.org/abs/2604.05292v2)). This is a floor on named classes, not a gate.
+- Silent functional regression. No functional tests were run. A post hoc byte-compile check found 236 of 236 complete preamble-arm outputs compile, which says nothing about what they do ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)).
+
+One caveat on provenance. The author wrote the book that introduced this preamble and designed the nine checkers, and discloses both. The instrument-blind scanner and the 500 raw outputs under a DOI are the mitigations, so the result is re-derivable without trusting him ([arXiv:2609.23270v1](https://arxiv.org/abs/2609.23270v1)).
+
+## Key Takeaways
+
+- State what must be true of the output, not how the team writes code. The artifact class is the whole difference between this result and the instruction-file null.
+- Expect nothing on most tasks. Sixty percent of pairs tied, and the value sits in the tail where a model would otherwise ship float money.
+- Your scanner will under-read the gain, because the two classes that moved most have no CWE between them.
+- The weaker the model behind your tooling, the more this buys. Vendors rotate models under fixed product names, so the floor is the part you own.
+- Nothing here licenses skipping tests or review, and functional correctness was not measured at all.
+
+## Related
+
+- [The Specification as Prompt](specification-as-prompt.md) — Point the agent at a formal artifact that already exists, instead of writing the constraints in prose.
+- [Match Architecture Spec Format to Model Capability](spec-format-by-model-tier.md) — The same inverse-capability shape, measured on architecture spec format rather than a fixed preamble.
+- [Standard-Grounded NFR Specs: Quality Up, Correctness Flat](standard-grounded-nfr-specification.md) — Per-requirement enrichment that cuts static defect density and leaves correctness flat.
+- [Evaluating AGENTS.md Context Files](evaluating-agents-md-context-files.md) — The instruction-file null this result is answering.
+- [Prompt as Security Knob](../patterns/anti-patterns/prompt-as-security-knob.md) — Why none of this makes the prompt a security guarantee.
 
 ---
 
@@ -16462,6 +16610,7 @@ The two studies also used different model and agent sets. So it is unclear wheth
 - [Agent Context File Evolution: Treating ACFs as Configuration Code](agent-context-file-evolution.md) — for ACFs that already help, the empirical maintenance lifecycle on the same Chatlatanagulchai dataset
 - [RAMP: Committed AI Configuration and the Quality Cost](committed-ai-configuration-quality-cost.md) — the longitudinal counterpart, where committed configuration tracks lower complexity drift even though task success does not move
 - [Documentation Read Counts Measure Retrievability, Not Value](documentation-read-counts.md) — the behavioral traces showing agents read these files most, and why that is not an argument for writing more of them
+- [Constraint Preambles and the Gain Your Scanner Misses](constraint-preamble-before-generation.md) — the artifact class that did move named defect classes, and why the two results are not in conflict
 
 ---
 
@@ -21124,6 +21273,7 @@ The cue is short, task-relevant, and pre-selected — two plausible CWEs are lis
 - [Context Priming](../context-engineering/context-priming.md) — the general lever the security cue specializes
 - [Severity-Stratified Evaluation of Security Prompts](../verification/severity-stratified-security-prompt-evaluation.md) — how to score the distribution shift a cue produces, so a redistribution is not read as a reduction
 - [Explained Feedback for LLM Vulnerability Repair](../verification/explained-feedback-vulnerability-repair.md) — the other half of the loop: what to hand the model after the scanner flags what the cue failed to prevent
+- [Constraint Preambles and the Gain Your Scanner Misses](constraint-preamble-before-generation.md) — the task-agnostic counterpart to a per-task CWE cue, whose largest gains no scanner reports
 
 ---
 
@@ -23489,6 +23639,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Renting a Cloud Agent's Execution Sandbox](rented-execution-sandbox.md) — Pointing a cloud agent at a third-party sandbox moves tool execution only, so decide it on a named requirement and expect inference and tool output to stay with the vendor
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — Use PreToolUse hook defer decisions to pause headless Claude Code sessions at tool calls and resume them after out-of-band human approval
 - [Most-Restrictive-Wins Fusion for Parallel Agent Control Returns](most-restrictive-wins-fusion.md) — The `deny > defer > ask > allow` merge function that fuses parallel hook decisions, classifier verdicts, and permission rules into a single agent-control answer
+- [Designing Agent Plugins to Survive Co-Installation](plugin-co-installation-safety.md) — Ship the root manifest, keep client data in `extensions`, and prefix exported capability names, because conformance is checked on one plugin and the failure needs two
 - [Product-Operation Tool Surfaces for In-Product Agents](product-operation-tool-surface.md) — An agent living inside a product enumerates each action as its own shallow tool and withholds the SDK, then scopes the live catalog per thread so tool selection holds up
 - [Typed Tool Surfaces and Out-of-Loop Correctness Gates](typed-tool-surface-out-of-loop-gate.md) — Name the domain's operations as tools, cap the loop in code, and check the answer downstream — a trade that won multi-hop questions by 9 points and lost single-hop ones by 25
 - [Tool Confirmation Carousel: Batched UI for Per-Call Approvals](tool-confirmation-carousel.md) — A carousel control reviews multiple pending tool calls in one navigable surface instead of scattered modals — useful only for residual approvals that allowlists and sandboxes cannot absorb
@@ -30226,7 +30377,7 @@ Source: https://agentpatterns.ai/patterns/agent-design/continuously-built-agent-
 
 > Continuously rebuild the agent environment in the background, promote only successful builds, and start every run from the last good one.
 
-A continuously built agent environment is a prepared workspace snapshot that a platform rebuilds on its own schedule and activates only when the build succeeds. Cursor ships this as Builds, defined as "a bootable snapshot of a prepared Cloud Agent environment" ([Cursor Docs](https://cursor.com/docs/cloud-agents/builds)). The snapshot holds "repos cloned, dependencies installed, and the install script fully executed" ([Cursor](https://cursor.com/blog/builds)). Builds reached cloud agents on 2026-08-13, which takes the clone and install off the session's own clock ([Cursor Changelog, 2026-08-13](https://cursor.com/changelog/08-13-26)).
+A continuously built agent environment is a prepared workspace snapshot that a platform rebuilds on its own schedule and activates only when the build succeeds. Cursor ships this as Builds, defined as "a bootable snapshot of a prepared Cloud Agent environment" ([Cursor Docs](https://cursor.com/docs/cloud-agents/builds)). The snapshot holds "repos cloned, dependencies installed, and the install script fully executed" ([Cursor](https://cursor.com/blog/builds)). Builds reached cloud agents on 2026-08-13, which takes the clone and install off the session's own clock ([Cursor Changelog, 2026-08-13](https://cursor.com/changelog/08-13-26)). See also: VS Code takes a different route to a related problem. Agent Sessions in Dev Containers "run agents with project-specific tools and dependencies," and agents "use the environment configured for the project instead of the local machine" ([VS Code 1.138](https://code.visualstudio.com/updates/v1_138)). That is per-project configuration, not a scheduled rebuild.
 
 ## When it pays
 
@@ -31511,6 +31662,76 @@ class MyAgentState(TypedDict):
 - [Trajectory Logging via Progress Files and Git History](../../observability/trajectory-logging-progress-files.md) — filesystem-side trajectory record that complements runtime-side checkpoints
 - [Durable Interactive Artifacts](durable-interactive-artifacts.md) — workspace state that survives sessions, complementary to delta-checkpointed graph state
 - [Agent Event Streaming: Consumer Contract Above the Tokens](agent-event-streaming-model.md) — the consumer-side event contract; this delta primitive is its runtime-side counterpart
+
+---
+
+### Designing Agent Plugins to Survive Co-Installation
+Source: https://agentpatterns.ai/patterns/agent-design/plugin-co-installation-safety/
+
+# Designing Agent Plugins to Survive Co-Installation
+
+> Conformance checks one plugin alone. Co-installation is the configuration users run, and nothing in the standard decides which plugin answers.
+
+Plugin co-installation safety is the set of packaging choices that keep your bundle working when a stranger's plugin is installed beside it. Agent Plugins v1.0.0 fixes where a bundle's files sit. It defines no qualified identity for a capability, no precedence rule when two installed plugins claim the same name, and no dependency relation between plugins, so "the same two plugins behave differently on different agents" ([AgentPluginZoo census](https://arxiv.org/abs/2609.23809v1)). That census covered 68,072 bundles across 30,655 repositories. Of the 31,901 that export a named capability, 81% share at least one name with another plugin, and a different-owner filter lowers that only to 74% ([AgentPluginZoo census](https://arxiv.org/abs/2609.23809v1)).
+
+## When this applies
+
+Three conditions have to hold before this earns your time. Strangers install your plugin next to plugins you have never seen, more than one client consumes it, and it exports named capabilities rather than only an MCP server. An internal bundle, published by one owner to one client, hits none of the failures below.
+
+## Four moves you control
+
+Ship the manifest at the bundle root with a `$schema` declaration. Omitting it is fatal rather than cosmetic: the client "MUST reject the plugin and MUST NOT discover or execute any of its components" ([AgentPluginZoo census](https://arxiv.org/abs/2609.23809v1)). Granting every manifest a correct `$schema` and changing nothing else takes the load rate from 6.4% to 96.6%.
+
+Put client-specific data in the manifest's `extensions` object rather than inventing a top-level field. The v1.0.0 schema is closed, so a field it does not name is one the client must ignore. Your plugin loads and the host drops what you wrote. 40.2% of bundles would load with at least one field discarded, and 1.9% of manifests use the reverse-domain `extensions` object the specification already sanctions ([AgentPluginZoo census](https://arxiv.org/abs/2609.23809v1)).
+
+Prefix the capability names you export. Do not ship a skill called `code-review`. `code-reviewer` is claimed by 300 distinct repository owners and `systematic-debugging` by 221, and the head of that distribution is made of "generic, task-shaped names for common jobs" ([AgentPluginZoo census](https://arxiv.org/abs/2609.23809v1)). Those are the names a user installs a plugin to get.
+
+Generate any duplicate manifests rather than hand-maintaining them. Of a 3,998-bundle sample of multi-manifest bundles, 95.6% held copies that were not semantically identical and 7.3% disagreed about their own name ([AgentPluginZoo census](https://arxiv.org/abs/2609.23809v1)).
+
+## Why it works
+
+The manifest carries identity and provenance only, and "says nothing about what the plugin does" ([AgentPluginZoo census](https://arxiv.org/abs/2609.23809v1)). A client never asks it what the bundle contains. It walks `skills/*/SKILL.md` and reads `mcp.json`. The literal directory name is therefore the only handle a host has on a capability, and the specification supplies neither a qualified form nor a tiebreak, so each host invents its own. Claude Code namespaces every plugin skill by plugin name "to prevent conflicts when multiple plugins have skills with the same name" ([Claude Code plugin docs](https://code.claude.com/docs/en/plugins)). VS Code drops the qualification and deduplicates by bare name, so one plugin's skill disappears from model context ([microsoft/vscode#334438](https://github.com/microsoft/vscode/issues/334438)). Prefixing works because it makes the name unique before any host-specific rule runs.
+
+## When this backfires
+
+- Your host already namespaces by force. Claude Code prefixes plugin skills as `/plugin-name:skill-name`, so an author-side prefix ships `/my-plugin:my-plugin-code-review` and buys nothing ([Claude Code plugin docs](https://code.claude.com/docs/en/plugins)).
+- One owner publishes the whole set. A name repeated across bundles inside a single organization is duplication, not a conflict a user can hit, and the census counts it separately for that reason ([AgentPluginZoo census](https://arxiv.org/abs/2609.23809v1)).
+- The collision rate may be inflated. One critique argues the figure reflects forks and copies of a handful of starter templates, which "trivially collide on every capability name they export" ([research-issues#1675](https://github.com/jjakimoto/research-issues/issues/1675)). Filtering by owner does not remove a widely forked template.
+- The repair may belong upstream. VS Code's shadowing is filed as a bug, so a client-side fix would repair every installed plugin at once rather than only the prefixed ones.
+- Your plugin's value is hooks, commands, or sub-agents. Version 1.0.0 covers skills and MCP servers only, and other component types "do not affect conformance" ([AgentPluginZoo census](https://arxiv.org/abs/2609.23809v1)), so the work returns a manifest and little else. See [Agent Plugins: Portable Packaging With Client-Defined Trust](../../standards/agent-plugins-standard.md).
+- The contract is still moving. A 1.1.0 working draft, a registry index, and a dependency field are all in progress ([AgentPluginZoo census](https://arxiv.org/abs/2609.23809v1)), so the fatal-`$schema` rule and the closed field list describe v1.0.0 rather than a settled answer.
+
+## Example
+
+Two independently published plugins each ship the same skill directory:
+
+```text
+plugin-a/skills/troubleshooting/SKILL.md
+plugin-b/skills/troubleshooting/SKILL.md
+```
+
+| Host behavior | Result |
+|---|---|
+| Namespaces by plugin | Both reachable, as `/plugin-a:troubleshooting` and `/plugin-b:troubleshooting` ([Claude Code plugin docs](https://code.claude.com/docs/en/plugins)) |
+| Deduplicates by bare name | One skill is dropped from model context ([microsoft/vscode#334438](https://github.com/microsoft/vscode/issues/334438)) |
+
+Renaming the directories to `plugin-a-troubleshooting` and `plugin-b-troubleshooting` removes the second row, at the cost of a longer name on the host that would have namespaced anyway.
+
+## Key Takeaways
+
+- A conformance check reads one plugin. Every collision failure needs a second one installed, so a green validator says nothing about the configuration users actually run.
+- `$schema` at the bundle root is the one fatal omission, and the part of portability an author fully controls. Adding it alone lifts the load rate to 96.6% ([AgentPluginZoo census](https://arxiv.org/abs/2609.23809v1)).
+- A top-level field the closed schema does not name still loads, with the host discarding what you wrote. 40.2% of bundles would load with a field discarded; 1.9% of manifests use the `extensions` object that would have held it.
+- Prefix exported capability names when strangers will co-install your bundle across more than one client. Skip it for a single-owner fleet or a host that namespaces by force.
+- Duplicate manifests drift. 95.6% of sampled multi-manifest bundles already disagree with themselves, so generate them from one source or ship one.
+
+## Related
+
+- [Agent Plugins: Portable Packaging With Client-Defined Trust](../../standards/agent-plugins-standard.md) — what v1.0.0 fixes and what it hands to each client; this page starts where that one stops.
+- [Agent Extension Conflicts: When Installed Skills and MCP Servers Fight Each Other](../anti-patterns/agent-extension-conflicts.md) — the runtime half of co-installation, where extensions compete for context budget and routing rather than for a name.
+- [Plugin Dependency Declaration and Disable-Chain Hints](../../standards/plugin-dependency-declaration.md) — one vendor's answer to the relation between plugins that v1.0.0 leaves undefined.
+- [Pre-Install Plugin Transparency: Capability Inventory and Cost Projection](../../standards/pre-install-plugin-transparency.md) — showing a user what a bundle exports before it is installed, which a declared capability surface would make cheap.
+- [Scoped MCP Server Discovery: Most-Specific-Wins Resolution](../../tool-engineering/scoped-mcp-server-discovery.md) — a worked precedence rule at the configuration layer, against the one the plugin specification declines to write.
 
 ---
 
@@ -50914,6 +51135,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Unsignalled Tool Failure: Returning Success With an Unusable Payload](unsignalled-tool-failure-envelope.md) — A tool wrapper that returns status:ok around a redacted or corrupted value leaves the model to infer the failure; dishonesty is 0.0% when the envelope reports the error and reaches 45.3% when it does not
 - [Tool-Call Success as Workflow Effect Evidence](tool-call-success-as-workflow-evidence.md) — Eight external-effect anomalies leave the wrong effects standing after every tool call returned success; a census of 98,291 MCP tools finds the standard annotations express one of the eight
 - [Treating Memory-Injection Rate as Security Evidence](memory-injection-rate-as-security-evidence.md) — A prompt guard cut memory injection on the Claude Code harness from 83.3% to 6.7% while cross-session attack success moved 0.0 points; injection rate and execution rate are separate properties that move independently
+- [Treating File Secrecy as Skill Confidentiality](file-secrecy-as-skill-confidentiality.md) — Hiding a skill's files hides its text, not the function it implements; a disclosure-shaped output filter blocked 3 of 4 explicit disclosure probes and 0 of 252 ordinary task responses
 
 ---
 
@@ -51318,6 +51540,7 @@ The right-hand column applies all four mitigations below: scope (one tracker), l
 - [MCP Eager vs JIT Loading](../../tool-engineering/mcp-eager-vs-jit-loading.md) — the lazy-load mitigation as a tool-engineering decision.
 - [Assuming Loaded Skills Stay Enforced in Long Contexts](assuming-loaded-skills-stay-enforced.md) — a single loaded skill silently sheds its own requirements as the trajectory grows, a failure that appears even without a second conflicting extension.
 - [Skill Over-Trust](skill-over-trust.md) — attributing a failure or cost regression to one installed skill by re-running the task with it withheld.
+- [Designing Agent Plugins to Survive Co-Installation](../agent-design/plugin-co-installation-safety.md) — the packaging-layer sibling, where two extensions claim the same capability name and no portable rule decides which answers.
 
 ---
 
@@ -61876,6 +62099,90 @@ The deployment fix is not "trust the depth-20 number." It is to measure refusal 
 - [The Anthropomorphized Agent](anthropomorphized-agent.md) — treating safety as a stable agent trait rather than a turn-by-turn measurement
 - [Prompt as Security Knob](prompt-as-security-knob.md) — assuming a prompt-level property is constant when it varies with perturbation
 - [Task Scope as a Security Boundary](../../security/task-scope-security-boundary.md) — narrowing scope reduces both refusal-rate exposure and blast radius
+
+---
+
+### Treating File Secrecy as Skill Confidentiality
+Source: https://agentpatterns.ai/patterns/anti-patterns/file-secrecy-as-skill-confidentiality/
+
+# Treating File Secrecy as Skill Confidentiality
+
+> Hiding a skill's files hides its text. The function stays observable in the answers the skill gives, where disclosure filters barely reach.
+
+This matters where three things hold at once. An outside party sends the skill task requests. The skill body carries logic the base model cannot reproduce from the public description. That logic is compact and deterministic: thresholds, table entries, composition rules, short procedures. Drop any one and file secrecy comes closer to sufficient. Internal skills, and skills whose value is a judgement no exact-match oracle scores, sit outside every result below.
+
+## What the two standard defenses cover
+
+Both defenses were built against disclosure, meaning an attacker who asks the agent to print its `SKILL.md`. Measured against ordinary task requests instead, they read the wrong signal. An input intent classifier and an output lexical-overlap filter caught all 4 explicit disclosure probes in one evaluation. Over 252 task-valid probes from a reconstruction run against the same victim, the input detector flagged 17 (6.7%) and the output filter blocked none, because those responses carry little lexical overlap with the skill body ([Hua et al. 2026 §6](https://arxiv.org/abs/2608.04192v2)).
+
+Vaguer public descriptions are the other reflex, and they do not pay. Rewriting all 21 mined skill descriptions to a task-only or vague form produced a median change in attack success rate of 0 pp, protecting 3 skills by at least 20 points and harming 4 by the same margin, while routing recall fell from 99.5% to 96.2% ([Hua et al. 2026 §6](https://arxiv.org/abs/2608.04192v2)). You pay in routing and get a coin flip.
+
+## What leaks, by what the body encodes
+
+Median attack success rate across a 30-skill suite, grouped by the skill's dominant hidden component, with the fraction of skills recovered above their majority-class floor ([Hua et al. 2026 §5.1](https://arxiv.org/abs/2608.04192v2)):
+
+| Hidden component | Median ASR | Above floor |
+|---|---|---|
+| Rule composition | 87% | 3/3 |
+| Threshold and decision rules | 83% | 4/5 |
+| Lookup tables and data | 82% | 7/10 |
+| Procedures and algorithms | 77% | 4/6 |
+| Numeric formulas | 43% | 3/6 |
+
+The recovered clones are substitutes rather than copies, scoring 74–100% ASR at 35–59% token precision against the skill body ([Hua et al. 2026 §5.1](https://arxiv.org/abs/2608.04192v2)). A working replacement sharing little text with the original is also one a text-overlap filter never sees.
+
+## Why it works
+
+A skill offered as a service has to answer ordinary requests, and every answer is a labeled input-output pair for the function the hidden body implements. The usable interface and the leak channel are one interface. Tramèr et al. named the same tension for prediction APIs a decade ago: "The tension between model confidentiality and public access motivates our investigation of model extraction attacks" ([Tramèr et al. 2016](https://arxiv.org/abs/1609.02943v2)). Skills add a second channel nobody can close, since the public advertisement exists so the agent can route tasks to the skill, and that same text narrows the space of plausible implementations ([Hua et al. 2026 §3.2](https://arxiv.org/abs/2608.04192v2)).
+
+A second group reached the same conclusion through a different observation channel. SigLeak contrasts skill-enabled and skill-disabled execution trajectories, and its authors report that "benign execution trajectories can expose proprietary procedural knowledge" ([Geng et al. 2026](https://arxiv.org/abs/2607.25560v2)).
+
+## When this backfires
+
+- Recovery is bounded, and the bounds are real. A 230-entry private codebook stayed at 0% ASR under a 24-probe budget, which the authors attribute to coverage rather than to any defense ([Hua et al. 2026 §5.1](https://arxiv.org/abs/2608.04192v2)). If your asset is a large dataset and your interface meters queries, the economics may already favor you.
+- Disclosure defenses are scoped, not wasted. Pipeline defenses at input, inference, and output "substantially reduce leakage" against the disclosure attack they were built for, though the same authors add that "the attack remains inexpensive and repeatable, and a single successful attempt is sufficient to compromise the protected skill" ([Wang et al. 2026](https://arxiv.org/abs/2604.21829v2)).
+- There is nothing validated to buy instead. The source states that "no customized defense is available for now" and lists cross-session identity controls, cumulative query monitoring, output coarsening, and private routing representations as untested directions ([Hua et al. 2026, Limitations](https://arxiv.org/abs/2608.04192v2)). Read any vendor claim in this space as unmeasured.
+- The evidence does not come from commercial deployments. Every evaluated skill body was a public artifact, and "proprietary services, paid marketplaces, and in-the-wild evaluations remain outside the study" ([Hua et al. 2026, Limitations](https://arxiv.org/abs/2608.04192v2)). The exposure is real; its size in your product is not measured.
+
+## Example
+
+The fix is a placement decision, and it splits on why the logic is secret.
+
+The source uses a traffic classifier for the same illustration: the advertisement exposes the task and its input fields, while "the hidden body specifies the exact detection thresholds and the logic that combines them" ([Hua et al. 2026 §3.2](https://arxiv.org/abs/2608.04192v2)).
+
+**Before** — the skill ships its detection cutoffs in the body, and the product story is that customers cannot see them:
+
+```markdown
+<!-- SKILL.md, hidden from the customer; thresholds illustrative -->
+Flag a session as suspicious when entropy > 7.4 AND packet-rate > 220/s.
+Escalate at entropy > 7.9 regardless of rate.
+```
+
+Every classification a customer requests is a labeled point on that boundary. Threshold and decision rules are the second most recovered component class in the suite, at an 83% median ([Hua et al. 2026 §5.1](https://arxiv.org/abs/2608.04192v2)).
+
+**After** — sort the logic by what its secrecy is doing.
+
+- Commercially valuable and compact. Accept that a customer can rebuild it, and compete on what a clone does not inherit: data freshness, support, and the update that lands next month. Do not price the skill as a moat.
+- Security-critical. Re-derive the control so it holds once the cutoff is known, the same rule [OWASP applies to system prompts](../../security/system-prompt-not-a-secret-store.md). A threshold that works only while nobody knows it was never a control.
+- Genuinely large and private. Keep it behind an interface that authenticates the caller and accounts for queries across sessions rather than per request. This is the direction the source recommends and has not evaluated, so treat it as a hypothesis you monitor.
+
+If you are buying rather than authoring, the same table is a purchasing note. A vendor's proprietary logic is worth roughly what its component class says it is worth, and for compact rule and threshold skills that is not much.
+
+## Key Takeaways
+
+- File secrecy and functional secrecy are separate properties. The same two filters caught 4 of 4 explicit disclosure probes and 17 of 252 ordinary task probes ([Hua et al. 2026 §6](https://arxiv.org/abs/2608.04192v2)).
+- Sort your skill bodies by what they encode before deciding what to protect. Rule composition, thresholds, and lookup tables sat at 82–87% median ASR, numeric formulas at 43% ([Hua et al. 2026 §5.1](https://arxiv.org/abs/2608.04192v2)), so the compact rule is the exposed one.
+- Vaguer descriptions are not a control. Median ASR change of 0 pp, 3 skills protected against 4 harmed, routing recall down 3.3 points ([Hua et al. 2026 §6](https://arxiv.org/abs/2608.04192v2)).
+- Any skill logic whose secrecy is load-bearing for security belongs somewhere that does not answer arbitrary task requests, and the control it backs should survive disclosure anyway.
+- No defense for this channel has been validated. Query accounting across sessions is the direction the source names as future work, so measure it yourself before relying on it.
+
+## Related
+
+- [System Prompt as Secret Store (OWASP LLM07)](../../security/system-prompt-not-a-secret-store.md) — the same boundary error one layer down, where the hidden text does leak; this page covers the case where it never leaks and the function is rebuilt anyway
+- [Adversarial-Only Threat Modeling for Agent Data Leakage](adversarial-only-leakage-threat-modelling.md) — benign requests leaking the user's data, the mirror image of benign requests leaking the provider's logic
+- [Credential Hygiene for Agent Skill Authorship](../../security/credential-hygiene-agent-skills.md) — the authoring-time decision about what belongs in a skill body at all
+- [Embedding Inversion: Vector Stores as a Source-Text Disclosure Surface](../../security/embedding-inversion-vector-store-disclosure.md) — another artifact whose confidentiality claim does not survive what the system must expose to be useful
+- [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the consuming team's side, for what observing a third-party skill's answers can and cannot establish
 
 ---
 
@@ -128250,6 +128557,7 @@ The skill and the MCP server travel. The hooks do not, because hooks are outside
 - [Cross-IDE Plugin Discovery: One Install Surface, Many Consuming Agents](cross-ide-plugin-discovery.md) — the shared install path on one machine, where this standard fixes the package instead
 - [Pre-Install Plugin Transparency: Capability Inventory and Cost Projection](pre-install-plugin-transparency.md) — the pre-install disclosure layer the spec leaves to each client
 - [Per-Surface Verification of Agent Plugin Packages](../tool-engineering/per-surface-plugin-verification.md) — what the client-defined half looks like in practice across GitHub's VS Code, CLI, and app clients
+- [Designing Agent Plugins to Survive Co-Installation](../patterns/agent-design/plugin-co-installation-safety.md) — the packaging choices that matter once a second plugin is installed, which conformance does not check
 
 ---
 
@@ -135771,6 +136079,7 @@ Because it fragments logically unified changes. Each atomic PR passes review on 
 - [Cognitive Load and AI Fatigue](cognitive-load-ai-fatigue.md) -- review burden on senior engineers
 - [Author-to-Reviewer Role Inversion](author-to-reviewer-role-inversion.md) -- the team-level staffing and measurement shift this economic migration produces
 - [Language Selection Scored on Review Cost](language-selection-review-cost.md) -- the technology-selection consequence: score a language on review cost once generation is cheap
+- [Reducing Fixed CI Overhead Before Adding Shards](../workflows/ci-setup-overhead-before-sharding.md) -- the machine-side constraint: CI capacity rather than review capacity
 
 ---
 
@@ -155991,6 +156300,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Bounding a Headless Codex Run Without a Turn Cap](headless-codex-bounding.md) — `codex exec` has no `--max-turns` equivalent, so an unattended Codex run is bounded by its sandbox policy, the caller's wall clock, and a JSON Schema output contract
 - [Per-Task Verification Budget: Size the Task to Fit the Check](per-task-verification-budget.md) — Fix the human check on each agent task at 30 to 60 seconds and treat that number as an admission rule, so work too large to verify inside the budget leaves the daily batch for its own thread
 - [Measuring the Verification Tax on Agent Output](verification-tax.md) — Divide CI, review, security, and rework cost by generation cost per change class, then read the ratio as a diagnostic with five candidate causes rather than a number to drive down
+- [Reducing Fixed CI Overhead Before Adding Shards](ci-setup-overhead-before-sharding.md) — Per-job setup cost decides how far test sharding pays, so cut it before buying parallelism
 
 ---
 
@@ -165765,6 +166075,7 @@ Read against the layers, the second case has a signature you can see before the 
 - [Per-Task Verification Budget: Size the Task to Fit the Check](per-task-verification-budget.md) — the human-attention budget expressed as a per-task admission rule
 - [Cost-Quality Pareto Measurement for Agent Configurations](../token-engineering/cost-quality-pareto-measurement.md) — the same cost-against-quality frame applied to one agent configuration
 - [Intervention Rate as a Diagnostic North Star, Not a Target](../human/intervention-rate-diagnostic-north-star.md) — a sibling metric governed by the same diagnostic-not-target rule
+- [Reducing Fixed CI Overhead Before Adding Shards](ci-setup-overhead-before-sharding.md) — the CI half of the tax, and the lever that moves it
 
 ---
 
@@ -167925,6 +168236,104 @@ Human review covers 6 issues instead of 18 raw notes. Each issue includes the fi
 - [Oracle Task Decomposition](../patterns/multi-agent/oracle-task-decomposition.md)
 - [LLM-as-Judge Evaluation](llm-as-judge-evaluation.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
+
+---
+
+### Reducing Fixed CI Overhead Before Adding Shards
+Source: https://agentpatterns.ai/workflows/ci-setup-overhead-before-sharding/
+
+# Reducing Fixed CI Overhead Before Adding Shards
+
+> Sharding divides test work and multiplies per-job setup, so fixed CI overhead decides how far parallelism pays. Cut it first.
+
+Every job pays a fixed cost before it runs a single test: booting a runner, checking out the repository, installing dependencies, provisioning a database. Sharding divides the test work across more jobs and pays that fixed cost once per job, so overhead sets a ceiling on parallelism that arrives well before the runners run out.
+
+## The CI capacity problem
+
+When agents write most of the tests, the suite grows faster than the pipeline that runs it, and merge throughput becomes a property of CI rather than of the reviewers. Linear's engineering team hit this in 2026 and described it plainly: "Agents have made it exponentially faster to ship code, but validating those changes hasn't quite kept up at the same rate" ([Linear](https://linear.app/now/ci-bottleneck-reworked)). The team is "currently adding roughly 2,000 tests a week".
+
+[The bottleneck migration](../human/bottleneck-migration.md) puts that limit on human review and judgment. This is the machine-side reading: the queue in front of the merge, measured in runner-minutes.
+
+## When this applies
+
+1. Setup is a large share of job time. A shard that spends two minutes starting and four minutes testing wastes a third of its bill. A shard that starts in ten seconds does not; target the slow tests instead.
+2. The constraint is runner time, not a concurrency cap. Cheaper jobs do not shorten a queue caused by a ceiling on concurrent runners. Buying concurrency does.
+3. Predictive test selection is out of reach. Teams with a long labeled history of test outcomes have a stronger option: see [When this backfires](#when-this-backfires).
+
+## Three implementation layers
+
+### Layer 1: strip the fixed cost out of every job
+
+Find the work each job repeats before it does anything useful, then move, shrink, or delete it. Linear's three changes were ordinary: preinstall shared dependencies into a CI base image rather than `apt`-installing them per shard, install only the workspace package a job needs rather than the whole monorepo, and stop caching what is faster to rebuild. The third is the one teams get backwards. Restoring a `node_modules` cache took about 28 seconds against roughly 7.5 seconds for a filtered install, so the cache "was adding save time and variability without giving us any discernible advantage". Together the three took per-shard setup down "by roughly 44%, from 110-140 seconds to 67-73 seconds".
+
+The same layer covers jobs that are pure overhead. Seven independent checks were each booting a runner, checking out the repository, and installing dependencies for seconds of real work. Consolidating them into two jobs, running the seven tasks concurrently inside, "saved roughly 87,000 runner-minutes per month, equivalent to 11.8% of our total CI usage". No check got faster.
+
+### Layer 2: shorten the jobs that gate the fan-out
+
+A gating job's cost is multiplied by everything waiting behind it. Change-detection jobs that decide which downstream work runs were checking out the full working tree for a path diff a shallow fetch could compute. Capping the fetch depth took the slowest of those gates "from 94 seconds to 20", and removing checkout from jobs that never needed a working tree took those "from 27 seconds to 7". The median change-detection job "fell from 26 to 8 seconds, p90 from 31 to 12 seconds, and the slowest run from 138 to 37 seconds".
+
+Cache-marker writes sat in the final pre-merge check, so a pull request waited in the merge queue after its tests had already passed. Moving that write into a job that gates nothing shaved "42 seconds from the merge path for every API pull request and merge-queue entry".
+
+### Layer 3: spend the headroom on parallelism, then defend it
+
+Only now does adding shards pay. Linear went from four shards to eight, which made the critical job "roughly 19% faster and 19% cheaper", after first splitting oversized test files because Vitest "distributes work by file rather than by the duration of individual tests". The largest single win came from letting opted-in files share a module registry instead of rebuilding the entity, GraphQL, and decorator graph per file, worth "roughly 17% in monthly savings at our volume".
+
+Shared module state is also the one change that can make a passing suite lie, so it holds only while every new test file honors the opt-in. Layer 3 is finished when that constraint is written where the authors of new tests will read it, not when the shards are configured.
+
+## What the rework returned
+
+| Change | Measured result |
+|---|---|
+| Moved off GitHub Actions to third-party runners | Jobs 34% faster on average, `tsc` down 52% |
+| Switched to the `tsgo` native TypeScript compiler | Weekly median `tsc` check down 73% |
+| Rewrote lint rules to drop the type graph | API lint time down 68%, full-repository lint down 55% |
+| Capped fetch depth on change-detection gates | Slowest gate 94s to 20s, median 26s to 8s |
+| Preinstalled the Postgres client, filtered the install, dropped a cache | Per-shard setup down roughly 44%, 110-140s to 67-73s |
+| Batched seven short checks into two jobs | Roughly 87,000 runner-minutes per month, 11.8% of CI usage |
+| Raised test shards from four to eight | Critical job roughly 19% faster and 19% cheaper |
+| Shared module state across opted-in test files | Roughly 17% monthly savings, slowest shard ~300-379s to ~195s |
+
+Against test suites "almost *quadrupling* since the start of the year", the team "brought pull request wait time down from more than 6 minutes to just over 5, while cutting runner time per test roughly in half". Wait time moved by about a minute; capacity moved by a factor of four. Plan for the second number. Promise the first, and a rework that absorbed four times the tests will read as a project that saved sixty seconds.
+
+## Triggers and constraints
+
+The pipeline runs on pull request and merge-queue events, so every change is measured against a per-PR critical path rather than a nightly total. A change that lowers total runner-minutes without touching that path is a cost win rather than a latency win.
+
+The layers are tool-agnostic. The specific levers are not. Fetch depth, image preinstallation, job batching, and gating-job placement apply to any CI system; the module-state item exists only where the test runner rebuilds per-file state, and the compiler and linter swaps are TypeScript-specific.
+
+## Why it works
+
+A job's cost splits into fixed setup and variable work, and sharding divides only the second term while multiplying the first. Adding shard N saves roughly `work/N` of wall-clock and adds one more setup, so once setup approaches `work/N` the next shard costs more than it returns. Linear states the relation and prices both sides of it: "Further sharding only pays off when the fixed cost per shard is low, since doubling the shard count also doubles the workflow time spent on setup." At 110-140 seconds of setup, "eight shards would have spent 15-19 minutes of runner time on setup alone, more than the tests themselves", while at roughly 40 seconds "eight shards spend less total setup time than four did before, while parallelizing the tests twice as far" ([Linear](https://linear.app/now/ci-bottleneck-reworked)). Overhead reduction is the precondition that decides how far sharding can go.
+
+## When this backfires
+
+- Setup is already cheap relative to test time. The exercise returns single-digit percentages and the hours are better spent on the slow tests.
+- A concurrency cap is the real limit. Lower runner-minutes do not move a queue caused by a ceiling on concurrent jobs.
+- The test runner does not rebuild per-file state. Linear's largest single win exists because "Vitest normally isolates every test file, which for us meant rebuilding the entity, GraphQL, and decorator graph in each test shard" ([Linear](https://linear.app/now/ci-bottleneck-reworked)). A runner with nothing to rebuild has nothing to share, so that item is absent and what remains is smaller.
+- Predictive test selection is available and stronger. Meta reported that a learned selection model "reduces the total infrastructure cost of testing code changes by a factor of two, while guaranteeing that over 95% of individual test failures and over 99.9% of faulty changes are still reported back to developers" ([arXiv:1810.05286v2](https://arxiv.org/abs/1810.05286v2)). That attacks test volume rather than per-job cost, and the gain keeps growing with the suite instead of stopping at an overhead floor. It costs a large labeled history of test outcomes and an accepted miss rate.
+- Isolation is relaxed without an enforced opt-in. Sharing state between test files is the condition that produces order-dependent flakiness, and one study of 7,571 flaky Python tests found that "order dependency is a much more dominant problem in Python, causing 59%" of them ([arXiv:2101.09077v1](https://arxiv.org/abs/2101.09077v1)). Linear calls the same change "the optimization with the highest correctness risk", requires an explicit opt-in comment on every eligible file, and left files using fake timers or untangleable shared state in the isolated project.
+
+## Example
+
+The last risk has a fix that only shows up once agents are the authors. An opt-in rule holds while every new test file respects it, and at Linear most new test files are generated: "because agents now write the majority of our tests, we updated our respective agent skills to account for this performance opt-in as well, so generated tests follow the same constraints by default" ([Linear](https://linear.app/now/ci-bottleneck-reworked)).
+
+Generalize that. Any CI performance invariant an agent can violate belongs in the instructions the agent loads, and a deterministic check is better still ([Enforcing Agent Behavior with Hooks](../instructions/enforcing-agent-behavior-with-hooks.md)). At 2,000 new tests a week, a convention that lives only in a reviewer's head has a short life.
+
+## Key Takeaways
+
+- Price a job as fixed setup plus variable work before choosing a lever, because sharding divides the second term and multiplies the first.
+- Sequence overhead reduction ahead of parallelism: eight shards at 110-140 seconds of setup would have burned more runner time on setup than on the tests.
+- Batching short checks into fewer jobs can return more than making any check faster; seven folded into two freed 11.8% of one team's total CI usage.
+- Expect capacity rather than latency. Absorbing a quadrupled suite at roughly flat wait time is the realistic outcome, and it is worth more than the minute it also saved.
+- Put any CI performance invariant into the agent's instructions, because agent-written tests break an unwritten opt-in rule faster than review catches it.
+
+## Related
+
+- [Measuring the Verification Tax on Agent Output](verification-tax.md) — the cost ratio that says whether CI is where the spend went
+- [The Bottleneck Migration When Humans Supervise Agents](../human/bottleneck-migration.md) — the human-side reading of the same constraint, where review absorbs the load
+- [Agent PR Volume vs. Value: The Productivity Paradox](../code-review/agent-pr-volume-vs-value.md) — the volume growth that puts the pressure on CI
+- [AI Bot CI/CD Workflow Reliability by Agent](ai-bot-ci-workflow-reliability.md) — how often agent-authored pull requests fail CI, which sets how much capacity goes to reruns
+- [Enforcing Agent Behavior with Hooks](../instructions/enforcing-agent-behavior-with-hooks.md) — the deterministic way to hold an invariant agent-written code would otherwise erode
 
 ---
 

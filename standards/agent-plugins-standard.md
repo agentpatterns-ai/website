@@ -78,3 +78,4 @@ The skill and the MCP server travel. The hooks do not, because hooks are outside
 - [Cross-IDE Plugin Discovery: One Install Surface, Many Consuming Agents](cross-ide-plugin-discovery.md) — the shared install path on one machine, where this standard fixes the package instead
 - [Pre-Install Plugin Transparency: Capability Inventory and Cost Projection](pre-install-plugin-transparency.md) — the pre-install disclosure layer the spec leaves to each client
 - [Per-Surface Verification of Agent Plugin Packages](../tool-engineering/per-surface-plugin-verification.md) — what the client-defined half looks like in practice across GitHub's VS Code, CLI, and app clients
+- [Designing Agent Plugins to Survive Co-Installation](../patterns/agent-design/plugin-co-installation-safety.md) — the packaging choices that matter once a second plugin is installed, which conformance does not check

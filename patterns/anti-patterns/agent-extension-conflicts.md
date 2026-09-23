@@ -92,3 +92,4 @@ The right-hand column applies all four mitigations below: scope (one tracker), l
 - [MCP Eager vs JIT Loading](../../tool-engineering/mcp-eager-vs-jit-loading.md) — the lazy-load mitigation as a tool-engineering decision.
 - [Assuming Loaded Skills Stay Enforced in Long Contexts](assuming-loaded-skills-stay-enforced.md) — a single loaded skill silently sheds its own requirements as the trajectory grows, a failure that appears even without a second conflicting extension.
 - [Skill Over-Trust](skill-over-trust.md) — attributing a failure or cost regression to one installed skill by re-running the task with it withheld.
+- [Designing Agent Plugins to Survive Co-Installation](../agent-design/plugin-co-installation-safety.md) — the packaging-layer sibling, where two extensions claim the same capability name and no portable rule decides which answers.
