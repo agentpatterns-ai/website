@@ -211,6 +211,7 @@ nav:
       - dual-write-append-mirror-transcript.md
       - deferred-permission-pattern.md
       - most-restrictive-wins-fusion.md
+      - plugin-co-installation-safety.md
       - natural-language-tool-selection.md
       - product-operation-tool-surface.md
       - typed-tool-surface-out-of-loop-gate.md

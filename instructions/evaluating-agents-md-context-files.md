@@ -122,3 +122,4 @@ The two studies also used different model and agent sets. So it is unclear wheth
 - [Agent Context File Evolution: Treating ACFs as Configuration Code](agent-context-file-evolution.md) — for ACFs that already help, the empirical maintenance lifecycle on the same Chatlatanagulchai dataset
 - [RAMP: Committed AI Configuration and the Quality Cost](committed-ai-configuration-quality-cost.md) — the longitudinal counterpart, where committed configuration tracks lower complexity drift even though task success does not move
 - [Documentation Read Counts Measure Retrievability, Not Value](documentation-read-counts.md) — the behavioral traces showing agents read these files most, and why that is not an argument for writing more of them
+- [Constraint Preambles and the Gain Your Scanner Misses](constraint-preamble-before-generation.md) — the artifact class that did move named defect classes, and why the two results are not in conflict

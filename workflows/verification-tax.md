@@ -109,3 +109,4 @@ Read against the layers, the second case has a signature you can see before the 
 - [Per-Task Verification Budget: Size the Task to Fit the Check](per-task-verification-budget.md) — the human-attention budget expressed as a per-task admission rule
 - [Cost-Quality Pareto Measurement for Agent Configurations](../token-engineering/cost-quality-pareto-measurement.md) — the same cost-against-quality frame applied to one agent configuration
 - [Intervention Rate as a Diagnostic North Star, Not a Target](../human/intervention-rate-diagnostic-north-star.md) — a sibling metric governed by the same diagnostic-not-target rule
+- [Reducing Fixed CI Overhead Before Adding Shards](ci-setup-overhead-before-sharding.md) — the CI half of the tax, and the lever that moves it

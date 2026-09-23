@@ -9,7 +9,7 @@ aliases:
   - prebuilt cloud agent environments
   - environment build promotion
   - agent cold start tax
-last_reviewed: 2026-09-02
+last_reviewed: 2026-09-22
 maturity: emerging
 ---
 
@@ -17,7 +17,7 @@ maturity: emerging
 
 > Continuously rebuild the agent environment in the background, promote only successful builds, and start every run from the last good one.
 
-A continuously built agent environment is a prepared workspace snapshot that a platform rebuilds on its own schedule and activates only when the build succeeds. Cursor ships this as Builds, defined as "a bootable snapshot of a prepared Cloud Agent environment" ([Cursor Docs](https://cursor.com/docs/cloud-agents/builds)). The snapshot holds "repos cloned, dependencies installed, and the install script fully executed" ([Cursor](https://cursor.com/blog/builds)). Builds reached cloud agents on 2026-08-13, which takes the clone and install off the session's own clock ([Cursor Changelog, 2026-08-13](https://cursor.com/changelog/08-13-26)).
+A continuously built agent environment is a prepared workspace snapshot that a platform rebuilds on its own schedule and activates only when the build succeeds. Cursor ships this as Builds, defined as "a bootable snapshot of a prepared Cloud Agent environment" ([Cursor Docs](https://cursor.com/docs/cloud-agents/builds)). The snapshot holds "repos cloned, dependencies installed, and the install script fully executed" ([Cursor](https://cursor.com/blog/builds)). Builds reached cloud agents on 2026-08-13, which takes the clone and install off the session's own clock ([Cursor Changelog, 2026-08-13](https://cursor.com/changelog/08-13-26)). See also: VS Code takes a different route to a related problem. Agent Sessions in Dev Containers "run agents with project-specific tools and dependencies," and agents "use the environment configured for the project instead of the local machine" ([VS Code 1.138](https://code.visualstudio.com/updates/v1_138)). That is per-project configuration, not a scheduled rebuild.
 
 ## When it pays
 
