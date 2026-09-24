@@ -95,3 +95,4 @@ Pre-write admission is also not a replacement for merge, tests, or review. It is
 - [Cohesion-Aware Task Partitioning for Multi-Agent Coding](cohesion-aware-task-partitioning.md)
 - [File-Based Agent Coordination](file-based-agent-coordination.md)
 - [Multi-Agent Shared State Isolation Anomalies](../anti-patterns/multi-agent-shared-state-isolation-anomalies.md)
+- [Treating a Clean Merge as Compatibility Evidence](../anti-patterns/clean-merge-as-compatibility-evidence.md) — what the collision costs when nothing declares scope up front and the merge stays clean

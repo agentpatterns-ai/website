@@ -58,6 +58,8 @@ Anthropic's [evaluations](https://www.anthropic.com/engineering/advanced-tool-us
 
 The cache prefix stays identical across turns. Deferred tools load into message history, so they invalidate nothing.
 
+Deferred loading is the right answer when the library is too large to keep resident. When it is small enough but availability still changes turn by turn, the cheaper move is to declare every tool once and restrict which ones are callable per request — see [Mask Tools Instead of Removing Them](../../context-engineering/mask-tools-instead-of-removing.md).
+
 ## Recommended tool architecture
 
 Anthropic's [advanced tool use guidance](https://www.anthropic.com/engineering/advanced-tool-use) recommends grouping tools by how often you use them:

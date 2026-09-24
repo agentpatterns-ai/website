@@ -348,6 +348,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [LLM-Driven Logical Retrieval: Boolean Queries over an Inverted Index](context-engineering/llm-driven-logical-retrieval.md)
 - [Long Context vs Retrieval: The Break-Even Decision](context-engineering/long-context-vs-retrieval-break-even.md)
 - [Manual Compaction Strategy for Dumb Zone Mitigation](context-engineering/manual-compaction-dumb-zone-mitigation.md)
+- [Mask Tools Instead of Removing Them](context-engineering/mask-tools-instead-of-removing.md)
 - [Measuring Reacquisition Cost Under Context Compaction](context-engineering/reacquisition-cost-measurement.md)
 - [Narrative Problem Reformulation for Code Generation](context-engineering/narrative-problem-reformulation.md)
 - [PEEK: Orientation Cache for Recurring-Context Agents](context-engineering/peek-orientation-cache.md)
@@ -1409,6 +1410,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Per-Plugin Token-Cost Attribution via claude plugin details](observability/plugin-token-cost-attribution.md)
 - [Prebuilt Agent Monitoring Dashboard](observability/prebuilt-agent-monitoring-dashboard.md)
 - [Programmatic Agent Session Export via `claude agents --json`](observability/claude-agents-json-session-export.md)
+- [Sizing Vendor-Emitted Agent Telemetry by Signal Tier](observability/vendor-emitted-telemetry-signal-tiers.md)
 - [Strained Coherence as a Pre-Failure Signal in Agent Trajectories](observability/strained-coherence-pre-failure-signal.md)
 - [Subagent OTel Trace Correlation via agent_id Attribute](observability/subagent-otel-trace-correlation.md)
 - [Traces Need Feedback to Power Learning](observability/traces-need-feedback-to-power-learning.md)
@@ -1685,6 +1687,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Happy Path Bias: How AI Agents Skip Error Handling](patterns/anti-patterns/happy-path-bias.md)
 - [Install-Once Plugin Trust: Vetting That Never Re-Runs on Update](patterns/anti-patterns/install-once-plugin-trust.md)
 - [Judging a Skill's Honesty by the Validity of Its Output](patterns/anti-patterns/judging-skill-honesty-by-output-validity.md)
+- [Knowledge Cutoff as a Documentation Boundary](patterns/anti-patterns/knowledge-cutoff-as-documentation-boundary.md)
 - [Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)](patterns/anti-patterns/large-codebase-agent-failure-patterns.md)
 - [Law of Triviality in AI PRs for AI Agent Development](patterns/anti-patterns/law-of-triviality-ai-prs.md)
 - [LLM Code Review Overcorrection for AI Agent Development](patterns/anti-patterns/llm-review-overcorrection.md)
@@ -1726,6 +1729,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Test Homogenization Trap: When LLM-Generated Tests Mirror Model Blind Spots](patterns/anti-patterns/test-homogenization-trap.md)
 - [Token Preservation Backfire for AI Agent Development](patterns/anti-patterns/token-preservation-backfire.md)
 - [Tool-Call Success as Workflow Effect Evidence](patterns/anti-patterns/tool-call-success-as-workflow-evidence.md)
+- [Treating a Clean Merge as Compatibility Evidence](patterns/anti-patterns/clean-merge-as-compatibility-evidence.md)
 - [Treating a Clean Static Scan as Security Evidence](patterns/anti-patterns/static-clean-as-security-evidence.md)
 - [Treating a Worktree as a Safety Boundary](patterns/anti-patterns/worktree-as-safety-boundary.md)
 - [Treating Agent Delegation as Routing, Not Authorization](patterns/anti-patterns/agent-delegation-as-routing.md)
@@ -1821,6 +1825,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Measuring GEO Performance for AI Search Visibility](geo/measuring-geo-performance.md)
 - [Schema and Structured Data for GEO — AI Citation Guide](geo/schema-and-structured-data.md)
 - [SEO vs GEO — How Signals and Metrics Differ](geo/seo-vs-geo.md)
+- [Separating Exposure From Selection in GEO Measurement](geo/exposure-vs-selection-geo-measurement.md)
 - [Topical Authority — Entity Coverage for AI Citation](geo/topical-authority.md)
 - [What is GEO — Generative Engine Optimization Defined](geo/what-is-geo.md)
 - [Agent-Readiness Discovery Surfaces for Docs Sites](geo/agent-readiness-discovery-surfaces.md)
@@ -2089,6 +2094,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — Treat prompt caching as a structural constraint on prompt composition, with cross-provider economics and extended-TTL guidance folded in
 - [Static Content First for Cache Hits](static-content-first-caching.md) — Place static content at the beginning of the prompt and variable content at the end to maximize prompt cache hits and keep inference costs linear
 - [Prompt Cache Keepalive for Agent Pauses](prompt-cache-keepalive-agent-pauses.md) — Replay a cached prefix on a timer so it survives tool runs and approval waits, and the billing, pause-length, and interval conditions that decide whether it saves money or costs 4x more
+- [Mask Tools Instead of Removing Them](mask-tools-instead-of-removing.md) — Restrict which tools an agent may call through a per-request field instead of editing the tools array, so a changing action space costs no cache write — and when removing them is still cheaper
 - [Stateful Iteration State-Carry](stateful-iteration-state-carry.md) — Carry typed persistent state across long agent loops through a state-read tool instead of replaying the full transcript each turn; converts O(n²) total token cost to O(n) when loops are long and observations are large
 - [Exclude Dynamic System Prompt Sections for Cross-Machine Cache Sharing](exclude-dynamic-system-prompt-sections.md) — Move per-machine context (cwd, OS, shell, memory paths) out of the Claude Code system prompt so identical fleet configurations share one prompt-cache entry across users and machines
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md) — When Claude Code prepends an attribution header to prompts sent to local models, it invalidates the KV cache on every request and causes ~90% slower inference
@@ -8084,6 +8090,117 @@ CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=55 claude
 
 ---
 
+### Mask Tools Instead of Removing Them
+Source: https://agentpatterns.ai/context-engineering/mask-tools-instead-of-removing/
+
+# Mask Tools Instead of Removing Them
+
+> Masking which tools an agent may call leaves the declared tool definitions untouched, so the cached prefix survives a change in the action space.
+
+Two separate levers control what an agent can do. The `tools` array declares which tools exist, and a per-request control decides which of them the model may call on this turn. Only the first one is part of the cached prefix. Move the variation onto the second lever and an agent whose available tools change every turn pays no cache write for the change.
+
+Varying the first lever is the reflex, and it is the expensive one. Manus calls a dynamic action space "a natural reaction", tried it, and settled on the opposite rule: "unless absolutely necessary, avoid dynamically adding or removing tools mid-iteration" ([Context Engineering for AI Agents](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
+
+## When masking is the right lever
+
+Masking pays when three things hold at once:
+
+- The declared set is small enough to keep resident every turn. Anthropic puts the threshold for reaching for deferred loading at "tool definitions consuming >10K tokens" ([Advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)).
+- Availability changes often, per turn or per model state rather than once or twice a session.
+- Your provider exposes a callability control that is not part of the prompt.
+
+Miss the first two and removal is the better trade. An agent with three phases and a large library crosses two boundaries a session, so it writes the cache twice and carries a short, clean tool list through every turn in between. That beats carrying every phase's tools through all of them.
+
+## Why it works
+
+The cached unit is the rendered prefix as bytes, and tool definitions render near the front of it. OpenAI states both halves of that: "Cache reuse requires the entire rendered prefix to match. If content or a relevant setting changes before a breakpoint, the prefix after that change cannot match the existing cache entry", and its table of cache-affecting settings attributes invalidation to `tools` for "tool names, descriptions, schemas, ordering, or tool-specific instructions" ([OpenAI prompt caching guide](https://developers.openai.com/api/docs/guides/prompt-caching)). Manus reached the same conclusion from its own experiments: "In most LLMs, tool definitions live near the front of the context after serialization, typically before or after the system prompt. So any change will invalidate the KV-cache for all subsequent actions and observations" ([Context Engineering for AI Agents](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
+
+Callability is enforced somewhere else entirely: in a per-request field the provider reads, or in a logit mask applied while decoding. Neither renders into the prompt. That same OpenAI settings table is the evidence by omission. It names `model`, `tools`, `parallel_tool_calls`, `text.format`, `reasoning.effort`, `text.verbosity` and `context_management`, and neither `tool_choice` nor `allowed_tools` appears in it.
+
+A second reason has nothing to do with cost. Removing a tool does not remove the calls to it already sitting in the conversation. Manus reports that when "previous actions and observations still refer to tools that are no longer defined in the current context, the model gets confused", and that without constrained decoding this "often leads to schema violations or hallucinated actions".
+
+## The controls
+
+OpenAI's prompt caching guide groups three of these under "Manage tools with append-only updates":
+
+| Goal | Control | What stays fixed |
+|---|---|---|
+| No tool use this turn | `tool_choice: "none"` | The whole `tools` array |
+| Only a subset callable | `allowed_tools` | The supplied `tools` list |
+| Add capability mid-thread | Tool search with `defer_loading: true` | Everything before the append point |
+
+The guide presents the first two as substitutes for editing the array: set `tool_choice` to `"none"` "instead of removing the tool definitions", and use `allowed_tools` "to restrict which tools are callable while keeping the supplied `tools` list stable". Cache preservation is the stated reason `allowed_tools` exists, for when "you want to make only a subset of tools available across model requests, but not modify the list of tools you pass in, so you can maximize savings from prompt caching" ([Function calling](https://developers.openai.com/api/docs/guides/function-calling)). The third row covers what masking does not, since deferred tools get appended at the end of context rather than inserted at the front.
+
+Self-hosted stacks get finer resolution. Manus prefills the assistant turn up to a chosen point so the model must begin its reply inside a named group, and gives related tools a shared name prefix so `browser_` or `shell_` selects a group "without using stateful logits processors".
+
+## When this backfires
+
+Masking preserves the cache and preserves the distractor load. Every definition you mask is still rendered, still attended to, and still billed on every turn.
+
+- Large libraries. Anthropic measured a 50-plus MCP tool configuration at roughly 72K tokens of definitions loaded upfront, against about 8.7K of total context once the same library is discovered on demand, and reports that "Opus 4 improved from 49% to 74%, and Opus 4.5 improved from 79.5% to 88.1% with Tool Search Tool enabled" ([Advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use)). Masking locks in the worse number on both counts.
+- Crowded shortlists, even small ones. Over-presentation costs choice accuracy on its own: "When the gold tool is present, Claude selects it 93.1±0.5% of the time under BoR (K=2.2) but only 87.1% under FK=5, a gap of 6 percentage points" ([arXiv:2605.24660v2](https://arxiv.org/abs/2605.24660v2)).
+- Phase-shaped availability. Two cache writes a session is a small bill. Paying every phase's definition tokens on every turn of every phase is not.
+- Single-turn or cold-start traffic. No accumulated prefix exists to protect, so declaring tools you will not allow buys nothing.
+- No per-request control. If the framework's only lever is the `tools` array, masking is unavailable, and the prefill route needs control over decoding that a hosted API does not hand you.
+- Access control. A mask constrains sampling, and a schema-violating completion can still name a tool the mask was meant to rule out. A tool that must be unreachable should not be declared at all (see [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md)).
+
+Manus concedes the first two in the same section that recommends masking: "your heavily armed agent gets dumber."
+
+## Example
+
+The anti-pattern rebuilds the array, so the front of the prompt changes and everything after it misses:
+
+```python
+# BAD: the declared set changes per phase, so the prefix changes too
+tools = PLANNING_TOOLS if phase == "plan" else EXECUTION_TOOLS
+response = client.responses.create(
+    model="gpt-6",
+    tools=tools,            # names, order and schemas all move -> cache write
+    input=history,
+)
+```
+
+The fix declares everything once and gates callability per request:
+
+```python
+ALL_TOOLS = load_all_tools()          # identical bytes on every call
+PHASE_TOOLS = {
+    "plan": ["read_file", "search_repo"],
+    "execute": ["read_file", "write_file", "run_tests"],
+}
+
+response = client.responses.create(
+    model="gpt-6",
+    tools=ALL_TOOLS,                  # never changes -> prefix keeps matching
+    tool_choice={
+        "type": "allowed_tools",
+        "mode": "auto",
+        "tools": [{"type": "function", "name": n} for n in PHASE_TOOLS[phase]],
+    },
+    input=history,
+)
+```
+
+Check the result rather than trusting the change. Cached-token reporting should stay high across a phase boundary; a read that collapses on the turn the phase changes means something in the declaration moved after all, and non-deterministic JSON key ordering is the usual culprit.
+
+## Key Takeaways
+
+- Declaration and availability are different layers. Put session-varying behavior on the availability layer, where the provider reads it as a field instead of rendering it into the prompt.
+- Confirm your chosen control is absent from the provider's list of cache-affecting settings before relying on it. OpenAI's list names `tools` and omits `tool_choice` and `allowed_tools`; a provider that folds availability into the prompt gives you no saving.
+- Masking buys back the cache write and nothing else. The definitions still cost tokens every turn and still compete for the model's attention, which is a 6-point accuracy gap in one measurement and 25 points in another.
+- Count how often availability actually changes. Per-turn variation favors masking; two phase boundaries a session favors removing the tools and paying the two writes.
+- Never use a mask where you mean a permission. It constrains sampling, not access.
+
+## Related
+
+- [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — the prefix rules this technique works within, and the cross-provider cache economics
+- [Dynamic Tool Fetching Destroys KV Cache Performance](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md) — the failure this avoids, and deferred loading as the other remedy
+- [Advanced Tool Use: Scaling Agent Tool Libraries](../tool-engineering/advanced-tool-use.md) — the deferred-loading route to take when the library is too large to keep resident
+- [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md) — why a sampling-time constraint is not a permission boundary
+- [Structure Prompts with Static Content First to Maximize Cache Hits](static-content-first-caching.md) — the prefix layout this depends on
+
+---
+
 ### Measuring Reacquisition Cost Under Context Compaction
 Source: https://agentpatterns.ai/context-engineering/reacquisition-cost-measurement/
 
@@ -8925,7 +9042,7 @@ A cache read restarts the eviction clock, and providers charge far less for that
 
 Shipped tooling gets the interval wrong far more often than the idea. Roughly 240 seconds on Anthropic holds the same retention as the conventional 30-second ping: median cache hit rate stayed at or above 98% either way. The 30-second convention just spends about 8x more for it: 7.8x across the paper's interval runs, or about $3.60 per hour against about $0.45 per hour on a 100k-token prefix at July 2026 list prices ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214v2)).
 
-Overshooting is the more expensive error. At Anthropic's 300-second lifetime, a 900-second interval means every ping lands on a dead entry and pays the full write price, so the keepalive "costs 4x more than never pinging" ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214v2)). Measure your own retention rather than copying a table: cross-provider lifetimes move, and OpenAI now defaults organizations without zero data retention to a 24-hour window. That contradicts the shorter lifetimes usually assumed ([OpenAI API changelog](https://developers.openai.com/api/docs/changelog)).
+Overshooting is the more expensive error. At Anthropic's 300-second lifetime, a 900-second interval means every ping lands on a dead entry and pays the full write price, so the keepalive "costs 4x more than never pinging" ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214v2)). Measure your own retention rather than copying a table, because cross-provider lifetimes move and they move per model. On GPT-5.5 and earlier, OpenAI defaults organizations without zero data retention to a 24-hour window, far longer than the eviction-on-idle behavior usually assumed. On GPT-5.6 and later the same provider went the other way: `prompt_cache_options.ttl` accepts only `"30m"`, and a prefix stays eligible "at least 30 minutes after the latest write or reuse" ([OpenAI prompt caching guide](https://developers.openai.com/api/docs/guides/prompt-caching)). A 30-minute window with free refresh-on-read leaves a keepalive very little to buy.
 
 ## When this backfires
 
@@ -9002,7 +9119,7 @@ The [Bui (2026) paper on OpenDev](https://arxiv.org/abs/2603.05344v3) describes 
 
 Prefix caching requires exact byte-level matches. Three patterns consistently bust the cache:
 
-- Adding or removing tools mid-session. Tool definitions sit in the prefix, so changing them invalidates everything after. Keep the tool list static across the session — [Anthropic's caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) confirm that modifying tool definitions (names, descriptions, parameters) invalidates the entire cache.
+- Adding or removing tools mid-session. Tool definitions sit in the prefix, so changing them invalidates everything after. Keep the tool list static across the session — [Anthropic's caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) confirm that modifying tool definitions (names, descriptions, parameters) invalidates the entire cache. When the agent genuinely needs a different set of tools per phase, gate callability per request rather than editing the array: see [Mask Tools Instead of Removing Them](mask-tools-instead-of-removing.md).
 - Switching models. Model-specific instructions go into the prefix, so a model change [invalidates the cache](https://openai.com/index/unrolling-the-codex-agent-loop/) for the entire session. Treat model switches as context boundaries.
 - Mutating the prefix to convey state. Timestamps, config, or metadata in early sections bust the cache on every call. Place variable state in the dynamic tail instead.
 
@@ -9060,17 +9177,17 @@ The architectural discipline above decides whether caching activates at all; the
 
 | | Anthropic | OpenAI | Google Gemini |
 |---|---|---|---|
-| Discount on cached tokens | 90% (reads cost 0.1x base) | 50% | ~90% (implicit); ~90% (explicit) |
-| Cache write cost | 1.25x (5-min TTL) or 2x (1-hour TTL) | No write premium | No write premium (implicit); hourly storage fee (explicit) |
-| Activation | Explicit breakpoints (up to 4) or automatic mode | Automatic for prompts >1,024 tokens | Implicit (automatic, no guarantee) or explicit (manual) |
+| Discount on cached tokens | 90% (reads cost 0.1x base) | 90% (reads cost 0.1x base) | ~90% (implicit); ~90% (explicit) |
+| Cache write cost | 1.25x (5-min TTL) or 2x (1-hour TTL) | 1.25x | No write premium (implicit); hourly storage fee (explicit) |
+| Activation | Explicit breakpoints (up to 4) or automatic mode | Explicit breakpoints or implicit mode | Implicit (automatic, no guarantee) or explicit (manual) |
 | Minimum tokens | 1,024--4,096 (varies by model) | 1,024 | Not documented for implicit |
-| TTL | 5 min or 1 hour (configurable) | 24h default retention (`prompt_cache_retention=24h`) for non-ZDR orgs | 1 hour default (explicit, configurable); undocumented (implicit) |
+| TTL | 5 min or 1 hour (configurable) | 30 min (`prompt_cache_options.ttl`, the only supported value) | 1 hour default (explicit, configurable); undocumented (implicit) |
 | Cache sharing | Workspace-isolated (since Feb 2026) | Organization-level | Not documented |
 | Storage fees | None | None | $1.00--$4.50/MTok/hour for explicit caching |
 
-Sources: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), [OpenAI cookbook](https://developers.openai.com/cookbook/examples/prompt_caching101), [OpenAI API changelog (2026-05-29)](https://developers.openai.com/api/docs/changelog), [Gemini caching](https://ai.google.dev/gemini-api/docs/caching), [Gemini pricing](https://ai.google.dev/pricing)
+Sources: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), [OpenAI prompt caching guide](https://developers.openai.com/api/docs/guides/prompt-caching), [Better prompt caching for GPT-6](https://openai.com/index/better-prompt-caching-for-gpt-6), [Gemini caching](https://ai.google.dev/gemini-api/docs/caching), [Gemini pricing](https://ai.google.dev/pricing)
 
-OpenAI's cache TTL was undocumented until the [2026-05-29 API changelog](https://developers.openai.com/api/docs/changelog), which documents a 24-hour default retention (`prompt_cache_retention=24h`) for non-ZDR organizations — caches survive far longer than the eviction-on-idle behavior previously assumed.
+Read the OpenAI column as GPT-5.6 and later, which includes GPT-6. Earlier models are a different product on every row that moved: no explicit breakpoints, "no additional cache-write charge", a model-dependent cached-input rate, and lifetime set through `prompt_cache_retention` rather than `prompt_cache_options.ttl` (`"24h"`, or `"in_memory"` at roughly 5 to 10 minutes idle). That split is why the GPT-4.1 worked example below still shows no write premium. On the current generation the two providers price the cache almost identically, a 0.1x read against a 1.25x write on both, with OpenAI's 30-minute window sitting between Anthropic's 5-minute and 1-hour tiers. Any break-even derived from the write-to-read ratio therefore carries across with only the window length changed. [Source: [OpenAI prompt caching guide](https://developers.openai.com/api/docs/guides/prompt-caching)]
 
 Anthropic's per-model minimum tokens before a breakpoint activates: 1,024 (Sonnet 4/4.5, Opus 4/4.1), 2,048 (Sonnet 4.6, Haiku 3.5), 4,096 (Opus 4.5/4.6, Haiku 3, Haiku 4.5). [Source: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)]
 
@@ -51136,6 +51253,8 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Tool-Call Success as Workflow Effect Evidence](tool-call-success-as-workflow-evidence.md) — Eight external-effect anomalies leave the wrong effects standing after every tool call returned success; a census of 98,291 MCP tools finds the standard annotations express one of the eight
 - [Treating Memory-Injection Rate as Security Evidence](memory-injection-rate-as-security-evidence.md) — A prompt guard cut memory injection on the Claude Code harness from 83.3% to 6.7% while cross-session attack success moved 0.0 points; injection rate and execution rate are separate properties that move independently
 - [Treating File Secrecy as Skill Confidentiality](file-secrecy-as-skill-confidentiality.md) — Hiding a skill's files hides its text, not the function it implements; a disclosure-shaped output filter blocked 3 of 4 explicit disclosure probes and 0 of 252 ordinary task responses
+- [Knowledge Cutoff as a Documentation Boundary](knowledge-cutoff-as-documentation-boundary.md) — A model's published cutoff does not mark where its product knowledge ends; across 336 graded Dev Proxy tasks over 53 versions it passed 18%, with passes and failures on both sides of the date
+- [Treating a Clean Merge as Compatibility Evidence](clean-merge-as-compatibility-evidence.md) — A no-conflict merge reports only that two agents' patches edited different text; blind patches merged cleanly and still failed tests in 105 of 108 constructed Django runs, while a description of the finished concurrent change recovered 82% of them
 
 ---
 
@@ -55177,6 +55296,8 @@ Anthropic's [evaluations](https://www.anthropic.com/engineering/advanced-tool-us
 
 The cache prefix stays identical across turns. Deferred tools load into message history, so they invalidate nothing.
 
+Deferred loading is the right answer when the library is too large to keep resident. When it is small enough but availability still changes turn by turn, the cheaper move is to declare every tool once and restrict which ones are callable per request — see [Mask Tools Instead of Removing Them](../../context-engineering/mask-tools-instead-of-removing.md).
+
 ## Recommended tool architecture
 
 Anthropic's [advanced tool use guidance](https://www.anthropic.com/engineering/advanced-tool-use) recommends grouping tools by how often you use them:
@@ -56171,6 +56292,52 @@ The fix is calibrated restraint, not maximal clarification. Forcing an agent to 
 - [Task Completion as Tool Certification (Silent Tool Rot)](task-completion-as-tool-certification.md) — the parallel failure where completion overstates the correctness of a reused agent-built tool rather than its safety.
 - [Task-Uniform Agent Permissions Ignore Where Failures Land](task-uniform-agent-permissions.md) — which task contexts the confirmation gate belongs in, from an incident corpus of 547 confirmed failures.
 - [Skill Review Without a Token Cost Baseline](skill-review-without-cost-baseline.md) — the economic version, where the completed task hides a 5x to 10x token bill instead of an unsafe action.
+
+---
+
+### Knowledge Cutoff as a Documentation Boundary
+Source: https://agentpatterns.ai/patterns/anti-patterns/knowledge-cutoff-as-documentation-boundary/
+
+# Knowledge Cutoff as a Documentation Boundary
+
+> A published cutoff date does not tell you which product versions a model knows, so it cannot decide which documentation to load.
+
+Deriving a documentation budget from a cutoff date fails at the first step: the date is not a version. Waldek Mastykarz tested GPT-5.6 Luna against Dev Proxy and SharePoint Framework with documentation and web search removed, one graded task per suitable product change. OpenAI lists that model's cutoff as February 16, 2026; asked where its Dev Proxy knowledge ended, the model named 0.29.0, which shipped on June 25, 2025 ([Mastykarz, 2026](https://devblogs.microsoft.com/blog/knowledge-cutoff-is-a-poor-proxy-for-model-capability/)).
+
+## What the results look like
+
+Noise rather than a decay curve. Across 336 Dev Proxy tasks over 53 versions the model passed 61, or 18%; SharePoint Framework gave 61 passes from 413 tasks over 40 versions, or 15%. Dev Proxy 0.3.0 passed four of five tasks while 0.4.0 passed none; 2.3.4, 3.0.0 and 3.1.0 each passed one of two despite shipping after the cutoff ([Mastykarz, 2026](https://devblogs.microsoft.com/blog/knowledge-cutoff-is-a-poor-proxy-for-model-capability/)).
+
+The two error directions differ in price. Below the boundary the model answered a Dev Proxy 0.5.0 question with `devproxy` when the executable was still `mgdp`. On SharePoint Framework 1.11.0 it wrote plausible module-loader advice while missing that the release removed SystemJS support from the local workbench ([Mastykarz, 2026](https://devblogs.microsoft.com/blog/knowledge-cutoff-is-a-poor-proxy-for-model-capability/)). Those gaps surface as confident wrong answers. Above the boundary the rule spends context on releases the model already handles.
+
+## Why it works
+
+Three causes stack, none ordered by date. A published cutoff caps the corpus, not one resource. Measured effective cutoffs differ from reported ones, because CommonCrawl dumps carry old data forward and deduplication misses near-duplicates ([Cheng et al., 2024](https://arxiv.org/abs/2403.12958v2)). Presence is not recall. Answer accuracy tracks how many pretraining documents support a fact, so a low-traffic product sits in the long tail whatever its release date ([Kandpal et al., 2023](https://arxiv.org/abs/2211.08411v2)). And a pass above the boundary can come from generalization instead of memory, indistinguishable from knowledge at the output ([Mastykarz, 2026](https://devblogs.microsoft.com/blog/knowledge-cutoff-is-a-poor-proxy-for-model-capability/)).
+
+Replace the date with a measurement: run tasks drawn from your real work with no product knowledge, then add documentation and measure the delta ([Mastykarz, 2026](https://devblogs.microsoft.com/blog/knowledge-cutoff-is-a-poor-proxy-for-model-capability/)).
+
+## When this backfires
+
+- You have no recurring workload. Unrelated one-off tasks give the task set nothing stable to cover, and it costs more than it saves.
+- The information boundary leaks. A local install, web search, or a docs server hands the agent the answer, so you measure retrieval instead.
+- You copy the sample size. One to five tasks per version carries no signal alone; only the shape across 53 versions does.
+- The product post-dates the model. With nothing shipped before the cutoff, the date is informative.
+- The aggregate evidence points the other way. LiveCodeBench reports a marked drop on LeetCode problems released after a model's cutoff ([Jain et al., 2024](https://arxiv.org/abs/2403.07974v2)). A later ACL paper removes that decay by rewriting the same problems, so the signal is partly an artifact of question construction ([Zhang et al., 2026](https://arxiv.org/abs/2509.00072v4)).
+
+## Key Takeaways
+
+- The date and the model's product knowledge are two boundaries, here about eight months apart in the direction nobody plans for.
+- An 18% pass rate scattered across 53 versions is not a curve you can round to a version number.
+- Budget for the expensive direction. Wasted context is recoverable; a wrong pre-cutoff fact reaches review looking fine.
+- A measured baseline is pinned to one model. Re-run it on upgrade; do not carry the number forward.
+
+## Related
+
+- [The Consistent Capability Fallacy](../../fallacies/consistent-capability-fallacy.md) — the general case: success on one task does not predict success on a neighboring one.
+- [Training-Data Gravity](training-data-gravity.md) — what the model does with a gap at generation time, reaching for the deprecated API that dominates the corpus.
+- [Grounding Agents in Code the Model Has Never Seen](../../context-engineering/grounding-zero-prior-code.md) — the zero-prior end of the same axis, where no version of the product is in training data.
+- [Answer-Reachable Eval Environments](answer-reachable-eval-environments.md) — why the information boundary has to be enforced before any of these numbers mean anything.
+- [Purpose-Built Eval Suites](../../verification/purpose-built-eval-suites.md) — building the workload-shaped task set that replaces the date.
 
 ---
 
@@ -61812,6 +61979,86 @@ The three controls compose: current docs in the harness's retrieval, an explicit
 - [Stale AI Configuration Artifacts (Context Rot)](stale-ai-configuration-artifacts.md) — The companion failure on the steering side: if the deprecation rules themselves drift, the counter-measure stops working.
 - [Grounding Agents in Code the Model Has Never Seen](../../context-engineering/grounding-zero-prior-code.md) — Sibling at the opposite end of the prior spectrum: zero training mass at all, so the model collapses to the closest public API rather than an outdated one.
 - [Emulate Agent-Experience Changes Before Shipping](../../verification/emulate-ax-changes-before-shipping.md) — The verification technique that surfaces this gravity empirically: emulate a doc change and measure whether it actually moves agent behavior before shipping it.
+
+---
+
+### Treating a Clean Merge as Compatibility Evidence
+Source: https://agentpatterns.ai/patterns/anti-patterns/clean-merge-as-compatibility-evidence/
+
+# Treating a Clean Merge as Compatibility Evidence
+
+> A clean merge means the two patches edited different text, and they still broke tests in 105 of 108 constructed Django runs.
+
+A merge that reports no conflict tells you the patches touched different lines. It says nothing about whether they still agree on what the code means. Three conditions have to hold together before that gap costs you anything. Two or more agents start from the same base commit and "solve their assigned tasks independently", neither seeing the other's finished edit, and one of them changes a contract the other depends on ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). Miss any one and the risk is not there.
+
+## The two rates in this paper are not the same number
+
+Xia, Wu and Park built `stale`, a benchmark that runs one test suite over each patch alone and over the pair combined, counting only failures that appear when the patches are combined ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). It reports two very different results, and quoting the alarming one alone misrepresents the work.
+
+The constructed tier pairs a script with an agent, so only one side is a model: "One patch makes a scripted interface change; an agent writes the other patch, which uses the helper" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). Across 36 such tasks on 12 real Django helpers, "In the blind condition, GPT-5.5 produced interference in 105/108 runs (97%), with failures on all 12 helpers despite clean textual merges" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). On 417 validated pairs of already-merged Django pull requests, "Of 834 runs on 417 validated Django pairs, only one had" a nonzero interference count ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)).
+
+The authors read the second number as a fact about the data, not about the mechanism: "These results suggest that merged PR history is a poor source of examples of unresolved parallel changes: development and review may have already made the patches compatible" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). They are equally blunt about the first: the constructed results "do not estimate its frequency or severity in everyday parallel development" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). Read 97% as proof that the mechanism reaches production helpers, not as a rate to expect in your repo.
+
+## Why it works
+
+A textual merge reconciles the regions each side edited. A dependency that crosses regions is invisible to it, so "a clean merge does not guarantee correct behavior" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). In the paper's motivating example one worker adds a price cache with invalidation while the other adds a bulk-write path: "The failure arises because A introduces an invariant that B's new write path violates: every price update must invalidate the corresponding cache" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). Neither patch is wrong alone, and neither edit region overlaps the other.
+
+What the second agent lacks is information, not capability. On the synthetic tier a message "averaging about 130 tokens" dropped mean interference from 2.50 to 0.04 ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). The same template-generated message on the constructed Django tasks recovered "89/108 runs (82%)", and among message-conditioned patches that still merged cleanly "Recovery reached 93%" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). The paper reports no token count for that second tier, so treat 130 tokens as the size that sufficed on synthetic helpers rather than a budget for real ones. The content is narrow and mechanical either way: "The message states the new helper names, required arguments, or return types" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). No plan, no rationale, no diff.
+
+## Checking for it badly invents it
+
+The authors got their own grading wrong first, in two ways worth copying as a checklist. Agents edited test files, and each patch was scored against only its own task's tests while the merged pair was scored against both. Both inflated the count, because "Using different tests for individual and merged patches can falsely suggest interference" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). The fix held: "After removing agent test edits and running the combined test set in every condition, nearly all apparent interference disappeared" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). Without that discipline the check produces false alarms faster than findings.
+
+## When this backfires
+
+- Agents already work on disjoint symbols. With no shared contract between in-flight tasks there is nothing to go stale, and a combined-suite protocol is pure overhead.
+- The shared code has thin behavioral tests. Interference is visible only through tests, and "Both measures depend on test coverage" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). The paper picked "12 helpers that can be unit-tested"; an untested helper returns a false all-clear.
+- You broadcast work in progress. The 82% recovery assumes a complete description of a finished edit, and "recovery with messages generated during parallel work remains untested" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). A plan or a half-written patch is an unmeasured input.
+- The change adds a required argument. Told about one, "the agent sometimes edits the helper definition itself, creating a textual conflict" ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)). Noisy beats silent, but it is not a clean pass.
+- More than two agents are in flight. The benchmark studies pairs, and its authors flag that with more tasks a failure may need three changes together before it shows up ([arXiv:2609.25396v1](https://arxiv.org/abs/2609.25396v1)).
+
+## Example
+
+The paper's price-cache figure, run as two agent branches on one repo.
+
+**Before** — merge cleanliness is the gate:
+
+```bash
+git merge --no-ff agent-a/cache-prices   # no conflict
+git merge --no-ff agent-b/bulk-update    # no conflict
+pytest tests/test_pricing.py             # only agent B's task tests
+```
+
+Agent B's patch passes its own tests, so the pair ships. The cache invariant agent A introduced is never exercised by that file.
+
+**After** — one suite, run in all three conditions:
+
+```bash
+# built from both tasks' tests, reapplied from the repo after discarding agent test edits
+SUITE="tests/test_pricing.py tests/test_cache.py"
+
+git checkout base && git merge --no-ff agent-a/cache-prices && pytest $SUITE  # solo A
+git checkout base && git merge --no-ff agent-b/bulk-update  && pytest $SUITE  # solo B
+git checkout base && git merge --no-ff agent-a/cache-prices agent-b/bulk-update && pytest $SUITE
+```
+
+Interference is what the third run fails and neither solo run failed. A failure that already appeared in a solo run belongs to that patch and gets excluded from the count.
+
+## Key Takeaways
+
+- A no-conflict merge is a statement about text. Behavioral agreement between two agents' patches needs a test run on the combined code.
+- Keep the 97% and the 1-in-834 together. The constructed tasks show the failure is real on real helpers, the mined pull-request history shows reviewed work rarely retains it, and neither number predicts your repo.
+- Run one test suite in all three conditions, each patch alone and the pair combined, and count only failures that are new in the combined run.
+- Discard agent edits to test files before grading. Scoring patches against different suites manufactures interference that was never there.
+- Where agents must share a symbol, hand the later one a short description of the finished change. It recovered 82% of the constructed Django failures, and about 130 tokens was enough on the synthetic tier.
+
+## Related
+
+- [Concurrent Agent Pull Requests and Merge-Conflict Cost](../../workflows/concurrent-agent-pr-merge-conflicts.md) — the textual half of the same collision, with measured conflict rates and a coordination ladder.
+- [Pre-Write Change Intent Admission (Claim Plane)](../multi-agent/pre-write-change-intent-admission.md) — preventing the collision by declaring write scope before coding, instead of detecting it after the merge.
+- [Coordination Channel Policy for Multi-Agent Coding](../multi-agent/coordination-channel-policy.md) — how agents should exchange the change description this page argues for.
+- [Multi-Agent Shared State Isolation Anomalies](multi-agent-shared-state-isolation-anomalies.md) — the same stale-assumption family when the shared thing is mutable memory rather than source code.
+- [Worktree Isolation](../../workflows/worktree-isolation.md) — the isolation that creates the blind condition in the first place.
 
 ---
 
@@ -67683,6 +67930,7 @@ Pre-write admission is also not a replacement for merge, tests, or review. It is
 - [Cohesion-Aware Task Partitioning for Multi-Agent Coding](cohesion-aware-task-partitioning.md)
 - [File-Based Agent Coordination](file-based-agent-coordination.md)
 - [Multi-Agent Shared State Isolation Anomalies](../anti-patterns/multi-agent-shared-state-isolation-anomalies.md)
+- [Treating a Clean Merge as Compatibility Evidence](../anti-patterns/clean-merge-as-compatibility-evidence.md) — what the collision costs when nothing declares scope up front and the merge stays clean
 
 ---
 
@@ -124599,6 +124847,7 @@ Source: https://agentpatterns.ai/observability/
 - [Making Observability Legible to Agents](observability-legible-to-agents.md) — Wire browser automation, application metrics, and structured logs into agent context so agents can reason about system behavior from real signals
 - [Observability Feedback Loop: A 7-Step Debug Runbook](observability-feedback-loop.md) — A named runbook — query, correlate, reason, implement, restart, rerun, verify — that closes the loop on agent debugging by tying the verification predicate to the originating signal
 - [Prebuilt Agent Monitoring Dashboard](prebuilt-agent-monitoring-dashboard.md) — Ship a templated Grafana view with the agent stack to close the OTel-emitter-to-consumer gap — under the conditions of a shared backend, stable model class, and verified emitter
+- [Sizing Vendor-Emitted Agent Telemetry by Signal Tier](vendor-emitted-telemetry-signal-tiers.md) — Classify each Copilot surface by the strongest signal it emits (joined trace, detached trace, or counters alone) before building an alert or dashboard on it
 - [Strained Coherence as a Pre-Failure Signal in Agent Trajectories](strained-coherence-pre-failure-signal.md) — A trajectory judge flags spans where the agent acknowledges a conflict then proceeds anyway; a late-stage triage signal that works only on verbose backbones and erodes under direct optimization pressure against the judge
 - [Subagent OTel Trace Correlation via agent_id Attribute](subagent-otel-trace-correlation.md) — Propagate a stable agent identifier as both an HTTP header on outgoing API requests and an OTEL span attribute so multi-agent traces become queryable by agent identity, independent of span lineage
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md) — Capture a full, replayable audit trail of agent decisions across sessions using only a progress file, git commits, and a bootstrap script
@@ -127146,6 +127395,7 @@ The dashboard's three required metric series (`claude_code_cost_usage_USD_total`
 - [Agent Observability with OpenTelemetry](agent-observability-otel.md)
 - [Making Observability Legible to Agents](observability-legible-to-agents.md)
 - [Observability Feedback Loop: A 7-Step Debug Runbook](observability-feedback-loop.md)
+- [Sizing Vendor-Emitted Agent Telemetry by Signal Tier](vendor-emitted-telemetry-signal-tiers.md)
 
 ---
 
@@ -127252,6 +127502,68 @@ The script uses `--cwd "$PWD"` rather than parsing the JSON to filter, because t
 - [In-Session Transcript Search](transcript-search.md)
 - [Plugin Background Monitors](../tools/claude/plugin-background-monitors.md)
 - [Monitor Tool: Event Streaming from Background Scripts](../tools/claude/monitor-tool.md)
+
+---
+
+### Sizing Vendor-Emitted Agent Telemetry by Signal Tier
+Source: https://agentpatterns.ai/observability/vendor-emitted-telemetry-signal-tiers/
+
+# Sizing Vendor-Emitted Agent Telemetry by Signal Tier
+
+> Classify each agent surface by the signal tier its vendor emits, because the tier decides which diagnostic question the telemetry can answer.
+
+A telemetry signal tier is the strongest shape a vendor emits for one agent surface: a joined trace, a detached trace, or counters alone. Sizing by tier means reading the vendor's signal tables surface by surface and writing down which question each tier supports, before any of it becomes a dashboard panel. Do this before you build something durable: an alert, a shared dashboard, a triage runbook. If you are switching telemetry on to look around, skip the exercise and read the traces.
+
+The GitHub Copilot app added OpenTelemetry export through enterprise-managed settings on 22 September 2026. Administrators "Configure the `telemetry` property in your enterprise's `managed-settings.json` file to enable export and specify the endpoint that will receive the data" ([GitHub Changelog](https://github.blog/changelog/2026-09-22-opentelemetry-in-the-github-copilot-app)). The client emits the data and sends it where you point it, with "no phone-home behavior" ([VS Code documentation](https://code.visualstudio.com/docs/agents/guides/monitoring-agents)). So you get vendor-authored instrumentation rather than a vendor-hosted feed, and it is uneven across surfaces.
+
+## The three tiers, applied to Copilot
+
+Copilot sends traces, metrics, and events ([GitHub Docs](https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/enterprise/opentelemetry)). Which of the three a surface gets is the tier.
+
+| Tier | What you get | Copilot surface | Question it answers |
+|---|---|---|---|
+| Joined trace | An `invoke_agent` parent with `chat`, `execute_tool`, and `execute_hook` children, plus subagent context propagation | Foreground agent, Copilot SDK, Claude agent | Which step in this session was slow or failed |
+| Detached trace | A full span tree that starts its own root and does not link back to the session that launched it | Copilot CLI terminal sessions | What happened inside this process |
+| Counters only | Metrics and events, no spans | Cloud and remote agents | How many sessions started, and how many notified PR-ready |
+
+The middle tier is a stated limit rather than an oversight. "Terminal traces appear as independent root traces under service `github-copilot` and are not linked to extension traces" ([VS Code documentation](https://code.visualstudio.com/docs/agents/guides/monitoring-agents)). The bottom tier catches people out. That same reference documents trace structure for the Copilot SDK, the CLI, and Claude agents, and never for cloud agents. Those appear only as the counters `copilot_chat.cloud.session.count` and `copilot_chat.cloud.pr_ready.count`, plus the event `copilot_chat.cloud.session.invoke`. A trace-shaped dashboard aimed at the hosted coding agent renders empty.
+
+One more cut runs underneath all three tiers. Prompts, responses, and tool arguments are excluded by default and need an opt-in to content capture, which the documentation warns "can include sensitive information such as code, file contents, and user prompts" ([VS Code documentation](https://code.visualstudio.com/docs/agents/guides/monitoring-agents)).
+
+## Why it works
+
+Signal tier predicts diagnostic power because each projection drops specific telemetry factors, and the dropped factors are the ones causal attribution needs. TelemetrySuffBench renders agent traces through seven factor masks and reports that "Metadata, OpenTelemetry-compatible, and OpenInference-compatible views preserve 99.5% to 100% detection F1 but limit origin-step accuracy to at most 0.5%" ([Zhu and Pu, 2026](https://arxiv.org/abs/2608.07899v1)). Such a view retains "only canonical identity, tool, observation, status, and relation fields", so decision content and provenance mapping fall out of it. The ablation isolates the cause: "removing decision content reduces origin-step accuracy to zero for every model".
+
+Copilot's default export makes that exact cut, so the default configuration is a detection-grade signal by construction and no amount of dashboard work converts it into a localization-grade one. Part of the gap survives configuration entirely. Across six vendor SDK regimes, reasoning trace is a regime-independent gap ([Solozobov, 2026](https://arxiv.org/abs/2605.12078v1)).
+
+## When this backfires
+
+- Content capture is off the table. In a regulated or secret-bearing codebase the opt-in stays false, so the localization tier is unreachable by policy, and a runbook ending in "open the trace and find the bad step" never pays off.
+- The tiers move under you. The GenAI span conventions are marked "Status: Development", not stable ([OpenTelemetry semantic conventions](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-spans.md)). Copilot already dual-emits a legacy `copilot_chat.*` namespace beside the canonical `github.copilot.*` one ([VS Code documentation](https://code.visualstudio.com/docs/agents/guides/monitoring-agents)). A later release can also raise a surface's tier, so a gap analysis can outlive the product it describes.
+- Volume is low. At a handful of agent sessions a week, the VS Code Agent Debug Log panel shows the same SDK hierarchy as a trace viewer and costs nothing to read.
+- Detection is the whole requirement. If the question is only whether runs fail and what they cost, the default tier already reaches 99.5% to 100% detection F1 ([Zhu and Pu, 2026](https://arxiv.org/abs/2608.07899v1)) and the sizing pass buys you nothing.
+
+## Example
+
+An enterprise wants an alert on agent failure rate and a panel showing which tool calls fail most. The tiering pass splits that request in two.
+
+Failure rate is available at every tier. The `error.type` attribute rides the spans, and the agent activity metrics, `copilot_chat.agent.edit_response.count` among them, track code changes across every surface including cloud agents ([VS Code documentation](https://code.visualstudio.com/docs/agents/guides/monitoring-agents)).
+
+Failing tool calls need joined traces, through `execute_tool` spans carrying `gen_ai.tool.name`. Cloud agents contribute nothing there, so the panel gets scoped to `service.name = copilot-chat` and labeled as covering editor sessions, instead of shipping as a fleet-wide view that omits the hosted agent.
+
+## Key Takeaways
+
+- Read the vendor's signal tables per surface, not the feature announcement. Copilot's changelog says traces; the reference says cloud agents get counters.
+- Convention-shaped telemetry is strong at detection and weak at localization, because the projection drops decision content ([Zhu and Pu, 2026](https://arxiv.org/abs/2608.07899v1)).
+- Label a dashboard with the surfaces it covers. A fleet-wide claim built on joined traces excludes the hosted agent silently.
+- Skip the sizing pass when you are exploring, when volume is low, or when detection is all you need.
+
+## Related
+
+- [Prebuilt Agent Monitoring Dashboard](prebuilt-agent-monitoring-dashboard.md) — the inverse problem, where the panel set dictates what the emitter must produce.
+- [Subagent OTel Trace Correlation via `agent_id` Attribute](subagent-otel-trace-correlation.md) — recovering identity when span lineage breaks across a boundary.
+- [Agent Observability with OpenTelemetry and Trajectory Logging](agent-observability-otel.md) — the self-instrumented case, where you choose the attributes.
+- [Debugging the Tool-Call Loop Before Reaching for a Framework](tool-call-loop-instrumentation.md) — per-hop instrumentation when you own the loop.
 
 ---
 
@@ -127472,6 +127784,7 @@ The 429 belongs to `fanout-3`, spawned by `orch`. A cost-by-`agent.name` panel i
 ## Related
 
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](agent-observability-otel.md)
+- [Sizing Vendor-Emitted Agent Telemetry by Signal Tier](vendor-emitted-telemetry-signal-tiers.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../patterns/multi-agent/sub-agents-fan-out.md)
 - [Bounded Batch Dispatch](../patterns/multi-agent/bounded-batch-dispatch.md)
 - [Agent Handoff Protocols](../patterns/multi-agent/agent-handoff-protocols.md)
@@ -146276,6 +146589,7 @@ GEO analysis is reverse-engineered from AI outputs. No engine publishes ranking 
 | [AI Crawler Policy](ai-crawler-policy.md) | robots.txt for training / index / user-request crawler landscape |
 | [Agent-Readiness Discovery Surfaces](agent-readiness-discovery-surfaces.md) | Which machine-readable discovery surfaces a content site should publish vs. skip |
 | [Measuring GEO Performance](measuring-geo-performance.md) | AI Visibility Score, Citation Share, AI Share of Voice; monitoring tools |
+| [Separating Exposure From Selection](exposure-vs-selection-geo-measurement.md) | Why an engine-free page score estimates query-page fit, not visibility; what to report instead |
 | [Topical Authority](topical-authority.md) | Comprehensive entity coverage as a persistent citation strategy |
 | [GEO for Technical Docs](geo-for-technical-docs.md) | Synthesis checklist for API references, tutorials, how-to guides |
 
@@ -148052,6 +148366,67 @@ Not immediately. Citation pools favor established earned media — Wikipedia, ma
 - [Topical Authority](topical-authority.md)
 - [Schema and Structured Data for GEO](schema-and-structured-data.md)
 - [Atomic Pages and Chunking](atomic-pages-and-chunking.md)
+
+---
+
+### Separating Exposure From Selection in GEO Measurement
+Source: https://agentpatterns.ai/geo/exposure-vs-selection-geo-measurement/
+
+# Separating Exposure From Selection in GEO Measurement
+
+> An engine-free page score estimates query-page fit. Visibility also needs engine-specific exposure, and cross-engine citation overlap runs from 0.0079 to 0.237.
+
+Observed citation is the product of two probabilities. One is whether an engine exposes your page to its answer process. The other is whether it cites the page given exposure. A deterministic score computed without a live engine reaches the second factor's inputs. It cannot reach the first, because exposure is a property of one engine's search triggering, query rewriting, retrieval, and reranking ([Tannenbaum, 2026 — arXiv:2609.22655v1](https://arxiv.org/abs/2609.22655v1)).
+
+## When the split is worth paying for
+
+Reach for the split when you are about to act on a single visibility number. That covers comparing engines, attributing a citation change to a content edit, and reporting coverage to someone who will read one score as "AI search". If you monitor one engine and your readers use one engine, engine identity is not a confound. The paper draws the same line: "This does not imply that every use case requires four engines. It does imply that engine choice is a sampling decision and should be visible in the metric definition."
+
+## Why it works
+
+The two factors are not separately identifiable from the product alone. "Two production engines can therefore share the same conditional preference over exposed pages and yet produce arbitrarily different end-to-end citation distributions if their exposure functions differ" ([arXiv:2609.22655v1](https://arxiv.org/abs/2609.22655v1)). A controlled experiment that hands the model a fixed candidate list holds exposure at 1 by construction, so it measures selection alone. The authors of the engine-free score under critique reach the same conclusion from their own data, "repositioning query-agnostic scores as quality filters rather than citation predictors" ([Bajemon and Rochet, 2026 — arXiv:2609.07559v1](https://arxiv.org/abs/2609.07559v1)).
+
+## What the audit measured
+
+One observational audit ran 15 commercial prompts against ChatGPT, Microsoft Copilot, Google, and Perplexity on 6 June 2026, collecting 589 citation rows over 528 distinct URLs ([arXiv:2609.22655v1](https://arxiv.org/abs/2609.22655v1)). Across 73 same-prompt engine pairs, mean exact-URL Jaccard overlap was 0.0079 and 84.9% of pairs shared no URL ([arXiv:2609.22655v1](https://arxiv.org/abs/2609.22655v1)). On the ten prompts observed on all four engines, top-five exact-URL overlap was zero in all 60 pairwise comparisons. Single-engine recall of the four-engine URL union ran from 11.4% (Copilot) to 42.6% (ChatGPT) on that same subset ([arXiv:2609.22655v1](https://arxiv.org/abs/2609.22655v1)).
+
+## How far apart engines actually are
+
+Treat those near-zero figures as the low end of a wide range. That audit covers 15 prompts in one self-referential vertical, and its author founded the company whose infrastructure collected the benchmark. An academic study of 11,500 queries across Google Search, AI Overviews, and Gemini Flash 2.5 reports that "the retrieved sources are substantially different for each search engine (<0.2 average Jaccard similarity)" ([Grossman et al., 2026 — arXiv:2604.27790v1](https://arxiv.org/abs/2604.27790v1)). A vendor study of 161,286 prompts puts domain-level pairwise overlap between 0.119 and 0.237. On the 70,879 prompts where all four engines returned citations, 72 to 73% of cited domains appeared on exactly one engine ([Writesonic, 2026](https://writesonic.com/blog/ai-citation-source-overlap-study)). The argument for splitting the score survives at 0.2 overlap; the specific claim that engines share nothing does not.
+
+## What to report instead
+
+Report four quantities and keep them recoverable, even behind a composite dial:
+
+| Quantity | What it answers | Instrument |
+|---|---|---|
+| Query-page fit | Is this page a good answer to this request? | Deterministic page score, no engine |
+| Exposure | Did this engine surface the page at all? | Live run, per engine, logged |
+| Conditional selection | Given exposure, was it cited? | Fixed-candidate experiment |
+| Observed visibility | Did the answer cite or name it? | Live run, per engine, per date |
+
+Record the engine, locale, date, product mode, and run frequency alongside the number. In the same audit, same-engine URL sets turned over 67.0% between 5 and 6 June across ChatGPT, Copilot, and Perplexity ([arXiv:2609.22655v1](https://arxiv.org/abs/2609.22655v1)). A single run is a draw, not a measurement.
+
+## When this backfires
+
+- Your pages are below the quality floor. Query-page fit is then the binding constraint, and the four-coordinate report costs money to change no decision.
+- You read per-engine exposure off one run. At that turnover rate, splitting one noisy number into four gives you four noisy numbers and the appearance of rigor.
+- Your vertical is nothing like the benchmark. The authors restrict their own result: "The numerical overlap rates should not be generalized to travel, health, shopping, local search, news, or other verticals without replication."
+- Your content is syndicated or mirrored. Exact-URL matching counts a canonical and a syndicated copy as divergence. The paper flags the same gap: "Different URLs may host duplicate, syndicated, canonicalized, translated, or semantically equivalent information" ([arXiv:2609.22655v1](https://arxiv.org/abs/2609.22655v1)).
+
+## Key Takeaways
+
+- A page score that moves is evidence about your page. A citation count that moves is evidence about your page or about the engine, and the score cannot tell you which.
+- Published cross-engine overlap spans 0.0079 to 0.237. Check the prompt count, the vertical, and whether matching is by URL or by domain before you quote one of those numbers.
+- Engine choice is a sampling decision, so it belongs in the metric definition rather than in a footnote.
+- Set the run schedule before you read a trend. One run per engine tells you what that engine did that day.
+
+## Related
+
+- [How AI Engines Cite](how-ai-engines-cite.md) — the retrieval architecture behind each engine's exposure function
+- [Measuring GEO Performance](measuring-geo-performance.md) — the metric vocabulary and monitoring tools this reporting discipline sits on top of
+- [What is GEO](what-is-geo.md) — the shift from rank to citation that makes the estimand question matter
+- [SEO vs. GEO](seo-vs-geo.md) — why deterministic rank measurement does not carry over to probabilistic citation
 
 ---
 
@@ -160529,6 +160904,7 @@ A team runs four Claude Code agents on one service repo. Before adding any coord
 - [Agent-Authored PR Integration](../code-review/agent-authored-pr-integration.md) — merge-success predictors on the same AIDev dataset, complementary to the conflict-cost view here
 - [Developer as CPU Scheduler: Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md) — the human-attention cost of running the same parallel fleet
 - [Stacked Agent Sessions on Unmerged Feature Branches](stacked-agent-sessions.md) — chaining dependent sessions instead of running them in parallel, which trades conflict cost for review-order cost
+- [Treating a Clean Merge as Compatibility Evidence](../patterns/anti-patterns/clean-merge-as-compatibility-evidence.md) — the semantic conflicts this page's source left unmeasured, where the merge reports no conflict at all
 
 ---
 
