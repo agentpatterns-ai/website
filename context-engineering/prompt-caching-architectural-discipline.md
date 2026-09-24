@@ -50,7 +50,7 @@ The [Bui (2026) paper on OpenDev](https://arxiv.org/abs/2603.05344v3) describes 
 
 Prefix caching requires exact byte-level matches. Three patterns consistently bust the cache:
 
-- Adding or removing tools mid-session. Tool definitions sit in the prefix, so changing them invalidates everything after. Keep the tool list static across the session — [Anthropic's caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) confirm that modifying tool definitions (names, descriptions, parameters) invalidates the entire cache.
+- Adding or removing tools mid-session. Tool definitions sit in the prefix, so changing them invalidates everything after. Keep the tool list static across the session — [Anthropic's caching docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) confirm that modifying tool definitions (names, descriptions, parameters) invalidates the entire cache. When the agent genuinely needs a different set of tools per phase, gate callability per request rather than editing the array: see [Mask Tools Instead of Removing Them](mask-tools-instead-of-removing.md).
 - Switching models. Model-specific instructions go into the prefix, so a model change [invalidates the cache](https://openai.com/index/unrolling-the-codex-agent-loop/) for the entire session. Treat model switches as context boundaries.
 - Mutating the prefix to convey state. Timestamps, config, or metadata in early sections bust the cache on every call. Place variable state in the dynamic tail instead.
 
@@ -108,17 +108,17 @@ The architectural discipline above decides whether caching activates at all; the
 
 | | Anthropic | OpenAI | Google Gemini |
 |---|---|---|---|
-| Discount on cached tokens | 90% (reads cost 0.1x base) | 50% | ~90% (implicit); ~90% (explicit) |
-| Cache write cost | 1.25x (5-min TTL) or 2x (1-hour TTL) | No write premium | No write premium (implicit); hourly storage fee (explicit) |
-| Activation | Explicit breakpoints (up to 4) or automatic mode | Automatic for prompts >1,024 tokens | Implicit (automatic, no guarantee) or explicit (manual) |
+| Discount on cached tokens | 90% (reads cost 0.1x base) | 90% (reads cost 0.1x base) | ~90% (implicit); ~90% (explicit) |
+| Cache write cost | 1.25x (5-min TTL) or 2x (1-hour TTL) | 1.25x | No write premium (implicit); hourly storage fee (explicit) |
+| Activation | Explicit breakpoints (up to 4) or automatic mode | Explicit breakpoints or implicit mode | Implicit (automatic, no guarantee) or explicit (manual) |
 | Minimum tokens | 1,024--4,096 (varies by model) | 1,024 | Not documented for implicit |
-| TTL | 5 min or 1 hour (configurable) | 24h default retention (`prompt_cache_retention=24h`) for non-ZDR orgs | 1 hour default (explicit, configurable); undocumented (implicit) |
+| TTL | 5 min or 1 hour (configurable) | 30 min (`prompt_cache_options.ttl`, the only supported value) | 1 hour default (explicit, configurable); undocumented (implicit) |
 | Cache sharing | Workspace-isolated (since Feb 2026) | Organization-level | Not documented |
 | Storage fees | None | None | $1.00--$4.50/MTok/hour for explicit caching |
 
-Sources: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), [OpenAI cookbook](https://developers.openai.com/cookbook/examples/prompt_caching101), [OpenAI API changelog (2026-05-29)](https://developers.openai.com/api/docs/changelog), [Gemini caching](https://ai.google.dev/gemini-api/docs/caching), [Gemini pricing](https://ai.google.dev/pricing)
+Sources: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), [OpenAI prompt caching guide](https://developers.openai.com/api/docs/guides/prompt-caching), [Better prompt caching for GPT-6](https://openai.com/index/better-prompt-caching-for-gpt-6), [Gemini caching](https://ai.google.dev/gemini-api/docs/caching), [Gemini pricing](https://ai.google.dev/pricing)
 
-OpenAI's cache TTL was undocumented until the [2026-05-29 API changelog](https://developers.openai.com/api/docs/changelog), which documents a 24-hour default retention (`prompt_cache_retention=24h`) for non-ZDR organizations — caches survive far longer than the eviction-on-idle behavior previously assumed.
+Read the OpenAI column as GPT-5.6 and later, which includes GPT-6. Earlier models are a different product on every row that moved: no explicit breakpoints, "no additional cache-write charge", a model-dependent cached-input rate, and lifetime set through `prompt_cache_retention` rather than `prompt_cache_options.ttl` (`"24h"`, or `"in_memory"` at roughly 5 to 10 minutes idle). That split is why the GPT-4.1 worked example below still shows no write premium. On the current generation the two providers price the cache almost identically, a 0.1x read against a 1.25x write on both, with OpenAI's 30-minute window sitting between Anthropic's 5-minute and 1-hour tiers. Any break-even derived from the write-to-read ratio therefore carries across with only the window length changed. [Source: [OpenAI prompt caching guide](https://developers.openai.com/api/docs/guides/prompt-caching)]
 
 Anthropic's per-model minimum tokens before a breakpoint activates: 1,024 (Sonnet 4/4.5, Opus 4/4.1), 2,048 (Sonnet 4.6, Haiku 3.5), 4,096 (Opus 4.5/4.6, Haiku 3, Haiku 4.5). [Source: [Anthropic docs](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)]
 

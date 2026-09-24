@@ -91,3 +91,4 @@ A team runs four Claude Code agents on one service repo. Before adding any coord
 - [Agent-Authored PR Integration](../code-review/agent-authored-pr-integration.md) — merge-success predictors on the same AIDev dataset, complementary to the conflict-cost view here
 - [Developer as CPU Scheduler: Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md) — the human-attention cost of running the same parallel fleet
 - [Stacked Agent Sessions on Unmerged Feature Branches](stacked-agent-sessions.md) — chaining dependent sessions instead of running them in parallel, which trades conflict cost for review-order cost
+- [Treating a Clean Merge as Compatibility Evidence](../patterns/anti-patterns/clean-merge-as-compatibility-evidence.md) — the semantic conflicts this page's source left unmeasured, where the merge reports no conflict at all

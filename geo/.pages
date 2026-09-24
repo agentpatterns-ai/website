@@ -17,6 +17,7 @@ nav:
   - "Measurement & Strategy":
       - geo-for-technical-docs.md
       - measuring-geo-performance.md
+      - exposure-vs-selection-geo-measurement.md
       - topical-authority.md
   - gsc-search-console-monitoring.md
   - ...

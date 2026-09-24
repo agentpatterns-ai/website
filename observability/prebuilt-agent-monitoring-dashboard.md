@@ -105,3 +105,4 @@ The dashboard's three required metric series (`claude_code_cost_usage_USD_total`
 - [Agent Observability with OpenTelemetry](agent-observability-otel.md)
 - [Making Observability Legible to Agents](observability-legible-to-agents.md)
 - [Observability Feedback Loop: A 7-Step Debug Runbook](observability-feedback-loop.md)
+- [Sizing Vendor-Emitted Agent Telemetry by Signal Tier](vendor-emitted-telemetry-signal-tiers.md)
