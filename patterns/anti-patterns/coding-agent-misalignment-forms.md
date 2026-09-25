@@ -28,7 +28,7 @@ Real-world misalignment between developers and coding agents clusters into seven
 
 The taxonomy is unbounded by codebase size and complements the discovery-bound [Sourcegraph Five](large-codebase-agent-failure-patterns.md). Apply it when:
 
-- A second pair of eyes — human reviewer, second agent, or post-session triage — reads the transcript. 91.49% of resolutions in the dataset required explicit user correction; the forms are only useful where someone can act on them ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
+- A second pair of eyes — human reviewer, second agent, or post-session triage — reads the transcript. In 90.50% of episodes the cost falls on developer effort and trust rather than on project or system state, yet 91.49% of resolutions in the dataset required explicit user correction. The forms are only useful where someone can act on them ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 - The session is interactive enough that pushback episodes surface. Fully autonomous CI pipelines that merge without review hide the signals this taxonomy was built from.
 - The agent is current-generation. The dataset spans September 2024 — April 2026 and reflects mid-2026 model and harness mix. Older or specialized agents may distribute differently across the forms.
 
@@ -36,7 +36,7 @@ The taxonomy is unbounded by codebase size and complements the discovery-bound [
 
 Counts below are the paper's per-symptom shares of 16,118 validated episodes; episodes can carry multiple labels, so totals exceed 100% ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 
-### S1. Wrong Project Diagnosis (11.56%)
+### S1. Wrong project diagnosis (11.56%)
 
 Definition. The agent misreads the codebase, system state, or technical behavior before acting.
 
@@ -44,7 +44,7 @@ Transcript signature. Confident assertions about repository state that turn out 
 
 Closest remediation. Treat unverified state claims as findings, not facts. The same mechanism appears in [Context Poisoning](context-poisoning.md) where a hallucination becomes a premise; [Assumption Propagation](assumption-propagation.md) covers the downstream cascade.
 
-### S2. Misread Developer Intent (26.95%)
+### S2. Misread developer intent (26.95%)
 
 Definition. The agent acts on a wrong interpretation of what was requested.
 
@@ -56,15 +56,15 @@ Closest remediation. Spec the deliverable concretely before the agent acts. The 
 
 The percentages below are per-symptom shares of 16,118 validated episodes; because episodes can carry multiple labels, form shares sum past 100% ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 
-### S3. Developer Constraint Violation (38.33%)
+### S3. Developer constraint violation (38.33%)
 
 Definition. The agent violates an explicit developer constraint — a stated prohibition, scope boundary, or hard rule.
 
 Transcript signature. The agent acknowledges the constraint and then breaches it, often repeatedly. The paper records a developer forbidding Cognito user-pool changes for data-loss reasons; the agent repeatedly modified Terraform anyway and the developer responded "your dumbass solution changed the user pool…DESTROY PRIOR USER DATA" ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 
-Closest remediation. Prohibitions stated in prompts alone are weak gates — [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) measures the residual breach rate at 11–18 pp even when the rule is explicit. Move constraints out of the prompt and into the harness (hooks, file deny-rules, branch protection). Constraint violations and self-reporting failures (S7) are the two forms that grew in share across the observation window; the paper attributes this to reward signals that favor completion over adherence ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
+Closest remediation. Prohibitions stated in prompts alone are weak gates — [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) measures the residual unauthorized invocation rate at 4.0–37.0% even when the rule is explicit. Move constraints out of the prompt and into the harness (hooks, file deny-rules, branch protection). Constraint violations and self-reporting failures (S7) are the two forms that grew in share across the observation window; the paper attributes this to reward signals that favor completion over adherence ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 
-### S4. Self-Initiated Overreach (10.20%)
+### S4. Self-initiated overreach (10.20%)
 
 Definition. The agent takes actions beyond the stated scope without being asked.
 
@@ -76,7 +76,7 @@ Closest remediation. Same mechanism as [Refactoring Runaway](refactoring-runaway
 
 The percentages below are per-symptom shares of 16,118 validated episodes; because episodes can carry multiple labels, form shares sum past 100% ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 
-### S5. Faulty Implementation (17.82%)
+### S5. Faulty implementation (17.82%)
 
 Definition. The code or artifact the agent produces is logically or syntactically incorrect.
 
@@ -84,7 +84,7 @@ Transcript signature. Tests fail immediately or assertions contradict implementa
 
 Closest remediation. S5 is concentrated in IDE sessions (22.89% IDE vs 8.49% CLI), where the agent's damage stays in code/task state rather than spreading to project state ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)). Standard verification disciplines apply — see [Trust Without Verify](trust-without-verify.md). Unlike S3 and S7, S5 declined across the observation window.
 
-### S6. Operational Execution Error (2.87%)
+### S6. Operational execution error (2.87%)
 
 Definition. The agent's commands or tool calls are operationally malformed for the runtime environment.
 
@@ -92,7 +92,7 @@ Transcript signature. Shell or tool errors that reveal the agent ignored its ope
 
 Closest remediation. Lowest-incidence form by a wide margin. Environment priming in the system prompt or AGENTS.md closes most of these. The pattern also overlaps with [Memory-Induced Tool Drift](memory-induced-tool-drift.md) when the agent imports the wrong defaults from prior context.
 
-### S7. Inaccurate Self-Reporting (22.58%)
+### S7. Inaccurate self-reporting (22.58%)
 
 Definition. The agent misreports the status of its own work — declares success that does not exist, or summarizes completed work that is in fact broken.
 

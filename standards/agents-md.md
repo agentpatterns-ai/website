@@ -8,7 +8,7 @@ tags:
 aliases:
   - project instruction file
   - AI agent README
-last_reviewed: 2026-06-09
+last_reviewed: 2026-09-19
 maturity: established
 ---
 
@@ -33,6 +33,8 @@ Tools that implement this convention — or their own equivalent:
 | Any AGENTS.md-compatible tool | `AGENTS.md` |
 | Claude Code | `CLAUDE.md` ([docs](https://code.claude.com/docs/en/memory)) |
 | GitHub Copilot | `.github/copilot-instructions.md` ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)) |
+
+Claude Code now reads AGENTS.md directly in a project that carries no CLAUDE.md, instead of requiring the Claude-specific file ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-277)).
 
 The AGENTS.md standard provides a single, tool-agnostic location rather than requiring per-tool files. See [how project instruction files relate](../instructions/instruction-file-ecosystem.md) for the full picture.
 
@@ -62,7 +64,7 @@ The mechanism is straightforward. Agents operate on context. An agent with no [p
 
 Loading AGENTS.md at session start converts a generic agent into a project-aware one. The conversion cost is fixed (one file) and applies to every task for the life of the project.
 
-## Relationship to Agent Skills
+## Relationship to agent skills
 
 AGENTS.md and [Agent Skills](https://agentskills.io) are complementary. AGENTS.md provides project context — what the codebase is and how it works. Agent Skills provide task knowledge — how to perform a specific type of work. AGENTS.md tells the agent "here is the project"; a skill tells the agent "here is how to write a PR description for this project."
 

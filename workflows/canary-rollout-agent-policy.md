@@ -138,3 +138,4 @@ Canary rollout is not a default. It is a control that assumes two things: enough
 - [Agent Governance Policies](agent-governance-policies.md) — Enterprise-level policy controls for agent mode, MCP, and model availability
 - [Model Deprecation Lifecycle](model-deprecation-lifecycle.md) — Migration cadence for the upstream model swaps a canary protects against
 - [Model Deprecation Migration Protocol](model-deprecation-migration-protocol.md) — Step-by-step migration that uses canary rollout to validate a replacement model
+- [Per-Change Deploy Monitors](../verification/per-change-deploy-monitors.md) — The opposite trade, for changes where no bounded reversible action exists and the monitor reports instead of acting

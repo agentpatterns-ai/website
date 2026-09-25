@@ -145,3 +145,4 @@ The pattern adds overhead that only pays off under specific conditions:
 - [Rollback-First Design](rollback-first-design.md) — every fix runs on a branch; main is only updated via human-approved merge
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — broader taxonomy of agent failure modes
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — two-role LLM loop for iterative output refinement
+- [Per-Change Deploy Monitors](../../verification/per-change-deploy-monitors.md) — the reporting-only variant, where the check set comes from the diff instead of a standing eval suite

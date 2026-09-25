@@ -9,7 +9,7 @@ tags:
 aliases:
   - "Agentic Code Review"
   - "Tool-Calling Code Review"
-last_reviewed: 2026-08-09
+last_reviewed: 2026-09-21
 maturity: adopted
 ---
 
@@ -69,7 +69,7 @@ Agentic code review needs compute infrastructure for tool-calling loops. GitHub'
 
 As of March 2026, you can [trigger reviews from the GitHub CLI](https://github.blog/changelog/2026-03-11-request-copilot-code-review-from-github-cli/) with `gh pr edit --add-reviewer @copilot`, or by selecting Copilot during `gh pr create` (requires CLI 2.88.0+). See [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md) for details.
 
-Check which surface requests the review, because that has changed. GitHub reports that [GitHub Code Quality no longer adds Copilot as a reviewer](https://github.blog/changelog/2026-08-07-github-code-quality-no-longer-adds-copilot-as-a-reviewer), a change it announced on August 7, 2026.
+Check which surface requests the review, because that has changed. GitHub reports that [GitHub Code Quality no longer adds Copilot as a reviewer](https://github.blog/changelog/2026-08-07-github-code-quality-no-longer-adds-copilot-as-a-reviewer), a change it announced on August 7, 2026. GitHub revised the review interaction surface again a month later; see its [September 2026 changelog entry](https://github.blog/changelog/2026-09-18-copilot-code-review-an-improved-review-experience) for what changed.
 
 ## When this backfires
 
@@ -118,10 +118,8 @@ It can. Broader access lets the agent comment on code that is intentionally isol
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md)
 - [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)
-- [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Committee Review Pattern](committee-review-pattern.md)
 - [Diff-Based Review Over Output Review](diff-based-review.md)
-- [Tiered Code Review](tiered-code-review.md)
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — merge rate evidence for CRA-only versus mixed reviewer compositions
 - [Match Tool Instructions to the Agent Workflow](../instructions/match-tool-instructions-to-workflow.md) — why upgrading this architecture's toolset regressed cost and detection until the review instructions were rewritten
 - [Bounded Tool Surfaces for Code Review Agents](bounded-tool-surface-review-agents.md) — the ceiling this architecture leaves unset: what happens to precision and cost when each tool's output is capped

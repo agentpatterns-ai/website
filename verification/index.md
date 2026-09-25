@@ -94,6 +94,7 @@ last_reviewed: 2026-05-27
 - [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](bug-discriminating-validation-evidence.md) — Replay a repair agent's own passing test against the unfixed code; 46.0% of positive validation events pass there too and carry no information about the bug
 - [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — Multi-turn LLM code refinement silently breaks previously-passing code (Phi 0.089 between instruction adherence and functional correctness); pin the original suite, re-execute every turn, and gate on the pass-set diff
 - [Cut-Point Replay: Test a Fix Against a Recorded Agent Run](cut-point-replay-agent-regression-tests.md) — Serve a recorded agent run's unchanged boundaries from the record and run the changed ones live, so one production incident becomes a deterministic regression test
+- [Per-Change Deploy Monitors: Report the Verdict, Don't Act on It](per-change-deploy-monitors.md) — Attach a monitor to each pull request, derive its checks from that diff, report health per environment in three states, and keep it off the rollback control because attribution is weaker than detection
 
 ## Eval-Driven Development
 

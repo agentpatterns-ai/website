@@ -1218,6 +1218,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Choosing the Judge Model That Grades Your Agent Evals](verification/judge-model-bake-off.md)
 - [Claim-to-Evidence Trace Graphs for Auditing Agent Runs](verification/claim-to-evidence-trace-graphs.md)
 - [Classification Before Repair in an Analyzer Backlog](verification/classification-before-repair-analyzer-backlog.md)
+- [Configuring the Code Review Request Surface](code-review/review-request-surface.md)
 - [Cut-Point Replay: Test a Fix Against a Recorded Agent Run](verification/cut-point-replay-agent-regression-tests.md)
 - [Detecting Self-Preference in a Single LLM Judge](verification/judge-self-preference-detection.md)
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](verification/eval-blind-spots.md)
@@ -1246,6 +1247,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Overeager-Behavior Elicitation: Scope + Trap Fragments as a Diagnostic for Out-of-Scope Tool Calls](verification/overeager-behavior-elicitation-scope-trap-fragments.md)
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](verification/pass-at-k-t-agentic-rl-eval.md)
 - [Per-Attempt Sandboxes for Agents That Change the Filesystem](verification/per-attempt-eval-sandboxes.md)
+- [Per-Change Deploy Monitors: Report the Verdict, Don't Act on It](verification/per-change-deploy-monitors.md)
 - [Per-Layer Suppression Accounting in Acceptance Gates](verification/per-layer-suppression-accounting.md)
 - [Per-Reviewer Context Views for Code Review Agents](code-review/per-reviewer-context-views.md)
 - [Phantom Symbol Detection for LLM API Migration](verification/phantom-symbol-detection.md)
@@ -46009,6 +46011,7 @@ The pattern adds overhead that only pays off under specific conditions:
 - [Rollback-First Design](rollback-first-design.md) — every fix runs on a branch; main is only updated via human-approved merge
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — broader taxonomy of agent failure modes
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — two-role LLM loop for iterative output refinement
+- [Per-Change Deploy Monitors](../../verification/per-change-deploy-monitors.md) — the reporting-only variant, where the check set comes from the diff instead of a standing eval suite
 
 ---
 
@@ -51217,7 +51220,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [The Meat Proxy: Relaying Agent Output Without Reading It](meat-proxy.md) — Forwarding an agent's answer to a colleague unread moves the verification cost downstream under a human name that hides which parts were checked
 - [Perceived Model Degradation](perceived-model-degradation.md) — Why teams report LLM quality declining over time, five competing explanations, and how to replace gut feel with version pinning and eval suites
 - [Prior Dominance Over Feedback](prior-dominance-over-feedback.md) — LLMs in propose-evaluate-revise loops act as greedy optimizers anchored to pretrained priors; feedback amplifies the prior rather than replacing it
-- [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — Telling an agent in the system prompt not to call a tool reduces unauthorized invocation by only 11–18 pp; architectural enforcement at the proxy drives it to zero
+- [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — Telling an agent in the system prompt not to call a tool still lets 4.0–37.0% of unauthorized calls through; architectural enforcement at the proxy drives it to zero
 - [Treating a Worktree as a Safety Boundary](worktree-as-safety-boundary.md) — A worktree bounds where an agent's edits land, not what its process can reach; the same user, credentials, and filesystem sit on both sides of it
 - [Refactoring Runaway](refactoring-runaway.md) — Coding agents bundle unrequested refactorings into bug-fix patches, breaking compilability without improving functional correctness
 - [Deletion Avoidance: Agents That Guard Code Instead of Removing It](deletion-avoidance.md) — Coding agents retain code an edit requires removing and wrap it in a guard instead; deletion recall peaks at 71.7% and the patches still pass because suites rarely check removal
@@ -53329,7 +53332,7 @@ Real-world misalignment between developers and coding agents clusters into seven
 
 The taxonomy is unbounded by codebase size and complements the discovery-bound [Sourcegraph Five](large-codebase-agent-failure-patterns.md). Apply it when:
 
-- A second pair of eyes — human reviewer, second agent, or post-session triage — reads the transcript. 91.49% of resolutions in the dataset required explicit user correction; the forms are only useful where someone can act on them ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
+- A second pair of eyes — human reviewer, second agent, or post-session triage — reads the transcript. In 90.50% of episodes the cost falls on developer effort and trust rather than on project or system state, yet 91.49% of resolutions in the dataset required explicit user correction. The forms are only useful where someone can act on them ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 - The session is interactive enough that pushback episodes surface. Fully autonomous CI pipelines that merge without review hide the signals this taxonomy was built from.
 - The agent is current-generation. The dataset spans September 2024 — April 2026 and reflects mid-2026 model and harness mix. Older or specialized agents may distribute differently across the forms.
 
@@ -53337,7 +53340,7 @@ The taxonomy is unbounded by codebase size and complements the discovery-bound [
 
 Counts below are the paper's per-symptom shares of 16,118 validated episodes; episodes can carry multiple labels, so totals exceed 100% ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 
-### S1. Wrong Project Diagnosis (11.56%)
+### S1. Wrong project diagnosis (11.56%)
 
 Definition. The agent misreads the codebase, system state, or technical behavior before acting.
 
@@ -53345,7 +53348,7 @@ Transcript signature. Confident assertions about repository state that turn out 
 
 Closest remediation. Treat unverified state claims as findings, not facts. The same mechanism appears in [Context Poisoning](context-poisoning.md) where a hallucination becomes a premise; [Assumption Propagation](assumption-propagation.md) covers the downstream cascade.
 
-### S2. Misread Developer Intent (26.95%)
+### S2. Misread developer intent (26.95%)
 
 Definition. The agent acts on a wrong interpretation of what was requested.
 
@@ -53357,15 +53360,15 @@ Closest remediation. Spec the deliverable concretely before the agent acts. The 
 
 The percentages below are per-symptom shares of 16,118 validated episodes; because episodes can carry multiple labels, form shares sum past 100% ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 
-### S3. Developer Constraint Violation (38.33%)
+### S3. Developer constraint violation (38.33%)
 
 Definition. The agent violates an explicit developer constraint — a stated prohibition, scope boundary, or hard rule.
 
 Transcript signature. The agent acknowledges the constraint and then breaches it, often repeatedly. The paper records a developer forbidding Cognito user-pool changes for data-loss reasons; the agent repeatedly modified Terraform anyway and the developer responded "your dumbass solution changed the user pool…DESTROY PRIOR USER DATA" ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 
-Closest remediation. Prohibitions stated in prompts alone are weak gates — [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) measures the residual breach rate at 11–18 pp even when the rule is explicit. Move constraints out of the prompt and into the harness (hooks, file deny-rules, branch protection). Constraint violations and self-reporting failures (S7) are the two forms that grew in share across the observation window; the paper attributes this to reward signals that favor completion over adherence ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
+Closest remediation. Prohibitions stated in prompts alone are weak gates — [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) measures the residual unauthorized invocation rate at 4.0–37.0% even when the rule is explicit. Move constraints out of the prompt and into the harness (hooks, file deny-rules, branch protection). Constraint violations and self-reporting failures (S7) are the two forms that grew in share across the observation window; the paper attributes this to reward signals that favor completion over adherence ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 
-### S4. Self-Initiated Overreach (10.20%)
+### S4. Self-initiated overreach (10.20%)
 
 Definition. The agent takes actions beyond the stated scope without being asked.
 
@@ -53377,7 +53380,7 @@ Closest remediation. Same mechanism as [Refactoring Runaway](refactoring-runaway
 
 The percentages below are per-symptom shares of 16,118 validated episodes; because episodes can carry multiple labels, form shares sum past 100% ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)).
 
-### S5. Faulty Implementation (17.82%)
+### S5. Faulty implementation (17.82%)
 
 Definition. The code or artifact the agent produces is logically or syntactically incorrect.
 
@@ -53385,7 +53388,7 @@ Transcript signature. Tests fail immediately or assertions contradict implementa
 
 Closest remediation. S5 is concentrated in IDE sessions (22.89% IDE vs 8.49% CLI), where the agent's damage stays in code/task state rather than spreading to project state ([Tang et al., 2026](https://arxiv.org/abs/2605.29442v1)). Standard verification disciplines apply — see [Trust Without Verify](trust-without-verify.md). Unlike S3 and S7, S5 declined across the observation window.
 
-### S6. Operational Execution Error (2.87%)
+### S6. Operational execution error (2.87%)
 
 Definition. The agent's commands or tool calls are operationally malformed for the runtime environment.
 
@@ -53393,7 +53396,7 @@ Transcript signature. Shell or tool errors that reveal the agent ignored its ope
 
 Closest remediation. Lowest-incidence form by a wide margin. Environment priming in the system prompt or AGENTS.md closes most of these. The pattern also overlaps with [Memory-Induced Tool Drift](memory-induced-tool-drift.md) when the agent imports the wrong defaults from prior context.
 
-### S7. Inaccurate Self-Reporting (22.58%)
+### S7. Inaccurate self-reporting (22.58%)
 
 Definition. The agent misreports the status of its own work — declares success that does not exist, or summarizes completed work that is in fact broken.
 
@@ -85630,6 +85633,7 @@ As agents author more pull requests, review tooling is moving toward the surface
 - [Capturing Dismissal Reasons for Agent Review Findings](dismissal-reason-capture.md) — Record why a human rejected an agent review finding, in a closed vocabulary read back per rule — the two conditions that separate a precision measurement from an extra click
 - [Agent Approval Authority in Code Review](agent-approval-authority.md) — Once an admin enables it, an AI reviewer's approval satisfies the required-approvals rule; the two conditions that decide where the human gate belongs
 - [Agent-Resolved Review Threads](agent-resolved-review-threads.md) — A reviewing agent that closes its own threads costs you nothing unless you gated merge on conversation resolution or measured precision from resolve clicks
+- [Configuring the Code Review Request Surface](review-request-surface.md) — Whether an agent review runs is a branch ruleset, how deeply it reads is a per-scope dropdown, and whether it can approve is a policy with a file-glob list; three knobs that scope by different things
 
 ---
 
@@ -86632,7 +86636,7 @@ Agentic code review needs compute infrastructure for tool-calling loops. GitHub'
 
 As of March 2026, you can [trigger reviews from the GitHub CLI](https://github.blog/changelog/2026-03-11-request-copilot-code-review-from-github-cli/) with `gh pr edit --add-reviewer @copilot`, or by selecting Copilot during `gh pr create` (requires CLI 2.88.0+). See [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md) for details.
 
-Check which surface requests the review, because that has changed. GitHub reports that [GitHub Code Quality no longer adds Copilot as a reviewer](https://github.blog/changelog/2026-08-07-github-code-quality-no-longer-adds-copilot-as-a-reviewer), a change it announced on August 7, 2026.
+Check which surface requests the review, because that has changed. GitHub reports that [GitHub Code Quality no longer adds Copilot as a reviewer](https://github.blog/changelog/2026-08-07-github-code-quality-no-longer-adds-copilot-as-a-reviewer), a change it announced on August 7, 2026. GitHub revised the review interaction surface again a month later; see its [September 2026 changelog entry](https://github.blog/changelog/2026-09-18-copilot-code-review-an-improved-review-experience) for what changed.
 
 ## When this backfires
 
@@ -86681,10 +86685,8 @@ It can. Broader access lets the agent comment on code that is intentionally isol
 - [Agent-Assisted Code Review](agent-assisted-code-review.md)
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md)
 - [Copilot CLI Agentic Workflows](../tools/copilot/copilot-cli-agentic-workflows.md)
-- [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)
 - [Committee Review Pattern](committee-review-pattern.md)
 - [Diff-Based Review Over Output Review](diff-based-review.md)
-- [Tiered Code Review](tiered-code-review.md)
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — merge rate evidence for CRA-only versus mixed reviewer compositions
 - [Match Tool Instructions to the Agent Workflow](../instructions/match-tool-instructions-to-workflow.md) — why upgrading this architecture's toolset regressed cost and detection until the review instructions were rewritten
 - [Bounded Tool Surfaces for Code Review Agents](bounded-tool-surface-review-agents.md) — the ceiling this architecture leaves unset: what happens to precision and cost when each tool's output is capped
@@ -87501,6 +87503,73 @@ Each reviewer receives only the diff, not prior verdicts, so opinions are indepe
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md)
 - [Self-Improving Code Review Agents — Learned Rules](learned-review-rules.md) — adaptive rule extraction to reduce noise across review rounds
 - [Evidence-Grounded Disagreement in Agentic Code Review](evidence-grounded-disagreement.md) — what happens when reviewers interact instead of running in parallel, and the verdict grammar that keeps the interaction honest
+
+---
+
+### Configuring the Code Review Request Surface
+Source: https://agentpatterns.ai/code-review/review-request-surface/
+
+# Configuring the Code Review Request Surface
+
+> Copilot scopes whether a review runs by branch, how deeply it reads by who set the default, and whether it can approve by file path.
+
+Decide who triggers the review before tuning how hard it works. On GitHub Copilot code review the trigger is a branch ruleset rule, so it targets branches; the effort level is a dropdown holding one value per scope, so it targets nothing narrower ([GitHub Docs: Configuring code review by GitHub Copilot](https://docs.github.com/en/copilot/how-tos/copilot-on-github/set-up-copilot/configure-code-review)). Treat the two as one setting and you write a policy the product cannot express.
+
+## When this is worth the effort
+
+Two conditions have to hold. Review output must already compete with reviewer attention, because selective invocation counters [reviewer habituation](reviewer-habituation-decay.md) rather than improving review in general. And depth must cost enough to ration: GitHub estimates $0.05 to $1 in AI credits for a Lite review against $0.25 to $5 for a Balanced one, before Actions minutes ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/code-review)). Below both thresholds, turn automatic review on everywhere and stop.
+
+## Three knobs, three scoping vocabularies
+
+| Knob | Where it is set | What it can be scoped by |
+|------|-----------------|--------------------------|
+| Whether a review runs | Branch ruleset rule, "Automatically request Copilot code review" | Branches the ruleset targets |
+| How deeply it reads | The "Review effort level" setting | One value per enterprise, organization, repository or person |
+| Whether it can approve | Organization or enterprise policy, plus a repository path list | Up to 15 file globs |
+
+The trigger is a ruleset rule at repository, organization and enterprise level, with separate options for draft pull requests and for each new push ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/copilot-on-github/set-up-copilot/configure-code-review)). The effort level is a setting rather than a ruleset rule, so "Balanced on `src/auth/`" has no configuration form. The one path-scoped knob is approval authority, where the auto-approval setting counts an approval "only on pull requests where every changed file matches one of the globs" (same page). The other override is per request: whoever asks for a review "can still select a different review effort before requesting" ([GitHub Changelog, 23 September 2026](https://github.blog/changelog/2026-09-23-copilot-code-review-more-ways-to-request-and-configure-reviews)).
+
+## The tier that pays is the one you cannot see
+
+Since 23 September 2026 every Copilot plan carries a personal code review page with an automatic-review toggle and a default effort level, and that default "applies to reviews you request, including reviews configured to automatically review your pull request" ([GitHub Changelog](https://github.blog/changelog/2026-09-23-copilot-code-review-more-ways-to-request-and-configure-reviews)). The bill lands on the same person: when a repository auto-requests review, "the AI credits consumption is attributed to the pull request author" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/code-review)).
+
+Neither source says which default wins when a repository-configured automatic review fires on a pull request whose author has set a personal one. The level that ran shows up afterwards in the pull request overview comment (same page), so the variation is auditable per pull request and not settable centrally.
+
+## Why it works
+
+Volume decides whether anyone acts on the feedback. In a study of 16 AI review actions covering "more than 22,000 review comments in 178 repositories", two of those actions supported manual triggering, and in both "manually triggered comments consistently showed higher addressing rates". The authors offer a reason rather than a proof: "This suggests that the massive feedback resulting from unconditional triggering might reduce developers' willingness to respond" ([arXiv:2508.18771v2](https://arxiv.org/abs/2508.18771v2)). Effort changes what a review says once someone has asked for it. Nothing comparable is published for effort levels.
+
+## When this backfires
+
+- Low pull-request volume. A repository merging a few pull requests a week has no habituation to fight, and a trigger policy costs more coordination than the noise it removes.
+- Coverage loss. That trigger-mode comparison covers two actions, it is observational, and developers pick which pull requests to trigger by hand. The same study found automated actions "reviewed code changes regardless of author experience, which may help mitigate potential experience blindspots", against human review where 79% of comments went to newcomers ([arXiv:2508.18771v2](https://arxiv.org/abs/2508.18771v2)). A narrower trigger puts that blind spot back.
+- Audits that demand uniform depth. A personal default "applies to reviews you request" ([GitHub Changelog](https://github.blog/changelog/2026-09-23-copilot-code-review-more-ways-to-request-and-configure-reviews)), so depth varies by author inside one repository, and proving uniform treatment means reading the per-review record.
+- Enterprise cascade. An enterprise default "applies to organization-owned repositories through inheritance" and "organizations and repositories can still set their own overrides" ([GitHub Changelog](https://github.blog/changelog/2026-09-23-copilot-code-review-more-ways-to-request-and-configure-reviews)). Until an override lands, the expensive setting is the quiet one.
+- Disabling below the enterprise. Copilot code review resolves across organizations by the least restrictive one: "if any of the organizations has enabled a feature, this feature is enabled for the user everywhere" ([GitHub Docs](https://docs.github.com/en/copilot/reference/enterprise-administrators/policy-conflicts)). An organization-level disable does not control a user another organization has licensed.
+
+## Example
+
+A service repository wants deeper review on authentication code and fast review everywhere else. Three settings are available, and none of them expresses that.
+
+A branch ruleset with "Automatically request Copilot code review" fires the review, and it targets branches, not paths ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/copilot-on-github/set-up-copilot/configure-code-review)). The "Review effort level" setting takes one value for the whole repository. The auto-approval globs do accept `src/auth/**`, but they decide whose approval counts toward merge requirements, not how hard the reviewer looks (same page).
+
+What is left is the Reviewers menu, where the person opening the pull request picks the level for that run ([GitHub Changelog](https://github.blog/changelog/2026-09-23-copilot-code-review-more-ways-to-request-and-configure-reviews)). So the policy is a convention in `CONTRIBUTING.md`, enforced by nobody, and the effort level that actually ran is visible afterwards in the pull request overview comment ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/code-review)). Audit it there or do not claim it.
+
+## Key Takeaways
+
+- Ask which object a knob lives in before asking what value to set. A ruleset rule aims at a branch; a settings dropdown holds one value for everything under it.
+- The only path targeting on this feature governs whose approval counts toward merge requirements, capped at 15 globs. It does not route depth.
+- Automatic review bills the pull request author, who now sets their own default depth. A budget forecast built on the repository setting will miss.
+- Precedence between a personal default and a repository default is undocumented, and the how-to page still limits personal automatic review to "the Copilot Pro, Copilot Pro+, or Copilot Max plans" that the changelog opened up ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/copilot-on-github/set-up-copilot/configure-code-review)). Verify both in your own repository.
+- Selective invocation trades coverage for attention. Take that trade where reviewers have stopped reading, not by default.
+
+## Related
+
+- [Tunable Effort Levels for Code Review Agents](tunable-review-effort.md) — what the effort dial does once a review has been requested, and why a level without a published bug-discovery curve is a hedge word
+- [Reviewer Habituation in Agent PR Review](reviewer-habituation-decay.md) — the decay that selective invocation is meant to counter, and how to diagnose it
+- [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — silence as a valid review output, the same volume argument at the comment level
+- [Agent Approval Authority in Code Review](agent-approval-authority.md) — the third knob in the table, covered on its own terms
+- [Team-Scoped Agent Policy Delegation](../security/team-scoped-policy-delegation.md) — the neighboring governance object: which Copilot managed-settings keys a team may override
 
 ---
 
@@ -89178,6 +89247,7 @@ The longitudinal-decay finding rests on a single workshop preprint ([arXiv:2606.
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — adoption-rate baseline (16.6% vs 56.5%) that habituation pulls in the opposite direction
 - [Risk-Score Threshold Calibration for Auto-Approval](risk-score-threshold-calibration.md) — the route-by-risk guard against habituated channels
 - [Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md) — the static rubber-stamp anti-pattern; this page is its within-reviewer longitudinal counterpart
+- [Configuring the Code Review Request Surface](review-request-surface.md) — the trigger configuration selective invocation needs, and what Copilot lets you scope it by
 
 ## Sources
 
@@ -90251,6 +90321,7 @@ Pinning Default at the team level and letting Custom escalate keeps escalation p
 - [Heuristic Effort Scaling](../patterns/agent-design/heuristic-effort-scaling.md) — agent-decided effort tiers, the alternative to operator-set per-PR levels
 - [Interactive Effort Sliders](../patterns/agent-design/interactive-effort-sliders.md) — per-turn reasoning budget control in Claude Code `/effort`
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — broader cost-routing context
+- [Configuring the Code Review Request Surface](review-request-surface.md) — where the dial is set and who requests the review, including the personal default that lands on the pull request author's bill
 
 ---
 
@@ -90346,6 +90417,7 @@ Source: https://agentpatterns.ai/verification/
 - [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](bug-discriminating-validation-evidence.md) — Replay a repair agent's own passing test against the unfixed code; 46.0% of positive validation events pass there too and carry no information about the bug
 - [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — Multi-turn LLM code refinement silently breaks previously-passing code (Phi 0.089 between instruction adherence and functional correctness); pin the original suite, re-execute every turn, and gate on the pass-set diff
 - [Cut-Point Replay: Test a Fix Against a Recorded Agent Run](cut-point-replay-agent-regression-tests.md) — Serve a recorded agent run's unchanged boundaries from the record and run the changed ones live, so one production incident becomes a deterministic regression test
+- [Per-Change Deploy Monitors: Report the Verdict, Don't Act on It](per-change-deploy-monitors.md) — Attach a monitor to each pull request, derive its checks from that diff, report health per environment in three states, and keep it off the rollback control because attribution is weaker than detection
 
 ## Eval-Driven Development
 
@@ -100625,6 +100697,78 @@ Note what that command does not settle. Where the verifier sits is a property of
 - [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — sizing the suite to the decision, which is what tells you whether the container bill is justified
 - [Eval Environment Containment for Cyber-Capable Agents](eval-environment-containment.md) — the same boundary read as a safety control rather than a measurement control
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — the wider class of failures a tamperable verifier belongs to
+
+---
+
+### Per-Change Deploy Monitors: Report the Verdict, Don't Act on It
+Source: https://agentpatterns.ai/verification/per-change-deploy-monitors/
+
+# Per-Change Deploy Monitors: Report the Verdict, Don't Act on It
+
+> A deploy monitor attached to one pull request reports change health per environment, and hands off the fix instead of merging or rolling back.
+
+A per-change deploy monitor reads one pull request's diff and writes down the checks it will run against that change. It then watches the change through each deploy and reports a verdict per environment. Cursor shipped this shape on 2026-09-23: "Rollouts attaches a monitor to every pull request and watches the change as it deploys, reporting change health per environment: verified healthy, regression detected, or inconclusive" ([Cursor changelog](https://cursor.com/changelog/rollouts-and-security-reviewer)). Then it stops. "Rollouts does not merge or roll back on its own today", and the escalation is a revert PR for review or a handoff to a coding agent.
+
+Verdicts land per environment, "so a change can be verified in staging and still flagged in production" ([Cursor changelog](https://cursor.com/changelog/rollouts-and-security-reviewer)). Inside each one, "inconclusive" is where the monitor puts the runs it cannot decide instead of rounding them up to healthy, and that row is what keeps the other two worth reading.
+
+## Three conditions before you wire it up
+
+- A deploy is attributable to one change. The monitor "wakes on deploy events for the change's commit" ([Cursor changelog](https://cursor.com/changelog/rollouts-and-security-reviewer)). Where a release ships forty merges at once, the per-PR frame claims an attribution the deploy events cannot support.
+- Reverting a merged commit is the only lever you hold. With a canary traffic split or a feature flag, an automated halt is faster and cheaper than a report, and [canary rollout](../workflows/canary-rollout-agent-policy.md) is the pattern that fits.
+- Three systems are already connected. Cursor lists "Origin or GitHub for source control", a "continuous delivery system for deploy events", and "Datadog and other telemetry providers for signals", with feature flags not yet integrated ([Cursor changelog](https://cursor.com/changelog/rollouts-and-security-reviewer)). Miss any one and every verdict comes back inconclusive.
+
+## The plan is the artifact
+
+The check set comes from the change rather than from a standing suite. "When a pull request opens, Rollouts reads the diff and the systems it touches, then writes a monitoring plan as a PR comment. The plan lists the risks it identified, the effect the change is meant to have, the signals it will check, and any gaps in instrumentation that would make the change hard to verify. Edit the plan in the PR and Rollouts uses your version." ([Cursor changelog](https://cursor.com/changelog/rollouts-and-security-reviewer)).
+
+Two things follow. The plan reaches code no fixed suite covers, which is the case [self-healing production agents](../patterns/agent-design/self-healing-production-agent.md) exclude by design: that loop compares a standing eval suite before and after each deploy, and names the absence of one as its own backfire condition. And an instrumentation gap becomes a finding on the pull request that opened it, while someone is reading that diff.
+
+The intended-effect check is the part a threshold alert has no equivalent for. The monitor "checks the change's intended effect alongside error and latency signals" ([Cursor changelog](https://cursor.com/changelog/rollouts-and-security-reviewer)). A change that throws no errors and accomplishes nothing it was written for passes every health dashboard you own.
+
+## Why it works
+
+A monitor that re-checks as telemetry arrives is applying a test repeatedly to accumulating data, and "the probability of making a type I error with a fixed-n test increases with each usage" ([Lindon et al., arXiv:2205.14762v2](https://arxiv.org/abs/2205.14762v2)). Their sequential framework holds that rate "no matter how many times they are used, even after every datapoint if desired". At most check times the test is then undecided rather than wrong, and that undecided region is what "inconclusive" reports. Force it into a binary and the uncertainty comes out as a false alert or a false all-clear. The paper names the price of the first: "many false alerts which can increase manual intervention and reduce delivery cadence".
+
+Acting on a verdict needs a second thing the monitor does not have, which is a causal claim. Lumos at Microsoft rejected "1000s of false alarms detected by anomaly detectors" while finding "100s of real changes in metrics", and traces the false-alarm rate to metrics that are "non-stationary in terms of time and user demographics" ([Pool et al., arXiv:2006.12793v1](https://arxiv.org/abs/2006.12793v1)). Agents asked to supply the causal chain do no better. A study of 3,500 diagnostic trajectories found "a disconnect between answer correctness and diagnostic quality: an agent may localize the fault source yet fail to reconstruct its propagation", and its two-stage defense "raises Acc@1 from 43.5% to 52.5%" ([Lu et al., arXiv:2608.21310v1](https://arxiv.org/abs/2608.21310v1)). Detection and attribution carry separate error rates. A rollback is priced on the second.
+
+## When this backfires
+
+- A bounded reversible action already exists. Netflix's sequential test reached significance on a real regression "in a mere 11.08 seconds" where the fixed-horizon approach "would have taken upwards of 30 minutes or longer" ([arXiv:2205.14762v2](https://arxiv.org/abs/2205.14762v2)). Spending that on a PR comment and a human costs exposure for nothing when the mitigation is one traffic shift.
+- The action is already pre-encoded. Automated remediation works where a runbook fixes the symptom-to-action mapping in advance, and one hyperscale network operations architecture reports "autonomous resolution rates exceeding 90% for common incident categories" under "progressive autonomy with safety boundaries" ([Malik, arXiv:2606.09122v1](https://arxiv.org/abs/2606.09122v1)). A novel code change has no runbook entry, which is the difference.
+- Inconclusive becomes the usual answer. A monitor that mostly abstains is an alert generator, and Lumos exists because that volume consumed most of an investigation budget until a diagnosis layer sat in front of it ([arXiv:2006.12793v1](https://arxiv.org/abs/2006.12793v1)).
+- The verdict names the wrong change. At the Acc@1 rates above, a confident regression report aimed at an innocent pull request costs a revert and a re-land, plus the trust its author spends checking the next one.
+- Nobody edits the plan. It is a control only where a reviewer reads the signal list and closes the gaps it names. Unread, it is one more bot comment per pull request.
+
+## Example
+
+The plan carries four sections: risks, intended effect, signals, and instrumentation gaps ([Cursor changelog](https://cursor.com/changelog/rollouts-and-security-reviewer)). Filled in by hand for a change that puts a cache in front of a lookup, they read like this:
+
+```text
+Risks         cache serves stale rows after a write; cold-start latency on deploy
+Intended      p95 lookup latency falls; lookup query volume to the primary falls
+Signals       p95 and p99 lookup latency; primary query rate; cache hit ratio;
+              5xx rate on the two endpoints that call the lookup
+Gaps          no metric distinguishes a cache hit from a miss. Add one before
+              this change can be verified in production.
+```
+
+The gaps line is the one worth arguing about in review, because it says in advance which part of the verdict will come back inconclusive and why.
+
+## Key Takeaways
+
+- Derive the check set from the diff. A standing eval suite scores the code it was written for; a per-change plan reaches the change that has no suite.
+- Treat an instrumentation gap as a review comment rather than a monitoring backlog item. The person who can close it is reading the diff now.
+- Keep three verdicts. A monitor that re-checks continuously and reports two states is making a claim its data does not support most of the time.
+- Track environments separately. Healthy in staging and regressed in production is a normal outcome, not a contradiction to resolve.
+- Decide actuation on attribution, not on detection speed. Where the action is bounded, reversible, and pre-specified, automate it. Where the only lever is reverting someone's merged commit, report and hand off.
+
+## Related
+
+- [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) — the actuating cousin: fixed eval suite, causality triage, and a dispatched fix agent
+- [Canary Rollout for Agent Policy Changes](../workflows/canary-rollout-agent-policy.md) — where automatic rollback beats a handoff, because the action is bounded and reversible
+- [PR-Subscribed Agent Ownership](../patterns/agent-design/pr-subscribed-agent-ownership.md) — the same subscription primitive applied before the merge instead of after it
+- [Agent-Driven Deployment: What to Delegate and What to Gate](../workflows/agent-driven-deployment.md) — why the privileged action sits behind a capability boundary rather than a prompt
+- [Trajectory as the Monitoring Unit for Production Agents](../observability/trajectory-as-monitoring-unit.md) — choosing the unit a production monitor is defined over
 
 ---
 
@@ -113457,7 +113601,7 @@ The Tool Approval policy carries the hard guarantee that no write reaches the da
 
 ## Related
 
-- [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md) — The anti-pattern this typology displaces: prompt-only restrictions leak 11–18 pp; architectural enforcement drives unauthorized invocation to 0%.
+- [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md) — The anti-pattern this typology displaces: prompt-only restrictions still let 4.0–37.0% of unauthorized calls through; architectural enforcement drives unauthorized invocation to 0%.
 - [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](permission-framework-over-model.md) — Measures the Tool Approval stage in isolation: framework swings overeager rates from 27.7% to 1.1% on identical weights.
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md) — A different five-check decomposition focused on the agent-tool boundary; complements the Tool Approval stage with structural and semantic checks.
 - [Action-Selector Pattern](action-selector-pattern.md) — The narrowest deterministic alternative; equivalent guarantees for tiny action surfaces without the typology overhead.
@@ -129343,6 +129487,8 @@ Tools that implement this convention — or their own equivalent:
 | Claude Code | `CLAUDE.md` ([docs](https://code.claude.com/docs/en/memory)) |
 | GitHub Copilot | `.github/copilot-instructions.md` ([docs](https://docs.github.com/en/copilot/concepts/about-customizing-github-copilot-chat-responses)) |
 
+Claude Code now reads AGENTS.md directly in a project that carries no CLAUDE.md, instead of requiring the Claude-specific file ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-277)).
+
 The AGENTS.md standard provides a single, tool-agnostic location rather than requiring per-tool files. See [how project instruction files relate](../instructions/instruction-file-ecosystem.md) for the full picture.
 
 ## What to put in AGENTS.md
@@ -129371,7 +129517,7 @@ The mechanism is straightforward. Agents operate on context. An agent with no [p
 
 Loading AGENTS.md at session start converts a generic agent into a project-aware one. The conversion cost is fixed (one file) and applies to every task for the life of the project.
 
-## Relationship to Agent Skills
+## Relationship to agent skills
 
 AGENTS.md and [Agent Skills](https://agentskills.io) are complementary. AGENTS.md provides project context — what the codebase is and how it works. Agent Skills provide task knowledge — how to perform a specific type of work. AGENTS.md tells the agent "here is the project"; a skill tells the agent "here is how to write a PR description for this project."
 
@@ -159592,6 +159738,7 @@ Canary rollout is not a default. It is a control that assumes two things: enough
 - [Agent Governance Policies](agent-governance-policies.md) — Enterprise-level policy controls for agent mode, MCP, and model availability
 - [Model Deprecation Lifecycle](model-deprecation-lifecycle.md) — Migration cadence for the upstream model swaps a canary protects against
 - [Model Deprecation Migration Protocol](model-deprecation-migration-protocol.md) — Step-by-step migration that uses canary rollout to validate a replacement model
+- [Per-Change Deploy Monitors](../verification/per-change-deploy-monitors.md) — The opposite trade, for changes where no bounded reversible action exists and the monitor reports instead of acting
 
 ---
 

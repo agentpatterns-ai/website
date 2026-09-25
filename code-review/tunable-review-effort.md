@@ -126,3 +126,4 @@ Pinning Default at the team level and letting Custom escalate keeps escalation p
 - [Heuristic Effort Scaling](../patterns/agent-design/heuristic-effort-scaling.md) — agent-decided effort tiers, the alternative to operator-set per-PR levels
 - [Interactive Effort Sliders](../patterns/agent-design/interactive-effort-sliders.md) — per-turn reasoning budget control in Claude Code `/effort`
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — broader cost-routing context
+- [Configuring the Code Review Request Surface](review-request-surface.md) — where the dial is set and who requests the review, including the personal default that lands on the pull request author's bill
