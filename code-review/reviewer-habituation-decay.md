@@ -72,6 +72,7 @@ The longitudinal-decay finding rests on a single workshop preprint ([arXiv:2606.
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — adoption-rate baseline (16.6% vs 56.5%) that habituation pulls in the opposite direction
 - [Risk-Score Threshold Calibration for Auto-Approval](risk-score-threshold-calibration.md) — the route-by-risk guard against habituated channels
 - [Law of Triviality in AI PRs](../patterns/anti-patterns/law-of-triviality-ai-prs.md) — the static rubber-stamp anti-pattern; this page is its within-reviewer longitudinal counterpart
+- [Configuring the Code Review Request Surface](review-request-surface.md) — the trigger configuration selective invocation needs, and what Copilot lets you scope it by
 
 ## Sources
 
