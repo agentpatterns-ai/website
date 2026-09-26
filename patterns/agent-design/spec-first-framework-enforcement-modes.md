@@ -71,3 +71,4 @@ That is the half with independent measurement behind it. The other half has an a
 - [Prescribing TDD Inside the Agent Loop](../anti-patterns/tdd-inside-the-agent-loop.md) — the measured counterweight to adding process ceremony inside the agent's loop
 - [Spec-Driven Development with Spec Kit](../../workflows/spec-driven-development.md) — the front-loaded exemplar in this taxonomy
 - [Learning Execution Guardrails from Agent Failure Traces](trace-learned-execution-guardrails.md) — a measurement of mode one, where mined prose rules cut abnormal execution while introducing a refusal cost of their own
+- [Protecting the Test Oracle From the Agent](protect-the-oracle-from-the-agent.md) — the same write-reach axis applied to one artifact class, including the waiver routes that never edit a test

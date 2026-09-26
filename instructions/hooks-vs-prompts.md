@@ -183,3 +183,4 @@ Treat that as an automatic case for external enforcement. When a rule asks the a
 - [Deterministic Guardrails](../verification/deterministic-guardrails.md)
 - [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md)
 - [Hooks and Lifecycle Events](../tool-engineering/hooks-lifecycle-events.md) — the canonical home for the lifecycle model these enforcement choices build on
+- [Frontmatter and Body Rule Drift in Agentic Workflows](frontmatter-body-rule-drift.md) — the same split inside one workflow file, and what happens to a rule written on both sides of it

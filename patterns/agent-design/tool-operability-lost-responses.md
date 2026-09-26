@@ -11,7 +11,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-08-26
+last_reviewed: 2026-09-15
 maturity: emerging
 ---
 
@@ -46,6 +46,8 @@ Wang's Agent-First Tooling set names seven mechanisms. Five carry the study's st
 MCP's Tasks extension is resumable invocation shipped in a protocol: "a server can answer `tools/call` with a task handle, and the client drives it with `tasks/get`, `tasks/update`, and `tasks/cancel`" ([MCP 2026-07-28 release candidate](https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/)). The handle is what makes a lost response recoverable, because the agent can ask what happened instead of guessing.
 
 Effect semantics have a shipped form too, and a sharper edge. MCP's `idempotentHint` answers "Can you safely call it again with the same arguments?", but "annotations are not guaranteed to faithfully describe tool behavior, and clients must treat them as untrusted unless they come from a trusted server" ([MCP, Tool Annotations as Risk Vocabulary](https://blog.modelcontextprotocol.io/posts/2026-03-16-tool-annotations/)). A wrong idempotency declaration is worse than a missing one, because it authorizes the retry that duplicates the effect. The same trust caveat governs [hint-driven concurrency](../../tool-engineering/read-only-hint-concurrency.md).
+
+The gap runs past a single call. A September 2026 preprint reports that shared agent-tool interfaces usually do not expose whether an effect occurred ([arXiv:2609.15397v1](https://arxiv.org/abs/2609.15397v1)). Nor do they say whether that effect can be compensated, staged, or safely reordered. Under retries, concurrency, and partial failures, the effects that survive can then be inconsistent with how the workflow was meant to resolve.
 
 ## Why it works
 

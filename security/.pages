@@ -3,6 +3,7 @@ nav:
   - index.md
   - "Threat Models":
       - action-audit-divergence-taxonomy.md
+      - benchmark-poisoning-self-modifying-agents.md
       - compositional-vulnerability-induction.md
       - constraint-drift-multi-agent-safety.md
       - context-fractured-decomposition-attacks.md
@@ -31,6 +32,7 @@ nav:
       - next-edit-suggestion-uncurated-context.md
   - "Sandboxing":
       - browser-sandbox-agent-generated-html.md
+      - copilot-app-local-sandbox-credentials.md
       - docker-sbx-adoption.md
       - dual-boundary-sandboxing.md
       - enterprise-managed-agent-sandbox.md
@@ -38,6 +40,7 @@ nav:
       - sandbox-rules-harness-tools.md
       - subprocess-pid-namespace-sandboxing.md
       - windows-sandbox-primitives-coding-agents.md
+      - self-state-update-boundary.md
       - wasm-sandbox-agent-code-execution.md
       - workload-keyed-sandbox-selection.md
       - smolvm-library-microvm-cross-os-sandbox.md
@@ -102,12 +105,16 @@ nav:
   - covert-success-rate-injection.md
   - credential-hygiene-agent-skills.md
   - customer-hosted-mcp-tunnel.md
+  - decoding-harness-attack-surface.md
   - destyling-untrusted-input.md
   - deterministic-control-plane-llm-coding-agents.md
   - document-borne-prompt-injection.md
   - embedding-inversion-vector-store-disclosure.md
+  - enrolled-identity-peer-routing.md
   - evidence-based-allowlist-auto-discovery.md
+  - explanation-bound-tool-execution.md
   - fail-closed-remote-settings-enforcement.md
+  - field-level-source-ownership.md
   - foresight-guided-multi-agent-jailbreak-defense.md
   - framing-gap-exfiltration-defenses.md
   - gate-agent-writes-to-executable-config.md
@@ -142,6 +149,7 @@ nav:
   - policy-as-code-layer-typology.md
   - pre-execution-command-risk-classification.md
   - privacy-preserving-llm-requests.md
+  - proof-of-presence-step-up-authentication.md
   - prompt-injection-resistant-agent-design.md
   - prompt-injection-threat-model.md
   - protecting-sensitive-files.md
@@ -168,6 +176,7 @@ nav:
   - static-first-shell-command-gating.md
   - subagent-return-framing.md
   - sufficiency-tightness-policy-decomposition.md
+  - system-prompt-delivery-channel.md
   - system-prompt-not-a-secret-store.md
   - task-based-access-control-hybrid-inspection.md
   - task-scope-security-boundary.md

@@ -128,3 +128,4 @@ Coverage increases to 34%. The agent continues iterating until coverage plateaus
 - [FLARE: Multi-Agent Fuzzing](flare-multi-agent-fuzzing.md)
 - [Skill Specification Violation Fuzzing](skill-specification-violation-fuzzing.md)
 - [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md)
+- [Agent-Driven Fuzzing with Human-Gated Crash Triage](../workflows/agent-driven-fuzzing-human-gated-triage.md) — what happens once this harness starts finding crashes: deterministic triage, LLM attribution, and the human confirmation step

@@ -79,5 +79,9 @@ The audit carries one confound of its own: its Gemini endpoint differs from the 
 - [Tool-Use Sim-to-Real Perturbation Taxonomy](tool-use-sim-to-real-perturbation-taxonomy.md) — perturbations that change the environment rather than the wording, and where robustness collapses under each.
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — measurement gaps a stronger model cannot close.
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — reporting capability and consistency as two numbers.
+- [Rank Resolution: Reading a Converged Coding-Agent Leaderboard](rank-resolution-converged-leaderboards.md) — the other reason a small gap says nothing, counted in discordant instances rather than variance.
 - [Measure the Judge Before You Freeze a Gate on It](judge-instrument-stability-check.md) — the judge arm neither floor here covers, plus the across-day axis a same-window rerun misses.
 - [Frozen-Base Task Mining for Repository Instruction Files](frozen-base-task-mining.md) — what the floor costs when the task pool is capped by one repository's history.
+- [Trajectory-Aware Benchmark Subset Selection for Agents](trajectory-aware-benchmark-subset-selection.md) — a second error term on top of this floor, from estimating the suite score off 5% to 30% of it.
+- [Recover the Six Measurement Choices Behind an Attack Success Rate](asr-comparability-audit.md) — the prior question for a security metric: whether two numbers measure the same quantity before either floor applies.
+- [Frozen Task Sets for Affordable Agent A/B Testing](../workflows/frozen-task-set-agent-ab-testing.md) — selecting the few tasks whose single run still tracks the full score, and what that instrument cannot resolve.

@@ -10,7 +10,7 @@ aliases:
   - subagent inheritance
   - what crosses the subagent boundary
   - subagent brief contract
-last_reviewed: 2026-08-29
+last_reviewed: 2026-09-19
 maturity: emerging
 ---
 
@@ -37,7 +37,7 @@ Outside those conditions the roster loses. Under one normalized execution and lo
 
 Sources: [Codex subagents walkthrough](https://towardsdatascience.com/from-one-agent-to-a-team-understanding-codex-subagents/), [Claude Code sub-agents](https://code.claude.com/docs/en/sub-agents).
 
-The Codex article states the inheritance rule plainly: "If we do not override those settings here, the three specialists will inherit them from the main Codex session." Claude Code inverts it. Its delegate "doesn't see your conversation history, the skills you've already invoked, or the files Claude has already read", and still arrives loaded with the rest. Neither default is wrong. Both stay invisible until a delegate acts on something you never wrote in the brief, or fails on something you assumed it had.
+The Codex article states the inheritance rule plainly: "If we do not override those settings here, the three specialists will inherit them from the main Codex session." Claude Code inverts it. Its delegate "doesn't see your conversation history, the skills you've already invoked, or the files Claude has already read", and still arrives loaded with the rest. An agent file can drop part of that load. Its `omitClaudeMd` attribute skips user, project, and local CLAUDE.md for that subagent while managed policy files still load ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-271)). Neither default is wrong. Both stay invisible until a delegate acts on something you never wrote in the brief, or fails on something you assumed it had.
 
 ## Why it works
 

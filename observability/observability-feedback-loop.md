@@ -11,7 +11,7 @@ aliases:
   - observability feedback loop
   - 7-step debug runbook
   - query correlate reason implement restart rerun verify
-last_reviewed: 2026-08-19
+last_reviewed: 2026-09-15
 maturity: established
 ---
 
@@ -42,13 +42,13 @@ The steps are scaffolding. The load-bearing piece is the verification predicate 
 
 The loop assumes runtime signals exist and are queryable. The SOP enumerates the minimum: structured logs on startup and the critical path, metrics for latency and failure counts, traces for multi-step flows, query interfaces in dev, and one repeatable workload to rerun. Without this stack, there is nothing to query. See [Making Observability Legible to Agents](observability-legible-to-agents.md) for wiring patterns. LangChain describes production monitoring for agents in [How to Monitor AI Agents in Production](https://www.langchain.com/blog/production-monitoring).
 
-This loop is reactive — it starts once a signal has surfaced. A complementary posture, "active observability," shifts tooling from passively recording traces to continuously analyzing them: clustering production traces into named patterns and surfacing the ones worth investigating before anyone queries for them ([Braintrust: AI observability is active observability](https://www.braintrust.dev/blog/active-observability)). Active analysis feeds step 1 with candidate signals; it does not replace the verification predicate the loop closes on.
+This loop is reactive — it starts once a signal has surfaced. A complementary posture, "active observability," shifts tooling from passively recording traces to continuously analyzing them: clustering production traces into named patterns and surfacing the ones worth investigating before anyone queries for them ([Braintrust: AI observability is active observability](https://www.braintrust.dev/blog/active-observability)). A later Braintrust post describes automated discovery of recurring behaviors across production traces, which turns trace review into a repeating loop rather than a manual pass ([Braintrust: One connected system for agent observability](https://www.braintrust.dev/blog/active-observability-loop-patterns-debugger)). Active analysis feeds step 1 with candidate signals; it does not replace the verification predicate the loop closes on.
 
 ## The seven steps
 
 ### 1. Query
 
-Pull the specific signal that failed — a log line, a metric value, a trace span. Not "tail the logs." Claude Code contrasts the vague `"the build is failing"` with `"the build fails with this error: [paste error]"` ([best practices](https://code.claude.com/docs/en/best-practices)). The signal queried here is the same one verified absent in step 7 — pick it deliberately.
+Pull the specific signal that failed — a log line, a metric value, a trace span. Not "tail the logs." Claude Code contrasts the vague `"the build is failing"` with `"the build fails with this error: [paste error]"` ([best practices](https://code.claude.com/docs/en/best-practices)). The signal queried here is the same one verified absent in step 7 — pick it deliberately. Braintrust describes an MCP server that exposes production traces, datasets, and evals to coding agents including Claude Code, Cursor, and Codex ([Braintrust: Use Braintrust with your coding agent](https://www.braintrust.dev/blog/braintrust-mcp)). With that wiring in place, step 1 runs inside the agent's own session rather than against a pasted log line.
 
 ### 2. Correlate
 

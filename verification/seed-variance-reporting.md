@@ -85,3 +85,4 @@ Seed 1 alone reads as a confirmed effect. The pair of rows reads as an unstable 
 - [Eval Blind Spots](eval-blind-spots.md) — structural gaps in what the harness can observe
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md) — aggregate metrics for run-to-run spread you cannot attribute
 - [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](multi-run-shuffled-order-evaluation.md) — the same reporting discipline when state accumulates across tasks and task order becomes a variable
+- [Serving-Stack Confounds in Tool-Call Evaluation](../patterns/anti-patterns/serving-stack-confound-tool-call-evaluation.md) — a case where turn-pooled and per-seed rates on the same runs differ by roughly 50 points

@@ -101,3 +101,4 @@ The 62% headline is consistent with this org and with a uniform-60%-medium-use o
 - [Copilot vs Claude Billing Semantics](copilot-vs-claude-billing-semantics.md) — the other side of Copilot-specific instrumentation; cost telemetry that pairs with the cohort distribution.
 - [Reading Copilot Feature Engagement by Its Threshold](copilot-feature-engagement-threshold.md) — the per-feature engagement breakdown keyed to these phases, and the denominator `users_in_phase_28d` adds to them.
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the rollout that these adoption-phase cohorts instrument: seed adoption socially, then track retention as a separate number.
+- [Anonymized Customization Metrics in the Copilot CLI](anonymized-customization-metrics-copilot-cli.md) — the customization dimension of the same API, where privacy bucketing removes the per-item read this page relies on.

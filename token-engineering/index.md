@@ -78,6 +78,7 @@ This axis is the freshest and least covered today — see the spin-off issues fo
 
 Spend reasoning compute in proportion to task difficulty, not uniformly.
 
+- [Splitting an Agent Token Budget at the Scaling Inflection Point](inflection-point-session-budget-split.md) — find the per-session budget where marginal gains drop below repeated sampling, then run that many sessions in parallel
 - [Reasoning Budget Allocation](../patterns/agent-design/reasoning-budget-allocation.md) — the reasoning sandwich: heavy planning and verification, light execution
 - [Heuristic-Based Effort Scaling](../patterns/agent-design/heuristic-effort-scaling.md) — encode effort rules in the system prompt
 - [Per-Call Budget Hints on Tool Invocations](../patterns/agent-design/per-call-budget-hints-tool-calls.md) — raise the cap on one dense, infrequent call

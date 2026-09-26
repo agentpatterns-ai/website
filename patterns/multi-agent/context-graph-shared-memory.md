@@ -104,3 +104,4 @@ Source: [Alexander 2026](https://towardsdatascience.com/vector-rag-isnt-enough-i
 - [Agent Memory Patterns: Learning Across Conversations](../agent-design/agent-memory-patterns.md) — scope-based memory architecture covering shared-store designs; the destination once the graph-vs-vector decision is made
 - [Knowledge Graphs as Provenance-Carrying Agent Memory](../agent-design/knowledge-graph-shared-memory.md) — the complementary case for graph state: what per-edge source attribution adds once the retrieval question here is settled
 - [Agent Handoff Protocols: Passing Work Between Agents](agent-handoff-protocols.md) — explicit handoff contracts for state passed between agents; the alternative to a shared-memory layer when the handoffs are well-defined
+- [Rerunnable Claim Graph as Shared Agent Memory](rerunnable-claim-graph.md) — the same shared-state question when the node is a commit with an artifact rather than a triple

@@ -93,3 +93,4 @@ Stop after 10 turns.
 - [Human-in-the-Loop Checkpoints as Loop Control](human-in-the-loop-checkpoints.md) — the deliberate suspend that puts human judgment back inside a running loop
 - [Session Scheduling with Loop and Cron in Claude Code](../tools/claude/session-scheduling.md) — the scheduled shape as one tool implements it, with its expiry and jitter semantics
 - [Developer as CPU Scheduler: Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md) — why adding triggers past your review capacity converts loop throughput into unread diffs
+- [Trigger-to-Function Architecture for Unprompted Codebase Maintenance](../workflows/trigger-function-maintenance-architecture.md) — the layer above this choice, where a catalogue of triggers dispatches a small set of callable agent functions

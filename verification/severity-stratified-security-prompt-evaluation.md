@@ -72,3 +72,4 @@ Treating every prompt-side gain as illusory costs a cheap control, and the resul
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — The umbrella page for measurement gaps a stronger model cannot close.
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Severity stratification applied to red-team results, where a 0% attack success rate can still hide cross-scope leakage.
 - [Explained Feedback for LLM Vulnerability Repair](explained-feedback-vulnerability-repair.md) — Post-detection rather than pre-generation: how the wording of a scanner finding changes whether the model removes the weakness.
+- [Task Category as the Security Review Routing Key](task-category-security-review-routing.md) — The same Bandit-shaped instrument seen from the routing side: findings cluster by task category far more than by which tool generated the code.

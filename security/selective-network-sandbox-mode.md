@@ -21,7 +21,7 @@ Related lesson: [The URL Is the Leak](https://learn.agentpatterns.ai/security/th
 
 ## The two-axis model
 
-Agent sandboxes enforce two independent boundaries. Most discussions collapse them into one toggle — "sandboxed" or "unsandboxed" — but the underlying OS primitives keep them separate. bubblewrap's `--unshare-net` controls only network namespaces; `--bind` and `--ro-bind` control filesystem visibility. Apple Seatbelt's `(allow file-read*)` and `(deny network*)` are independent rule classes. The collapse happens at the harness.
+Agent sandboxes enforce two independent boundaries, and some products add a third for credentials ([the Copilot app's credential axis](copilot-app-local-sandbox-credentials.md)). Most discussions collapse them into one toggle — "sandboxed" or "unsandboxed" — but the underlying OS primitives keep them separate. bubblewrap's `--unshare-net` controls only network namespaces; `--bind` and `--ro-bind` control filesystem visibility. Apple Seatbelt's `(allow file-read*)` and `(deny network*)` are independent rule classes. The collapse happens at the harness.
 
 VS Code 1.119 productionized the split with a third value for `chat.agent.sandbox.enabled`:
 

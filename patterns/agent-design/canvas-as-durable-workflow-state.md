@@ -11,7 +11,7 @@ aliases:
   - workflow-state canvas
   - canvas as workflow state surface
   - agentic workflow canvas blueprint
-last_reviewed: 2026-08-20
+last_reviewed: 2026-09-26
 maturity: emerging
 ---
 
@@ -23,7 +23,7 @@ A canvas built as workflow state holds the current position of a repeated proces
 
 ## The three conditions
 
-The workflow has to repeat often enough to amortize a build. Payback is spread across runs, so a one-time migration or a twice-used checklist never recovers the cost. Pick a process that already runs weekly.
+The workflow has to repeat often enough to amortize a build. Payback is spread across runs, so a one-time migration or a twice-used checklist never recovers the cost. Pick a process that already runs weekly. Burke Holland makes the same amortization case outside canvases: "It's almost always better to have the agent build a tool where all future interactions are free vs treating the agent itself as the tool" ([Holland, GitHub, 2026-09-24](https://github.blog/ai-and-ml/github-copilot/when-chat-is-the-wrong-ui/)). He offers three examples — a Winget package manager, a SQLite browser with intellisense, and a Jekyll post editor — where the payoff needs no agent.
 
 You have to own the persistence. A canvas extension is code in your repository, not a hosted document: it "lives in its own directory under either `.github/extensions` (project scope) or `~/.copilot/extensions` (user scope)", and persisted state arrives as "Optional JSON artifacts" you choose to write ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/github-copilot-app/working-with-canvas-extensions)). Step three of the blueprint is a build instruction, not a platform guarantee. One worked implementation describes its own store as "best-effort JSON persistence" and states plainly: "It is single-user and single-machine. The loopback HTTP server and per-document store are local by design; multi-user is an aspiration, not a shipped capability" ([Stott, 2026-06-29](https://techcommunity.microsoft.com/blog/educatordeveloperblog/github-copilot-app-canvas-is-a-runtime/4531462)).
 

@@ -68,10 +68,10 @@ Signs: the tuning-suite score keeps rising while production error rates stay fla
 Mitigations:
 
 - Rotate eval tasks: periodically replace tuning tasks with fresh ones drawn from production traces; see [Incident-to-Eval Synthesis](../../verification/incident-to-eval-synthesis.md)
-- Held-out validation: run a final check on a task set that never touched the tuning loop before promoting a harness change
+- Held-out validation: run a final check on a task set that never touched the tuning loop before promoting a harness change. It covers task-level overfitting only; see [Held-Out Tasks as a Harness Shortcut Defense](../anti-patterns/held-out-tasks-as-shortcut-defense.md) for the shortcut that lives in the benchmark protocol and survives a task swap
 - Monitor production: treat the eval score as a leading indicator; production outcomes are ground truth
 
-When a search procedure rather than a person picks the winning configuration, run-to-run selection variance is a second failure mode on top of overfitting — see [Reliability of an Automatically Selected Agent Harness](harness-selection-reliability.md).
+When a search procedure rather than a person picks the winning configuration, run-to-run selection variance is a second failure mode on top of overfitting — see [Reliability of an Automatically Selected Agent Harness](harness-selection-reliability.md). Every mitigation above changes what you measure, and none of them removes a change the loop already accepted; [deletion and cost rules](harness-deletion-and-cost-rules.md) cover that half.
 
 ## When this backfires
 

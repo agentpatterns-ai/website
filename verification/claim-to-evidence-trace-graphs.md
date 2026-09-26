@@ -90,3 +90,4 @@ The completion claim collapses it further. One passing run is reported, while th
 - [Generative Provenance Records for Tool-Using Agents](generative-provenance-records.md) — the in-loop counterpart, emitted per sentence during generation instead of reconstructed afterward
 - [Agent-Trace Data Layer: Storage for Hours-Long Traces](../observability/agent-trace-data-layer.md) — the storage tier holding the records a trace graph is built over
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — stage scoring across an eval corpus, the aggregate view rather than one session's audit path
+- [Transcript-Measured Review Coverage](transcript-measured-review-coverage.md) — one claim answered without the inferred layer, comparing the files a review says it read against the files the trace shows it read

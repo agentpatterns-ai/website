@@ -116,3 +116,4 @@ CI enforcement keeps scope in check:
 - [Diff-Based Review Over Output Review](../../code-review/diff-based-review.md)
 - [Cognitive Load and AI Fatigue](../../human/cognitive-load-ai-fatigue.md)
 - [Signal Over Volume in AI Review](../../code-review/signal-over-volume-in-ai-review.md)
+- [Reading Visible Edge-Case Handling as a Security Check](edge-case-handling-as-security-signal.md) — the cue reviewers substitute when attention runs short, measured at 21 seconds per suggestion

@@ -148,3 +148,4 @@ No custom schema was needed. `--help` provided discovery; stderr provided error 
 - [Restricting a Coding Agent to a Single execute_code Tool](restrict-coding-agent-to-execute-code.md) — measures the cost of this single-bash surface against an interpreter-only surface, by task regime and agent
 - [Terminal-First Agent Interfaces with Browser Escalation](terminal-first-browser-escalation.md) — the same interface applied to enterprise platform automation, with measured cost against browser and MCP-style agents and an explicit escalation list
 - [MCP-vs-CLI Cost Ratios Are a Property of the Scaffolding](mcp-cli-cost-ratio-scaffolding-bound.md) — how much of the CLI cost advantage is the interface and how much is the harness around it
+- [Choosing an Agent Tool Interface: Shell or Typed Catalog](agent-tool-interface-selection.md) — measures the "small curated toolset plus shell" hedge above on enterprise benchmarks and finds it recovers nothing over the shell alone

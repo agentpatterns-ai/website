@@ -91,3 +91,4 @@ A team using SWE-bench Verified scores alone to choose between models would rank
 - [Skill Retrieval Realism Gap](eval-blind-spots.md) — idealized retrieval conditions as an adjacent eval-inflation mechanism
 - [Eval Awareness](eval-awareness.md) — models detecting eval-shaped prompts as a parallel measurement-validity threat
 - [Answer-Reachable Eval Environments](../patterns/anti-patterns/answer-reachable-eval-environments.md) — the run-time half, where the answer sits in the checkout rather than the training data
+- [Rank Resolution: Reading a Converged Coding-Agent Leaderboard](rank-resolution-converged-leaderboards.md) — why shared successes at a saturated frontier are hard to separate from shared exposure

@@ -10,7 +10,7 @@ tags:
   - geo
   - technique
   - tool-agnostic
-last_reviewed: 2026-07-20
+last_reviewed: 2026-09-21
 maturity: emerging
 ---
 
@@ -29,7 +29,7 @@ Discovery surfaces fall into two families, and only one applies to a static cont
 | Content-corpus | Content Signals, `Link` headers, markdown alternates, agent-skills index | Yes — the site is the content |
 | Service | OpenAPI / API catalog, OAuth metadata, MCP server card | Only if you run a callable service |
 
-Cloudflare's Agent Readiness score scans four dimensions — Discoverability, Content, Bot Access Control, and Capabilities. It marks the Commerce checks optional on non-commerce sites and excludes them from the score when no commerce signals exist ([Cloudflare](https://blog.cloudflare.com/agent-readiness/)). That exclusion is the applicability split in miniature. A scanner that always demanded every surface would penalize a docs site for lacking a checkout API it has no reason to expose.
+Cloudflare's Agent Readiness score scans four dimensions — Discoverability, Content, Bot Access Control, and Capabilities. It also checks agentic commerce standards such as x402, but those checks do not currently count toward the score ([Cloudflare](https://blog.cloudflare.com/agent-readiness/)). That exclusion is the applicability split in miniature. A scanner that always demanded every surface would penalize a docs site for lacking a checkout API it has no reason to expose. Vercel's agent-readiness audit report now highlights different checks by site type, while the underlying checks and the score stay the same across views ([Vercel](https://vercel.com/changelog/is-agentic-report-categories)).
 
 ## The content-corpus surfaces
 

@@ -12,7 +12,7 @@ aliases:
   - small eval suite
   - local eval suite
   - custom eval suite
-last_reviewed: 2026-08-16
+last_reviewed: 2026-09-14
 maturity: emerging
 ---
 
@@ -83,6 +83,8 @@ The first grader only checked that the output had exactly three non-empty lines.
 
 Simon Willison covers the same tool in a practitioner write-up ([Willison, 2026](https://simonwillison.net/2026/Jul/31/smevals/)).
 
+Claude Code ships a comparable runner. `claude plugin eval` runs a plugin's eval suite against Claude Code and returns "scored, reproducible results (JSON + HTML report)" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-269)). Reproducibility is the property a swap decision needs. A suite that scores differently on every run cannot separate two configurations.
+
 LangChain publishes the benchmark setup it runs against its own deep agents, with tasks in coding, conversation, and retrieval ([LangChain, 2026](https://www.langchain.com/blog/how-we-benchmark-deep-agents)). The suite gates whether a change ships.
 
 ## Key Takeaways
@@ -101,8 +103,6 @@ LangChain publishes the benchmark setup it runs against its own deep agents, wit
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — the held-out gap you create by tuning against a fixed suite
 - [Decomposing Agent Output Variability by Layer](sampling-state-agent-variability-layers.md) — which layer the run-to-run noise in your suite comes from
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — why public scores drift from real capability over time
-- [Head-to-Head Evaluation of Competing MCP Servers](head-to-head-mcp-server-evaluation.md) — a worked instance where the configuration under test is a tool server, and the quality axis ties
 - [AX Evals: Measure the Agent-Facing Surface, Not the Model](ax-evals-agent-facing-surface.md) — the inversion: hold the configuration fixed and vary your own product's agent-facing surface instead
-- [Review-Comment-Derived Benchmarks for Code Review Agents](review-comment-derived-benchmarks.md) — a worked instance where the tasks come from your reviewers' own PR comments
 - [Adaptive Validation Task Selection](adaptive-validation-task-selection.md) — spending less of the suite per round once it is large enough that a full pass costs real money
 - [Offline Evaluation as an Integration Test for LLM Features](../workflows/offline-eval-integration-test.md) — wiring the finished suite to a change trigger so it gates releases instead of settling one swap

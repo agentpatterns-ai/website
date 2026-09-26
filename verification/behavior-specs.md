@@ -11,7 +11,7 @@ aliases:
   - BEHAVIOR.md
   - agent behavior spec
   - trajectory behavior specification
-last_reviewed: 2026-08-05
+last_reviewed: 2026-09-22
 maturity: emerging
 ---
 
@@ -25,7 +25,7 @@ A behavior spec is a Markdown file that states the conduct you expect from an ag
 
 The evidence for this format is one vendor announcement and one design partner, so check your situation against three conditions before adopting it.
 
-The agent has to run long. The motivating case is an accounting agent that completes a tax return unattended, making hundreds of decisions in a single trajectory ([Braintrust](https://www.braintrust.dev/blog/behavior-specs)). On a three-turn agent the trajectory holds little that an outcome check would miss.
+The agent has to run long. The motivating case is an accounting agent that completes a tax return unattended, making hundreds of decisions in a single trajectory ([Braintrust](https://www.braintrust.dev/blog/behavior-specs)). Cursor reports the production numbers behind that case: a partnership tax return takes a human roughly 30 to 40 hours; Basis's agent does the same return in roughly 6 to 7 hours. The agent puts more than 5 hours of work into a single deliverable ([Cursor](https://cursor.com/blog/basis)). On a three-turn agent the trajectory holds little that an outcome check would miss.
 
 The outcome has to resist verification. Where the result is objectively checkable, outcome supervision is the cheaper instrument: DeepMind found that "pure outcome-based supervision produces similar final-answer error rates with less label supervision" ([Uesato et al., 2022](https://arxiv.org/abs/2211.14275v1)). Process supervision buys correctness of reasoning, at a higher supervision cost.
 

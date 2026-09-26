@@ -11,7 +11,7 @@ aliases:
   - judge model selection
   - evaluator bake-off
   - judge comparison
-last_reviewed: 2026-09-20
+last_reviewed: 2026-09-26
 maturity: emerging
 ---
 
@@ -36,6 +36,8 @@ Frozen inputs, a human-written oracle, one rubric across every arm, and identica
 Its inputs were frozen: "For each example in the dataset, we captured the weather agent's response and stored the full output as a fixed example in LangSmith", so every judge scored byte-identical text and agent stochasticity left the comparison. Its oracle was human, and one rubric ran throughout: "we had a human reviewer label each fixed response against the same rubric" ([LangChain](https://blog.langchain.com/jev-agent-evals-langsmith/)).
 
 Decoding is the control that slipped. LangChain states it plainly: "We did not set temperature, top-p, seed, or max tokens for the LLM judges, so each provider's defaults applied" ([LangChain](https://blog.langchain.com/jev-agent-evals-langsmith/)). In a five-temperature sweep, three autoregressive judges reached a McDonald's omega of 1.0 on every benchmark at temperature 0, against values as low as 0.421 at higher settings ([arXiv:2412.12509v2](https://arxiv.org/abs/2412.12509v2)). A variance gap measured against provider defaults mixes a model-class difference with a settings difference.
+
+The shipped integration repeats the same gap. Its evaluator setup asks only for a provider and a model: "select TypeSafe as the Provider and `jev-latest` as the Model" ([LangChain](https://www.langchain.com/blog/jev-is-now-available-in-langsmith-evals)). LangChain also flags a data-retention caveat for that integration: "Note that TypeSafe does not currently offer zero data retention, so prompts and outputs sent for evaluation may be retained by the provider" ([LangChain](https://www.langchain.com/blog/jev-is-now-available-in-langsmith-evals)).
 
 ## What that experiment settled, and what it left open
 
@@ -64,7 +66,7 @@ That bound also explains the asymmetry in the table. Cost and latency are measur
 
 ## What to re-baseline after a swap
 
-Re-baseline every threshold that was calibrated against the old judge. A new judge moves the score distribution, so pass marks, regression alerts, and any historical trend line shift with it. Size the fresh human labeling by the power you need rather than by habit. Sample sizes for the human and model halves can be chosen to hit a target power, with more human ratings allocated where model predictability is lowest ([arXiv:2605.16354v1](https://arxiv.org/abs/2605.16354v1)).
+Re-baseline every threshold that was calibrated against the old judge. A new judge moves the score distribution, so pass marks, regression alerts, and any historical trend line shift with it. The swap does not always start with you. `jev-latest` is a floating alias, so the model behind the judge can change without you touching a config file ([LangChain](https://www.langchain.com/blog/jev-is-now-available-in-langsmith-evals)). Size the fresh human labeling by the power you need rather than by habit. Sample sizes for the human and model halves can be chosen to hit a target power, with more human ratings allocated where model predictability is lowest ([arXiv:2605.16354v1](https://arxiv.org/abs/2605.16354v1)).
 
 ## Key Takeaways
 

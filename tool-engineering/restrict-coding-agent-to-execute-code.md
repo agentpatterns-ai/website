@@ -68,3 +68,4 @@ The single cell where narrowing costs more is the one that pairs modification wo
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md) — the broader argument for exposing fewer, non-overlapping tools that this cost result sharpens.
 - [Consolidate Agent Tools](consolidate-agent-tools.md) — related consolidation pattern for when narrowing helps versus when it costs.
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — why a well-designed native edit surface carries capability that a single execute_code tool can forfeit.
+- [Choosing an Agent Tool Interface: Shell or Typed Catalog](agent-tool-interface-selection.md) — the same comparison outside coding, where an execution surface beats a typed catalog on score rather than only on cost.

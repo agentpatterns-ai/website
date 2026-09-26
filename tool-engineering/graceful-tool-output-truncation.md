@@ -110,3 +110,4 @@ For any tool whose output can grow past a fixed limit:
 - [Observation Contract Preservation in Tool-Augmented Agents](../patterns/agent-design/observation-contract-preservation.md)
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md)
 - [Semantic Tool Output](semantic-tool-output.md)
+- [Auditing Agent Tool Chains for Silent Partial Success](../verification/tool-chain-silent-failure-audit.md) — how to find the places your wrapper already truncates without saying so

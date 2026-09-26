@@ -75,3 +75,4 @@ Inspection moved hard while action did not move at all. Any monitor keyed to how
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — What to report when a result moves with the seed, and why a cell at a bound is sometimes the design and sometimes the defect.
 - [Specification-Path Testing: Same Contract, Different History](specification-path-testing.md) — why rate-level equivalence can hold while the set of passing tasks turns over
 - [Against-Prior Accuracy: Score the Rules That Fight Defaults](against-prior-accuracy.md) — the complementary case, where you expect an effect and need the denominator cleaned before you read it
+- [Rank Resolution: Reading a Converged Coding-Agent Leaderboard](rank-resolution-converged-leaderboards.md) — the mistake this page prevents, where a failed separation test on a leaderboard gets read as parity

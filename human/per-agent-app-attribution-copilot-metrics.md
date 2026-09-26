@@ -93,3 +93,4 @@ The first form invents 860 interactions that were never prompts. The second keep
 - [Human-Equivalent Hours for Autonomous Coding Agent Productivity](human-equivalent-hours-agent-productivity.md) — a denominator for the outcome half of the pairing this page requires.
 - [Reading Copilot Feature Engagement by Its Threshold](copilot-feature-engagement-threshold.md) — the other non-partitioning breakdown in this API, where the residual comes from users counted under several features.
 - [Delegating Delivery Stages to GitHub Agent Apps](../workflows/agent-apps-delivery-stage-delegation.md) — the install decision this metric is joined to, decided per delivery stage.
+- [Anonymized Customization Metrics in the Copilot CLI](anonymized-customization-metrics-copilot-cli.md) — the same API one month later, where the reporting unit stops matching the decision and the metric no longer joins to it.

@@ -37,6 +37,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — On SWE-bench, negative constraints are the only individually beneficial rule type; positive directives actively hurt — and rules work through context priming, not instruction specificity
 - [Restraint Rules Need External Enforcement](restraint-rules-need-external-enforcement.md) — Agents comply with rules that add work and never with rules that stop it; additive rules belong in the auto-loaded instruction file, restraint rules in CI or required review
 - [Do Not Price the Rules in Your Agent Instruction File](enforcement-information-paradox.md) — Naming a penalty beside a rule can lower compliance with it, because a stated price turns a prohibition into an affordable option
+- [Write Agent Rules You Can Grade From the Transcript](transcript-gradable-agent-rules.md) — A deployed agent followed every prompt rule that could be scored from its output and none of the rules about manner; countability buys an observable failure, not compliance
 - [Security Knowledge Priming for Code Generation (SPARK)](security-knowledge-priming.md) — A brief task-relevant CWE cue in the prompt activates the model's latent security knowledge — supplementary to mechanical scanners, not a replacement
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md) — Exclusions and constraints eliminate entire classes of mistakes more efficiently than equivalent positive guidance
 - [Example-Driven vs Rule-Driven Instructions](example-driven-vs-rule-driven-instructions.md) — Rules generalize; examples anchor — knowing when to use each determines whether agents interpret your intent or invent their own
@@ -65,6 +66,7 @@ Structuring instructions across scopes, layers, and files so the right context r
 - [Layered Instruction Scopes](layered-instruction-scopes.md) — Structure agent instructions in concentric layers — global defaults, project-level files, and directory overrides — so the most specific rule always wins
 - [Hierarchical CLAUDE.md](hierarchical-claude-md.md) — Layer CLAUDE.md files at multiple scopes so each agent session receives only the context relevant to its working location
 - [claudeMdExcludes: Selective Ancestor Instruction-File Exclusion](claude-md-excludes.md) — Skip irrelevant ancestor CLAUDE.md files in a monorepo with a glob list, so the agent's context is not burned on conventions for packages you never touch
+- [Per-Subagent Instruction Inheritance (omitClaudeMd)](per-subagent-instruction-inheritance.md) — Drop the user, project, and local CLAUDE.md layer for one subagent; managed policy files still load, unless the subagent itself is deployed through managed settings
 - [@import Composition Pattern for Instruction Files](import-composition-pattern.md) — Claude Code supports `@path/to/file` imports in CLAUDE.md, enabling modular instruction authoring; other tools rely on hierarchical discovery instead
 - [Prompt File Libraries](prompt-file-libraries.md) — Store reusable, parameterized prompt templates as version-controlled files that team members invoke on demand
 - [Production System Prompt Architecture](production-system-prompt-architecture.md) — Structural patterns from a 102K-char production system prompt: XML-sectioned concern isolation, skills registries, and deferred tool loading
@@ -77,6 +79,7 @@ Designing, replacing, and dynamically augmenting the system-level instructions t
 - [Domain-Specific System Prompts with Concrete Examples](domain-specific-system-prompts.md) — Domain-specific system prompts with worked examples produce consistent, high-quality agent behavior in your specific context
 - [System Prompt Replacement for Domain-Specific Agent Personas](system-prompt-replacement.md) — Replace the default coding-focused system prompt entirely to transform an agent into a domain specialist while preserving its tool ecosystem
 - [Event-Driven System Reminders](event-driven-system-reminders.md) — Inject targeted guidance at specific points during agent execution to combat instruction fade-out without bloating the static system prompt
+- [Repairing Agent Prompts from Trace Contrast, Not Search](trace-contrast-prompt-repair.md) — Mine divergent runs of the same task for the semantic features that separate pass from fail, then inject those as prompt rules with no candidate ranking
 
 ## Specifications & Standards
 
@@ -111,6 +114,7 @@ Reviewing, versioning, and repairing instruction files over time so they remain 
 - [Agent Context File Evolution: Treating ACFs as Configuration Code](agent-context-file-evolution.md) — ACFs are actively-maintained artifacts that drift with code and grow monotonically; the maintenance discipline is two loops — add-on-drift and compact-on-add — that keep the file under the compliance ceiling
 - [Prompt Governance via PR](prompt-governance-via-pr.md) — Store agent instructions as plain markdown files in git and use pull requests to propose, review, and merge behavior changes
 - [Agent Config as a Managed Supply Chain](agent-config-as-managed-supply-chain.md) — Treat CLAUDE.md and AGENTS.md as a content-addressed, version-pinned, permission-declaring artifact; the benefit is provenance and rollback at multi-repo scale, not model compliance
+- [Frontmatter and Body Rule Drift in Agentic Workflows](frontmatter-body-rule-drift.md) — A workflow file's configuration region is enforced and its prose region is not, and most maintenance edits touch only one of the two
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](skill-pack-registry-distribution.md) — A registry pack gives a team one addressable, updatable skill bundle; the version pin, the review gate, and the size limit stay the team's job
 - [Workspace-Hosted Skills: Authorship Outside the Repo](workspace-hosted-skills.md) — A skill whose source of truth is a document workspace makes page edit permission the mutation gate and page view permission the install gate; mirror the workspace into git to keep a revision you can roll back to
 - [Skill File Linting: Which Three Checks to Run First](skill-file-linting.md) — Description shape, no name-as-H1, and externalized code cover most SKILL.md defects; the gate buys routing and review hygiene, never a safety verdict
