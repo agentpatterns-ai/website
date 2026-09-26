@@ -112,3 +112,4 @@ Tool-call behavior does not revert. The agent still retrieves the accumulated me
 - [Security Drift in Iterative LLM-Driven Code Refinement](../../security/security-drift-iterative-refinement.md)
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md)
+- [Recoverability-Gated Self-Evolution for Agent Harnesses](recoverability-gated-self-evolution.md)

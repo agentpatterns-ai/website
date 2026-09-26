@@ -71,3 +71,4 @@ The controlled study shows what a real check finds: across 35 scaffold releases 
 - [Cost-Driven Model Routing Without Quality Monitoring](cost-routing-without-quality-monitoring.md) — the same failure shape at the routing layer: cost dashboards stay green while unmeasured quality decays.
 - [Cross-Component Interference in Agent Scaffolds](cross-component-interference.md) — why stacking scaffold components degrades quality, the mechanism behind emergent scaffold-versus-model effects.
 - [Unversioned Scaffolding Commands Pull Stale Templates](unversioned-scaffolding-stale-templates.md) — a sibling scaffolding-hygiene failure where an unpinned version silently changes behavior.
+- [Serving-Stack Confounds in Tool-Call Evaluation](serving-stack-confound-tool-call-evaluation.md) — the same misattribution one layer below the scaffold, where the serving stack refuses the request before the model runs.

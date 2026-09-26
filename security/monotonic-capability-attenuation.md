@@ -104,3 +104,4 @@ The patterns compose: the control plane gates on identity, capability budgets ga
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Subgoal-scoped revocation through a reference monitor; same envelope of mediated tools + typed catalog
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — The same non-amplification property applied to a change of subject rather than a chain of values
+- [Field-Level Source Ownership for Agent Capabilities](field-level-source-ownership.md) — the same never-widen rule applied to which source may fill each field of a capability, rather than which sinks a value may reach.

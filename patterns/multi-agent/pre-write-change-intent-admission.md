@@ -96,3 +96,4 @@ Pre-write admission is also not a replacement for merge, tests, or review. It is
 - [File-Based Agent Coordination](file-based-agent-coordination.md)
 - [Multi-Agent Shared State Isolation Anomalies](../anti-patterns/multi-agent-shared-state-isolation-anomalies.md)
 - [Treating a Clean Merge as Compatibility Evidence](../anti-patterns/clean-merge-as-compatibility-evidence.md) — what the collision costs when nothing declares scope up front and the merge stays clean
+- [Path-Scoped Write Contracts for Shared Agent State](path-scoped-write-contracts.md) — the same admit-before-commit rule applied to a shared state tree, where the contract names paths rather than resources

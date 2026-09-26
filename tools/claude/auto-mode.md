@@ -130,3 +130,4 @@ The rule forces a prompt for those commands and leaves auto mode governing every
 - [Managed Settings Drop-in](managed-settings-drop-in.md) — enterprise rollout of `autoMode.environment` and deny rules
 - [Sub-Agents](sub-agents.md) — classifier coverage of spawned worker agents
 - [Blast Radius Containment](../../security/blast-radius-containment.md) — scoping agent permissions and file access
+- [Red-Team Your Blocking Monitor Before You Trust It](../../verification/red-teaming-blocking-monitors.md) — how this classifier holds up against an agent that is attacking it on purpose

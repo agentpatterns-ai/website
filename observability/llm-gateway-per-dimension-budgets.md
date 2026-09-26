@@ -68,4 +68,5 @@ The gateway helps only for traffic it can see and price correctly. It backfires 
 - [Per-Plugin Token-Cost Attribution](plugin-token-cost-attribution.md) — attributes spend to components once traffic is metered
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](../loop-engineering/loop-budgeting.md) — allocates budget inside one loop, below the fleet-wide caps this gateway enforces
 - [Gateway Model Routing](../patterns/agent-design/gateway-model-routing.md) — the routing role of the same proxy this page uses for budget enforcement
+- [Gateway Hint Headers for Routing and Budgeting Agent Calls](../patterns/agent-design/gateway-hint-headers.md) — how a client populates the per-subagent and per-request-class dimensions these budgets attach to
 - [Developer Control Strategies for AI Coding Agents](../human/developer-control-strategies-ai-agents.md) — the human-side control loop that per-dimension budgets operationalize at the org level

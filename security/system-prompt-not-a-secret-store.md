@@ -98,3 +98,4 @@ The transaction limit, loan cap, cross-user authorization check, and database cr
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — why prompt-text instructions cannot be relied on as behavior controls
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — extracted credentials in a prompt close the trifecta when the agent has untrusted input and egress
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — architectural patterns for the external-enforcement half of the rule
+- [System Prompt Delivery Channels on Shared Runners](system-prompt-delivery-channel.md) — the infrastructure channel rather than the model one: what argv, the environment, and a prompt file expose to a neighboring job

@@ -121,3 +121,4 @@ The baseline number alone would let the team ship the monitor with confidence. T
 - [Eval Awareness](eval-awareness.md) — Why monitors and judges shift behavior on eval-shaped prompts
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — Outcome-only grading misses safety violations that trajectory auditing catches
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Grades how harmful a compromised trajectory was on an L0 to L6 scale, complementing decomposed attack construction
+- [Red-Team Your Blocking Monitor Before You Trust It](red-teaming-blocking-monitors.md) — The on-policy counterpart: a live attacker run against a production blocking gate rather than fixed trajectories

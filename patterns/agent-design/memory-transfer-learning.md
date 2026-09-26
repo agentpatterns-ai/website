@@ -103,3 +103,4 @@ Skip it when:
 - [Subtask-Level Memory for SE Agents](subtask-level-memory.md) — granularity within a domain; complementary to cross-domain abstraction
 - [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — utility scoring for retrieval quality; orthogonal to cross-domain pooling
 - [Dual-Trace Memory Encoding](dual-trace-memory-encoding.md) — fact-plus-scene encoding for temporal recall; different memory encoding strategy
+- [Scope-Matched Retrieval for Persisted Agent Skills](scope-matched-memory-retrieval.md) — the opposite result on a gated skill store, where retrieving an accepted edit outside its originating family cost more than it gained

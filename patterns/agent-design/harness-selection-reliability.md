@@ -62,6 +62,7 @@ Constraining what the optimizer may write shrinks the same variance. Middleware 
 ## Related
 
 - [Harness Hill-Climbing](harness-hill-climbing.md) — the eval-driven search loop this reporting discipline sits on top of
+- [Deletion and Cost Rules for an Evolving Agent Harness](harness-deletion-and-cost-rules.md) — constrains what the harness retains rather than what the optimizer may write, using a noise band like the one this page reports
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — attributing a score change to one harness subsystem at a fixed model
 - [Agent Runtime Middleware](agent-runtime-middleware.md) — the pre/post handler pipeline that tool-boundary edits live in
 - [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — the hand-written form of prerequisite blocking

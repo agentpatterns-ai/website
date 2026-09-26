@@ -98,3 +98,4 @@ A subagent "starts its own conversation with its own system prompt and tool set,
 - [Prompt Caching: Architectural Discipline for Agents](../../context-engineering/prompt-caching-architectural-discipline.md) — the cost asymmetry (cache reads at ~10% of standard input) that makes invalidation expensive.
 - [Structure Prompts with Static Content First to Maximize Cache Hits](../../context-engineering/static-content-first-caching.md) — the layering discipline this anti-pattern undermines.
 - [Disable Attribution Headers to Preserve KV Cache in Local Inference](../../context-engineering/kv-cache-invalidation-local-inference.md) — the local-inference variant where prefix invalidation has a different root cause.
+- [Cache-Safe Routing Boundaries: Where a Router May Act](../agent-design/cache-safe-routing-boundaries.md) — the three points where a model switch invalidates nothing, and the arithmetic for the ones that do.

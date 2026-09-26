@@ -39,6 +39,8 @@ The network boundary does three things:
 - routes all other traffic through a validating proxy, or blocks it
 - blocks inbound connections to the agent's environment
 
+Two boundaries are the floor. Some products add a third for the credentials already on the machine, which neither rule above reaches: [the credential axis in the Copilot app](copilot-app-local-sandbox-credentials.md).
+
 Enforce both at the OS level, not the prompt level. A confused agent can bypass prompt-level restrictions. Prompt content alone cannot override OS-level restrictions — though they still leak through kernel CVEs, configuration gaps, or agents reasoning around denylisted paths (see [When this backfires](#when-this-backfires)).
 
 ## OS enforcement mechanisms

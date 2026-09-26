@@ -90,6 +90,7 @@ One caveat on that last context: routing maintenance back to agents does not mak
 - [Agent PR Volume vs. Value](agent-pr-volume-vs-value.md) — pre-merge counterpart: agents author at high volume but lower acceptance, and skew structurally simpler
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — review-side mechanism by which AI-authored work makes it through merge despite missing scope
 - [Predicting Reviewable Code](predicting-reviewable-code.md) — predictive signals for AI-generated functions likely to be deleted, complementary to maintenance-survival data
+- [Post-Merge Fix Signals for Agent Merges](../verification/post-merge-fix-signals-agent-merges.md) — the same question at pull-request granularity, where 69.6% of verified follow-up fixes come from the agent that shipped the merge
 
 ## Sources
 

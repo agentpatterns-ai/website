@@ -72,5 +72,7 @@ Review time goes on reconstruction, not inspection. Interviews at Microsoft foun
 - [The Software Factory Model: Industrializing Agent Loops](../workflows/software-factory-model.md) — why the review gate is the binding constraint this artifact tries to widen
 - [Audit-Budget Allocation for Agent Fleets](audit-budget-allocation-agent-fleets.md) — screening a self-reported confidence score before letting it order a review queue
 - [Agent-Generated Verification Reports](agent-generated-verification-report.md) — the per-sub-task variant with a verdict channel routing back to the agent
+- [Evidence-First Reports From Failure-Diagnosis Agents](../patterns/agent-design/evidence-first-diagnosis-reports.md) — the same bundle-first ordering on a failure report, where the stated cause is the part that misleads
 - [Risk-Score Threshold Calibration for Auto-Approval](../code-review/risk-score-threshold-calibration.md) — the independent learned score that decides whether a human reviews at all
 - [Reviewer's Playbook for Agent-Authored Pull Requests](../code-review/reviewers-playbook-agent-authored-prs.md) — the inspection order a reviewer applies once the depth is chosen
+- [Post-Merge Fix Signals for Agent Merges](post-merge-fix-signals-agent-merges.md) — what to watch once the depth is spent and the change has landed, and the one merge-time signal that predicts a follow-up fix

@@ -80,3 +80,4 @@ The three conditions above invert cleanly: an aggregate readout, or separations 
 - [Detecting Self-Preference in a Single LLM Judge](judge-self-preference-detection.md) — a bias a stability check passes over
 - [Decomposing Agent Output Variability by Layer (Sampling vs Orchestration State)](sampling-state-agent-variability-layers.md) — attributing variance once you know the instrument moved
 - [Grading Strategies](../training/eval-driven-development/grading-strategies.md) — where a judge sits among code-based and human grading
+- [Recover the Six Measurement Choices Behind an Attack Success Rate](asr-comparability-audit.md) — the oracle choice as one of six axes that make two published security numbers incomparable

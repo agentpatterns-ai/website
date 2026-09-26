@@ -70,3 +70,4 @@ With no channel, the reachable green result is a hardcoded output. With the tool
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — the same reach-out move for missing information rather than a defective oracle.
 - [Escape Hatches: Unsticking Stuck Agents](../../workflows/escape-hatches.md) — recovery paths for an agent making no progress; its prompt-level "report the blocker" instruction is the weaker form this research measures.
 - [Agent Pushback Protocol for Managing Disagreements](agent-pushback-protocol.md) — the broader case for letting an agent contest the task it was given.
+- [Protecting the Test Oracle From the Agent](protect-the-oracle-from-the-agent.md) — the structural answer to the same conflict: take the oracle out of the agent's write reach instead of offering it a better option.

@@ -81,6 +81,7 @@ Every `gen_ai.*` span and attribute also still carries the Development status ba
 
 ## Related
 
+- [Trajectory Projection: A Flattened View of Agent Traces](trajectory-projection.md) — the read-model derived from the trace, for SME review and behavioral scoring rather than monitoring
 - [Agent Observability with OpenTelemetry](agent-observability-otel.md) — the OTel wiring and cost attribution this page attaches to
 - [Failure-Aware Observability for Multi-Agent LLM Systems](failure-aware-observability-multi-agent.md) — a six-signal taxonomy for diagnosing a run mid-trajectory
 - [Traces Need Feedback to Power Learning](traces-need-feedback-to-power-learning.md) — why a trace without an attached verdict cannot label itself

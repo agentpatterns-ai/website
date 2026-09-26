@@ -14,7 +14,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-18
+last_reviewed: 2026-09-15
 maturity: emerging
 ---
 
@@ -55,6 +55,8 @@ Attack-success rates run 85–100% on Gemini 3.1 Pro and 15–85% on GPT-5-mini 
 | Mem0 (agentic) | Separate LLM extracts atomic facts | No provenance; payload written as fact |
 
 [MINJA (Dong et al., 2025)](https://arxiv.org/abs/2503.03704v5) corroborates the class: 95% injection and 70% attack success under idealized conditions, and Llama Guard misses payloads that embed plausible reasoning. When legitimate memories already exist, effectiveness drops sharply, so benchmark numbers overstate field risk ([Sunil et al., 2026](https://arxiv.org/abs/2601.05504v2)).
+
+PMPA, a persistent memory poisoning attack, targets named agent harnesses instead of research memory backends. It reports average injection and cross-session attack success rates of 73.7% and 55.5% on OpenClaw, and 66.9% and 81.7% on Claude Code ([PMPA, 2026](https://arxiv.org/abs/2609.13889v1)). The prompt-level defense it tests helps before the memory is poisoned and little after.
 
 ## Defenses and their utility costs
 

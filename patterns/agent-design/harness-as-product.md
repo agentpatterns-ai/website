@@ -78,3 +78,4 @@ Copilot, billing near those same listed rates, ships that stack pre-built plus o
 - [Harness Impermanence](harness-impermanence.md) — treating harness scaffolding as deletable capital as native model capability rises
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](../../token-engineering/cost-aware-agent-design.md) — the complementary token lever once the build-vs-buy question is settled
 - [Local Model Viability Factors for Coding](local-model-viability-for-coding.md) — when the "build" side extends to self-hosting the model itself
+- [Outcome Pricing as a Scope Signal](outcome-pricing-as-scope-signal.md) — what a per-outcome unit reports when the price is not the listed token rate

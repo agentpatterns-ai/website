@@ -137,5 +137,6 @@ None of these are syntax errors. All of them compile, run, and produce output. W
 - [Spec-Driven Development with Spec Kit](spec-driven-development.md) — The new-code analogue: an executable specification plays the role the verified source plays in this workflow.
 - [Verification-Centric Development for AI-Generated Code](verification-centric-development.md) — General layered-verification frame that the R1–R5 acceptance ladder instantiates.
 - [The Research-Plan-Implement Pattern](research-plan-implement.md) — Three-phase shape this workflow specializes for staged literal porting.
+- [In-Place Atomic Replacement for Agent-Driven Ports](in-place-atomic-replacement-port.md) — Where the port lands rather than what it holds fixed; one component per pull request, in `main`, with the old code deleted in the same commit.
 
 The composed building blocks (an incremental-verification technique page and a numeric-oracle pattern page) do not yet have standalone entries under `docs/patterns/` or `docs/techniques/` — the closest sibling building blocks today live under [Verification-Centric Development](verification-centric-development.md) and the workflows above. File an idea issue if you would benefit from a standalone "kernel-twin verification" technique page.

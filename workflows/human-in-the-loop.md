@@ -160,3 +160,4 @@ They give three oversight levels in one setting: `default` asks before each acti
 - [Humans and Agents in Software Engineering Loops](humans-agents-development-loops.md)
 - [The AI Development Maturity Model: From Skeptic to Agentic](ai-development-maturity-model.md)
 - [Agent Governance Policies for AI Agent Development](agent-governance-policies.md)
+- [Monitor or Wait: The Supervision Choice During Agent Execution](monitor-or-wait-during-agent-execution.md)

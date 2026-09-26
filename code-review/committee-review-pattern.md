@@ -12,7 +12,7 @@ tags:
 aliases:
   - "review panel pattern"
   - "multi-agent review committee"
-last_reviewed: 2026-06-13
+last_reviewed: 2026-09-15
 maturity: established
 ---
 
@@ -61,6 +61,8 @@ Each reviewer should have:
 - A single-focus system prompt that defines exactly what it evaluates
 - A structured output schema, for example `{"verdict": "PASS|FAIL", "issues": [...], "notes": [...]}`
 - Explicit pass criteria — what counts as PASS must be unambiguous
+
+An industrial deployment at Ericsson splits its panel along quality attributes: readability, maintainability, reliability and performance, each with its own reviewer expert. A separate context builder assembles the input each reviewer sees. Across 200+ developer-validated issues the system reached 96% accuracy; about 69% of correctly identified issues were rated important and about 33% severe ([Ericsson multi-agent code review study](https://arxiv.org/abs/2609.15877v1)).
 
 Reviewers run in parallel. The orchestrator waits for all verdicts before aggregating. If any reviewer returns FAIL, the issue list goes back to the implementer.
 
@@ -151,7 +153,6 @@ Each reviewer receives only the diff, not prior verdicts, so opinions are indepe
 ## Related
 
 - [Task-Specific vs Role-Based Agents](../patterns/agent-design/task-specific-vs-role-based-agents.md)
-- [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md)
 - [Adversarial Multi-Model Development Pipeline](../patterns/multi-agent/adversarial-multi-model-pipeline.md) — extends cross-model review into a full six-phase pipeline with a dedicated adversary role
 - [Tiered Code Review](tiered-code-review.md)
 - [Diff-Based Review Over Output Review](diff-based-review.md)

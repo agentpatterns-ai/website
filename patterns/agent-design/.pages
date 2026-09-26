@@ -6,6 +6,7 @@ nav:
       - agent-discoverable-slash-commands.md
       - agent-driven-codebase-fingerprint.md
       - agent-first-software-design.md
+      - agent-operable-interface-design.md
       - agent-stack-bets.md
       - agentic-ai-architecture-evolution.md
       - agentic-flywheel.md
@@ -75,6 +76,7 @@ nav:
       - memory-retrieval-as-control.md
       - memory-synthesis-execution-logs.md
       - memory-transfer-learning.md
+      - scope-matched-memory-retrieval.md
       - rag-over-thinking-traces.md
       - session-initialization-ritual.md
       - session-recap.md
@@ -130,6 +132,7 @@ nav:
       - deterministic-precondition-gates.md
       - spec-first-framework-enforcement-modes.md
       - trace-learned-execution-guardrails.md
+      - protect-the-oracle-from-the-agent.md
       - informed-abstention-tool-boundary-gate.md
       - delegated-autonomy-boundary-artifacts.md
       - trigger-level-agent-intake-gating.md
@@ -141,11 +144,14 @@ nav:
       - administrative-effort-ceilings.md
       - agent-circuit-breaker.md
       - agent-client-admission-control.md
+      - residual-completion-stateful-handoffs.md
       - retry-switch-abstain-recovery-policy.md
       - self-healing-production-agent.md
       - advisor-strategy.md
       - agent-backpressure.md
       - behavioral-drivers-agent-success.md
+      - cache-safe-routing-boundaries.md
+      - calibrated-deciders-in-loop-decisions.md
       - comparison-only-advisor.md
       - copilot-auto-tier-selection.md
       - cross-vendor-competitive-routing.md
@@ -157,7 +163,9 @@ nav:
       - dual-budget-control-search-agents.md
       - effective-feedback-compute.md
       - escalation-channels-defect-disclosure.md
+      - evidence-first-diagnosis-reports.md
       - gateway-model-routing.md
+      - gateway-hint-headers.md
       - exception-handling-recovery-patterns.md
       - failure-trajectory-recovery-window.md
       - feedback-capability-equalizer.md
@@ -179,6 +187,7 @@ nav:
       - progressive-spend-threshold-alerting.md
       - reasoning-budget-allocation.md
       - reasoning-effort-over-tool-scaffolding.md
+      - recoverability-gated-self-evolution.md
       - rollback-first-design.md
       - router-imposed-quality-ceiling.md
       - routing-break-even.md
@@ -210,6 +219,7 @@ nav:
       - delta-channels-checkpoint-storage.md
       - dual-write-append-mirror-transcript.md
       - deferred-permission-pattern.md
+      - deny-fallback-unattended-permissions.md
       - most-restrictive-wins-fusion.md
       - plugin-co-installation-safety.md
       - natural-language-tool-selection.md
@@ -226,10 +236,13 @@ nav:
       - harness-hill-climbing.md
       - harness-impermanence.md
       - harness-as-product.md
+      - outcome-pricing-as-scope-signal.md
       - situated-harness-layers.md
       - isometric-harness-ablation.md
+      - prompt-only-baseline-before-specialized-subsystem.md
       - model-set-parity-harness-claims.md
       - harness-selection-reliability.md
+      - harness-deletion-and-cost-rules.md
       - last-unconstrained-axis.md
       - suspect-the-harness-not-the-model.md
       - lane-based-execution-queueing.md
@@ -237,6 +250,7 @@ nav:
       - local-model-viability-for-coding.md
       - multi-shape-byok-provider.md
       - observability-driven-harness-evolution.md
+      - recurring-control-in-harness-code.md
       - per-model-harness-tuning.md
       - persistent-connection-agent-transport.md
       - quality-score-rubric.md

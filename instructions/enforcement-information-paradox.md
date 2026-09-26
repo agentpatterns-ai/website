@@ -94,3 +94,4 @@ The rule line and the mandate line are the study's own imperative framing and an
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the other reason a stated rule fails to bind
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — parallel finding that reformatting a constraint is not a compliance fix
 - [Plan Compliance in Agents: Measure What They Execute, Not What You Wrote](../patterns/agent-design/plan-compliance-in-agents.md) — measuring whether the instructed behavior actually runs
+- [Write Agent Rules You Can Grade From the Transcript](transcript-gradable-agent-rules.md) — a rule about manner breaks with no trace, so phrase it so the violation counts

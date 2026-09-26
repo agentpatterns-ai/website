@@ -39,6 +39,8 @@ Tools call scripts that consume `$DATABASE_URL` internally — the value never a
 
 For persistent configuration, use `direnv` to evaluate `.envrc` on `cd` into the project ([direnv.net](https://direnv.net/)).
 
+The environment hides the value from the process table, and not from a co-tenant process running as the same user. On a shared CI runner that distinction decides whether the move helps at all: see [System Prompt Delivery Channels on Shared Runners](system-prompt-delivery-channel.md).
+
 ## Wrapper scripts
 
 Agents need results, not credentials. A wrapper script uses a secret internally and returns only the output:

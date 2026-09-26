@@ -82,3 +82,4 @@ The same source names the opposite error. Doing the work once and asking the age
 - [Critical Instruction Repetition: Exploiting Primacy and Recency Bias](critical-instruction-repetition.md) — the constraints to exempt from single-source-of-truth
 - [Rule Lifecycle Metadata for Prunable Instruction Surfaces](rule-lifecycle-metadata.md) — metadata that tells you which rules to test first
 - [Against-Prior Accuracy: Score the Rules That Fight Defaults](../verification/against-prior-accuracy.md) — the same deletion probe pointed at a compliance score instead of a pruning decision
+- [Write Agent Rules You Can Grade From the Transcript](transcript-gradable-agent-rules.md) — the prior question: whether the line's effect is countable at all, without which the test has nothing to compare

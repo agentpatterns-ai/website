@@ -136,4 +136,5 @@ The orchestrator never inspects free-text output. If the triage agent returns an
 - [MCP Client-Server Architecture](../../tool-engineering/mcp-client-server-architecture.md)
 - [Poka-Yoke for Agent Tools](../../tool-engineering/poka-yoke-agent-tools.md)
 - [Agent Handoff Protocols](agent-handoff-protocols.md)
+- [Path-Scoped Write Contracts for Shared Agent State](path-scoped-write-contracts.md) — who may write which field, the ownership control a shape check cannot supply
 - [Skill Tool Runtime Enforcement](../../tool-engineering/skill-tool-runtime-enforcement.md)

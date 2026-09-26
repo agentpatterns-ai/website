@@ -92,4 +92,5 @@ A poisoned LLM-as-judge is a particular concern even when the "trusted writers" 
 - [Continual Learning for AI Agents: Three Layers of Knowledge Accumulation](../agent-design/continual-learning-layers.md) — the context-layer view of memory updates that decentralized stores instantiate
 - [Agentic Flywheel: Self-Improving Agent Systems](../agent-design/agentic-flywheel.md) — self-improvement loop that decentralized memory feeds at the per-agent level
 - [Multi-Agent Topology Taxonomy: Centralized, Decentralized, and Hybrid](multi-agent-topology-taxonomy.md) — coordination-topology context for choosing per-agent vs shared state
+- [Rerunnable Claim Graph as Shared Agent Memory](rerunnable-claim-graph.md) — the shared-store case this page argues against, built on commits a peer can check out and rerun
 - [Memory Retrieval as a Control Decision](../agent-design/memory-retrieval-as-control.md) — utility-score updates for retrieval that the LLM-as-judge reweighting parallels at the pool level

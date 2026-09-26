@@ -83,3 +83,5 @@ Both runs are small. Ten iterations of one candidate is a shallow search, so rea
 - [Comparative Judging for Agent Configuration Ranking](comparative-judging-config-ranking.md) — ranking candidates when absolute scores are noisy
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — why a single favorable run is not a result
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — the held-out gap this technique widens
+- [Trajectory-Aware Benchmark Subset Selection for Agents](trajectory-aware-benchmark-subset-selection.md) — the alternative, freezing one deterministic subset per full run instead of resampling each round
+- [Frozen Task Sets for Affordable Agent A/B Testing](../workflows/frozen-task-set-agent-ab-testing.md) — the opposite trade, selecting a subset once and never resampling it

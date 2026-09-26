@@ -138,6 +138,7 @@ The planning step took two minutes but prevented a scope creep that would have r
 - [Attention Management for Parallel Agents](attention-management-parallel-agents.md) — supervision strategies for multiple concurrent agents
 - [Progressive Autonomy and Model Evolution](progressive-autonomy-model-evolution.md) — how calibrated trust feeds progressive delegation
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](cognitive-load-ai-fatigue.md) — the supervision and review burden that control strategies impose
+- [Monitor or Wait: The Supervision Choice During Agent Execution](../workflows/monitor-or-wait-during-agent-execution.md) — the stage-level version of the supervise step, and what it costs to leave a run
 - [Rigor Relocation](rigor-relocation.md) — where engineering discipline moves when agents write the code
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — why planning matters more than generation speed
 - [Adapting AI Assistant Configuration to Developer Interaction Style](developer-interaction-style-adaptation.md) — control strategies vary by cognitive style; persona configuration is one way to encode them

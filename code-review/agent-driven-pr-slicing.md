@@ -9,7 +9,7 @@ tags:
 aliases:
   - agent PR splitting
   - logical PR decomposition
-last_reviewed: 2026-08-01
+last_reviewed: 2026-09-26
 maturity: established
 ---
 
@@ -71,6 +71,8 @@ A single PR is preferable when:
 - Security-sensitive paths — splitting a security fix widens the partial-protection window and risks out-of-order merges.
 - Small total diffs — a 200-line change sliced into three 60-line PRs adds queue overhead without lowering per-PR load. Below the 200-LOC floor, the SmartBear data suggests slicing is net-negative.
 - Thin chat context — when the agent did not author the branch or context was compacted, slicing falls back to diff-only signals and misses intent.
+
+GitHub's engineering blog names one case that fits this exactly: "some changes, like this one, can't be split cleanly" ([Rendering huge pull requests in the GitHub Copilot app](https://github.blog/engineering/user-experience/rendering-huge-pull-requests-in-the-github-copilot-app/)). It rebuilt its diff-review surface to open a single pull request of about a million lines with hundreds of inline comments instead of splitting it.
 
 ## When splits are worse than the original
 

@@ -140,5 +140,6 @@ When agent-03 attempts to push a lock for the same task, git rejects the push wi
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent Code Generation](crdt-observation-driven-coordination.md)
 - [Oracle-Based Task Decomposition](oracle-task-decomposition.md)
 - [Multi-Agent Topology Taxonomy: Centralized, Decentralized, and Hybrid](multi-agent-topology-taxonomy.md)
+- [Rerunnable Claim Graph as Shared Agent Memory](rerunnable-claim-graph.md)
 - [Coordination Channel Policy for Multi-Agent Coding](coordination-channel-policy.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)

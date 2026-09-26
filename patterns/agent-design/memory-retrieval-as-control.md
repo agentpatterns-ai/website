@@ -139,4 +139,5 @@ Control-layer behavior — abstention's structural-compatibility feature scores 
 - [Continual Learning for AI Agents](continual-learning-layers.md) — three-layer taxonomy locating utility scoring at the cheapest, most reversible context layer
 - [Memory Transfer Learning](memory-transfer-learning.md) — cross-domain reuse and when utility scores transfer poorly
 - [Layered Mutability: Governing Persistent Self-Modifying Agents](layered-mutability.md) — where governance attaches in persistent agents; the pre-action gate is one attachment point
+- [Scope-Matched Retrieval for Persisted Agent Skills](scope-matched-memory-retrieval.md) — narrows eligibility by the evidence that certified each stored skill, upstream of any injection decision.
   - long-form

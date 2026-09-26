@@ -9,7 +9,7 @@ tags:
   - context-engineering
   - copilot
   - code-generation
-last_reviewed: 2026-06-13
+last_reviewed: 2026-09-20
 ---
 
 # Next Edit Suggestions Paradigm
@@ -26,6 +26,8 @@ Next Edit Suggestions watches edits in progress and predicts the next location a
 | Next Edit Suggestions (NES) | Proactive | Edit at predicted location | Change pattern detection |
 | Agent mode | Autonomous | Multi-file changes | Explicit instruction |
 
+Read the rows as user-facing behavior. The first two no longer run on separate models, which [Custom model architecture](#custom-model-architecture) covers.
+
 ## How NES works
 
 NES watches your editing patterns and predicts the next related edit. A gutter arrow marks the location. Tab navigates to it, and Tab again accepts it. This is the key difference from autocomplete: NES predicts edits to existing code at predicted locations, not completions at the cursor ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)).
@@ -40,9 +42,11 @@ NES watches your editing patterns and predicts the next related edit. A gutter a
 
 NES does not use a general-purpose LLM. It runs a purpose-built, low-latency, task-specific model designed for real-time in-editor response — frontier models were "accurate but too slow for an in-editor experience" ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)).
 
+NES no longer runs on a model of its own. The VS Code team replaced the separate completions, NES, and long-distance NES models with one unified "3-in-1" model, built on the data and training lessons of the standalone models ([VS Code blog, Sept 2026](https://code.visualstudio.com/blogs/2026/09/16/building-the-github-copilot-inline-suggestions-model-part-one)).
+
 ### Training on editing sessions, not code snapshots
 
-PR diffs were insufficient because they "show only the final state, not the intermediate edits." The team collected real editing session data from internal volunteers, capturing the temporal sequence of changes. A smaller volume of high-quality edit data produced better models than larger volumes of less curated data ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)).
+PR diffs were insufficient because they show "only the final state, not the intermediate edits." The team collected real editing session data from internal volunteers, capturing the temporal sequence of changes. A smaller volume of high-quality edit data produced better models than larger volumes of less curated data ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/evolving-github-copilots-next-edit-suggestions-through-custom-model-training/)).
 
 ### Reinforcement learning refinement
 
@@ -89,7 +93,7 @@ A developer renames a TypeScript interface property from `userId` to `accountId`
 ## Key Takeaways
 
 - NES sits between autocomplete and agent mode: proactive enough to find related edit locations, constrained enough to suggest only the edit rather than act autonomously.
-- It runs a purpose-built low-latency model, trained on editing sessions rather than PR diffs, and refined with RL to suppress unhelpful suggestions.
+- It runs a purpose-built low-latency model, now unified with inline completions. The standalone NES model behind it was trained on editing sessions rather than PR diffs and refined with RL to suppress unhelpful suggestions.
 - Match the paradigm to the task: autocomplete for forward composition, NES for cascading edits, agent mode for well-scoped goals.
 - NES is GA in VS Code and Visual Studio and in public preview for JetBrains, Xcode, and Eclipse — admin opt-in is required for Business/Enterprise orgs.
 

@@ -9,7 +9,7 @@ tags:
 aliases:
   - Web Model Context Protocol
   - navigator.modelContext
-last_reviewed: 2026-06-03
+last_reviewed: 2026-09-26
 maturity: emerging
 ---
 
@@ -30,9 +30,9 @@ Reach for [server-side MCP](mcp-protocol.md) instead when the agent runs headles
 
 ## What WebMCP defines
 
-The [WebMCP specification](https://webmachinelearning.github.io/webmcp/) is a Draft Community Group Report (20 May 2026) of the W3C Web Machine Learning Community Group, with editors from Microsoft and Google. It is not on the W3C Standards Track.
+The [WebMCP specification](https://webmachinelearning.github.io/webmcp/) is a Draft Community Group Report of the W3C Web Machine Learning Community Group (revision of 25 September 2026), with editors from Microsoft and Google. It is not on the W3C Standards Track.
 
-The spec adds one entry point — `navigator.modelContext` — and one tool descriptor shape: a JavaScript function with a `name`, a natural-language `description`, a JSON Schema `inputSchema`, and an `execute` callback. Tools carry annotations including `readOnlyHint` and `untrustedContentHint`. The latter signals output that may contain content from outside the application's trust boundary, propagating the MCP trust model into the page. Two registration shapes coexist ([Chrome for Developers: WebMCP](https://developer.chrome.com/docs/ai/webmcp)): an imperative API (`navigator.modelContext.registerTool({...})`) and a declarative API (HTML form-element annotations the browser synthesizes into a JSON Schema). An `exposedOrigins` list and a `tools` permissions-policy feature scope which embedded origins can invoke a page's tools.
+The spec adds one entry point — `navigator.modelContext` — and one tool descriptor shape: a JavaScript function with a `name`, a natural-language `description`, a JSON Schema `inputSchema`, and an `execute` callback. Tools carry annotations including `readOnlyHint` and `untrustedContentHint`. The latter signals output that may contain content from outside the application's trust boundary, propagating the MCP trust model into the page. Two registration shapes coexist ([Chrome for Developers: WebMCP](https://developer.chrome.com/docs/ai/webmcp)): an imperative API (`navigator.modelContext.registerTool({...})`) and a declarative API (HTML form-element annotations the browser synthesizes into a JSON Schema). An `exposedTo` registration option (a list of origins) and a `tools` permissions-policy feature scope which embedded origins can invoke a page's tools.
 
 ## Why it works
 
@@ -44,16 +44,16 @@ WebMCP replaces actuation with a typed function call against a contract the page
 
 WebMCP carries real adoption and security costs. The cases below mark where reaching for it makes the system worse:
 
-- Headless or background agents — WebMCP tools run on the page event loop and need an open tab; tool calls within a page are sequential, not parallel ([WebMCP spec §5.1](https://webmachinelearning.github.io/webmcp/)). CI runners and server-side cron jobs want [server-side MCP](mcp-protocol.md) instead.
+- Headless or background agents — WebMCP tools live in the page's event loop, so they need an open tab ([WebMCP spec §5.1](https://webmachinelearning.github.io/webmcp/)). CI runners and server-side cron jobs want [server-side MCP](mcp-protocol.md) instead.
 - Long-tail sites with no UI investment budget — Twenty years of voluntary metadata (microformats, schema.org, OpenGraph) show that long-tail sites do not adopt optional protocols without distribution incentives ([Manveer Chawla: The WebMCP False Economy](https://dev.to/manveer_chawla_64a7283d5a/the-webmcp-false-economy-why-we-dont-need-another-layer-of-abstraction-566e)). For a restaurant menu, the browser synthesizing existing ARIA roles and form labels is more realistic than a `registerTool` call that never ships.
-- Teams that already maintain a server-side API or MCP server — A WebMCP descriptor written against the in-page UI becomes a second tool contract that drifts from the server API; the same critique calls it "a second-class annotation that describes the product rather than owning it" ([Manveer Chawla: The WebMCP False Economy](https://dev.to/manveer_chawla_64a7283d5a/the-webmcp-false-economy-why-we-dont-need-another-layer-of-abstraction-566e)).
-- Multi-tab browser agents with private data in adjacent tabs — An agent holding a logged-in session in tab A and visiting an attacker-controlled WebMCP page in tab B receives tool descriptors and outputs from an untrusted origin. The `untrustedContentHint` annotation acknowledges the threat but does not solve it, and Section 6 'Security and privacy considerations' of the May 2026 draft is still empty ([WebMCP spec §6](https://webmachinelearning.github.io/webmcp/)). Treat WebMCP as one more untrusted-content surface alongside the [lethal-trifecta threat model](../security/lethal-trifecta-threat-model.md).
+- Teams that already maintain a server-side API or MCP server — A WebMCP descriptor written against the in-page UI becomes a second tool contract that drifts from the server API; the same critique calls it "a second-class annotation that describes a UI rather than owning the functionality" ([Manveer Chawla: The WebMCP False Economy](https://dev.to/manveer_chawla_64a7283d5a/the-webmcp-false-economy-why-we-dont-need-another-layer-of-abstraction-566e)).
+- Multi-tab browser agents with private data in adjacent tabs — An agent holding a logged-in session in tab A and visiting an attacker-controlled WebMCP page in tab B receives tool descriptors and outputs from an untrusted origin. The `untrustedContentHint` annotation acknowledges the threat but does not solve it. Section 6, 'Security and Privacy Considerations', is non-normative: it names prompt injection through tool metadata, inputs, and outputs as a key risk, and states that the document "cannot define precise mitigation strategies that agents or user agents must provide" ([WebMCP spec §6](https://webmachinelearning.github.io/webmcp/)). Treat WebMCP as one more untrusted-content surface alongside the [lethal-trifecta threat model](../security/lethal-trifecta-threat-model.md).
 
 ## Current adoption status
 
-WebMCP is available in Chrome 149 through the early preview program ([Chrome for Developers: WebMCP early preview](https://developer.chrome.com/blog/webmcp-epp), 2026-02-10). Brandon Walderman of Microsoft is lead editor alongside Khushal Sagar and Dominic Farolino of Google. The spec remains a Community Group Draft, not a W3C Recommendation.
+Google opened a WebMCP early preview program on 10 February 2026 ([Chrome for Developers: WebMCP early preview](https://developer.chrome.com/blog/webmcp-epp)), and a WebMCP origin trial runs from Chrome 149 ([Chrome for Developers: WebMCP](https://developer.chrome.com/docs/ai/webmcp)). The spec editors are Brandon Walderman of Microsoft and Khushal Sagar and Dominic Farolino of Google. The spec remains a Community Group Draft, not a W3C Recommendation. Vercel added experimental WebMCP support to its `mcp-handler` package on 18 September 2026, with tools opted in through an `experimental_webMcp` option ([Vercel changelog](https://vercel.com/changelog/webmcp-mcp-handler)).
 
-The implementation existing does not mean agents use it. As of May 2026 no mainstream agent (Claude, ChatGPT's agent, Gemini, or Perplexity) calls `navigator.modelContext` tools directly; all still rely on DOM scraping or computer use, and with no agent demand sites have little reason to author descriptors ([freeCodeCamp: A Developer's Guide to WebMCP — Shipping a 0% Adoption Standard](https://www.freecodecamp.org/news/a-developers-guide-to-webmcp/)). Until a shipping agent consumes these tools, WebMCP is a capability to track, not one to build against. Follow changes at [webmachinelearning.github.io/webmcp](https://webmachinelearning.github.io/webmcp/).
+The implementation existing does not mean agents use it. A May 2026 scan of 111,076 of the top 200,000 websites found zero shipping WebMCP, and the author's own deployed tools had nothing calling them because no production browser fully executed them ([freeCodeCamp: A Developer's Guide to WebMCP — Shipping a 0% Adoption Standard](https://www.freecodecamp.org/news/a-developers-guide-to-webmcp/)). Until a shipping agent consumes these tools, WebMCP is a capability to track, not one to build against. Follow changes at [webmachinelearning.github.io/webmcp](https://webmachinelearning.github.io/webmcp/).
 
 ## Example
 
@@ -88,7 +88,7 @@ The agent calls `applyPriceFilter({maxPriceUsd: 50})` by name and receives a str
 
 - WebMCP is a W3C Community Group draft, not a Standards Track recommendation — treat it as an experimental Chrome early-preview capability rather than a broadly supported standard.
 - The right place for WebMCP is in-tab interactive flows where the agent and user share UI state; server-side MCP remains the right answer for headless, parallel, or multi-platform agents.
-- Tool descriptors carry an `untrustedContentHint` annotation, but the spec's Security and Privacy section is still empty — the indirect-prompt-injection threat model is not yet normative.
+- Tool descriptors carry an `untrustedContentHint` annotation, but the spec's Security and Privacy section is non-normative and leaves prompt-injection mitigations to agents and browsers.
 - Two API shapes (Imperative `registerTool`, Declarative HTML annotations) coexist; the declarative form is the lighter on-ramp for standard form submissions.
 - Adoption follows the same long-tail dynamics as past voluntary metadata standards; sites with no UI investment budget will not author WebMCP descriptors, so browser-side synthesis from existing accessibility metadata remains complementary.
 

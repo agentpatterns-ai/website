@@ -77,3 +77,4 @@ A named deployment has since been published, and it changes that assessment very
 - [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — the query-time half, gating what reaches the agent where this pattern governs what stays trusted at write time
 - [Detecting Memory-Poisoning Exfiltration by Tool-Call Order](../../security/recall-before-send-memory-poisoning-detection.md) — the adversarial neighbor, where bad entries are planted rather than left behind by change
 - [Auto-Merging a Wiki Agent's Documentation Pull Requests](auto-merged-documentation-updates.md) — a named OpenWiki deployment, where the update PRs merge unreviewed and the only accuracy control left is the generator
+- [Claim-Scoped Invalidation for Agent Memory](../../context-engineering/claim-scoped-invalidation.md) — the benchmark that measures this anchoring approach as a baseline, and the question-phrasing change that beats it

@@ -75,3 +75,4 @@ There is also a floor case the measurement itself reveals: if the best judge you
 - [Detecting Self-Preference in a Single LLM Judge](judge-self-preference-detection.md) — the conditional error this aggregate calibration averages away, and the stratified ablation that surfaces it.
 - [Behavior Specs: Grading the Trajectory, Not the Result](behavior-specs.md) — a written standard a judge grades trajectories against, which only pays off once that judge has been meta-evaluated.
 - [Mutation Testing for LLM Judges: Scoring an Evaluator on Injected Defects](mutation-testing-llm-judges.md) — the label-free screening proxy to reach for when the human labels this page depends on are the cost you cannot pay.
+- [Contract-Domain Tracing for Rubric Credit](contract-domain-tracing-rubric-credit.md) — the complement that executes the requirement behind a criterion, catching defects every judge in a panel scores as passing.

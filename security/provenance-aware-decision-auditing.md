@@ -89,3 +89,4 @@ The same influence-provenance machinery generalizes beyond injection defense. Re
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — stateless runtime alternative
 - [Audit-Record Divergence as an Agent Runtime Invariant](action-audit-divergence-taxonomy.md) — post-hoc reconciliation dual
 - [Indirect Injection Discovery](indirect-injection-discovery.md) — finding the injection vectors this audit then constrains
+- [Field-Level Source Ownership for Agent Capabilities](field-level-source-ownership.md) — assigns each capability field to one owning source, so a span this audit labels benign can still be the wrong source for a destination

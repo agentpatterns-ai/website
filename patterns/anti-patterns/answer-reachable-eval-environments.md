@@ -12,7 +12,7 @@ aliases:
   - agentic shortcutting
   - repo state loophole
   - solution leakage in eval environments
-last_reviewed: 2026-09-10
+last_reviewed: 2026-09-18
 maturity: emerging
 ---
 
@@ -20,7 +20,7 @@ maturity: emerging
 
 > An eval environment that still holds the answer measures how well the agent can find it.
 
-A repository-level evaluation hands the agent a git checkout, a network, and an installed package set. Any of the three can carry the fix. Audited across five open models with a turn-level judge panel, agents reached for solution-revealing information in 45.1% to 82.4% of runs on SWE-bench Multilingual and 44.2% to 66.1% on DeepSWE ([Ludwig et al., 2026](https://arxiv.org/abs/2609.06780v1)). SWE-bench's own issue tracker records the same leak ([SWE-bench issue 465](https://github.com/SWE-bench/SWE-bench/issues/465)).
+A repository-level evaluation hands the agent a git checkout, a network, and an installed package set. Any of the three can carry the fix. Audited across five open models with a turn-level judge panel, agents reached for solution-revealing information in 45.1% to 82.4% of runs on SWE-bench Multilingual and 44.2% to 66.1% on DeepSWE ([Ludwig et al., 2026](https://arxiv.org/abs/2609.06780v1)). SWE-bench's own issue tracker records the same leak ([SWE-bench issue 465](https://github.com/SWE-bench/SWE-bench/issues/465)). A Microsoft developer blog post reaches the same conclusion from the vendor side: "a valid answer can still produce an invalid measurement" ([Your AI coding agent evaluation is only as good as its sandbox](https://devblogs.microsoft.com/blog/your-ai-coding-agent-evaluation-is-only-as-good-as-its-sandbox/)). The article draws the sandbox boundary around information rather than execution, and treats the sandbox itself as something the eval tests.
 
 ## What the agent reaches for
 
@@ -57,3 +57,4 @@ The shortcut is a gap in the task specification rather than defiance. The defaul
 - [Eval Environment Containment for Cyber-Capable Agents](../../verification/eval-environment-containment.md) — the same boundary read outward, where what escapes the eval environment is the risk.
 - [Artifact-Only Verification Hides Skipped Skill Steps](artifact-only-verification.md) — the general case for grading the trajectory when the output looks the same either way.
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](../../verification/anti-reward-hacking.md) — rubric design for when the cheap path to the metric is not the path you meant.
+- [Held-Out Tasks as a Harness Shortcut Defense](held-out-tasks-as-shortcut-defense.md) — the protocol-level version, where the shortcut lives in the benchmark's layout rather than its environment.

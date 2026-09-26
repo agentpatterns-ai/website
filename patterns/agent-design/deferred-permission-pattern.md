@@ -149,6 +149,7 @@ v2.1.89 also added a `PermissionDenied` hook event that fires when the [auto-mod
 ## Related
 
 - [Harness Engineering](harness-engineering.md)
+- [Deny-Fallback Permissions for Unattended Agent Runs](deny-fallback-unattended-permissions.md) — the other half of the split: what to do when no caller will ever collect the approval
 - [Agent Pushback Protocol](agent-pushback-protocol.md)
 - [Human-in-the-Loop Confirmation Gates](../../security/human-in-the-loop-confirmation-gates.md)
 - [Session Initialization Ritual](session-initialization-ritual.md)

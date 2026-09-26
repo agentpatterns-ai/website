@@ -64,3 +64,4 @@ Running the live layer on the production subset gave a different picture. Across
 - [Emulated APIs for Agent Skill Evals](emulated-apis-for-skill-evals.md) — keeps live-data mutation and API cost out of the paired score when the skill under test calls real endpoints.
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — what to report when the number moves with the run, which is the failure mode single-trial lift walks into.
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — the description and structure work a scan gate can actually improve.
+- [Contract-Domain Tracing for Rubric Credit](contract-domain-tracing-rubric-credit.md) — what to do with the criterion decisions once a lift figure exists, when the arms sit near the rubric's ceiling.

@@ -120,4 +120,5 @@ If the same task only touched `tests/test_deploy.py` (Low tier), it would stay S
 - [Committee Review Pattern](../code-review/committee-review-pattern.md)
 - [Delegation Decision](../patterns/agent-design/delegation-decision.md)
 - [Risk-Based Shipping](risk-based-shipping.md)
+- [Task Category as the Security Review Routing Key](task-category-security-review-routing.md)
 - [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md)

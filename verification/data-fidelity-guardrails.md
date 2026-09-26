@@ -137,3 +137,4 @@ Under these conditions, prefer [typed schemas at the boundary](structured-output
 - [Semantic Tool Output](../tool-engineering/semantic-tool-output.md)
 - [Tool Signing and Verification](../security/tool-signing-verification.md)
 - [Layered Accuracy Defense](layered-accuracy-defense.md)
+- [Auditing Agent Tool Chains for Silent Partial Success](tool-chain-silent-failure-audit.md) — the case upstream of this one, where the data never reached the agent

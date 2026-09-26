@@ -104,3 +104,4 @@ The scale gap in the same post is the part to plan against. The largest single s
 - [Verification Capacity Saturation: Three Levers, One Default](../verification/verification-capacity-saturation.md) — what a saturated review gate does when nobody picks a lever
 - [Reviewer's Playbook for Agent-Authored Pull Requests](../code-review/reviewers-playbook-agent-authored-prs.md) — how to spend the reads the batch does cost
 - [AI Slop as a Process Problem: Encoding Quality Standards as Pipeline Gates](slop-as-process-problem.md) — moving the standard off the reviewer and into the pipeline
+- [Outcome Pricing as a Scope Signal](../patterns/agent-design/outcome-pricing-as-scope-signal.md) — how the same vendor prices this work, and what billing on merges requires of the harness

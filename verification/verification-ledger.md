@@ -169,6 +169,7 @@ The Honk team wired deterministic verifiers — format, build, and test — dire
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)
 - [Pre-Completion Checklists](pre-completion-checklists.md)
+- [Name the Check That Passed Before Accepting AI Code](named-check-over-evaluation-confidence.md) — the same record on the human side of the handoff, where confidence tracked trust rather than checking
 - [Grade Agent Outcomes](grade-agent-outcomes.md)
 - [Evidence-Chain Run Logs](evidence-chain-run-logs.md) — records whether the reported symptom moved, not only whether the checks ran
 - [Claim-to-Evidence Trace Graphs for Auditing Agent Runs](claim-to-evidence-trace-graphs.md) — typed edges linking a claim to the artifacts and checks behind it, rather than a flat table of check results

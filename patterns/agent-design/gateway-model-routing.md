@@ -106,3 +106,4 @@ This is the gateway version of pinning a Bedrock ARN ([Claude Code: Model config
 - [Per-Model Harness Tuning](per-model-harness-tuning.md) — per-model configuration once a gateway exposes multiple options.
 - [Managed vs Self-Hosted Harness](managed-vs-self-hosted-harness.md) — trade-off frame that gateways sit inside.
 - [Copilot CLI BYOK Local Models](../../tools/copilot/copilot-cli-byok-local-models.md) — comparable BYOK pattern in a different harness.
+- [Gateway Hint Headers for Routing and Budgeting Agent Calls](gateway-hint-headers.md) — the other header set the same gateway reads, for routing and attribution rather than model discovery.

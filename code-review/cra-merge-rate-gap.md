@@ -92,6 +92,7 @@ The study measured the 23-point gap on HuggingFace-hosted ML and AI repositories
 - [PR Description Style as a Lever for Agent PR Merge Rates](pr-description-style-lever.md) — how PR description structure (not just reviewer composition) affects merge outcomes using the same AIDev dataset
 - [Agent-Assisted Code Review](agent-assisted-code-review.md) — prescriptive guide for structuring the AI first pass
 - [Committee Review Pattern](committee-review-pattern.md) — multi-agent verification as an alternative to single CRA deployment
+- [Post-Merge Fix Signals for Agent Merges](../verification/post-merge-fix-signals-agent-merges.md) — the downstream counterpart: agent merges drew a verified follow-up fix at 1.62 times the odds of human merges, stratified within repositories in a separate 891-repository cohort
 
 ## Sources
 

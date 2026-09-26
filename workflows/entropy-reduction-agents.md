@@ -21,7 +21,7 @@ Learn it hands-on with the [Garbage-Collecting Entropy guided lesson](https://le
 
 ## The problem: silent decay
 
-Entropy reduction agents are scheduled background processes that scan a codebase for violations of encoded standards — outdated docs, deprecated patterns, architectural drift — and open targeted PRs for human review. They run on a cadence whether or not anyone pushes a commit, catching decay that reactive CI misses entirely.
+Entropy reduction agents are scheduled background processes that scan a codebase for violations of encoded standards — outdated docs, deprecated patterns, architectural drift — and open targeted PRs for human review. They run on a cadence whether or not anyone pushes a commit, catching decay that reactive CI misses entirely. Where an external signal announces the work instead, the event-driven counterpart is [trigger-to-function architecture](trigger-function-maintenance-architecture.md).
 
 Codebases accumulate entropy between changes. Documentation drifts from the implementation faster than anyone reconciles it, which is what [continuous documentation](continuous-documentation.md) exists to counter. Deprecated patterns spread as agents copy existing code indiscriminately. Convention violations build up in corners no one watches. OpenAI's [harness engineering](../patterns/agent-design/harness-engineering.md) team calls this proactive scanning the "garbage collection" of technical debt ([Martin Fowler — Harness Engineering](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html)).
 

@@ -116,3 +116,4 @@ The diff harness operates on observable artifacts (rendered SVG, exported file b
 - [Eval-Driven Development: Write Evals Before Building Agent Features](eval-driven-development.md) — defining success criteria before code, complementary to executable specs
 - [Simulation and Replay Testing for Agent Verification](simulation-replay-testing.md) — single-implementation alternative when cross-platform reach is not a requirement
 - [Staged Literal Porting with a Per-Stage Numeric Oracle](staged-literal-port-with-numeric-oracle.md) — Adjacent workflow where the oracle is the prior canonical version's output rather than sibling ports' divergence
+- [In-Place Atomic Replacement for Agent-Driven Ports](in-place-atomic-replacement-port.md) — The opposite branch strategy, where the old implementation is deleted in the same commit that replaces it rather than kept alongside

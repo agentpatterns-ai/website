@@ -118,3 +118,4 @@ Yes. Running tests that do not cover the actual change is verification theater �
 - [The Yes-Man Agent](yes-man-agent.md) — agents that execute without pushback ship the same unverified errors at machine speed
 - [Model Confidence as Security Verification](model-confidence-as-security-verification.md) — the security-specific case: a model's own confidence does not track whether its code is secure
 - [LLM Support During the First Detection Pass](llm-support-first-detection-pass.md) — the measured cost of consulting a model during a review pass rather than after it
+- [Reading Visible Edge-Case Handling as a Security Check](edge-case-handling-as-security-signal.md) — the measured form: 18 of 23 interviewees judged AI code security by whether a defensive block was visible

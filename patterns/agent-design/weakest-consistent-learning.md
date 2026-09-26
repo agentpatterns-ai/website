@@ -84,3 +84,4 @@ The second entry permits every future timezone-dependent test failure, and the r
 - [Rule Lifecycle Metadata for Prunable Instruction Surfaces](../../instructions/rule-lifecycle-metadata.md) — recording applicability and expiry so a persisted rule can later be pruned.
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](../../instructions/guardrails-beat-guidance-coding-agents.md) — the countervailing evidence for prohibitions.
 - [Skill Misevolution in Self-Updating Skill Libraries](../../security/skill-misevolution-lifecycle-gates.md) — what contaminated evidence does once a loop has persisted it, measured across authoring, retrieval, and a later clean session.
+- [Scope-Matched Retrieval for Persisted Agent Skills](scope-matched-memory-retrieval.md) — the reach of a persisted rule rather than its content: retrieve it only where the evidence that certified it applies.

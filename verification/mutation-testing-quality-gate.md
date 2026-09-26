@@ -10,7 +10,7 @@ tags:
 aliases:
   - mutation testing for LLM tests
   - mutation-guided test generation
-last_reviewed: 2026-06-12
+last_reviewed: 2026-09-15
 maturity: established
 ---
 
@@ -18,7 +18,7 @@ maturity: established
 
 > Coverage proves a line ran; mutation testing proves the suite would notice a regression. On LLM-generated tests, surviving mutants expose assertions that catch nothing.
 
-Coding agents now produce more tests per feature than humans, often with high coverage and zero failures on first generation. The [Test Homogenization Trap](../patterns/anti-patterns/test-homogenization-trap.md) shows why that signal is misleading: LLM-generated tests cluster around the same blind spots as the model's code, so green suites overstate correctness. Mutation testing forces each test to prove it would catch a regression — a behavioral claim coverage cannot make.
+Coding agents now produce more tests per feature than humans, often with high coverage and zero failures on first generation. The [Test Homogenization Trap](../patterns/anti-patterns/test-homogenization-trap.md) shows why that signal is misleading: LLM-generated tests cluster around the same blind spots as the model's code, so green suites overstate correctness. VibeCheck adds a cross-tool measurement of the execution-adequacy gap in LLM-generated tests from Kiro, Antigravity, and Cursor ([VibeCheck (arXiv)](https://arxiv.org/abs/2609.05978v2)). Mutation testing forces each test to prove it would catch a regression — a behavioral claim coverage cannot make.
 
 ## Mutation testing primer
 
@@ -113,9 +113,7 @@ The agent adds three targeted tests; the mutation tool reruns and confirms all 1
 
 - [The Test Homogenization Trap](../patterns/anti-patterns/test-homogenization-trap.md) — why LLM-generated tests share the model's blind spots; this page is the dedicated mitigation
 - [Skill Evals](skill-evals.md) — evaluable-unit framing for any agent capability, with discriminating-assertion guidance
-- [Behavioral Testing for Agents](behavioral-testing-agents.md) — testing what agents do, not how they do it
 - [Coverage-Guided Agents for Fuzz Harness Generation](coverage-guided-fuzz-harness-generation.md) — the same generate-measure-refine loop applied to fuzzing
-- [Anti-Reward-Hacking](anti-reward-hacking.md) — designing rubrics agents cannot game by surface metrics
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — the changed-line coverage gate whose assertion-free blind spot mutation testing closes
 - [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](bug-discriminating-validation-evidence.md) — the same discrimination question asked against the real reported defect rather than a synthetic mutant
 - [Code Health as a Signal for Agent-Generated Test Quality](code-health-agent-generated-tests.md) — why the maintainability of the code under test shows up in mutation score and not in coverage

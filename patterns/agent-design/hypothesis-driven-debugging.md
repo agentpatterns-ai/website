@@ -119,5 +119,6 @@ Without the hypothesis-and-tag structure, the agent would likely have patched H1
 - [The Think Tool](think-tool.md) — Mid-stream reasoning checkpoint between tool calls; lighter-weight scaffold when the task does not require instrumentation.
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate extra compute to planning and verification phases; the hypothesis step is a verification primitive.
 - [Agent Debugging: Diagnosing Bad Agent Output](../../observability/agent-debugging.md) — Debugging the agent itself when its output is wrong; complementary to debugging the program under its control.
+- [Evidence-First Reports From Failure-Diagnosis Agents](evidence-first-diagnosis-reports.md) — What the loop hands a human once it has converged; the evidence outranks the root cause it settled on.
 - [Incident Log Investigation Skill](../../workflows/incident-log-investigation-skill.md) — Parallel-query investigation for production incidents; uses correlation across systems where hypothesis-driven debugging uses correlation across log tags.
 - [In-Thread Side-Channel](../../workflows/in-thread-side-channel.md) — Cursor's `/btw`, shipped in the same 2026-04-14 changelog; ask mid-debug clarifying questions without breaking the hypothesis loop.
