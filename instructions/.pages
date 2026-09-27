@@ -1,4 +1,105 @@
 title: Instructions
 nav:
   - index.md
+  - "Instruction Files":
+      - claude-md-convention.md
+      - instruction-file-ecosystem.md
+      - agents-md-design-patterns.md
+      - agents-md-as-table-of-contents.md
+      - agents-md-distributed-conventions.md
+      - evaluating-agents-md-context-files.md
+      - probe-and-refine-guidance-tuning.md
+      - knowledge-gap-vs-skill-gap-triage.md
+      - encoding-values-in-agents-md.md
+      - rules-file-corpus-evidence.md
+      - committed-ai-configuration-quality-cost.md
+      - documentation-read-counts.md
+      - natural-language-customization-bootstrap.md
+      - getting-started-instruction-files.md
+      - empirical-baseline-agentic-config.md
+      - grounding-md-field-scoped-instructions.md
+  - "Instruction Design":
+      - instruction-polarity.md
+      - guardrails-beat-guidance-coding-agents.md
+      - restraint-rules-need-external-enforcement.md
+      - enforcement-information-paradox.md
+      - transcript-gradable-agent-rules.md
+      - security-knowledge-priming.md
+      - negative-space-instructions.md
+      - example-driven-vs-rule-driven-instructions.md
+      - personalized-vs-generic-agent-skills.md
+      - encoding-product-design-taste.md
+      - publishing-agent-instructions-outside-the-repo.md
+      - iterative-binary-feedback-pattern-adherence.md
+      - hints-over-code-samples.md
+      - critical-instruction-repetition.md
+      - instruction-compliance-ceiling.md
+      - constraint-degradation-code-generation.md
+      - constraint-encoding-compliance-gap.md
+      - configuration-file-structure-compliance-gap.md
+      - system-prompt-altitude.md
+      - match-tool-instructions-to-workflow.md
+      - three-knowledge-tiers.md
+      - cost-aware-skill-rewriting.md
+      - typed-pseudocode-skill-libraries.md
+      - codified-effort-escalation-policy.md
+      - advisory-prompts-from-reasoning-traces.md
+      - controlling-agent-output.md
+  - "Architecture & Composition":
+      - layered-instruction-scopes.md
+      - hierarchical-claude-md.md
+      - claude-md-excludes.md
+      - per-subagent-instruction-inheritance.md
+      - import-composition-pattern.md
+      - prompt-file-libraries.md
+      - production-system-prompt-architecture.md
+      - prompt-transpilation.md
+      - hooks-vs-prompts.md
+      - shared-context-bundle-registry.md
+  - "System Prompts":
+      - domain-specific-system-prompts.md
+      - system-prompt-replacement.md
+      - event-driven-system-reminders.md
+      - trace-contrast-prompt-repair.md
+  - "Specifications & Standards":
+      - specification-as-prompt.md
+      - frozen-spec-file.md
+      - feature-list-files.md
+      - standards-as-agent-instructions.md
+      - ai-writing-tell-catalogue.md
+      - convention-over-configuration.md
+      - wrap-framework-agent-instructions.md
+      - agent-ready-bug-reports.md
+      - multi-layer-specification-redundancy.md
+      - stage-targeted-prompt-structure-pr-outcomes.md
+      - ubiquitous-language-for-ai-plans.md
+      - standard-grounded-nfr-specification.md
+      - spec-format-by-model-tier.md
+      - constraint-preamble-before-generation.md
+      - specification-portability-across-agents.md
+      - diagram-as-shared-spec.md
+      - per-step-skill-preconditions.md
+      - contractual-skill-files.md
+      - living-docs-grounded-design-conversations.md
+  - "Governance & Maintenance":
+      - enforcing-agent-behavior-with-hooks.md
+      - rule-lifecycle-metadata.md
+      - behavioral-no-op-test.md
+      - encoded-rule-failure-diagnosis.md
+      - agent-context-file-evolution.md
+      - prompt-governance-via-pr.md
+      - agent-config-as-managed-supply-chain.md
+      - frontmatter-body-rule-drift.md
+      - skill-pack-registry-distribution.md
+      - workspace-hosted-skills.md
+      - skill-file-linting.md
+      - plugin-component-co-change.md
+      - post-compaction-reread-protocol.md
+      - content-exclusion-gap.md
+      - prompt-rewrite-on-cross-generation-migration.md
+      - html-as-output-format.md
+      - mermaid-as-agent-output-format.md
+      - acknowledged-debt-ledger.md
+      - method-map-failure-mode-triage.md
+      - task-list-divergence-diagnostic.md
   - ...

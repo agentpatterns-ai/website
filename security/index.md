@@ -120,6 +120,7 @@ Preventing sensitive data from entering agent context is cheaper than scrubbing 
 
 Excess permissions expand the blast radius of any failure or attack.
 
+- [Agent Approval Laundering: Effects Beyond the Named Command](approval-laundering-transitive-effects.md) — An approval record can name `npm install` correctly while its workflow runs lifecycle scripts, or name an MCP tool while its transport carries network authority the record never lists; effect-aware review pays off only where a sandbox or an execution-side default does not already contain the effect
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — Restrict which domains agent tools can reach via harness-enforced allow and deny lists; remove the model from the network trust boundary
 - [Aggregation Bounds for Agent Authorization](aggregation-bounds-agent-authorization.md) — Every access in a workflow can be authorized and the synthesized answer still not be; three parts are buildable today, and both papers that name the gap state the general problem is open
 - [An Explicit Update Boundary for Agent Self-State](self-state-update-boundary.md) — A six-operation replay shows `chattr +i`, AppArmor and Landlock block every path to an agent's memory file and also reject its approved update; sort self-state by whether the agent legitimately writes it, then give the writable half a separate authorization step

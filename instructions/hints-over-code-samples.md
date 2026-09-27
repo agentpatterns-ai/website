@@ -139,3 +139,4 @@ The hint version costs ~20 tokens instead of ~80, stays correct when the handler
 - [System Prompt Altitude](system-prompt-altitude.md) — hints operate at a higher altitude than code samples, staying valid across variation
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — shorter instruction files with hints keep rule counts lower
 - [Prompt Compression](../context-engineering/prompt-compression.md) — hints as compression that preserves signal while reducing token cost
+- [Give the Model the Target's Contract, Not Similar Solutions](../context-engineering/contract-context-over-example-retrieval.md) — pointing an agent at the target's own test and required helpers instead of a retrieved similar-problem solution

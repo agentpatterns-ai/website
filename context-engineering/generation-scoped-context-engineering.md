@@ -10,7 +10,7 @@ aliases:
   - generation-scoped context engineering
   - context engineering per model generation
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-09-14
+last_reviewed: 2026-09-26
 maturity: emerging
 ---
 
@@ -32,6 +32,31 @@ Anthropic names six former best practices that became myths on the newer models.
 - Simple specs to rich references. The model handles higher-fidelity references than a markdown plan: an HTML mockup, a test suite, a function to port, or a rubric a verifier agent grades against. See [HTML as an Agent Output Format](../instructions/html-as-output-format.md).
 
 Claude Code ships tooling for the audit itself: "We've put these best practices in `claude doctor`; use the command /doctor in Claude Code to rightsize your skills, and CLAUDE.md files" ([Anthropic — The new rules of context engineering](https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models)).
+
+## Running the prompt-audit command
+
+Treat every finding from this audit as a proposal, not a verdict. The report grades each finding by confidence, and a diff sits beside it for you to accept or reject hunk by hunk; nothing changes on its own.
+
+Two commands run some form of this audit, and no source confirms they run the same procedure. Claude Code 2.1.283, released September 25, 2026, "Added `/doctor prompt-audit` (also `/checkup prompt-audit`) to audit your CLAUDE.md files, skills, agents and commands for prompting patterns written for older models" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-283)). A separate subcommand shipped first, in Claude Code 2.1.221 on August 4, 2026: "Added a `prompt-audit` subcommand to the `claude-api` skill for auditing prompts and tool descriptions for patterns written for older models" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-221)). Claude Code's commands reference documents that second form: "Run `prompt-audit` to flag instructions written for older models in your prompts, skills, and tool descriptions and propose fixes as a diff" ([Claude Code commands reference](https://code.claude.com/docs/en/commands)). Its `/doctor` row names no `prompt-audit` subcommand at all. Do not assume `/doctor prompt-audit` runs the `claude-api` skill's published procedure below; no source states that it does. The `/doctor` row's own description does match the shape: it reports findings and asks for confirmation before it changes anything.
+
+Anthropic's published procedure for the `claude-api` skill's audit sets a keep-list, so a line matching a pattern table is not an automatic deletion candidate ([anthropics/skills — prompt-audit.md, commit 3337550](https://github.com/anthropics/skills/blob/33375500bcea98d610eb30ce10ac4e59b89c390d/skills/claude-api/shared/prompt-audit.md)):
+
+- Scoped emphasis: "Emphasis is not banned; it is a tested, scoped fix for one demonstrably underweighted instruction, not a first-draft register."
+- A single end-of-prompt recap: "Deliberate recap is not padding. A single end-of-prompt restatement of the few key constraints is a known, reasonable pattern; the anti-pattern is scattered duplication."
+- Trigger and routing text, because "skills currently under-trigger." The audit flags shouting in a prompt's body, not in text that decides whether a skill fires.
+- Exact scripts for fragile operations, because prescriptive text is correct for "destructive commands, auth flows, compliance steps."
+- A prohibition whose failure still happens: "prohibitions against current, demonstrated failures stay."
+- Duplication that still works: "working redundancy is not cruft."
+
+Findings carry a confidence grade: "High - documented in current Claude docs or errors on the target model. Medium - consistent, widely-observed behavior (e.g. example over-indexing). Low - heuristic or idiom-dating; flag, don't edit." A low grade stays in the report and drops out of the diff.
+
+A high grade is not proof a cut is safe. The procedure calls a removal a hypothesis: "Probe behavior, not self-report ... Asking the model whether it needs an instruction is not a measurement." Test a contested change on a scratch copy before and after, one change at a time when the stakes are high, and check who else reads the exact line before you delete it: "Check out-of-band dependencies before deleting. Grep the wider system for the exact prompt text first - classifiers, tests, and log parsers sometimes match on prompt strings."
+
+Re-run the audit on model changes, not on a calendar: "Re-audit at every model release. Prompts are per-model artifacts; a line that is load-bearing on one generation is cruft on the next."
+
+An independent practitioner who repeated the exercise on an operational repository reported "an 11% cut on one repository, not an 80% one, and a set of findings that had almost nothing to do with byte counts" ([Digital Applied — We Cut Our AI Agent Instruction Files](https://www.digitalapplied.com/blog/ai-agent-instruction-file-audit-what-we-cut)). A file built mostly from redundant documentation carries a large cut. One built mostly from hard-won operational knowledge carries a small one, and pruning either to hit a fixed percentage would destroy the valuable part first. "Dated" is not a fixed judgment across models, either: independent research found that "newer GPT models exhibit diminishing or even negative marginal gains from structured prompting... whereas Qwen models continue to benefit substantially from Few-Shot and CCoT" ([Rudyk et al., arXiv:2608.24641v1](https://arxiv.org/abs/2608.24641v1)). A line this audit flags as cruft for the target Claude model can stay load-bearing for a different model family reading the same shared file, such as AGENTS.md.
+
+The 2.1.283 release also widened what the report leads with, beyond prompting patterns: "stale paths, stale commands and contradicting instruction files now lead the report" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-283)). That check now overlaps [Scheduled Instruction File Fact-Checker](../workflows/instruction-file-fact-checker.md), which verifies instruction-file claims against the codebase on its own schedule.
 
 ## Why it works
 
@@ -82,5 +107,6 @@ Same intent, half the words, and it stops firing wrongly on the complex algorith
 - [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — the measurement step that finds what to delete before you delete it.
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) — the progressive-disclosure rule: only keep what the model cannot find for itself.
 - [Prompt-Rewrite Discipline on Cross-Generation Model Migration](../instructions/prompt-rewrite-on-cross-generation-migration.md) — the process wrapper for the rewrite this audit feeds into.
+- [Scheduled Instruction File Fact-Checker for Accuracy](../workflows/instruction-file-fact-checker.md) — the neighboring drift axis: factual claims against the live codebase, rather than prose aging against the model.
 - [Prompt Debt: Hand-Tuning Natural-Language Prompts as Technical Debt](../patterns/anti-patterns/prompt-debt.md) — the slow-accumulation cousin; this page is the generation-jump trigger to pay it down.
 - [Instruction Polarity: Positive Rules Over Negative](../instructions/instruction-polarity.md) — why blanket NEVER rules misfire once the model can reason from intent.
