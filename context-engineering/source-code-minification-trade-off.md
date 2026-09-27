@@ -104,3 +104,4 @@ The decoupled measurement reveals which side of the Pareto frontier the workload
 - [Prompt Compression](prompt-compression.md) — Compressing instruction prose for the same goal at a different layer; lower accuracy risk than code minification.
 - [Context Budget Allocation](context-budget-allocation.md) — Distributing the token budget across sources; minification is one lever, but not the only one.
 - [Comment Content as Code-Generation Context](comment-content-as-generation-context.md) — What stripping comments costs on the output side, where suppression moved pass@1 in opposite directions across models.
+- [Give the Model the Target's Contract, Not Similar Solutions](contract-context-over-example-retrieval.md) — The same identifier-naming signal from the retrieval side: stripping names from ICL examples cost the weakest model 30 points on self-contained tasks.

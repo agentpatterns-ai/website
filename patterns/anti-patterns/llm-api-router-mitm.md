@@ -113,6 +113,7 @@ The pinned digest blocks the unpinned-image step of the LiteLLM compromise. The 
 
 ## Related
 
+- [Treating a Local Agent Session Trace as Audit Evidence](local-trace-as-audit-evidence.md) — the same privileged-tier cost applies when the router is repurposed as an interception point for tamper-evident agent traces
 - [Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)](response-path-control-gap.md) — the agent-side half: what a router on the path does to permission modes, execution allowlists, and model review
 - [Lethal Trifecta Threat Model](../../security/lethal-trifecta-threat-model.md) — router compromise instantly closes the trifecta on agents whose principals look benign in isolation
 - [Hostname-Allowlist Proxy: The TLS-Inspection Blind Spot](../../security/hostname-allowlist-tls-blind-spot.md) — the network-layer sibling at the L4/L7 boundary; this page is its application-layer analogue
