@@ -9,7 +9,7 @@ aliases:
   - managed agent harness
   - self-hosted agent harness
   - agent harness deployment
-last_reviewed: 2026-09-11
+last_reviewed: 2026-09-27
 maturity: established
 ---
 
@@ -21,7 +21,7 @@ maturity: established
 
 Managed agent services such as [Claude Managed Agents](https://claude.com/blog/building-with-claude-managed-agents) ([platform docs](https://platform.claude.com/docs/en/managed-agents/overview)) provide a pre-built harness, [sandboxed execution](../../security/sandbox-runtime-comparison.md), and hosted infrastructure in exchange for vendor coupling. Self-hosted open-source harnesses such as [LangChain Deep Agents Deploy](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/) and Cursor's self-hosted cloud agents trade ops burden for control over data, model selection, and accumulated [agent memory](agent-memory-patterns.md).
 
-OpenAI joined the managed side in September 2026 with an Agents API, released in public beta, which runs its Codex harness behind a managed endpoint ([OpenAI: Introducing the Agents API](https://openai.com/index/introducing-the-agents-api/)). Claude Managed Agents and the Agents API both come from the model vendor, and the same five signals decide between them.
+OpenAI joined the managed side in September 2026 with an Agents API, released in public beta, which runs its Codex harness behind a managed endpoint ([OpenAI: Introducing the Agents API](https://openai.com/index/introducing-the-agents-api/), [API docs](https://developers.openai.com/api/docs/guides/agents-api/overview)). Claude Managed Agents and the Agents API both come from the model vendor, and the same five signals decide between them.
 
 The choice mirrors the classic SaaS vs on-prem decision but with a compounding factor: agents accumulate memory over time. Locking memory behind a proprietary API raises migration cost with every session.
 
@@ -55,7 +55,7 @@ If you need multi-model routing, cost-based routing across providers, or model m
 
 ### 5. Ops capacity
 
-Self-hosted means deploying and operating the harness, orchestration layer, sandboxes, and memory stores. Deep Agents Deploy cuts this to a single `deepagents deploy` command that provisions a multi-tenant, horizontally scalable server with 30+ endpoints, but you still own the infrastructure ([LangChain, April 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)). Managed services, Claude Managed Agents in particular, handle all of it: "no need to build your own agent loop, sandbox, or tool execution layer" ([Anthropic, 2026](https://platform.claude.com/docs/en/managed-agents/overview)). The trade-off is losing the ability to customize those layers.
+Self-hosted means deploying and operating the harness, orchestration layer, sandboxes, and memory stores. Deep Agents Deploy cuts this to a single `deepagents deploy` command that provisions a multi-tenant, horizontally scalable server with 30+ endpoints, but you still own the infrastructure ([LangChain, April 2026](https://blog.langchain.com/deep-agents-deploy-an-open-alternative-to-claude-managed-agents/)). Managed services, Claude Managed Agents in particular, handle all of it: "no need to build your own agent loop, sandbox, or tool execution layer" ([Anthropic, 2026](https://platform.claude.com/docs/en/managed-agents/overview)). OpenAI runs session orchestration, context compaction, and recovery for its Agents API, and the durable sessions continue work across turns ([OpenAI: Agents API overview](https://developers.openai.com/api/docs/guides/agents-api/overview)). The trade-off is losing the ability to customize those layers.
 
 ## Decision flow
 
@@ -82,7 +82,7 @@ Cursor's self-hosted cloud agents (March 2026) demonstrate a hybrid: managed orc
 
 This is the pattern to consider when compliance concerns are about execution artifacts specifically, not orchestration metadata.
 
-The hybrid is not Cursor-specific. Managed providers increasingly offer self-hosted execution as a first-class mode: Claude Managed Agents supports self-hosted sandboxes where "the agent's code, filesystem, and network egress never leave your environment," positioned for "your organization's own compliance and audit controls" ([Anthropic](https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes)). Anthropic offers the same split at the coding-session layer. Claude Code 2.1.224 adds a `claude self-hosted-runner` command that hosts web, mobile, and desktop sessions on your own machines ([Claude Code changelog, August 2026](https://code.claude.com/docs/en/changelog#2-1-224)). So the data-residency signal alone rarely forces a fully self-hosted harness. What stays genuinely managed-only is narrower: in that case, [accumulated memory](agent-memory-patterns.md) is unsupported with self-hosted sandboxes, and managed sessions remain ineligible for Zero Data Retention and HIPAA BAA ([Anthropic](https://platform.claude.com/docs/en/managed-agents/overview)). Weigh those residual constraints, not the deployment label.
+The hybrid is not Cursor-specific. Managed providers increasingly offer self-hosted execution as a first-class mode: Claude Managed Agents supports self-hosted sandboxes where "the agent's code, filesystem, and network egress never leave your environment," positioned for "your organization's own compliance and audit controls" ([Anthropic](https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes)). Anthropic offers the same split at the coding-session layer. Claude Code 2.1.224 adds a `claude self-hosted-runner` command that hosts web, mobile, and desktop sessions on your own machines ([Claude Code changelog, August 2026](https://code.claude.com/docs/en/changelog#2-1-224)). OpenAI's Agents API gives the same sandbox choice: OpenAI-hosted, your own infrastructure, or a supported provider ([OpenAI: Agents API overview](https://developers.openai.com/api/docs/guides/agents-api/overview)). So the data-residency signal alone rarely forces a fully self-hosted harness. What stays genuinely managed-only is narrower: in that case, [accumulated memory](agent-memory-patterns.md) is unsupported with self-hosted sandboxes, and managed sessions remain ineligible for Zero Data Retention and HIPAA BAA ([Anthropic](https://platform.claude.com/docs/en/managed-agents/overview)). Weigh those residual constraints, not the deployment label.
 
 ## Key Takeaways
 
