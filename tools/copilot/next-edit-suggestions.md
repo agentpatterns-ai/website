@@ -9,7 +9,7 @@ tags:
   - context-engineering
   - copilot
   - code-generation
-last_reviewed: 2026-09-20
+last_reviewed: 2026-09-27
 ---
 
 # Next Edit Suggestions Paradigm
@@ -63,6 +63,8 @@ NES must suppress suggestions that would not help — too many break focus; too 
 | Hide rate | -25.6% |
 
 Fewer suggestions shown, more accepted, fewer dismissed.
+
+The unified 3-in-1 model delivered a 10.1% decrease in dismissals. One client behavior change on its own was responsible for a 26% dismissal-rate swing ([VS Code blog, 23 September 2026](https://code.visualstudio.com/blogs/2026/09/23/building-the-github-copilot-inline-suggestions-model-part-two)). The client moved the metric further than the new model did, so hold the client constant when you benchmark your own suggestion surface.
 
 ## Configuration
 
