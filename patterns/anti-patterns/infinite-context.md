@@ -83,4 +83,5 @@ The fix was not in the extra context — the extra context is why the fix failed
 - [Manual Compaction as Dumb Zone Mitigation](../../context-engineering/manual-compaction-dumb-zone-mitigation.md)
 - [Context Poisoning](context-poisoning.md)
 - [Distractor Interference](distractor-interference.md)
+- [Documenting Code the Agent Can Already Read](documenting-code-the-agent-can-read.md) — a measured case of context that adds nothing: no gain beyond one task across five settings
 - [Session Partitioning](session-partitioning.md)

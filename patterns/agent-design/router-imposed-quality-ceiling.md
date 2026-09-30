@@ -10,7 +10,7 @@ aliases:
   - single-commit routing ceiling
   - trigger-order quality cap
   - client-orchestrated model selection ceiling
-last_reviewed: 2026-09-20
+last_reviewed: 2026-09-27
 maturity: emerging
 ---
 
@@ -40,6 +40,8 @@ With `class Fa` typed, completions fires first. It "can only append to the prefi
 
 Read the shipped numbers carefully. Phase 1 flighted a unified NES and long-distance model against the three-model baseline. It reported "no statistically significant regressions in any key metrics", a 10% decrease in time to show a suggestion, and a 61% reduction in output tokens ([VS Code](https://code.visualstudio.com/blogs/2026/09/16/building-the-github-copilot-inline-suggestions-model-part-one)). Latency and tokens moved. Quality held flat. The `Fish` case illustrates the ceiling; it does not measure it.
 
+Part Two of the same series reports the full 3-in-1 model, and dismissals fell 10.1% ([VS Code, 23 September 2026](https://code.visualstudio.com/blogs/2026/09/23/building-the-github-copilot-inline-suggestions-model-part-two)). The same post traces a 26% dismissal-rate swing to one change in client behavior. Dismissal rate scores only suggestions that were shown, so neither number measures the ceiling. The 26% is the one to keep. The client that decides what to fire moved the headline metric further than the merge did.
+
 ## Why it works
 
 Picking a model before generating anything is a single-commit selection, and its score is bounded by the committed model's own answer distribution. Chen proves this as a recoverability asymmetry: the bound holds "for every single-commit router" whether deterministic or randomized, while the same budget spent resampling the committed model recovers what selection cannot ([arxiv 2607.03436v2](https://arxiv.org/abs/2607.03436v2)). The cap belongs to the act of committing, not to the router's judgement. A smarter router narrows it; a better specialist does not.
@@ -59,7 +61,7 @@ The cap is also wide. Across 21 routing methods and five benchmarks, routers lan
 - A router that commits before any candidate exists caps quality at the committed model's answer. Tuning the specialists does not lift that cap.
 - The bound is provable for every single-commit router, deterministic or randomized ([arxiv 2607.03436v2](https://arxiv.org/abs/2607.03436v2)).
 - Most of the router-to-oracle gap is recoverable by a better router. Rewrite the router before rewriting the architecture.
-- Copilot's unification bought latency and token efficiency with quality held flat, on vendor-internal experiments. Do not budget a quality gain from it.
+- Copilot's Phase 1 unification bought latency and token efficiency with quality held flat, on vendor-internal experiments. Do not budget a quality gain from it.
 - Acceptance and dismissal metrics cannot detect this failure, because the better suggestion was never produced.
 
 ## Related

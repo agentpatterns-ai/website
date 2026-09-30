@@ -121,3 +121,4 @@ The three conditions ablate the load-bearing component: `baseline` measures the 
 - [Background Todo Agent](background-todo-agent.md) — another pattern that offloads work to a different idle channel — bookkeeping rather than anticipation
 - [Agent Memory Patterns: Learning Across Conversations](agent-memory-patterns.md) — the persistent-memory substrate the predictor reads from
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](../../token-engineering/cost-aware-agent-design.md) — the cost-routing discipline that decides whether the 111.8k speculative tokens per scenario are worth spending
+- [Rolling Out a Team-Embedded Agent Like a Tool](../anti-patterns/proactive-team-agent-tool-rollout.md) — what the same proactivity costs when the agent sits in a shared team channel rather than one user's session

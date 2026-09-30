@@ -85,3 +85,4 @@ The audit carries one confound of its own: its Gemini endpoint differs from the 
 - [Trajectory-Aware Benchmark Subset Selection for Agents](trajectory-aware-benchmark-subset-selection.md) — a second error term on top of this floor, from estimating the suite score off 5% to 30% of it.
 - [Recover the Six Measurement Choices Behind an Attack Success Rate](asr-comparability-audit.md) — the prior question for a security metric: whether two numbers measure the same quantity before either floor applies.
 - [Frozen Task Sets for Affordable Agent A/B Testing](../workflows/frozen-task-set-agent-ab-testing.md) — selecting the few tasks whose single run still tracks the full score, and what that instrument cannot resolve.
+- [Action-Class Decomposition for Tool-Calling Evals](action-class-decomposition-tool-calling-evals.md) — the per-class gap these floors have to clear before it counts as a finding.

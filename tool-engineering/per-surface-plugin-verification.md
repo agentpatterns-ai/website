@@ -82,3 +82,4 @@ In VS Code the first three entries load and the fourth does not, because VS Code
 - [Cross-IDE Plugin Discovery: One Install Surface, Many Consuming Agents](../standards/cross-ide-plugin-discovery.md) — the shared install path, where this page covers divergent client behavior instead
 - [Pre-Install Plugin Transparency: Capability Inventory and Cost Projection](../standards/pre-install-plugin-transparency.md) — the disclosure layer each client defines for itself
 - [Proprietary-to-Open-Standard Tool Migration (Copilot Extensions to MCP)](copilot-extensions-to-mcp-migration.md) — the earlier GitHub migration with the same verify-per-surface cost
+- [Policy File Validation: Catching Silent Non-Enforcement](../instructions/policy-file-validation.md) — the other route to an unenforced managed setting, where the file itself is malformed rather than the client unsupported

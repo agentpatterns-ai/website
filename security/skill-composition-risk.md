@@ -56,6 +56,7 @@ Per-skill review samples each skill in isolation. Emergent risks across activate
 | Threat | Vector | Distinguishing feature |
 |--------|--------|------------------------|
 | SCR (this page) | Two or more benign skills composed in shared context | No skill is malicious; the agent's reasoning across outputs is what harms |
+| [Single-Decision Approval of Vendor Skill Suites](single-decision-suite-approval.md) | Two or more skills deliberately modified by one vendor | Each edit carries a defensible rationale; harm needs every edit present |
 | [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) | A single skill carries a hidden payload (DDIPE) | The malicious skill exists as an artifact; detection is per-skill |
 | [Compositional Vulnerability Induction](compositional-vulnerability-induction.md) | Sequential coding tickets compose an exploitable end-state diff | Coding agent emits vulnerable code; SCR coerces the agent into a harmful runtime action |
 | Permission laundering (defended by [Monotonic Capability Attenuation](monotonic-capability-attenuation.md)) | Per-tool checks pass, chained effect exfiltrates | Defense target — capability budgets that intersect through composition |
@@ -100,6 +101,7 @@ Each skill is benign under isolated review. Skill A reads private repo content b
 ## Related
 
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md)
+- [Single-Decision Approval of Vendor Skill Suites](single-decision-suite-approval.md) — the adversarial counterpart, where a vendor splits one malicious objective across a suite
 - [The Skill Closure Declaration Gap](skill-closure-declaration-gap.md) — the artifact-side counterpart: what a skill root declares versus the files, packages, and services one run of it can reach
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md)
 - [Compositional Vulnerability Induction in Coding Agents](compositional-vulnerability-induction.md)

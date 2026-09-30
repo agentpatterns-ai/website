@@ -107,3 +107,4 @@ Both definitions accept the same calls, and the canary's output is deliberately 
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — the same planted-defect logic applied to instrumentation instead of tool choice
 - [Eval Awareness: Designing Evals Agents Cannot Recognize](eval-awareness.md) — what to check when you suspect the model is detecting the probe rather than reasoning
 - [Security-Aware Tool Descriptions for MCP](../security/security-aware-tool-descriptions-mcp.md) — the adversarial counterpart, where a description misleads on purpose
+- [Action-Class Decomposition for Tool-Calling Evals](action-class-decomposition-tool-calling-evals.md) — the prior question, whether the agent picked the right kind of action before it picked a tool

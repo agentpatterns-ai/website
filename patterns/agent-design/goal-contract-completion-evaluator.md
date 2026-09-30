@@ -103,3 +103,4 @@ A weaker condition — `/goal the v1 to v2 migration is complete` — fails beca
 - [Frozen Spec File](../../instructions/frozen-spec-file.md) — immutable, agent-readable scope file; complementary to `/goal` for long-running tasks where post-compaction drift is the dominant failure mode
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — deterministic Stop-hook gate when the evaluator's leniency bias is unacceptable
 - [Premature Completion](../anti-patterns/premature-completion.md) — the canonical failure mode this pattern targets
+- [Specification Authority Boundary: Agents Propose, the Runtime Commits](specification-authority-boundary.md) — extends the doer/checker split past the completion claim to every requirement the agent is meant to satisfy

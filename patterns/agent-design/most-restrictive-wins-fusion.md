@@ -10,7 +10,7 @@ aliases:
   - most-restrictive-wins
   - deny-overrides hook merge
   - parallel hook decision precedence
-last_reviewed: 2026-08-30
+last_reviewed: 2026-09-29
 maturity: established
 ---
 
@@ -18,7 +18,7 @@ maturity: established
 
 > Fuse parallel agent-control returns by picking the strongest restriction (`deny > defer > ask > allow`) so a single deny anywhere blocks the call.
 
-Most-restrictive-wins is the merge function for parallel agent-control decisions. Several `PreToolUse` hooks, a permission classifier, and settings-scope rules can evaluate one tool call at once. The harness picks the strongest restriction across the set. The Claude Agent SDK documents the ordering explicitly: *"When multiple hooks or permission rules apply, **deny** takes priority over **defer**, which takes priority over **ask**, which takes priority over **allow**. If any hook returns `deny`, the operation is blocked regardless of other hooks."* ([SDK hooks reference](https://code.claude.com/docs/en/agent-sdk/hooks#outputs))
+Most-restrictive-wins is the merge function for parallel agent-control decisions. Several `PreToolUse` hooks, a permission classifier, and settings-scope rules can evaluate one tool call at once. The harness picks the strongest restriction across the set. The Claude Agent SDK documents the ordering explicitly: *"When multiple hooks or permission rules apply, `deny` takes priority over `defer`, which takes priority over `ask`, which takes priority over `allow`. If any hook returns `deny`, the operation is blocked regardless of other hooks."* ([SDK hooks reference](https://code.claude.com/docs/en/agent-sdk/hooks#outputs))
 
 The teaching is the merge itself: it lets each input be authored independently.
 
@@ -58,7 +58,7 @@ The merge is correct because the underlying decision is binary (proceed or don't
 - hooks that side-effect between siblings: a downstream deny can't undo a side effect an earlier hook already committed. Keep side-effecting logic in `PostToolUse`, not `PreToolUse`
 - a chronically wrong deny: one bad hook blocks the agent indefinitely. Without `permissionDecisionReason` on every hook, finding which of six denied means reading each hook's own logs
 - allow-wins fits some tools better: coding agents default to `deny-overrides`, but XACML's `permit-overrides` suits resource classes with inverted harm asymmetry ([XACML 3.0 spec](https://docs.oasis-open.org/xacml/3.0/xacml-3.0-core-spec-os-en.html)); the SDK exposes only `deny-overrides`
-- settings-scope confusion: a project rule that should beat a managed-org rule instead loses to it, because managed settings also gate which hooks can fire
+- settings-scope confusion: a project rule that should beat a managed-org rule instead loses to it, because managed settings also gate which hooks can fire. GitHub Copilot's enterprise managed settings have a validator that flags malformed JSON, unsupported configurations, and invalid team mappings, which cover misconfiguration that stops a policy from being enforced but not rule precedence ([GitHub changelog: enterprise managed settings in-product validator](https://github.blog/changelog/2026-09-25-enterprise-managed-settings-in-product-validator))
 - inflexible by design: once a deny is in place, no allow elsewhere overrides it ([Datadog: least-privilege IAM](https://www.datadoghq.com/blog/iam-least-privilege/)) — the property coding agents want, but say so for new authors
 - indeterminate handling is unspecified: XACML stops on `Indeterminate`; the SDK is silent on a hook that errors mid-evaluation. Treat a thrown exception as unhandled
 

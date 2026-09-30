@@ -104,3 +104,4 @@ Add a branch-protection rule requiring human review on `crypto/**`. The trailer 
 - [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md) — parallel finding that file placement and structure are not the compliance lever
 - [Encoding AI Writing Tells as a Prose Style Contract](ai-writing-tell-catalogue.md) — a worked split of one rule set into the mechanically-enforced half and the review half
 - [Frontmatter and Body Rule Drift in Agentic Workflows](frontmatter-body-rule-drift.md) — what a rule costs when it is written in the enforced region and the advisory one at once
+- [Policy File Validation: Catching Silent Non-Enforcement](policy-file-validation.md) — the prior question for a rule moved to CI or managed settings: whether the file carrying it parsed at all

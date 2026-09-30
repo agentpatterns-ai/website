@@ -89,3 +89,4 @@ The pattern is calibrated for enterprise deployments. Smaller or differently sha
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — formalizes what the audit record must guarantee, the safety property ADR's telemetry feeds
 - [Enterprise Agent Hardening: Governance, Observability, and Reproducibility](enterprise-agent-hardening.md) — the broader checklist ADR sits inside as the observability gate
 - [Agent Observability: OTel, Cost Tracking, Trajectory Logs](../observability/agent-observability-otel.md) — adjacent observability mechanics for non-MCP signals
+- [Cross-Layer Evidence for Agent Attack Detection](cross-layer-detection-evidence.md) — what a kernel syscall view adds to this transport telemetry, mechanic by mechanic

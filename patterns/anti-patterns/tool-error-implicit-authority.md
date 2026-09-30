@@ -114,3 +114,4 @@ The anti-pattern label is over-broad in five cases:
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — developer mental-model failure that error streams inherit when treated as system diagnostics rather than artifacts.
 - [Verbatim Failure Records in Small-Model Agent Transcripts](verbatim-failure-records.md) — the non-adversarial cost of the same error frame: the failed call's own text raises the odds the model sends it again.
 - [Unsignalled Tool Failure: Returning Success With an Unusable Payload](unsignalled-tool-failure-envelope.md) — the cost of the opposite choice: suppress the error frame and the model fabricates a value instead.
+- [Caller-Actionable Error Steps in Tool Responses](../agent-design/caller-actionable-error-steps.md) — the recovery case for the same authority, and the reason hardening against error-path injection pulls against clearer error text.

@@ -63,6 +63,7 @@ Over-pruning creates its own failure mode. Narrowing context too aggressively ri
 ## Related
 
 - [The Infinite Context](infinite-context.md)
+- [Documenting Code the Agent Can Already Read](documenting-code-the-agent-can-read.md) — the same distraction cost charged by a file description that restates code the agent can open
 - [Context Poisoning](context-poisoning.md)
 - [Token Preservation Backfire](token-preservation-backfire.md)
 - [The Implicit Knowledge Problem](implicit-knowledge-problem.md)

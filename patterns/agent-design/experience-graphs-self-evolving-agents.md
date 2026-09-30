@@ -11,7 +11,7 @@ aliases:
   - EXG framework
   - experience graph memory
   - structured experience memory
-last_reviewed: 2026-06-12
+last_reviewed: 2026-09-27
 maturity: established
 ---
 
@@ -20,6 +20,8 @@ maturity: established
 > An experience graph links an agent's wins and failures as a relational structure, not flat episodic memory — only under long deployments with trusted writers.
 
 An experience graph replaces ad hoc reflection and unstructured memory with a relational store that links trajectories ("what was tried") to abstracted strategic principles ("why it worked or failed"). EXG (Jin et al., 2026) introduces the framework as a plug-and-play module for self-evolving agents, with online graph growth during execution and offline reuse across sessions ([arxiv 2605.17721](https://arxiv.org/abs/2605.17721)).
+
+A survey of self-evolving coding agents sorts the field by what evolves: framework, memory, skills and tools, components, workflow and topology, environment and context. It cuts across those targets on two more axes, when evolution happens and which code-specific signals drive it ([Self-Evolving Coding Agents survey](https://arxiv.org/abs/2608.03392)).
 
 ## Preconditions
 

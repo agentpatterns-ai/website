@@ -80,3 +80,4 @@ Two engineers each harden the same downstream call, guided by their own agent, w
 - [PR Scope Creep as a Human Review Bottleneck](pr-scope-creep-review-bottleneck.md) — what happens to the review channel itself as agent velocity outpaces human capacity.
 - [Ubiquitous Language for AI Plans](../../instructions/ubiquitous-language-for-ai-plans.md) — a glossary-and-ADR remedy that anchors agent plans to agreed vocabulary.
 - [Encoding Tacit Knowledge](../../workflows/encoding-tacit-knowledge.md) — turning unwritten team judgment into artifacts agents and humans share.
+- [Rolling Out a Team-Embedded Agent Like a Tool](proactive-team-agent-tool-rollout.md) — the multi-user case, where interviewees worked out one at a time what a proactive agent in their shared channels was allowed to do

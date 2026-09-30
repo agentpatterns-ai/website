@@ -12,7 +12,7 @@ tags:
 aliases:
   - decomposed red-teaming
   - semi-automated monitor red-teaming
-last_reviewed: 2026-06-12
+last_reviewed: 2026-09-29
 maturity: emerging
 ---
 
@@ -82,6 +82,8 @@ Skip when:
 - The agent has no monitor model and relies on [deterministic guardrails](deterministic-guardrails.md), confirmation gates, or permission scoping
 - The deployment is structurally narrow (single tool, fixed input schema) and the attack surface is closed at the harness level
 - Single-pass elicitation already exposes failures the team has not closed, so fix those first
+
+LangChain added red teaming and automated testing to LangSmith Engine on 2026-09-24. The red teaming targets the agent, to find bugs and prompt issues, not the monitors that watch it, and it is in private beta for LangSmith Deployment users ([LangChain, LangSmith Engine red teaming](https://www.langchain.com/blog/langsmith-engine-v2-redteam)).
 
 ## Failure modes
 

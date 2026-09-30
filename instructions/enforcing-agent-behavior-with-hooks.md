@@ -188,3 +188,4 @@ It depends on scope. User, project, and local settings are all overridable by th
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — where instruction text stops working, hooks start
 - [Event-Driven System Reminders](event-driven-system-reminders.md)
 - [Hooks Lifecycle Events](../tool-engineering/hooks-lifecycle-events.md)
+- [Policy File Validation: Catching Silent Non-Enforcement](policy-file-validation.md) — a hook registered in a malformed settings file never fires, and the schema error is reported differently per scope

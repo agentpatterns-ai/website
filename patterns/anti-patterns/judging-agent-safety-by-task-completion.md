@@ -59,3 +59,4 @@ The fix is calibrated restraint, not maximal clarification. Forcing an agent to 
 - [Task Completion as Tool Certification (Silent Tool Rot)](task-completion-as-tool-certification.md) — the parallel failure where completion overstates the correctness of a reused agent-built tool rather than its safety.
 - [Task-Uniform Agent Permissions Ignore Where Failures Land](task-uniform-agent-permissions.md) — which task contexts the confirmation gate belongs in, from an incident corpus of 547 confirmed failures.
 - [Skill Review Without a Token Cost Baseline](skill-review-without-cost-baseline.md) — the economic version, where the completed task hides a 5x to 10x token bill instead of an unsafe action.
+- [Treating a Clean Final State as Boundary-Compliance Evidence](clean-final-state-as-compliance-evidence.md) — the uncrossed-boundary half, where the run stays inside the boundary and the clean end state still hides which policy kept it there.

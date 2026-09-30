@@ -5,7 +5,7 @@ tags:
   - training
   - cost-performance
   - copilot
-last_reviewed: 2026-07-28
+last_reviewed: 2026-09-29
 ---
 
 # GitHub Copilot: Model Selection & Routing
@@ -21,6 +21,8 @@ GitHub Copilot exposes models from multiple providers across every surface: VS C
 ### What's available
 
 GitHub Copilot supports models from multiple providers. The roster changes frequently — models are added, retired, and re-priced. Check the [supported models page](https://docs.github.com/en/copilot/reference/ai-models/supported-models) for the current list.
+
+GitHub added Claude Sonnet 5.5 to Copilot on 2026-09-28 ([GitHub changelog](https://github.blog/changelog/2026-09-28-claude-sonnet-5-5-in-github-copilot)). The July 2026 rates below predate it.
 
 Spend is denominated in AI credits, where [1 credit = $0.01](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing). Code completions and next edit suggestions consume no credits at all and stay unlimited on every paid plan, so everything below concerns chat, agent, and CLI turns.
 

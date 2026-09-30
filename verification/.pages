@@ -17,7 +17,9 @@ nav:
       - pass-at-k-t-agentic-rl-eval.md
       - markov-chain-agent-reliability.md
       - sampling-state-agent-variability-layers.md
+      - size-agent-comparisons-by-run-variance.md
       - trajectory-decomposition-diagnosis.md
+      - action-class-decomposition-tool-calling-evals.md
       - repository-perturbation-context-reasoning-diagnosis.md
       - static-difficulty-estimation-issue-triage.md
       - pre-generation-complexity-scoring.md
@@ -27,6 +29,7 @@ nav:
       - nonstandard-errors-ai-agents.md
       - benchmark-driven-tool-selection.md
       - ambiguity-stability-model-selection.md
+      - frozen-stimulus-behavior-panels.md
       - purpose-built-eval-suites.md
       - rank-resolution-converged-leaderboards.md
       - review-comment-derived-benchmarks.md

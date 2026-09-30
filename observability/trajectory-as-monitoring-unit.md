@@ -88,3 +88,4 @@ Every `gen_ai.*` span and attribute also still carries the Development status ba
 - [Circuit Breakers for Agent Loops](circuit-breakers.md) — halting a run on stalled progress, cost, or repetition
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md) — a replayable audit trail across sessions
 - [Completion Summary as the Oversight Surface](../patterns/anti-patterns/completion-summary-as-oversight-surface.md) — what you lose by monitoring the agent's own summary instead of the run it describes
+- [Cross-Layer Evidence for Agent Attack Detection](../security/cross-layer-detection-evidence.md) — the security case for attaching a kernel syscall view to the same session unit
