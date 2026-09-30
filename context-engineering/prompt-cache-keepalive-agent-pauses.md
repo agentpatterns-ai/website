@@ -75,3 +75,4 @@ Only the second and third leave headroom for jitter. Aider fires exactly at the 
 - [Static Content First for Cache Hits](static-content-first-caching.md) — prefix layout, the prerequisite a keepalive cannot substitute for
 - [Exclude Dynamic System Prompt Sections for Cross-Machine Cache Sharing](exclude-dynamic-system-prompt-sections.md) — removing per-machine variance so a prefix is shareable in the first place
 - [KV Cache Invalidation in Local Inference](kv-cache-invalidation-local-inference.md) — the same prefix-match mechanism at the local serving layer
+- [Attributed Cache Misses: Reading Why a Prefix Diverged](attributed-cache-miss-diagnostics.md) — the provider field that says whether the prefix changed, read beside the cache-read token count

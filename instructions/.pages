@@ -74,6 +74,7 @@ nav:
       - stage-targeted-prompt-structure-pr-outcomes.md
       - ubiquitous-language-for-ai-plans.md
       - standard-grounded-nfr-specification.md
+      - requirement-smell-density.md
       - spec-format-by-model-tier.md
       - constraint-preamble-before-generation.md
       - specification-portability-across-agents.md
@@ -90,6 +91,7 @@ nav:
       - prompt-governance-via-pr.md
       - agent-config-as-managed-supply-chain.md
       - frontmatter-body-rule-drift.md
+      - policy-file-validation.md
       - skill-pack-registry-distribution.md
       - workspace-hosted-skills.md
       - skill-file-linting.md

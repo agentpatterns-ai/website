@@ -105,3 +105,4 @@ Treat the absolute rates with the caution the authors do: one generation model o
 - [Silent-Failure Mechanism Taxonomy](silent-failure-mechanism-taxonomy.md) — the runtime-wide cut of failures whose signal never reaches a human.
 - [Informed Abstention as a Tool-Boundary Runtime Gate](../agent-design/informed-abstention-tool-boundary-gate.md) — the gate that fires before the call, not after it returns.
 - [Defense-in-Depth Against Coding Agent Fabrication](../../verification/honesty-harness-fabrication-defense.md) — the layered defense a named failure state slots into.
+- [Silent Adoption of Corrupted Tool Returns](silent-adoption-of-corrupted-tool-returns.md) - the sub-agent and search cases, where the return is wrong and looks fine

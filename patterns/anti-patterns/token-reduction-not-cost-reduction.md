@@ -78,3 +78,4 @@ The figures illustrate the paper's measured shape — a ~38% token cut landing a
 - [Cost-Quality Pareto Measurement for Agent Configurations](../../token-engineering/cost-quality-pareto-measurement.md) — the standing measurement frame that denominates in USD per successful task
 - [Harness-Controlled Token Economics (The Harness Effect)](../../token-engineering/harness-token-economics.md) — why the cache-hit rate, not token count, sets the effective price
 - [Skill Review Without a Token Cost Baseline](skill-review-without-cost-baseline.md) — the adversarial case, where an installed skill inflates per-task tokens and the output stays correct
+- [First-Proposal Execution in Agent Loops](first-proposal-execution.md) — a governance layer that cuts token count and then loses the saving to its own adjudication cost

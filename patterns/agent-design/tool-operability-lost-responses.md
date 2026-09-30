@@ -83,5 +83,6 @@ The mechanisms are not new. Idempotency is already protocol vocabulary, as the `
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — the caller-side half; this page covers what the tool must expose so the caller knows a re-run is the right move.
 - [Informed Abstention as a Tool-Boundary Runtime Gate](informed-abstention-tool-boundary-gate.md) — blocks the call before it happens on a missing precondition, where this page handles the unreadable outcome after.
 - [Observation Contract Preservation in Tool-Augmented Agents](observation-contract-preservation.md) — the other way a valid-looking call chain breaks on tool output the agent mishandled.
+- [Caller-Actionable Error Steps in Tool Responses](caller-actionable-error-steps.md) — what the failure message itself should say once the tool has decided to report one.
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — the agent-side escalation ladder these interface mechanisms feed.
 - [Designing for Agent Consumers (Agent Experience)](../../tool-engineering/designing-for-agent-consumers.md) — the surface-design discipline covering discovery and invocation correctness.

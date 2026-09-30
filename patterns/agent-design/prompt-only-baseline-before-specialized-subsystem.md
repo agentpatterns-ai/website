@@ -65,3 +65,4 @@ The self-improvement result also gave the meta-agent a stronger model (GPT-5.4) 
 - [Recursive Agent Harnesses (RAH)](recursive-agent-harnesses.md) — what the recursive unit is when an agent spawns subagents
 - [Evolving Playbooks: Incremental Context That Preserves Knowledge](../../context-engineering/evolving-playbooks.md) — the ACE self-improvement approach this baseline was measured against
 - [Silent Handoff Failure in Delegated Code Search](../../context-engineering/silent-handoff-failure-delegated-search.md) — what a lossy parent-to-subagent handoff costs in practice
+- [First-Proposal Execution in Agent Loops](../anti-patterns/first-proposal-execution.md) — the same baseline-first question, inside one agent cycle

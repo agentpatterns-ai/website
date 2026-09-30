@@ -66,3 +66,4 @@ Cross-framework validation is overhead, and that overhead is wasted in a few nar
 - [Behavioral Testing for Agents](behavioral-testing-agents.md)
 - [Isometric Harness Ablation](../patterns/agent-design/isometric-harness-ablation.md)
 - [Per-Model Harness Tuning](../patterns/agent-design/per-model-harness-tuning.md)
+- [Frozen-Stimulus Panels for Cross-Vendor Behavior Measurement](frozen-stimulus-behavior-panels.md)

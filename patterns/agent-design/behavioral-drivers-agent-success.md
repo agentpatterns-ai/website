@@ -13,7 +13,7 @@ aliases:
   - behavioral trajectory analysis
   - agent architectural reasoning gap
   - resolve rate limitations
-last_reviewed: 2026-06-12
+last_reviewed: 2026-09-27
 maturity: emerging
 ---
 
@@ -109,6 +109,8 @@ Behavioral-pattern auditing and ensembling have diminishing returns in several c
 - Benchmark divergence: the root-cause split comes from 12 never-solved tasks in SWE-bench Verified, which skews toward well-specified single-file bugs. Production tasks (architecture changes, multi-repo work, ambiguous requirements) may fail for different dominant reasons, and 12 tasks is a narrow base to generalize from.
 - Benchmark integrity: OpenAI retired SWE-bench Verified after finding 59.4% of audited problems had flawed tests, and METR observed reward-hacking in 30%+ of frontier-model runs ([OpenAI, 2026](https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/); [Berkeley RDI, 2026](https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/)). Treat the trajectory-derived findings as directional, not ground truth.
 - Low divergence: agents sharing an LLM with different prompts often have overlapping failure sets, so coverage gains are much smaller than the 60%-overlap example implies.
+
+Ambiguous requirements rest on limited evidence, from a controlled experiment on four small game applications rather than production code. The experiment varied requirement-smell density and scored functional correctness against a test suite ([On the Impact of Requirement Smells in LLM-Based Code Generation, arXiv:2609.29208](https://arxiv.org/abs/2609.29208)). The abstract reports that higher density was generally associated with lower correctness, but no correlation stayed statistically significant after correction for multiple comparisons. Requirements carrying no smells still produced faulty code too. The authors report limited statistical power and warn that non-significant results are not evidence of no effect. Read it as a reason to check the requirement text before auditing the agent, not as a measured effect size.
 
 ## Key Takeaways
 

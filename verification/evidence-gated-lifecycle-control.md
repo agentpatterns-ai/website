@@ -9,7 +9,7 @@ tags:
 aliases:
   - "evidence-gated lifecycle control"
   - "agent-as-claim lifecycle gating"
-last_reviewed: 2026-07-18
+last_reviewed: 2026-09-27
 maturity: emerging
 ---
 
@@ -23,7 +23,7 @@ Evidence-gated lifecycle control advances a work unit from one state to the next
 
 The gate proves evidence is authentic, current, and tied to the code in front of it — not that the code is correct. Adopt it only when your real failure mode matches what it defends against:
 
-- Agents emit premature or stale completion claims. Turn-budget pressure pushes agents to produce completion language as the budget runs low, regardless of the actual state of the code ([The Verification Horizon, arxiv:2606.26300](https://arxiv.org/abs/2606.26300)). Freshness binding blocks that.
+- Agents emit premature or stale completion claims. Turn-budget pressure pushes agents to produce completion language as the budget runs low, regardless of the actual state of the code ([The Verification Horizon, arxiv:2606.26300](https://arxiv.org/abs/2606.26300)). Freshness binding blocks that. Across seven models, completion-claim rates exceeded the official evaluator's pass rates by 28.7 to 37.9 percentage points ([Who Holds the Pen? Let Specifications, Not Agents, Sign Off, arxiv:2609.29921](https://arxiv.org/abs/2609.29921v1)). The same models satisfied only 79.6 to 86.4% of 509 source-grounded task directions.
 - Your gate predicates actually constrain intent. The gate faithfully admits whatever the test proves — so if the test under-specifies behavior, the gate authentically advances a wrong artifact (see [when this backfires](#when-this-backfires)).
 - You can absorb the overhead. In the paper's ablation the gated loop ran about 1.2x the tokens (204,553 vs 170,545 per cell) and about 1.5x the wall time (81.2s vs 54.8s) of the compute-budgeted baseline ([Proof-or-Stop, arxiv:2607.14890](https://arxiv.org/abs/2607.14890v1)).
 

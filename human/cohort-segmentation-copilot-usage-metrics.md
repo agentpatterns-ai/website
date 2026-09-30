@@ -9,7 +9,7 @@ tags:
   - copilot
   - human-factors
   - observability
-last_reviewed: 2026-09-15
+last_reviewed: 2026-09-29
 maturity: adopted
 status: current
 ---
@@ -32,6 +32,8 @@ On 29 May 2026 the Copilot Usage Metrics API gained `ai_adoption_phase` (user-le
 Each entry carries a `version` field (starts at `v1`) so logic can evolve without breaking history. `totals_by_ai_adoption_phase` reports averages per user inside the phase — engaged users, interactions, completion/acceptance activity, lines added/deleted, PRs created/merged/reviewed, median time-to-merge ([GitHub Changelog, 2026-05-29](https://github.blog/changelog/2026-05-29-copilot-usage-metrics-api-adds-cohorts-for-ai-adoption)). Averages, not sums, so phase size never dominates intensity.
 
 On 11 September 2026 the API added `daily_active_vscode_agent_users` and `totals_by_vscode_agent` at the org level, plus a per-user `used_vscode_agent` flag ([GitHub Changelog, 2026-09-11](https://github.blog/changelog/2026-09-11-add-vs-code-agents-to-copilot-usage-metrics)). They cover the dedicated VS Code Agents window only, separate from editor-window Agent Mode. Read `totals_by_vscode_agent` as the IDE-agent population and Phase 1 undercounts.
+
+On 25 September 2026 the repository-level reports added a `pull_request_review_times` array on each `repos-1-day` row. It gives the median and 90th percentile time from ready for review to first review, first review to final review, and final review to merge ([GitHub Changelog, 2026-09-25](https://github.blog/changelog/2026-09-25-usage-metrics-api-adds-pull-request-review-stages)). It counts only human reviews of pull requests a person opened, and it leaves out pull requests that became ready for review before 21 September 2026.
 
 ## When this applies
 

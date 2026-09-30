@@ -98,6 +98,7 @@ nav:
       - interactive-clarification-underspecified-tasks.md
       - critic-agent-plan-review.md
       - cross-session-peer-messaging.md
+      - decision-unbundling-orchestrator-load.md
       - deterministic-orchestration-structured-modernization.md
       - llm-as-code-agentic-programming.md
       - bounded-agent-step.md
@@ -131,6 +132,7 @@ nav:
       - capability-declarations-for-agent-actions.md
       - deterministic-precondition-gates.md
       - spec-first-framework-enforcement-modes.md
+      - specification-authority-boundary.md
       - trace-learned-execution-guardrails.md
       - protect-the-oracle-from-the-agent.md
       - informed-abstention-tool-boundary-gate.md
@@ -140,10 +142,12 @@ nav:
       - interaction-effect-obligations.md
       - fleet-irreversibility-budget.md
       - agent-native-filesystem-mediation.md
+      - model-directed-subagent-tiering.md
   - "Reliability":
       - administrative-effort-ceilings.md
       - agent-circuit-breaker.md
       - agent-client-admission-control.md
+      - caller-actionable-error-steps.md
       - residual-completion-stateful-handoffs.md
       - retry-switch-abstain-recovery-policy.md
       - self-healing-production-agent.md
@@ -155,6 +159,7 @@ nav:
       - comparison-only-advisor.md
       - copilot-auto-tier-selection.md
       - cross-vendor-competitive-routing.md
+      - decision-fork-replay.md
       - decoupled-search-grounding.md
       - deterministic-fast-paths.md
       - field-change-intent-over-generated-diffs.md
@@ -166,6 +171,7 @@ nav:
       - evidence-first-diagnosis-reports.md
       - gateway-model-routing.md
       - gateway-hint-headers.md
+      - exactly-once-enforcement-layer.md
       - exception-handling-recovery-patterns.md
       - failure-trajectory-recovery-window.md
       - feedback-capability-equalizer.md

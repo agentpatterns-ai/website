@@ -44,11 +44,13 @@ nav:
       - prompt-compression.md
       - control-context-compression-budget.md
       - reacquisition-cost-measurement.md
+      - compaction-policy-latency-and-cost.md
       - injected-context-cost-attribution.md
       - working-memory-evaluation-levels.md
       - prompt-caching-architectural-discipline.md
       - static-content-first-caching.md
       - prompt-cache-keepalive-agent-pauses.md
+      - attributed-cache-miss-diagnostics.md
       - mask-tools-instead-of-removing.md
       - stateful-iteration-state-carry.md
       - exclude-dynamic-system-prompt-sections.md
@@ -107,6 +109,7 @@ nav:
       - skill-loading-method-selection.md
       - skill-graph-topology-bound.md
       - coverage-aware-skill-selection.md
+      - static-context-tool-residence.md
       - per-object-context-allocation.md
       - organizational-context-layer.md
       - generated-questionnaires.md

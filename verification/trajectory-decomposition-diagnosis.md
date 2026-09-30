@@ -133,3 +133,5 @@ Skip it when:
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — where outcome-only grading misses safety and robustness signals that trajectory-aware auditing catches
 - [Evidence-Chain Run Logs](evidence-chain-run-logs.md) — the per-run counterpart: bracket the reported symptom with one measurement instead of scoring stages across a corpus
 - [Static Difficulty Estimation for Agent Issue Triage](static-difficulty-estimation-issue-triage.md) — the pre-hoc counterpart: estimate whether a run will succeed from task structure before any trajectory exists
+- [Decision-Fork Replay: Grading an Agent's Mid-Run Choices](../patterns/agent-design/decision-fork-replay.md) — scores the choice at a branch point instead of the stages either side of it
+- [Action-Class Decomposition for Tool-Calling Evals](action-class-decomposition-tool-calling-evals.md) — the same split taken along the action-class axis, separating a wrong-kind-of-action miss from an execution failure

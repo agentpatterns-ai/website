@@ -124,3 +124,4 @@ AgentCore's gateway evaluates this Cedar document on every `deploy_service` call
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
 - [MCP Client/Server Architecture](../tool-engineering/mcp-client-server-architecture.md)
 - [Agentic Detection and Response at the MCP Boundary](agentic-detection-response-mcp.md) — the observe half of the same architecture: ADR instruments the transport for detection while the control plane enforces
+- [Delivery-Bound Tool Authorization: When Progressive Discovery Becomes Access Control](delivery-bound-tool-authorization.md) — an experiment where a generic sequence guard at this layer matched a role-scoped delivery server on premature executions and beat it end-to-end

@@ -54,6 +54,7 @@ nav:
       - supply-chain-security-debt-agent-prs.md
       - llm-pinned-vulnerable-versions.md
       - skill-supply-chain-poisoning.md
+      - single-decision-suite-approval.md
       - skill-closure-declaration-gap.md
       - tool-signing-verification.md
   - "Auditing & Governance":
@@ -61,6 +62,7 @@ nav:
       - agent-retrieval-provenance.md
       - centrally-provisioned-mcp-servers.md
       - cross-iteration-safety-state.md
+      - cross-layer-detection-evidence.md
       - cryptographic-governance-audit-trail.md
       - defense-in-depth-agent-safety.md
       - enforced-versus-advisory-controls.md
@@ -107,6 +109,7 @@ nav:
   - credential-hygiene-agent-skills.md
   - customer-hosted-mcp-tunnel.md
   - decoding-harness-attack-surface.md
+  - delivery-bound-tool-authorization.md
   - destyling-untrusted-input.md
   - deterministic-control-plane-llm-coding-agents.md
   - document-borne-prompt-injection.md
