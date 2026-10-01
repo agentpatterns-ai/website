@@ -90,3 +90,4 @@ Same data, the conclusion inverts. The decomposition exposes that the density de
 - [LLM Code Review Overcorrection](llm-review-overcorrection.md) — companion misreading where the review signal is the artifact, not the code
 - [The Reasoning-Complexity Trade-off](reasoning-complexity-tradeoff.md) — stronger models produce more bloated and coupled code; corroborates the LOC-inflation half of this anti-pattern
 - [Vibe Coding](vibe-coding.md) — the consumption shape that drives the LOC-inflation denominator behind density artifacts
+- [The Agent-on-Agent Maintenance Penalty](agent-on-agent-maintenance-penalty.md) — complexity and volume metrics failing again, this time to predict downstream resolve rate

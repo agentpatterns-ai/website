@@ -78,3 +78,4 @@ Claude Code, Gemini CLI, and Copilot CLI all implement subagents as static Markd
 - [Cross-Tool Subagent Comparison](cross-tool-subagent-comparison.md) — how Claude Code, Gemini CLI, and Copilot CLI each implement static subagent definitions and tool scoping
 - [Recursive Sub-Agent Delegation: Depth Limits and Trade-offs in Nested Hierarchies](recursive-sub-agent-delegation-depth.md) — what happens at the other end of uncapped programmatic spawning
 - [Claude Code Dynamic Workflows](../../tools/claude/dynamic-workflows.md) — the dispatch interpretation: code-driven orchestration of pre-configured subagent types at scale
+- [Provider-Hosted Subagent Delegation](../agent-design/provider-hosted-subagent-delegation.md) — the model spawns subagents at runtime under provider-injected instructions, and the tree shares one model.

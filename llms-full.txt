@@ -728,7 +728,9 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Progressive Spend Threshold Alerting for Agent Cost Governance](patterns/agent-design/progressive-spend-threshold-alerting.md)
 - [Project-Scoped Agent Workspace: Durable Context for Clean-Context Subagents](patterns/agent-design/project-scoped-agent-workspace.md)
 - [Protecting the Test Oracle From the Agent](patterns/agent-design/protect-the-oracle-from-the-agent.md)
+- [Provider-Hosted Subagent Delegation: One Model Price for the Whole Tree](patterns/agent-design/provider-hosted-subagent-delegation.md)
 - [Specification Authority Boundary: Agents Propose, the Runtime Commits](patterns/agent-design/specification-authority-boundary.md)
+- [Task Shape Decides What a Heavier Agent Harness Buys](patterns/agent-design/task-shape-harness-payoff.md)
 - [Prompt-Only Baseline Before a Specialized Agent Subsystem](patterns/agent-design/prompt-only-baseline-before-specialized-subsystem.md)
 - [Quality Score Rubric and Simplification Log for Agent Harnesses](patterns/agent-design/quality-score-rubric.md)
 - [RAG over Thinking Traces: Index Reasoning Trajectories Instead of Documents](patterns/agent-design/rag-over-thinking-traces.md)
@@ -970,6 +972,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [The Merge-Conflict Resolution Skill: What to Encode](tool-engineering/merge-conflict-resolution-skill.md)
 - [Tool Cloning and Provenance Assessment in Agent Ecosystems](tool-engineering/tool-cloning-provenance-assessment.md)
 - [Tool Necessity Probing: Reading Tool-Call Decisions From Hidden States](tool-engineering/tool-necessity-probing.md)
+- [Tool-Schema Bias: Measure the Interface Before You Ship](tool-engineering/tool-schema-bias.md)
 - [Toolset Agentization: Wrapping Co-Used Tools as Sub-Agents](tool-engineering/toolset-agentization.md)
 - [Unix CLI as the Native Tool Interface for AI Agents](tool-engineering/unix-cli-native-tool-interface.md)
 - [Web Search Agent Loop: Iterative Research Patterns](tool-engineering/web-search-agent-loop.md)
@@ -1282,6 +1285,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [False-Pass Liability Decides the Next Harness Component](verification/false-pass-liability-harness-triage.md)
 - [Frozen-Base Task Mining for Repository Instruction Files](verification/frozen-base-task-mining.md)
 - [Frozen-Stimulus Panels for Cross-Vendor Behavior Measurement](verification/frozen-stimulus-behavior-panels.md)
+- [Gate Best-of-k Selection on Compliance Before Score](verification/compliance-gated-best-of-k-selection.md)
 - [Handoff-Boundary Fault Injection (llmmas-otel)](verification/handoff-boundary-fault-injection.md)
 - [Hash-Pinned Command Approval for Non-Interactive Plugin Installs](verification/hash-pinned-command-approval.md)
 - [Human-AI Review Synergy in Agentic Code Review](code-review/human-ai-review-synergy.md)
@@ -1620,6 +1624,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints](workflows/prototype-before-optimizing.md)
 - [Public-Channel Agent Work as Lehrwerkstatt for Team Learning](workflows/public-channel-agent-work.md)
 - [QA Session to Issues Pipeline for AI Agent Development](workflows/qa-session-to-issues-pipeline.md)
+- [Re-Run an Agent's Speed-Up Claim Before Merging](workflows/rerun-agent-speedup-claims.md)
 - [Reducing Fixed CI Overhead Before Adding Shards](workflows/ci-setup-overhead-before-sharding.md)
 - [Routing Dependency Updates to Repair Agents by Budget](workflows/dependency-update-repair-routing.md)
 - [Runbooks as Agent Instructions: Agent-Followable Ops](workflows/runbooks-as-agent-instructions.md)
@@ -1766,6 +1771,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Compound Prompt Constraints Degrade More Than Their Parts Predict](patterns/anti-patterns/compound-prompt-constraints.md)
 - [Conceptual Integrity Erosion in Agent-Built Codebases](patterns/anti-patterns/conceptual-integrity-erosion.md)
 - [Context Poisoning: When Hallucinations Become Premises](patterns/anti-patterns/context-poisoning.md)
+- [Cost-Inefficient Behaviors in Coding Agents](patterns/anti-patterns/cost-inefficient-agent-behaviors.md)
 - [Cross-Component Interference in Agent Scaffolds](patterns/anti-patterns/cross-component-interference.md)
 - [Cross-Session Re-Implementation of Existing Agent Code](patterns/anti-patterns/cross-session-reimplementation.md)
 - [Declared Peer Consensus as Context for a Reviewing Agent](patterns/anti-patterns/declared-peer-consensus-agent-context.md)
@@ -1814,6 +1820,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Spec Complexity Displacement: When Specs Become Code](patterns/anti-patterns/spec-complexity-displacement.md)
 - [Stale AI Configuration Artifacts (Context Rot)](patterns/anti-patterns/stale-ai-configuration-artifacts.md)
 - [Test Oracles That Read Their Expectation From the Code](patterns/anti-patterns/state-anchored-test-oracles.md)
+- [The Agent-on-Agent Maintenance Penalty](patterns/anti-patterns/agent-on-agent-maintenance-penalty.md)
 - [The AI Knowledge Generation Fallacy: LLMs Recombine, Not Invent](fallacies/ai-knowledge-generation-fallacy.md)
 - [The Consistent Capability Fallacy in LLM Agent Design](fallacies/consistent-capability-fallacy.md)
 - [The Effortless AI Fallacy for AI Agent Development](patterns/anti-patterns/effortless-ai-fallacy.md)
@@ -24768,6 +24775,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Fleet-Level Irreversibility Budgets for Agent Effects](fleet-irreversibility-budget.md) — One shared account of residual risk, charged before each effect commits, catches the overdraw that individually compliant agents create together — and the fleet size below which it buys nothing
 - [Agent-Native Filesystems: Gating Effects, Not Commands](agent-native-filesystem-mediation.md) — Attach permission rules to filesystem paths instead of command strings, stage every mutation until the user commits, and keep the undo inside the filesystem
 - [Model-Directed Subagent Tiering: Lead Model Picks the Tier](model-directed-subagent-tiering.md) — Let the lead agent pick subagent kind, tier, effort and reuse at each dispatch instead of a router or one fixed sidekick; the evidence is vendor-run and depends on cache lifetime
+- [Provider-Hosted Subagent Delegation: One Model Price for the Whole Tree](provider-hosted-subagent-delegation.md) — Hosted delegation lets the model spawn subagents inside one API request, but every agent inherits the request's model and price, so size that model to the hardest subtask in the tree
 
 ## Reliability
 
@@ -24874,6 +24882,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Situated Harness Layers: Fix at the Layer That Owns It](situated-harness-layers.md) — An eight-layer model of what a harness manages, ordered by change cadence, so a fix lands on the layer that owns the problem rather than a faster one that cannot hold it
 - [Fleet Harness Attribution](fleet-harness-attribution.md) — Pin model and task, swap whole harnesses, and measure pass rate alongside input-token consumption across a model fleet to attribute outcomes to the harness layer rather than the model
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — Pin the model, remove one harness subsystem at a time, measure the score drop — the resulting per-subsystem table ranks investment priorities
+- [Task Shape Decides What a Heavier Agent Harness Buys](task-shape-harness-payoff.md) — Harness gain shrinks with model strength on fixed-workflow issue repair and grows with it on open-ended repository work, with a measured per-component ledger
 - [Prompt-Only Baseline Before a Specialized Agent Subsystem](prompt-only-baseline-before-specialized-subsystem.md) — Measure a prompt-only agent loop before adopting a memory or self-improvement subsystem; it beat both on two benchmarks, but only where the loop exposes its prompt and history as code variables
 - [Model-Set Parity: Reading Harness Efficiency Claims](model-set-parity-harness-claims.md) — A published cross-harness efficiency figure measures the harness only when both arms run the same models; change the model set and the number prices a configuration
 - [Reliability of an Automatically Selected Agent Harness](harness-selection-reliability.md) — When a search procedure picks the winning harness, report the worst run and the lower-quantile selected lift alongside the mean
@@ -40372,6 +40381,8 @@ Each ablation run produces one row. The table is the deliverable.
 | State | 80% | 75% | 5 pp |
 | Feedback | 80% | 50% | 30 pp |
 
+A published table that measures five components by adding each to a minimal baseline, not by removing them, is in [Task Shape Decides What a Heavier Agent Harness Buys](task-shape-harness-payoff.md).
+
 The drops rank the subsystems. The rule is simple: upgrade the highest-drop subsystem first. Near-zero drops mark simplification candidates — they consume maintenance budget without earning their place ([walkinglabs](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-02-what-a-harness-actually-is/index.md)).
 
 ## Why the same-model constraint matters
@@ -42174,6 +42185,7 @@ The ablation shows that many warm, tiered subagents beat one long-lived worker. 
 - [Model-Set Parity in Harness Claims](model-set-parity-harness-claims.md) covers harness comparisons when the model sets differ.
 - [Dispatch-Time Reasoning Level](dispatch-time-reasoning-level.md) covers a human choosing effort at hand-off.
 - [Pricier per Token, Cheaper per Task](../../token-engineering/pricier-per-token-cheaper-per-task.md) covers the lead plus sidekick cost inversion.
+- [Provider-Hosted Subagent Delegation](provider-hosted-subagent-delegation.md) covers the hosted form of the same delegation decision, where the tree shares one model and no tier can be chosen.
 
 ---
 
@@ -43488,6 +43500,8 @@ Source: https://agentpatterns.ai/patterns/agent-design/per-model-harness-tuning/
 Frontier vendors train models on provider-specific prompt and tool conventions. A harness shaped for one violates the other's training distribution. Declare per-model overrides — system-prompt prefix and suffix, tool inclusion and naming, middleware, subagent configuration — that the harness applies whenever you select a particular model.
 
 LangChain's deepagents library shipped this as harness profiles on 2026-04-29. On a tau2-bench subset, profiles produced a 10-20 point jump per model: GPT 5.3 Codex went from 33% to 53%, and Claude Opus 4.7 from 43% to 53% ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)).
+
+Model capability is one axis of the conditional; task type is the other, and it can reverse the sign. See [Task Shape Decides What a Heavier Agent Harness Buys](task-shape-harness-payoff.md).
 
 ```mermaid
 graph TD
@@ -45512,6 +45526,75 @@ Neither measures ownership separation itself. Treat the control as a design argu
 - [Test Oracles That Read Their Expectation From the Code](../anti-patterns/state-anchored-test-oracles.md) — the same cancellation reached through how the oracle derives its expectation rather than through who may edit it
 - [The Reviewer's Playbook for Agent-Authored PRs](../../code-review/reviewers-playbook-agent-authored-prs.md) — the detection-side counterpart, which reads CI and test-config changes before any application code
 - [Verification-Centric Development](../../workflows/verification-centric-development.md) — owns the snapshot-approval-file argument, where every structural change needs an explicit human approval
+
+---
+
+### Provider-Hosted Subagent Delegation: One Model Price for the Whole Tree
+Source: https://agentpatterns.ai/patterns/agent-design/provider-hosted-subagent-delegation/
+
+# Provider-Hosted Subagent Delegation: One Model Price for the Whole Tree
+
+> Hosted delegation moves subagent orchestration into one API request and gives the tree a single model, so that model must fit the hardest subtask.
+
+Provider-hosted subagent delegation lets the model spawn and coordinate subagents without your application implementing orchestration. OpenAI shipped it in beta alongside GPT-6.1 Sol on 2026-09-29: "Let the model delegate work to subagents in a Responses API request" ([OpenAI API changelog](https://developers.openai.com/api/docs/changelog)). Every agent in the tree inherits one model. "The subagents share the request's model and available tools, while agents coordinate through collaboration primitives such as spawning, messaging, and waiting" ([OpenAI: Multi-agent](https://developers.openai.com/api/docs/guides/responses-multi-agent)). This page covers OpenAI's design only, so treat it as one vendor's shape rather than a settled one.
+
+## Conditions that have to hold
+
+- The work splits into bounded, independent subtasks. OpenAI names the shapes that do not: tasks that "depend on a single ordered chain of reasoning, require frequent writes to shared mutable state, or are already dominated by one slow external operation" ([OpenAI](https://developers.openai.com/api/docs/guides/responses-multi-agent)).
+- Those subtasks sit close together in difficulty. One rate covers the tree, so a mix of trivial and hard work pays the hard rate throughout.
+- You do not need the three controls hosted mode withdraws. `/responses/compact`, `reasoning.summary` and `max_tool_calls` are all unsupported once `multi_agent.enabled` is true, and server-side compaction switches on "even if the request does not configure `context_management`" ([OpenAI](https://developers.openai.com/api/docs/guides/responses-multi-agent)).
+
+## How the tree works
+
+The root agent is `/root`, and children take paths like `/root/reviewer/tester`. Six hosted actions drive coordination: `spawn_agent`, `send_message`, `followup_task`, `wait_agent`, `interrupt_agent` and `list_agents`. `max_concurrent_subagents` defaults to 3, capping active subagent turns tree-wide, and OpenAI "imposes no fixed limit on the total number of subagents or tree depth" ([OpenAI](https://developers.openai.com/api/docs/guides/responses-multi-agent)).
+
+Uniformity is not an accident of the beta. OpenAI states it to the model, in instructions the caller cannot edit: "All agents in the team, including the agents that you can assign tasks to, are equally intelligent and capable, and have access to the same set of tools" ([OpenAI](https://developers.openai.com/api/docs/guides/responses-multi-agent)). A lead that picks a cheaper tier per dispatch, as in [model-directed subagent tiering](model-directed-subagent-tiering.md), has no equivalent here.
+
+## Why it works
+
+Delegation buys two separable things, and the hosted form buys one. The first is context isolation: "Each subagent receives a bounded task and maintains its own context, which reduces interference in context between unrelated lines of work and improves performance" ([OpenAI](https://developers.openai.com/api/docs/guides/responses-multi-agent)). A study outside the vendor states the same condition: multi-agent systems can be advantageous "when a single agent's effective context utilization is degraded (e.g., due to long or noisy contexts)" ([Tran and Kiela](https://arxiv.org/abs/2604.02460v2)).
+
+The second is price arbitrage. Cost is rate times tokens, so moving routine tokens onto a cheaper model lowers the bill, which is what a tiering harness does at each dispatch. A tree that shares one model cannot express that, because one rate covers every agent. The rule follows from the price tables, not from any vendor claim. Pick the request's model for the hardest subtask, and pay that rate for the easy ones.
+
+## When this backfires
+
+- Subtask difficulty varies widely. GPT-6.1 Sol and GPT-6 Astra share a 1,050,000 context window and an Apr 30, 2026 knowledge cutoff. Astra costs $10.00 per million input tokens and $50.00 output. Sol costs $2.00 and $10.00 ([GPT-6.1 Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol); [GPT-6 Astra](https://developers.openai.com/api/docs/models/gpt-6-astra)). A tree pinned to Astra for one hard subagent pays five times over for the rest.
+- Token growth outruns the parallel gain. OpenAI warns that "adding subagents can increase token usage" ([OpenAI](https://developers.openai.com/api/docs/guides/responses-multi-agent)), and the launch material puts no number on the gain.
+- The prompt crosses 272K input tokens, at which point "2x input and cache rates and 1.5x output for the full request" apply ([GPT-6.1 Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol)).
+- Agents contend rather than cooperate. Cognition argues that "Actions carry implicit decisions, and conflicting decisions carry bad results", and that running agents in collaboration "only results in fragile systems" because "decision-making ends up being too dispersed" ([Cognition](https://cognition.com/blog/dont-build-multi-agents)). The post is dated June 12, 2025, before hosted coordination actions existed.
+- The gain may be compute, not architecture. Tran and Kiela conclude that "for multi-hop reasoning tasks, many reported advantages of multi-agent systems are better explained by unaccounted computation and context effects rather than inherent architectural benefits" ([arXiv:2604.02460v2](https://arxiv.org/abs/2604.02460v2)). Their scope is multi-hop reasoning, not coding agents.
+
+## Example
+
+The same five-agent job, priced two ways, at OpenAI's published rates for one hard subtask and three mechanical ones:
+
+```text
+Harness-built tiering            Hosted tree
+  lead      -> Astra  $10/$50     /root           -> Sol  $2/$10
+  hard      -> Astra  $10/$50     /root/hard      -> Sol  $2/$10
+  rename x3 -> Sol    $2/$10      /root/rename x3 -> Sol  $2/$10
+
+Tiering sets the rate per dispatch.
+Hosting sets it once, in the request.
+```
+
+Pinning the hosted request to Astra to serve the one hard subagent reprices all five agents at $10/$50. The cheaper reading is to run the tree on Sol and keep the hard subtask out of it.
+
+## Key Takeaways
+
+- Hosted delegation ships the orchestration and withholds the tier: subagents share the request's model and tools.
+- Size the request's model to the hardest subtask in the tree, and count every easy subagent as billed at that rate.
+- The mechanism on offer is context isolation and parallelism. Price arbitrage is not available, and OpenAI warns that adding subagents can increase token usage.
+- Enabling it costs `/responses/compact`, `reasoning.summary` and `max_tool_calls`, and forces server-side compaction on.
+- The feature is beta, from one vendor, and the vendor publishes no number for the gain.
+
+## Related
+
+- [Model-Directed Subagent Tiering](model-directed-subagent-tiering.md) covers the lead model choosing a tier and effort per dispatch, which the hosted form removes.
+- [Auto Model Selection](auto-model-selection.md) covers the harness picking the model per request from a vendor-managed pool.
+- [Recursive Sub-Agent Delegation](../multi-agent/recursive-sub-agent-delegation-depth.md) covers depth as a design lever in nested hierarchies.
+- [Static Roster vs Runtime Subagent Definition](../multi-agent/static-roster-vs-runtime-subagent-definition.md) covers who defines a subagent's prompt and tool allowlist, and when.
+- [Sub-Agents for Fan-Out](../multi-agent/sub-agents-fan-out.md) covers single-level dispatch, which this tree extends with nesting.
 
 ---
 
@@ -51203,6 +51286,72 @@ A feasibility gate works because feasibility is a cheap, up-front, observable pr
 
 ---
 
+### Task Shape Decides What a Heavier Agent Harness Buys
+Source: https://agentpatterns.ai/patterns/agent-design/task-shape-harness-payoff/
+
+# Task Shape Decides What a Heavier Agent Harness Buys
+
+> On fixed-workflow issue repair a heavier harness covers for a weaker model, and its gain shrinks as the model improves. Open-ended repository work reverses that.
+
+What a heavier harness buys depends on the shape of the task as much as on the strength of the backing model. A study of two harnesses across ten open-weight models and three benchmarks found the harness-to-capability relationship running in opposite directions on different task types ([Hu et al., arXiv:2609.32459v1](https://arxiv.org/abs/2609.32459v1)).
+
+## Read the task shape first
+
+On issue repair the workflow is fixed and edits touch functions in a few files. There, harness machinery substitutes for model capability, and the substitution weakens as models improve. Matched-model rows from the SWE-bench Verified leaderboard show it: OpenHands "decreases from +13.60 pp with Claude 3.7 Sonnet to +5.47 pp with Claude 4 Sonnet". SWE-agent drops "from +9.60 pp to +4.07 pp under the same model progression" ([Hu et al., arXiv:2609.32459v1](https://arxiv.org/abs/2609.32459v1)). The authors' own runs on a 300-instance sample of SWE-bench Pro repeat it for Qwen: "the OpenCode advantage decreases from about 6 pp for Qwen3-Max to 2.67 pp for Qwen3.7-Max".
+
+Open-ended repository work inverts this. On ProgramBench, a repository-generation benchmark, weaker models got no preferential benefit: "OpenCode does not bring greater improvements to weaker models than mini-SWE-agent. Only the latest models (e.g., Qwen3.7-Max and DeepSeek-V4-Pro) can consistently leverage the complex harness to complete tasks more effectively" ([Hu et al., arXiv:2609.32459v1](https://arxiv.org/abs/2609.32459v1)). On GitTaskBench the turning point sat inside each family, at Qwen3.6-Max and DeepSeek-V3.1.
+
+So the decision splits:
+
+- Fixed-workflow task, strong model: the extra harness adds a smaller gain.
+- Open-ended task, model below your family's turning point: the complex harness did not beat the minimal one.
+- Open-ended task, model above it: this is where the build pays.
+
+## The measured component ledger
+
+Ablation on the full 200-instance ProgramBench set, run on Qwen3.7-Max and DeepSeek-V4-Pro only, ranks the five harness components unevenly, with subagents split into two variants. Every figure below is a repository-generation score change against the mini-SWE-agent baseline ([Hu et al., arXiv:2609.32459v1](https://arxiv.org/abs/2609.32459v1)).
+
+| Component added alone | Qwen3.7-Max | DeepSeek-V4-Pro |
+|---|---|---|
+| Task-specific subagents | +5.91 pp | +4.46 pp |
+| Tool registry | +4.57 pp | +3.54 pp |
+| Explicit planning | small gain, no figure reported | small gain, no figure reported |
+| Lazy skills | smaller benefit than DeepSeek | larger benefit than Qwen |
+| Context compression | -4.86 pp | -3.85 pp |
+| General SE subagents | negative, no figure reported | negative, no figure reported |
+| All five combined | +7.37 pp | +6.21 pp |
+
+The last row constrains how you use the rest. Turning on all five, including the two that lose points alone, beat every single-component variant on both models, taking Qwen3.7-Max "from 42.88 to 50.25" and DeepSeek-V4-Pro "from 45.14 to 51.35". The authors read this as non-independence: "harness components are not independent: their benefits depend on how they are coordinated within the agent loop". The study did not run subsets of two to four components, so the ledger does not show which parts are safe to strip.
+
+## Why it works
+
+The authors say the gains come from regulating "how agents explore and act in repositories". Manual inspection of failed and low-scoring trajectories found two failure modes, excessive probing and insufficient probing: "the components with the largest performance gains, i.e., task-specific subagents, substantially reduce the tendency of mini-SWE-agent to perform either excessive or insufficient probing" ([Hu et al., arXiv:2609.32459v1](https://arxiv.org/abs/2609.32459v1)). The correction runs both ways: one trajectory cut reference probes from 133 to 43 and rose from 1602/6491 to 4425/6491 tests passed; another raised probes from 3 to 45 and rose from 1231/1994 to 1499/1994. The authors suggest more structured interaction, not a bigger prompt budget, explains the gain: tool calls rose 131.18% and 83.58% while prompt tokens rose 16.37% and 7.26%.
+
+## When this backfires
+
+- The compression row may not transfer to a different compaction design. The module measured here applies snipping and observation compaction first, and "triggers LLM-based summarization" only if the context still exceeds the limit. CliffCompaction, a different design, "reduces cost by up to 50% under a bounded context while maintaining or improving performance on Terminal-Bench", crediting a pass that keeps "compacted information faithful by only truncating or dropping content, never rephrasing or rewriting it" ([arXiv:2609.26779v1](https://arxiv.org/abs/2609.26779v1)).
+- Its payoff also shrinks as the window widens. Averaged across four models, the payoff from managing context "shrinks steadily across 32k, 64k, 96k, and 128k windows: from 35.7 to 15.9, 5.5, and 2.7 percentage points on SWE-Bench" ([Fan et al., arXiv:2609.20804v1](https://arxiv.org/abs/2609.20804v1)).
+- Diminishing is not zero. In the same leaderboard table the Tools harness still gained +5.60 pp on Claude 4 Opus, the strongest model listed ([Hu et al., arXiv:2609.32459v1](https://arxiv.org/abs/2609.32459v1)).
+- Nothing here transfers cleanly outside the measured setup. Every controlled run used open-weight Qwen and DeepSeek in non-thinking mode at temperature 0.0. The authors also cut the ProgramBench step limit "from the original 1,000 steps to 300 steps to reduce evaluation cost". The authors name dataset coverage as their main external threat ([Hu et al., arXiv:2609.32459v1](https://arxiv.org/abs/2609.32459v1)).
+
+## Key Takeaways
+
+- Ask what the task looks like before asking whether the model is strong enough. A strong model on fixed-workflow repair needs less harness; on repository generation it is the one that can use more.
+- Alone, structured tools and task-specific subagents gave "the most stable and substantial gains" on both models. The study did not test them as a pair.
+- A component that loses points alone may still earn its place. All five together beat every single-component variant, which points to interaction. The study did not run any mixed subset, such as all five minus context compression.
+- Check how much your compaction discards. Compression lost points in this study. CliffCompaction reports "maintaining or improving performance on Terminal-Bench" with faithful truncation ([arXiv:2609.26779v1](https://arxiv.org/abs/2609.26779v1)).
+- These are priors from one benchmark and two open-weight models. [Isometric harness ablation](isometric-harness-ablation.md) is how you get your own.
+
+## Related
+
+- [Isometric Harness Ablation](isometric-harness-ablation.md) — the method for producing a per-component table on your own stack rather than importing one.
+- [Per-Model Harness Tuning](per-model-harness-tuning.md) — the other half of the conditional, treating the backing model as a harness variable.
+- [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — a second study where added capability surface moved the thing it touched but not reliability.
+- [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md) — why the task-specific subagent beats the general one.
+- [Stage Elision Before Summarization](../../context-engineering/stage-elision-before-summarization.md) — the context-management evidence behind the window-binding condition.
+
+---
+
 ### Task-Specific Agents vs Role-Based Agents
 Source: https://agentpatterns.ai/patterns/agent-design/task-specific-vs-role-based-agents/
 
@@ -53738,6 +53887,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)](bypass-permissions-overrides-allowlist.md) — Pairing allowedTools with bypassPermissions does not restrict the agent — the allow list is a no-op below the bypass step, so every tool runs without prompts
 - [Assuming a CLAUDE.md Security Rule Is Enforced](unenforced-claude-md-security-rules.md) — Under the strictest matching standard, 4.4% of security rules across 481 public CLAUDE.md files had a matching built-in Claude Code control; sort each rule by what could enforce it
 - [Direct Prompt Injection via Collaboration (User as Attack Vector)](direct-prompt-injection-collaboration.md) — When the user pastes an attacker-crafted prompt themselves, model-layer classifiers anchored on user intent have nothing anomalous to flag; only egress controls and filesystem boundaries hold
+- [The Agent-on-Agent Maintenance Penalty](agent-on-agent-maintenance-penalty.md) — Agents resolve up to 13.1 points fewer downstream tasks on code another agent wrote, and static maintainability metrics do not predict which code causes the drop
 - [The Anthropomorphized Agent](anthropomorphized-agent.md) — Treating an AI agent as a team member with memory, feelings, and personality leads to misplaced trust and systematic misuse
 - [The Copy-Paste Agent](copy-paste-agent.md) — Duplicating agent definitions causes drift; compose from shared skills instead
 - [Spec Complexity Displacement](spec-complexity-displacement.md) — Writing a spec does not eliminate engineering precision — it relocates it; specs tight enough to drive reliable generation converge toward code-like structure
@@ -53853,6 +54003,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Reading Visible Edge-Case Handling as a Security Check](edge-case-handling-as-security-signal.md) — 18 of 23 interviewees judged an AI suggestion's security by whether a defensive block was visible, on a 21-second review budget; selection rates for the most and least secure suggestions were indistinguishable
 - [Held-Out Tasks as a Harness Shortcut Defense](held-out-tasks-as-shortcut-defense.md) — Held-out tasks resample the questions and leave the benchmark protocol fixed; one protocol counterfactual turned a tuned harness's reported 8.16% gain into −5.10% with the task content unchanged
 - [Treating a Local Agent Session Trace as Audit Evidence](local-trace-as-audit-evidence.md) — Nearly every tested coding-agent harness deleted its own session trace in full-access mode on request; one harness held out through a prompt, not a permission boundary, and a hash-chained log does not stop the deletion either
+- [Cost-Inefficient Behaviors in Coding Agents](cost-inefficient-agent-behaviors.md) — Agents re-read code already retrieved, rewrite near-identical scripts, and rerun unchanged tests; the three behaviors carried 6.86% of task cost in one harness and up to 22.75% in another, and a tool that removed over 75% of one of them under Claude Code raised the bill
 - [Rolling Out a Team-Embedded Agent Like a Tool](proactive-team-agent-tool-rollout.md) — Provisioning a proactive agent into shared team channels the way a tool is provisioned leaves the renegotiation of unwritten norms to whoever is in the channel
 - [First-Proposal Execution in Agent Loops](first-proposal-execution.md) — A loop that runs whatever it proposed first hit the goal 67.42% of the time; choosing among three candidates hit 96.53%, and the governance architecture on top added 0.04 points
 - [Treating a Clean Final State as Boundary-Compliance Evidence](clean-final-state-as-compliance-evidence.md) — A clean protected-state digest collapses several decision policies into one value; three models can leave the same frozen test untouched by three different routes, and one clean repository state followed an edit the agent reverted
@@ -56976,6 +57127,126 @@ The cheap model surfaces its own uncertainty; the tier label propagates through 
 
 ---
 
+### Cost-Inefficient Behaviors in Coding Agents
+Source: https://agentpatterns.ai/patterns/anti-patterns/cost-inefficient-agent-behaviors/
+
+# Cost-Inefficient Behaviors in Coding Agents
+
+> Three repeated behaviors showed up in 79.00% to 98.00% of coding tasks, at an average 6.86% to 22.75% of task cost depending on the harness.
+
+Your agent re-reads a file a subagent already read, writes a fourth probe script almost identical to the third, and runs the same test again without having touched the patch. A study of 1,200 trajectories from Claude Code and Mini-SWE-Agent on 300 SWE-bench Verified tasks names those three behaviors, counts them, and attributes a share of task cost to each ([Hu et al., "Analyzing and Mitigating Cost-Inefficient Behaviors in Coding Agents", arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)). In this study the harness moved the cost share more than the model did: Claude Code 6.86% against 21.16% for Mini-SWE-Agent on the same Sonnet 4.6, and 21.16% to 22.75% across three models inside Mini-SWE-Agent. And the obvious fix, bolting on a tool that removed the behavior under Claude Code, made the bill go up in the same study.
+
+## What the study counted
+
+Three behaviors, each defined by a detector run over the trajectory:
+
+- Subsumed retrieval: a retrieval whose returned content is fully covered by an earlier retrieval. The detector scans backward from each retrieval that returns at least five non-empty lines ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+- Similar script generation: a script regenerated rather than edited, at line-level Jaccard similarity of at least 0.60 against the nearest preceding script. The authors set that threshold by manually inspecting 20 pairs per configuration ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+- Test re-execution: repeated runs of the same tests inside one inter-patch window. The detector keeps the last run, on the grounds that it is "potentially decision-relevant", and flags every run before it ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+Prevalence below is the percentage of tasks showing the behavior at least once. Cost is the average share of per-task monetary cost attributed to it, computed from the tokens in each flagged action at the relevant model's own prices. Four configurations were measured: Claude Code with Sonnet 4.6 as the main model and Haiku 4.5 for subagents, and Mini-SWE-Agent with Sonnet 4.6, MiniMax-M3, or Qwen-3.5 Plus ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+| Behavior | Claude Code | MSA + S46 | MSA + MM3 | MSA + Q35+ |
+|---|---|---|---|---|
+| Subsumed retrieval | 64.33% / 5.01% | 87.33% / 8.42% | 92.33% / 7.88% | 89.33% / 11.41% |
+| Similar script generation | 20.67% / 1.02% | 51.33% / 9.57% | 68.00% / 8.85% | 57.67% / 7.91% |
+| Test re-execution | 49.67% / 0.83% | 69.00% / 3.17% | 83.00% / 5.39% | 66.00% / 3.43% |
+| All three | 79.00% / 6.86% | 97.33% / 21.16% | 98.00% / 22.12% | 96.67% / 22.75% |
+
+Each cell is tasks affected / average share of task cost, from Table 1 of [arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1).
+
+Read the spread, not the maximum. The 22.75% belongs to one Mini-SWE-Agent configuration. The same three behaviors under Claude Code carried 6.86%, and the paper states that "CC consistently exhibits the lowest overall level of inefficiency" ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)). The authors put that down to the harness rather than the model: Claude Code's system prompt and tool abstractions suppress several of these behaviors before any intervention ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+## Why it works
+
+Under Claude Code, half of subsumed retrieval crosses the subagent boundary. The paper reports that cross-agent subsumed retrieval "is unique to CC and accounts for 50.15% of its SubRetrv", because "CC offloads exploration to subagents, which return summaries rather than the retrieved code. So the main agent may re-retrieve the same region when needed later" ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+Script regeneration follows the artifact. Similar script generation "occurs 5.91–9.98× more frequently in MSA (2.54–4.29 vs. 0.43)" per task, and the authors call the gap consistent with a line in Claude Code's own system prompt. The difference, they write, "is consistent with CC's built-in instruction: 'NEVER create files unless they're absolutely necessary for achieving your goal.' This discourages persistent script creation and shifts toward ephemeral generation" ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+Test re-execution has no counterweight in Claude Code's built-in prompt. Here the authors report that "we find no built-in instruction that discourages re-running tests without updated patches or asks the agent to reuse previous test output", and call it "the one behavior where CC shows no clear advantage: 2.09 executions per task, the same magnitude as MSAS46 (2.51) and MSAQ35+ (2.10)" ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)). Its three named causes are gaps in repository-specific test knowledge, recovery of test output the agent failed to capture, and stalls where the agent reruns without advancing the patch.
+
+The saving, when you get one, exceeds the behavior's own price tag. Relating task-cost change to behavior-attributed cost change, the authors fit slopes of 2.83 on the held-out Verified tasks and 1.33 on the SWE-bench Pro sample. They give two reasons. A shorter trajectory re-reads less cached context on every later call. Removing an action can also prevent unflagged follow-on actions, such as the reasoning that would have interpreted its output ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+## The behavior fell and the bill rose
+
+Equipping Claude Code with CodeGraph, a structure-aware retrieval tool, cut the behavior and raised the bill: "Under CC, SubRetrv drops by over 75% on both benchmarks, yet cost rises by 8.30% on Verified-200 and robustly by 12.19% on Pro-100" ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)). Under Mini-SWE-Agent the behavior did not fall reliably: "Under MSA, SubRetrv increases in four of six settings", and the authors conclude that CodeGraph "neither consistently reduces SubRetrv nor improves task cost efficiency". Across the eight agent-and-benchmark settings the tool "yields no robust cost reduction but four robust increases of 8.39–28.14%". Robust is the authors' own term: they "classify an effect as robust at one-sided p<0.05, imposing a stricter threshold on single-run effects" ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+Two mechanisms did the damage, both measured under Claude Code. Each CodeGraph query "returns 8.2–16.6× more tokens than other retrieval actions", so fewer calls bought no fewer tokens. And the tool changed who did the work: "H45 subagent calls drop from 4.81 and 11.03 per task to zero on both benchmarks, while S46 main-agent calls change only slightly (−0.42% and +8.17%). Thus, roughly the same token volume shifts to S46, whose token price is 3× that of H45" ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)). The retrieval tool deleted the cheap model from the trajectory.
+
+[Token Reduction Mistaken for Cost Reduction](token-reduction-not-cost-reduction.md) records the same gap on a different tool class, where a compressor removed tokens without removing dollars.
+
+## What reduced the bill
+
+Seven general behavioral principles, written by the authors and preloaded into the agent's system prompt. They include:
+
+- State what you expect to find before a read.
+- Check whether content is already in context before fetching it again.
+- Make targeted edits rather than whole-file overwrites.
+- Identify the repository's test runner before running tests.
+- Persist reusable scripts rather than creating numbered variants.
+- Stop when repeated actions produce no new evidence ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+Those beat the agent-written alternative. The authors also built configuration-specific sets of 23 to 41 operational rules by distilling each agent's own trajectories ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)), then compared the two:
+
+> SynSkills robustly reduce average cost in three of eight settings by 8.86–22.32%, with no robust cost increase or Pass@1 degradation (Table 3). In comparison, DevSkills robustly reduce cost in six settings by 7.88–41.73%, nearly twice the maximum saving from SynSkills, with only one small Pass@1 drop (−1.50 pp for CC on Verified-200). ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1))
+
+Attach the scope before you quote that range. The 41.73% is Mini-SWE-Agent with Sonnet 4.6 on the held-out Verified tasks. Under Claude Code the same seven principles gave 13.94% on that split and a 1.51% cut on SWE-bench Pro that the authors do not count as robust, and Mini-SWE-Agent with Qwen-3.5 Plus on Pro got 3.57% more expensive. Six of eight settings cut cost by a margin the authors call robust; two did not (Table 3, [arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+On task success the authors count one drop, of 1.50 pp. Table 3 also shows Claude Code down 2.33 pp on Pro and Mini-SWE-Agent with MiniMax-M3 down 2.17 pp on Verified, neither of which the paper counts against the intervention. Most approach cells ran once and are judged against a noise floor estimated from three baseline runs (Study Setup, [arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+For why the hand-written set won, the paper offers a hypothesis and labels it one: "One possible mechanism is that DevSkills encode higher-level, trace-agnostic guidance, whereas SynSkills retain low-level, trace-specific instructions" ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)). The synthesized rules described how to handle a failed string substitution or a shell quoting problem. The hand-written rule on scripts said to persist and revise them instead of creating similar variants.
+
+## When this backfires
+
+The detectors count these actions and price them. They do not establish that any individual instance was dispensable, and the Threats to Validity section grants it: "Parsing, labeling, and detection mechanisms may introduce detection errors despite explicit implementations and manual calibration." ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+- Your trajectories run long. Long-distance subsumed retrieval, where the two reads sit at least 10 steps apart, was most prominent in the configuration with the longest runs: 52.40% of its pairs, at 77.99 average steps against 29.99 to 58.06 for the others ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)). The paper's own rule concedes the case, and offers "content is too far back in context to rely on" as a valid reason to re-read.
+- Your harness already constrains the agent. The gain under Claude Code was smaller than under the bare shell agent on Sonnet 4.6 (13.94% against 41.73% on Verified-200, 1.51% against 33.00% on Pro-100), and the authors explain the general pattern as "CC's system prompt and tool abstractions already suppress several inefficient behaviors, leaving less room for improvement" ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+- Your repositories look nothing like SWE-bench. Every rule set came from SWE-bench Verified trajectories. Carried across, effects shrank: "All approaches also perform better overall on Verified-200 than Pro-100 in identified behaviors. For skill-based approaches, this partly reflects a generalization challenge, as the skills are derived from Verified trajectories and applied to Pro" ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+- You want statistical certainty from this. Baselines and nine intervention settings ran three times; budget limited the rest to single runs judged against a noise floor transferred from the matching baseline. The authors say so plainly: "Robustness estimates rely on baseline-derived variability, which may not fully establish statistical significance." ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)). The CodeGraph numbers carry one more restriction: the tool could not run on 13 of the 100 Pro tasks, so its Pro results compare 87.
+
+## Example
+
+**Before** — the cost column read as a savings target:
+
+```text
+Finding: the three behaviors account for up to 22.75% of task cost
+Action:  install a structure-aware retrieval tool to kill subsumed retrieval
+Result:  under Claude Code, subsumed retrieval down >75%,
+         task cost up 8.30% (Verified-200) and 12.19% (Pro-100, robust)
+```
+
+**After** — measured on your own harness, judged on the bill:
+
+```text
+1. Count the behaviors in your own trajectories. The per-configuration
+   spread in the paper is 6.86% to 22.75%; your harness has one number,
+   not the range.
+2. Change one thing. For example, add a system-prompt rule to rerun tests
+   only when code changes or new evidence warrants it.
+3. Compare total billed cost and task success against the unchanged arm.
+   A drop in the behavior count is not the result you are buying.
+```
+
+## Key Takeaways
+
+- Under Claude Code the three behaviors together carried an average 6.86% of task cost across 300 SWE-bench Verified tasks; under three Mini-SWE-Agent configurations, 21.16% to 22.75% ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)). Quote the figure for the harness you run.
+- Half of Claude Code's subsumed retrieval crosses the subagent boundary: exploration is delegated, a summary comes back, and the main agent re-reads the code itself later ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+- Test re-execution is the one behavior where Claude Code shows no clear advantage, at 2.09 executions per task against 2.51 and 2.10 for two of the three Mini-SWE-Agent configurations ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+- A structure-aware retrieval tool cut subsumed retrieval by over 75% under Claude Code. Cost rose 8.30% on Verified-200, which is not among the four robust increases the authors list (8.39-28.14%), and 12.19% on Pro-100 (robust), partly by shifting work off a subagent model priced at a third of the main one ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+- Seven general behavioral rules in the system prompt robustly reduced cost in six of eight settings by 7.88% to 41.73%, against three of eight and at most 22.32% for rules the agent distilled from its own traces. The top of that range is one framework, one model, one benchmark split (Table 3, [arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+- The detectors count repeated actions, and the mitigation experiment recorded one Pass@1 drop of 1.50 pp that the authors count ([arXiv:2609.30725v1](https://arxiv.org/abs/2609.30725v1)).
+
+## Related
+
+- [Token Reduction Mistaken for Cost Reduction](token-reduction-not-cost-reduction.md) — the same gap between a metric that moved and a bill that did not, measured on context compressors
+- [Harness-Controlled Token Economics (The Harness Effect)](../../token-engineering/harness-token-economics.md) — why four configurations differ by more than 3x on the same three behaviors
+- [Cheaper Per Token, Costlier Per Task](cheaper-per-token-costlier-per-task.md) — the pricing side of the subagent shift that made the retrieval tool more expensive
+- [Request Shaping to Cut Wasted Agent Turns](../../token-engineering/request-shaping-wasted-turns.md) — the prompt-side lever against retrieval the agent did not need
+- [Indiscriminate Structured Reasoning](reasoning-overuse.md) — the adjacent case of paid tokens that do not change the outcome
+
+---
+
 ### Cross-Component Interference in Agent Scaffolds
 Source: https://agentpatterns.ai/patterns/anti-patterns/cross-component-interference/
 
@@ -57738,6 +58009,7 @@ Same data, the conclusion inverts. The decomposition exposes that the density de
 - [LLM Code Review Overcorrection](llm-review-overcorrection.md) — companion misreading where the review signal is the artifact, not the code
 - [The Reasoning-Complexity Trade-off](reasoning-complexity-tradeoff.md) — stronger models produce more bloated and coupled code; corroborates the LOC-inflation half of this anti-pattern
 - [Vibe Coding](vibe-coding.md) — the consumption shape that drives the LOC-inflation denominator behind density artifacts
+- [The Agent-on-Agent Maintenance Penalty](agent-on-agent-maintenance-penalty.md) — complexity and volume metrics failing again, this time to predict downstream resolve rate
 
 ---
 
@@ -62714,6 +62986,7 @@ Same bug fix. No architectural drift.
 - [CLAUDE.md Convention](../../instructions/claude-md-convention.md)
 - [Trust Without Verify](trust-without-verify.md)
 - [The Patchwork Problem in LLM-Generated Code](patchwork-problem.md)
+- [The Agent-on-Agent Maintenance Penalty](agent-on-agent-maintenance-penalty.md)
 
 ---
 
@@ -63668,6 +63941,58 @@ The instrument has limits too. Canedo grants that mutation score is "a proxy, an
 
 ---
 
+### The Agent-on-Agent Maintenance Penalty
+Source: https://agentpatterns.ai/patterns/anti-patterns/agent-on-agent-maintenance-penalty/
+
+# The Agent-on-Agent Maintenance Penalty
+
+> An agent extending agent-written code resolves fewer tasks than one extending human code, and the inherited code's maintainability metrics do not predict the penalty.
+
+Across four frontier agents and four benchmarks, downstream resolve rate fell by "up to 13.1%" when the inherited patch came from an agent, not a human ([Patel et al., 2026](https://arxiv.org/abs/2606.21804v2)). An agent did the follow-on work throughout. When people evolved AI-co-developed code, a 151-participant experiment "revealed no significant differences in subsequent evolution with respect to completion time or code quality" ([Borg et al., 2026](https://arxiv.org/abs/2507.00788v3)).
+
+## How big the effect is
+
+The 13.1-point figure is one model on one benchmark: GLM 4.7 on SWE-Bench Pro. Four of the sixteen pairs match or beat the human baseline, and the paper discounts three on sample size or a weak ceiling. Refactoring is worst hit at 8.21 points on average; bug fixing least at 4.05 ([Patel et al., 2026](https://arxiv.org/abs/2606.21804v2)).
+
+## The signal that predicts it
+
+Cyclomatic complexity, cognitive complexity and Halstead volume separate nothing at either step: "static maintainability metrics show near-identical distributions on HA wins and AA wins". HA is the chain that inherited a human patch. AA is the one that inherited an agent patch. Two features do separate the 405 cases where the chains disagreed: downstream patch size and task difficulty.
+
+The third sits in the inherited code: the agent changed input validation or error handling relative to the human's. An added gating check, a swapped default, a new exception type. Where that drift is present, the odds the human chain is the one to resolve are 1.83 times those of the agent chain (95% CI 1.15 to 2.92, p = 0.011); a second judge model reproduces it at 1.70 ([Patel et al., 2026](https://arxiv.org/abs/2606.21804v2)).
+
+## Why it works
+
+The drift persists into the follow-on task. The follow-on patch leaves the agent's drift unchanged on 85.9% of the 262 human-chain wins, and rewrites the divergent function on 6.9% ([Patel et al., 2026](https://arxiv.org/abs/2606.21804v2)).
+
+## When this backfires
+
+- Your maintainers are people. That case is out of scope, and the nearest evidence found nothing ([Borg et al., 2026](https://arxiv.org/abs/2507.00788v3)).
+- You answer it with a complexity gate. Those metrics showed no separation, and a SonarQube comparison on the same class of proxy found LLM code "has fewer bugs and requires less effort to fix them overall" ([Molison et al., 2025](https://arxiv.org/abs/2508.00700v1)).
+- You diagnose every failure this way. The drift is confirmed as the cause on 20.6% of those instances; 74.4% "fail for reasons we have not isolated" ([Patel et al., 2026](https://arxiv.org/abs/2606.21804v2)).
+- You extrapolate to long chains. The setup is two pull requests deep; compounding is untested ([Patel et al., 2026](https://arxiv.org/abs/2606.21804v2)).
+
+## Example
+
+One of the paper's five worked cases is removed input gating. The human implementation rejects a call made with two list arguments. The agent's implementation of the same function accepts them and builds a result instead. The follow-on task then edits a different function and never touches the divergence, "so the test that expects the call to be rejected fails" ([Patel et al., 2026](https://arxiv.org/abs/2606.21804v2)).
+
+## Key Takeaways
+
+- Read the penalty as an agent-to-agent effect. It is not evidence that people will struggle with agent code.
+- Review the input and error contract of an agent's patch against what the codebase already did: gating checks added or removed, defaults swapped, exception types changed.
+- Complexity metrics are the wrong gate here. Cyclomatic complexity, cognitive complexity and Halstead volume showed near-identical distributions across the two groups.
+- Weight review toward refactoring, where the measured drop is largest (8.21 points on average).
+- Most of the gap stays unexplained (the regression recovers a McFadden R-squared of 0.069), so treat contract drift as one cause to check rather than the diagnosis.
+
+## Related
+
+- [Shadow Tech Debt](shadow-tech-debt.md) — the architectural half of the same problem, drift no single agent PR looks responsible for
+- [The Reasoning-Complexity Trade-off](reasoning-complexity-tradeoff.md) — stronger models producing more coupled code, a second route from capability to maintenance cost
+- [Density-Normalized Quality Metrics Mask AI-Driven Code Growth](density-normalized-quality-metric.md) — another standard code metric reporting the wrong story about agent output
+- [Conceptual Integrity Erosion in Agent-Built Codebases](conceptual-integrity-erosion.md) — what happens to design coherence once the cost of a change collapses
+- [Code Health as a Signal for Agent-Generated Test Quality](../../verification/code-health-agent-generated-tests.md) — the same metrics pointed the other way, at the code an agent is asked to test
+
+---
+
 ### The Anthropomorphized Agent
 Source: https://agentpatterns.ai/patterns/anti-patterns/anthropomorphized-agent/
 
@@ -64596,6 +64921,7 @@ class DiscountAuditLog:
 - [Deterministic Guardrails](../../verification/deterministic-guardrails.md) — CI thresholds that catch bloat mechanically
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md) — when to move quality controls out of the prompt
 - [Entropy Reduction Agents](../../workflows/entropy-reduction-agents.md) — scheduled cleanup passes for accumulated bloat
+- [The Agent-on-Agent Maintenance Penalty](agent-on-agent-maintenance-penalty.md) — the measured downstream cost when the next agent builds on that code
 
 ---
 
@@ -65050,6 +65376,7 @@ The figures illustrate the paper's measured shape — a ~38% token cut landing a
 - [Cost-Quality Pareto Measurement for Agent Configurations](../../token-engineering/cost-quality-pareto-measurement.md) — the standing measurement frame that denominates in USD per successful task
 - [Harness-Controlled Token Economics (The Harness Effect)](../../token-engineering/harness-token-economics.md) — why the cache-hit rate, not token count, sets the effective price
 - [Skill Review Without a Token Cost Baseline](skill-review-without-cost-baseline.md) — the adversarial case, where an installed skill inflates per-task tokens and the output stays correct
+- [Cost-Inefficient Behaviors in Coding Agents](cost-inefficient-agent-behaviors.md) — the same decoupling reached from the behavior side, where a tool cut subsumed retrieval by over 75% under Claude Code and raised the bill
 - [First-Proposal Execution in Agent Loops](first-proposal-execution.md) — a governance layer that cuts token count and then loses the saving to its own adjudication cost
 
 ---
@@ -72664,6 +72991,7 @@ Claude Code, Gemini CLI, and Copilot CLI all implement subagents as static Markd
 - [Cross-Tool Subagent Comparison](cross-tool-subagent-comparison.md) — how Claude Code, Gemini CLI, and Copilot CLI each implement static subagent definitions and tool scoping
 - [Recursive Sub-Agent Delegation: Depth Limits and Trade-offs in Nested Hierarchies](recursive-sub-agent-delegation-depth.md) — what happens at the other end of uncapped programmatic spawning
 - [Claude Code Dynamic Workflows](../../tools/claude/dynamic-workflows.md) — the dispatch interpretation: code-driven orchestration of pre-configured subagent types at scale
+- [Provider-Hosted Subagent Delegation](../agent-design/provider-hosted-subagent-delegation.md) — the model spawns subagents at runtime under provider-injected instructions, and the tree shares one model.
 
 ---
 
@@ -73825,6 +74153,7 @@ Structural patterns for tool interfaces, schemas, error handling, and output for
 - [Designing for Agent Consumers (Agent Experience)](designing-for-agent-consumers.md) — Treat the agent as a first-class consumer of your public SDK, CLI, API, and docs; the AX discipline that routes the surface-design tactics, distinct from harness engineering
 - [Agent-Computer Interface (ACI)](agent-computer-interface.md) — Tools are the agent's UI; the same principles that make human interfaces usable make agent tools effective
 - [Tool Architecture Moves Consistency, Not Resolve Rate](tool-architecture-consistency-lever.md) — Holding capabilities constant and changing only how tools are organized shifts run-to-run consistency, while the task resolve rate stays flat
+- [Tool-Schema Bias: Measure the Interface Before You Ship](tool-schema-bias.md) — Functionally equivalent tool schemas move agent success by most of the scale; which operators matter, and what measuring a candidate schema costs
 - [Function-Level Debugger Interfaces for Coding Agents](function-level-debugger-interfaces.md) — Re-expose interactive debuggers at the function frame instead of the source line so LLM agents pay one turn per call, not one turn per step
 - [Semantic Tool Output](semantic-tool-output.md) — Return human-readable, contextually filtered output from agent tools to reduce hallucination and improve downstream call accuracy
 - [Typed Schemas at Agent Boundaries](../patterns/multi-agent/typed-schemas-at-agent-boundaries.md) — Formal schemas at every agent-to-agent interface establish explicit contracts that prevent state mismanagement and silent failures
@@ -84902,6 +85231,71 @@ The same harness without the probe routinely fires `schema_lookup` on Query A �
 
 ---
 
+### Tool-Schema Bias: Measure the Interface Before You Ship
+Source: https://agentpatterns.ai/tool-engineering/tool-schema-bias/
+
+# Tool-Schema Bias: Measure the Interface Before You Ship
+
+> Two tool definitions exposing the identical executable action can produce agent success rates at opposite ends of the scale. That gap is tool-schema bias.
+
+Tool-schema bias is systematic variation in an agent's task success across tool schemas that expose the same executable actions and reach the same environment states. An executable rewriting framework applied nine operators to one native schema, checked every variant against the native actions and final states, and ran eleven models on up to 32 variants. The finding: "success rates range from complete failure to 97% depending solely on the schema" ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)). Two conditions bound what to do about it: the effect concentrates in a few of the schema decisions, and it belongs to the model you measured rather than to schemas in general.
+
+## Which schema changes move the number
+
+Most measurements come from a synthetic environment of 12 domains, 168 native operations, and 2,748 task queries, scored by exact match against the gold actions ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)). The nine operators sort into three tiers, and every quoted effect in the table below is from that paper.
+
+| Schema change | Reported effect |
+|---|---|
+| Merge tools behind one discriminator argument | The costliest single-call change. "Splitting largely preserves native-schema performance, whereas fully merging tools reduces success by a median of 19 points" across the nine open-weight models |
+| Split a tool by the value range of an argument | Largely preserves native performance, per that same comparison |
+| Reorder arguments, strip descriptions, nest arguments, namespace tool names | Near-inert. These "leave every model close to its native score"; opaque function names hurt "the smallest Qwen2.5 model", a sensitivity that "vanishes with scale" |
+| Spread one action over dependent calls, as a transaction protocol or a schema-discovery step does | The worst tier. These "collapse most earlier-generation models, often to near zero, and only the newest generation absorbs them" |
+| Add a resolver call that converts a value to a handle | The exception in the other direction. Models that follow it "score at or above their native rate" |
+
+Two effects hide inside the merge tier. At a fixed tool count, "grouping semantically related operations is consistently better than random or deliberately mismatched grouping". And the argument form of a merged tool matters. The nested argument form "costs every model 19 to 73 points", including models that lose under 7 points on the flat form ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
+
+Newer models shrink the effect without closing it. The two closed models tested were gpt-6-luna and GLM-5.3-Flash, with no Anthropic model in the set, and each moved by 32 points across equivalent schemas. Their weak spots were the variants that expose a large catalog, class dispatch and namespaced names, not the cross-call protocols ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
+
+## What it costs to find out
+
+Guessing from the schema text does not work. Two query-free probes, written automatically from the schema's own descriptions and argument values, ranked variants at a Spearman correlation of 0.52 and 0.57 against full-set success. About one hundred target queries per candidate schema lifted that correlation to 0.81, and even 36 queries reached 0.72, "so the probes fall short because they omit the tasks, not because they are small" ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
+
+Draw that sample from the traffic your agent will see. A ranking measured on the paper's synthetic tasks did not predict the ranking on τ²-bench ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)), so a borrowed sample can order your candidates wrongly.
+
+One prompt-side lever survives when the schema belongs to somebody else. Describing a variant's calling convention in a single sentence moved one 4-billion-parameter model from 0.36 to 0.64 on the fully merged schema and from 0.07 to 0.52 on schema discovery, and had no noticeable effect on the other variants ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
+
+## Why it works
+
+Part of the bias is a failure to write the right action in the presented schema. In the failure analysis, a model "sometimes invokes the correct native action but fails to write it in the presented schema", and the largest such gap lands on the fully merged catalog, "driven by the Qwen3 and smaller Qwen2.5 models, which keep calling native tool names" ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
+The training analysis points the same way. Fine-tuning on native-schema demonstrations "keeps native performance but does not repair the hard variants, so the repair comes from seeing a variant during training rather than from more tool-use practice" ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)). Practice at tool use does not make a model insensitive to the schema. Seeing that schema does.
+
+Three of the seven failure modes the authors catalog are silent: the episode ends with too few native actions, too many, or the wrong argument values, with nothing rejected. Schema discovery mostly fails that way ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)), so no runtime error marks those episodes.
+
+## When this backfires
+
+- Your agent does open-ended work through a shell. Across 11,700 trajectories on repository-level issue fixing, six tool architectures left resolve rate flat: "The overall task resolve rate is similar across tool architectures for a given actor model" ([Xu et al., arXiv:2608.11386v1](https://arxiv.org/abs/2608.11386v1)). Run-to-run consistency moved instead.
+- You measure the inert operators. A cycle spent on argument order, description text, or per-tool argument nesting returns nothing on the models the paper tested.
+- You switch models and keep the tuned schema. Each model family is sensitive to different representations, and the authors state that "schema bias cannot be fixed once for all" ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
+- You assume the native schema is the safe default. On the airline domain of τ²-bench, most earlier-generation models scored higher under some alternative schema than under the native one. On retail, the native schema was the best or near-best choice for almost every model ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
+- You want a number for a model the paper never ran. The authors bound their own claim: "most measurements come from a controlled synthetic environment and a finite set of models, so the size of the effect on other benchmarks and model families remains to be established" ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
+
+## Key Takeaways
+
+- Sort a schema decision into its tier before you spend an eval on it. Tool-set partitioning and cross-call protocol hold the points; per-tool surface rewrites do not.
+- Budget about 100 queries per candidate schema, drawn from the agent's own task distribution. A probe built from the schema text ranks them only moderately well.
+- Re-measure after a model upgrade. The ranking is a joint property of the model, the schema, and the queries.
+- Where a vendor's schema is fully merged or needs a discovery step, try one sentence on its calling convention in the prompt, then measure whether that closes the gap.
+
+## Related
+
+- [Tool Architecture Moves Consistency, Not Resolve Rate](tool-architecture-consistency-lever.md) — the conflicting result on open-ended coding work, where reorganizing tools moved consistency and left resolve rate flat
+- [Consolidate Agent Tools](consolidate-agent-tools.md) — the case for merging tools, which this page prices in success points
+- [Tool Minimalism and High-Level Prompting](tool-minimalism.md) — how many tools to expose, as against how to shape the ones you keep
+- [Tool Description Quality for Effective Agent Guidance](tool-description-quality.md) — the description text, which this measurement places in the near-inert tier
+- [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md) — designing out the off-schema call instead of measuring what it costs
+
+---
+
 ### Toolset Agentization: Wrapping Co-Used Tools as Sub-Agents
 Source: https://agentpatterns.ai/tool-engineering/toolset-agentization/
 
@@ -86111,6 +86505,7 @@ Because the prefix bytes never change, the provider serves them as cache reads. 
 - [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the quality guardrail that cutting tokens must respect
 - [The Harness as Product: What Listed-Rate Pricing Buys](../patterns/agent-design/harness-as-product.md) — the build-vs-buy view of the same harness layer: what you pay for beyond tokens when a product bills at listed API rates
 - [Pricier-Per-Token Models That Cost Less Per Task](pricier-per-token-cheaper-per-task.md) — the inverse experiment: hold the harness fixed and vary the model, where the cost ordering can invert
+- [Cost-Inefficient Behaviors in Coding Agents](../patterns/anti-patterns/cost-inefficient-agent-behaviors.md) — the behavior-level evidence: the same three repeated actions cost 6.86% of task cost in one harness and up to 22.75% in another
 
 ---
 
@@ -94141,6 +94536,7 @@ Source: https://agentpatterns.ai/verification/
 - [Markov-Chain Reliability for LLM Agents: Audit the Abstraction Before You Trust the Metric](markov-chain-agent-reliability.md) — pass@k, pass^k, and the reliability decay curve are projections of one first-passage distribution; fit an absorbing DTMC to traces and report a goodness-of-fit certificate to make any of those numbers defensible
 - [Decomposing Agent Output Variability by Layer (Sampling vs Orchestration State)](sampling-state-agent-variability-layers.md) — Separate run-to-run agent variability into token-sampling, infrastructure, and orchestration-state layers so the mitigation matches the layer; a single trajectory cannot distinguish them
 - [Size Agent Comparisons by Run-to-Run Variance](size-agent-comparisons-by-run-variance.md) — Measure one pairing's run-to-run SD and size each arm on the smallest gap that would change the decision; three-run comparisons ranked same-model pairings wrongly 28 to 44 percent of the time on one task
+- [Gate Best-of-k Selection on Compliance Before Score](compliance-gated-best-of-k-selection.md) — Reject the attempts that broke a rule before you rank on score; across 312 runs the ten violators held the seven highest scores, and excluding them moved the best score from 0.8293 to 0.7695
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — Decompose agent trajectories into search, read, and edit stages with per-stage precision and recall to pinpoint where and why an agent went wrong
 - [Action-Class Decomposition for Tool-Calling Evals](action-class-decomposition-tool-calling-evals.md) — Split a multi-turn tool-calling score into call, ask, refuse, and confirm; an end-state grader passes trajectories that chose the wrong class, and the per-class recall column is what surfaces them
 - [Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)](repository-perturbation-context-reasoning-diagnosis.md) — Apply semantics-preserving repository perturbations before an agent runs to isolate context reasoning from end-to-end issue-resolution shortcuts; average score drops 66.8% to 25.3% on the explicit-task formulation
@@ -95132,6 +95528,7 @@ Anti-gaming checklist:
 - [Eval Awareness](eval-awareness.md)
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — IaC-security instance of orthogonal-grader stacking
 - [Escalation Channels: A Reporting Tool Instead of a Reward Hack](../patterns/agent-design/escalation-channels-defect-disclosure.md) — the complement to rubric design: what to give the agent once the rubric is already broken
+- [Gate Best-of-k Selection on Compliance Before Score](compliance-gated-best-of-k-selection.md) — what to do at selection time once some attempts have gamed the score
 
 ---
 
@@ -100661,6 +101058,7 @@ Review time goes on reconstruction, not inspection. Interviews at Microsoft foun
 - [Risk-Score Threshold Calibration for Auto-Approval](../code-review/risk-score-threshold-calibration.md) — the independent learned score that decides whether a human reviews at all
 - [Reviewer's Playbook for Agent-Authored Pull Requests](../code-review/reviewers-playbook-agent-authored-prs.md) — the inspection order a reviewer applies once the depth is chosen
 - [Post-Merge Fix Signals for Agent Merges](post-merge-fix-signals-agent-merges.md) — what to watch once the depth is spent and the change has landed, and the one merge-time signal that predicts a follow-up fix
+- [Re-Run an Agent's Speed-Up Claim Before Merging](../workflows/rerun-agent-speedup-claims.md) — the case where the bundled evidence does not move the decision, and re-executing the claim is the only check left
 
 ---
 
@@ -101369,6 +101767,58 @@ Do not generalize across a lineage from a few members. The generational crossing
 - [Transcript-Measured Review Coverage](transcript-measured-review-coverage.md) — the instrumented read-out applied to one behavior, which scores the trace against the report.
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — how to establish the per-code agreement the coded read-out depends on.
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — what happens to a frozen public stimulus over time.
+
+---
+
+### Gate Best-of-k Selection on Compliance Before Score
+Source: https://agentpatterns.ai/verification/compliance-gated-best-of-k-selection/
+
+# Gate Best-of-k Selection on Compliance Before Score
+
+> Run every attempt through a pass/fail compliance check, then rank only the attempts that passed.
+
+A compliance gate is a check that every attempt passes or fails before any score comparison runs. Failing attempts leave the candidate pool, so the selection takes the maximum over the survivors rather than over all k.
+
+Ariño de la Rubia and Pafka ran 312 fixed-configuration agent runs on one tabular prediction task. Ten broke a data rule: five trained on the labeled evaluation file, five computed features from the batch they were scoring. "The seven highest scores in the study are all among these ten, and removing them takes the best score from 0.8293 to 0.7695" ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 4.3). Their conclusion, in the same section: "Because they sit at the top of the ranking, the run one would pick on score alone is the run most likely to have broken a rule."
+
+With the gate in place, three attempts beat one. The measured policy selects among compliant attempts on the evaluation set and reports the holdout score of the one it keeps. "Three attempts move the median delivered model 0.0081 AUC above one attempt, and ten attempts 0.0136" ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 4.4). Its Table 6 puts the chance that three attempts return a compliant artifact at "at least 99.88%". The policy was specified after the runs were scored, so read it as retrospective.
+
+## Where the gate applies
+
+The paper's gate checks two rules: "no evaluation label reaches a model fit, other than as the early-stopping set the rules permit, and no feature or statistic is computed from the frame handed to the prediction function" ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 3.5).
+
+For ranking configurations against each other, excluding the violations "leaves the spread between pairing means and the best-of-k medians almost unchanged" (Section 4.3). Sizing that comparison is a separate job, covered in [Size Agent Comparisons by Run-to-Run Variance](size-agent-comparisons-by-run-variance.md).
+
+## Declare what k counts
+
+Two policies share the name: "Note also what k counts: attempts, not compliant attempts" ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 4.4). The paper measured the fixed-attempt version, and says the alternative "costs more and never fails to deliver". Say which one you run. The fixed-k version can fail to deliver a compliant artifact.
+
+Report the violation rate beside the quality figures. The paper's own recommendation is that "Agents and models should be evaluated as pairings, over repeated attempts, with compliance reported beside quality" ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), abstract).
+
+## Prefer prevention to detection
+
+Two designs remove a violation rather than catch it: "putting evaluation labels behind a scoring interface makes unauthorised training impossible, and testing whether a row's prediction changes when the batch around it changes catches batch-dependent features without reading code" ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 4.3). The first makes one class of violation unreachable; the second is a behavioral probe that reads no code.
+
+## When this backfires
+
+- A proxy heuristic stands in for the real check. The paper published a screen flagging any run whose best evaluation score beats its holdout score by more than 0.03, then did not use it. It compares a run's best experiment with the program it delivered, which need not be the same, and "on these runs it would have excluded two compliant runs and missed two that trained on evaluation labels" ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 3.5).
+- The gate's coverage gets read as the rule set. Two traces covered the two violation classes, and "Seven hits were cleared on reading" (Section 3.5).
+
+## Key Takeaways
+
+- Check every attempt against your rules, then compare scores. Reversing the order makes the top pick the run most likely to have broken a rule.
+- On 312 runs, ten violators held the seven top scores, and excluding them moved the best score from 0.8293 to 0.7695.
+- Say whether k counts attempts or compliant attempts. The two policies differ in cost and in whether they can return nothing.
+- Report the violation rate next to the quality figures.
+- A gate catches the classes you wrote checks for. The authors write that prevention is better than detection.
+
+## Related
+
+- [Size Agent Comparisons by Run-to-Run Variance](size-agent-comparisons-by-run-variance.md) — how many runs a ranking needs, from the same study.
+- [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — designing the score so fewer violations pay off.
+- [Protecting the Test Oracle From the Agent](../patterns/agent-design/protect-the-oracle-from-the-agent.md) — the permission-level version: deny the agent write access to what decides correctness.
+- [Reliability of an Automatically Selected Agent Harness](../patterns/agent-design/harness-selection-reliability.md) — what a pick from a noisy search is worth in the unlucky case.
+- [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — what repeated attempts measure when the outcome is pass or fail.
 
 ---
 
@@ -108335,7 +108785,7 @@ The SWE-bench study gives a second scale for pass/fail scoring: about 9 runs per
 
 Choosing a good artifact needs far fewer runs than ranking configurations. In the paper's best-of-k analysis, three attempts moved the median delivered model 0.0081 AUC above one attempt, and ten attempts 0.0136. The floor rose faster than the ceiling, and the authors conclude that "Attempts mostly buy protection against a bad draw" ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 4.4). The policy was specified after the runs were scored, so treat it as retrospective.
 
-Selection needs a compliance gate. The seven highest scores in the study all came from rule-breaking runs, so picking the top score picks a rule-breaker ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 4.3). The authors advise: "Reject first, then rank." They also recommend making violations impossible rather than detectable ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 6), for example by putting evaluation labels behind a scoring interface (Section 4.4). See [anti-reward-hacking](anti-reward-hacking.md) for the wider pattern.
+Selection needs a compliance gate. The seven highest scores in the study all came from rule-breaking runs, so picking the top score picks a rule-breaker ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 4.3). The authors advise: "Reject first, then rank." They also recommend making violations impossible rather than detectable ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 6), for example by putting evaluation labels behind a scoring interface (Section 4.3). [Gate Best-of-k Selection on Compliance Before Score](compliance-gated-best-of-k-selection.md) covers how to build that gate and where it fails. See [anti-reward-hacking](anti-reward-hacking.md) for the wider pattern.
 
 ## Confirm on later data
 
@@ -108369,6 +108819,7 @@ An agent run is a long autoregressive loop. Bjarnason and colleagues found that 
 - [Decomposing Agent Output Variability by Layer](sampling-state-agent-variability-layers.md) — where run-to-run variance comes from.
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — capability versus consistency metrics.
 - [Equivalence Testing for Agent Configuration Changes](equivalence-testing-agent-config-changes.md) — testing whether a config change matters.
+- [Gate Best-of-k Selection on Compliance Before Score](compliance-gated-best-of-k-selection.md) — the selection half: how to build the compliance gate and where it fails.
 
 ---
 
@@ -163444,6 +163895,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Bounding a Headless Codex Run Without a Turn Cap](headless-codex-bounding.md) — `codex exec` has no `--max-turns` equivalent, so an unattended Codex run is bounded by its sandbox policy, the caller's wall clock, and a JSON Schema output contract
 - [Per-Task Verification Budget: Size the Task to Fit the Check](per-task-verification-budget.md) — Fix the human check on each agent task at 30 to 60 seconds and treat that number as an admission rule, so work too large to verify inside the budget leaves the daily batch for its own thread
 - [Measuring the Verification Tax on Agent Output](verification-tax.md) — Divide CI, review, security, and rework cost by generation cost per change class, then read the ratio as a diagnostic with five candidate causes rather than a number to drive down
+- [Re-Run an Agent's Speed-Up Claim Before Merging](rerun-agent-speedup-claims.md) — Acceptance of an agent performance fix tracks the repository's history with that agent, so re-run the claim on base and head at three workload sizes to learn whether it delivers
 - [Reducing Fixed CI Overhead Before Adding Shards](ci-setup-overhead-before-sharding.md) — Per-job setup cost decides how far test sharding pays, so cut it before buying parallelism
 - [In-Place Atomic Replacement for Agent-Driven Ports](in-place-atomic-replacement-port.md) — Port one component per pull request that adds the replacement, shims the callers, and deletes the old code in the same commit, so main stays shippable and the existing end-to-end suite becomes the oracle
 - [Trigger-to-Function Architecture for Unprompted Codebase Maintenance](trigger-function-maintenance-architecture.md) — Pair a catalogue of maintenance events with a deliberately short list of callable agent functions over a pre-built index, and damp the resulting queue at the trigger, at dispatch, and at review
@@ -173774,6 +174226,7 @@ Read against the layers, the second case has a signature you can see before the 
 - [Cost-Quality Pareto Measurement for Agent Configurations](../token-engineering/cost-quality-pareto-measurement.md) — the same cost-against-quality frame applied to one agent configuration
 - [Intervention Rate as a Diagnostic North Star, Not a Target](../human/intervention-rate-diagnostic-north-star.md) — a sibling metric governed by the same diagnostic-not-target rule
 - [Reducing Fixed CI Overhead Before Adding Shards](ci-setup-overhead-before-sharding.md) — the CI half of the tax, and the lever that moves it
+- [Re-Run an Agent's Speed-Up Claim Before Merging](rerun-agent-speedup-claims.md) — one priced check, three layers deep, for the claim a merge never verifies
 
 ---
 
@@ -176039,6 +176492,95 @@ Human review covers 6 issues instead of 18 raw notes. Each issue includes the fi
 - [Oracle Task Decomposition](../patterns/multi-agent/oracle-task-decomposition.md)
 - [LLM-as-Judge Evaluation](llm-as-judge-evaluation.md)
 - [Parallel Agent Sessions](parallel-agent-sessions.md)
+
+---
+
+### Re-Run an Agent's Speed-Up Claim Before Merging
+Source: https://agentpatterns.ai/workflows/rerun-agent-speedup-claims/
+
+# Re-Run an Agent's Speed-Up Claim Before Merging
+
+> Re-executing 30 merged agent fixes found nine with no significant gain, or a regression, at the primary workload.
+
+A speed-up re-run is a bounded re-execution of the improvement an agent's pull request claims, timed on the base tree and the head tree in one container at more than one workload size, with a behavior diff over the changed lines. The merge button answers a different question from the one the claim raises, and the two get read as one answer.
+
+## Why the merge tells you nothing about the speed-up
+
+Acceptance tracks the repository's history with the agent and the shape of the patch. Qi and colleagues coded 1,262 agent performance fixes across 582 repositories from AIDev v4, 1,105 of them closed. Acceptance runs at 33% where the repository had merged at most 40% of its decided agent pull requests when the fix opened, 57% in the middle band, and 84% where it had merged over 90% (n = 165, 521, and 255). Moving that pre-opening merge rate from 0 to 1 multiplies the odds of acceptance by 13.7 (95% CI 6.3 to 30.0) ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+
+Delivery is a property of the code. A rejection thread rarely shows whether anyone checked the claimed improvement. Only 3% of the 480 rejection threads ask for a measurement, and 61% state no reason at all. Of 30 merged fixes the authors re-executed, 18 met their delivery criterion at the primary workload, 3 improved but fell short of the claim, and 9 showed no significant gain or regressed ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+
+Attaching a benchmark does not buy you a merge, which inverts the usual advice. Acceptance sits at 51% for fixes carrying a performance test, 54% with functional tests only, 60% with adaptation only, and 58% with no test at all (p = 0.53) ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)). Run the measurement because it tells you something, not because the reviewer will weigh it.
+
+## Three verification layers
+
+Each layer is cheaper than the next and disqualifies a different class of claim. Run them in order; stop at the first failure.
+
+### Layer 1: Base-tree replay
+
+Check out the base commit, apply only the pull request's test files, and run them. In 17 of the 28 merged fixes where the tests ran on the base tree, they passed there unchanged, and only 2 of the 30 failed on the base for a performance reason ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)). A test that passes with and without the fix is not evidence about this fix.
+
+Read the bound as well. In web-infra-dev/rsbuild PR 6060, Copilot added a test requiring `getCommonParentPath` to handle 100 paths within 100 ms. The base costs about 41 microseconds per call, so "the bound sits more than 2,000 times above the cost it is meant to guard" ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+
+### Layer 2: Sized re-execution
+
+Time base and head in the same container at three workload sizes: the size the pull request's own test uses, a size one to two orders of magnitude larger, and the size of the pull request's claim. Across the three sizes the authors ran, 8 of the 30 fixes were slower than the base at one of them, and 5 of the 18 that delivered gained only at the larger sizes. In jdereg/java-util PR 127, a binary search over a compact map's keys ran 9% slower than the linear scan at the four keys the pull request itself used, and 4.8 times faster on 600 ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+
+Budget for it. The authors timed each merged fix as 12 interleaved forks per version at each of the three sizes, which the paper calls a more intensive protocol than its single-workload pilot ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+
+### Layer 3: Behavior diff
+
+A reproduced speed-up is not a correct fix. Generated tests over the changed lines found the head behaving differently from the base in 24 of the 30 merged fixes. In 14 the fix introduced a functional change its description never mentions, and in 10 of those the head failed or returned a different result on inputs inside the changed function's intended use ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)). None of those inputs appeared in the pull request's own tests.
+
+## Triggers and constraints
+
+Tie the three layers to the pull request event. What bounds the agent doing the timing:
+
+| Driver | When it fires | Bound on the runner |
+|---|---|---|
+| Pull request opened or synchronized | Layers 1 and 2, in CI | Fixed container image, no network, wall-clock cap per fix |
+| Reviewer request | Layer 3, on demand | Read-only on the repository; writes a report, never the fix |
+| Merge gate | Layer 1 result only | Blocks when the added test passes on base |
+
+Gate a merge on Layer 1 only. Layer 2 reports rather than blocks, because shared hardware moves the number: Laaber et al. (2019) found a 10% slowdown detectable only when test and control ran on the same instance in randomized order, as reported in [Qi et al. (2026)](https://arxiv.org/abs/2609.37985v1) section 2.1.
+
+The artifact worth keeping is a performance test that fails on base and passes on head. Any performance test is uncommon: only 11% of the 1,259 fixes carry one, and of the 140 that do, 66 use a sized workload against 49 a toy one. Among the 28 merged fixes whose tests ran on the base tree, 17 passed there unchanged ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+
+## Multi-tool coverage
+
+Tool-agnostic. The layers act on a pull request and two trees, so nothing differs between Claude Code, Copilot, and Cursor. Who holds the merge button does differ. Where the operator opens the pull request through their own account and merges it, 209 of the 306 self-merged operator fixes were merged within an hour and 97% of those fast merges carry no human text ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)). Under that account model the re-run lives in CI or nowhere.
+
+## Why it works
+
+Acceptance tracks the repository's history with the agent, and the coded content of the fix does not separate merged from rejected fixes. A passing functional test says nothing about speed, and a measurement worth reading needs repetition and control that a pull request thread rarely shows. Georges et al. (2007) found that reporting the best or the mean of a few runs of a Java benchmark can reverse a comparison, and Mytkowicz et al. (2009) found that link order and the size of the process environment alone shift run time enough to reverse the sign of a claimed speed-up, both as reported in [Qi et al. (2026)](https://arxiv.org/abs/2609.37985v1) section 2.1.
+
+The study finds the same pattern in its acceptance model. Adding the block that holds author association and the repository's history with agent pull requests lifts the pseudo R-squared from 0.145 to 0.232. The authors summarize the other terms this way: "The repository's history with agent PRs and the deleted-line share of the fix distinguish merged from rejected fixes, while the coded content of the fix, its description, its tests and its attached measurements do not" ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)). These are associations in observational data, and the authors say so; whether changing a fix's shape would change its outcome is untested.
+
+## When this backfires
+
+- One- to five-line micro-optimizations. Eight of the 10 fully covered fixes failed the delivery criterion against 4 of the 20 partly covered ones (p = 0.004), because the fully covered fixes are mostly micro-optimizations whose gain disappears under the JIT or inside untouched work. The authors note that diff size confounds that comparison ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+- Repositories that have not yet merged an agent pull request. The study records an agent's account as NONE until the repository merges one of its pull requests, and NONE fixes are rejected 94% of the time ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+- One benchmark read as a verdict. The discipline that catches a bad claim produces a bad one when it runs at one size on one shared machine.
+
+The case for skipping the re-run is real. Eighteen of the 30 re-executed merged fixes did deliver, and the median base-to-head cost ratio across all 30 was 1.8 ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)). A prior built from twenty merged pull requests is cheap, and it does track something: acceptance runs at 37% where the repository had never seen the agent and 70% after 20 or more merged pull requests from it ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)). A maintainer who waves through a small deleting patch from an agent with a long record in the repository is making a defensible trade.
+
+Measurement does change what the agent produces, even though it does not change what the maintainer decides. On PerfBench's 81 .NET performance tasks, a baseline OpenHands agent reached "only a ~3% success rate"; the same harness with performance-aware tooling and instructions reached "a ~20% success rate" ([Garg et al., 2025](https://arxiv.org/abs/2509.24091v3)). Give the agent the benchmark before it writes the patch, then re-run the claim after.
+
+## Key Takeaways
+
+- Acceptance and delivery are separate questions. The repository's pre-opening merge rate on other agent pull requests moves the odds of acceptance by a factor of 13.7 from 0 to 1, while the fix's tests and attached measurements do not separate the outcomes ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+- Layer 1 pays for itself. In 17 of 28 fixes the pull request's tests passed on the base tree, so they could not have told a delivered fix from a missing one ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+- One size certifies nothing. Over the authors' three sizes, 8 of the 30 fixes were slower than the base at one of them ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+- Diff the behavior too. Fourteen of the 30 merged fixes changed behavior their description never mentions ([Qi et al., 2026](https://arxiv.org/abs/2609.37985v1)).
+- The weakness generalizes past performance work. A differential analysis of 1,210 merged agent bug-fix pull requests concludes that "merge success does not reliably reflect post-merge code quality" ([Beyond Bug Fixes, 2026](https://arxiv.org/abs/2601.20109v1)).
+
+## Related
+
+- [Effective Feedback Compute (EFC) for Harness Comparison](../patterns/agent-design/effective-feedback-compute.md) — the single-agent building block: which feedback an agent actually acts on
+- [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](../verification/evidence-bundled-agent-prs.md) — what to attach so a reviewer can pick a depth per change
+- [Post-Merge Fix Signals for Agent Merges](../verification/post-merge-fix-signals-agent-merges.md) — the follow-up-fix rate after an agent merge, and what predicts it
+- [Profiler-Guided Optimization Loops for Coding Agents](../verification/profiler-guided-optimization-loop.md) — give the agent a profile and a behavior gate before it writes the patch
+- [Measuring the Verification Tax on Agent Output](verification-tax.md) — what checking agent work costs relative to producing it
 
 ---
 

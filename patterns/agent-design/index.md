@@ -158,6 +158,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Fleet-Level Irreversibility Budgets for Agent Effects](fleet-irreversibility-budget.md) — One shared account of residual risk, charged before each effect commits, catches the overdraw that individually compliant agents create together — and the fleet size below which it buys nothing
 - [Agent-Native Filesystems: Gating Effects, Not Commands](agent-native-filesystem-mediation.md) — Attach permission rules to filesystem paths instead of command strings, stage every mutation until the user commits, and keep the undo inside the filesystem
 - [Model-Directed Subagent Tiering: Lead Model Picks the Tier](model-directed-subagent-tiering.md) — Let the lead agent pick subagent kind, tier, effort and reuse at each dispatch instead of a router or one fixed sidekick; the evidence is vendor-run and depends on cache lifetime
+- [Provider-Hosted Subagent Delegation: One Model Price for the Whole Tree](provider-hosted-subagent-delegation.md) — Hosted delegation lets the model spawn subagents inside one API request, but every agent inherits the request's model and price, so size that model to the hardest subtask in the tree
 
 ## Reliability
 
@@ -264,6 +265,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Situated Harness Layers: Fix at the Layer That Owns It](situated-harness-layers.md) — An eight-layer model of what a harness manages, ordered by change cadence, so a fix lands on the layer that owns the problem rather than a faster one that cannot hold it
 - [Fleet Harness Attribution](fleet-harness-attribution.md) — Pin model and task, swap whole harnesses, and measure pass rate alongside input-token consumption across a model fleet to attribute outcomes to the harness layer rather than the model
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — Pin the model, remove one harness subsystem at a time, measure the score drop — the resulting per-subsystem table ranks investment priorities
+- [Task Shape Decides What a Heavier Agent Harness Buys](task-shape-harness-payoff.md) — Harness gain shrinks with model strength on fixed-workflow issue repair and grows with it on open-ended repository work, with a measured per-component ledger
 - [Prompt-Only Baseline Before a Specialized Agent Subsystem](prompt-only-baseline-before-specialized-subsystem.md) — Measure a prompt-only agent loop before adopting a memory or self-improvement subsystem; it beat both on two benchmarks, but only where the loop exposes its prompt and history as code variables
 - [Model-Set Parity: Reading Harness Efficiency Claims](model-set-parity-harness-claims.md) — A published cross-harness efficiency figure measures the harness only when both arms run the same models; change the model set and the number prices a configuration
 - [Reliability of an Automatically Selected Agent Harness](harness-selection-reliability.md) — When a search procedure picks the winning harness, report the worst run and the lower-quantile selected lift alongside the mean

@@ -143,6 +143,7 @@ nav:
       - fleet-irreversibility-budget.md
       - agent-native-filesystem-mediation.md
       - model-directed-subagent-tiering.md
+      - provider-hosted-subagent-delegation.md
   - "Reliability":
       - administrative-effort-ceilings.md
       - agent-circuit-breaker.md
@@ -245,6 +246,7 @@ nav:
       - outcome-pricing-as-scope-signal.md
       - situated-harness-layers.md
       - isometric-harness-ablation.md
+      - task-shape-harness-payoff.md
       - prompt-only-baseline-before-specialized-subsystem.md
       - model-set-parity-harness-claims.md
       - harness-selection-reliability.md

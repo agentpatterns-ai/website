@@ -18,6 +18,7 @@ nav:
       - markov-chain-agent-reliability.md
       - sampling-state-agent-variability-layers.md
       - size-agent-comparisons-by-run-variance.md
+      - compliance-gated-best-of-k-selection.md
       - trajectory-decomposition-diagnosis.md
       - action-class-decomposition-tool-calling-evals.md
       - repository-perturbation-context-reasoning-diagnosis.md

@@ -98,3 +98,4 @@ Because the prefix bytes never change, the provider serves them as cache reads. 
 - [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the quality guardrail that cutting tokens must respect
 - [The Harness as Product: What Listed-Rate Pricing Buys](../patterns/agent-design/harness-as-product.md) — the build-vs-buy view of the same harness layer: what you pay for beyond tokens when a product bills at listed API rates
 - [Pricier-Per-Token Models That Cost Less Per Task](pricier-per-token-cheaper-per-task.md) — the inverse experiment: hold the harness fixed and vary the model, where the cost ordering can invert
+- [Cost-Inefficient Behaviors in Coding Agents](../patterns/anti-patterns/cost-inefficient-agent-behaviors.md) — the behavior-level evidence: the same three repeated actions cost 6.86% of task cost in one harness and up to 22.75% in another

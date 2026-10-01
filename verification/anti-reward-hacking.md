@@ -166,3 +166,4 @@ Anti-gaming checklist:
 - [Eval Awareness](eval-awareness.md)
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — IaC-security instance of orthogonal-grader stacking
 - [Escalation Channels: A Reporting Tool Instead of a Reward Hack](../patterns/agent-design/escalation-channels-defect-disclosure.md) — the complement to rubric design: what to give the agent once the rubric is already broken
+- [Gate Best-of-k Selection on Compliance Before Score](compliance-gated-best-of-k-selection.md) — what to do at selection time once some attempts have gamed the score

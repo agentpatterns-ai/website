@@ -11,6 +11,7 @@ nav:
       - designing-for-agent-consumers.md
       - agent-computer-interface.md
       - tool-architecture-consistency-lever.md
+      - tool-schema-bias.md
       - function-level-debugger-interfaces.md
       - semantic-tool-output.md
       - poka-yoke-agent-tools.md
