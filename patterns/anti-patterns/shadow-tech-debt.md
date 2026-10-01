@@ -134,3 +134,4 @@ Same bug fix. No architectural drift.
 - [CLAUDE.md Convention](../../instructions/claude-md-convention.md)
 - [Trust Without Verify](trust-without-verify.md)
 - [The Patchwork Problem in LLM-Generated Code](patchwork-problem.md)
+- [The Agent-on-Agent Maintenance Penalty](agent-on-agent-maintenance-penalty.md)

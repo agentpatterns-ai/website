@@ -86,3 +86,4 @@ The ablation shows that many warm, tiered subagents beat one long-lived worker. 
 - [Model-Set Parity in Harness Claims](model-set-parity-harness-claims.md) covers harness comparisons when the model sets differ.
 - [Dispatch-Time Reasoning Level](dispatch-time-reasoning-level.md) covers a human choosing effort at hand-off.
 - [Pricier per Token, Cheaper per Task](../../token-engineering/pricier-per-token-cheaper-per-task.md) covers the lead plus sidekick cost inversion.
+- [Provider-Hosted Subagent Delegation](provider-hosted-subagent-delegation.md) covers the hosted form of the same delegation decision, where the tree shares one model and no tier can be chosen.

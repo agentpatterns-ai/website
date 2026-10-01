@@ -23,6 +23,8 @@ Frontier vendors train models on provider-specific prompt and tool conventions. 
 
 LangChain's deepagents library shipped this as harness profiles on 2026-04-29. On a tau2-bench subset, profiles produced a 10-20 point jump per model: GPT 5.3 Codex went from 33% to 53%, and Claude Opus 4.7 from 43% to 53% ([LangChain](https://blog.langchain.com/tuning-deep-agents-different-models)).
 
+Model capability is one axis of the conditional; task type is the other, and it can reverse the sign. See [Task Shape Decides What a Heavier Agent Harness Buys](task-shape-harness-payoff.md).
+
 ```mermaid
 graph TD
     H[Generic harness] --> P{Model selected}

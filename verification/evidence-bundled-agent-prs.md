@@ -76,3 +76,4 @@ Review time goes on reconstruction, not inspection. Interviews at Microsoft foun
 - [Risk-Score Threshold Calibration for Auto-Approval](../code-review/risk-score-threshold-calibration.md) — the independent learned score that decides whether a human reviews at all
 - [Reviewer's Playbook for Agent-Authored Pull Requests](../code-review/reviewers-playbook-agent-authored-prs.md) — the inspection order a reviewer applies once the depth is chosen
 - [Post-Merge Fix Signals for Agent Merges](post-merge-fix-signals-agent-merges.md) — what to watch once the depth is spent and the change has landed, and the one merge-time signal that predicts a follow-up fix
+- [Re-Run an Agent's Speed-Up Claim Before Merging](../workflows/rerun-agent-speedup-claims.md) — the case where the bundled evidence does not move the decision, and re-executing the claim is the only check left

@@ -122,3 +122,4 @@ class DiscountAuditLog:
 - [Deterministic Guardrails](../../verification/deterministic-guardrails.md) — CI thresholds that catch bloat mechanically
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md) — when to move quality controls out of the prompt
 - [Entropy Reduction Agents](../../workflows/entropy-reduction-agents.md) — scheduled cleanup passes for accumulated bloat
+- [The Agent-on-Agent Maintenance Penalty](agent-on-agent-maintenance-penalty.md) — the measured downstream cost when the next agent builds on that code

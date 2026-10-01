@@ -49,7 +49,7 @@ The SWE-bench study gives a second scale for pass/fail scoring: about 9 runs per
 
 Choosing a good artifact needs far fewer runs than ranking configurations. In the paper's best-of-k analysis, three attempts moved the median delivered model 0.0081 AUC above one attempt, and ten attempts 0.0136. The floor rose faster than the ceiling, and the authors conclude that "Attempts mostly buy protection against a bad draw" ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 4.4). The policy was specified after the runs were scored, so treat it as retrospective.
 
-Selection needs a compliance gate. The seven highest scores in the study all came from rule-breaking runs, so picking the top score picks a rule-breaker ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 4.3). The authors advise: "Reject first, then rank." They also recommend making violations impossible rather than detectable ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 6), for example by putting evaluation labels behind a scoring interface (Section 4.4). See [anti-reward-hacking](anti-reward-hacking.md) for the wider pattern.
+Selection needs a compliance gate. The seven highest scores in the study all came from rule-breaking runs, so picking the top score picks a rule-breaker ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 4.3). The authors advise: "Reject first, then rank." They also recommend making violations impossible rather than detectable ([arXiv:2609.33812v1](https://arxiv.org/abs/2609.33812v1), Section 6), for example by putting evaluation labels behind a scoring interface (Section 4.3). [Gate Best-of-k Selection on Compliance Before Score](compliance-gated-best-of-k-selection.md) covers how to build that gate and where it fails. See [anti-reward-hacking](anti-reward-hacking.md) for the wider pattern.
 
 ## Confirm on later data
 
@@ -83,3 +83,4 @@ An agent run is a long autoregressive loop. Bjarnason and colleagues found that 
 - [Decomposing Agent Output Variability by Layer](sampling-state-agent-variability-layers.md) — where run-to-run variance comes from.
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — capability versus consistency metrics.
 - [Equivalence Testing for Agent Configuration Changes](equivalence-testing-agent-config-changes.md) — testing whether a config change matters.
+- [Gate Best-of-k Selection on Compliance Before Score](compliance-gated-best-of-k-selection.md) — the selection half: how to build the compliance gate and where it fails.

@@ -61,6 +61,8 @@ Each ablation run produces one row. The table is the deliverable.
 | State | 80% | 75% | 5 pp |
 | Feedback | 80% | 50% | 30 pp |
 
+A published table that measures five components by adding each to a minimal baseline, not by removing them, is in [Task Shape Decides What a Heavier Agent Harness Buys](task-shape-harness-payoff.md).
+
 The drops rank the subsystems. The rule is simple: upgrade the highest-drop subsystem first. Near-zero drops mark simplification candidates — they consume maintenance budget without earning their place ([walkinglabs](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-02-what-a-harness-actually-is/index.md)).
 
 ## Why the same-model constraint matters
