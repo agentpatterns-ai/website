@@ -12,7 +12,7 @@ aliases:
   - prompt-only baseline
   - bare agent loop baseline
   - minimal harness baseline
-last_reviewed: 2026-09-24
+last_reviewed: 2026-10-01
 maturity: emerging
 ---
 
@@ -49,7 +49,9 @@ Production practice runs the other way. A study of eleven production coding harn
 - Implementation quality swamps the paradigm. On StuLife the smolagents version of CodeAct+subagents scored 30.2% pass where the authors' reimplementation of the same method scored 60.0%, because "established implementations were found to perform worse than our reimplementation due to defects in prompting and REPL implementation" ([Table 1](https://arxiv.org/abs/2609.26891v1)). A baseline you build badly proves nothing.
 - Letta lost a task that needed exact substring matching, where "the only tool Letta had (conversation_search) did not support it" ([Li et al., 2026](https://arxiv.org/abs/2609.26891v1)). If your workload fits the retrieval model the subsystem was built around, the argument drops away.
 
-The self-improvement result also gave the meta-agent a stronger model (GPT-5.4) than the solvers (GPT-5.4 nano) ([Table 2](https://arxiv.org/abs/2609.26891v1)). Both results come from one paper on two benchmarks, never independently replicated.
+The self-improvement result also gave the meta-agent a stronger model (GPT-5.4) than the solvers (GPT-5.4 nano) ([Table 2](https://arxiv.org/abs/2609.26891v1)). Both results come from one paper on two benchmarks, and no other group has rerun those benchmarks.
+
+A second group reports the same pattern in a different domain. Given the same frontier model and an equal time budget, open-source ML-engineering harnesses finished no better than a single session of a minimal-harness coding agent ([How Much of a Harness Does a Strong Agent Need for Autonomous ML Engineering?](https://arxiv.org/abs/2609.40303)). That paper reads the model as the primary driver. The baseline question therefore reaches multi-agent orchestrators and dedicated retrieval subagents, though different benchmarks make it corroboration rather than replication.
 
 ## Key Takeaways
 

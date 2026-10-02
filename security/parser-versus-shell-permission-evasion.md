@@ -77,3 +77,4 @@ The effect a rule protects is the tractable half. A file write, an outbound conn
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — the layer the conclusion points at, and the one a parser gap falls through to
 - [Dual-Boundary Sandboxing: Filesystem and Network Isolation](dual-boundary-sandboxing.md) — what enforcement below the shell looks like when it is built deliberately
 - [Scoped-Looking Permission Grants](../patterns/anti-patterns/scoped-looking-permission-grants.md) — the sibling failure that needs no respelling at all: the rule matches correctly and still permits every command
+- [Treating Read Denial as Confidentiality for a Build Input](../patterns/anti-patterns/read-denial-on-a-build-input.md) — the read-side case, where the uncovered route needs no respelling because the build's own permission supplies it
