@@ -98,3 +98,4 @@ The underlying issue is architectural: exclusion policies built for passive mode
 - [Prompt Governance via PR](prompt-governance-via-pr.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
+- [Treating Read Denial as Confidentiality for a Build Input](../patterns/anti-patterns/read-denial-on-a-build-input.md) — where the filesystem-level restriction this page recommends cannot tell the two reads apart, because the compiler opens the file as the same user

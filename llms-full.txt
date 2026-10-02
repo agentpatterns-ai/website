@@ -1841,6 +1841,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Treating Agent Safety as Uniform Across a Session (Cold-Start Safety Gap)](patterns/anti-patterns/cold-start-safety-gap.md)
 - [Treating File Secrecy as Skill Confidentiality](patterns/anti-patterns/file-secrecy-as-skill-confidentiality.md)
 - [Treating Memory-Injection Rate as Security Evidence](patterns/anti-patterns/memory-injection-rate-as-security-evidence.md)
+- [Treating Read Denial as Confidentiality for a Build Input](patterns/anti-patterns/read-denial-on-a-build-input.md)
 - [Trusting Human Review to Catch Deliberate Agent Sabotage](patterns/anti-patterns/deliberate-agent-code-sabotage.md)
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](patterns/anti-patterns/tool-error-implicit-authority.md)
 - [Unsignalled Tool Failure: Returning Success With an Unusable Payload](patterns/anti-patterns/unsignalled-tool-failure-envelope.md)
@@ -15574,6 +15575,7 @@ The underlying issue is architectural: exclusion policies built for passive mode
 - [Prompt Governance via PR](prompt-governance-via-pr.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md)
+- [Treating Read Denial as Confidentiality for a Build Input](../patterns/anti-patterns/read-denial-on-a-build-input.md) — where the filesystem-level restriction this page recommends cannot tell the two reads apart, because the compiler opens the file as the same user
 
 ---
 
@@ -45346,7 +45348,9 @@ Production practice runs the other way. A study of eleven production coding harn
 - Implementation quality swamps the paradigm. On StuLife the smolagents version of CodeAct+subagents scored 30.2% pass where the authors' reimplementation of the same method scored 60.0%, because "established implementations were found to perform worse than our reimplementation due to defects in prompting and REPL implementation" ([Table 1](https://arxiv.org/abs/2609.26891v1)). A baseline you build badly proves nothing.
 - Letta lost a task that needed exact substring matching, where "the only tool Letta had (conversation_search) did not support it" ([Li et al., 2026](https://arxiv.org/abs/2609.26891v1)). If your workload fits the retrieval model the subsystem was built around, the argument drops away.
 
-The self-improvement result also gave the meta-agent a stronger model (GPT-5.4) than the solvers (GPT-5.4 nano) ([Table 2](https://arxiv.org/abs/2609.26891v1)). Both results come from one paper on two benchmarks, never independently replicated.
+The self-improvement result also gave the meta-agent a stronger model (GPT-5.4) than the solvers (GPT-5.4 nano) ([Table 2](https://arxiv.org/abs/2609.26891v1)). Both results come from one paper on two benchmarks, and no other group has rerun those benchmarks.
+
+A second group reports the same pattern in a different domain. Given the same frontier model and an equal time budget, open-source ML-engineering harnesses finished no better than a single session of a minimal-harness coding agent ([How Much of a Harness Does a Strong Agent Need for Autonomous ML Engineering?](https://arxiv.org/abs/2609.40303)). That paper reads the model as the primary driver. The baseline question therefore reaches multi-agent orchestrators and dedicated retrieval subagents, though different benchmarks make it corroboration rather than replication.
 
 ## Key Takeaways
 
@@ -54009,6 +54013,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Treating a Clean Final State as Boundary-Compliance Evidence](clean-final-state-as-compliance-evidence.md) — A clean protected-state digest collapses several decision policies into one value; three models can leave the same frozen test untouched by three different routes, and one clean repository state followed an edit the agent reverted
 - [Cross-Session Re-Implementation of Existing Agent Code](cross-session-reimplementation.md) — Fresh agent sessions on one workspace read less repository code and rewrite their own earlier functions while per-turn tests stay green; audit across sessions, not per diff
 - [Silent Adoption of Corrupted Tool Returns by Agents](silent-adoption-of-corrupted-tool-returns.md) — Agents adopt wrong tool returns over answers they already had (56.4% override in Search under plausible corruption) and warn the user in a small share of final answers
+- [Treating Read Denial as Confidentiality for a Build Input](read-denial-on-a-build-input.md) — Fifteen read routes to a protected build input, classified against four mechanisms an ordinary user can configure; five are refused by neither the permission rules nor the sandbox, and none of the four can say which program is reading
 
 ---
 
@@ -66220,6 +66225,53 @@ PMPA drove both harnesses with DeepSeek-V4-Flash, DeepSeek-V4-Pro and Qwen3-Max 
 - [Typed Memory Provenance and Assertion Release Gating](../agent-design/typed-memory-provenance-assertion-gating.md) — a control that governs both stages at once, evaluated on a conformance suite rather than an attack
 - [The Recall Trap: Tuning a Code Retriever on Recall@k at a Fixed Slot Budget](recall-trap-retriever-tuning.md) — the same measurement error in retrieval, where the flag's own metric improves and the downstream task does not
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — why the instruction layer keeps losing, which is the adjacent claim this page is careful not to make
+
+---
+
+### Treating Read Denial as Confidentiality for a Build Input
+Source: https://agentpatterns.ai/patterns/anti-patterns/read-denial-on-a-build-input/
+
+# Treating Read Denial as Confidentiality for a Build Input
+
+> The compiler must open a build input, and no rule that matches a path or a command can tell its read from the agent's.
+
+Four conditions have to hold together before this costs anything, and all four come from the deployment Shobhan Roy describes ([arXiv:2609.35557v1](https://arxiv.org/abs/2609.35557v1)). The protected file is an input the build cannot run without. You are an ordinary user of the harness, so you cannot load a kernel policy or replace the language runtime. The agent and the build share one account, and the compiler starts from the agent's own shell. And something follows from the bytes reaching a transcript, such as a license term that permits publishing results but not passing on the algorithms. Drop one of the four and the ordinary advice on [protecting sensitive files](../../security/protecting-sensitive-files.md) applies instead.
+
+## Which routes each mechanism covers
+
+Shobhan Roy classified fifteen ways the protected bytes could reach a coding agent's context in one deployment. The two mechanisms that enforce anything divide the work rather than sharing it: "Two routes are covered by both, seven by the sandbox alone, one by the permission rules alone, and five by neither" ([arXiv:2609.35557v1](https://arxiv.org/abs/2609.35557v1)). Documented scope explains the division. Claude Code's sandbox "applies only to Bash, PowerShell, and Monitor commands and their child processes". The built-in tools go the other way: "Read, Edit, and Write use the permission system directly rather than running through the sandbox" ([Claude Code — Sandboxing](https://code.claude.com/docs/en/sandboxing)). That page corroborates the sandbox half of two of the five, warning that a command could "add a hook or MCP server that Claude Code runs outside the sandbox".
+
+## Why it works (the criterion is not in any of the four)
+
+Four mechanisms sit between the agent and the file here: the container, the permission rules, the sandbox, and the instruction file. "Out of the box, none of the four can state the criterion the rule turns on, which is which program is reading" ([arXiv:2609.35557v1](https://arxiv.org/abs/2609.35557v1)). No attribute is left for them to decide on, because "The agent and the build run as one user account, and the compiler is a child of the agent's own shell, inside the agent's container". So the compiler is the route that tightening cannot reach: "A direct read is refused while gfortran -E f is not, though the compiler names the path as plainly as cat does." The permission the build requires is what the route uses. Roy uses the literature's own names rather than coining one. The rule the deployment wants is purpose-based access control; the uncovered routes are a failure of complete mediation.
+
+## What tightening the list buys
+
+Roy kept one deny list under revision for five weeks with the protected paths held still. Four revisions took it from 14 rules to 488, 540, 556 and 586, adding 118, 13, 4 and then zero new command names. The fourth is the informative one: 30 new rules and no new name, extending fifteen already-listed commands from the directory to the single file. "What the revision fixed was a missing invariant rather than a missing command" ([arXiv:2609.35557v1](https://arxiv.org/abs/2609.35557v1)).
+
+## When this backfires
+
+Read this as a limit on what you claim for the boundary rather than a reason to remove it. Roy still runs the arrangement, and it produced 64 denial events over seven weeks of ordinary research work. No denial in that corpus blocked ordinary work on the protected files, and he states that "none of these counts supports a rate" ([arXiv:2609.35557v1](https://arxiv.org/abs/2609.35557v1)).
+
+- You administer the host kernel. SELinux type enforcement moves a process into a domain on exec, so the kernel can refuse the agent's domain while the compiler proceeds. The answer is a privileged policy loader, not a longer list.
+- The protected files are stable and sit apart from the code the agent works on. Hold them under a second account behind a build recipe the agent cannot edit. That trusted broker "approximates the rule rather than enforcing it", and it charges the edit-build-fix loop.
+- Process lineage does not settle it. In [ActPlane](https://arxiv.org/abs/2606.25189v2) the tags propagate through fork and exec, so the compiler inherits the agent's label and the build fails. Name the compiler as an exception and "The exception that exists for the build is available to the agent on the same terms."
+- One deployment, one vendor's rule syntax, one rater. Two routes were seen refused in practice against a decoy tree, the other thirteen were never run against the protected files, and the table "is not a measure of how often an attack would be stopped".
+
+## Key Takeaways
+
+- Ask whether the build opens the file before writing a read-denial rule for it. If it does, the exception that rule needs for the compiler is itself a route to the contents.
+- Tightening stops finding new commands long before it closes the gap. Roy's fourth revision added 30 rules and no new command name ([arXiv:2609.35557v1](https://arxiv.org/abs/2609.35557v1)).
+- Of any read control, work out which of three things it names: the account, the path, or the program consuming the bytes. Only the third expresses this rule.
+- Both outputs the build is allowed to return carry content derived from the protected file, the diagnostic in the line it quotes and the compiled artifact in the models' constants ([arXiv:2609.35557v1](https://arxiv.org/abs/2609.35557v1)). A filter on the build's reply is the control, not a rule on the file.
+
+## Related
+
+- [Protecting Sensitive Files from Agent Context Access](../../security/protecting-sensitive-files.md) — the path-rule and pre-read-hook approach, which holds for a file nothing else has to open
+- [Content Exclusion Gap: AI Security Boundaries by Mode](../../instructions/content-exclusion-gap.md) — the same boundary failing across a vendor's interaction modes, with filesystem-level restriction offered as the fix
+- [Parser-Versus-Shell Evasion in Command Permission Checks](../../security/parser-versus-shell-permission-evasion.md) — the other half of why a command-text rule misses a read: the shell respells its own input
+- [Treating a Worktree as a Safety Boundary](worktree-as-safety-boundary.md) — the same account, credentials, and filesystem on both sides of a boundary that only places edits
+- [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](../../security/revocable-resource-effect-capabilities.md) — a mechanism that does bind a path to an access mode, and models one consumer rather than two
 
 ---
 
@@ -123855,6 +123907,7 @@ The effect a rule protects is the tractable half. A file write, an outbound conn
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — the layer the conclusion points at, and the one a parser gap falls through to
 - [Dual-Boundary Sandboxing: Filesystem and Network Isolation](dual-boundary-sandboxing.md) — what enforcement below the shell looks like when it is built deliberately
 - [Scoped-Looking Permission Grants](../patterns/anti-patterns/scoped-looking-permission-grants.md) — the sibling failure that needs no respelling at all: the rule matches correctly and still permits every command
+- [Treating Read Denial as Confidentiality for a Build Input](../patterns/anti-patterns/read-denial-on-a-build-input.md) — the read-side case, where the uncovered route needs no respelling because the build's own permission supplies it
 
 ---
 

@@ -824,6 +824,7 @@
   "patterns/anti-patterns/prompt-debt.md": "2026-07-19T21:23:30+00:00",
   "patterns/anti-patterns/prompt-only-tool-access-control.md": "2026-05-20T15:14:52+00:00",
   "patterns/anti-patterns/prompt-tinkerer.md": "2026-03-28T09:17:05+00:00",
+  "patterns/anti-patterns/read-denial-on-a-build-input.md": "2026-10-01T21:26:58+00:00",
   "patterns/anti-patterns/reasoning-complexity-tradeoff.md": "2026-05-05T19:07:08+00:00",
   "patterns/anti-patterns/reasoning-overuse.md": "2026-03-28T09:17:05+00:00",
   "patterns/anti-patterns/recall-trap-retriever-tuning.md": "2026-08-19T20:28:20+00:00",

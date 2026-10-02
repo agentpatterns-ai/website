@@ -1717,6 +1717,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Treating Agent Safety as Uniform Across a Session (Cold-Start Safety Gap)](patterns/anti-patterns/cold-start-safety-gap.md)
 - [Treating File Secrecy as Skill Confidentiality](patterns/anti-patterns/file-secrecy-as-skill-confidentiality.md)
 - [Treating Memory-Injection Rate as Security Evidence](patterns/anti-patterns/memory-injection-rate-as-security-evidence.md)
+- [Treating Read Denial as Confidentiality for a Build Input](patterns/anti-patterns/read-denial-on-a-build-input.md)
 - [Trusting Human Review to Catch Deliberate Agent Sabotage](patterns/anti-patterns/deliberate-agent-code-sabotage.md)
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](patterns/anti-patterns/tool-error-implicit-authority.md)
 - [Unsignalled Tool Failure: Returning Success With an Unusable Payload](patterns/anti-patterns/unsignalled-tool-failure-envelope.md)
