@@ -9,7 +9,7 @@ tags:
 aliases:
   - "event-subscribed agents"
   - "agent PR subscription"
-last_reviewed: 2026-08-23
+last_reviewed: 2026-10-02
 maturity: emerging
 ---
 
@@ -29,6 +29,8 @@ This pattern is the autonomous half of [one-click CI auto-fix](../../workflows/o
 ## The subscription primitive
 
 A subscribed agent attaches to an event source instead of being invoked per task. Cursor describes an agent that "subscribes to an event source (a thread or conversation) and wakes when something happens," covering pull requests, Slack threads, and schedules ([Cursor Changelog, 2026-08-19](https://cursor.com/changelog/08-19-26)). PR ownership follows: "Cloud agents automatically subscribe to PRs they create and drive them to completion, fixing CI and addressing bot comments."
+
+GitHub ships this loop in preview as agent merge: "Enable agent merge in an active session to let the agent handle review feedback, failed checks, merge conflicts, and workflow reruns" ([GitHub Changelog, 2026-10-01](https://github.blog/changelog/2026-10-01-github-copilot-in-vs-code-september-2026-releases)). The changelog names the work the agent takes on and stops there. Who presses merge and what bounds the reruns are conditions two and three above, and the announcement answers neither.
 
 ```mermaid
 flowchart TD
