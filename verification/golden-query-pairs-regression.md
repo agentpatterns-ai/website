@@ -117,7 +117,7 @@ def run_agent(question: str) -> str:
         max_tokens=512,
         messages=[{"role": "user", "content": question}],
     )
-    return response.content[0].text
+    return "".join(b.text for b in response.content if b.type == "text")
 
 def grade(question: str, golden: str, generated: str) -> dict:
     response = client.messages.create(
@@ -130,7 +130,7 @@ def grade(question: str, golden: str, generated: str) -> dict:
             ),
         }],
     )
-    return json.loads(response.content[0].text)
+    return json.loads("".join(b.text for b in response.content if b.type == "text"))
 
 results = []
 for pair in GOLDEN_PAIRS:

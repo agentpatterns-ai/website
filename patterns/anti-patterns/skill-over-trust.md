@@ -88,3 +88,4 @@ A retrieval-augmented generation task required configurable model parameters. Th
 - [Skill-Use Gates: Trigger, Compliance and Boundary](../../verification/skill-use-gate-decomposition.md) — scoring which gate a skill failure came from.
 - [The No-Op Test](../../instructions/behavioral-no-op-test.md) — deleting a line and rerunning the task to test whether it changes behavior.
 - [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the same withheld-skill comparison pointed at policy integrity instead of cost and failure attribution.
+- [Prompt Replay as a Skill Safety Test](prompt-replay-skill-testing.md) — the security-side version of changing how a skill is delivered, where pasting the body as a prompt reproduces under a third of the installed skill's effect.

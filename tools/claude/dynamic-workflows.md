@@ -88,6 +88,7 @@ Claude writes the orchestration script, the approval prompt shows the planned ph
 ## Related
 
 - [Sub-Agents](sub-agents.md)
+- [GitHub Copilot Dynamic Workflows](../copilot/copilot-dynamic-workflows.md) — the Copilot form, where the workflow program itself can run commands
 - [Claude Code Agent Teams](agent-teams.md)
 - [Deterministic Orchestration for Structured Modernization](../../patterns/agent-design/deterministic-orchestration-structured-modernization.md)
 - [Orchestrator-Worker Pattern for AI Agent Development](../../patterns/multi-agent/orchestrator-worker.md)

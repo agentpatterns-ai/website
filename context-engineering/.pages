@@ -81,6 +81,7 @@ nav:
       - context-compiler.md
       - semantic-context-loading.md
       - symbol-ranked-file-picker.md
+      - name-only-path-routing.md
       - seeding-agent-context.md
       - grounding-zero-prior-code.md
       - environment-specification-as-context.md

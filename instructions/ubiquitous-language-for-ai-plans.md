@@ -64,7 +64,7 @@ The token-economics leg is Pocock's: with shared language, "the AI uses fewer to
 
 ## When it backfires
 
-The pattern is not free. Recent empirical work on AGENTS.md-style context files found LLM-generated context files reduce success rate ~3% on the AGENTbench suite of 138 niche-repo Python tasks, and human-written files produce only +4% success at a parallel +19% inference cost ([Gloaguen et al., InfoQ summary](https://www.infoq.com/news/2026/03/agents-context-file-value-review/) — covered in detail at [Evaluating AGENTS.md](evaluating-agents-md-context-files.md)). Trace analysis showed agents follow context-file instructions even when those instructions add work without raising patch quality.
+The pattern is not free. Recent empirical work on AGENTS.md-style context files found LLM-generated context files lower success rate by 0.5% on SWE-bench Lite and 2% on the CTXbench suite of 138 niche-repo Python tasks (neither significant), and human-written files produce only +2.4% success on CTXbench (p=21%, not significant) at up to +19% inference cost ([Gloaguen et al., arXiv:2602.11988v3](https://arxiv.org/abs/2602.11988v3); [InfoQ summary](https://www.infoq.com/news/2026/03/agents-context-file-value-review/) — covered in detail at [Evaluating AGENTS.md](evaluating-agents-md-context-files.md)). Trace analysis showed agents follow context-file instructions even when those instructions add work without raising patch quality.
 
 That study is on undifferentiated context content, not specifically glossary-with-ADR files, but the lesson generalizes: a thicker context file is not free. The pattern earns its keep under specific conditions:
 

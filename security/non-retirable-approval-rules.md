@@ -101,3 +101,4 @@ Three `ask` entries, and `Edit(/src/**)` is the one to argue about. It prompts o
 - [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md) — the accreted-grant workflow a managed ask deliberately invalidates.
 - [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md) — how these subkeys are marked overridable so a team can vary them inside the enterprise boundary.
 - [Reviewer Habituation in Agent PR Review](../code-review/reviewer-habituation-decay.md) — the measured decay that bounds what any repeated approval gate buys.
+- [Approval Records That Bind No Identity and No Session](../patterns/anti-patterns/unbound-approval-records.md) — why a saved grant satisfies an operation it was never granted for, and the two fields that would stop it.

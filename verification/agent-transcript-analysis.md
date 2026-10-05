@@ -110,7 +110,7 @@ response = client.messages.create(
     }]
 )
 
-print(response.content[0].text)
+print("".join(b.text for b in response.content if b.type == "text"))
 ```
 
 The key instruction is to reason through the root cause before proposing a rewrite. This separates diagnosis from prescription. It also makes it easier to judge whether the proposed change addresses the underlying issue. After you apply any changes, re-run the eval suite against a [held-out test set](eval-blind-spots.md) before you treat the tool as improved.

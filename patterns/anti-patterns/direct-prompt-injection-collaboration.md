@@ -77,3 +77,4 @@ Without these controls, the same scenario exfiltrates in 24 of 25 retries — th
 - [Lethal Trifecta in Agent Tooling](../../security/lethal-trifecta-threat-model.md)
 - [Guarding Against URL-Based Data Exfiltration](../../security/url-exfiltration-guard.md)
 - [Trust Without Verify](trust-without-verify.md)
+- [Prompt Replay as a Skill Safety Test](prompt-replay-skill-testing.md) — the defender's use of this same channel, pasting a suspect skill body as a prompt, which reproduces under a third of what the installed skill does

@@ -146,7 +146,7 @@ def run_incident_evals(agent_fn, evals):
                 input=case["input"], expected=case["expected"], actual=actual
             )}],
         )
-        verdict = json.loads(response.content[0].text)
+        verdict = json.loads("".join(b.text for b in response.content if b.type == "text"))
         results.append({
             "id": case["id"], "severity": case["severity"], **verdict
         })

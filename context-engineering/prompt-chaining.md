@@ -109,20 +109,23 @@ import anthropic
 
 client = anthropic.Anthropic()
 
+def text_of(message) -> str:
+    return "".join(b.text for b in message.content if b.type == "text")
+
 def gate_check(output: str, required_sections: list[str]) -> bool:
     return all(section.lower() in output.lower() for section in required_sections)
 
 def run_spec_chain(feature_request: str) -> str:
-    draft = client.messages.create(
+    draft = text_of(client.messages.create(
         model="claude-opus-4-8",
         max_tokens=1024,
         messages=[{"role": "user", "content": f"Write a technical specification for: {feature_request}"}]
-    ).content[0].text
+    ))
 
     if not gate_check(draft, ["overview", "requirements", "api design", "error handling"]):
         raise ValueError("Draft missing required sections — aborting chain")
 
-    review = client.messages.create(
+    review = text_of(client.messages.create(
         model="claude-opus-4-8",
         max_tokens=512,
         messages=[{"role": "user", "content": f"""Review this specification for gaps and risks:
@@ -130,21 +133,21 @@ def run_spec_chain(feature_request: str) -> str:
 {draft}
 
 Return JSON: {{"issues": [...], "approved": true/false}}"""}]
-    ).content[0].text
+    ))
 
     import json
     review_result = json.loads(review)
     if not review_result.get("approved"):
         raise ValueError(f"Review failed — issues: {review_result['issues']}")
 
-    final = client.messages.create(
+    final = text_of(client.messages.create(
         model="claude-opus-4-8",
         max_tokens=1024,
         messages=[{"role": "user", "content": f"""Finalise this specification addressing: {review_result['issues']}
 
 Draft:
 {draft}"""}]
-    ).content[0].text
+    ))
 
     return final
 ```

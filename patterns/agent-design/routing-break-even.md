@@ -10,7 +10,7 @@ aliases:
   - minimum offload fraction
   - router judge cost break-even
   - model routing break-even calculation
-last_reviewed: 2026-09-20
+last_reviewed: 2026-10-02
 maturity: emerging
 ---
 
@@ -25,6 +25,8 @@ Replit routes between models per request rather than pinning every request to on
 ## What the calculation can decide
 
 The formula answers one question: is the gap between your two models wide enough to pay for the judge. When two models sit close in price, the required offload climbs above 100%, which asks you to send more turns to the cheap model than you have. LangChain is explicit that no judge configuration recovers this, and that the one escape is hosting the cheap model yourself, where inference cost falls near zero and the gap reopens ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
+
+Measure both sides of that gap as cost per task. Anthropic reported that Sonnet 5.5 carries Sonnet 5's per-token price unchanged. It still costs "up to 30% less for most work", because it "typically needs far fewer tokens to do the same work" ([Anthropic, 28 September 2026](https://claude.dev/blog/building-with-claude-sonnet-5-5/)). On per-token price alone the gap between them reads as zero, though the cost-per-task spread runs up to 30%. Check both again after a model update, because a vendor can move token consumption and per-token price separately.
 
 Three things it does not decide. It cannot tell you whether the router picks well on your traffic. It compares routing against a frontier-only baseline, so it says nothing about running the cheap model on everything. And on a lopsided pairing it settles nothing, because the bar sits far below any plausible offload rate. As the authors put it: "Use it to rule routing out on cost. Run your own workload to rule it in" ([LangChain](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
 
@@ -80,3 +82,4 @@ Clearing the bar that far tells you little. The authors concede that "with a pai
 - [Difficulty-Aware Topology Selection for Coding Agents](difficulty-aware-topology-selection.md) — the same trade priced over collaboration structure rather than model choice.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the broader tier-routing frame this calculation sits inside.
 - [Cache-Safe Routing Boundaries: Where a Router May Act](cache-safe-routing-boundaries.md) — the second gate, which prices the prompt cache a switch forfeits rather than the judge that decides it.
+- [Task-Distribution Router Fit: Where the Decision Belongs](task-distribution-router-fit.md) — what the router's criteria are fitted to, once this calculation says the offload fraction is reachable.

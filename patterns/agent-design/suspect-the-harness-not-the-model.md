@@ -69,3 +69,4 @@ A team's agent starts costing about 40% more per pull request over a month, with
 - [Harness-Controlled Token Economics](../../token-engineering/harness-token-economics.md) — why the orchestration layer, not the model, sets the token bill that inflates here
 - [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — the boundary condition where you cannot pin or inspect the harness at all
 - [Reliability of an Automatically Selected Agent Harness](harness-selection-reliability.md) — when a search procedure picks the harness, the pick itself is a source of regression
+- [Model Rankings Reverse Across Agent Harnesses](model-rankings-reverse-across-harnesses.md) — the selection version of the same attribution problem, where the harness decides which of two models scores higher

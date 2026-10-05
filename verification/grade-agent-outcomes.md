@@ -100,7 +100,7 @@ def grade_code_quality(file_contents: str) -> dict:
             ),
         }],
     )
-    return response.content[0].text
+    return "".join(b.text for b in response.content if b.type == "text")
 ```
 
 `grade_outcome` passes as long as the test suite is green — the agent may have taken two tool calls or twenty. The optional `grade_code_quality` function uses an LLM rubric to handle the subjective dimension without prescribing implementation steps.

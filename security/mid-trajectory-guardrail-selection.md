@@ -123,7 +123,7 @@ Respond with JSON: {{"safe": true/false, "reason": "brief explanation"}}"""
         max_tokens=256,
         messages=[{"role": "user", "content": guard_prompt}]
     )
-    result = json.loads(response.content[0].text)
+    result = json.loads("".join(b.text for b in response.content if b.type == "text"))
     return result["safe"]
 
 def run_agent_with_guardrail(task: str, tools: list) -> str:

@@ -95,7 +95,7 @@ if response.stop_reason == "tool_use":
     messages += [{"role": "assistant", "content": response.content},
                  {"role": "user", "content": [{"type": "tool_result", "tool_use_id": tool_use.id, "content": result}]}]
     final = client.messages.create(model="claude-opus-4-5", max_tokens=1024, tools=tools, messages=messages)
-    print(final.content[0].text)
+    print("".join(b.text for b in final.content if b.type == "text"))
 ```
 
 Every step — the tool schema, the message array, the tool-result injection — is explicit. When the model misbehaves, the failure surface is a plain Python dict, not a framework abstraction stack.

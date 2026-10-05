@@ -71,4 +71,5 @@ The selection is about accuracy and cost, not about permissions. Varying effort 
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — varying effort across phases of one run rather than across tasks.
 - [Auto Model Selection: Harness-Driven Routing per Task](auto-model-selection.md) — the model half of the same dispatch decision.
 - [Cost-Quality Pareto Measurement](../../token-engineering/cost-quality-pareto-measurement.md) — how to measure whether a level change paid for itself.
+- [Effort as a Verification Dial: What a Higher Level Buys](effort-as-verification-dial.md) — what the extra compute is spent on, and which task categories it moves.
 - [Decision-Fork Replay: Grading an Agent's Mid-Run Choices](decision-fork-replay.md) — one benchmark where raising the reasoning level moved accuracy by −0.2 and +2.2 points on the two GPT-5.6-family models tested.

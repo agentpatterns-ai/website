@@ -124,7 +124,7 @@ def role_turn(role, content):
         system=ROLES[role],
         messages=[{"role": "user", "content": content}],
     )
-    return response.content[0].text
+    return "".join(b.text for b in response.content if b.type == "text")
 
 task      = "Optimize the retry logic in our API client."
 results   = role_turn("competitor", task)

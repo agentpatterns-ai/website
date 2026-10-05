@@ -86,3 +86,4 @@ Neither prompt had enforcement behind it. The second names one owner and reaches
 - [Pre-Write Change Intent Admission (Claim Plane)](../multi-agent/pre-write-change-intent-admission.md) — a deterministic control plane that refuses a claim before any byte changes
 - [Lead-to-Teammate Plan-Approval Handshake](../multi-agent/lead-teammate-plan-approval-handshake.md) — authority backed by a runtime-held read-only mode
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](../../security/enforced-versus-advisory-controls.md) — sorting safeguards by where they are evaluated
+- [Per-User Agents on a Contested Shared Resource](per-user-agents-contested-resource.md) — the measured cost when the sessions answer to different users, and the ranking nobody holds

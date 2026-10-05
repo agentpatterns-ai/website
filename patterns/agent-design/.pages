@@ -117,6 +117,7 @@ nav:
       - minimum-sufficient-control-ladder.md
       - orchestrator-attention-budget.md
       - plan-compliance-in-agents.md
+      - plan-as-control-flow.md
       - pr-subscribed-agent-ownership.md
       - proactive-idle-time-anticipation.md
       - progressive-disclosure-agents.md
@@ -168,6 +169,7 @@ nav:
       - dispatch-time-reasoning-level.md
       - dual-budget-control-search-agents.md
       - effective-feedback-compute.md
+      - effort-as-verification-dial.md
       - escalation-channels-defect-disclosure.md
       - evidence-first-diagnosis-reports.md
       - gateway-model-routing.md
@@ -195,9 +197,12 @@ nav:
       - reasoning-budget-allocation.md
       - reasoning-effort-over-tool-scaffolding.md
       - recoverability-gated-self-evolution.md
+      - requirement-keyed-checkpoints.md
       - rollback-first-design.md
       - router-imposed-quality-ceiling.md
       - routing-break-even.md
+      - task-distribution-router-fit.md
+      - per-surface-routing-visibility.md
       - rubric-refine-pre-execution-tool-use.md
       - scout-then-route.md
       - selective-checkpoint-restore.md
@@ -221,6 +226,7 @@ nav:
       - agent-pushback-protocol.md
       - agent-turn-model.md
       - browser-as-agent-action-space.md
+      - computer-use-last-integration-tier.md
       - generated-programs-web-agent-action-space.md
       - deep-agent-runtime.md
       - delta-channels-checkpoint-storage.md
@@ -249,6 +255,7 @@ nav:
       - task-shape-harness-payoff.md
       - prompt-only-baseline-before-specialized-subsystem.md
       - model-set-parity-harness-claims.md
+      - model-rankings-reverse-across-harnesses.md
       - harness-selection-reliability.md
       - harness-deletion-and-cost-rules.md
       - last-unconstrained-axis.md

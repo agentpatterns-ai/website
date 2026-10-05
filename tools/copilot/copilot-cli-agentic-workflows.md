@@ -136,6 +136,7 @@ No. `/delegate` dispatches work to the cloud coding agent for async execution vi
 
 ## Related
 
+- [GitHub Copilot Dynamic Workflows](copilot-dynamic-workflows.md) — the form whose steps are defined in code, and how its permissions relate to the model above
 - [Copilot CLI BYOK and Local Model Support](copilot-cli-byok-local-models.md)
 - [Copilot Coding Agent](coding-agent.md)
 - [Copilot Agent Mode](agent-mode.md)

@@ -301,7 +301,7 @@ def judge_test_plan(pr_description: str, diff: str) -> dict:
             }
         ],
     )
-    return json.loads(response.content[0].text)
+    return json.loads("".join(b.text for b in response.content if b.type == "text"))
 ```
 
 Notice the separation: code-based grading handles everything it can (structure, length, content presence, flagging). LLM-as-judge only handles the one dimension that requires subjective judgment (test plan quality). This follows the hierarchy from [Grading Strategies](grading-strategies.md).
@@ -472,7 +472,7 @@ def generate_pr_description(diff: str) -> str:
             }
         ],
     )
-    return response.content[0].text
+    return "".join(b.text for b in response.content if b.type == "text")
 ```
 
 Notice how the tasks directly informed the system prompt: the required sections, the 500-word limit, the explicit instruction to avoid generic test plan phrases, and the error handling for empty diffs all come from the task definitions written in Step 1.

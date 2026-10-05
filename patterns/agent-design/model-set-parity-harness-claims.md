@@ -75,3 +75,4 @@ None of that makes the result wrong. Cognition argues the coupling is the findin
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — pinning the model and removing one subsystem at a time to rank investment.
 - [Cost-Quality Pareto Measurement](../../token-engineering/cost-quality-pareto-measurement.md) — keeping score and cost on one plot so a quality trade stays visible.
 - [Pricier Per Token, Cheaper Per Task](../../token-engineering/pricier-per-token-cheaper-per-task.md) — the lead-model result inside the same Fusion architecture.
+- [Model Rankings Reverse Across Agent Harnesses](model-rankings-reverse-across-harnesses.md) — a matched-arm campaign that reports the score side of the same comparison, across 66 model-harness configurations.

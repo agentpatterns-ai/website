@@ -67,3 +67,4 @@ The paper's own recommendation names the record: show "whether the code ran, whe
 - [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](evidence-bundled-agent-prs.md) — what a reviewer reads when the evidence arrives with the change
 - [Model Confidence as Security Verification (Security Calibration Gap)](../patterns/anti-patterns/model-confidence-as-security-verification.md) — the same decoupling on the model's side of the exchange
 - [Stated-Understanding Checks: Asking the Agent to Correct You](../human/stated-understanding-checks.md) — a check that counts only when the agent can look the answer up
+- [Reject on a Failing Check, Never Accept on a Passing One](asymmetric-check-evidence.md) — which direction a named check may decide in, once a machine reads the result instead of a person

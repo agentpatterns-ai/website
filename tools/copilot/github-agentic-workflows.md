@@ -169,6 +169,7 @@ The compiled `summarize.lock.yml` is the GitHub Actions workflow that runs. The 
 - [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — AI credits, per-model token rates, credit pooling, and budget controls behind workflow-run costs
 - [Cloud Agent Organization Controls](cloud-agent-org-controls.md) — runner configuration, firewall policy, and org-level governance for agentic workflow execution
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
+- [GitHub Copilot Dynamic Workflows](copilot-dynamic-workflows.md) — the in-session form, started by you rather than by a repository event
 - [GitHub Models in Actions](github-models-in-actions.md)
 - [GitHub Copilot MCP Integration](mcp-integration.md)
 - [Dependabot Agent Assignment](dependabot-agent-assignment.md)

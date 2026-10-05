@@ -8,13 +8,13 @@ tags:
 aliases:
   - Instruction File Convention
   - Project Instruction Files
-last_reviewed: 2026-05-27
+last_reviewed: 2026-10-03
 maturity: established
 ---
 
 # CLAUDE.md Convention for Structuring Agent Instructions
 
-> CLAUDE.md is Claude Code's project-level instruction file -- a Markdown file that Claude Code reads at session start to understand project conventions, tooling, and behavioral rules.
+> CLAUDE.md is the project-level instruction file Claude Code reads at session start for conventions, tooling, and behavioral rules.
 
 ??? note "Also known as: Instruction File Convention, Project Instruction Files"
     See [Project Instruction File Ecosystem](instruction-file-ecosystem.md) and [copilot-instructions.md Convention](../tools/copilot/copilot-instructions-md-convention.md).
@@ -96,6 +96,8 @@ paths:
 - All API endpoints must include input validation
 - Use the standard error response format
 ```
+
+Claude Code v2.1.288 (2026-10-02) widened the load trigger. A `Write` or `Edit` that creates or changes a matching file now loads the rules file, and nested CLAUDE.md files load on the same events ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-288)). Earlier releases loaded both on `Read` alone.
 
 Rules files support symlinks for cross-repo sharing ([docs](https://code.claude.com/docs/en/memory)).
 

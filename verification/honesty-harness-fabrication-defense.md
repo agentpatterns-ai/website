@@ -114,3 +114,4 @@ The reviewer holds external tools: WebFetch for source verification, and Bash pl
 - [Layered Accuracy Defense](layered-accuracy-defense.md) — the same defense-in-depth idea applied to content pipelines instead of coding agents
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — why Layer 3 belongs in hooks, not the system prompt
 - [Agent Self-Review Loop](../code-review/agent-self-review-loop.md) — Layer 4 as practised in Copilot's pre-PR review
+- [Post-Failure Evidence Contracts for Tool-Using Agents](post-failure-evidence-contract.md) — the Layer 1 honesty rule given a required output shape, measured against a plain instruction

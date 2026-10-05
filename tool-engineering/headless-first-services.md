@@ -94,6 +94,7 @@ The skill is the piece most product teams miss. Without it, the agent sees a CLI
 
 ## Related
 
+- [Computer Use as the Last Integration Tier](../patterns/agent-design/computer-use-last-integration-tier.md)
 - [Unix CLI as the Native Tool Interface for AI Agents](unix-cli-native-tool-interface.md)
 - [CLI-First Skill Design](cli-first-skill-design.md)
 - [MCP Server Design](mcp-server-design.md)

@@ -83,3 +83,4 @@ The caller cannot narrow the search with file globs or a revision, so scoping qu
 - [Agent Retrieval Provenance as an Audit Control](../security/agent-retrieval-provenance.md) — the compliance case for scoped retrieval: the same citations that save tokens also form the audit trail of what the agent read.
 - [Silent Handoff Failure in Delegated Code Search](silent-handoff-failure-delegated-search.md) — measured evidence that a loose return contract turns a delegated search into a confident wrong answer.
 - [Symbol Ranking for Agent File Pickers](symbol-ranked-file-picker.md) — the same hosted index serving the human's file selection rather than the agent's search loop.
+- [Name-Only Path Routing](name-only-path-routing.md) — the zero-index end of the same trade: candidates found from path names alone, at 8.89 model calls per issue.

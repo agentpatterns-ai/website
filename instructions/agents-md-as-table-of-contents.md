@@ -162,7 +162,7 @@ If any linked document is deleted or renamed without updating AGENTS.md, the CI 
 
 ## When this backfires
 
-The pointer-map pattern assumes the agent will follow pointers on demand. An ETH Zurich study of 138 Python tasks across four agents found that repository-level context files — even human-written ones — consistently raise inference cost by adding 19-20% more agent steps, and that LLM-generated context files reduced task success by ~3% on average compared to no context file at all ([Gloaguen et al. 2026, Evaluating AGENTS.md](https://arxiv.org/abs/2602.11988v2)). The pattern is worse than the alternative when:
+The pointer-map pattern assumes the agent will follow pointers on demand. An ETH Zurich study of 300 SWE-bench Lite tasks and 138 CTXbench Python tasks across four agents found that repository-level context files, even human-written ones, raised inference cost (up to 19% for human-written files, 20% to 23% for LLM-generated ones), and that LLM-generated context files lowered task success by 0.5% (SWE-bench Lite) and 2% (CTXbench) on average compared to no context file, a difference that was not significant ([Gloaguen et al. 2026, Evaluating AGENTS.md](https://arxiv.org/abs/2602.11988v3)). The pattern is worse than the alternative when:
 
 - The repository is small or conventional. If a single `README.md` and obvious file layout already answer "what is this and where does it live," an AGENTS.md pointer map just adds tokens without directing behavior.
 - Agents do not reliably follow pointers. Some agent harnesses pre-load AGENTS.md but never traverse the linked docs, which leaves the agent with a table of contents and no content. The study found instructions are followed, but context files "do not function as effective repository overviews."
@@ -172,7 +172,7 @@ The pointer-map pattern assumes the agent will follow pointers on demand. An ETH
 
 **Does research support repository-level context files?**
 
-Only partly. An ETH Zurich study of 138 Python tasks across four agents found that repository-level context files, even human-written ones, consistently raise inference cost by adding 19-20% more agent steps, and that LLM-generated context files reduced task success by roughly 3% compared with no context file at all. Instructions were followed, but the files did not function as effective repository overviews.
+Only partly. An ETH Zurich study of 300 SWE-bench Lite tasks and 138 CTXbench tasks found that context files raised inference cost (up to 19% for human-written files, 20% to 23% for LLM-generated ones). LLM-generated files lowered task success by 0.5% (SWE-bench Lite) and 2% (CTXbench) on average, not significantly. Instructions were followed, but the files did not function as effective repository overviews.
 
 **Which lines need source, applicability, and expiry metadata?**
 

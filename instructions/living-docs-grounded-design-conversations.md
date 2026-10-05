@@ -18,7 +18,7 @@ maturity: established
 
 > Hand the agent your current domain glossary and architectural decision records during the design interview — the docs become both a question generator and a vocabulary checker, and stale entries surface as the conversation runs.
 
-The technique applies under three conditions: the codebase has non-trivial domain vocabulary not already encoded by types, at least a thin `CONTEXT.md`-style glossary and `docs/adr/` set exists (or is created lazily during the session), and the change is large enough that wrong terminology will leak into code. Outside those conditions, anchoring an interview in prose docs adds cost without value or propagates stale definitions into the new design ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988v2); [MemU, *Context Drift Causes 65% of Enterprise AI Agent Failures*](https://memu.pro/blog/ai-context-drift-enterprise-agent-memory)).
+The technique applies under three conditions: the codebase has non-trivial domain vocabulary not already encoded by types, at least a thin `CONTEXT.md`-style glossary and `docs/adr/` set exists (or is created lazily during the session), and the change is large enough that wrong terminology will leak into code. Outside those conditions, anchoring an interview in prose docs adds cost without value or propagates stale definitions into the new design ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988v3); [MemU, *Context Drift Causes 65% of Enterprise AI Agent Failures*](https://memu.pro/blog/ai-context-drift-enterprise-agent-memory)).
 
 ## How the pattern differs from sibling techniques
 
@@ -60,11 +60,11 @@ The root cause this addresses is widely reported: AI coding agents amplify whate
 The technique fails — sometimes silently — under four conditions.
 
 - Docs are systematically stale: a glossary or ADR set untouched for six months in a fast-moving codebase becomes a vector for context drift, the failure mode MemU's 2026 enterprise survey ranks as the dominant agent-deployment killer ([MemU, *Context Drift Causes 65% of Enterprise AI Agent Failures*](https://memu.pro/blog/ai-context-drift-enterprise-agent-memory)). The interview is grounded in obsolete terms and the developer spends it refuting docs instead of designing.
-- Docs are too thin: a `CONTEXT.md` with three entries gives the agent fragments to extrapolate from. It invents domain terms that sound like they belong — the "follows instructions even when wrong" dynamic Gloaguen et al. observed with auto-generated context files ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988); covered in [Evaluating AGENTS.md](evaluating-agents-md-context-files.md)).
+- Docs are too thin: a `CONTEXT.md` with three entries gives the agent fragments to extrapolate from. It invents domain terms that sound like they belong — the close instruction-following Gloaguen et al. observed, where "instructions in the context files are well followed by coding agents" ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988v3); covered in [Evaluating AGENTS.md](evaluating-agents-md-context-files.md)).
 - Domain is already encoded in types: Rust enums, TypeScript discriminated unions, or a tight Pydantic schema enforce vocabulary at compile time. A prose glossary adds a looser second source of truth that can disagree with the strict one. The agent must pick and may pick wrong.
 - Compliance over signal: the [instruction compliance ceiling](instruction-compliance-ceiling.md) bites. A 50-term glossary makes the agent recite every term back, drowning the design signal. Keep the artifact lazy and short — Pocock's skill creates files only when the first term resolves ([Pocock, *grill-with-docs SKILL.md*](https://github.com/mattpocock/skills/blob/main/skills/engineering/grill-with-docs/SKILL.md)).
 
-Gloaguen quantifies the upside ceiling: human-written context files lifted success only ~4% on the AGENTbench suite at a 19% inference-cost premium ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988v2)). The Q&A-grounded variant earns its keep when the conditions above hold; it does not justify itself in greenfield projects or scripts.
+Gloaguen quantifies the upside ceiling: human-written context files lifted success only 2.4% on average on the CTXbench suite (p=21%, not statistically significant) at up to a 19% inference-cost premium ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988v3)). The Q&A-grounded variant earns its keep when the conditions above hold; it does not justify itself in greenfield projects or scripts.
 
 ## Example
 

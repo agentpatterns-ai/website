@@ -125,7 +125,7 @@ def grade_behavioral(question: str, output: str, rubric: str) -> dict:
             f"\"explanation\": \"...\"}}"
         )}],
     )
-    return {"method": "llm", **json.loads(response.content[0].text)}
+    return {"method": "llm", **json.loads("".join(b.text for b in response.content if b.type == "text"))}
 
 # Combine both methods for a complete behavioral eval
 deterministic = grade_deterministic("./repo", "tests/test_feature.py")

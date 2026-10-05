@@ -99,7 +99,7 @@ Some tools expose a deliberate interactive channel for injecting context mid-ses
 
 Seeding suits stable, long-lived codebases. For short-lived projects, the maintenance overhead may exceed the benefit.
 
-Even accurate seeding is not free. A controlled study found that repository-level context files often reduce coding-agent task success versus no context while raising inference cost by over 20%. Broad architectural overviews can pull agents into unbounded exploration, and LLM-generated files fare worst, with human-curated ones giving only modest gains ([Gloaguen et al., "Evaluating AGENTS.md"](https://arxiv.org/abs/2602.11988v2)). Seed lean, specific, hand-written context rather than generated bulk.
+Even accurate seeding is not free. A controlled study found that repository-level context files did not significantly improve coding-agent task success versus no context while raising inference cost by over 20% on average. Codebase overviews did not help agents find the relevant files sooner. LLM-generated files lowered success in 5 of 8 settings, while human-written ones gained 2.4% on average (p=21%, not significant) ([Gloaguen et al., "Evaluating AGENTS.md"](https://arxiv.org/abs/2602.11988v3)). Seed lean, specific, hand-written context rather than generated bulk.
 
 ## FAQ
 
@@ -109,7 +109,7 @@ Seed durable information: stable conventions and constraints, architectural deci
 
 **Does adding an AGENTS.md always improve agent performance?**
 
-No. A controlled study found repository-level context files often reduce coding-agent task success versus no context while raising inference cost by over 20%; broad architectural overviews can pull agents into unbounded exploration, and LLM-generated files fare worst, with human-curated ones giving only modest gains ([Gloaguen et al.](https://arxiv.org/abs/2602.11988v2)). Seed lean, specific, hand-written context.
+No. A controlled study found repository-level context files did not significantly improve coding-agent task success versus no context while raising inference cost by over 20% on average; codebase overviews did not help agents find the relevant files sooner, LLM-generated files lowered success in 5 of 8 settings, and human-written ones gained 2.4% on average (p=21%, not significant) ([Gloaguen et al.](https://arxiv.org/abs/2602.11988v3)). Seed lean, specific, hand-written context.
 
 **What goes wrong with nested context files?**
 

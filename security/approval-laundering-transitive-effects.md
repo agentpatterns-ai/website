@@ -67,3 +67,4 @@ Two controls do the work for shell commands: turning lifecycle scripts off by de
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — the write-side control on the same expansion sources, `.npmrc` and `.devcontainer/` included
 - [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — a different MCP approval gap, where the reviewer cannot even see the metadata the model reads
 - [Safe Command Allowlisting: Reducing Approval Fatigue](safe-command-allowlisting.md) — the approval-fatigue trade-off this pattern's own fix runs into when it adds a confirmation
+- [Approval Records That Bind No Identity and No Session](../patterns/anti-patterns/unbound-approval-records.md) — the identity side of the same record, where the approved command is reused by another agent or in a later session

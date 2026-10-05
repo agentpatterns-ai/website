@@ -78,3 +78,4 @@ Fanning out is expensive, not free. Agent teams "use approximately 7x more token
 - [Per-Model Harness Tuning: Treating the Backing Model as a Harness Variable](per-model-harness-tuning.md) — the same coupling from the other side, tuning one harness per model
 - [Benchmark-Driven Tool Selection for Code Generation](../../verification/benchmark-driven-tool-selection.md) — why leaderboard rankings overstate real capability
 - [CLI-IDE-GitHub Context Ladder](../../workflows/cli-ide-github-context-ladder.md) — matching the development surface to the phase of work
+- [Model Rankings Reverse Across Agent Harnesses](model-rankings-reverse-across-harnesses.md) — a later study where the within-model gap reached 27 points on hard command-line tasks, which bears on the capability criterion this page sets aside

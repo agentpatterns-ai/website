@@ -122,7 +122,7 @@ def sample_platform(prompt: str) -> str:
         max_tokens=512,
         messages=[{"role": "user", "content": prompt}],
     )
-    return msg.content[0].text
+    return "".join(b.text for b in msg.content if b.type == "text")
 
 def run_cycle(brand: str):
     for prompt in PROMPTS:

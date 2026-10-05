@@ -13,7 +13,7 @@ aliases:
   - Common Enforcement Patterns
   - Enforcing with Hooks
   - Hook Enforcement Patterns
-last_reviewed: 2026-05-27
+last_reviewed: 2026-10-03
 maturity: adopted
 ---
 
@@ -245,6 +245,7 @@ Multiple handlers can fire per event/matcher. Hooks scope at three levels ([docs
 - False positive blocking: over-broad regex matchers (matching `rm` instead of `rm -rf`) block legitimate commands. The model then exhausts retries or hallucinates workarounds. Validate patterns against real command logs.
 - Silent failures: a hook that exits non-zero without a `permissionDecisionReason` gives the model no signal to adapt. Always emit a reason string.
 - Exit code 1 fails open: for most hook events Claude Code treats only exit code `2` as a block. Exit code `1` is logged as a non-blocking error and the call proceeds. Developers who reach for the conventional Unix failure code ship guards that silently fail open ([hooks reference](https://code.claude.com/docs/en/hooks)).
+- Fail-closed plumbing stops the call: `PreToolUse` and `PermissionRequest` hooks were once "skipped when matching them failed or the tool's input could not be serialized to JSON". Claude Code 2.1.288 made both cases block the tool call instead ([Claude Code changelog 2.1.288](https://code.claude.com/docs/en/changelog#2-1-288), 2 October 2026). A matcher that fails to evaluate used to let the call through unguarded and now halts the agent, so test matchers against real tool payloads.
 - Tool-switching circumvention: hooks fire per tool match. Block `Edit`/`Write` and the model reaches for `Bash` + `sed`/`python -c`/heredoc; block `rm` and it falls back to `perl -e 'unlink(...)'`. Anchor outcome-layer harms in file permissions, network policy, or a sandbox, and pair tool hooks with a `Bash` matcher for the obvious bypasses ([issue #43189](https://github.com/anthropics/claude-code/issues/43189)).
 - Exit-code-2 stop-instead-of-retry: a `PreToolUse` block with exit `2` is meant to feed `stderr` back so the agent adapts. In practice Claude often stops mid-turn and waits for user input, turning a fixable guardrail into a hard halt ([issue #24327](https://github.com/anthropics/claude-code/issues/24327)).
 - Long sub-command chains bypass deny rules: Claude Code has been shown to skip permission checks when a tool call carries a long chain of sub-commands, falling back to asking the user instead of enforcing the deny ([The Register, Apr 2026](https://www.theregister.com/software/2026/04/01/claude-code-bypasses-safety-rule-if-given-too-many-commands/)). Scope hook matchers to atomic commands.

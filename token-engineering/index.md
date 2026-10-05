@@ -95,6 +95,7 @@ Push verbose intermediate work to a cheaper model and return a compact result.
 
 You cannot reduce what you do not measure — instrument spend before cutting it.
 
+- [The Four Terms That Decide What an Agent Task Costs](four-term-agent-cost-model.md) — turns, cache-read share and model price multiply on the input side while output tokens add, so you can read a finished session's bill back to its cause
 - [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — swapping only the orchestration layer cut cost per task 41% at parity quality; the harness sets both token volume and effective price
 - [Pricier-Per-Token Models That Cost Less Per Task](pricier-per-token-cheaper-per-task.md) — comparing two models under one harness: a 2x per-token premium inverted into a lower bill once the lead could delegate
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the instrument-attribute-fix-verify loop

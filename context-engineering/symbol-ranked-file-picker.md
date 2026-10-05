@@ -96,5 +96,6 @@ Keystroke latency is the budget this has to fit. Sourcegraph measured a warm p95
 - [Semantic Context Loading](semantic-context-loading.md) — querying a codebase through Language Server Protocol symbols, the same retrieval key applied to the agent's own navigation rather than the picker.
 - [Repository Map Pattern](repository-map-pattern.md) — ranking symbols by graph importance to fill a token budget, where this ranks them to answer one query.
 - [Agent-Tuned Code Search](agent-tuned-code-search.md) — the delegated version of the same trade: a hosted index buys latency and costs freshness.
+- [Name-Only Path Routing](name-only-path-routing.md) — the opposite trade on the same query: no index at all, with a model scoring path names instead of symbols.
 - [Indexed Regex Search for Agent Tools](../tool-engineering/indexed-regex-search-agent-tools.md) — the local index alternative, and the staleness problem any index inherits.
 - [Lexical-First Retrieval for Agentic Search](../tool-engineering/lexical-first-retrieval-for-agentic-search.md) — the same question one layer up: which retrieval mechanism the query shape actually calls for.

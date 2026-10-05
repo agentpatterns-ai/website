@@ -9,7 +9,7 @@ aliases:
   - critic agent
   - dual-model plan review
   - pre-execution plan review
-last_reviewed: 2026-06-12
+last_reviewed: 2026-10-03
 maturity: adopted
 ---
 
@@ -33,7 +33,7 @@ graph TD
     C -->|Rejected + feedback| B
 ```
 
-The critic is a distinct agent role, not self-review. A different model creates genuine disagreement, because the critic does not share the planner's blind spots. Research on the [self-correction blind spot](https://arxiv.org/abs/2507.02778v3) measured an average 64.5% blind-spot rate across 14 tested LLMs. The models failed to correct errors in their own outputs even while correcting identical errors from external sources. This shows that same-model review inherits the producer's failure modes.
+The critic is a distinct agent role, not self-review. A different model creates genuine disagreement, because the critic does not share the planner's blind spots. Research on the [self-correction blind spot](https://arxiv.org/abs/2507.02778v3) measured an average 64.5% blind-spot rate across 14 tested LLMs. The models failed to correct errors in their own outputs even while correcting identical errors from external sources. This shows that same-model review inherits the producer's failure modes. GitHub Copilot's built-in Rubber Duck agent applies that reasoning: it "uses a second model to critique plans, code, and tests before you move forward" ([GitHub Blog, 2026-10-02](https://github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out/)).
 
 ## Why plan-gating matters
 

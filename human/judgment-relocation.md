@@ -71,3 +71,4 @@ Osmani measured two tasks inside the same sample factory. A quick finder with no
 - [The Bottleneck Migration](bottleneck-migration.md) — why the review stage becomes the binding constraint that these conditions have to hold under
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](author-to-reviewer-role-inversion.md) — the staffing and measurement half of giving the relocated position real capacity
 - [Reviewer Habituation in Agent PR Review](../code-review/reviewer-habituation-decay.md) — the measured decay that turns an exercised position into a nominal one over months
+- [Awareness Is Not Control in Parallel Agent Supervision](awareness-is-not-control-parallel-agents.md) — supervision tooling that improved awareness without a detected gain in control, and what participants said they lost when it took over their tracking

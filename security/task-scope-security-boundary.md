@@ -122,6 +122,7 @@ Tight instructions reduce flexibility — a narrow-scope agent cannot handle req
 
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
+- [Leave-One-Out Permission Testing for Agent Rule Files](leave-one-out-permission-testing.md)
 - [Prompt Injection Threat Model](prompt-injection-threat-model.md)
 - [The Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Defense in Depth for Agent Safety](defense-in-depth-agent-safety.md)
