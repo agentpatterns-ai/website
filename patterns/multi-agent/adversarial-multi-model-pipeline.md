@@ -107,7 +107,7 @@ def builder_turn(prompt: str) -> str:
         system="You are the Builder. Author specs, write failing tests, then implement.",
         messages=builder_history,
     )
-    reply = response.content[0].text
+    reply = "".join(b.text for b in response.content if b.type == "text")
     builder_history.append({"role": "assistant", "content": reply})
     return reply
 

@@ -120,6 +120,9 @@ import anthropic
 
 client = anthropic.Anthropic()
 
+def text_of(message) -> str:
+    return "".join(b.text for b in message.content if b.type == "text")
+
 TASK = """
 We are deciding whether to move our monolith to microservices.
 The codebase is 200k lines, team of 8, no existing service mesh.
@@ -139,35 +142,35 @@ SKEPTIC_PROMPT = (
 )
 
 # Phase 1: Independent analysis — neither sees the other's output
-advocate_output = client.messages.create(
+advocate_output = text_of(client.messages.create(
     model="claude-opus-4-5",
     max_tokens=1024,
     system=ADVOCATE_PROMPT,
     messages=[{"role": "user", "content": TASK}],
-).content[0].text
+))
 
-skeptic_output = client.messages.create(
+skeptic_output = text_of(client.messages.create(
     model="claude-opus-4-5",
     max_tokens=1024,
     system=SKEPTIC_PROMPT,
     messages=[{"role": "user", "content": TASK}],
-).content[0].text
+))
 
 # Phase 2: Cross-critique
-advocate_critique = client.messages.create(
+advocate_critique = text_of(client.messages.create(
     model="claude-opus-4-5",
     max_tokens=512,
     system=ADVOCATE_PROMPT,
     messages=[{"role": "user", "content": f"{TASK}\n\nThe skeptic argues:\n{skeptic_output}\n\nChallenge these objections."}],
-).content[0].text
+))
 
 # Phase 3: Synthesis (third agent)
-synthesis = client.messages.create(
+synthesis = text_of(client.messages.create(
     model="claude-opus-4-5",
     max_tokens=1024,
     system="You are a neutral decision synthesizer. Integrate the opposing analyses into a balanced recommendation.",
     messages=[{"role": "user", "content": f"Advocate:\n{advocate_output}\n\nSkeptic:\n{skeptic_output}\n\nAdvocate response to skeptic:\n{advocate_critique}"}],
-).content[0].text
+))
 ```
 
 The advocate and skeptic receive the same task but structurally incompatible incentives — the advocate cannot simply agree with the skeptic's framing.

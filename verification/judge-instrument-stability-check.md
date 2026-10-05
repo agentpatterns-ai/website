@@ -78,6 +78,9 @@ The three conditions above invert cleanly: an aggregate readout, or separations 
 - [Audit the Noise Floor Before Trusting a Benchmark Gap](benchmark-noise-floor-audit.md) — the same discipline for AST-graded benchmarks, whose two floors explicitly exclude judge variance
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — the accuracy half, measured against human labels
 - [Detecting Self-Preference in a Single LLM Judge](judge-self-preference-detection.md) — a bias a stability check passes over
+- [Capability-Ladder Probe](capability-ladder-eval-probe.md) — a stable judge checking the wrong thing shows up as a task that never moves across the ladder
 - [Decomposing Agent Output Variability by Layer (Sampling vs Orchestration State)](sampling-state-agent-variability-layers.md) — attributing variance once you know the instrument moved
 - [Grading Strategies](../training/eval-driven-development/grading-strategies.md) — where a judge sits among code-based and human grading
 - [Recover the Six Measurement Choices Behind an Attack Success Rate](asr-comparability-audit.md) — the oracle choice as one of six axes that make two published security numbers incomparable
+- [Typed Judge Scorers and the Cost of Each Extra Label](typed-judge-scorers.md) — the return shape to replay, where the label count sets both the alignment and the coverage cost
+- [Cross-Day Config Comparisons Under an Injected Date](../patterns/anti-patterns/cross-day-config-comparisons.md) — a candidate explanation for a next-day replay drifting, if the judge's surface injects the date

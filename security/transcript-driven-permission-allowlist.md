@@ -130,6 +130,7 @@ The next session runs without prompts for these four commands, while any new or 
 - [Permission-Gated Custom Commands](permission-gated-commands.md)
 - [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](permission-framework-over-model.md)
 - [Sufficiency-Tightness Decomposition for Agent-Authored Permissions](sufficiency-tightness-policy-decomposition.md)
+- [Leave-One-Out Permission Testing for Agent Rule Files](leave-one-out-permission-testing.md)
 - [Pre-Execution Risk Classification for Terminal Commands](pre-execution-command-risk-classification.md)
 - [Blast Radius Containment](blast-radius-containment.md)
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md)

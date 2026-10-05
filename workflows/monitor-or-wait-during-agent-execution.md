@@ -115,3 +115,4 @@ The authors flag their own anchoring risk: participants saw Sheridan's framework
 - [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md) — the permission bounds that make an unattended stretch affordable
 - [Developer as CPU Scheduler: Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md) — where the capacity freed by Wait normally goes
 - [Escape Hatches: Unsticking Stuck Agents](escape-hatches.md) — the cost of interrupting a run once you decide to
+- [Awareness Is Not Control in Parallel Agent Supervision](../human/awareness-is-not-control-parallel-agents.md) — the same split across several concurrent runs, where a study measured cue awareness rising and detected no matching gain in control

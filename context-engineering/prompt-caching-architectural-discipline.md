@@ -247,7 +247,7 @@ def send_turn(user_message: str) -> str:
           f"write={usage.cache_creation_input_tokens}, "
           f"uncached={usage.input_tokens})")
 
-    return response.content[0].text
+    return "".join(b.text for b in response.content if b.type == "text")
 ```
 
 After the first turn, `cache_read_input_tokens` should cover the system prompt and tool definitions. A mid-session spike in `cache_creation_input_tokens` signals a prefix change — check whether tool definitions or system prompt content was modified between calls.

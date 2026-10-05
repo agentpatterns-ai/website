@@ -120,7 +120,7 @@ def run_agent(role: str, system_prompt: str) -> dict:
         system=system_prompt,
         messages=[{"role": "user", "content": "Review and improve src/parser.py"}],
     )
-    return {"role": role, "output": response.content[0].text}
+    return {"role": role, "output": "".join(b.text for b in response.content if b.type == "text")}
 
 with concurrent.futures.ThreadPoolExecutor() as executor:
     futures = {

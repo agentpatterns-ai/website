@@ -81,3 +81,4 @@ The same draft contains an `import polars as pl` line. Do not route this through
 - [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md) — Repeated-critique technique that shares CoVe's anti-anchoring mechanism.
 - [Pre-Completion Checklists](pre-completion-checklists.md) — Stop-gate that can host factored verification as one of its steps.
 - [Incremental Verification](incremental-verification.md) — External-oracle pattern (run tests after each change) that displaces CoVe for behavior claims.
+- [Verification as a Tool, Not an Instruction](tool-provided-verification.md) — Why a callable checker shifts verification behavior where a prompt instruction barely does.

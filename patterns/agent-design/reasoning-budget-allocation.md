@@ -128,11 +128,16 @@ Approximate the sandwich through prompt structure: more reasoning guidance in pl
 A Claude API implementation routing by phase:
 
 ```python
+def text_of(message) -> str:
+    # With thinking enabled, content starts with a thinking block, so select by type
+    return "".join(b.text for b in message.content if b.type == "text")
+
 def run_sandwich(task: str) -> str:
     # Planning — extra-high thinking budget
     plan = client.messages.create(
         model="claude-opus-4-5",
         thinking={"type": "enabled", "budget_tokens": 10000},
+        max_tokens=16000,
         messages=[{"role": "user", "content": f"Plan: {task}"}],
     )
 
@@ -140,16 +145,18 @@ def run_sandwich(task: str) -> str:
     result = client.messages.create(
         model="claude-opus-4-5",
         thinking={"type": "enabled", "budget_tokens": 2000},
-        messages=[{"role": "user", "content": f"Execute plan:\n{plan.content[0].text}\nTask: {task}"}],
+        max_tokens=4000,
+        messages=[{"role": "user", "content": f"Execute plan:\n{text_of(plan)}\nTask: {task}"}],
     )
 
     # Verification — extra-high thinking budget
     verdict = client.messages.create(
         model="claude-opus-4-5",
         thinking={"type": "enabled", "budget_tokens": 10000},
-        messages=[{"role": "user", "content": f"Verify result meets requirements:\n{result.content[1].text}"}],
+        max_tokens=16000,
+        messages=[{"role": "user", "content": f"Verify result meets requirements:\n{text_of(result)}"}],
     )
-    return verdict.content[1].text
+    return text_of(verdict)
 ```
 
 In Claude Code skills, add `ultrathink` to the skill content for planning and verification skills, and omit it for execution skills.
@@ -163,5 +170,6 @@ In Claude Code skills, add `ultrathink` to the skill content for planning and ve
 - [Know When Not to Add Structured Reasoning](../anti-patterns/reasoning-overuse.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md)
 - [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — the prior decision: spend a fixed budget on reasoning effort before adding tools
+- [Effort as a Verification Dial: What a Higher Level Buys](effort-as-verification-dial.md) — which tasks the extra compute helps, measured by work type rather than by phase
 - [Think Tool](think-tool.md)
 - [Harness Engineering](harness-engineering.md)

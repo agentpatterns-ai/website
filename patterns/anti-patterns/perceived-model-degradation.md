@@ -101,7 +101,7 @@ def run_regression_evals(model: str) -> dict:
     results = {}
     for prompt, expected in GOLDEN_QUERIES.items():
         response = client.messages.create(model=model, messages=[{"role": "user", "content": prompt}])
-        results[prompt] = score(response.content[0].text, expected)
+        results[prompt] = score("".join(b.text for b in response.content if b.type == "text"), expected)
     pass_rate = sum(results.values()) / len(results)
     assert pass_rate >= 0.95, f"Regression detected: {pass_rate:.1%} pass rate (threshold: 95%)"
     return results
@@ -123,3 +123,4 @@ When the team suspects degradation, they run the eval suite against the pinned v
 - [Demo-to-Production Gap](demo-to-production-gap.md)
 - [The Anthropomorphized Agent](anthropomorphized-agent.md) — misattributing context overload to agent fatigue rather than session state
 - [Blaming the Model for Scaffolding-Driven Quality Regressions](blaming-the-model-for-scaffolding-regressions.md) — the scaffolding-evolution counterpart: the other layer that changed when quality dropped
+- [Cross-Day Config Comparisons Under an Injected Date](cross-day-config-comparisons.md) — why a scheduled rerun of the same suite is not a controlled comparison against last month's run

@@ -77,6 +77,7 @@ Hill-climbing isolates one variable per iteration so attribution is mechanical; 
 - Defective seed harness — the loop assumes the agent's prior model is roughly correct. On a degenerate seed, the same opacity that traps [GEPA](gepa-reflective-prompt-evolution.md) can trap AHE. You need a pre-loop validator on the seed, not just a per-edit gate.
 - Weak benchmarks — verified predictions only matter against an eval that captures real failure modes. A benchmark that rewards surface patterns lets the loop converge to a local maximum that fails in production. Rotate eval tasks; see [incident-to-eval synthesis](../../verification/incident-to-eval-synthesis.md).
 - Sub-frontier models — predicting edits to your own harness is meta-reasoning. AHE was evaluated on frontier models; weaker ones would likely produce miscalibrated predictions that degrade signal, mirroring the capability threshold in [runtime scaffold evolution](runtime-scaffold-evolution.md).
+- Cross-component safety — per-edit predictions score utility (pass@1), not whether two safe edits fail together. Memory, prompt, and tool updates can each pass and still violate a safety rule together. See [compositional safety failures in harness evolution](../../security/compositional-harness-evolution-failures.md).
 - Narrow-scope agents — file-level component representations, layered trajectory corpora, and prediction registries are infrastructure work. For small task sets, manual edits reach good-enough faster.
 
 ## Example

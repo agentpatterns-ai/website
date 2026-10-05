@@ -81,3 +81,4 @@ Anthropic says a list of this kind "will inevitably be incomplete" ([How we buil
 - [Safe Command Allowlisting: Reducing Approval Fatigue](../../security/safe-command-allowlisting.md) — the practice this anti-pattern is a failure mode of
 - [Skill Shell Execution Gate](../../security/skill-shell-execution-gate.md) — the managed-settings control for shell side-effects arriving through skills
 - [Agent Config as a Managed Supply Chain](../../instructions/agent-config-as-managed-supply-chain.md) — pinning and hashing for the same harness layer these grants live in
+- [Approval Records That Bind No Identity and No Session](unbound-approval-records.md) — the same rule read too generously along a different axis, the caller rather than the command

@@ -205,7 +205,7 @@ for task in tasks:
         system="Summarise the following git diff in 2-3 sentences.",
         messages=[{"role": "user", "content": task["input"]["diff"]}],
     )
-    summary = result.content[0].text
+    summary = "".join(b.text for b in result.content if b.type == "text")
     verdict = client.messages.create(
         model="claude-opus-4-5",
         max_tokens=64,
@@ -215,7 +215,7 @@ for task in tasks:
             "content": f"Does this summary mention all of {task['expected_topics']}?\n\n{summary}"
         }],
     )
-    print(task["id"], verdict.content[0].text.strip())
+    print(task["id"], "".join(b.text for b in verdict.content if b.type == "text").strip())
 ```
 
 Running this suite against a baseline before any feature code is written produces a clear failure rate — the gap the implementation must close, not a post-hoc rubber stamp.

@@ -40,3 +40,4 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [PowerShell Tool](powershell-tool.md) — Native Windows shell for Claude Code via PowerShell instead of Git Bash
 - [Skill disallowed-tools Frontmatter](skill-disallowed-tools.md) — Skill-layer tool denial: remove tools from the model while a skill is active, the deny-side complement to allowed-tools
 - [Local Plugin Scaffolding (`claude plugin init`)](local-plugin-scaffolding.md) — Auto-load plugins from `.claude/skills/<name>/.claude-plugin/plugin.json` and scaffold the layout in one command — when the manifest earns its keep over a loose skill, and when it does not
+- [Mods](mods.md) — Plugin code that runs inside Claude Code's process: it can draw panes, rewrite events, and approve a call a `PreToolUse` hook blocked, which decides when to pick one over a settings hook

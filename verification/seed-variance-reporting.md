@@ -83,6 +83,7 @@ Seed 1 alone reads as a confirmed effect. The pair of rows reads as an unstable 
 - [Decomposing Agent Output Variability by Layer](sampling-state-agent-variability-layers.md) — which layer a spread comes from, once you know it exists
 - [Equivalence Testing for Agent Configuration Changes](equivalence-testing-agent-config-changes.md) — how to get a usable bound from a zero-event arm
 - [Eval Blind Spots](eval-blind-spots.md) — structural gaps in what the harness can observe
+- [Capability-Ladder Probe](capability-ladder-eval-probe.md) — the companion ordering check, using a model and effort ladder as a stimulus whose direction is already known
 - [pass@k and pass^k Metrics](pass-at-k-metrics.md) — aggregate metrics for run-to-run spread you cannot attribute
 - [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](multi-run-shuffled-order-evaluation.md) — the same reporting discipline when state accumulates across tasks and task order becomes a variable
 - [Serving-Stack Confounds in Tool-Call Evaluation](../patterns/anti-patterns/serving-stack-confound-tool-call-evaluation.md) — a case where turn-pooled and per-seed rates on the same runs differ by roughly 50 points

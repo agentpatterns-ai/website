@@ -166,7 +166,7 @@ def evaluate(agent_output: str, sources: list[str], tool_log: list[dict]) -> dic
             )
         }]
     )
-    scores = json.loads(response.content[0].text)
+    scores = json.loads("".join(b.text for b in response.content if b.type == "text"))
 
     failures = [dim for dim, result in scores.items() if not result["pass"]]
     if failures:

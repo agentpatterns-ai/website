@@ -63,6 +63,7 @@ nav:
       - benchmark-noise-floor-audit.md
       - asr-comparability-audit.md
       - judge-instrument-stability-check.md
+      - capability-ladder-eval-probe.md
       - specification-path-testing.md
       - severity-stratified-security-prompt-evaluation.md
       - agent-transcript-analysis.md
@@ -139,6 +140,7 @@ nav:
       - claim-to-evidence-trace-graphs.md
       - post-merge-fix-signals-agent-merges.md
       - named-check-over-evaluation-confidence.md
+      - asymmetric-check-evidence.md
       - transcript-measured-review-coverage.md
       - task-category-security-review-routing.md
       - chain-of-verification-coding-agents.md
@@ -157,11 +159,13 @@ nav:
       - judge-self-preference-detection.md
       - judge-model-bake-off.md
       - contract-domain-tracing-rubric-credit.md
+      - typed-judge-scorers.md
   - "Guardrails":
       - verification-capacity-quality-ceiling.md
       - verification-capacity-saturation.md
       - diff-coverage-gate-agent-prs.md
       - deterministic-guardrails.md
+      - tool-provided-verification.md
       - enforcement-liveness-evidence.md
       - per-layer-suppression-accounting.md
       - slop-detection-as-review-gate.md
@@ -183,6 +187,7 @@ nav:
       - per-line-requirement-citations.md
       - typed-generation-contract.md
       - semantic-validation-schema-valid-output.md
+      - post-failure-evidence-contract.md
       - honesty-harness-fabrication-defense.md
       - layered-oracle-iac-security-repair.md
       - explained-feedback-vulnerability-repair.md

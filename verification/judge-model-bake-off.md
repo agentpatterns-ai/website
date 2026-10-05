@@ -83,3 +83,4 @@ Re-baseline every threshold that was calibrated against the old judge. A new jud
 - [Detecting Self-Preference in a Single LLM Judge](judge-self-preference-detection.md) — the bias a bake-off misses when every arm scores the same generator
 - [Human-Review-Driven Curation of Golden Eval Datasets](human-review-golden-dataset-curation.md) — growing the labeled oracle this comparison depends on
 - [Evaluator Templates: Portable Primitives for Agent Eval Suites](evaluator-templates.md) — the rubric layer to settle before comparing models
+- [Typed Judge Scorers and the Cost of Each Extra Label](typed-judge-scorers.md) — what changes in the comparison once the judge returns a constrained choice with per-choice probabilities

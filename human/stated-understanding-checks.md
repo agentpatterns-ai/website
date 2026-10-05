@@ -91,6 +91,7 @@ The second version offers no preferred answer to agree with, names an artifact t
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](author-to-reviewer-role-inversion.md) — why catching divergence before the diff matters as review becomes the constraint
 - [Developer Control Strategies for AI Agents](developer-control-strategies-ai-agents.md) — the wider set of in-session steering moves
 - [The Yes-Man Agent: Compliance Without Verification](../patterns/anti-patterns/yes-man-agent.md) — the agreement bias this check both exploits and is exposed to
+- [Explain-the-Change Review Gates for Agent Code](../workflows/explain-the-change-review-gate.md) — the same question asked after the change lands, by a reviewer rather than the agent
 
 ## Sources
 

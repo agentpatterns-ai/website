@@ -97,3 +97,4 @@ The scope statement — "not a general-purpose remote-unlock path for your Mac" 
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — narrows what a successful breach of any single axis can affect
 - [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md) — per-turn authorization scoping is task-scope thinking applied to lock state
 - [Heartbeat-Bound Hierarchical Credentials](heartbeat-bound-hierarchical-credentials.md) — credential lifetime bounded to operator presence rather than agent liveness
+- [Computer Use as the Last Integration Tier](../patterns/agent-design/computer-use-last-integration-tier.md) — whether to drive a desktop at all, decided before these safeguards apply

@@ -50,7 +50,7 @@ All prevalence figures, precisions, and named examples below are from the paper'
 
 ## Why it works
 
-Five of the six are signal-to-token defects. Lint Leakage, Context Bloat, Skill Leakage, Init Fossilization, and Blind References reduce the useful fraction of the always-loaded context. Conflicting Instructions reduces its resolvability. Independent benchmark work converges on the same mechanism. Gloaguen et al. measured −3% task success and +20% inference cost for LLM-generated context files on SWE-bench Lite and AGENTbench, and only +4% success at +19% cost for human-written ones ([arxiv 2602.11988](https://arxiv.org/abs/2602.11988v2)). Naming each defect turns 'our CLAUDE.md is messy' into a checklist item with a known fix: extract style rules to the linter, split rarely-used sections into on-demand skills, resolve contradictions, update fossilized content, and pitch each external reference.
+Five of the six are signal-to-token defects. Lint Leakage, Context Bloat, Skill Leakage, Init Fossilization, and Blind References reduce the useful fraction of the always-loaded context. Conflicting Instructions reduces its resolvability. Independent benchmark work converges on the same mechanism. Gloaguen et al. measured −0.5% task success on SWE-bench Lite, −2% on CTXbench (neither significant), and +20% and +23% inference cost for LLM-generated context files, and only +2.4% success (p=21%, not significant) at up to +19% cost for human-written ones on CTXbench ([arxiv 2602.11988](https://arxiv.org/abs/2602.11988v3)). Naming each defect turns 'our CLAUDE.md is messy' into a checklist item with a known fix: extract style rules to the linter, split rarely-used sections into on-demand skills, resolve contradictions, update fossilized content, and pitch each external reference.
 
 ## When this backfires
 
@@ -66,7 +66,7 @@ The Conflicting Instructions detector is also the weakest at 57% precision ([arx
 
 - 91 of 100 popular repos carry at least one of the six smells; this is the modal state of AGENTS.md and CLAUDE.md, not a fringe failure ([arxiv 2606.15828](https://arxiv.org/abs/2606.15828v1)).
 - Lint Leakage (62%) is the most common; Context Bloat, Skill Leakage, and Conflicting Instructions frequently co-occur, with each of the latter two raising Context Bloat likelihood by ~83%.
-- The catalog converges with independent benchmark work showing context files cost without proportional success gains ([arxiv 2602.11988](https://arxiv.org/abs/2602.11988)).
+- The catalog converges with independent benchmark work showing context files cost without proportional success gains ([arxiv 2602.11988](https://arxiv.org/abs/2602.11988v3)).
 - Use the table as a greppable audit checklist; treat the 57%-precision Conflicting Instructions detector as a flag for human review, not an auto-fix trigger.
 
 ## Related

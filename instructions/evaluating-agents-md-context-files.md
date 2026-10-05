@@ -1,7 +1,7 @@
 ---
 title: "Evaluating AGENTS.md: When Context Files Hurt More Than Help"
 term: "Evaluating AGENTS.md"
-description: "Empirical research shows auto-generated context files reduce success rates while increasing costs 20%+. Human-written files help only when minimal and specific."
+description: "Empirical research shows auto-generated context files do not improve success rates while raising costs 20%+. Human-written files raise cost and gain little on success."
 tags:
   - instructions
   - context-engineering
@@ -10,13 +10,13 @@ tags:
 aliases:
   - AGENTS.md evaluation
   - context file benchmarks
-last_reviewed: 2026-06-13
+last_reviewed: 2026-10-04
 maturity: established
 ---
 
 # Evaluating AGENTS.md: When Context Files Hurt More Than Help
 
-> Auto-generated context files reduce task success rates. Human-written files improve success only when they contain minimal, specific instructions — not architectural overviews or duplicated documentation.
+> Auto-generated context files do not improve task success and raise cost. Human-written files gain little on success, and tool-specific instructions change agent behavior reliably.
 
 ## The evidence
 
@@ -24,7 +24,7 @@ Two studies evaluated AGENTS.md-style context files on real coding benchmarks:
 
 | Study | Benchmark | Finding |
 |-------|-----------|---------|
-| Gloaguen et al. (2026) | SWE-bench Lite (300 tasks), AGENTbench (138 tasks) | LLM-generated files: -3% success, +20% cost. Human-written files: +4% success, +19% cost |
+| Gloaguen et al. (2026) | SWE-bench Lite (300 tasks), CTXbench (138 tasks) | LLM-generated files: -0.5% success on SWE-bench Lite and -2% on CTXbench (p=87% and p=37%, no significant effect), +20% and +23% cost. Human-written files: +2.4% success on CTXbench (p=21%, no significant effect), up to +19% cost |
 | Lulla et al. (2026) | 10 repos, 124 PRs | AGENTS.md present: -28.6% runtime, -16.6% output tokens, completion rates unchanged |
 | AIDev (2026) | Agentic PRs across many projects | Context files do not reliably improve merge rate: 27.7% of projects improved ≥20% while 26.35% degraded |
 
@@ -43,13 +43,13 @@ graph LR
     E --> F[+2.7% improvement<br>File now adds value]
 ```
 
-When researchers removed existing documentation from repos, the same auto-generated files improved performance by 2.7%. This confirms that redundancy, not the file itself, is the problem.
+When researchers removed existing documentation from the CTXbench repos, the auto-generated files improved performance by 2.7% on average and outperformed the developer-written ones (the paper compares the two in that setting). This confirms that redundancy, not the file itself, is the problem.
 
-GPT-5.1 Mini and GPT-5.2 used 14% and 22% more reasoning tokens respectively with LLM-generated context files. That effort went into processing information the agent would have found anyway.
+With LLM-generated context files, GPT-5.2 used 22% more reasoning tokens on SWE-bench Lite and 14% more on CTXbench. GPT-5.1 Mini used 10% more on both. That effort went into processing information the agent would have found anyway.
 
-## Why verbose human-written files trade success for cost
+## Why human-written files trade success for cost
 
-Human-written context files improved success by about 4% on AGENTbench but raised costs by up to 19%. Agents followed instructions too faithfully — running more tests, reading more files, and searching more than the task required.
+Human-written context files improved success by 2.4% on average on CTXbench, a difference the authors could not separate from chance (p=21%), and raised costs by up to 19%. They did beat LLM-generated files by 7% on average (p=3.8%). Agents followed instructions too faithfully — running more tests, reading more files, and searching more than the task required.
 
 This is the [compliance ceiling](instruction-compliance-ceiling.md) in action. Agents treat every instruction as equally important, producing more work without proportional accuracy gains.
 
@@ -57,7 +57,7 @@ Architectural overviews did not help. Agents spent the same effort locating file
 
 ## What actually works
 
-One finding was clear: tool-specific instructions change agent behavior reliably. Repository-specific tools averaged 2.5 calls per instance when mentioned, against 0.05 when not.
+One finding was clear: tool-specific instructions change agent behavior reliably. Repository-specific tools averaged 2.5 calls per instance when mentioned, against fewer than 0.05 when not.
 
 | Include | Omit |
 |---------|------|
@@ -72,10 +72,10 @@ This aligns with the [table of contents pattern](agents-md-as-table-of-contents.
 
 "AGENTS.md files hurt" overstates the finding. The research shows four things:
 
-1. Auto-generated context files are net negative — stop running `/init` and expecting improvement.
-2. Verbose human-written files trade marginal accuracy for significant cost — the [compliance ceiling](instruction-compliance-ceiling.md) now has empirical backing.
-3. Minimal, specific instructions work — tool commands and non-inferable constraints change behavior reliably.
-4. Pointer files avoid the core failure mode — no duplication of discoverable information.
+1. Auto-generated context files do not improve success and cost about 20% more — stop running `/init` and expecting improvement.
+2. Human-written files trade a small, non-significant accuracy gain for higher cost — the [compliance ceiling](instruction-compliance-ceiling.md) now has empirical backing.
+3. Tool-specific instructions change behavior reliably — agents used repository-specific tools 2.5 times per instance when mentioned, against fewer than 0.05 when not.
+4. Pointer files avoid the core failure mode — no duplication of discoverable information. The study did not test minimal or pointer-style files, so this follows from its findings rather than being measured.
 
 The advice: remove everything the agent can already infer, and keep only what it cannot.
 
@@ -94,14 +94,14 @@ The two studies also used different model and agent sets. So it is unclear wheth
 ## Key Takeaways
 
 - Auto-generated context files duplicate discoverable information and increase costs 20%+ with no accuracy gain
-- Human-written files improve success ~4% but at ~19% higher cost
-- Tool-specific commands are the highest-value content: 2.5 calls when mentioned vs 0.05 when not
+- Human-written files improved success 2.4% on average (p=21%, not significant) at up to 19% higher cost
+- Tool-specific commands are the highest-value content: 2.5 calls when mentioned vs fewer than 0.05 when not
 - Architectural overviews do not reduce file discovery time — omit them
-- The research validates minimal instruction files and the pointer-map pattern
+- The research is consistent with minimal instruction files and the pointer-map pattern, but did not test them
 
 ## Sources
 
-- [Gloaguen et al. — Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?](https://arxiv.org/abs/2602.11988)
+- [Gloaguen et al. — Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents?](https://arxiv.org/abs/2602.11988v3)
 - [Lulla et al. — On the Impact of AGENTS.md Files on the Efficiency of AI Coding Agents](https://arxiv.org/abs/2601.20404)
 - [AIDev — Empirical analysis of agentic-PR merge rates and context files](https://arxiv.org/abs/2606.13449)
 - [InfoQ — New Research Reassesses the Value of AGENTS.md Files for AI Coding](https://www.infoq.com/news/2026/03/agents-context-file-value-review/)

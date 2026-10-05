@@ -62,7 +62,7 @@ Where each layer lives depends on when it needs to be readable:
 | Reference implementations | Workspace code | Agents pattern-match the code they can see, so it has to show the right shape |
 | Diagnostics | Error messages | "Received: { clientId, scope } which appears to be an OAuth configuration" teaches at the point of failure |
 
-Loading all five every session costs more than it returns. A controlled evaluation found context files often reduce task success against no context file at all, while raising inference cost over 20% when they carry structural overviews ([Gloaguen et al., "Evaluating AGENTS.md", arxiv 2602.11988](https://arxiv.org/abs/2602.11988v2)). Layer 1 is a few lines and belongs in the always-loaded file. Layers 3 and 4 are long and belong behind an on-demand call.
+Loading all five every session costs more than it returns. A controlled evaluation found context files did not significantly improve task success against no context file at all, while raising inference cost over 20% on average, and the structural overviews they carried did not help agents find relevant files sooner ([Gloaguen et al., "Evaluating AGENTS.md", arxiv 2602.11988](https://arxiv.org/abs/2602.11988v3)). Layer 1 is a few lines and belongs in the always-loaded file. Layers 3 and 4 are long and belong behind an on-demand call.
 
 ## Start with the baseline run
 
@@ -85,7 +85,7 @@ The five-layer bootstrap is real engineering, and it only pays for itself on a p
 - The surface is tiny. One internal helper does not earn a Skill plus an MCP server plus an identity layer. The agent gets it wrong, review catches it, and that costs less than maintaining the provisioning.
 - Nobody owns the reference material. Stale identity is worse than no identity: the agent now follows confidently wrong instructions instead of its own wrong guess. See [Stale AI Configuration Artifacts (Context Rot)](../patterns/anti-patterns/stale-ai-configuration-artifacts.md).
 - The SDK is a thin wrapper. If it is OAuth plus a header, the nearest public API is already about 80% right and the bootstrap buys little.
-- The always-loaded context is already full. Bulk context files add roughly 20% to inference cost with no gain in task success ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988v2)). Keep identity there and push shape, examples, and gotchas behind on-demand calls.
+- The always-loaded context is already full. Bulk context files add roughly 20% to inference cost with no gain in task success ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988v3)). Keep identity there and push shape, examples, and gotchas behind on-demand calls.
 - The verifier is fast and lossless. Unit tests covering the internal SDK on every commit surface the failure in seconds. Provisioning earns most where wrong code looks plausible and reaches production unchecked.
 
 ## Example
@@ -145,7 +145,7 @@ Always-loaded context stays at about 30 lines. The expensive layers load only wh
 - Diagnose before you provision, and only for a surface big enough to justify it: run the unprovisioned baseline first, then name and forbid whichever public framework it reaches for ([Mastykarz, 2026](https://developer.microsoft.com/blog/when-the-model-has-never-seen-your-code)).
 - Retrieval alone leaves the gap open, so pair it with an identity layer rather than treat it as the fix: the nearest public API still wins every decision the docs do not explicitly override ([Zhang et al., arxiv 2603.15159, 2026](https://arxiv.org/abs/2603.15159)).
 - Order the layers identity, concepts, shape, patterns, gotchas, and never drop the first. It is the only one that contradicts the wrong guess head-on.
-- Split by load shape rather than by topic: identity always-loaded, shape and examples on demand, or context cost outruns the gain in task success ([Gloaguen et al., arxiv 2602.11988](https://arxiv.org/abs/2602.11988)).
+- Split by load shape rather than by topic: identity always-loaded, shape and examples on demand, or context cost outruns the gain in task success ([Gloaguen et al., arxiv 2602.11988](https://arxiv.org/abs/2602.11988v3)).
 - Stale provisioning is worse than none at all. If nobody owns the identity layer, do not build one.
 
 ## Related

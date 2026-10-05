@@ -4,6 +4,7 @@ nav:
   - "Threat Models":
       - action-audit-divergence-taxonomy.md
       - benchmark-poisoning-self-modifying-agents.md
+      - compositional-harness-evolution-failures.md
       - compositional-vulnerability-induction.md
       - constraint-drift-multi-agent-safety.md
       - context-fractured-decomposition-attacks.md
@@ -25,50 +26,169 @@ nav:
       - trojan-hippo-memory-attack.md
       - unbounded-consumption-resource-bounds.md
       - workspace-topology-injection-attack-vector.md
-      - bug-class-hints-as-exploit-input.md
       - task-choice-poisoned-repository-exposure.md
-      - post-authorization-execution-trust-gap.md
+      - bug-class-hints-as-exploit-input.md
       - vibe-coded-vulnerability-root-causes.md
+      - post-authorization-execution-trust-gap.md
       - next-edit-suggestion-uncurated-context.md
+      - temporal-spatial-semantic-evasion-taxonomy.md
+  - "Prompt Injection":
+      - action-selector-pattern.md
+      - adaptive-evaluation-out-of-band-defenses.md
+      - authgraph-dual-graph-injection-defense.md
+      - camel-control-data-flow-injection.md
+      - close-attack-to-fix-loop.md
+      - covert-success-rate-injection.md
+      - prompt-injection-resistant-agent-design.md
+      - framing-gap-exfiltration-defenses.md
+      - destyling-untrusted-input.md
+      - indirect-injection-discovery.md
+      - document-borne-prompt-injection.md
+      - decoding-harness-attack-surface.md
+      - subagent-return-framing.md
+      - field-level-source-ownership.md
+      - human-in-the-loop-confirmation-gates.md
+      - monotonic-capability-attenuation.md
+      - non-human-event-provenance-markers.md
+      - per-agent-capability-scoping.md
+      - prompt-injection-threat-model.md
+      - provenance-aware-decision-auditing.md
+      - rl-automated-red-teamers.md
+      - task-scope-security-boundary.md
+      - clarification-mode-injection-amplification.md
+      - cognitive-poisoning-tool-feedback.md
+      - history-anchor-consistency-injection.md
+      - plan-then-execute-web-agents.md
   - "Sandboxing":
       - browser-sandbox-agent-generated-html.md
+      - capability-additive-interpreter.md
       - copilot-app-local-sandbox-credentials.md
-      - docker-sbx-adoption.md
       - dual-boundary-sandboxing.md
       - enterprise-managed-agent-sandbox.md
-      - sandbox-runtime-comparison.md
+      - network-less-container-unix-socket-egress.md
+      - permitted-egress-attack-surface.md
       - sandbox-rules-harness-tools.md
+      - selective-network-sandbox-mode.md
       - subprocess-pid-namespace-sandboxing.md
-      - windows-sandbox-primitives-coding-agents.md
-      - self-state-update-boundary.md
+      - smolvm-library-microvm-cross-os-sandbox.md
+      - url-fetch-public-index-gate.md
       - wasm-sandbox-agent-code-execution.md
       - workload-keyed-sandbox-selection.md
-      - smolvm-library-microvm-cross-os-sandbox.md
+      - hostname-allowlist-tls-blind-spot.md
+      - docker-sbx-adoption.md
+      - sandbox-runtime-comparison.md
+      - windows-sandbox-primitives-coding-agents.md
+      - sandbox-approvals-auto-review-triad.md
+  - "Data Protection":
+      - credential-hygiene-agent-skills.md
+      - internal-hostname-disclosure-agent-context.md
+      - pii-tokenization-in-agent-context.md
+      - privacy-preserving-llm-requests.md
+      - protecting-sensitive-files.md
+      - public-placeholder-credentials-injecting-proxy.md
+      - sandbox-credential-masking.md
+      - scoped-credentials-proxy.md
+      - secrets-management-for-agents.md
+      - system-prompt-delivery-channel.md
+      - system-prompt-not-a-secret-store.md
+      - url-exfiltration-guard.md
+      - agent-authored-message-rendered-image-exfiltration.md
+      - multitenant-rag-authorization-gap.md
+      - mcp-server-credential-isolation.md
+      - multi-tenant-isolation-knobs-agent-sdk.md
+      - embedding-inversion-vector-store-disclosure.md
+      - heartbeat-bound-hierarchical-credentials.md
+      - workload-identity-federation-for-agents.md
+  - "Permissions":
+      - approval-laundering-transitive-effects.md
+      - agent-network-egress-policy.md
+      - aggregation-bounds-agent-authorization.md
+      - self-state-update-boundary.md
+      - authority-confusion-untrusted-context.md
+      - authorization-continuity-across-agent-mutation.md
+      - blast-radius-containment.md
+      - centrally-provisioned-mcp-servers.md
+      - constraint-substrate-scalable-oversight.md
+      - explanation-bound-tool-execution.md
+      - fail-closed-remote-settings-enforcement.md
+      - gate-agent-writes-to-executable-config.md
+      - intent-governed-tool-authorization.md
+      - leave-one-out-permission-testing.md
+      - non-retirable-approval-rules.md
+      - org-membership-gated-agent-entitlement.md
+      - parser-versus-shell-permission-evasion.md
+      - per-caller-identity-for-agent-tool-calls.md
+      - permission-gated-commands.md
+      - pre-execution-command-risk-classification.md
+      - proof-of-presence-step-up-authentication.md
+      - revocable-resource-effect-capabilities.md
+      - enrolled-identity-peer-routing.md
+      - safe-outputs-pattern.md
+      - static-first-shell-command-gating.md
+      - task-based-access-control-hybrid-inspection.md
+      - team-scoped-policy-delegation.md
+      - transcript-driven-permission-allowlist.md
+      - permission-framework-over-model.md
+      - safe-command-allowlisting.md
+      - evidence-based-allowlist-auto-discovery.md
+      - sensitive-terminal-prompt-interception.md
+      - skill-shell-execution-gate.md
+      - sufficiency-tightness-policy-decomposition.md
+  - "Code Injection":
+      - code-injection-multi-agent-defence.md
+  - "Multi-Agent Propagation":
+      - foresight-guided-multi-agent-jailbreak-defense.md
+  - "PR-Time and Scheduled Review":
+      - always-on-pr-security-review.md
+      - capability-pegged-security-rescan.md
+      - scanner-as-mcp-server.md
+      - cross-repository-security-posture.md
+      - black-box-probe-build-loop.md
+      - structural-safeguard-monitoring.md
+      - security-audit-harness-composition.md
+      - agentic-detection-response-mcp.md
+  - "Tool Invocation":
+      - behavioral-firewall-tool-call-trajectories.md
+      - closed-world-tool-call-resolution.md
+      - delivery-bound-tool-authorization.md
+      - recall-before-send-memory-poisoning-detection.md
+      - flattened-tool-specs-safety-judgment.md
+      - hybrid-deterministic-semantic-tool-authorization.md
+      - mcp-execution-security-invariants.md
+      - mcp-metadata-approval-view-gap.md
+      - mcp-runtime-control-plane.md
+      - security-aware-tool-descriptions-mcp.md
+      - mid-trajectory-guardrail-selection.md
+      - tool-invocation-attack-surface.md
+      - vetting-tool-definitions-before-install.md
+      - customer-hosted-mcp-tunnel.md
   - "Supply Chain":
-      - setup-documentation-install-time-attacks.md
-      - slopsquatting-hallucinated-package-names.md
-      - neutral-prompting-hallucination-steering.md
-      - npm-signing-channel-containment-playbook.md
-      - enterprise-managed-plugin-governance.md
       - agent-emitted-dependency-ranges.md
       - supply-chain-security-debt-agent-prs.md
+      - deterministic-control-plane-llm-coding-agents.md
       - llm-pinned-vulnerable-versions.md
+      - skill-composition-risk.md
       - skill-supply-chain-poisoning.md
       - single-decision-suite-approval.md
       - skill-closure-declaration-gap.md
+      - setup-documentation-install-time-attacks.md
+      - slopsquatting-hallucinated-package-names.md
+      - neutral-prompting-hallucination-steering.md
       - tool-signing-verification.md
-  - "Auditing & Governance":
+      - enterprise-managed-plugin-governance.md
+      - npm-signing-channel-containment-playbook.md
+      - semantic-intent-validation-skills.md
+  - "Defense in Depth":
       - agent-governance-plane.md
       - agent-retrieval-provenance.md
-      - centrally-provisioned-mcp-servers.md
       - cross-iteration-safety-state.md
       - cross-layer-detection-evidence.md
       - cryptographic-governance-audit-trail.md
       - defense-in-depth-agent-safety.md
+      - harness-distributed-security-controls.md
       - enforced-versus-advisory-controls.md
       - workflow-execution-protections.md
       - enterprise-agent-hardening.md
-      - harness-distributed-security-controls.md
       - inline-lifecycle-safety-harness.md
       - lifecycle-security-architecture.md
       - locked-desktop-agent-safeguards.md
@@ -78,118 +198,9 @@ nav:
       - three-depth-in-session-security-review.md
       - usability-pressure-security-regression.md
       - llm-cryptographic-code-verification.md
-      - always-on-pr-security-review.md
-      - capability-pegged-security-rescan.md
-      - black-box-probe-build-loop.md
-      - scanner-as-mcp-server.md
-      - cross-repository-security-posture.md
-      - structural-safeguard-monitoring.md
-      - team-scoped-policy-delegation.md
-  - action-selector-pattern.md
-  - adaptive-evaluation-out-of-band-defenses.md
-  - agent-authored-message-rendered-image-exfiltration.md
-  - agent-network-egress-policy.md
-  - agentic-detection-response-mcp.md
-  - aggregation-bounds-agent-authorization.md
-  - approval-laundering-transitive-effects.md
-  - authgraph-dual-graph-injection-defense.md
-  - authority-confusion-untrusted-context.md
-  - authorization-continuity-across-agent-mutation.md
-  - behavioral-firewall-tool-call-trajectories.md
-  - blast-radius-containment.md
-  - camel-control-data-flow-injection.md
-  - capability-additive-interpreter.md
-  - clarification-mode-injection-amplification.md
-  - close-attack-to-fix-loop.md
-  - closed-world-tool-call-resolution.md
-  - code-injection-multi-agent-defence.md
-  - cognitive-poisoning-tool-feedback.md
-  - constraint-substrate-scalable-oversight.md
-  - covert-success-rate-injection.md
-  - credential-hygiene-agent-skills.md
-  - customer-hosted-mcp-tunnel.md
-  - decoding-harness-attack-surface.md
-  - delivery-bound-tool-authorization.md
-  - destyling-untrusted-input.md
-  - deterministic-control-plane-llm-coding-agents.md
-  - document-borne-prompt-injection.md
-  - embedding-inversion-vector-store-disclosure.md
-  - enrolled-identity-peer-routing.md
-  - evidence-based-allowlist-auto-discovery.md
-  - explanation-bound-tool-execution.md
-  - fail-closed-remote-settings-enforcement.md
-  - field-level-source-ownership.md
-  - foresight-guided-multi-agent-jailbreak-defense.md
-  - framing-gap-exfiltration-defenses.md
-  - gate-agent-writes-to-executable-config.md
-  - heartbeat-bound-hierarchical-credentials.md
-  - history-anchor-consistency-injection.md
-  - hostname-allowlist-tls-blind-spot.md
-  - human-in-the-loop-confirmation-gates.md
-  - hybrid-deterministic-semantic-tool-authorization.md
-  - indirect-injection-discovery.md
-  - intent-governed-tool-authorization.md
-  - internal-hostname-disclosure-agent-context.md
-  - mcp-execution-security-invariants.md
-  - mcp-metadata-approval-view-gap.md
-  - mcp-runtime-control-plane.md
-  - mcp-server-credential-isolation.md
-  - mid-trajectory-guardrail-selection.md
-  - monotonic-capability-attenuation.md
-  - multi-tenant-isolation-knobs-agent-sdk.md
-  - multitenant-rag-authorization-gap.md
-  - network-less-container-unix-socket-egress.md
-  - non-human-event-provenance-markers.md
-  - non-retirable-approval-rules.md
-  - org-membership-gated-agent-entitlement.md
-  - per-agent-capability-scoping.md
-  - per-caller-identity-for-agent-tool-calls.md
-  - permission-framework-over-model.md
-  - permission-gated-commands.md
-  - parser-versus-shell-permission-evasion.md
-  - permitted-egress-attack-surface.md
-  - pii-tokenization-in-agent-context.md
-  - plan-then-execute-web-agents.md
-  - policy-as-code-layer-typology.md
-  - pre-execution-command-risk-classification.md
-  - privacy-preserving-llm-requests.md
-  - proof-of-presence-step-up-authentication.md
-  - prompt-injection-resistant-agent-design.md
-  - prompt-injection-threat-model.md
-  - protecting-sensitive-files.md
-  - public-placeholder-credentials-injecting-proxy.md
-  - provenance-aware-decision-auditing.md
-  - recall-before-send-memory-poisoning-detection.md
-  - restricted-access-defensive-ai.md
-  - revocable-resource-effect-capabilities.md
-  - rl-automated-red-teamers.md
-  - safe-command-allowlisting.md
-  - safe-outputs-pattern.md
-  - sandbox-approvals-auto-review-triad.md
-  - sandbox-credential-masking.md
-  - scoped-credentials-proxy.md
-  - secrets-management-for-agents.md
-  - security-audit-harness-composition.md
-  - security-aware-tool-descriptions-mcp.md
-  - security-budget-token-economics.md
-  - selective-network-sandbox-mode.md
-  - semantic-intent-validation-skills.md
-  - sensitive-terminal-prompt-interception.md
-  - skill-composition-risk.md
-  - skill-shell-execution-gate.md
-  - static-first-shell-command-gating.md
-  - subagent-return-framing.md
-  - sufficiency-tightness-policy-decomposition.md
-  - system-prompt-delivery-channel.md
-  - system-prompt-not-a-secret-store.md
-  - task-based-access-control-hybrid-inspection.md
-  - task-scope-security-boundary.md
-  - temporal-spatial-semantic-evasion-taxonomy.md
-  - tool-invocation-attack-surface.md
-  - transcript-driven-permission-allowlist.md
-  - url-exfiltration-guard.md
-  - url-fetch-public-index-gate.md
-  - vetting-tool-definitions-before-install.md
-  - workload-identity-federation-for-agents.md
-  - flattened-tool-specs-safety-judgment.md
+      - policy-as-code-layer-typology.md
+  - "Economics":
+      - security-budget-token-economics.md
+  - "Deployment Models":
+      - restricted-access-defensive-ai.md
   - ...

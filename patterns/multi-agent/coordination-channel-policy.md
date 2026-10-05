@@ -79,3 +79,4 @@ The second runs a four-step pipeline: parse, validate, aggregate, format. Each s
 - [Persistent Shared Search Sub-Agent for Output-Token Reuse](persistent-search-subagent.md) — the same write-once-read-many saving applied to repository lookups
 - [Multi-Agent Topology Taxonomy: Centralized, Decentralized, and Hybrid](multi-agent-topology-taxonomy.md) — the coarser topology choice this policy sits inside
 - [Assuming Agent Interchangeability in Long-Running Teams](../anti-patterns/assuming-agent-interchangeability.md) — the other thing that moves message volume, measured against a placebo roster change
+- [Per-User Agents on a Contested Shared Resource](../anti-patterns/per-user-agents-contested-resource.md) — what the channel cannot fix once each agent answers to a different user

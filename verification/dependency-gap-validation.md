@@ -6,7 +6,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-12
+last_reviewed: 2026-10-02
 maturity: adopted
 ---
 
@@ -39,6 +39,21 @@ Agent performance also varies by language:
 | Codex | 88% | 54% | 24% |
 
 The practical takeaway: match the agent to the language. Gemini does well at Python but struggles with Java. Claude shows the most balanced performance across languages.
+
+## Declaration accuracy, measured per language
+
+A [second measurement of declaration accuracy](https://arxiv.org/abs/2610.00425v1) scores the dependency file against what the code loads, rather than asking whether the project runs.
+
+It covers 3 agents, 4 languages and 50 tasks. The manifest is wrong in both directions: JavaScript carries 49% phantom dependencies (over-declared) and 62% hidden ones (under-declared). The four languages are Python, Java, JavaScript and C++. By dependency-declaration F1:
+
+| Language | Dependency-declaration F1 |
+|----------|:---:|
+| JavaScript | 0.219 |
+| Java | 0.708 |
+| Python | 0.765 |
+| C++ | 0.018 |
+
+Among the three languages in the study above, JavaScript scores lowest here while placing mid-pack on clean-environment success, so language risk depends on what you measure. After repair, final success ranged from 94% (Codex, C++) to 100% (Claude, all four languages). A project that runs is no evidence that its manifest is complete.
 
 ## Three-layer dependency framework
 
@@ -135,6 +150,7 @@ Weigh the gate cost against failure cost. For production deployments and externa
 - AI agents declare ~7% of the packages their code actually loads at runtime — the other 93% are transitive dependencies they never mention
 - Python is the safest language for AI-generated projects (89% success); Java is the riskiest (44%)
 - Most AI code failures are bugs, not dependency gaps — validate both
+- Which language is riskiest depends on the measure: Java fails clean-environment runs most often, JavaScript declares dependencies least accurately of the three languages in the first study
 - Lock files only work if generated from a working environment, not from the agent's incomplete manifest
 - Clean-environment testing is a [deterministic guardrail](deterministic-guardrails.md) — add it to CI, don't rely on agents to self-check
 

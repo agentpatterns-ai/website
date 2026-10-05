@@ -11,7 +11,7 @@ aliases:
   - evidence-backed claim staleness
   - agent memory staleness detection
   - self-correcting knowledge base
-last_reviewed: 2026-09-11
+last_reviewed: 2026-10-02
 maturity: emerging
 ---
 
@@ -39,6 +39,8 @@ Writing a page also records the claims that page makes and the code supporting e
 ```
 
 The runtime stores a version for that evidence. Staleness detection then runs at the start of every update, before the agent acts: it walks the claim set and compares each persisted version against the code on disk, which the post calls "a deterministic check with no model calls." No status flag is kept, because the stored version re-derives freshness on its own, so a claim cannot quietly return to trusted.
+
+The width of that anchor is a second decision. A September 2026 preprint on a system called Assay binds each claim to the Merkle hash of its transitive dependency cone ([arXiv:2609.36170v1](https://arxiv.org/abs/2609.36170v1)). That scope re-verifies 7.9% to 81.9% of claims when four modules are edited, against 100% for a repo-wide hash. Binding to the edited module's own hash instead misses 23% to 68% of the invalidations the claim set required. The tests ran on five public repositories. The preprint "does not measure how much better language-model agents perform with Assay than without", so its figures bound re-verification work rather than agent performance.
 
 Repair happens inside work the agent is already doing. "The agent never sweeps the claim set itself." Stale claims surface beside the page content when an update reads that page, and the agent either re-verifies the claim and refreshes its version or rewrites claim and page text together. Whatever it leaves unresolved stays flagged.
 
