@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - context-engineering
   - claude
+  - hooks
 aliases:
   - PreCompact veto
   - compaction block hook

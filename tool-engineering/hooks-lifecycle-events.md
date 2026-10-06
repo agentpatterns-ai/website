@@ -10,6 +10,7 @@ tags:
   - agent-design
   - tool-agnostic
   - tool-engineering
+  - hooks
 last_reviewed: 2026-07-16
 maturity: established
 ---

@@ -77,3 +77,4 @@ A second group reached the same split from the interactive side. ClarifyCodeBenc
 - [Interactive Clarification for Underspecified Tasks](../patterns/agent-design/interactive-clarification-underspecified-tasks.md) — the alternative control, where the agent asks instead of guessing.
 - [Assumption Propagation](../patterns/anti-patterns/assumption-propagation.md) — the downstream failure this measurement is trying to price.
 - [Frozen-Stimulus Panels for Cross-Vendor Behavior Measurement](frozen-stimulus-behavior-panels.md) — the cheap cross-vendor instrument to reach for when the thing you are ranking is behavior rather than interpretation.
+- [Decision Pins: Confirm an Acceptance Example Discriminates](execution-confirmed-decision-pins.md) — the per-requirement fix once model choice has done what it can: record the reading you picked as an input you can rerun.

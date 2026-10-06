@@ -107,3 +107,4 @@ Treat the absolute rates with the caution the authors do: one generation model o
 - [Defense-in-Depth Against Coding Agent Fabrication](../../verification/honesty-harness-fabrication-defense.md) — the layered defense a named failure state slots into.
 - [Silent Adoption of Corrupted Tool Returns](silent-adoption-of-corrupted-tool-returns.md) - the sub-agent and search cases, where the return is wrong and looks fine
 - [Post-Failure Evidence Contracts for Tool-Using Agents](../../verification/post-failure-evidence-contract.md) — what is left once the envelope declares the failure and the model still misreports it
+- [Empty Commitments: Promises No Runtime Can Keep](empty-commitments.md) — the same mismatch stated in prose rather than in a payload, where the agent promises an action its deployment cannot perform

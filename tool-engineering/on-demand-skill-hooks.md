@@ -8,6 +8,7 @@ tags:
   - claude
   - tool-engineering
   - skills
+  - hooks
 aliases:
   - on-demand hooks
   - session-scoped guardrails

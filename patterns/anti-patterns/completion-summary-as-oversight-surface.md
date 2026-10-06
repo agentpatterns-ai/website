@@ -92,3 +92,4 @@ Link:  gh pr review 22 --comment                           -> supported
 - [Verification Ledger for Tracking Agent Output Quality](../../verification/verification-ledger.md) — the remedy pattern, replacing self-reported claims with structured records carrying tool and exit code
 - [Trajectory as the Monitoring Unit for Production Agents](../../observability/trajectory-as-monitoring-unit.md) — moves the monitored unit from one output to the whole run, which is the record the report omits
 - [Transcript-Measured Review Coverage](../../verification/transcript-measured-review-coverage.md) — the check for one specific claim, whether a scoped review touched the files it says it did, where the mismatch does predict missed defects
+- [Empty Commitments: Promises No Runtime Can Keep](empty-commitments.md) — the same report read forwards, covering a promise of later action that the deployment's affordances cannot carry out

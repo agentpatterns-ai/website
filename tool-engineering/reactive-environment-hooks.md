@@ -6,6 +6,7 @@ tags:
   - agent-design
   - claude
   - tool-engineering
+  - hooks
 aliases:
   - reactive hooks
   - CwdChanged hook

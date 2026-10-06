@@ -10,7 +10,7 @@ aliases:
   - model routing decision matrix
   - model tier selection map
   - routing pattern selection map
-last_reviewed: 2026-06-29
+last_reviewed: 2026-10-05
 maturity: adopted
 ---
 
@@ -44,13 +44,15 @@ The four signals that practitioner sources converge on ([Merge.dev — LLM Routi
 - Latency tolerance — synchronous IDE work has a tight budget; deferrable bulk runs (overnight evals, refactors, doc refreshes) belong in [batch APIs at 50% discount](index.md#right-time--temporal-routing) rather than tier routing.
 - Cost ceiling — the absolute spend cap. A team without a ceiling will not invest in routing; a team that has one needs the [per-plugin token-cost attribution](../observability/plugin-token-cost-attribution.md) before any router decision is trustworthy.
 
-## Why It Works
+The matrix sorts by signal and quotes no prices. Fill the cost ceiling from your vendor's published prices.
+
+## Why it works
 
 The framework is cognitive offloading over the eight routing pages, not new mechanism. The cost mechanism each row exploits is already proven: [FrugalGPT](https://arxiv.org/abs/2305.05176v1) reports LLM cascade routing can match GPT-4 with up to 98% cost reduction, or improve accuracy by 4% at equivalent cost. The framework's contribution is matching each row to its dominant signal so the practitioner picks once instead of reading every routing page in sequence and stacking patterns blindly — the failure mode the [Pattern Selection Map](../patterns/selection-map.md) exists to defuse for patterns generally.
 
 The selection logic itself has a quantitative grounding. [Triage (arxiv 2604.07494)](https://arxiv.org/abs/2604.07494) gives the explicit feasibility condition for tier routing: the light-tier pass rate on the routed tasks must exceed the inter-tier cost ratio. Below that threshold, rework costs more than the savings. That is the same threshold every row in the matrix implicitly assumes.
 
-## When This Backfires
+## When this backfires
 
 Four documented failure modes. Each one is the reason the matrix is a *picker*, not a recommendation engine.
 

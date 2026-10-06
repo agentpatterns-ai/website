@@ -6,6 +6,7 @@ tags:
   - agent-design
   - claude
   - tool-engineering
+  - hooks
 last_reviewed: 2026-05-27
 maturity: adopted
 ---

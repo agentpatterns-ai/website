@@ -84,3 +84,4 @@ Re-baseline every threshold that was calibrated against the old judge. A new jud
 - [Human-Review-Driven Curation of Golden Eval Datasets](human-review-golden-dataset-curation.md) — growing the labeled oracle this comparison depends on
 - [Evaluator Templates: Portable Primitives for Agent Eval Suites](evaluator-templates.md) — the rubric layer to settle before comparing models
 - [Typed Judge Scorers and the Cost of Each Extra Label](typed-judge-scorers.md) — what changes in the comparison once the judge returns a constrained choice with per-choice probabilities
+- [When a Second Model Helps in LLM Review](cross-model-review-independence.md) — whether to run a second reviewer at all, and which artifacts to route to it

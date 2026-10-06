@@ -5,6 +5,7 @@ description: "Configure a PostToolUse hook to run formatters automatically after
 tags:
   - claude
   - tool-engineering
+  - hooks
 last_reviewed: 2026-06-13
 ---
 

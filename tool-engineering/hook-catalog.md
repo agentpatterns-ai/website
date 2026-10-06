@@ -8,6 +8,7 @@ tags:
   - workflows
   - claude
   - tool-engineering
+  - hooks
 aliases:
   - Hook Examples & Recipes
   - Common Enforcement Patterns

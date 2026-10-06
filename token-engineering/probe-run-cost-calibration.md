@@ -79,6 +79,7 @@ Two-thirds of settings landed within 50% of actual after the single probe ([arXi
 
 - [Request Shaping to Cut Wasted Agent Turns](request-shaping-wasted-turns.md) — what to put in the request once you know phrasing is worth tuning
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the measurement loop for spend you already incur, rather than spend you are forecasting
+- [What an Agent's Own Token Cost Estimate Is Good For](agent-cost-self-prediction.md) — what to do before you have a history to calibrate against, and why the agent's own number is not it
 - [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — the frame that stops a cheaper configuration hiding a quality regression
 - [Deliberation-Inducing Cues That Multiply Reasoning Cost](../patterns/anti-patterns/deliberation-inducing-prompt-cues.md) — phrasings that inflate reasoning tokens rather than retrieval turns
 - [Reasoning Budget Allocation](../patterns/agent-design/reasoning-budget-allocation.md) — the effort knob whose level decides how much any of this matters

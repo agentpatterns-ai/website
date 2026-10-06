@@ -66,3 +66,4 @@ Pin the intent in the prompt ("top 3 by recency; ascending is fine") and assert 
 - [LLM Comprehension Fallacy](../../fallacies/llm-comprehension-fallacy.md) — coherent, correct-looking output is not evidence the model understood the task
 - [Voting / Ensemble Pattern](../multi-agent/voting-ensemble-pattern.md) — self-consistency exploits variance to pick an answer; absence of variance is not clarity
 - [Destructive-Failure Mechanism Attribution by Mitigation Owner](destructive-failure-mechanism-attribution.md) — underspecification is one of its three failure buckets, routed to the spec author
+- [Decision Pins: Confirm an Acceptance Example Discriminates](../../verification/execution-confirmed-decision-pins.md) — builds the contrasting pair rather than waiting for sampled outputs to differ

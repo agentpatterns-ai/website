@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - observability
   - claude
+  - hooks
 aliases:
   - terminalSequence hook field
   - out-of-band agent notifications

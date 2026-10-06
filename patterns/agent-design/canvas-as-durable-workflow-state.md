@@ -11,7 +11,7 @@ aliases:
   - workflow-state canvas
   - canvas as workflow state surface
   - agentic workflow canvas blueprint
-last_reviewed: 2026-09-26
+last_reviewed: 2026-10-05
 maturity: emerging
 ---
 
@@ -19,7 +19,7 @@ maturity: emerging
 
 > Build a canvas as workflow state only when the workflow repeats, you engineer the persistence yourself, and the approval points survive a distracted reviewer.
 
-A canvas built as workflow state holds the current position of a repeated process — the phase, the pending decisions, the drafts, what a human has approved — instead of rendering one agent response. GitHub's blueprint for building one has four steps: "Define workflow states clearly", "Surface the decisions that matter", "Persist progress and drafts immediately", and "Keep explicit human approval points" ([Gupta, GitHub, 2026-08-17](https://github.blog/ai-and-ml/github-copilot/how-canvases-make-agentic-workflows-visible-steerable-and-cost-efficient/)). Three conditions decide whether following it is worth doing.
+A canvas built as workflow state holds the current position of a repeated process — the phase, the pending decisions, the drafts, what a human has approved — instead of rendering one agent response. GitHub's blueprint for building one has four steps: "Define workflow states clearly", "Surface the decisions that matter", "Persist progress and drafts immediately", and "Keep explicit human approval points" ([Gupta, GitHub, 2026-08-17](https://github.blog/ai-and-ml/github-copilot/how-canvases-make-agentic-workflows-visible-steerable-and-cost-efficient/)). GitHub also publishes a beginner-level introduction that covers creating a canvas with /create-canvas and shaping it around a workflow ([GitHub, 2026-09-25](https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-how-to-build-custom-workflows-with-canvases/)). Three conditions decide whether following it is worth doing.
 
 ## The three conditions
 

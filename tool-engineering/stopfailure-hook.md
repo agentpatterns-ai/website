@@ -7,6 +7,7 @@ tags:
   - claude
   - tool-engineering
   - observability
+  - hooks
 aliases:
   - StopFailure event
   - API error hook

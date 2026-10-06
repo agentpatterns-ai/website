@@ -92,6 +92,7 @@ nav:
       - agent-config-as-managed-supply-chain.md
       - frontmatter-body-rule-drift.md
       - policy-file-validation.md
+      - pre-execution-skill-selection.md
       - skill-pack-registry-distribution.md
       - workspace-hosted-skills.md
       - skill-file-linting.md

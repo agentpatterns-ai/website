@@ -88,3 +88,4 @@ On the `skills.sh` route the same discipline is assembled by hand. Install with 
 - [Skill Library Evolution: Lifecycle Governance for Agents](../tool-engineering/skill-library-evolution.md) — how to prune the installed set that a pack keeps growing
 - [Trusting a Skill Scanner's Verdict as a Security Judgment](../patterns/anti-patterns/skill-scanner-verdict-not-security-judgment.md) — why a registry's clean scan is a signal rather than a decision
 - [Workspace-Hosted Skills: Authorship Outside the Repo](workspace-hosted-skills.md) — the authoring side: what changes when the skill's source of truth is a document workspace rather than a registry entry
+- [Pre-Execution Skill Selection: Layers Over Install Counts](pre-execution-skill-selection.md) — how to rank candidates before a pack is assembled, once registry popularity has stopped separating them

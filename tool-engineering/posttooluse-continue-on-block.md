@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - instructions
   - claude
+  - hooks
 aliases:
   - continueOnBlock hook
   - refusal-with-reason hook

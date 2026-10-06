@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - instructions
   - claude
+  - hooks
 aliases:
   - PostToolBatch hook event
   - batch-boundary hook
