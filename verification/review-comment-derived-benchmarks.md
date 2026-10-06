@@ -20,6 +20,8 @@ maturity: emerging
 
 A review-comment-derived benchmark turns comments that trusted reviewers left on merged pull requests into eval tasks. Each task freezes one PR's diff and metadata, and a verifier checks whether the agent recovers the defect the reviewer found. LangChain built ReviewBench this way because it trusted few existing benchmarks, "because they don't incorporate our internal review standards" ([LangChain](https://www.langchain.com/blog/evaluating-code-review-agents-with-reviewbench)).
 
+This ReviewBench is LangChain's private suite. It is not GitHub's open ReviewBench, which [Scoring a Code Review Agent on an Open Benchmark Suite](open-code-review-benchmarks.md) covers.
+
 ## Conditions that make it worth building
 
 Three conditions have to hold before the construction cost pays back.
@@ -66,6 +68,7 @@ A review defect is defined by a contract the diff does not contain. Two of LangC
 
 ## Related
 
+- [Scoring a Code Review Agent on an Open Benchmark Suite](open-code-review-benchmarks.md) — the public-benchmark alternative, using GitHub's ReviewBench; a different artifact from LangChain's
 - [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — the general case for a local suite; this page is the code review instance of it
 - [Human-Review-Driven Curation of Golden Eval Datasets](human-review-golden-dataset-curation.md) — the ongoing curation loop that keeps a suite calibrated after you have built one
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — the reliability check the verifier in this pipeline needs

@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - cost-performance
   - claude
+  - hooks
 aliases:
   - tier-aware hooks
   - reasoning-effort hooks

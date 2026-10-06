@@ -97,3 +97,4 @@ The two-axis split routes the silent failure to a human without making the opera
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — deterministic Stop-hook gate when the evaluator's leniency bias is unacceptable
 - [Objective Drift: When Agents Lose the Thread](objective-drift.md) — adjacent failure where the agent completes a subtly different objective than the one it started with
 - [Tool-Call Success as Workflow Effect Evidence](tool-call-success-as-workflow-evidence.md) — the same gap one layer in, where every tool call reports success and the surviving external effects are still wrong
+- [Empty Commitments: Promises No Runtime Can Keep](empty-commitments.md) — the gap read forwards, where a promised later action has no execution path under the agent's tools or runtime

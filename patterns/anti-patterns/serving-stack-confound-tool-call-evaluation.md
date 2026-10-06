@@ -69,3 +69,4 @@ The authors scope the fixed-interface rule to standardized model comparisons. Fo
 - [Seed-Variance Reporting](../../verification/seed-variance-reporting.md) — what to publish when a result moves with the seed.
 - [Perceived Model Degradation](perceived-model-degradation.md) — the competing explanations for a model that seems to have got worse, and how to pin versions before choosing one.
 - [Benchmark Noise-Floor Audit](../../verification/benchmark-noise-floor-audit.md) — measuring how much of an eval gap the instrument itself produces.
+- [Trigger-Conditioned Skill Comparisons](trigger-conditioned-skill-comparisons.md) — the selection version of the same error, where filtering a paired skill eval down to the runs that triggered can move the number on its own.

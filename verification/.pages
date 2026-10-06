@@ -34,6 +34,7 @@ nav:
       - purpose-built-eval-suites.md
       - rank-resolution-converged-leaderboards.md
       - review-comment-derived-benchmarks.md
+      - open-code-review-benchmarks.md
       - frozen-base-task-mining.md
       - policy-graded-agent-evaluation.md
       - head-to-head-mcp-server-evaluation.md
@@ -124,6 +125,7 @@ nav:
       - pre-completion-checklists.md
       - golden-journeys.md
       - test-driven-intent-clarification.md
+      - execution-confirmed-decision-pins.md
       - unstated-constraint-probes.md
       - unstated-contract-bug-triage.md
       - pre-test-grounded-plan-assertion-annotation.md
@@ -149,6 +151,7 @@ nav:
       - risk-based-shipping.md
       - risk-based-task-sizing.md
       - predictive-claim-gate.md
+      - cross-model-review-independence.md
   - "Rubric Design":
       - anti-reward-hacking.md
       - symptom-reduction-as-root-cause.md

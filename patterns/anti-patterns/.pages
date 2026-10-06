@@ -97,6 +97,7 @@ nav:
       - task-completion-as-tool-certification.md
       - run-status-vs-task-status-confusion.md
       - completion-summary-as-oversight-surface.md
+      - empty-commitments.md
       - clean-final-state-as-compliance-evidence.md
       - clean-merge-as-compatibility-evidence.md
       - pooled-evidence-mcp-factuality-conflation.md
@@ -116,12 +117,15 @@ nav:
       - perceived-model-degradation.md
       - cross-day-config-comparisons.md
       - homogeneous-debate-panel-groundedness.md
+      - frozen-judge-release-decisions.md
       - density-normalized-quality-metric.md
+      - trigger-conditioned-skill-comparisons.md
   - "Permissions & Access Control":
       - prompt-only-tool-access-control.md
       - unenforced-claude-md-security-rules.md
       - prompt-as-security-knob.md
       - over-privileged-tool-selection.md
+      - self-justification-as-scope-control.md
       - scoped-looking-permission-grants.md
       - unbound-approval-records.md
       - task-uniform-agent-permissions.md
@@ -134,6 +138,7 @@ nav:
       - ai-agents-in-ci-cd-with-elevated-permissions.md
       - constraint-loss-and-tool-reach-scored-separately.md
       - worktree-as-safety-boundary.md
+      - fixed-width-credential-assumptions.md
   - "Injection & Untrusted Input":
       - single-layer-injection-defence.md
       - direct-prompt-injection-collaboration.md
@@ -150,6 +155,7 @@ nav:
       - judging-agent-safety-by-task-completion.md
       - cold-start-safety-gap.md
       - memory-injection-rate-as-security-evidence.md
+      - detector-benchmark-score-as-deployment-evidence.md
       - local-trace-as-audit-evidence.md
       - read-denial-on-a-build-input.md
       - trusting-claimed-prior-approval.md

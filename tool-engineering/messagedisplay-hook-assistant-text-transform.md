@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - instructions
   - claude
+  - hooks
 aliases:
   - assistant text transformation hook
   - outbound message hook

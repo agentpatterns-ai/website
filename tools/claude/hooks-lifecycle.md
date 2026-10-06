@@ -9,6 +9,7 @@ tags:
   - agent-design
   - instructions
   - claude
+  - hooks
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-06-08
 status: current

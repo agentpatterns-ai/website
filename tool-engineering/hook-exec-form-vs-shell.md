@@ -6,6 +6,7 @@ tags:
   - tool-engineering
   - security
   - claude
+  - hooks
 aliases:
   - hook args field
   - hook exec form

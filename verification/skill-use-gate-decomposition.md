@@ -69,3 +69,4 @@ Under progressive disclosure the agent makes two decisions from different inform
 - [Skill Specification Violation Fuzzing](skill-specification-violation-fuzzing.md) — attacking the boundary gate directly, by turning each guardrail into a reachability goal
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — the description craft that moves the trigger gate
 - [Fleet Harness Attribution](../patterns/agent-design/fleet-harness-attribution.md) — how to attribute a cross-harness delta to the harness rather than the model
+- [Trigger-Conditioned Skill Comparisons](../patterns/anti-patterns/trigger-conditioned-skill-comparisons.md) — why the cheaper paired run cannot be read as the effect of invoking the skill once it is restricted to the runs that triggered

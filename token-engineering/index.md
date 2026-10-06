@@ -102,6 +102,7 @@ You cannot reduce what you do not measure — instrument spend before cutting it
 - [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — plot each configuration on the (cost, quality) frontier so quality-trading downgrades are visible
 - [GitHub's Copilot Cost Levers at Constant Task Quality](copilot-cost-levers-fixed-quality.md) — a primary operator account: four harness levers that cut per-task token cost by low single digits each (5.5% at most) with task quality held flat, and which ones a team can copy
 - [Probe-Run Calibration for Predicting Agent Token Spend](probe-run-cost-calibration.md) — one $0.11 run cuts median cost-prediction error on an unseen task from 161% to 36%
+- [What an Agent's Own Token Cost Estimate Is Good For](agent-cost-self-prediction.md) — self-predicted spend tops out at 0.39 correlation and runs low for every model tested, so it ranks tasks rather than pricing them
 - [Code Cleanliness as an Agent Cost Lever](code-cleanliness-agent-cost-lever.md) — cleaner code cut token use 7-8% with no pass-rate change
 - [Measuring Refactoring Payback in Tokens](refactoring-payback-in-tokens.md) — replay one frozen change prompt after every refactoring step, because agents never learn between runs
 - [The Token Price Index Fallacy in Agent Cost Planning](../fallacies/token-price-index-fallacy.md) — published price-per-token indices move on routing mix as much as on price; your realized rate is an output of your own routing

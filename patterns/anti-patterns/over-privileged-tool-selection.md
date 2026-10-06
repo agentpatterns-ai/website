@@ -88,3 +88,4 @@ The pattern is load-bearing when the deployment uses a mid-tier or open-weight m
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — adjacent failure: relying on prompt rules to enforce tool boundaries rather than harness-level deny rules.
 - [Action-Selector Pattern](../../security/action-selector-pattern.md) — architectural defense that eliminates the selection surface where the catalog allows it.
 - [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — the sibling right-tool failure: correct privilege, wrong entity the tool acts on.
+- [Self-Justification as a Tool-Scope Control](self-justification-as-scope-control.md) — the same question one level up, about how many tools the agent calls, and why asking it to justify each one does not reduce the count.

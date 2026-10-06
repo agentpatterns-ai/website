@@ -73,3 +73,4 @@ Every standard correction is partial. The measured limits matter more than the r
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md) — the pipeline this check instruments
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — the umbrella for measurement gaps a stronger model cannot close
 - [Measure the Judge Before You Freeze a Gate on It](judge-instrument-stability-check.md) — the stability axis, which a biased judge can pass
+- [When a Second Model Helps in LLM Review](cross-model-review-independence.md) — the two-reviewer case, where swapping the model lowered finding overlap and swapping the session did not

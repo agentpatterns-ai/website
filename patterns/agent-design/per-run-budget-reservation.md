@@ -117,7 +117,7 @@ On the first response — 1,200 input tokens split 300 ordinary / 400 cached / 5
 
 - Per-run reservation is admission control at the per-call boundary: it answers a yes/no question about the next request before issuing it, so the budget is never breached.
 - Worst-case pricing (every input token at the highest applicable rate) is what makes the guarantee hold; the refund step keeps utilization from collapsing under compounded reservations.
-- Reserve externally from a pricing table, not from a model self-estimate. The [BAGEN benchmark](https://arxiv.org/abs/2606.00198v1) measured interval coverage capping at 47% for trained agents, with a capability-awareness correlation of only r=0.35.
+- Reserve externally from a pricing table, not from a model self-estimate. The [BAGEN benchmark](https://arxiv.org/abs/2606.00198v1) measured interval coverage capping at 47% for trained agents, with a capability-awareness correlation of only r=0.35. On what a self-estimate can still carry, see [What an Agent's Own Token Cost Estimate Is Good For](../../token-engineering/agent-cost-self-prediction.md).
 - Fail closed on `UncertainCharge` and use exact arithmetic (`Fraction`, not floats). An unverifiable settlement voids the guarantee.
 - Scope is narrow by construction: synchronous non-streaming Responses API, default tier, model-token costs, single process. Outside that scope, use period-scoped alerts or a fleet gateway.
 - Cache-heavy workloads pay a safety tax. On the source's sample rates a 60%-cached mix reserves about 2.9x its real cost. The multiple moves with the model's own cached-versus-cache-write spread, so derive it before shipping.

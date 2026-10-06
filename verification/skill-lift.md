@@ -12,7 +12,7 @@ tags:
   - skills
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-08-24
+last_reviewed: 2026-10-05
 maturity: emerging
 ---
 
@@ -21,6 +21,8 @@ maturity: emerging
 > Skill Lift is the paired difference between a run with a skill available and the same run with it withheld.
 
 The baseline arm is not an empty workspace. Configured prerequisite, helper, reference, and decoy skills stay fixed and only the target skill is withheld, which is what makes the delta attributable to that skill ([arXiv:2608.20614v1](https://arxiv.org/abs/2608.20614v1)). Cost then scales with the whole registry: `N skills × K agents × C cases × A attempts × 2 conditions` needs up to 2NKCA container runs, so the measurement belongs on release candidates and high-risk skills rather than on every edit ([arXiv:2608.20614v1](https://arxiv.org/abs/2608.20614v1)).
+
+A 2026 review finds that pairing leaves selection inside the task once the measurement conditions on the skill having fired. It recommends reporting the trigger rate beside the paired difference ([arXiv:2609.33153v2](https://arxiv.org/abs/2609.33153v2)).
 
 ## When the number means anything
 
@@ -65,3 +67,4 @@ Running the live layer on the production subset gave a different picture. Across
 - [Seed-Variance Reporting and Measurable-Range Eval Design](seed-variance-reporting.md) — what to report when the number moves with the run, which is the failure mode single-trial lift walks into.
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — the description and structure work a scan gate can actually improve.
 - [Contract-Domain Tracing for Rubric Credit](contract-domain-tracing-rubric-credit.md) — what to do with the criterion decisions once a lift figure exists, when the arms sit near the rubric's ceiling.
+- [Pre-Execution Skill Selection: Layers Over Install Counts](../instructions/pre-execution-skill-selection.md) — a cheap pre-filter that narrows candidates before a paired run; it does not replace one.

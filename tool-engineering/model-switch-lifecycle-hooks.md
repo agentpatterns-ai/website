@@ -7,6 +7,7 @@ tags:
   - context-engineering
   - cost-performance
   - claude
+  - hooks
 aliases:
   - PreModelSwitch hook event
   - PostModelSwitch hook event
