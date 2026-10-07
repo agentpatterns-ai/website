@@ -78,3 +78,4 @@ The effect a rule protects is the tractable half. A file write, an outbound conn
 - [Dual-Boundary Sandboxing: Filesystem and Network Isolation](dual-boundary-sandboxing.md) — what enforcement below the shell looks like when it is built deliberately
 - [Scoped-Looking Permission Grants](../patterns/anti-patterns/scoped-looking-permission-grants.md) — the sibling failure that needs no respelling at all: the rule matches correctly and still permits every command
 - [Treating Read Denial as Confidentiality for a Build Input](../patterns/anti-patterns/read-denial-on-a-build-input.md) — the read-side case, where the uncovered route needs no respelling because the build's own permission supplies it
+- [Judging a Write by Its Spelled Path (Spelled-Path Scope)](../patterns/anti-patterns/spelled-path-permission-scope.md) — the symlink row of the table above, taken on its own: one path, one grammar, and a guard and a kernel that still disagree about which file it names

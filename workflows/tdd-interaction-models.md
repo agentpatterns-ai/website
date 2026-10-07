@@ -106,3 +106,4 @@ The study's own setup is the clearest case. Participants implemented a `TextForm
 - [The Velocity-Quality Asymmetry: Why AI Speed Gains Fade Without QA Investment](velocity-quality-asymmetry.md) — the field-data version of the same speed-against-quality trade
 - [Human-in-the-Loop](human-in-the-loop.md) — where to place human checkpoints in an agent workflow
 - [Verification-Centric Development](verification-centric-development.md) — organizing a workflow around what can be verified rather than what can be generated
+- [Post-Commitment Test Generation: Draw the Sample Last](post-commitment-test-generation.md) — what changes when the tests arrive after the implementation is frozen rather than before it

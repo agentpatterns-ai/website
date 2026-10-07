@@ -100,3 +100,4 @@ Measurement does change what the agent produces, even though it does not change 
 - [Post-Merge Fix Signals for Agent Merges](../verification/post-merge-fix-signals-agent-merges.md) — the follow-up-fix rate after an agent merge, and what predicts it
 - [Profiler-Guided Optimization Loops for Coding Agents](../verification/profiler-guided-optimization-loop.md) — give the agent a profile and a behavior gate before it writes the patch
 - [Measuring the Verification Tax on Agent Output](verification-tax.md) — what checking agent work costs relative to producing it
+- [Require the Metric the Optimization Should Move](../verification/expected-metric-gate-performance-prs.md) — what the PR has to report before you re-run anything

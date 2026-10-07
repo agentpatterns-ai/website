@@ -30,6 +30,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Feature Flags & Environment Variables](feature-flags.md) — Curated reference for the most impactful configuration knobs
 - [Session Scheduling](session-scheduling.md) — /loop and cron tools for recurring prompts within a session
 - [Cloud-Scheduled Routines vs Local Session Scheduling](cloud-scheduled-routines.md) — When to move schedule out of the local box; cloud Routines trade working-tree fidelity for uptime continuity
+- [Claude Code Cloud Sessions](cloud-sessions.md) — What crosses the VM boundary: repo state, config, credentials, network allowlist bypass paths, and pause and reclaim
 - [Skill Eval Loop](skill-eval-loop.md) — Test, benchmark, A/B-compare, and optimize agent skills with the skill-creator eval framework
 - [Reloading Skills Mid-Session](reload-skills-mid-session.md) — Re-scan skill directories with /reload-skills or a SessionStart hook, picking up edits without losing context
 - [Monitor Tool](monitor-tool.md) — Stream stdout from background scripts to Claude line-by-line, eliminating polling loops

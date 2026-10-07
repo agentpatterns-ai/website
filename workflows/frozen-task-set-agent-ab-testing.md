@@ -123,3 +123,4 @@ Evaluation 13 added two scope checks so plan-review and code-review findings cou
 - [Harness Hill-Climbing](../patterns/agent-design/harness-hill-climbing.md) — the single-agent tuning loop that reads whatever instrument you build here.
 - [Audit the Noise Floor Before Trusting a Benchmark Gap](../verification/benchmark-noise-floor-audit.md) — the variance source this selection procedure does not measure.
 - [Eval Blind Spots](../verification/eval-blind-spots.md) — what a frozen set stops being able to see over a long tuning series.
+- [Post-Commitment Test Generation: Draw the Sample Last](post-commitment-test-generation.md) — the case against freezing, when the subject under test is the code rather than the harness.

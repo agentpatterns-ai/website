@@ -75,6 +75,7 @@ The evidence above came from a framework that turns failure-free tool-use benchm
 
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — blocks calls to a tool once it degrades, where this pattern routes around it to a declared equivalent
 - [Informed Abstention as a Tool-Boundary Runtime Gate](informed-abstention-tool-boundary-gate.md) — gates before execution on a missing precondition; this is the post-failure half of the same decision
+- [Harness-Enforced Stopping on Judged-Useless Tool Results](enforced-stop-on-useless-results.md) — measures the "policy could live below the model" caveat above: a stopping rule stated in the prompt was followed at most partly, and only harness enforcement made stopping track the evidence
 - [Task Feasibility Awareness: Stop Before You Start](task-feasibility-awareness.md) — checks the tool manifest up front, so nothing is attempted when the capability is simply absent
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — the broader escalation hierarchy this policy slots into
 - [Belief Inertia After Tool-Map Drift](../anti-patterns/belief-inertia-after-tool-map-drift.md) — what a stale fallback map produces once the tool surface moves underneath it

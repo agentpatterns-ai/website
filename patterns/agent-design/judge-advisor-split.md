@@ -76,3 +76,4 @@ On a trajectory where the agent had reproduced the failure at step three and was
 - [The Advisor Strategy](advisor-strategy.md) — a frontier advisor gated by task difficulty rather than by detected drift
 - [Loop Detection for AI Agents](../../observability/loop-detection.md) — deterministic detection with a canned nudge and no advisor
 - [Steering Running Agents](steering-running-agents.md) — the human-issued version of the same mid-run correction
+- [Watcher Side Agents](watcher-side-agents.md) — the same rule-gated advice, addressed to the operator instead of the executor

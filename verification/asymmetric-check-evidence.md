@@ -83,3 +83,4 @@ In the mirror case, django-12497, the probe failed on the agent patch and on the
 - [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](evidence-bundled-agent-prs.md) — what to hand a human reviewer once the automatic stages have abstained
 - [Name the Check That Passed Before Accepting AI Code](named-check-over-evaluation-confidence.md) — the same discipline for a human acceptance, recorded per change
 - [Feedback as Capability Equalizer](../patterns/agent-design/feedback-capability-equalizer.md) — the generator-side version of evidence outweighing model size
+- [Require the Metric the Optimization Should Move](expected-metric-gate-performance-prs.md) — the performance case, where the check is a number rather than a pass or fail

@@ -88,3 +88,4 @@ The allowlist matches by hostname, an artifact the user does not own. The denyli
 - [Enterprise-Managed Plugin Governance for Agent CLIs](../../security/enterprise-managed-plugin-governance.md)
 - [Permission Framework over Model Judgment](../../security/permission-framework-over-model.md)
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)
+- [Judging a Write by Its Spelled Path (Spelled-Path Scope)](spelled-path-permission-scope.md) — the filesystem version of the same substitution, where the string the rule matches is a path and the thing it names is an inode

@@ -488,6 +488,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Requirement Smells: No Category Signal, Density Unconfirmed](instructions/requirement-smell-density.md)
 - [Rule Lifecycle Metadata for Prunable Instruction Surfaces](instructions/rule-lifecycle-metadata.md)
 - [Shared Context Bundle Registry for Agent Teams](instructions/shared-context-bundle-registry.md)
+- [Skill Rule Novelty: Add What the Skill Does Not Name](instructions/skill-rule-novelty.md)
 - [Specification Portability Across Coding Agents](instructions/specification-portability-across-agents.md)
 - [Standard-Grounded NFR Specs: Quality Up, Correctness Flat](instructions/standard-grounded-nfr-specification.md)
 - [Typed Pseudocode for Skill Libraries (Skill-as-Pseudocode)](instructions/typed-pseudocode-skill-libraries.md)
@@ -673,6 +674,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Harness Engineering for Building Reliable AI Agents](patterns/agent-design/harness-engineering.md)
 - [Harness Hill-Climbing: Eval-Driven Iterative Improvement of Agent Harnesses](patterns/agent-design/harness-hill-climbing.md)
 - [Harness Impermanence: Build Scaffolding To Be Deleted](patterns/agent-design/harness-impermanence.md)
+- [Harness-Enforced Stopping on Judged-Useless Tool Results](patterns/agent-design/enforced-stop-on-useless-results.md)
 - [Harness-Memory Coupling as a Design Axis](patterns/agent-design/harness-memory-coupling.md)
 - [Hypothesis-Driven Debugging: Instrument Before You Patch](patterns/agent-design/hypothesis-driven-debugging.md)
 - [Idle-Time Speculative Planning for ReAct Agents](patterns/agent-design/idle-time-speculative-planning.md)
@@ -740,6 +742,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Specification Authority Boundary: Agents Propose, the Runtime Commits](patterns/agent-design/specification-authority-boundary.md)
 - [Task Shape Decides What a Heavier Agent Harness Buys](patterns/agent-design/task-shape-harness-payoff.md)
 - [Task-Distribution Router Fit: Where the Decision Belongs](patterns/agent-design/task-distribution-router-fit.md)
+- [The Agent Escalation Ladder Priced in Energy and Latency](patterns/agent-design/agent-escalation-ladder-energy.md)
+- [Watcher Side Agents: Give the Second Agent a Trigger It Did Not Pick](patterns/agent-design/watcher-side-agents.md)
 - [Prompt-Only Baseline Before a Specialized Agent Subsystem](patterns/agent-design/prompt-only-baseline-before-specialized-subsystem.md)
 - [Quality Score Rubric and Simplification Log for Agent Harnesses](patterns/agent-design/quality-score-rubric.md)
 - [RAG over Thinking Traces: Index Reasoning Trajectories Instead of Documents](patterns/agent-design/rag-over-thinking-traces.md)
@@ -1167,6 +1171,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Unbounded Consumption: Bounding Agent Resource Use Against DoS and Denial-of-Wallet](security/unbounded-consumption-resource-bounds.md)
 - [Usability Pressure as a Silent Security-Regression Vector](security/usability-pressure-security-regression.md)
 - [Verifying LLM-Generated Cryptographic Code](security/llm-cryptographic-code-verification.md)
+- [Vetting-Constrained Skill Composition](security/vetting-constrained-skill-composition.md)
 - [Which Task You Delegate Changes Poisoned-Repo Exposure](security/task-choice-poisoned-repository-exposure.md)
 - [Windows Sandboxing for Coding Agents](security/windows-sandbox-primitives-coding-agents.md)
 - [Working Inside an Enterprise-Managed Agent Sandbox Policy](security/enterprise-managed-agent-sandbox.md)
@@ -1348,6 +1353,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Rented Sandboxes for Coding-Agent Benchmark Runs](verification/rented-benchmark-sandboxes.md)
 - [Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)](verification/repository-perturbation-context-reasoning-diagnosis.md)
 - [Reproduce-Before-Report Verification Gate](code-review/reproduce-before-report-verification-gate.md)
+- [Require the Metric the Optimization Should Move](verification/expected-metric-gate-performance-prs.md)
 - [Review Constraint Tests as a Second Acceptance Gate](verification/review-constraint-acceptance-gate.md)
 - [Review-Feedback-to-Rule Loop: Promoting Recurring PR Comments into Harness Rules](code-review/review-feedback-to-rule-loop.md)
 - [Review-Then-Implement Loop for AI Agent Development](code-review/review-then-implement-loop.md)
@@ -1376,6 +1382,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Symptom-Reduction-as-Root-Cause: Why Oracle Tests Alone Miss Architectural Drift](verification/symptom-reduction-as-root-cause.md)
 - [Task Alignment: The Selective-Compliance Gap Benchmarks Miss](verification/task-alignment-benchmark.md)
 - [Task Category as the Security Review Routing Key](verification/task-category-security-review-routing.md)
+- [Test Adequacy of LLM-Dependent Harness Code](verification/llm-dependent-harness-test-adequacy.md)
 - [Test-Driven Intent Clarification: Tests as Intermediate Alignment Artifacts](verification/test-driven-intent-clarification.md)
 - [The Security Review Gap in AI-Authored PRs](code-review/security-review-gap-in-ai-prs.md)
 - [Tiered Code Review: AI-First with Human Escalation](code-review/tiered-code-review.md)
@@ -1641,6 +1648,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [One-Click CI Auto-Fix: Human-Triggered Cloud-Agent Remediation for Failing GitHub Actions](workflows/one-click-ci-auto-fix.md)
 - [Parallel Polyglot Ports as a Spec-Ambiguity Oracle](workflows/parallel-polyglot-ports-spec-oracle.md)
 - [Per-Task Verification Budget: Size the Task to Fit the Check](workflows/per-task-verification-budget.md)
+- [Post-Commitment Test Generation: Draw the Sample Last](workflows/post-commitment-test-generation.md)
 - [Pre-Execution Codebase Exploration for AI Coding Agents](workflows/pre-execution-codebase-exploration.md)
 - [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](workflows/programmatic-cloud-agent-dispatch.md)
 - [Prototype Before Optimizing: Establish Quality Baselines Before Token Constraints](workflows/prototype-before-optimizing.md)
@@ -1787,6 +1795,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Ask-Everything Permission Policies Protect Less than Per-Action Approval](patterns/anti-patterns/ask-everything-permission-policies.md)
 - [Assuming Agent Interchangeability in Long-Running Teams](patterns/anti-patterns/assuming-agent-interchangeability.md)
 - [Assumption Propagation: Compounding Agent Misunderstandings](patterns/anti-patterns/assumption-propagation.md)
+- [Attributing a Changed Tool Call to the Model (Intent-Execution Correspondence)](patterns/anti-patterns/changed-tool-call-attribution.md)
 - [Boring Technology Bias: When Agents Recommend by Popularity](patterns/anti-patterns/boring-technology-bias.md)
 - [bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)](patterns/anti-patterns/bypass-permissions-overrides-allowlist.md)
 - [Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth](fallacies/chain-of-thought-reasoning-fallacy.md)
@@ -1813,6 +1822,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Held-Out Tasks as a Harness Shortcut Defense](patterns/anti-patterns/held-out-tasks-as-shortcut-defense.md)
 - [Install-Once Plugin Trust: Vetting That Never Re-Runs on Update](patterns/anti-patterns/install-once-plugin-trust.md)
 - [Judging a Skill's Honesty by the Validity of Its Output](patterns/anti-patterns/judging-skill-honesty-by-output-validity.md)
+- [Judging a Write by Its Spelled Path (Spelled-Path Scope)](patterns/anti-patterns/spelled-path-permission-scope.md)
 - [Knowledge Cutoff as a Documentation Boundary](patterns/anti-patterns/knowledge-cutoff-as-documentation-boundary.md)
 - [Large-Codebase Coding-Agent Failure Patterns (Sourcegraph Five)](patterns/anti-patterns/large-codebase-agent-failure-patterns.md)
 - [Law of Triviality in AI PRs for AI Agent Development](patterns/anti-patterns/law-of-triviality-ai-prs.md)
@@ -1867,6 +1877,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Treating a Clean Final State as Boundary-Compliance Evidence](patterns/anti-patterns/clean-final-state-as-compliance-evidence.md)
 - [Treating a Clean Merge as Compatibility Evidence](patterns/anti-patterns/clean-merge-as-compatibility-evidence.md)
 - [Treating a Clean Static Scan as Security Evidence](patterns/anti-patterns/static-clean-as-security-evidence.md)
+- [Treating a Cleared Review Comment as a Fixed Flaw](patterns/anti-patterns/cleared-review-comment-as-fix.md)
 - [Treating a Detector's Benchmark Score as Deployment Evidence](patterns/anti-patterns/detector-benchmark-score-as-deployment-evidence.md)
 - [Treating a Local Agent Session Trace as Audit Evidence](patterns/anti-patterns/local-trace-as-audit-evidence.md)
 - [Treating a Worktree as a Safety Boundary](patterns/anti-patterns/worktree-as-safety-boundary.md)
@@ -1881,6 +1892,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Unsignalled Tool Failure: Returning Success With an Unusable Payload](patterns/anti-patterns/unsignalled-tool-failure-envelope.md)
 - [Verbatim Failure Records in Small-Model Agent Transcripts](patterns/anti-patterns/verbatim-failure-records.md)
 - [When Developers Understand Less of Their Own Codebase](patterns/anti-patterns/comprehension-debt.md)
+- [When Your Agent's Verifier Reads the Same False Premise](patterns/anti-patterns/verifier-reads-the-same-premise.md)
 - [Density-Normalized Quality Metrics Mask AI-Driven Code Growth](patterns/anti-patterns/density-normalized-quality-metric.md)
 - [Unversioned Scaffolding Commands Pull Stale Templates](patterns/anti-patterns/unversioned-scaffolding-stale-templates.md)
 - [Agent Sprawl: Unmanaged Sub-Agent and Skill Proliferation](patterns/anti-patterns/agent-sprawl.md)
@@ -2029,6 +2041,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Claude Code /batch and Worktrees for AI Agent Development](tools/claude/batch-worktrees.md)
 - [Claude Code Agent Teams for Collaborative AI Workflows](tools/claude/agent-teams.md)
 - [Claude Code Auto Mode: Classifier-Based Permission Gating](tools/claude/auto-mode.md)
+- [Claude Code Cloud Sessions: What Crosses the VM Boundary](tools/claude/cloud-sessions.md)
 - [Claude Code Dynamic Workflows](tools/claude/dynamic-workflows.md)
 - [Claude Code Extension Points: When to Use What](tools/claude/extension-points.md)
 - [Claude Code Feature Flags and Environment Variables](tools/claude/feature-flags.md)
@@ -13780,6 +13793,7 @@ Reviewing, versioning, and repairing instruction files over time so they remain 
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — Move critical behavioral rules out of prompts and into deterministic shell hooks that the model cannot override
 - [Rule Lifecycle Metadata for Prunable Instruction Surfaces](rule-lifecycle-metadata.md) — Tagging each rule with source, applies_to, and retire_when converts the rule-budget audit from a counting exercise into a pruning exercise so the instruction surface can actually shrink
 - [The No-Op Test: Prune Agent Docs by Behavior, Not Length](behavioral-no-op-test.md) — Delete a line, rerun the task, and keep it only if behavior moved; the two loads say where deleted material goes
+- [Skill Rule Novelty: Add What the Skill Does Not Name](skill-rule-novelty.md) — An added skill rule moves the agent when it names a command or path the file lacked; discount the gain for on-demand loading and for how rarely a request needs it
 - [Why an Encoded Rule Still Fails After a Passing Eval](encoded-rule-failure-diagnosis.md) — A rule that passes the eval and keeps failing in production is unclear, not loading, inexpressible in the available primitives, or in the wrong medium; only the first is wording
 - [Agent Context File Evolution: Treating ACFs as Configuration Code](agent-context-file-evolution.md) — ACFs are actively-maintained artifacts that drift with code and grow monotonically; the maintenance discipline is two loops — add-on-drift and compact-on-add — that keep the file under the compliance ceiling
 - [Prompt Governance via PR](prompt-governance-via-pr.md) — Store agent instructions as plain markdown files in git and use pull requests to propose, review, and merge behavior changes
@@ -22856,6 +22870,66 @@ On the `skills.sh` route the same discipline is assembled by hand. Install with 
 
 ---
 
+### Skill Rule Novelty: Add What the Skill Does Not Name
+Source: https://agentpatterns.ai/instructions/skill-rule-novelty/
+
+# Skill Rule Novelty: Add What the Skill Does Not Name
+
+> A skill rule can only pay when it names a command or path the file does not already mention. Restating buys almost nothing.
+
+Before adding a rule to a `SKILL.md`, check whether the token it names already appears in the file. Across 2,608 first/last revision pairs from 3,159 real skills, the gain from an added rule sits almost entirely with rules that introduce something the old version lacked. A new token lifts compliance from a baseline of 0.05 by +0.51 to +0.66; a rule about a token the skill already named starts at 0.61 and lifts it by +0.08 (95% CI +0.03 to +0.12) pooled over 107 probes, and the authors note part of the difference may be headroom, the room left above a high old-version rate ([Wang et al., 2026](https://arxiv.org/abs/2610.04832v1)). The headline figure averages both kinds: "Across 16 open-weight models, an added rule raises compliance in a single answer by +0.41 on average."
+
+## When this applies
+
+Three conditions carry the effect, and all three have to hold.
+
+1. The rule names a command, path, flag, or identifier the skill does not mention. On the 23 sandbox tasks whose old skill already contained the required token, the study detected no gain in whether the agent took the action (Qwen 3.5-9B +0.00, 27B +0.06, Claude Sonnet 4.5 −0.13).
+2. Real requests will need the rule. Of 1,454 later in-scope commit-rule pairs, "25% need the rule" (95% CI 14-40%), while every request pays the added input tokens.
+3. The harness will put the body in front of the model. Under on-demand loading, "the action gain falls from +0.23 to +0.12": about 51% retained across four agents and 38% across three open models.
+
+## Running the arithmetic before you edit
+
+Multiply the conditional effect by how often it fires. The paper's own scenario puts an in-scope request at about 0.10 in single-answer compliance (0.25 × 0.41, 95% CI of the product 0.05 to 0.17) and about 0.06 in the required action of the four sandbox agents (0.25 × 0.23). Apply the loading discount and a rule in a skill the agent opens on demand is worth half of that again.
+
+The cost on the other side is small. A single answer costs 18 to 19% more input tokens, and a sandbox episode showed no detectable change at all, −2.3 to +3.0% with every interval spanning zero, because the longer prompt bought fewer steps. "The old version costs 37 to 57% more tokens per episode than none", so whether to carry the body dominates whether to edit it.
+
+Deletion is not the free inverse. Removing a rule lowered compliance with it by 0.27 to 0.33 on each of eight models, about three quarters of what adding one gained, so the authors tell maintainers: "Before deleting a rule, check that the agent should no longer follow it, since deletions are followed too."
+
+## Why it works
+
+The rule supplies information, and it binds that information to an action. Exposure alone does not substitute. Where the agent's own context already showed the token but the old skill lacked it, the revision still added +0.31 (95% CI +0.20 to +0.42), and Qwen 3.5-27B's old-skill agent, where it had seen the token in its own command output, still gained +0.19 (95% CI +0.08 to +0.29) from the new one ([Wang et al., 2026](https://arxiv.org/abs/2610.04832v1)). The gain is also not the document growing. "Unrelated text of the same length has no detectable effect", while stripping the rule line out of the new version cost about 0.21. Stating the rule adds +0.15 (95% CI +0.12 to +0.19) over a sentence naming the same token without an imperative, which is the distance between telling an agent a path exists and telling it to read that path.
+
+## When this backfires
+
+- The agent never opens the skill. Vercel measured the route itself as unreliable: "In 56% of eval cases, the skill was never invoked." The skill scored 53% on default behavior against a 53% baseline, while a docs index in `AGENTS.md`, an index that points at doc files rather than the documentation itself, passed every task ([Vercel, 2026](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals)). No rule inside an unread file matters.
+- The skill already fills the window. The gain falls from 0.424 at low occupancy to 0.270 once the skill takes three quarters of a model's usable context, and about two fifths of the short-answer effect survives in a 40k-token agent context.
+- The rule is a prohibition, a conditional, or a permission guardrail. The study's literal filter keeps 17% of candidate directives and under-represents those classes.
+- The agent is a frontier reasoning model. Every model answered with thinking disabled, and Claude Sonnet 4.5's human-judged correctness moved only +0.06 (95% CI −0.06 to +0.18) on 72 pairs, underpowered rather than null.
+- Instructions as a whole may not pay. A separate evaluation found that providing repository context files "does not generally improve task success rates, while increasing inference cost by over 20% on average" ([Gloaguen et al., 2026](https://arxiv.org/abs/2602.11988v3)). Novelty says which rule is worth adding, not that the file is worth having.
+
+## Example
+
+In the `juxt/allium` repository, "a rule to run allium check shrinks the answer from 201 to 81 tokens and raises compliance from 0.07 to 0.99" ([Wang et al., 2026](https://arxiv.org/abs/2610.04832v1)). The command was absent from the old skill, so the rule was the only place the agent could learn it. Output got shorter because a model told which command to run stops hedging between candidates.
+
+The counter-case is the same study's overhead tally. For one rule-model pair in five "the prompt grows but we detect no change in compliance" (95% CI 16.1-24.2%). Of the 55 rules that at least half the models scored that way, 27 were already followed without the rule and 28 were ignored whether present or not. The first group needs a removal test; the second needs rewriting.
+
+## Key Takeaways
+
+- Grep the skill for the token before you write the rule. A token already in the file predicts no gain in whether the agent acts.
+- Never quote the headline +0.41 as what your skill will gain. It is a conditional effect measured on requests that need the rule, with the body already in the prompt; production meets neither condition by default.
+- Carrying a skill body costs 37 to 57% more tokens per episode and revising one costs almost nothing per episode, so budget the decision to load rather than the decision to edit.
+- Deleting a rule removes about three quarters of the compliance an equivalent addition buys. Treat removal as a behavioral change and test it.
+
+## Related
+
+- [Cost-Aware Skill Rewriting](cost-aware-skill-rewriting.md) — which lines to keep when a skill has to get shorter.
+- [The No-Op Test](behavioral-no-op-test.md) — the empirical check that settles whether a line earns its place; novelty is the prior that predicts the result.
+- [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — why a gain shrinks as the file grows against the window.
+- [Agent Context File Evolution](agent-context-file-evolution.md) — the maintenance loops around files that only ever grow.
+- [Pre-Execution Skill Selection](pre-execution-skill-selection.md) — scoring a skill's layers before it runs, instructions included.
+
+---
+
 ### Specification Portability Across Coding Agents
 Source: https://agentpatterns.ai/instructions/specification-portability-across-agents/
 
@@ -23796,6 +23870,7 @@ The same source names the opposite error. Doing the work once and asking the age
 - [Rule Lifecycle Metadata for Prunable Instruction Surfaces](rule-lifecycle-metadata.md) — metadata that tells you which rules to test first
 - [Against-Prior Accuracy: Score the Rules That Fight Defaults](../verification/against-prior-accuracy.md) — the same deletion probe pointed at a compliance score instead of a pruning decision
 - [Write Agent Rules You Can Grade From the Transcript](transcript-gradable-agent-rules.md) — the prior question: whether the line's effect is countable at all, without which the test has nothing to compare
+- [Skill Rule Novelty: Add What the Skill Does Not Name](skill-rule-novelty.md) — the token-novelty prior that predicts a deletion test's result before you spend the run
 
 ---
 
@@ -24935,6 +25010,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — Agents that explore the codebase first and ask targeted clarification questions recover up to 74% of the performance lost to underspecified inputs
 - [Issue Requirements Preprocessing](issue-requirements-preprocessing.md) — Transforming raw issue descriptions into structured requirements before code generation improves patch resolution rates by 17% on average
 - [Splitting the Drift Judge from the Advisor (LivePlan)](judge-advisor-split.md) — Separate the component that decides whether an agent has drifted from the component that decides what to do about it, so the always-on half runs without an LLM call
+- [Watcher Side Agents: Give the Second Agent a Trigger It Did Not Pick](watcher-side-agents.md) — A concurrent, read-only agent that writes notes to the operator earns its cost on long sessions when a rule fires it, because a watcher asked continuously whether anything is wrong finds something
 - [Minimum-Sufficient Control Ladder: Escalate by Failure Mode](minimum-sufficient-control-ladder.md) — An ordered algorithm for adding agent control mechanisms — Tool Use, Reflection, Evaluator-Optimizer, Human-in-the-Loop, Parallelization — only when a named failure mode justifies the next rung
 - [The Orchestrator's Attention Budget: Delegating to Protect Context](orchestrator-attention-budget.md) — Justify a sub-agent by what it keeps out of the orchestrator's context rather than by time saved, since imported worker output charges attention on every remaining turn
 - [Plan Compliance in Agents: Measure What They Execute, Not What You Wrote](plan-compliance-in-agents.md) — Agents silently deviate from instructed plans; plan quality, phase alignment, and periodic reminders determine whether the plan you wrote actually runs
@@ -24971,6 +25047,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 
 - [Administrative Effort Ceilings for Reasoning Budget](administrative-effort-ceilings.md) — An admin-set `maxEffortLevel` bounds every operator effort control; caps compose by minimum across settings scopes, and the clamp is silent in headless and background runs
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — Wrap external tools with per-tool failure-tracking state machines that block calls during degraded states, preventing token waste on retry loops
+- [The Agent Escalation Ladder Priced in Energy and Latency](agent-escalation-ladder-energy.md) — On self-hosted open-weight models one agent costs 1.20x a direct call's energy, two cost 3.06x and four cost 6.36x, while accuracy stays flat on four of five tasks
 - [Agent-Client Admission Control for Agentic Traffic](agent-client-admission-control.md) — Retry budgets, honored 429s, and token-denominated buckets let an agent client throttle itself inside the gap between a burst and the autoscaler's response, for traffic you own and with enforcement still on the server
 - [Caller-Actionable Error Steps in Tool Responses](caller-actionable-error-steps.md) — A next step the caller cannot run cost 37 points of recovery on expired credentials; write the repair as a call to one of your own tools, and only where the failure is invisible in the agent's own call
 - [Retry, Switch, or Abstain: Supplying a Tool-Recovery Policy at Runtime](retry-switch-abstain-recovery-policy.md) — Hand the agent a fallback map and recovery constraints in context so it retries, switches tools, or stops — worth up to 16.8 points of robustness, and only where failures are observable
@@ -24992,6 +25069,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Dual-Budget Control for Search Agents](dual-budget-control-search-agents.md) — Under hard limits on both tool calls and generated tokens, score each candidate action by Value-of-Information per unit budget and spend the next unit on the highest-ranking action
 - [Effective Feedback Compute (EFC) for Harness Comparison](effective-feedback-compute.md) — A trace-level scaling coordinate that credits feedback only when it is informative, valid, non-redundant, and retained — replacing raw tokens or tool calls when comparing two harnesses on the same multi-turn task
 - [Effort as a Verification Dial: What a Higher Level Buys](effort-as-verification-dial.md) — Effort buys self-verification and edge-case testing, so raise it where hidden cases decide the result and keep it low where the risk is a misread requirement
+- [Harness-Enforced Stopping on Judged-Useless Tool Results](enforced-stop-on-useless-results.md) — Agents call a failing source's results useless 97-100% of the time and keep querying it; count the run in harness code and remove every action but finish
 - [Escalation Channels: A Reporting Tool Instead of a Reward Hack](escalation-channels-defect-disclosure.md) — Give the agent a structured tool for reporting broken test infrastructure at the point of conflict, paired with a written prohibition on shortcuts — either half alone raised hacking for one model
 - [Evidence-First Reports From Failure-Diagnosis Agents](evidence-first-diagnosis-reports.md) — Engineers named the Evidence section one of the most valuable parts of an agent's failure report whether or not they accepted its root cause; keep the verdict, but put the retrieved logs above it
 - [Gateway Model Routing](gateway-model-routing.md) — Treat an Anthropic-compatible gateway as both inference target and model catalog, so a single config knob controls what the harness can call and what it shows in the picker
@@ -34812,6 +34890,7 @@ The controller fires `commit` because its VOI/cost ratio is highest given how li
 - [Inference-Time Tool-Call Reviewer](inference-time-tool-call-reviewer.md)
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md)
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
+- [Harness-Enforced Stopping on Judged-Useless Tool Results](enforced-stop-on-useless-results.md) — why a stated call budget relocates the stop to the deadline instead of making it track the evidence
 
 ---
 
@@ -39423,6 +39502,85 @@ The discipline converts to tagging [compensatory mechanisms](temporary-compensat
 - [Runtime Scaffold Evolution](runtime-scaffold-evolution.md) — agents that synthesize and deprecate their own scaffolding at runtime
 - [Rollback-First Design](rollback-first-design.md) — the same reversibility discipline applied to agent actions
 - [Agentic Flywheel](agentic-flywheel.md) — agents proposing harness changes based on their own trajectory data
+
+---
+
+### Harness-Enforced Stopping on Judged-Useless Tool Results
+Source: https://agentpatterns.ai/patterns/agent-design/enforced-stop-on-useless-results/
+
+# Harness-Enforced Stopping on Judged-Useless Tool Results
+
+> An agent that judges its results useless and keeps querying will not stop on that judgment until the harness counts the run and acts.
+
+Count the consecutive results the agent judges useless, and when the count hits your threshold, remove every action except finish. Across seven agents in a retrieval environment with injected source failures, letting the harness take that step was the only tested condition under which stopping tracked the evidence for every model ([Zhang et al., arxiv:2610.06191v1](https://arxiv.org/abs/2610.06191v1)). Writing the same rule into the prompt does not substitute. Stated in words, "only Llama-3.1-8B and Qwen3-32B follow it, and only partly".
+
+Two routes get the judgment to the harness. The paper's instrument asks the agent a one-word question, USEFUL or USELESS, "on a scratch copy of the conversation that the agent never sees again", so the trajectory is untouched. The cheaper route reads the judgment out of the reasoning the agent already writes, with a keyword reader ([2610.06191v1](https://arxiv.org/abs/2610.06191v1)). Either way the counter lives in your code, not in the model's head.
+
+## When this is worth building
+
+Three conditions decide it:
+
+- The tool fails silently. It answers with a 200 and well-formed text that does not help, so an error-counting breaker never trips. When your failures are timeouts and 5xx instead, [Agent Circuit Breaker](agent-circuit-breaker.md) already covers the case and needs no judgment signal at all.
+- Answering from what the agent already holds beats spending the rest of the budget. The gain tracks that: on FEVER fact verification, where a coin flip scores half, the rule raised mean success by +0.129 to +0.201, against +0.026 to +0.097 on multi-hop question answering ([2610.06191v1](https://arxiv.org/abs/2610.06191v1)).
+- You can fit the threshold. The paper's five was set on 100 development questions against sources that recover after at most three failures. Copy the mechanism, not the number.
+
+## The agent hands you the signal and ignores it
+
+The study records judgment, belief and action separately at each step. The judgment is reliable: "Every model whose judgments we recorded calls a failing source's results useless 97-100% of the time." The action does not follow it. "After their own judgments have called five results in a row useless, five of the seven answer on at most 7% of questions." Unaided Qwen3-8B answered on 1 of 292.
+
+Caution is not paying off. For the 7-8B models "answering at that point succeeds 15-17% of the time and continuing at most 7%", an exploratory result. Forced to answer at that same point, Claude Haiku 4.5 "is right on 114 of the 284 questions where this happens, whereas on its own it answers only one of them" ([2610.06191v1](https://arxiv.org/abs/2610.06191v1)).
+
+## What telling the agent more does
+
+Delta below is the paper's time-matched contrast: the chance of answering at a fixed step after an unbroken run of useless-judged results, minus the chance at that step when the latest result was judged useless but an earlier one useful. Zero means the clock or the deadline drives the stop; positive means the evidence does.
+
+| Told the agent | What changed | Delta |
+|---|---|---|
+| It may answer from memory | Qwen3-8B stops earlier, answering before any real result on 55% of questions whose source recovers after three failures | -0.32 |
+| The budget, with a counter | On a failing source, 51-79% of answers land on the last action; double the budget and they move from the eighth action to the sixteenth for no gain | stays negative |
+| The stopping rule in words | Two of four open models follow it, partly | +0.09, +0.08 against +0.37, +0.33 enforced |
+| A price of 0.05 per call | The 7-8B models still answer at the deadline, no better than the budget alone | negative |
+| The running count of useless judgments | Agents do not stop on the count | -0.14 to -0.24 (three 7-8B models) |
+
+Figures from test300 in [2610.06191v1](https://arxiv.org/abs/2610.06191v1); the running-count row is exploratory. The enforced rule, by contrast, answers at the same action under either budget.
+
+## Why it works
+
+The paper rules out the three cheaper explanations one at a time, which is what makes the mechanism specific. Perception is intact at 97-100% accuracy. Belief is not the cause: beliefs "point in different directions across models, and actions do not follow them", with Llama-3.1-8B answering at only 32 of 595 decision points where its own reports favored answering now. Nor is missing information, since permission, the budget, the rule in words, a per-call price and the running count each move when the agent stops without changing what it stops on.
+
+What is left is the step that turns an accumulated run into an act. Hand that step to the harness and mean success rises by +0.026 to +0.097 for the four open models and Claude Haiku 4.5, and the stopping point stays put when the budget doubles. In a hazard model, each further useless judgment moves an unaided 7-8B agent's chance of answering by -0.02 to -0.01, and by +0.15 to +0.17 under the enforced rule. The authors read it as a run-length test in "the spirit of sequential testing". One control separates this from the idea that forcing a stop helps anyway: against a random signal that says useless equally often but at random steps, "the enforced rule wins by 0.011 to 0.029 (Holm-significant), so the timing of the signal matters" ([2610.06191v1](https://arxiv.org/abs/2610.06191v1)).
+
+## When this backfires
+
+- Your sources recover late, or fail on topic. The threshold is fitted to a recovery distribution you cannot see in production, and when recovery comes later, "the rule can give up just before it". Judgment accuracy also falls to 84-97% on distractor paragraphs and 76-97% on pages stripped of their supporting facts, so the gate's input degrades where real tools fail.
+- You are buying accuracy. Mostly you are not. A stated budget matches or exceeds the enforced rule on the three 7-8B models: "the budget condition matches or exceeds the enforced rule's success on several models, so success alone cannot show what stopping responds to". The gate buys a stopping point that holds when the budget changes, plus the calls you stop spending. With a fixed budget and cheap calls, that is not worth a threshold to maintain.
+- The judgment calls get billed. The rule "makes three to five judgment calls per question, which would put it below the budget condition if they were charged like tool calls". Reading the judgment out of the agent's own reasoning costs nothing and holds success within 0.01 on Llama-3.1-8B and the Qwen3 models, but it "does not help Qwen2.5-7B, which rarely states a judgment".
+- Your agent already stops too early. Qwen2.5-7B's failure is the opposite one: the gate alone moved it from .192 to .237, while the budget and the gate together reached .375. Diagnose the direction first.
+- Answering early is not free. Parametric knowledge "can be stale or wrong", so the authors argue for making the abandon decision explicit and measurable, not for trusting memory ([2610.06191v1](https://arxiv.org/abs/2610.06191v1)).
+- The agent's judgment may not be the signal worth paying for. A detector that just counts shared content words "does about as well as the agent", on the paper's own exploratory comparison, and both [HALT](https://arxiv.org/abs/2608.02009v3) and [evidence-carrying termination](https://arxiv.org/abs/2608.23623v1) report results from signals the agent never supplies.
+
+## Example
+
+The transferable part is the measurement, because a success score cannot tell these policies apart. An agent that stops at a fixed step, one that waits for the deadline and one that stops on accumulated evidence can all score alike, and they diverge only when conditions change. So test the stop, not the score: hold the step fixed and check whether the chance of answering rises with the run of results the agent judged useless. The authors state it as a rule for evaluators: "Evaluations should not infer evidence-driven stopping from success, which a deadline also yields" ([2610.06191v1](https://arxiv.org/abs/2610.06191v1)).
+
+The cheap version in your own harness is a budget-doubling probe. Run the agent against a source you have broken on purpose, once at the normal call budget and once at twice it. If the median answering step moves with the budget, your agent is stopping on the deadline, and whatever judgment it logged along the way changed nothing.
+
+## Key Takeaways
+
+- Count the run in harness code, not in the prompt. Every prompt-level cue tested moved the stopping point without changing what it responds to.
+- Log the agent's per-result judgment before you build anything. It is the signal the gate needs, you probably already have it in the reasoning trace, and reading it there costs nothing.
+- Justify the gate on a stopping point that survives a budget change, not on accuracy. If your budget is fixed and your calls are cheap, a stated budget is the cheaper buy.
+- Fit the threshold to your own sources' recovery behavior, and re-fit it when they change. Five was fitted to sources recovering within three failures.
+- Check the direction of your failure first. An agent that already answers too early needs a budget floor, not a gate.
+- Probe with a doubled budget before and after. A stopping point that moves with the deadline is not reading the evidence.
+
+## Related
+
+- [Agent Circuit Breaker](agent-circuit-breaker.md) — the same gate for loud failures, counting errors instead of relevance judgments
+- [Retry-Switch-Abstain: A Runtime Tool-Recovery Policy](retry-switch-abstain-recovery-policy.md) — the prompt-side counterpart that supplies a fallback map in context, whose "the policy could live below the model" caveat this measures
+- [Silent Adoption of Corrupted Tool Returns by Agents](../anti-patterns/silent-adoption-of-corrupted-tool-returns.md) — the same notice-without-acting gap for returns that are wrong rather than useless
+- [Dual-Budget Control for Search Agents: VOI Scoring Per Action](dual-budget-control-search-agents.md) — scores the next action by value of information, where this only decides when to stop
+- [Informed Abstention as a Tool-Boundary Runtime Gate](informed-abstention-tool-boundary-gate.md) — blocks before execution on a static precondition, not on accumulated evidence
 
 ---
 
@@ -47605,6 +47763,7 @@ The evidence above came from a framework that turns failure-free tool-use benchm
 
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — blocks calls to a tool once it degrades, where this pattern routes around it to a declared equivalent
 - [Informed Abstention as a Tool-Boundary Runtime Gate](informed-abstention-tool-boundary-gate.md) — gates before execution on a missing precondition; this is the post-failure half of the same decision
+- [Harness-Enforced Stopping on Judged-Useless Tool Results](enforced-stop-on-useless-results.md) — measures the "policy could live below the model" caveat above: a stopping rule stated in the prompt was followed at most partly, and only harness enforcement made stopping track the evidence
 - [Task Feasibility Awareness: Stop Before You Start](task-feasibility-awareness.md) — checks the tool manifest up front, so nothing is attempted when the capability is simply absent
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — the broader escalation hierarchy this policy slots into
 - [Belief Inertia After Tool-Map Drift](../anti-patterns/belief-inertia-after-tool-map-drift.md) — what a stale fallback map produces once the tool surface moves underneath it
@@ -50927,6 +51086,7 @@ On a trajectory where the agent had reproduced the failure at step three and was
 - [The Advisor Strategy](advisor-strategy.md) — a frontier advisor gated by task difficulty rather than by detected drift
 - [Loop Detection for AI Agents](../../observability/loop-detection.md) — deterministic detection with a canned nudge and no advisor
 - [Steering Running Agents](steering-running-agents.md) — the human-issued version of the same mid-run correction
+- [Watcher Side Agents](watcher-side-agents.md) — the same rule-gated advice, addressed to the operator instead of the executor
 
 ---
 
@@ -52408,6 +52568,10 @@ To hold back one bad release without going full default-deny, keep prefix matchi
 
 A blocked model disappears from the `/model` picker and is rejected by name everywhere the allowlist applies ([Claude Code: Model configuration](https://code.claude.com/docs/en/model-config#block-specific-models-or-versions)). It leaves every unnamed release on the default-allow path.
 
+### Provider restriction is a separate key
+
+The `allowedProviders` managed setting limits which API providers a machine may use ([Claude Code: Changelog](https://code.claude.com/docs/en/changelog#2-1-285)). The list covers the Anthropic API, a custom endpoint, Bedrock, Mantle, Vertex AI, Foundry, Claude Platform on AWS, and a Cloud gateway. A model allowlist does not constrain the provider, so a residency rule that names a cloud rather than a model needs this key too.
+
 ### Traps in the recipe
 
 - A family alias defeats `"exact"`. An allowlist of `["opus", "sonnet"]` still admits the next Opus and Sonnet release: "a family alias such as `\"opus\"` still permits the whole family" ([Claude Code: Settings reference](https://code.claude.com/docs/en/settings-reference#availablemodelsmatch)). Default-deny needs full model IDs, not family names.
@@ -52612,6 +52776,68 @@ The advisor strategy is an API-native form of established patterns:
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
 - [Agent Turn Model](agent-turn-model.md)
 - [Comparison-Only Advisor: Steering a Large Actor With a Tiny Comparator](comparison-only-advisor.md) — the inverse arrangement, where a 0.5B comparator advises a far larger actor by ranking its options rather than solving anything
+
+---
+
+### The Agent Escalation Ladder Priced in Energy and Latency
+Source: https://agentpatterns.ai/patterns/agent-design/agent-escalation-ladder-energy/
+
+# The Agent Escalation Ladder Priced in Energy and Latency
+
+> On self-hosted open-weight models, one agent costs 1.20x a direct call's energy, two 3.06x, four 6.36x, with accuracy flat on four of five tasks.
+
+The rungs between a stateless model call and a four-agent workflow carry separate prices. Astekin and colleagues metered 1,840 runs across five software engineering tasks, six open-weight models, two prompt strategies and three hardware platforms ([Astekin et al., 2026](https://arxiv.org/abs/2610.03010v1)). The runs used about 651.7 kWh in total. Averaged over all of it, one agent consumes 1.20x the energy of a direct stateless query and runs 1.23x as long. Two agents reach 3.06x and 3.32x. Four reach 6.36x and 6.07x. The worst individual task-hardware pair reached 160x. Log parsing on the mid-range workstation took 50,186 seconds under four agents against 313 seconds direct.
+
+Those prices hold inside one envelope. The models are 4B to 20B open-weight. They are served locally through Ollama at a 4096-token context with temperature fixed at 0, and they answer single-pass prompts over curated benchmark items. Repository-scale and tool-augmented tasks are named as future work rather than measured. The authors mark the boundary themselves: "The results may not generalize to tasks such as code review, test generation, repository-level maintenance, or autonomous development". Read the ladder as a cost curve for self-hosted inference on single-pass work rather than a verdict on agent topology generally.
+
+## What each rung buys
+
+Accuracy does not climb with the price. The direct call has the highest mean score on four of the five tasks: code generation, technical debt detection, log parsing and log analysis. Four agents lead on one, vulnerability detection, at 55.4% F1 against 49.7% for the direct call ([Astekin et al., 2026](https://arxiv.org/abs/2610.03010v1)).
+
+The asymmetry runs deeper than the means. Energy differs significantly by agentic configuration on all five tasks, while accuracy does so on one: vulnerability detection, at p=0.0162 on the omnibus test. Even there the post-hoc pairwise test does not separate four agents from the direct call. The paper states the limit: "the differences among MA, NA, and SA are not significant under the paired hardware-balanced test". Across the 15 task-hardware pairs the accuracy-energy frontiers hold 66 configurations in total, of which 36 are non-agentic, 23 single-agent, 6 dual-agent and 1 four-agent.
+
+That makes a frontier the evidence standard, since a win on the accuracy axis alone can still fail a multi-objective comparison. Here the only such win did.
+
+## Why it works
+
+The study decomposes multi-agent latency into three parts: model loading, orchestration overhead, then inference for every agent involved ([Astekin et al., 2026](https://arxiv.org/abs/2610.03010v1)). Each added agent contributes its own token generation on top of the messages the agents exchange. A coordination round therefore multiplies the work rather than adding to it. On a local GPU that multiplier is the whole cost, because "local inference on the same hardware draws roughly constant power". Energy and wall-clock correlate at r=0.987 in log-log space. The paper reports savings on the two as largely co-achieved: "a configuration change that reduces one will almost always reduce the other".
+
+Every extra round costs its multiple whatever the task is. It pays only when it supplies information the first pass lacked. The cost is structural, the benefit contingent. Hardware adds to that: on the hardware-balanced subset accuracy varies by under 3 percentage points across the three platforms, while platform latency differences grow from about 2-3x for the direct call to about 3.4x for four agents.
+
+## Try the cheaper levers first
+
+Prompt and model choice moved these tasks further than topology did. Few-shot prompting took log-parsing accuracy from 3.4% to 54.3% and cut energy by 24% to 41% at the same time. Model choice swung log-parsing latency by up to 136.5x between two open-weight models ([Astekin et al., 2026](https://arxiv.org/abs/2610.03010v1)). Neither lever points the same way on every task: few-shot examples made code generation worse, 92.7% against 97.3% zero-shot.
+
+## When this backfires
+
+- Breadth-first retrieval over independent sub-queries. Anthropic reports a multi-agent system that "outperformed single-agent Claude Opus 4 by 90.2% on our internal research eval" at roughly 15 times the tokens of a chat interaction ([Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system)). A 6x multiplier is cheap against that. The same post narrows it: "most coding tasks involve fewer truly parallelizable tasks than research".
+- Repository-scale repair with execution feedback. AgentForge's five agents, a sandbox and three debug retries took SWE-bench Lite resolution from 14.0% under single-agent GPT-4o to 40.0%, for about 2.7x the per-task API cost ([Kumar et al., 2026](https://arxiv.org/abs/2604.13120v1)). That is 26 points for a smaller multiplier than the ladder charges, on work this study excludes.
+- Hosted or cloud serving. Batching, virtualization, cooling and grid carbon intensity all move the multiplier, and a hosted API exposes no energy figure to meter.
+- Format-bound tasks. Where output structure is the bottleneck, as in log parsing, the prompt lever dominates and escalating agents spends 6x on the wrong axis.
+- Batch work nobody waits on. A 6.07x runtime penalty costs an overnight job nothing, and the carbon figure rests on a fixed grid-intensity assumption the authors call a conservative lower bound.
+- Baselines already near ceiling. All four configurations scored between 94.2% and 96.8% Pass@1 on code generation, which leaves coordination nothing to buy.
+
+## Example
+
+Vulnerability detection is the one case the ladder appears to justify. Four agents in a mock-court arrangement — security researcher, code author, moderator, review board — reached 55.4% F1 against 49.7% for a direct call on 386 paired PrimeVul functions. That 5.7-point gain is the only task in the study where an agentic configuration beat the direct call on mean accuracy ([Astekin et al., 2026](https://arxiv.org/abs/2610.03010v1)).
+
+Then price it. The four-agent configuration is the balanced pick on the three-objective frontier for none of the 15 task-hardware pairs. Table 23 selects the direct call in 11 and a single agent in 4. The pairwise test against the baseline returns p=0.339. The paper's §4.4.2 prose says four agents appear on the balanced front for one pair, which Table 23 does not show. A team reading only the F1 column ships the mock court everywhere. A team reading all three columns escalates here and nowhere else.
+
+## Key Takeaways
+
+- On self-hosted open-weight inference, price the rungs separately. The agent abstraction itself costs 1.20x the energy and 1.23x the runtime of a direct call, the second agent costs 3.06x and 3.32x, the fourth 6.36x and 6.07x ([Astekin et al., 2026](https://arxiv.org/abs/2610.03010v1)).
+- On self-hosted inference energy and wall-clock move together, correlated at r=0.987, so savings on the two are largely co-achieved instead of traded against each other.
+- Judge an escalation on a frontier rather than one axis. Of the 66 configurations on the study's accuracy-energy frontiers, 59 are non-agentic or single-agent and 1 is four-agent. On the three-objective frontier that adds latency, four agents are the balanced pick for none of the 15 task-hardware pairs.
+- Exhaust prompt and model choice first. Few-shot prompting beat every topology change on log parsing and reduced energy by 24% to 41% while doing it.
+- The envelope is narrow: 4B-to-20B local models, single-pass benchmark prompts, no repository context. Breadth-first retrieval and execution-grounded repair both pay their multipliers back.
+
+## Related
+
+- [Over-Orchestrated Agent Architecture](../anti-patterns/prefer-simplest-agent-architecture.md) — the same escalation discipline as an anti-pattern, with context loss rather than energy as the mechanism
+- [Difficulty-Aware Topology Selection](difficulty-aware-topology-selection.md) — routes topology per task on hosted models, priced in dollars and fitted with a learned router
+- [Agentless vs Autonomous](agentless-vs-autonomous.md) — the two-phase pipeline that beat autonomous agents on SWE-bench Lite at $0.70 a task
+- [Routing Break-Even](routing-break-even.md) — the same marginal-cost arithmetic applied to model choice instead of agent count
+- [The Model Economics of Agent Swarms](../multi-agent/model-economics-agent-swarms.md) — what caps fan-out width once decomposability has already said yes
 
 ---
 
@@ -54330,6 +54556,79 @@ The `send_to_terminal` integration closes a second bottleneck. Background agents
 
 ---
 
+### Watcher Side Agents: Give the Second Agent a Trigger It Did Not Pick
+Source: https://agentpatterns.ai/patterns/agent-design/watcher-side-agents/
+
+# Watcher Side Agents: Give the Second Agent a Trigger It Did Not Pick
+
+> A watcher side agent is advisory, so it costs operator attention, and only a rule-fired trigger lets it stay silent on a clean run.
+
+A watcher side agent runs beside the main session, reads what the main agent is doing, and writes notes to the operator. It does not do the task and it cannot change anything. Claude Code 2.1.287 shipped one on 1 October 2026 as "a built-in mod where a side agent watches your back and flags things you or Claude might miss", enabled with `/plugin enable cc-plugin-you-should-know@builtin` and limited to "first-party sessions with telemetry on" ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+
+Three properties separate it from a review agent. It is concurrent rather than downstream. It reads the live session rather than a diff. Its output is advisory, delivered as "a note above the prompt" ([Mods overview](https://code.claude.com/docs/en/plugins/mods/overview)). That note is the watcher's entire output, so what decides whether it pays is the value of the operator's attention, not the cost of the side agent's tokens.
+
+## When it earns its cost
+
+Four conditions, and the evidence supports the pattern only where all four hold.
+
+Run it on a session long enough that you have stopped reading every turn. Anthropic scopes its own watcher that way, to one that "watches your back while Claude works on longer tasks" ([Mods overview](https://code.claude.com/docs/en/plugins/mods/overview)). LivePlan, which gates an advisor on trajectory rules, fires its stagnation rule after "seven consecutive steps in the same phase", a threshold taken from uninstrumented runs whose average maximum same-phase length was 5.64 steps on resolved instances and 7.61 on unresolved ones ([Liu et al., 2026, arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)). A run shorter than seven steps cannot trip it.
+
+Give it a trigger it does not choose. This is the decision the whole pattern turns on.
+
+Reserve it for defect classes with no checkable predicate. Where a predicate exists, write the gate: a gate refuses and a note does not.
+
+Check that somebody is at the prompt. An unattended run closes the only channel the watcher has.
+
+## Why it works
+
+A watcher does not work by being independent. It is a second imperfect detector over the same material, and the honest mechanism is additive coverage: "Any two imperfect, non-identical detectors raise union recall mechanically; the observed unions in fact fall below both pooled and within-artifact independence reference values" ([Song, 2026, arXiv:2610.01471v1](https://arxiv.org/abs/2610.01471v1)). Across 900 review sessions on 30 artifacts carrying 150 planted errors, one same-model fresh-session review paired with one from a top-tier cross-model reviewer under information restriction matched 85 of 150 errors, against 64 of 150 for two same-model fresh-session reviews. That 14.0pp gain carries a 95% confidence interval of 6.7 to 22.0. Both are set-level recalls over run 1, conditional on that study's automated matcher.
+
+An agent checking its own work is the extreme case of a near-identical detector, and this project measures it. `routine-prompts/backlog-pipeline.md` Step 4a exists because "The pipeline subagent audits a page it wrote, and it reads the page as it meant it." The recorded result: "Three consecutive runs sent 24 self-audit PASS pages to this step, and all 24 failed it, with 46 HIGH findings between them". Improving the producer did not close the gap. The same file records that the self-audit prompt was rewritten mid-run to name the defect class, that producers then fixed more such defects themselves, "and every page still failed here."
+
+That is also why the trigger decides whether the pattern pays. Judging and advising pull against each other: "an advisor prompted to diagnose and provide corrective advice is incentivized to find a problem", and one may "surface a problem that does not exist and impose misleading advice that derails a run that was, in fact, on track" ([arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)). That advisor steered an executor rather than informing a person, so the carry-over to an operator-addressed note is an argument from the same incentive and not a second measurement. The incentive is the part that carries. A rule-fired watcher is asked what the operator should know given this specific signal, and nothing is an available answer to that. A standing watcher is asked whether anything is wrong, and nothing is not.
+
+## When this backfires
+
+A watcher with no gate on its own consultation produces notes on healthy runs. SAGE, a prior approach the LivePlan authors compare against, re-plans from a trajectory with no detection rule in front of it, and it "even underperforms the Vanilla run under DeepSeek-V3 and MiniMax-M2.5" ([arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)).
+
+A watcher sharing the main agent's model inherits its blind spots. In the cross-model experiment, "we see no clear sign that changing the context alone changes which errors the model finds, whereas changing the model is accompanied by lower overlap" ([arXiv:2610.01471v1](https://arxiv.org/abs/2610.01471v1)). On that study's re-analysis of earlier data, after one baseline run of uncertain provenance was excluded, removing the generation conversation before review beat same-context self-review by 1.5pp in F1, which the author reports as not significant.
+
+A second reader brings false positives of its own kind. Classifying every cross-model false positive in that study put 187 of 1,995 (9.4%) into a category of "model bias errors, where the reviewer flags issues based on its own training data rather than actual defects". The largest subcategory, 136 of those 187, involved "flagging generator-specific features or tools as non-existent". That classification was keyword-based and was not validated.
+
+A watcher is also hard to audit and hard to switch off. "Mods aren't sandboxed", and one that approves tool calls "can approve one that an `ask` rule would prompt for, or that one of your own `PreToolUse` hooks blocked". Built-in mods sit outside the usual kill switches: "The settings and flags that stop installed mods, such as `disableAllHooks`, `--bare`, and `--safe-mode`, don't stop built-in mods." The same page lists four built-in mods whose source is public, and the watcher is not among them, so its implementation cannot be read ([Mods overview](https://code.claude.com/docs/en/plugins/mods/overview)).
+
+## Example
+
+The same watcher, two triggers.
+
+### The standing question
+
+Every ten turns, the side agent reads the transcript and is asked whether anything looks wrong. There is no input on which its answer is "nothing", because it was asked to find something. The note rate is therefore fixed by the polling interval rather than by the run, and a clean run and a drifting one produce the same number of notes.
+
+### The rule-fired trigger
+
+The side agent is consulted only when a deterministic signal fires. Real thresholds of this shape already exist. This repo's loop detector pauses on a fifth repeated edit to one region of a file (`.claude/AGENTS.md`), and LivePlan's monitor fires after seven consecutive steps in one phase and then holds a five-step cooldown before the advisor may be called again ([arXiv:2608.06701v1](https://arxiv.org/abs/2608.06701v1)). The cooldown is what stops a signal that stays true from producing a stream.
+
+Note quality is the same in both designs. Only the second has a reachable state in which the correct output is silence.
+
+## Key Takeaways
+
+- Price a watcher in operator attention. Its notes block nothing, so the budget it spends is the one you cannot meter.
+- Write the trigger before the prompt. A watcher with no firing rule has no state in which its correct output is silence, and silence is most of what you want from it.
+- Count the notes a watcher produces on runs that turned out fine. That rate, not the quality of any single note, is what decides whether the operator keeps reading the region they appear in.
+- Record a watcher's agreement as coverage, never as confirmation. Two readers of one transcript raise union recall; they do not corroborate each other.
+- Budget for the second agent becoming the binding constraint, whichever resource is scarce where you run it. In an interactive session that resource is the operator's attention. In this project's unattended pipeline it was the fetch cap, which began stopping runs with most of the clock unspent after an independent audit stage was added: two measured runs dispatched 5 of 12 and 9 of 13 eligible backlog items, leaving 275 and 255 of 360 minutes unspent (`routine-prompts/backlog-pipeline.md`). That is evidence about which resource binds, not a measurement of what an interruption costs a person.
+
+## Related
+
+- [Splitting the Drift Judge from the Advisor (LivePlan)](judge-advisor-split.md) — the agent-addressed counterpart, where rule-gated advice steers the executor instead of informing the operator
+- [Wink: Classifying and Auto-Correcting Coding Agent Misbehaviors](wink-agent-misbehavior-correction.md) — a concurrent observer that holds authority to inject corrections
+- [Critic Agent Pattern](critic-agent-plan-review.md) — review placed before execution rather than beside it
+- [When Does a Second Model Help in LLM Review](../../verification/cross-model-review-independence.md) — which model to pick once you have decided to pay for a second reader
+- [Monitor or Wait: The Supervision Choice During Agent Execution](../../workflows/monitor-or-wait-during-agent-execution.md) — the operator-side stage a watcher is meant to make affordable
+
+---
+
 ### Weakest Consistent Learning: What Agent Loops Should Persist
 Source: https://agentpatterns.ai/patterns/agent-design/weakest-consistent-learning/
 
@@ -54610,6 +54909,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [The Mega-Prompt](../../instructions/instruction-compliance-ceiling.md) — A single instruction file containing every rule, convention, and example degrades agent compliance rather than improving it
 - [The Prompt Tinkerer](prompt-tinkerer.md) — Endlessly refining prompts to prevent errors that structural controls would eliminate deterministically
 - [Prompt Debt: Hand-Tuning Natural-Language Prompts as Technical Debt](prompt-debt.md) — Patching each new error by hand-tuning a natural-language prompt accrues brittle, repetition-laden instructions that slow iteration, lose the team, and lock the system to one aging model
+- [When Your Agent's Verifier Reads the Same False Premise](verifier-reads-the-same-premise.md) — A verifier prompted from the same task description inherits its false premise, so 64-sample selection returns a wrong program over a correct one already in the pool
 - [The Test Homogenization Trap](test-homogenization-trap.md) — LLM-generated test suites share the generating model's blind spots, providing false confidence because tests miss the same edge cases the code misses
 - [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](code-first-test-oracle-bias.md) — Tests generated from the code an agent just wrote inherit that code's faults and pass instead of catching them; generate tests from the specification independently
 - [Test Oracles That Read Their Expectation From the Code](state-anchored-test-oracles.md) — An oracle whose expected value flows from the code under test cannot fail, because a fault moves measurement and expectation together and the comparison cancels; re-anchoring one oracle on published procedure moved detection from 26.09% to 45.65% over the same mutants
@@ -54653,6 +54953,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Trusting Model-Level Privilege Restraint at Tool Selection](over-privileged-tool-selection.md) — mainstream open-weight agents pick higher-privilege tools 55-65% of the time when a lower-privilege variant suffices, and transient failures amplify the rate; general safety alignment does not transfer to tool-selection privilege
 - [Self-Justification as a Tool-Scope Control](self-justification-as-scope-control.md) — in OverAct's ablation, making a tool-calling agent justify each planned call raised its Privacy Violation Score 9%, while the separate step that deletes unjustified calls cut that score 36%
 - [Destructive-Failure Mechanism Attribution by Mitigation Owner (ClayBuddy Three)](destructive-failure-mechanism-attribution.md) — A three-mechanism cut of destructive coding-agent failures — underspecification, capability errors, harness errors — chosen so each bucket routes to a different mitigation owner (spec author, model trainer, harness builder)
+- [Attributing a Changed Tool Call to the Model (Intent-Execution Correspondence)](changed-tool-call-attribution.md) — A hop between the model and the shell rewrites a correct command; the trajectory holds only the text the model sent, so a judge files 97 of 102 production failures against the LLM when the path caused 56 of them
 - [Constraint Tax: Tool Suppression Under JSON Schema Decoding](constraint-tax-tool-suppression.md) — Co-enabling JSON-schema constrained decoding and tool calling silently suppresses tool invocation in open-weight models — schemas stay valid, tools never fire
 - [Multi-Tool Threshold Poisoning Against MCP (ShareLock)](multi-tool-threshold-poisoning-mcp.md) — Per-tool MCP description review is structurally blind to payloads split as Shamir threshold shares across multiple tools; ShareLock reaches 94.1% ASR with all five tested detectors classifying the dispersed shares as safe
 - [Tab-Accept Rate as a Proxy for Critical Engagement](tab-accept-critical-engagement-gap.md) — Reading a high AI code-completion accept rate as engagement or productivity hides an automation-complacency signal; under novice populations, load-bearing completions, or thin downstream verification the correlation inverts
@@ -54708,6 +55009,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Compound Prompt Constraints Degrade More Than Their Parts Predict](compound-prompt-constraints.md) — Prompt constraints that each test clean can combine into a super-additive accuracy loss; one such trio landed 12.2 points below its own additive prediction on GPT-4o-mini, while the GPT-4.1 family barely moved
 - [Assuming Agent Interchangeability in Long-Running Teams](assuming-agent-interchangeability.md) — Swapping a role-matched agent into a team that has formed partner-specific conventions barely moves task score but raises communication per unit of progress by 16 to 63 percent, and coordination cost recovers about half as fast as score
 - [Scoped-Looking Permission Grants](scoped-looking-permission-grants.md) — A permission rule naming one interpreter or runner permits every command; 3.1% of 2,660 scanned agent setups write one and 3.8% ship one inside a published skill
+- [Judging a Write by Its Spelled Path (Spelled-Path Scope)](spelled-path-permission-scope.md) — A path-pattern permission rule decides on the name an agent wrote while the filesystem decides where it resolves; one changelog carries 24 such fixes across 20 releases, and resolving the path narrows the gap without closing it
 - [Answer-Reachable Eval Environments](answer-reachable-eval-environments.md) — Agents reach the fix through git refs, upstream, or leftover artifacts in 45.1-82.4% of SWE-bench Multilingual runs; scrubbing the container beats appending an originality instruction, which still costs up to 13.3 Pass@1 points
 - [Treating a Clean Static Scan as Security Evidence](static-clean-as-security-evidence.md) — Sandboxed exploit tests confirmed vulnerabilities in 83 of 654 Python files that Bandit and Semgrep both cleared, and the confirmation rate swings from 5.4% on a curated benchmark to 33.7% on adversarial code
 - [Unsignalled Tool Failure: Returning Success With an Unusable Payload](unsignalled-tool-failure-envelope.md) — A tool wrapper that returns status:ok around a redacted or corrupted value leaves the model to infer the failure; dishonesty is 0.0% when the envelope reports the error and reaches 45.3% when it does not
@@ -54737,6 +55039,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Empty Commitments: Promises No Runtime Can Keep](empty-commitments.md) — A promise of action after the turn ends is empty when nothing in the agent's tools or runtime can carry it out, and the paper defining it reports no measured rates
 - [Trigger-Conditioned Skill Comparisons](trigger-conditioned-skill-comparisons.md) — Pairing a with-skill and without-skill run on the same task, then reporting only the runs where the skill fired, selects the sample on an event the treatment caused; report the trigger rate and both segments
 - [Deciding an Agent Upgrade on a Frozen Judge's Verdict](frozen-judge-release-decisions.md) — A frozen judge's verdicts depend on which agent version wrote the trajectory, so its error cannot be assumed to cancel in a version delta; eight of 60 judge-by-pair units declared an upgrade the execution interval left inconclusive, and transporting the old version's calibration was worse than no correction in 59 of 60
+- [Treating a Cleared Review Comment as a Fixed Flaw](cleared-review-comment-as-fix.md) — Feedback-guided revision won approval for still-exploitable code on 33 of 159 CVE-based PRs, and re-running the same default review caught 23 of those 33 in round one and none by round five
 
 ---
 
@@ -56131,6 +56434,75 @@ Apply the ladder when the cost of a wrong direction exceeds the cost of the chec
 - [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — an unverified entity binding is an assumption that cascades into the wrong action.
 - [Semantic Collapse Under Underspecified Prompts](semantic-collapse.md) — the upstream cause: an underspecified prompt collapses onto one confident, wrong interpretation that seeds the assumption.
 - [The Patchwork Problem in LLM-Generated Code](patchwork-problem.md) — a sibling single-artifact failure: structurally incoherent code rather than a wrong interpretation.
+
+---
+
+### Attributing a Changed Tool Call to the Model (Intent-Execution Correspondence)
+Source: https://agentpatterns.ai/patterns/anti-patterns/changed-tool-call-attribution/
+
+# Attributing a Changed Tool Call to the Model (Intent-Execution Correspondence)
+
+> A hop between the model and the shell can rewrite a correct command, and the trajectory holds only the text the model sent.
+
+One condition decides whether this applies to you. A command passed to a non-interactive shell as a single argument arrives as written: on Linux, Yang et al. recorded no change across "all 1,779 calls of 4 harnesses, 4,012 calls of 9 developers, and 161,214 held-out Codex calls" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)). Calls change where something handles the text first: a Windows host wrapper, a layer typing into an interactive shell, a harness that splits and rejoins the command, or `/bin/sh` resolving to dash ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)).
+
+## The trap
+
+Where that condition holds, the harness rewrites correct commands and the tool result says nothing. Through Claude Code's Bash launch on Windows, "12.0% of the 7,491 exposed Bash calls change", where exposed means a heredoc, a backslash pair, or at least 1,000 characters ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)). The wrapper merges backslash pairs, and "the wrong action runs without any reported error for 535 of the 663 such calls that ran before IntAct" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)). Anthropic's own tracker carries the mechanism as an open bug ([anthropics/claude-code#98733](https://github.com/anthropics/claude-code/issues/98733)).
+
+Misattribution is what costs you engineering time. A judge reading the trajectory sees the agent's command and an error naming that command, so it files the failure against the model. On 102 human-labeled production failures, 56 of them caused by the path, "the all-at-once judge attributes 97 of the 102 failures to the LLM" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)). The agent misreads its own run the same way, reporting 665 of 949 failed runs as completed, "a false-confirmation rate of 70.1%" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)).
+
+## Why it works
+
+A hop changes a call by parsing its text, so more escaping cannot fix it. "More quotes or escapes only move the change to the next parse, whereas an unparsed channel leaves the hop nothing to change" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)). The repair is therefore a change of channel: a file the shell sources, an argument vector, or standard input. The paper's Claude Code mod sources a file for any command over 200 characters or carrying a heredoc or backslash pair, at a median 4 ms per call ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)). The bug reporter does the same by hand with the Write tool.
+
+Fixing the attribution needs no new tooling. Re-parse the text you sent, with execution disabled, using the interpreter that receives it: "Text that does not parse was incorrect when emitted, a generation error" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)). Text that parses and still errors points at the path, not the model.
+
+## When this backfires
+
+- Your harness hands the command to a non-interactive shell as one argument. That is the measured zero-change case, so hardening the channel buys nothing.
+- The call is not exposed: no heredoc, no backslash pair, under 1,000 characters. Of those calls, "in the replay no Bash call outside this set changes" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)), so routing all of them through a file buys a cost and no correctness. The released forms "add 2.1 to 396 ms per call" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)).
+- The change lands at the target parser, where no channel helps. Of 30 injected changes, "IntAct restores every call of the first 4 hops and refuses the 13 at the target parser" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)). For those 13 the whole fix is refusing the call.
+- The rewrite sits upstream of your permission check. "A repair that rewrites a call must leave the harness's permission rules judging the original call, as the mod does" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)). Rewrite before the allowlist and you have moved a security boundary.
+- You reach for the prompt-level fix, where the two studies disagree. QuoteBench found that disclosing the boundary recovers 30.4 to 60.7 points for six of eight configurations ([arXiv:2608.13547v1](https://arxiv.org/abs/2608.13547v1)); the correspondence measurement recorded one model falling "from 50 pairs to 36" under a disclosed boundary ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)). Measure it on your own path first.
+
+## Example
+
+The bug report gives a reproduction on Windows with Git Bash ([anthropics/claude-code#98733](https://github.com/anthropics/claude-code/issues/98733)). The transcript records two and four backslashes; `od` shows what bash received.
+
+**Before — the shell receives half the backslashes:**
+
+```bash
+printf '%s\n' 'two:a\\b' 'four:a\\\\b' | od -c
+# 0000000   t   w   o   :   a   \   b  \n   f   o   u   r   :   a   \   \
+# 0000020   b  \n
+```
+
+Single quotes do not help, and neither does a quoted heredoc: "This happens even inside single quotes and inside a quoted heredoc" ([anthropics/claude-code#98733](https://github.com/anthropics/claude-code/issues/98733)). The reporter's fix changes the channel instead of the escaping.
+
+**After — the content goes through the file tools:**
+
+```text
+Write  t.txt   content: two:a\\b
+Read   t.txt   two backslashes, as sent
+```
+
+"The Write tool is not affected: the same content written with Write keeps every backslash" ([anthropics/claude-code#98733](https://github.com/anthropics/claude-code/issues/98733)).
+
+## Key Takeaways
+
+- Ask what your harness does to the command text before the shell sees it. On Terminal-Bench reference solutions written for Bash, dash stops 5 at `set -o pipefail`, and "zsh, the default shell of macOS, silently changes 5" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)).
+- A shell failure in a trajectory is not evidence about the model. Re-parse the sent text with the receiving interpreter before you tune a prompt or swap a model.
+- Retries hide the cost rather than removing it. In the production sessions each path-caused call that finally succeeded cost "3.9 times the tokens of one clean request" ([arXiv:2610.04375v1](https://arxiv.org/abs/2610.04375v1)).
+- When no channel can carry a call, refusing it beats running a different action, because the silent case gives the agent nothing to notice.
+
+## Related
+
+- [Rewriting a CLI Into a JSON Payload for Agents](cli-json-payload-rewrite.md) — names the shell-escaping tax as a measured cost driver; this page covers what that escaping does to a call in transit.
+- [Permission Modes as a Defense Against a Tampered Response Path (Response-Path Control Gap)](response-path-control-gap.md) — the same seam under a hostile router rather than an unmodified harness.
+- [Destructive-Failure Mechanism Attribution by Mitigation Owner (ClayBuddy Three)](destructive-failure-mechanism-attribution.md) — routes a failure to its mitigation owner; a changed call is the harness-error bucket with a concrete discriminator.
+- [Verify-Gated Completion as Admission Control](../multi-agent/verify-gated-completion-admission-control.md) — a read-only check on the completion claim, which is what a 70.1% false-confirmation rate argues for.
+- [Unix CLI as the Native Tool Interface for AI Agents](../../tool-engineering/unix-cli-native-tool-interface.md) — the single `run(command)` design whose reliability depends on the launch underneath it.
 
 ---
 
@@ -60605,6 +60977,70 @@ Run one query set twice, with the skill loaded and without it, and compare how o
 
 ---
 
+### Judging a Write by Its Spelled Path (Spelled-Path Scope)
+Source: https://agentpatterns.ai/patterns/anti-patterns/spelled-path-permission-scope/
+
+# Judging a Write by Its Spelled Path (Spelled-Path Scope)
+
+> A path guard decides on the name the agent wrote; the kernel decides where that name resolves, and the two disagree without any respelling.
+
+Resolve the path before you decide on it, and name the resolved destination in whatever a human approves. Two conditions decide whether that is worth doing. Links have to be possible on the host. The guard has to be the boundary, not a pre-flight above a sandbox. Where both hold, the fix is cheap and still incomplete.
+
+Nothing here needs a respelling, a quoting trick, or a second shell. One unambiguous path, parsed identically by the guard and by the kernel, still reaches two different files.
+
+## What the record shows
+
+A keyword pass over the Claude Code [changelog](https://code.claude.com/docs/en/changelog), read through by hand afterwards, finds 24 entries across 20 releases where a symlink, hard link or junction decided a permission, an approval, or whether something stayed inside its boundary. The earliest is 2.1.69 and the most recent is 2.1.290. The version that prompted this page states the failure and the fix together: "Fixed writes through a symlinked path being judged by their in-tree spelling: the prompt names where the write lands, and `acceptEdits`, allow rules and auto mode no longer approve one landing outside" ([2.1.280](https://code.claude.com/docs/en/changelog#2-1-280)).
+
+The remedy was already on record 151 releases earlier. Version 2.1.89 fixed "`Edit(//path/**)` and `Read(//path/**)` allow rules to check the resolved symlink target, not just the requested path" ([2.1.89](https://code.claude.com/docs/en/changelog#2-1-89)). The class recurred anyway, at each surface that takes a path, including worktree creation that followed "a repository-committed symlink at `.claude/worktrees`, which could create files outside the repository" ([2.1.212](https://code.claude.com/docs/en/changelog#2-1-212)). A repo-committed link is the ordinary case, with no adversary in it.
+
+Resolving only the request leaves half the gap, because the rule is written in one of the two languages too. Version 2.1.268 covers both directions at once: "deny and ask permission rules on symlinked directories (`/etc`, `/tmp`, `/var` on macOS; `/bin` on Linux) not applying when a path was given by its real location, and Bash commands ignoring deny rules written on a symlinked path spelling" ([2.1.268](https://code.claude.com/docs/en/changelog#2-1-268)).
+
+## Why it works
+
+A path glob is a predicate over names. The kernel's path walk is a function from a name to a file, computed through a directory tree that two names can share and that changes under you. A guard matching names and a filesystem opening them therefore compute different functions of one string. Glob precision cannot close a gap that belongs to the two domains rather than to the pattern. Resolving the request first puts the matcher in the filesystem's domain, and that is the whole mechanism. It narrows rather than closes, because a resolved path is still a name.
+
+MITRE has carried the class since long before agents. CWE-59 covers a product that "attempts to access a file based on the filename, but it does not properly prevent that filename from identifying a link or shortcut that resolves to an unintended resource" ([CWE-59](https://cwe.mitre.org/data/definitions/59.html)), with cited CVEs from 1999.
+
+## When this backfires
+
+- Containment already bounds the process. A jail that leaves only the checkout writable makes the destination absent from the namespace, so resolving inside the matcher changes no outcome. CWE-59's one listed mitigation is Separation of Privilege, not canonicalization: "Denying access to a file can prevent an attacker from replacing that file with a link to a sensitive file" ([CWE-59](https://cwe.mitre.org/data/definitions/59.html)).
+- The target is a hard link or a device, where there is nothing to follow. Refusal is the move left, and 2.1.211 took it in file upload validation, where "files with multiple hard links are refused" ([2.1.211](https://code.claude.com/docs/en/changelog#2-1-211)). Version 2.1.285 had to fix "an approved Edit never going through when its target is a device, such as a file symlinked to /dev/null, and the approval came from the IDE diff view or changed the edit" ([2.1.285](https://code.claude.com/docs/en/changelog#2-1-285)).
+- Resolution is not atomic with the open, so a resolved verdict is a snapshot. Version 2.1.251 fixed "file tools (Read, Write, Edit) following a symlink swapped inside the working directory after the permission check, which could read or write outside the approved location" ([2.1.251](https://code.claude.com/docs/en/changelog#2-1-251)).
+- Your users legitimately reach one file under two names, and a resolution-aware check refuses them. One error string, `symlink resolution changed after permission was checked`, appears in two separate bug fixes: on macOS it refused "a dragged-in screenshot, or any file the system reports under a second path" ([2.1.273](https://code.claude.com/docs/en/changelog#2-1-273)), and on Windows it left Read, Write and Edit "refusing every file" inside an AppContainer or restricted-token sandbox ([2.1.265](https://code.claude.com/docs/en/changelog#2-1-265)).
+- Budget for a revert. A tightening for Cygwin-style symlinks shipped in 2.1.232 and was withdrawn one release later ([2.1.233](https://code.claude.com/docs/en/changelog#2-1-233)).
+
+## Example
+
+This repository's hooks answer the question three different ways.
+
+Resolving: `.claude/hooks/block-secret-reads.py` matches its credential globs against `Path(raw).expanduser()` and `literal.resolve()`. Its docstring gives the reason. A symlink whose name looks innocent but points at a guarded file is still blocked, because both the literal path and its realpath are matched.
+
+Resolving, then answering a different question: `.claude/hooks/preload-rules-on-write.py` computes `target.resolve().relative_to(root)` and returns 0 when that raises, so a path resolving outside the repository root means no action. Correct for a convenience hook, and the defect in a deny gate.
+
+Matching the spelling: a third hook in the same directory tests its globs against the raw path, `os.path.expanduser(raw)` and `os.path.abspath(os.path.expanduser(raw))`. That is the pair to look for in your own guards, because `os.path.abspath` normalizes text while `os.path.realpath` resolves links, and the two read almost identically in a diff.
+
+Nothing has gone wrong here yet. `git ls-files -s` reports no tracked symlinks and no `worktree.symlinkDirectories` is set, so none of the three hooks has a link to disagree about. That is also the state this defect sits in right up to the commit that adds one.
+
+## Key Takeaways
+
+- Go through your guards and sort them by which function they call. A text normalizer such as `os.path.abspath` and a resolver such as `os.path.realpath` look alike in a diff and answer different questions.
+- Resolve the rule as well as the request. A deny entry written on a link's spelling and a request written on the real location miss each other. Doing only one side is the common half-fix.
+- Count the approval prompt as a consumer of the same decision. It is listed beside `acceptEdits` and the allow rules in the 2.1.280 entry. A prompt that names the spelling leaves a human approving a file that is not the one written.
+- Expect to re-apply the fix at every new surface that takes a path, rather than once. The remedy was on record from 2.1.89 and the class still produced entries 161 releases later.
+- Where a sandbox already makes the destination unreachable, spend the effort there instead. Resolution in the matcher is a narrowing, and it is the weaker of the two moves.
+
+## Related
+
+- [Parser-Versus-Shell Evasion in Command Permission Checks](../../security/parser-versus-shell-permission-evasion.md) — the sibling gap, where several shell grammars respell one command; this page is what remains when the grammars agree and the names still do not
+- [Scoped-Looking Permission Grants](scoped-looking-permission-grants.md) — a rule that matches correctly and permits everything, where this one matches correctly and permits the wrong file
+- [Parameter-Level Permission Rules (Tool(param:value) Syntax)](../../tools/claude/tool-param-value-permission-rules.md) — matching on an argument value, the layer that has to choose between a spelling and a destination
+- [Blast Radius Containment: Least Privilege for AI Agents](../../security/blast-radius-containment.md) — the compartmentalization CWE-59 recommends over better path matching
+- [MCP Allowlist by Label, Not by Identity (serverName Trap)](mcp-allowlist-label-vs-identity.md) — the same substitution one layer up, where the string the policy matches is a label the user picks
+- [Treating a Worktree as a Safety Boundary](worktree-as-safety-boundary.md) — worktree scoping as placement rather than reach, which is the guard 2.1.212 found following a committed link
+
+---
+
 ### Judging Agent Safety by Task Completion (Action-Boundary Violations)
 Source: https://agentpatterns.ai/patterns/anti-patterns/judging-agent-safety-by-task-completion/
 
@@ -61334,6 +61770,7 @@ The allowlist matches by hostname, an artifact the user does not own. The denyli
 - [Enterprise-Managed Plugin Governance for Agent CLIs](../../security/enterprise-managed-plugin-governance.md)
 - [Permission Framework over Model Judgment](../../security/permission-framework-over-model.md)
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)
+- [Judging a Write by Its Spelled Path (Spelled-Path Scope)](spelled-path-permission-scope.md) — the filesystem version of the same substitution, where the string the rule matches is a path and the thing it names is an inode
 
 ---
 
@@ -63624,6 +64061,7 @@ Editing runs the mechanism backwards. Participants changed 29.2 lines on average
 - [Trust Without Verify](trust-without-verify.md) — The general form: polish standing in for verification, of which the edge-case cue is one instance.
 - [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md) — The other attention failure at review time: scrutiny scales inversely with diff size.
 - [From Preventive to Reactive: Front-Loading Security in AI Coding Prompts](../../human/preventive-to-reactive-security-prompting.md) — Moves the security decision to prompt time instead of the accept-time check this page finds unreliable.
+- [Treating a Cleared Review Comment as a Fixed Flaw](cleared-review-comment-as-fix.md) — the machine version of the same shortcut, reading a resolved finding as proof the vulnerability is gone.
 
 ---
 
@@ -64642,6 +65080,7 @@ The paper also states its limits: results may change with API model retirement, 
 - [Trusting Tool Error Messages as Implicit Authority](tool-error-implicit-authority.md) - the same trust on the error stream
 - [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md) - recovery for failures the agent can observe
 - [Trust Without Verify](trust-without-verify.md) - the operator-side counterpart
+- [Harness-Enforced Stopping on Judged-Useless Tool Results](../agent-design/enforced-stop-on-useless-results.md) - the same notice-without-acting gap for returns that are useless rather than wrong, and a harness gate that closes it
 
 ---
 
@@ -67368,6 +67807,82 @@ Do not extend that into a claim that static tools cannot see weak randomness. Ba
 - [Artifact-Only Verification Hides Skipped Skill Steps](artifact-only-verification.md) — the general case for measuring what ran, not only what the output looks like.
 - [Deterministic Guardrails Around Probabilistic Agents](../../verification/deterministic-guardrails.md) — what a deterministic gate does buy, and where its reach stops.
 - [The Security Review Gap in AI-Authored PRs](../../code-review/security-review-gap-in-ai-prs.md) — the human half of the same gate, where reviewer heuristics miss AI-specific CWE clusters.
+- [Treating a Cleared Review Comment as a Fixed Flaw](cleared-review-comment-as-fix.md) — the same error inside a review loop, where an adversary adapts the code to whatever the reviewer said.
+
+---
+
+### Treating a Cleared Review Comment as a Fixed Flaw
+Source: https://agentpatterns.ai/patterns/anti-patterns/cleared-review-comment-as-fix/
+
+# Treating a Cleared Review Comment as a Fixed Flaw
+
+> A cleared review comment proves the reported defect is gone. Whether the vulnerability survived is a separate question.
+
+Cleared-comment deference is approving a revision because the reviewer's own earlier finding no longer applies. Gong and colleagues measured what it costs on 159 executable CVE-based pull requests. An adversarial contributor that read the reviewer's explanation and revised the code won approval for code an independently executed exploit still broke on 33 of them, 20.8% of the benchmark, against a Claude Code reviewer running Sonnet 5 ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)). Against a Codex reviewer running GPT-5.5 it won 25 of 159, 15.7%. Success required approval plus a proof-of-concept verified on the approved revision, so these are confirmed exploitable merges.
+
+Compare that with attacks that leave the code alone. On the same 159 instances and the same Sonnet 5 reviewer, revising the PR description won 13, one-shot persuasion won 7, and a fabricated security-analysis comment won 2 ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)). Changing the implementation is what moved the number, and 27 of the 33 successes were reachable by no other method.
+
+## Why it works
+
+The reviewer and the author are answering different questions, and the reviewer's answer looks like the author's. The paper states the mechanism plainly: "AFCRA exploits the gap between resolving a review comment and establishing that the code is safe. Feedback identifies a repair target, which the attacker fixes while preserving harmful behavior elsewhere. The revision becomes convincing because the reported defect disappears, and the reviewer accepts this local improvement as evidence of safety" ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)).
+
+Holding the reviewer at Sonnet 5 across all 159 instances, a verdict alone won 19, adding the flagged location won 25, and adding the explanation won 33 ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)). The verdict-to-full move gained 14 instances and lost none. The authors treat the two intermediate steps as descriptive after correction, so location and explanation are supported together, neither on its own.
+
+A path check repaired to block sibling-directory traversal still followed symbolic links outside the served root. A rejected regular expression replaced with explicit scans removed the backtracking and left the code quadratic ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)). In both, the reviewer verified its own earlier complaint and stopped there.
+
+## What re-review catches
+
+Default review's early rejections did not hold. Of the 33 instances that eventually won approval, it was still rejecting 23 after round one, 7 after round three, and none after round five ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)). A request for changes buys a round, and the contributor has four more.
+
+The paper then tested five alternative reviewer strategies on those same 33 instances, keeping the full feedback and the five-round budget ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)).
+
+Among strategies using ordinary review information, root-cause review (checking whether the revision prevents the underlying violation) caught 23 of 33, re-reviewing the whole diff each round caught 22, requiring static analysis on changed files caught 20, and swapping the model for Fable 5.1 caught 18. Executing the instance's supplied proof-of-concept, an idealized upper bound, caught 29 ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)). Note the denominator: 33, the already-successful attacks, not 159.
+
+Default review cost $12; the five defenses cost $50 to $96, static scan cheapest at $50 for 20 catches and root cause $52 for 23 ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)). All five reached their final catch counts by round three. Re-running the six configurations against the historical developer fixes for those same 33 instances produced "zero false rejections" across all 198 reviews ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)), so on that repair set the added checks did not start rejecting real fixes.
+
+## When this backfires
+
+- Nobody hostile can open a PR. The threat model needs a contributor who authored the vulnerable code and controls the revisions. An internal-only repository paying for security-focused review is buying protection it does not need.
+- You withhold explanations by default. Detail is what makes feedback work for honest contributors. The paper reports, citing SWE-Review, the resolve rate after revision rising "from 8% with a verdict alone to 21%" on 100 correctly rejected patches ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)). Its recommendation is staged rather than blanket, to "Give full feedback first, then withhold locations and explanations for security-sensitive issues."
+- The security check targets the wrong property. Root-cause review checked prototype modification on a flaw that was uncontrolled recursion, and approved. Proof-of-concept execution accepted protection limited to HTTP after naming the same behavior in other schemes ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)). A strategy that does not name the original harmful behavior costs four to six times default review and still signs off.
+- You pick one strategy and stop. No single defense caught all 33. Seven were caught by all five, and the union of the five covered every instance ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)).
+- Approval authority spans more than the diff. Letting the contributor edit the PR description and reply in the review thread alongside the code took approval from 33 of 159 to 70 of 159, 44.0% ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)). Neither added channel was significant alone.
+
+## Example
+
+What separates the configurations the paper measured is the reviewer's instruction. Every strategy except the model swap ran on the same Sonnet 5 ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)).
+
+**Before — the default reviewer, which the paper describes as one that "reviews changed code for correctness, quality, performance, and security":**
+
+```text
+Review the changed code for correctness, quality, performance, and security.
+```
+
+**After — the two best-catching strategies that use ordinary review information, described in the paper as one that "checks whether the revision prevents the underlying security violation" and one that "instructs the reviewer to inspect the whole diff again each round":**
+
+```text
+Inspect the whole diff again, not only the lines that changed since the
+last round. Name the security violation your first review identified, then
+decide whether this revision prevents that violation.
+```
+
+The paper measured these as two separate configurations; this prompt combines them. Carried into every later round, the root-cause question caught 23 of the 33 attacks default review had approved, and whole-diff re-reading caught 22 ([arXiv:2610.05399v1](https://arxiv.org/abs/2610.05399v1)). Static analysis on changed files is the cheaper third option, blocking approval on unresolved confirmed findings for $50 against root cause's $52.
+
+## Key Takeaways
+
+- A cleared comment is evidence about the comment. Ask what the first review said the violation was, and whether this revision prevents that, before approving.
+- An early request for changes is not a save. Default review was still rejecting 23 of the 33 after round one and none of them after round five.
+- Budget three rounds of security-focused review rather than five. Every tested defense reached its final catch count by round three.
+- Use checks that look at different things. No single defense caught all 33, and the union of all five did.
+- Scope approval authority to the diff. Code plus PR text plus thread replies took attack success from 20.8% to 44.0% on the same reviewer.
+
+## Related
+
+- [Treating a Clean Static Scan as Security Evidence](static-clean-as-security-evidence.md) — the same green-signal error without an adversary adapting to the signal.
+- [Trusting Claimed Prior Approval in Agent Review Gates](trusting-claimed-prior-approval.md) — where the worthless evidence is a fabricated approval rather than a real repair.
+- [Reading Visible Edge-Case Handling as a Security Check](edge-case-handling-as-security-signal.md) — the human version, judging security by whether a defensive block is visible.
+- [Bug-Class Hints as Exploit Input for Coding Agents](../../security/bug-class-hints-as-exploit-input.md) — what a localizing hint gives an attacker before review ever starts.
+- [The Security Review Gap in AI-Authored PRs](../../code-review/security-review-gap-in-ai-prs.md) — the non-adversarial half of the same gate, where reviewer heuristics miss AI-specific CWE clusters.
 
 ---
 
@@ -68229,6 +68744,7 @@ One caution against over-correcting: LLM review is not worthless here. Removing 
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md) — relying on one review layer is exactly what this pipeline did before the entry provenance control.
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](tool-error-implicit-authority.md) — the same authority-confusion mechanism applied to the error stream instead of the approval claim.
 - [Security Review Gap in AI-Authored PRs](../../code-review/security-review-gap-in-ai-prs.md) — the broader review-coverage failure that authority framing exploits.
+- [Treating a Cleared Review Comment as a Fixed Flaw](cleared-review-comment-as-fix.md) — where the deference is to the reviewer's own earlier finding rather than to a claimed approval.
 
 ---
 
@@ -68982,6 +69498,82 @@ The entire session takes 10 minutes. The developer never read a diff. The tool w
 - [Permutation Frameworks](../../workflows/permutation-frameworks.md)
 - [Human-in-the-Loop](../../workflows/human-in-the-loop.md)
 - [Verification-Centric Development](../../workflows/verification-centric-development.md)
+
+---
+
+### When Your Agent's Verifier Reads the Same False Premise
+Source: https://agentpatterns.ai/patterns/anti-patterns/verifier-reads-the-same-premise/
+
+# When Your Agent's Verifier Reads the Same False Premise
+
+> A verifier prompted from the same task description inherits its false premise, so selection returns a wrong program over a correct one in the pool.
+
+Two conditions have to hold. The task description asserts something untrue, and that same description reaches both the candidate generator and whatever writes the tests used to pick the winner. The pass rate then stops being an independent check, because the tests that would expose the shortcut are the ones the verifier no longer writes. The authors name this Verification Trap. A task counts as trapped when the "candidate pool contains at least one hidden-test-correct program, but the selector returns a hidden-test-wrong candidate" ([He et al., 2026](https://arxiv.org/abs/2610.05170v1)).
+
+## The anti-pattern
+
+Sample many candidates, run generated tests over them, keep the best pass rate, and treat that rate as evidence the code is right. Sampling candidates and letting a verifier or selector pick the final output is standard practice. What couples the two halves is the prompt: "verifier inputs are constructed from the same prompt condition as the generator" ([He et al., 2026](https://arxiv.org/abs/2610.05170v1)).
+
+One misleading sentence in the description cost 13.81 points of selector-chosen correctness on HumanEval+ with Qwen2.5-Coder-32B (85.81 to 72.00 Selected@64). The objective, signature, and hidden tests were unchanged. Recoverable mis-selection on that cell more than doubled (4.73 to 12.00 Trap@64). Selection got worse in all eleven dataset-model cells, spanning HumanEval+, MBPP, LiveCodeBench, and five models including GPT-4o-mini ([He et al., 2026](https://arxiv.org/abs/2610.05170v1)).
+
+## Why it works
+
+Premise-violating inputs are precisely the tests that catch a premise-consistent shortcut, and under a false premise the verifier writes fewer of them: "the counterexample rate decreases by 9.6 pp, 12.9 pp, and 18.9 pp for Qwen-7B, Qwen-14B, and Qwen-32B, respectively." A control inserting a true but irrelevant sentence stayed near baseline, so generic prompt noise is not the cause. The surviving tests leave wrong candidates in the same high-scoring region as right ones, and the selector follows that structure ([He et al., 2026](https://arxiv.org/abs/2610.05170v1)).
+
+One control isolates the channel. With the false-premise candidate pool held fixed, stripping the premise from the verifier prompt alone lowered Trap@64 across all three verifiers tested ([He et al., 2026](https://arxiv.org/abs/2610.05170v1)). The defect sits in the evidence the selector reads.
+
+## More tests do not fix it
+
+Interventions that kept the original verifier as final judge moved selected correctness by under one point on the Qwen-7B and HumanEval+ cell. Extra verifier tests gained 0.97, width scaling lost 0.36, and regenerating candidates gained 0.67. Replacing what decides recovered 4.05 with a source-aware prior and 4.73 with a premise-agnostic robustness auditor ([He et al., 2026](https://arxiv.org/abs/2610.05170v1)). Regeneration shows why quantity failed. It created correct programs that the original verifier then declined to select.
+
+## When this backfires
+
+A second evidence channel costs extra model calls and another scorer to calibrate. Three conditions limit what it buys.
+
+1. The premise is true. The paper measured its mitigations only on false-premise tasks, so their benefit on true-premise tasks is unmeasured.
+2. The pool holds no correct candidate. A trap needs a recoverable task by definition, and changing what selects cannot select a program that was never generated.
+3. You expect the win to come from withholding the premise. An auditor handed the false-premise prompt still reached 80.41 against the clean auditor's 81.08. The authors conclude that "the mitigation gain is not explained solely by hiding the false premise from the auditor input" ([He et al., 2026](https://arxiv.org/abs/2610.05170v1)). What pays is scoring candidate robustness instead of verifier-test agreement. Removing the premise adds a smaller amount on top.
+
+The mitigation figures come from one dataset-model cell with an auditor the authors call simple. They also scope their claims to "the controlled false-premise settings evaluated in this work" rather than to any measured rate of false premises in the wild ([He et al., 2026](https://arxiv.org/abs/2610.05170v1)).
+
+## Example
+
+A schematic of the selection loop, with the premise sentence as the only difference between the two forms.
+
+**Before — the verifier inherits the premise:**
+
+```python
+task = spec + "\nNote: the input list is always sorted ascending."
+candidates = generate(task, n=64)
+tests = write_tests(task)            # same text, same blind spot
+best = max(candidates, key=lambda c: pass_rate(c, tests))
+```
+
+**After — a scorer that does not come from the verifier's tests:**
+
+```python
+candidates = generate(task, n=64)
+tests = write_tests(spec)            # premise sentence withheld
+audit = robustness_score(candidates) # candidate robustness, not test agreement
+best = max(candidates, key=lambda c: (audit[c], pass_rate(c, tests)))
+```
+
+The Before form writes tests from the text under suspicion. The After form withholds the premise from test writing, scores candidates with an auditor, and uses the verifier only as a tiebreak.
+
+## Key Takeaways
+
+- The failure sits in selection: a correct program can sit in the pool while the selector returns a wrong one that the tests happen to agree with.
+- Watch for the shared prompt. Stripping the premise from the verifier prompt alone lowered the trap rate with the candidate pool held fixed.
+- Buying more of the same evidence moved correctness under one point; replacing what decides, with candidate-level robustness scores, moved it 4.73.
+- Spend the extra channel only where premises are untrusted. The irrelevant-control condition left the verifier's counterexample rate near baseline, so generic prompt noise does not explain the drop.
+
+## Related
+
+- [The Test Homogenization Trap](test-homogenization-trap.md) — the same green-suite illusion attributed to shared model weights; that page treats a different test-writing model as a fix, which a shared prompt premise survives
+- [Generating Tests From Agent-Written Code (Code-First Oracle Bias)](code-first-test-oracle-bias.md) — the coupling that runs through the code rather than through the description
+- [Independent Test Generation in Multi-Agent Code Systems](../multi-agent/independent-test-generation-multi-agent.md) — hiding the implementation from the test writer, and the independence it does not buy on its own
+- [Test Oracles That Read Their Expectation From the Code](state-anchored-test-oracles.md) — oracle independence lost through state rather than through prompt text
+- [Assumption Propagation](assumption-propagation.md) — the single-agent version, where one faulty premise compounds across turns
 
 ---
 
@@ -71673,6 +72265,7 @@ The test designer generates tests from the spec alone — including edge cases l
 - [TDD Agent Development](../../verification/tdd-agent-development.md) — human-written tests as spec for agents, complementary to agent-generated tests
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md) — five-role decomposition for self-improving agent systems
 - [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md) — taxonomy classifying this as Role-Based Cooperation + Sequential Execution
+- [When Your Agent's Verifier Reads the Same False Premise](../anti-patterns/verifier-reads-the-same-premise.md) — hiding the code is not independence when the test writer reads the same task description
 
 ## Sources
 
@@ -96515,6 +97108,7 @@ Source: https://agentpatterns.ai/verification/
 - [Timeout Oracles for Agent-Written Code](timeout-oracles-agent-written-code.md) — Agent-written C utilities produced fewer fuzz failures than their human originals, and every failure from the agent's own code was a hang, so add a timeout-and-memory oracle beside the crash oracle
 - [Auditing Agent Tool Chains for Silent Partial Success](tool-chain-silent-failure-audit.md) — Diff a tool's richest surface against its API and wrapper to find calls that return success with fields missing; 51 of 91 audited failures sat at the API layer
 - [Red-Team Your Blocking Monitor Before You Trust It](red-teaming-blocking-monitors.md) — Run a live, monitor-aware agent at your action-approval gate; production gates allowed over 55% of attacks, and the fixes are serializer, coverage, and staging changes
+- [Test Adequacy of LLM-Dependent Harness Code](llm-dependent-harness-test-adequacy.md) — Scope coverage and mutation to the harness statements that depend on model output; across ten agent codebases that slice averaged 44.27% line coverage and a 33.60% mutation score
 
 ## Regression Testing
 
@@ -96567,6 +97161,7 @@ Source: https://agentpatterns.ai/verification/
 - [Post-Merge Fix Signals for Agent Merges](post-merge-fix-signals-agent-merges.md) — Agent merges draw a verified follow-up fix at 1.62 times the odds of human merges in the same repositories; watch the first week and rank by the commits it took to land, because review duration carries no within-repository effect
 - [Name the Check That Passed Before Accepting AI Code](named-check-over-evaluation-confidence.md) — Across 506 coded accounts of AI use in research code, evaluation confidence tracked trust in the tool (r=.33) rather than the checks actually run (r=.05), so gate acceptance on a recorded check instead
 - [Reject on a Failing Check, Never Accept on a Passing One](asymmetric-check-evidence.md) — After a fail-on-base check, a generated test still failing on an agent's patch rejected it at 0.82 precision in the test stage of a 121-trace held-out Python run, while the same test passing accepted at only 0.30, so give the reject arm a mechanical decision and the accept arm none
+- [Require the Metric the Optimization Should Move](expected-metric-gate-performance-prs.md) — Validation evidence appears in 82.3% of agentic and 80.6% of human performance PRs, but only 34.5% report a metric the applied optimization is expected to improve and 17.7% of caching gains report the memory cost, so name both numbers instead of asking whether the change was validated
 - [Transcript-Measured Review Coverage](transcript-measured-review-coverage.md) — Agents skipped at least one in-scope file in 67.9% of 1,140 review runs and 80.4% of those runs did not disclose it; derive coverage from the tool-call trace and flag the mismatch with what the report claims
 - [Verify Agent Diagnoses and Fix Proposals Before Acting](predictive-claim-gate.md) — In a Claude-built codebase, design-fix proposals scored 79.4% accurate against 94.3% for checkable facts, narrowing to 93.4% once rejected proposals are excluded; run the check before you adopt a diagnosis or proposal, since it predicts rather than reports
 - [Task Category as the Security Review Routing Key](task-category-security-review-routing.md) — Generated-code security findings varied three to six times more by task category than by which tool wrote the code, so route review depth by task and grade model choice separately
@@ -109153,6 +109748,7 @@ Three parts carry the result: the agent reads a summary rather than raw profiler
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — the general form of the caching-inside-the-timing-loop failure a behavior gate blocks.
 - [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — the regression risk that selective validation trades against.
 - [Making Application Observability Legible to Agents](../observability/observability-legible-to-agents.md) — wiring runtime signals into agent context generally; a profile is one such signal, aimed at optimization.
+- [Require the Metric the Optimization Should Move](expected-metric-gate-performance-prs.md) — the review-side counterpart: which metric the finished PR has to report.
 
 ---
 
@@ -110008,6 +110604,7 @@ In the mirror case, django-12497, the probe failed on the agent patch and on the
 - [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](evidence-bundled-agent-prs.md) — what to hand a human reviewer once the automatic stages have abstained
 - [Name the Check That Passed Before Accepting AI Code](named-check-over-evaluation-confidence.md) — the same discipline for a human acceptance, recorded per change
 - [Feedback as Capability Equalizer](../patterns/agent-design/feedback-capability-equalizer.md) — the generator-side version of evidence outweighing model size
+- [Require the Metric the Optimization Should Move](expected-metric-gate-performance-prs.md) — the performance case, where the check is a number rather than a pass or fail
 
 ---
 
@@ -110164,6 +110761,76 @@ The example numbers are illustrative; the methodology is the load-bearing contri
 - [Controlled Benchmark Rewriting for Agent Safety Judgment](controlled-benchmark-rewriting-safety-judgment.md) — same perturbation logic applied to safety judgment instead of code-agent context reasoning
 - [Constraint Decay in Backend Code Generation](constraint-decay-backend-agents.md) — independent evidence of multi-file reasoning degradation as constraints accumulate
 - [Static Difficulty Estimation for Agent Issue Triage](static-difficulty-estimation-issue-triage.md) — measures repository scale as a difficulty predictor rather than perturbing it
+
+---
+
+### Require the Metric the Optimization Should Move
+Source: https://agentpatterns.ai/verification/expected-metric-gate-performance-prs/
+
+# Require the Metric the Optimization Should Move
+
+> Half of performance PRs that claim validation report no metric at all, so require the one the optimization is supposed to move.
+
+An expected-metric gate names two numbers a performance change must report before anyone accepts it: the metric the applied optimization is expected to improve, and the resource that optimization usually spends to get it. Asking instead whether the author validated the change sorts almost nothing, because nearly everyone says yes.
+
+Apply the gate where the change trades one resource for another and the effect cannot be read off the diff. Caching, buffering, request batching, lazy loading, and data-structure swaps all qualify. A dead-code deletion does not.
+
+## What validation presence hides
+
+Validation evidence appears at the same rate whatever wrote the change. In a 1:1 balanced sample of performance pull requests, week-stratified over December 2024 to June 2026 in repositories with at least 100 GitHub stars, "Validation evidence is reported in 929 of 1,129 agentic PRs (82.3%) and 910 of 1,129 human-authored PRs (80.6%)", with no significant association to author type at p=0.330 ([Peng et al., arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)).
+
+The form of that evidence decides whether a number exists at all. Among the 1,684 PRs with a resolved evidence type, "the pipeline identifies at least one metric in 79.8% of benchmark-based PRs, 30.8% of profiling-based PRs, 21.6% of static-reasoning-based PRs, and 18.2% of anecdotal ones" ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)). Agents lean on the form that carries no number. Among the 1,819 PRs with reported validation evidence and a resolved evidence type (918 agentic and 901 human-authored), static reasoning is the primary evidence in 51.4% of agentic PRs against 39.3% of human-authored ones.
+
+That author-type difference is closing, so do not build the gate on it. Benchmark use among agentic PRs rises at an odds ratio of 3.63 per year (p=0.012) against 0.98 for humans (p=0.950). Among PRs with a resolved evidence type, the benchmark share by 2026-Q2 is 60.1% agentic and 58.7% human ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)). What is left to gate on is what the evidence measures, and both groups show that gap.
+
+## The two numbers to name
+
+First, the metric the optimization is expected to improve. The study maps each of 59 catalog optimization patterns to the performance dimensions it should move, then checks whether the PR reports one of them. Among 1,699 PRs with validation evidence, 34.5% report at least one expected metric against a 23.7% permutation baseline (p=0.002). Better than chance, and still two PRs in three reporting nothing from that expected set. Reporting is thin before correspondence even comes up: "half of the PRs with reported validation contain no extractable quantitative performance metric, and a majority of those that report a metric report only one" ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)).
+
+Second, the resource the change spends. The authors restricted this test to caching and buffering, where the exchange of memory for time is well established. Of the 96 such PRs with benchmark or profiling evidence that report a runtime-side gain, "fewer than one in five caching or buffering PRs that report a runtime-side improvement also report an adverse memory effect" — 17.7%, split 18.2% agentic and 17.1% human ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)).
+
+Agentic PRs show no significant difference by change type. Human authors report both validation and a metric for 25.2% of code-smell refactorings against 45.8% of other performance changes. The agentic figures are 37.8% and 42.3%, and none of the three agentic contrasts reaches significance, at q≥0.33 ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)). An agent applies one reporting habit to a dead-code deletion and to a cache, so the gate has to supply the discrimination the author did not.
+
+## Why it works
+
+Performance is not a property you can read from a diff. The paper states the premise its recommendation rests on: "a functionally correct change may yield no improvement, regress on other workloads, or appear beneficial because of measurement noise or experimental conditions" ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)).
+
+Naming the expected metric and the traded resource replaces a question whose answer carries no information with one that has a checkable answer. The authors reach the same conclusion: "The assurance target should therefore be the appropriateness and completeness of evidence, not merely the presence of validation or a benchmark", because "even benchmark-based evidence can verify an intended gain while leaving relevant costs unobserved" ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)).
+
+## When this backfires
+
+- The direction is visible in the diff. Code smells and structural simplification is the category with the lowest metric reporting in the study, and human authors already hold it to a lower bar. Requiring a benchmark to delete unreachable code spends CI minutes and returns nothing.
+- The benchmark runs in isolation, or on a shared runner. A JMH-compliant microbenchmark can still mislead: a badly designed one "may cause the JVM to collect an unrealistic profile, resulting in aggressive, yet misleading, optimizations, that would not occur in a real application" ([Schiavio et al., arXiv:2605.23570v1](https://arxiv.org/abs/2605.23570v1)). A gate that accepts any number accepts that one.
+- The PR volume is agentic scale. A per-PR benchmark requirement is the thing that does not scale: "Existing CI-based benchmarking, designed for human workflows, is unlikely to scale to agent-driven workloads" ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)).
+- Nobody re-runs the number. The gate reads a PR description, and the authors warn that agents "may also learn to reproduce the form of human validation reports, including plausible benchmark claims, without a corresponding improvement in measurement practice or evidential reliability" ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)). A gate on the reported figure is a shallower fix than re-timing base against head yourself, so pair it with a [speed-up re-run](../workflows/rerun-agent-speedup-claims.md) wherever the change matters enough.
+
+The case against the gate runs on incentives. Test kind does not move acceptance: across the 1,105 closed agent performance fixes in a separate study, "acceptance is 51% with a performance test, 54% with functional tests only, 60% with adaptation only and 58% with no test (p = 0.53)" ([Qi et al., arXiv:2609.37985v1](https://arxiv.org/abs/2609.37985v1)). An attached measurement is slightly more common among rejected fixes (20% versus 15%, p = 0.024), and "the measurement's coefficient is not significant once the agent is held fixed (M4)". Acceptance does not track the test kind, so a reviewer who starts requiring a metric imposes a real cost on authors and collects no faster merge for it. The gate buys information. The study is observational and "identifies associations rather than causal effects of agentic authorship".
+
+## Example
+
+This example is illustrative, not drawn from the studies.
+
+A caching PR description that fails the gate: "Added an LRU cache to the lookup path. Tested locally and it feels faster."
+
+A caching PR description that passes: "Added an LRU cache to the lookup path. Expected metric: p95 lookup latency, measured on base and head with the same benchmark. Traded resource: peak resident memory, measured on the same runs. Cache size is capped at 10,000 entries."
+
+The first names no metric and no cost. The second names both, so a reviewer can check them.
+
+## Key Takeaways
+
+- Stop asking whether a performance change was validated. The answer is yes at 82.3% for agentic PRs and 80.6% for human-authored ones, p=0.330 ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)).
+- Ask instead for the metric the optimization should move, because two thirds of validated PRs report none: 34.5% correspondence against a 23.7% baseline ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)).
+- Ask for the resource it spends too. Among 96 caching and buffering PRs claiming a runtime gain, 17.7% also report an adverse memory effect ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)).
+- Justify the gate on evidence, not on authorship. Agentic benchmark use overtook the human rate by 2026-Q2, at 60.1% against 58.7% among PRs with a resolved evidence type ([arXiv:2610.03969v1](https://arxiv.org/abs/2610.03969v1)).
+- Expect no faster merges from it. Acceptance was statistically flat across test kinds over 1,105 closed agent performance fixes, p = 0.53 ([Qi et al., arXiv:2609.37985v1](https://arxiv.org/abs/2609.37985v1)).
+
+## Related
+
+- [Re-Run an Agent's Speed-Up Claim Before Merging](../workflows/rerun-agent-speedup-claims.md) — the complement: this page sets what the PR must report, that one re-executes the claim on base and head
+- [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — give the agent the profile before it writes the patch, so the expected metric is the one it targets
+- [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](evidence-bundled-agent-prs.md) — what else to attach so a reviewer can pick a depth per change
+- [Name the Check That Passed Before Accepting AI Code](named-check-over-evaluation-confidence.md) — the same move applied to correctness, where a named check replaces a confidence statement
+- [Reject on a Failing Check, Never Accept on a Passing One](asymmetric-check-evidence.md) — how much a passing check is worth once you have one
 
 ---
 
@@ -112990,6 +113657,80 @@ Three tools from three vendors converged on the same per-category ordering. That
 
 ---
 
+### Test Adequacy of LLM-Dependent Harness Code
+Source: https://agentpatterns.ai/verification/llm-dependent-harness-test-adequacy/
+
+# Test Adequacy of LLM-Dependent Harness Code
+
+> LLM-dependent harness code concentrates an agent's decision logic, and averaged under half line and branch coverage across ten studied agent codebases.
+
+Measure coverage separately over the harness code that depends on model output, when that slice is more than a thin wrapper over a provider SDK. A study of 10 open-source agentic systems found that slice averaged 44.27% line and 41.18% branch coverage under the projects' own test suites, with an average mutation score of 33.60% ([Xiong et al., arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)). The authors name the slice LLM-dependent harness code: harness statements carrying a data or control dependency on the output of an LLM invocation.
+
+## Where a separate coverage target pays
+
+LDH is not uniformly the worst-covered part of an agent codebase, so the separate target needs a reason. "LDH line coverage is lower than project-level line coverage in eight of the ten agents", but average LDH branch coverage of 41.18% ran above average project branch coverage of 36.84% ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)). Four conditions decide whether reporting it earns the effort.
+
+- The harness is more than a wrapper over a provider SDK. SWE-agent's LDH slice was 8.78% of executable lines and 12.63% of branches ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)), small enough that project coverage already describes it.
+- Model output crosses several components before the decision that consumes it. The paper's account: "Model outputs often flow through multiple harness components before reaching deeper LDH logic, where each component may expect specific input structures, runtime states, and interaction sequences" ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)).
+- You have no reusable builders for mocked responses and accumulated state yet. The study's inspection found that "Kimi Code provides systematic test support for satisfying these requirements", and Kimi Code reached 92.83% LDH line coverage against 71.98% project line coverage ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)).
+- You score the slice by mutation. Average LDH mutation score across the ten systems was 33.60%, from 3.58% on RD-Agent to 70.94% on Kimi Code ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)).
+
+## What the tests reach and miss
+
+Two annotators hand-coded 700 LDH branch predicates sampled from the ten systems, reaching Cohen's kappa of 0.96 before a third reviewer resolved disagreements. Of those predicates, "only 25.57% are fully covered, 24.57% are partially covered, and 49.86% remain entirely uncovered" ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)). The gap is not spread evenly across what the predicates do.
+
+| Predicate group | Fully covered |
+|---|---|
+| Tool action handling | 38.18% (63/165) |
+| Observation feedback handling | 18.39% (16/87) |
+| Error recovery handling | 17.65% (9/51) |
+| Agent orchestration control | 14.29% (14/98) |
+
+Orchestration control also had the lowest coverage of any group, with 63.27% (62/98) of its predicates uncovered. The same split appears on the other two coding dimensions. Policy guards were 50.00% (15/30) fully covered against 22.12% of presence-or-shape checks, and predicates over tool action payloads were 43.42% fully covered against 17.71% for predicates over generated content.
+
+The covered half is the half with a schema. Tool actions and policy interfaces give a test an explicit shape to build and a bounded set of values to vary. Orchestration, feedback handling, and free-text content do not.
+
+## Why it works
+
+Model output lands in decision logic, and the decisions outnumber the lines that carry them. LDH averaged 22.35% of executable lines but 31.71% of branches, and "across all studied agents, the LDH branch share is 1.10-1.75 times its line share" ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)). In the 700-predicate sample, 47.14% of those decisions were presence or shape checks over model-derived values.
+
+One mocked response drives one path through that logic. The other outcomes need a differently shaped model-derived input while the rest of the execution context stays valid, which an end-to-end run cannot supply because it gets whatever the model emits. Mocking alone does not close this. All ten studied systems mock the LLM, and the paper's reading is that "simply using mocks does not necessarily make deeper harness behavior easy to reach".
+
+What separated the best-covered system from the worst was reusable test infrastructure. Kimi Code carried helpers that build mocked responses with the fields each scenario needs, fake LLMs for valid interaction sequences, and local HTTP and SSE servers for provider communication. OpenClaw's mocks and fixtures were "organized in a relatively ad hoc manner". The study's own summary is that high LDH adequacy "calls for contract-faithful test setups that satisfy the expected data structures, runtime states, and interaction protocols across harness components".
+
+The bug-detection result follows the same line. Across 250 historical harness bugs from the ten systems, with every technique handed the buggy location as its generation target, a generator carrying explicit contract guidance revealed 43 of them (17.20%) against 2 (0.80%) for the strongest general-purpose baseline ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)). Removing the contract support dropped it to 15 (6.00%).
+
+## When this backfires
+
+- You read the coverage percentage as the goal. Coverage's "effect, and specifically the advisable dose, are disputed in both the research and engineering communities", and the existing evidence base is correlational ([Schulte et al., arXiv:2602.03585v1](https://arxiv.org/abs/2602.03585v1)). The discriminating instrument in the harness study was the mutation score, as it is in [mutation testing as a quality gate](mutation-testing-quality-gate.md).
+- Your fixtures diverge from the production contract. Seven of the 50 differential outcomes the contract-aware generator retained were false positives, rising to 5 of 20 without contract support. The cases came from "fixtures that violated production-side agent-harness contracts or assertions that assumed unsupported behavior" ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)). Each one costs triage time and names no bug.
+- You have no way to compute the slice. Off-the-shelf analysis does not identify it: existing frameworks "do not directly capture the LLM-specific semantics required by LDH extraction", so the authors built an interprocedural tool that treats LLM invocations as taint sources and propagates to a fixed point ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)). Without that, the number you report is the project's.
+- You generalize past the sample. The authors scope it themselves: "The generality of our findings can be scoped to our studied agents" ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)). Those agents were open-source, written in Python or TypeScript, and carried at least 10,000 GitHub stars with a reproducible test suite.
+
+## Example
+
+A generated test exposed a confirmed sensitive-data leak in Browser Use. The agent records model-selected tool calls as typed actions in its execution history. On the save path, `redact_dict` hands list-valued fields to `redact_list`, which masks strings and recurses into dictionaries but returns nested lists unchanged, so a secret held in a `list[list[str]]` action parameter survived into the saved history file ([arXiv:2610.04921v1](https://arxiv.org/abs/2610.04921v1)).
+
+Reaching that line took a complete valid chain. The test had to build a schema-valid action, wrap it in a model-output object, place that inside a history object carrying browser state, supply the sensitive-data mapping, and then read the written file. Neither the strongest Python baseline nor the contract-agnostic variant revealed the bug.
+
+## Key Takeaways
+
+- When that slice is more than a thin wrapper, report coverage over the statements with a data or control dependency on model output, not only over the project; in the ten-system sample those averaged 44.27% line coverage against 49.48% project-wide
+- Score that slice by mutation rather than by percentage covered; the sample's best-covered system reached 92.83% LDH line coverage and still killed only 70.94% of its LDH mutants
+- Aim the fixture budget at orchestration control, error recovery, and generated-content predicates; tool-call payloads and policy guards are already the covered half
+- Build reusable response, state, and transport fakes before writing cases, because every studied system already mocked the model and that did not reach the deep logic
+- Check a new failing harness test against the production contract before filing it; a quarter of the contract-agnostic generator's differential outcomes were false positives
+
+## Related
+
+- [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md) — the instrument that separates a covered harness line from a tested one
+- [Structural Coverage Criteria for Agent Workflows](structural-coverage-agent-workflows.md) — the behavioral counterpart, deriving obligations from a declared coordination graph instead of from source statements
+- [LLM API Fault Injection at the HTTP Layer (AgentChaos)](llm-api-fault-injection-http-layer.md) — varying provider responses at the transport, where this page varies them at the fixture
+- [Spec-Driven Test Generation: Contract Coverage Is the Lever](spec-driven-test-generation-contract-coverage.md) — the same contract-first move applied to general software rather than harness code
+- [Cut-Point Replay: Test a Fix Against a Recorded Agent Run](cut-point-replay-agent-regression-tests.md) — the alternative when fixture fidelity is the hard part, since a recorded run satisfies the contract by construction
+
+---
+
 ### Test Harness Design for LLM Context Windows
 Source: https://agentpatterns.ai/verification/llm-context-test-harness/
 
@@ -115342,6 +116083,7 @@ Agents dynamically load tools from MCP servers, plugins, and registries at runti
 - [Content-Addressed Agent Configurations (Deterministic Control Plane)](deterministic-control-plane-llm-coding-agents.md) — Treat coding-agent configs as an installed supply chain with SHA-256 content addressing, a per-project lockfile, and five declared permission tiers; the 10.1% cross-repo duplicate rate and the <1% configs declaring any permission scope (vs 33% of GitHub Actions workflows) make this a governance gap, not a hypothetical one
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — Across 10 models on 1,000 Python tasks, 36.7%-55.7% of LLM-specified versions contain known CVEs and all models converge on the same risky releases — pin against an external vulnerability source, not the model's training prior
 - [Skill Composition Risk in Agent Ecosystems](skill-composition-risk.md) — Skills benign in isolation become harmful when one skill's output flows into the next; three failure modes (CapFlow, TrustLift, AuthBlur) reach 33.6%, 96.5%+, and 71.8% relative attack success across ten production backends, and per-skill vetting misses them by construction
+- [Vetting-Constrained Skill Composition](vetting-constrained-skill-composition.md) — A standalone vetting engine is cheap to query, so it becomes a constraint inside the attacker's search; refining both skills raised the average trial-level harm rate from 27.9% to 73.8% while average pass rates across three commercial engines stayed at 92.1% to 97.1%
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — Malicious skills injected into public registries exploit in-context learning to execute payloads hidden in documentation examples, bypassing alignment that blocks explicit instruction injection
 - [Single-Decision Approval of Vendor Skill Suites](single-decision-suite-approval.md) — Approving a vendor's skill bundle in one decision hands the review unit to that vendor; cascades split across the suite hit 89.4% attack success, and concatenating the skills into one review query recovers 5.2 points at best
 - [The Skill Closure Declaration Gap](skill-closure-declaration-gap.md) — Of 526 published Agent Skills that bundle files, 21 name every one of those paths in `SKILL.md`, 67 carry links resolving outside their own root, and none declares a dependency; approving the root approves an incomplete statement of what a run can reach
@@ -126552,6 +127294,7 @@ The effect a rule protects is the tractable half. A file write, an outbound conn
 - [Dual-Boundary Sandboxing: Filesystem and Network Isolation](dual-boundary-sandboxing.md) — what enforcement below the shell looks like when it is built deliberately
 - [Scoped-Looking Permission Grants](../patterns/anti-patterns/scoped-looking-permission-grants.md) — the sibling failure that needs no respelling at all: the rule matches correctly and still permits every command
 - [Treating Read Denial as Confidentiality for a Build Input](../patterns/anti-patterns/read-denial-on-a-build-input.md) — the read-side case, where the uncovered route needs no respelling because the build's own permission supplies it
+- [Judging a Write by Its Spelled Path (Spelled-Path Scope)](../patterns/anti-patterns/spelled-path-permission-scope.md) — the symlink row of the table above, taken on its own: one path, one grammar, and a guard and a kernel that still disagree about which file it names
 
 ---
 
@@ -130890,6 +131633,7 @@ Indispensability gives incident response a lever. Withdrawing a single modificat
 - [The Skill Closure Declaration Gap](skill-closure-declaration-gap.md) — what a skill root declares versus what one run of it can reach
 - [Compositional Vulnerability Induction in Coding Agents](compositional-vulnerability-induction.md) — the same decomposition idea applied to engineering tickets rather than skills
 - [Enterprise-Managed Plugin Governance](enterprise-managed-plugin-governance.md) — the administrative surface where suite approval is granted or withheld
+- [Vetting-Constrained Skill Composition](vetting-constrained-skill-composition.md) — the attacker-side version, where each skill is tuned to keep passing the scanner that reviews it
 
 ---
 
@@ -132545,6 +133289,7 @@ Enumerate the root yourself and diff that listing against what `SKILL.md` names.
 - [Agent Config as a Managed Supply Chain](../instructions/agent-config-as-managed-supply-chain.md) — the same hashing and pinning discipline applied to `CLAUDE.md` and `AGENTS.md`
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — why the pin you add to a helper script needs a bump path behind it
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — the general principle this page is one instance of: a grant names a subject that can change after the grant is issued
+- [Vetting-Constrained Skill Composition](vetting-constrained-skill-composition.md) — what happens to the artifact verdict itself once an attacker can query the engine that issues it
 
 ---
 
@@ -133921,6 +134666,70 @@ A schema-and-description scan is a first-pass net, not a complete defense. Obfus
 - [Security-Aware Tool Descriptions for MCP Servers (SpellSmith)](security-aware-tool-descriptions-mcp.md) — the opposite case: strengthening a trusted tool's own description rather than refusing an untrusted one
 - [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — a concealment attack on the same reviewed metadata, hiding the payload from the human reviewer rather than the model
 - [OWASP LLM Top 10 (2025): Agent Security Crosswalk](owasp-llm-top-10-2025-agent-crosswalk.md) — LLM06:2025 Excessive Agency, the framework category this risk sits under
+
+---
+
+### Vetting-Constrained Skill Composition
+Source: https://agentpatterns.ai/security/vetting-constrained-skill-composition/
+
+# Vetting-Constrained Skill Composition
+
+> Tuning a skill composition so each skill still passes standalone vetting turns the vetting engine into a constraint the attacker searches under.
+
+[Zhou et al. (2026)](https://arxiv.org/abs/2610.05943v1) measured this on 560 skill pairs drawn from 4,000 public skills collected from SkillHub and ClawHub, across eight cybersecurity behaviors. The setup was an OpenClaw agent, 70 pairs per behavior, the facilitated prompt condition. On DeepSeek-V4-Flash the average trial-level harm rate ran 27.9% for the unmodified composition and 73.8% once both skills were refined (Table 1). The method discards any candidate composition "containing a skill that fails standalone vetting" (§5.3), with SkillSafe as the constraint engine.
+
+## What a per-skill pass certifies
+
+A skill's capability space is the set of ordered arrangements over its capabilities ([Zhou et al., 2026](https://arxiv.org/abs/2610.05943v1), Definition 1). Composing two skills therefore yields arrangements that interleave both and appear in neither skill's own space (Theorem 2). Theorem 3 places the unsafe arrangements in that difference set alone, where they "cannot be directly observed under standalone vetting".
+
+The green check is an accurate statement about one artifact's own capability space. Read as a statement about the set you installed, it reports on a space it never examined.
+
+## Why it works
+
+The containment result explains why the pass is silent. What makes it exploitable is that a vetting verdict is cheap and repeatable, so it can be searched under. The paper's steering module generates five candidate pairs per round and discards any candidate composition "containing a skill that fails standalone vetting" (§5.3) ([Zhou et al., 2026](https://arxiv.org/abs/2610.05943v1)). It keeps the candidate whose execution trace moved furthest toward the target. What it edits is coordination rather than capability: "small, targeted adjustments to how existing benign capabilities exchange information, follow execution order, or maintain state during joint execution". That cost a mean of 42.1 added instruction tokens over 2.6 rounds (Table S1).
+
+Pass rates stay high but not at 100%. The authors report that "most optimized skills are still regarded as benign when examined independently". Averaged across the eight behaviors, the retained skills still pass at 93.8% on SkillSafe, 97.1% on the Cisco Skill Scanner and 92.1% on Tencent CSC SkillScan ([Zhou et al., 2026](https://arxiv.org/abs/2610.05943v1), Table 2). The originals passed at 98.2%, 98.0% and 98.2%. The authors read the same table as evidence that "individual skill inspection alone does not reliably reflect the security risk produced when the same skills are executed together".
+
+Capability coverage is the precondition and not the cause. Random pairing from the same corpus averaged 3.1% direct-composition success, against 17.0% for capability-directed selection ([Zhou et al., 2026](https://arxiv.org/abs/2610.05943v1), Table 3). Both figures come from the strict benign prompt condition. Refinement "cannot create capabilities that are absent from the selected pair".
+
+## What a harness owner does about it
+
+- Move the verdict to the installed set, and read it from side effects. The paper's sandbox scores a run by whether it produced the target environmental consequence, "rather than by the agent's textual response alone" ([Zhou et al., 2026](https://arxiv.org/abs/2610.05943v1)). Tool actions, state changes, and what left the sandbox are the evidence; the transcript is not.
+- Re-run that verdict per backbone model. The same pairs under the same condition averaged 27.9% on DeepSeek-V4-Flash and 9.7% on GPT-4o-mini for direct composition ([Zhou et al., 2026](https://arxiv.org/abs/2610.05943v1), Table 1), so a composition verdict expires on a model swap.
+- Keep the permission envelope, because neither attack touches it. "Neither DCA nor ACA expands the permission scope of the underlying model" ([Zhou et al., 2026](https://arxiv.org/abs/2610.05943v1)). Deny-by-default egress and capability isolation bite without anyone predicting which pair arrives.
+- Treat a capability union as triage. [Wang et al. (2026)](https://arxiv.org/abs/2606.00448v1) flagged 22.25% of 211,575 individually-safe pairs on union alone, then audited a 200-unit stratified sample: "roughly one in five flagged pair-pattern hits is a real compositional risk" (18.2%, 95% CI 11.3% to 27.4%). That rate is at the (pair, pattern) annotation level. The authors give a separate pair-level point estimate of 4.05% under a co-validation assumption, so the union rate is a shortlist and not a count of risky pairs.
+
+## When this backfires
+
+- Registry-scale enumeration. 651 individually-safe skills form 211,575 pairs ([Wang et al., 2026](https://arxiv.org/abs/2606.00448v1)). Sandboxed co-execution fits an installed set and never a pair space, which is why that paper argues for "install-time compositional checks and capability isolation as complements to per-skill scanning".
+- Single-author internal libraries. The threat model assumes an adversary with the same access to the repository and agent interface as an ordinary user ([Zhou et al., 2026](https://arxiv.org/abs/2610.05943v1)). Where one team authors and reviews every skill, nobody operates the refinement loop, and the per-skill pass is weak evidence rather than a defeated control.
+- Explicitly malicious requests. Holding one request fixed and varying only the installed skills, over six cross-vendor models at three runs each, [Wang et al. (2026)](https://arxiv.org/abs/2606.00448v1) found response-level compliance highest with no skills installed (17/18) and no higher for the risky pair (11/18) than for an unrelated pair (12/18). Their own reading is that "a composition fixes which capabilities are reachable, while the host model decides whether to use them". Where the request already names the action, refusal behavior is the control that applies.
+- An unreconciled constraint in the primary source. SkillSafe is the stated RRS constraint, yet its post-refinement pass rate averages 93.8%, with cells down to 90.0%. The paper does not reconcile this, so treat the pass rates as measured and the reading that every retained skill passed as unconfirmed.
+- A dangling cross-reference in the primary source. The Table 1 caption cites a Table 4 and a Table 4c absent from the v1 HTML, so treat its figures as scoped to the facilitated prompt and nothing wider.
+
+## Example
+
+The paper's own verdict procedure is the thing worth copying. Its Skill Reaction Chamber executes a candidate skill pair with a fixed agent inside an isolated sandbox, then records the trace: "tool actions, state changes, and externally observable consequences" ([Zhou et al., 2026](https://arxiv.org/abs/2610.05943v1)). The run is scored on whether the target environmental consequence appeared. The agent's own account of what it did never enters the decision.
+
+Translated to a harness, that is a different review object from the one a marketplace badge covers. The badge is issued per artifact, before install, by an engine that reads files. The run-level check is issued per installed set, after install, by diffing what left the sandbox against what the task needed. The run-level check costs one run per pair you actually installed, and a quadratic pair space for a registry. That is why the installed set is where it stays affordable.
+
+## Key Takeaways
+
+- A standalone vetting pass reports on one artifact's capability space. The unsafe cross-skill arrangements sit in the difference between the composed space and the individual ones, where "cannot be directly observed under standalone vetting" is a theorem rather than an observed limitation ([Zhou et al., 2026](https://arxiv.org/abs/2610.05943v1)).
+- The paper's method uses the engine as a constraint inside the attacker's search. Refining both skills raised the average trial-level harm rate from 27.9% to 73.8% under the facilitated prompt, and average pass rates after refinement stayed at 92.1% to 97.1% across three commercial engines ([Zhou et al., 2026](https://arxiv.org/abs/2610.05943v1)).
+- A diff-size review will not catch it. The refinement averaged 42.1 added instruction tokens and granted no new permissions, so the artifact looks the same size and the same shape afterwards.
+- Capability coverage selects candidates without deciding the outcome, so an inventory of what two skills can do is a shortlist and not a verdict.
+- The pair is not the whole cause. Under one fixed explicit request, [Wang et al. (2026)](https://arxiv.org/abs/2606.00448v1) measured response-level compliance of 17/18 with no skills installed, 11/18 with the risky pair and 12/18 with an unrelated pair, over six models at three runs each.
+- In [Zhou et al. (2026)](https://arxiv.org/abs/2610.05943v1) Table 1, the average trial-level harm rate for direct composition under the facilitated prompt was 27.9% on DeepSeek-V4-Flash and 9.7% on GPT-4o-mini, so re-run an effect-based verdict on a model swap.
+- The affordable defense covers the installed set. A capability union is a triage filter whose flags audit out at 18.2% validity per (pair, pattern) hit, and the permission envelope is the control that does not require predicting which pair arrives.
+
+## Related
+
+- [Skill Composition Risk in Agent Ecosystems](skill-composition-risk.md) — the runtime half of the same gap, with three named modes for how composed context fuses
+- [The Skill Closure Declaration Gap](skill-closure-declaration-gap.md) — the same mismatch one level down, between a skill root and what one run of it reaches
+- [Single-Decision Approval of Vendor Skill Suites](single-decision-suite-approval.md) — what happens when the review unit itself is handed to the skill author
+- [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — the runtime control for capability budgets that intersect through composition
+- [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the permission-envelope frame this page leans on
 
 ---
 
@@ -158920,6 +159729,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Feature Flags & Environment Variables](feature-flags.md) — Curated reference for the most impactful configuration knobs
 - [Session Scheduling](session-scheduling.md) — /loop and cron tools for recurring prompts within a session
 - [Cloud-Scheduled Routines vs Local Session Scheduling](cloud-scheduled-routines.md) — When to move schedule out of the local box; cloud Routines trade working-tree fidelity for uptime continuity
+- [Claude Code Cloud Sessions](cloud-sessions.md) — What crosses the VM boundary: repo state, config, credentials, network allowlist bypass paths, and pause and reclaim
 - [Skill Eval Loop](skill-eval-loop.md) — Test, benchmark, A/B-compare, and optimize agent skills with the skill-creator eval framework
 - [Reloading Skills Mid-Session](reload-skills-mid-session.md) — Re-scan skill directories with /reload-skills or a SessionStart hook, picking up edits without losing context
 - [Monitor Tool](monitor-tool.md) — Stream stdout from background scripts to Claude line-by-line, eliminating polling loops
@@ -159599,7 +160409,7 @@ graph TD
     H -->|Block| I[Deny + Claude tries alternative]
 ```
 
-First match wins. Reads and working-directory edits auto-approve except on [protected paths](https://code.claude.com/docs/en/permission-modes#protected-paths); everything else runs the pipeline. The classifier itself runs on Claude Sonnet 5 rather than your `/model` selection, falling back to the session model when that is Sonnet 4.6 or when `availableModels` excludes Sonnet 5 ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
+First match wins. Reads and working-directory edits auto-approve except on [protected paths](https://code.claude.com/docs/en/permission-modes#protected-paths); everything else runs the pipeline. The classifier itself runs on Claude Sonnet 5 rather than your `/model` selection, falling back to the session model when that is Sonnet 4.6 or when `availableModels` excludes Sonnet 5 ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)). From v2.1.278 (September 19, 2026) that check runs server-side by default for Claude API and Enterprise users, and on Bedrock, Vertex, Foundry, and gateways. The `Auto mode server` row in `/status` reports which path your session uses ([Claude Code changelog 2.1.278](https://code.claude.com/docs/en/changelog#2-1-278)).
 
 Measured performance on real traffic ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)):
 
@@ -159641,7 +160451,7 @@ To switch one session back, cycle with `Shift+Tab` or start with `claude --permi
 - Consent-scope misjudgment on a population that never opted in. That 17% overeager rate now applies to developers who inherited the mode.
 - Narrow allow rules the classifier never sees. Broad rules like `Bash(*)` are suspended on entry, but a narrow rule such as `Bash(npm test)` carries over and can pass a destructive argument. Setting `autoMode.classifyAllShell` closes that, at one classifier call per command.
 - Workflows built on default-branch pushes being blocked. From v2.1.211 those pushes are allowed by default and the protected-branch setting was removed ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-config)).
-- Metered accounts. On Enterprise plans and on Claude API, Bedrock, Agent Platform, and Foundry accounts, every classifier check counts toward token usage ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
+- Metered accounts. On Enterprise plans and on Claude API, Bedrock, Agent Platform, and Foundry accounts, every classifier check counts toward token usage ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)). The server-side path became the default in v2.1.278 for Claude API and Enterprise users, and on Bedrock, Vertex, Foundry, and gateways. It "does not charge for classifier overhead" ([Claude Code changelog 2.1.278](https://code.claude.com/docs/en/changelog#2-1-278)).
 
 ## Example
 
@@ -159685,6 +160495,78 @@ The rule forces a prompt for those commands and leaves auto mode governing every
 - [Sub-Agents](sub-agents.md) — classifier coverage of spawned worker agents
 - [Blast Radius Containment](../../security/blast-radius-containment.md) — scoping agent permissions and file access
 - [Red-Team Your Blocking Monitor Before You Trust It](../../verification/red-teaming-blocking-monitors.md) — how this classifier holds up against an agent that is attacking it on purpose
+
+---
+
+### Claude Code Cloud Sessions: What Crosses the VM Boundary
+Source: https://agentpatterns.ai/tools/claude/cloud-sessions/
+
+# Claude Code Cloud Sessions: What Crosses the VM Boundary
+
+> A cloud session runs Claude Code on an Anthropic-managed VM, so the repository, credentials, and network policy all change hands.
+
+A Claude Code cloud session runs the agent on a machine of its own. "Each task gets a fresh virtual machine with your repository cloned onto a new branch and your environment's setup already done." ([field guide](https://claude.dev/blog/claude-code-in-the-cloud/))
+
+## When to choose cloud
+
+A local session shares your working tree, runs with your credentials, and stops when your computer sleeps. A cloud session removes all three dependencies ([field guide](https://claude.dev/blog/claude-code-in-the-cloud/)). Stay local for a database with real local data, a VPN service, a GPU, or a device simulator, and in Zero Data Retention organizations, where cloud sessions are off. For a few tasks with the full local toolchain, use [Remote Control](../../patterns/agent-design/remote-session-control.md).
+
+## What crosses the boundary
+
+The VM clones your GitHub remote, not your checkout: "The cloud VM clones your current directory's GitHub remote at your current branch, not your local checkout, so push first if you have local commits." ([docs](https://code.claude.com/docs/en/claude-code-on-the-web)) Without a remote, or for a github.com repository the Claude GitHub App is not installed on, Claude Code uploads a bundle. On macOS, Linux, and WSL it leaves uncommitted changes to credential-named files such as `.env` out of the upload. On native Windows, uncommitted changes to tracked files upload as they are.
+
+Repo-level config travels. User-level config does not ([cloud environments](https://code.claude.com/docs/en/cloud-environments)):
+
+- Skills, agents, and commands under `~/.claude/` stay behind. Commit them to the repo's `.claude/` directory.
+- MCP servers added with `claude mcp add` at local or user scope stay behind.
+- User-level SessionStart hooks do not run.
+
+## What the session can reach
+
+The GitHub token stays outside the VM. The git client holds a scoped credential, "which the proxy verifies and swaps for your actual GitHub token." ([GitHub proxy](https://code.claude.com/docs/en/cloud-environments#github-proxy))
+
+The sources disagree on push scope. The field guide says the credential "can push only to its own working branch." The docs say the proxy "doesn't limit which branches a push can update." This page follows the docs, so use GitHub branch protection or rulesets.
+
+Network access has four levels: None, Trusted (package registries, GitHub, cloud SDKs), Full, and Custom ([access levels](https://code.claude.com/docs/en/cloud-environments#access-levels)). At every level, four paths skip the allowlist: GitHub, enabled MCP connectors, API-credential hosts, and the Anthropic API for Claude Code's own requests, even at None. The docs warn that this "may allow data to exit the VM." Treat the allowlist as a narrower egress surface, not an exfiltration guarantee. Environment variables are readable by anyone who uses the environment ([cloud environments](https://code.claude.com/docs/en/cloud-environments)).
+
+## Pause, reclaim, and restore
+
+An idle VM pauses with its files saved, and your next message restores it. If the paused VM was reclaimed, reopening provisions a fresh one ([cloud environments](https://code.claude.com/docs/en/cloud-environments)). Conversation history returns. Subagents and shell commands still running do not ([docs](https://code.claude.com/docs/en/claude-code-on-the-web#environment-expired)). A session waiting on an MCP approval counts as inactive and can expire, so commit and push as you go.
+
+## Make the session verify its own work
+
+Setup scripts run as root on Ubuntu 24.04 ([setup scripts](https://code.claude.com/docs/en/cloud-environments#setup-scripts)). To scope a hook to the cloud, test `CLAUDE_CODE_REMOTE`, which is `true` in the VM and never `true` locally. See also [Cloud Agent Session Bootstrap](../../patterns/agent-design/cloud-agent-session-bootstrap.md).
+
+## Parallel sessions and handoff
+
+Sessions cannot see each other. The guide advises: "Split parallel tasks along file boundaries, merge the branches in a sensible order, and expect a session to report problems that another session is already fixing." ([field guide](https://claude.dev/blog/claude-code-in-the-cloud/)) Pull a session into your terminal with `--teleport` after you push its branch. You cannot push a terminal session to the cloud ([docs](https://code.claude.com/docs/en/claude-code-on-the-web)).
+
+## Why it works
+
+Each task gets its own VM, checkout, processes, and ports, so two sessions cannot edit the same files. The GitHub token sits in a proxy outside the VM ([GitHub proxy](https://code.claude.com/docs/en/cloud-environments#github-proxy)). On Pro and Max plans, keys you add as API credentials stay outside it too. Code in the VM cannot read those secrets. The same boundary hides anything not in the remote repo or environment config.
+
+## When this backfires
+
+- The task needs a VPN-only service, local data, a GPU, or a simulator, unless the organization runs a self-hosted environment (beta, Team and Enterprise).
+- Build and test commands live in user-level config. The session cannot verify its work until they move into `CLAUDE.md`, `.claude/`, and `.mcp.json`.
+- Setup takes longer than about 5 minutes, so it is never cached.
+- Parallel tasks touch the same files, so you pay the merge cost.
+- Willison reports the same output as the local CLI: "I would likely have got the exact same result running this prompt against Claude CLI on my laptop." One alternative: worktrees plus Remote Control give parallelism without sending repo contents to a hosted VM.
+
+## Key Takeaways
+
+- Push before you start a cloud session, because the VM clones the remote.
+- Move skills, hooks, and MCP servers into the repo.
+- Add branch protection, because the push proxy does not limit which branches a session updates.
+- Four paths bypass the allowlist at every level.
+
+## Related
+
+- [Cloud-Scheduled Routines vs Local Session Scheduling](cloud-scheduled-routines.md) — scheduled cloud runs
+- [Batch and Worktrees](batch-worktrees.md) — local parallel isolation
+- [Cloud Agent Session Bootstrap](../../patterns/agent-design/cloud-agent-session-bootstrap.md) — install versus session-start split
+- [Remote Session Control](../../patterns/agent-design/remote-session-control.md) — steer a local session remotely
+- [Cloud Planning, Execute Anywhere](../../workflows/cloud-planning-execute-anywhere.md) — ultraplan review across the cloud boundary
 
 ---
 
@@ -160236,6 +161118,25 @@ Mods get described as hot-reloading, which holds for two of the three ways one r
 
 Reloading costs you module scope. "Each reload runs `register` again, so `calls` resets to `0`" ([Create a mod](https://code.claude.com/docs/en/plugins/mods/create)). Put a counter or a history in `$.state` instead, declared in the manifest's type contract. A directory passed to `--plugin-dir` is also a protected path, "so in `default` and `acceptEdits` modes you're asked to approve each of Claude's edits to the mod". Skills reload by a separate mechanism, covered in [reloading skills mid-session](reload-skills-mid-session.md).
 
+## The ceiling and agentId fields on tool.check
+
+Claude Code 2.1.290, released 5 October 2026, added two fields to a mod's permission check. One changelog line reads: "Added `ceiling` to the question and verdict a mod's `tool.check` hook reads, naming the approval an organization requires for a tool". The other reads: "Added `agentId` to the `tool.check` event of plugin hooks, so a hook can tell a subagent's permission check from the main session's" ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+
+No published page describes the shape of `ceiling`. Its type, its values, and whether every call carries it are undocumented. The public typings predate it: the file header says Claude Code 2.1.277 wrote it, and neither `ToolCheckInput` nor `ToolCheckResult` lists the field ([claude-code.d.ts](https://github.com/anthropics/claude-code/blob/main/mods/types/claude-code.d.ts)). The `.d.ts` files a local load writes into `.claude-plugin/types/` show the real shape, so do not branch on specific values.
+
+No source says where the organization's level comes from, so this link is inferred from shared wording. The nearest match is the 2.1.287 changelog entry on "organization per-tool permission ceilings" for MCP tools, and the per-tool controls an organization sets on claude.ai connectors. Claude Code "reads these settings at startup and enforces them locally" ([MCP docs](https://code.claude.com/docs/en/mcp)). Treat `ceiling` as naming "the approval an organization requires for a tool", and do not assume which tools carry it.
+
+For a connector tool set to `ask`, the engine prompts, not your hook. "Claude Code prompts on every call with the reason `Your organization requires approval for this tool`". The prompt appears even in `acceptEdits`, `auto`, and `bypassPermissions` modes, and `dontAsk` mode denies the call instead ([MCP docs](https://code.claude.com/docs/en/mcp)). The permissions page says such tools still prompt when a settings hook returns allow ([Permissions](https://code.claude.com/docs/en/permissions)). It does not say in plain words whether a mod's allow gets the same treatment, so verify that before you rely on it. Release 2.1.292 fixed a different case: a plugin's `tool.check` allow ran a tool that requires your answer, such as a question or a plan approval, without showing its dialog ([changelog](https://code.claude.com/docs/en/changelog)).
+
+The changelog says `ceiling` names "the approval an organization requires for a tool". It does not document what a hook should do with it, so test any use against your build's `.d.ts` files first.
+
+Settings hooks already carried `agent_id`, which is "Present only when the hook fires inside a subagent call" ([Hooks reference](https://code.claude.com/docs/en/hooks)). The 2.1.290 changelog adds `agentId` to the `tool.check` event. Use it to apply different checks to subagent calls.
+
+The pattern fails in two cases:
+
+- Desktop app local and SSH sessions do not receive the organization's `ask` setting ([MCP docs](https://code.claude.com/docs/en/mcp)).
+- A Claude Code older than 2.1.290 sees neither field, and a mod written against the 2.1.277 typings gets no type hints for either. Whether a missing `ceiling` means no organization requirement is undocumented, so a hook should not treat absence as approval.
+
 ## When this backfires
 
 - Nothing draws outside the terminal and the Desktop app's Code tab. A mod's hooks run wherever the plugin loads. But "Drawing is narrower: only the terminal and the Desktop app show a mod's panes, bands, and replaced rows" ([Mods overview](https://code.claude.com/docs/en/plugins/mods/overview)). The same table marks the VS Code extension's chat panel, `claude -p`, the Agent SDK, and cloud sessions as hooks-yes and draws-no. A pane is dead weight in a [headless CI session](bare-mode.md).
@@ -160262,7 +161163,9 @@ The pane and the held call are only possible in-process, so no settings hook cou
 - [Claude Code Hooks Lifecycle](hooks-lifecycle.md) — the settings-hook events a mod's handlers sit beside
 - [Local Plugin Scaffolding via `claude plugin init`](local-plugin-scaffolding.md) — the manifest layer underneath a mod, and when it beats a loose skill
 - [Reloading Skills Mid-Session in Claude Code](reload-skills-mid-session.md) — the adjacent reload mechanism, for skills rather than plugin code
+- [Enterprise-Managed Plugin Governance for Agent CLIs](../../security/enterprise-managed-plugin-governance.md) — the managed settings and hooks that a user's mod cannot override
 - [Plugin Background Monitors](plugin-background-monitors.md) — the other way a plugin runs work for the length of a session
+- [Watcher Side Agents](../../patterns/agent-design/watcher-side-agents.md) — the pattern behind the `you-should-know` built-in, and the trigger it needs to pay off
 
 ---
 
@@ -166800,6 +167703,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Cloud Planning with Inline-Comment Review and Execute-Anywhere Choice](cloud-planning-execute-anywhere.md) — Generate the plan in a cloud session, review it inline in the browser, then defer the cloud-versus-local execution choice to approval time
 - [The Velocity-Quality Asymmetry: Why AI Speed Gains Fade Without QA Investment](velocity-quality-asymmetry.md) — Empirical evidence shows AI coding tools produce transient velocity gains but persistent quality degradation — sustainable speed requires scaling QA as a first-class concern
 - [TDD Interaction Models: Throughput Versus Test Quality](tdd-interaction-models.md) — Four ways to split the TDD cycle between human and agent, and why full autonomy trades verified specification coverage for raw development speed
+- [Post-Commitment Test Generation: Draw the Sample Last](post-commitment-test-generation.md) — Freeze the candidate before a separate testing agent generates inputs, and draw the acceptance sample afterwards so passing it is evidence about that implementation
 - [AI Slop as a Process Problem: Encoding Quality Standards as Pipeline Gates](slop-as-process-problem.md) — Treat AI-generated slop the way CI/CD treats broken builds — a per-PR agent gate enforcing version-controlled standards, sized to agent throughput rather than reviewer attention
 - [Kaizen-Style Continuous Code Quality Loop (Pomona)](kaizen-continuous-quality-loop.md) — Pair a Scanning skill and a Repair skill to file small, single-purpose code-quality PRs a reviewer accepts quickly — for mechanical tasks under a per-day review cap
 - [Vibe Coding: Outcome-Oriented Agent-Assisted Development](../patterns/anti-patterns/vibe-coding.md) — Delegate implementation entirely to the agent and focus on evaluating outcomes for low-risk, throwaway work
@@ -174770,6 +175674,7 @@ Evaluation 13 added two scope checks so plan-review and code-review findings cou
 - [Harness Hill-Climbing](../patterns/agent-design/harness-hill-climbing.md) — the single-agent tuning loop that reads whatever instrument you build here.
 - [Audit the Noise Floor Before Trusting a Benchmark Gap](../verification/benchmark-noise-floor-audit.md) — the variance source this selection procedure does not measure.
 - [Eval Blind Spots](../verification/eval-blind-spots.md) — what a frozen set stops being able to see over a long tuning series.
+- [Post-Commitment Test Generation: Draw the Sample Last](post-commitment-test-generation.md) — the case against freezing, when the subject under test is the code rather than the harness.
 
 ---
 
@@ -178922,6 +179827,97 @@ Six named steps and no check between them and the reader. The question marks are
 
 ---
 
+### Post-Commitment Test Generation: Draw the Sample Last
+Source: https://agentpatterns.ai/workflows/post-commitment-test-generation/
+
+# Post-Commitment Test Generation: Draw the Sample Last
+
+> Tests reused across repair rounds stop being evidence about the implementation they shaped, so draw the audit sample after the candidate is frozen.
+
+Post-commitment test generation splits one testing budget into two parts that answer different questions. During development, a separate testing agent writes fresh inputs after each candidate implementation is frozen, and a trusted evaluator shrinks the failures into counterexamples the coding agent reads next round. At acceptance, the harness draws a new sample from a population fixed before development began, and that sample alone decides whether the implementation ships. The published formulation is Generative Test-Driven Development ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)).
+
+## The adaptive-candidate problem
+
+A test suite that stays still while an agent repairs against it becomes a target. "A program may implement only the exercised cases or special-case their inputs, and an agent with broader access may attempt to change the tests" ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)). The green suite then reports that the exercised cases work, which is true and is not the question anyone asked. Adding more tests does not fix this on its own, because whether a passing result is evidence depends on what the agent learned about those tests while it was being repaired. The general rule underneath is holdout discipline, which the paper carries over from adaptive data analysis, where "repeated feedback can change the validity of conclusions based on a fixed evaluation sample" ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)). The sample that steers the work cannot also be the sample that judges it.
+
+## When this applies
+
+The acceptance half of this workflow needs three things. Without them you get the development loop and not the guarantee that motivates it.
+
+- An oracle for inputs nobody has seen. A reference implementation supplies expected replies for a structured interface such as a parser or a key-value store. For natural-language output the paper substitutes a rubric, a model judge, or human review, and says that whether such an evaluator agrees with intended behavior is a separate question it does not settle ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)).
+- A population you fix before development starts. The guarantee is a finite-population statement about a listed set of cases, and the audit is a sample drawn from it.
+- A round budget larger than the few rounds that fit a demo. Across all 150 trajectories in the paper's experiment, one reached a failure rate of at most 0.01 after four coding rounds, so three repair rounds leave a large residual failure rate under every policy tested ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)).
+
+The development half carries a narrower condition. It beat inputs a model wrote once from the specification. It did not beat inputs drawn from a generator matched to the target distribution, which is the comparison in [When this backfires](#when-this-backfires).
+
+## Three implementation layers
+
+```mermaid
+flowchart TD
+    A[Coding session edits repo] --> B[Harness freezes candidate]
+    B --> C[Tester writes fresh inputs]
+    C --> D[Evaluator shrinks failures]
+    D -->|bounded counterexamples| A
+    D -->|passing inputs| E[Regression suite]
+    B --> F[Fresh audit sample]
+    F --> G[Accept or continue]
+```
+
+### Layer 1: Generation after commitment
+
+The coding session edits the repository. The harness then restores protected files and commits the candidate together with its execution configuration, and every later check runs against that snapshot. Only then does the testing agent receive the behavioral contract, the permitted history, and a trace budget, and it returns concrete inputs with no expected outputs. Whether it also gets read access to the candidate's source is a configuration choice, and in the paper's experiment that choice made no measurable difference.
+
+### Layer 2: Reduction and bounded feedback
+
+The evaluator runs each valid, non-duplicate input against both the reference and the candidate. For a failure it finds the shortest failing prefix, then deletes operations while preserving validity and the disagreement, verifying each shorter version before it replaces the previous one. At most a fixed number of reduced failures reach the next coding round, and every passing generated input is kept as a regression test, so a failure found once is checked for the rest of the project.
+
+### Layer 3: Acceptance by fresh audit
+
+Acceptance draws a new sample, sized before the draw, from the population fixed at the start. The coding agent receives the aggregate decision and nothing else: no sampled inputs, no per-requirement results. A condition may additionally require every saved regression test to pass, which can only lower the chance of accepting an inaccurate candidate.
+
+## Why it works
+
+The leak this ordering closes is informational. Each round of feedback tells the coding agent something about the test set that produced it, so the implementation can be shaped toward those cases. "The same feedback that guides development also allows an agent to adapt to the tested examples without satisfying the full behavioral contract" ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)). The paper prices that leak by counting the possible feedback histories over a finite population. On a population of 500 cases with a tolerance of 0.05, a constructed three-region adversary passes a reused hidden set of 131 cases with probability 0.8082, while the same 131 cases drawn after the candidate is frozen accept a failing requirement family with probability at most 0.000292. The first figure allows adaptation through three rounds of feedback and comes from a worst-case candidate class that can realize any per-case loss pattern, so read it as the ceiling on what reuse costs rather than as a typical agent's odds. The second concerns a candidate fixed before sampling. Freezing first is what restores a known distribution: "fresh sampling after candidate commitment supplies an acceptance sample whose conditional distribution is known despite earlier development feedback" ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)).
+
+A weaker second effect acts during development. A frozen model-written generator runs dry as the implementation changes, surfacing 3.40 new counterexamples in round three against 5.37 and 5.77 for the two regenerating policies. "The fixed LLM inputs continue to expose failures, but they supply fewer previously unreported counterexamples as development proceeds" ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)).
+
+## Triggers and constraints
+
+The cycle runs on commitment, not on a clock. The harness's commit of a candidate is what dispatches the testing agent, and nothing that agent produces can enter the next coding round except through the bounded counterexample channel. Two constraints hold the rest in place. The tester never sees audit samples or population results, so adversarial testing shapes development feedback and never the acceptance evidence. The harness, not either agent, owns the snapshot, the protected files, and the sample size. The workflow is tool-agnostic: it governs what each session may read and when the sample is drawn, so it reads the same in Claude Code, Copilot, or Cursor.
+
+## When this backfires
+
+Regenerating tests every round is the part I would not pay for first, and the paper's own numbers are why.
+
+- You already have a distribution-matched generator. A property-based generator frozen before development, drawing from the same distribution as the evaluation set, finished at a 0.298 mean failure rate against 0.274 and 0.279 for the two regenerating policies. The gap is -0.024 with a 95% interval of [-0.097, +0.043] and p=0.534. "Neither dynamic condition has a statistically detectable advantage over Static property, which draws its inputs from the generator that produced the evaluation set and is therefore a strong baseline for this task" ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)).
+- Generator-writing is a per-round failure point. In the two regenerating policies, 17 and 13 of 90 generator requests supplied no valid trace, because the generator failed to run, errored, returned only invalid traces, or was truncated at the 8,000-token output cap. Regenerating every round multiplies how often you pay that ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)).
+- Showing the tester the candidate's source gained nothing. The source-informed and source-blind policies differed by -0.005, interval [-0.044, +0.034], p=0.810. "Source access produces no detectable additional improvement under this comparison" ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)).
+- More tests do not stop a repair from breaking the build. The one-shot model-written condition got worse between rounds three and four when two final repairs broke modules that had been passing, finishing at 0.405 against 0.342 for a condition with no development tests beyond the public example, so that "its final rate is not statistically distinguishable from Public only" ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)). Regression gating catches that class of failure; test volume does not.
+- Where there is no oracle, test volume may not move outcomes at all. Across four models on SWE-bench Verified, prompt changes that pushed agents to write more or fewer tests "do not significantly change final outcomes in this setting" ([Chen et al., 2026](https://arxiv.org/abs/2602.07900v2)).
+
+## Example
+
+The paper's experiment is one in-memory key-value store with 61 commands, a 2,072-word specification, and a 620-line reference implementation, run in 30 paired blocks with gpt-4.1-mini as both coder and tester. Every block starts from a shared first-round module at a 0.548 mean failure rate and gets three repair rounds against a private 2,000-trace evaluation set.
+
+Read the result as one task and one model. The headline contrast of -0.131 (p=0.0015) between the source-informed regenerating policy and the one-shot model-written policy leans on three blocks in which the one-shot policy ended with a module failing almost every trace. The median within-block difference is -0.044 and the 10% trimmed mean -0.076. Four further conditions that equalized the trace budget produced intermediate rates with no detectable step between neighbors, so the study "does not attribute the advantage of the dynamic policies to regeneration, to the number of traces, or to the reported history alone" ([Kato, 2026](https://arxiv.org/abs/2610.02952v1)).
+
+## Key Takeaways
+
+- Budget the audit as a separate draw rather than a slice of the development suite. Sampling order, not test count, is what carries the guarantee: 131 cases bound false acceptance at 0.000292 when drawn after the candidate is frozen, and bound it at nothing worth stating once the same cases have been feeding repairs.
+- Keep the acceptance sample out of development entirely. Once a case reaches the coding agent, it has stopped being evidence about the code it shaped.
+- Save every verified failure as a regression test whether or not you regenerate. That half costs one file and no extra model calls.
+- Before building a regeneration loop, try one generator whose input distribution matches production traffic. In the only published head-to-head the two were indistinguishable.
+
+## Related
+
+- [TDD Interaction Models: Throughput Versus Test Quality](tdd-interaction-models.md) — which half of the TDD cycle to hand the agent, and what each split costs in test quality
+- [Frozen Task Sets for Affordable Agent A/B Testing](frozen-task-set-agent-ab-testing.md) — the opposite trade, where freezing the task set is correct because you are tuning the harness rather than the code
+- [The Test Homogenization Trap](../patterns/anti-patterns/test-homogenization-trap.md) — why one model writing both code and tests yields a suite that shares the code's blind spots
+- [Generating Tests From Agent-Written Code](../patterns/anti-patterns/code-first-test-oracle-bias.md) — the related ordering error, where tests derive from the implementation instead of the contract
+- [Mutation Testing as a Quality Gate](../verification/mutation-testing-quality-gate.md) — how to tell whether the saved regression tests would notice a regression
+
+---
+
 ### Pre-Execution Codebase Exploration
 Source: https://agentpatterns.ai/workflows/pre-execution-codebase-exploration/
 
@@ -179641,6 +180637,7 @@ Measurement does change what the agent produces, even though it does not change 
 - [Post-Merge Fix Signals for Agent Merges](../verification/post-merge-fix-signals-agent-merges.md) — the follow-up-fix rate after an agent merge, and what predicts it
 - [Profiler-Guided Optimization Loops for Coding Agents](../verification/profiler-guided-optimization-loop.md) — give the agent a profile and a behavior gate before it writes the patch
 - [Measuring the Verification Tax on Agent Output](verification-tax.md) — what checking agent work costs relative to producing it
+- [Require the Metric the Optimization Should Move](../verification/expected-metric-gate-performance-prs.md) — what the PR has to report before you re-run anything
 
 ---
 
@@ -182251,6 +183248,7 @@ The study's own setup is the clearest case. Participants implemented a `TextForm
 - [The Velocity-Quality Asymmetry: Why AI Speed Gains Fade Without QA Investment](velocity-quality-asymmetry.md) — the field-data version of the same speed-against-quality trade
 - [Human-in-the-Loop](human-in-the-loop.md) — where to place human checkpoints in an agent workflow
 - [Verification-Centric Development](verification-centric-development.md) — organizing a workflow around what can be verified rather than what can be generated
+- [Post-Commitment Test Generation: Draw the Sample Last](post-commitment-test-generation.md) — what changes when the tests arrive after the implementation is frozen rather than before it
 
 ---
 

@@ -10,7 +10,7 @@ aliases:
   - "auto mode classifier"
   - "classifier-based permission gating"
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-08-09
+last_reviewed: 2026-10-06
 status: current
 ---
 
@@ -45,7 +45,7 @@ graph TD
     H -->|Block| I[Deny + Claude tries alternative]
 ```
 
-First match wins. Reads and working-directory edits auto-approve except on [protected paths](https://code.claude.com/docs/en/permission-modes#protected-paths); everything else runs the pipeline. The classifier itself runs on Claude Sonnet 5 rather than your `/model` selection, falling back to the session model when that is Sonnet 4.6 or when `availableModels` excludes Sonnet 5 ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
+First match wins. Reads and working-directory edits auto-approve except on [protected paths](https://code.claude.com/docs/en/permission-modes#protected-paths); everything else runs the pipeline. The classifier itself runs on Claude Sonnet 5 rather than your `/model` selection, falling back to the session model when that is Sonnet 4.6 or when `availableModels` excludes Sonnet 5 ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)). From v2.1.278 (September 19, 2026) that check runs server-side by default for Claude API and Enterprise users, and on Bedrock, Vertex, Foundry, and gateways. The `Auto mode server` row in `/status` reports which path your session uses ([Claude Code changelog 2.1.278](https://code.claude.com/docs/en/changelog#2-1-278)).
 
 Measured performance on real traffic ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)):
 
@@ -87,7 +87,7 @@ To switch one session back, cycle with `Shift+Tab` or start with `claude --permi
 - Consent-scope misjudgment on a population that never opted in. That 17% overeager rate now applies to developers who inherited the mode.
 - Narrow allow rules the classifier never sees. Broad rules like `Bash(*)` are suspended on entry, but a narrow rule such as `Bash(npm test)` carries over and can pass a destructive argument. Setting `autoMode.classifyAllShell` closes that, at one classifier call per command.
 - Workflows built on default-branch pushes being blocked. From v2.1.211 those pushes are allowed by default and the protected-branch setting was removed ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-config)).
-- Metered accounts. On Enterprise plans and on Claude API, Bedrock, Agent Platform, and Foundry accounts, every classifier check counts toward token usage ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
+- Metered accounts. On Enterprise plans and on Claude API, Bedrock, Agent Platform, and Foundry accounts, every classifier check counts toward token usage ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)). The server-side path became the default in v2.1.278 for Claude API and Enterprise users, and on Bedrock, Vertex, Foundry, and gateways. It "does not charge for classifier overhead" ([Claude Code changelog 2.1.278](https://code.claude.com/docs/en/changelog#2-1-278)).
 
 ## Example
 
