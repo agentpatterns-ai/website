@@ -101,3 +101,4 @@ The paper also states its limits: results may change with API model retirement, 
 - [Trusting Tool Error Messages as Implicit Authority](tool-error-implicit-authority.md) - the same trust on the error stream
 - [Exception Handling and Recovery Patterns](../agent-design/exception-handling-recovery-patterns.md) - recovery for failures the agent can observe
 - [Trust Without Verify](trust-without-verify.md) - the operator-side counterpart
+- [Harness-Enforced Stopping on Judged-Useless Tool Results](../agent-design/enforced-stop-on-useless-results.md) - the same notice-without-acting gap for returns that are useless rather than wrong, and a harness gate that closes it

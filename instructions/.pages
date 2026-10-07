@@ -86,6 +86,7 @@ nav:
       - enforcing-agent-behavior-with-hooks.md
       - rule-lifecycle-metadata.md
       - behavioral-no-op-test.md
+      - skill-rule-novelty.md
       - encoded-rule-failure-diagnosis.md
       - agent-context-file-evolution.md
       - prompt-governance-via-pr.md

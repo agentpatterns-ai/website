@@ -9,7 +9,7 @@ aliases:
   - in-process plugin hooks
   - the mods API
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-10-02
+last_reviewed: 2026-10-07
 status: current
 ---
 
@@ -45,6 +45,25 @@ Mods get described as hot-reloading, which holds for two of the three ways one r
 
 Reloading costs you module scope. "Each reload runs `register` again, so `calls` resets to `0`" ([Create a mod](https://code.claude.com/docs/en/plugins/mods/create)). Put a counter or a history in `$.state` instead, declared in the manifest's type contract. A directory passed to `--plugin-dir` is also a protected path, "so in `default` and `acceptEdits` modes you're asked to approve each of Claude's edits to the mod". Skills reload by a separate mechanism, covered in [reloading skills mid-session](reload-skills-mid-session.md).
 
+## The ceiling and agentId fields on tool.check
+
+Claude Code 2.1.290, released 5 October 2026, added two fields to a mod's permission check. One changelog line reads: "Added `ceiling` to the question and verdict a mod's `tool.check` hook reads, naming the approval an organization requires for a tool". The other reads: "Added `agentId` to the `tool.check` event of plugin hooks, so a hook can tell a subagent's permission check from the main session's" ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+
+No published page describes the shape of `ceiling`. Its type, its values, and whether every call carries it are undocumented. The public typings predate it: the file header says Claude Code 2.1.277 wrote it, and neither `ToolCheckInput` nor `ToolCheckResult` lists the field ([claude-code.d.ts](https://github.com/anthropics/claude-code/blob/main/mods/types/claude-code.d.ts)). The `.d.ts` files a local load writes into `.claude-plugin/types/` show the real shape, so do not branch on specific values.
+
+No source says where the organization's level comes from, so this link is inferred from shared wording. The nearest match is the 2.1.287 changelog entry on "organization per-tool permission ceilings" for MCP tools, and the per-tool controls an organization sets on claude.ai connectors. Claude Code "reads these settings at startup and enforces them locally" ([MCP docs](https://code.claude.com/docs/en/mcp)). Treat `ceiling` as naming "the approval an organization requires for a tool", and do not assume which tools carry it.
+
+For a connector tool set to `ask`, the engine prompts, not your hook. "Claude Code prompts on every call with the reason `Your organization requires approval for this tool`". The prompt appears even in `acceptEdits`, `auto`, and `bypassPermissions` modes, and `dontAsk` mode denies the call instead ([MCP docs](https://code.claude.com/docs/en/mcp)). The permissions page says such tools still prompt when a settings hook returns allow ([Permissions](https://code.claude.com/docs/en/permissions)). It does not say in plain words whether a mod's allow gets the same treatment, so verify that before you rely on it. Release 2.1.292 fixed a different case: a plugin's `tool.check` allow ran a tool that requires your answer, such as a question or a plan approval, without showing its dialog ([changelog](https://code.claude.com/docs/en/changelog)).
+
+The changelog says `ceiling` names "the approval an organization requires for a tool". It does not document what a hook should do with it, so test any use against your build's `.d.ts` files first.
+
+Settings hooks already carried `agent_id`, which is "Present only when the hook fires inside a subagent call" ([Hooks reference](https://code.claude.com/docs/en/hooks)). The 2.1.290 changelog adds `agentId` to the `tool.check` event. Use it to apply different checks to subagent calls.
+
+The pattern fails in two cases:
+
+- Desktop app local and SSH sessions do not receive the organization's `ask` setting ([MCP docs](https://code.claude.com/docs/en/mcp)).
+- A Claude Code older than 2.1.290 sees neither field, and a mod written against the 2.1.277 typings gets no type hints for either. Whether a missing `ceiling` means no organization requirement is undocumented, so a hook should not treat absence as approval.
+
 ## When this backfires
 
 - Nothing draws outside the terminal and the Desktop app's Code tab. A mod's hooks run wherever the plugin loads. But "Drawing is narrower: only the terminal and the Desktop app show a mod's panes, bands, and replaced rows" ([Mods overview](https://code.claude.com/docs/en/plugins/mods/overview)). The same table marks the VS Code extension's chat panel, `claude -p`, the Agent SDK, and cloud sessions as hooks-yes and draws-no. A pane is dead weight in a [headless CI session](bare-mode.md).
@@ -71,4 +90,6 @@ The pane and the held call are only possible in-process, so no settings hook cou
 - [Claude Code Hooks Lifecycle](hooks-lifecycle.md) — the settings-hook events a mod's handlers sit beside
 - [Local Plugin Scaffolding via `claude plugin init`](local-plugin-scaffolding.md) — the manifest layer underneath a mod, and when it beats a loose skill
 - [Reloading Skills Mid-Session in Claude Code](reload-skills-mid-session.md) — the adjacent reload mechanism, for skills rather than plugin code
+- [Enterprise-Managed Plugin Governance for Agent CLIs](../../security/enterprise-managed-plugin-governance.md) — the managed settings and hooks that a user's mod cannot override
 - [Plugin Background Monitors](plugin-background-monitors.md) — the other way a plugin runs work for the length of a session
+- [Watcher Side Agents](../../patterns/agent-design/watcher-side-agents.md) — the pattern behind the `you-should-know` built-in, and the trigger it needs to pay off

@@ -95,6 +95,7 @@ nav:
       - multi-agent-rag-spec-to-test.md
       - skill-specification-violation-fuzzing.md
       - tool-use-sim-to-real-perturbation-taxonomy.md
+      - llm-dependent-harness-test-adequacy.md
   - "Regression Testing":
       - golden-query-pairs-regression.md
       - human-review-golden-dataset-curation.md
@@ -143,6 +144,7 @@ nav:
       - post-merge-fix-signals-agent-merges.md
       - named-check-over-evaluation-confidence.md
       - asymmetric-check-evidence.md
+      - expected-metric-gate-performance-prs.md
       - transcript-measured-review-coverage.md
       - task-category-security-review-routing.md
       - chain-of-verification-coding-agents.md

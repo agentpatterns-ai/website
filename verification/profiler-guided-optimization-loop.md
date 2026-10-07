@@ -90,3 +90,4 @@ Three parts carry the result: the agent reads a summary rather than raw profiler
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — the general form of the caching-inside-the-timing-loop failure a behavior gate blocks.
 - [Re-Run the Original Test Suite After Every Refinement Turn](test-suite-after-refinement-turn.md) — the regression risk that selective validation trades against.
 - [Making Application Observability Legible to Agents](../observability/observability-legible-to-agents.md) — wiring runtime signals into agent context generally; a profile is one such signal, aimed at optimization.
+- [Require the Metric the Optimization Should Move](expected-metric-gate-performance-prs.md) — the review-side counterpart: which metric the finished PR has to report.

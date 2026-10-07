@@ -79,3 +79,4 @@ Enumerate the root yourself and diff that listing against what `SKILL.md` names.
 - [Agent Config as a Managed Supply Chain](../instructions/agent-config-as-managed-supply-chain.md) — the same hashing and pinning discipline applied to `CLAUDE.md` and `AGENTS.md`
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — why the pin you add to a helper script needs a bump path behind it
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — the general principle this page is one instance of: a grant names a subject that can change after the grant is issued
+- [Vetting-Constrained Skill Composition](vetting-constrained-skill-composition.md) — what happens to the artifact verdict itself once an attacker can query the engine that issues it

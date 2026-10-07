@@ -108,3 +108,4 @@ The controller fires `commit` because its VOI/cost ratio is highest given how li
 - [Inference-Time Tool-Call Reviewer](inference-time-tool-call-reviewer.md)
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md)
 - [Heuristic-Based Effort Scaling](heuristic-effort-scaling.md)
+- [Harness-Enforced Stopping on Judged-Useless Tool Results](enforced-stop-on-useless-results.md) — why a stated call budget relocates the stop to the deadline instead of making it track the evidence

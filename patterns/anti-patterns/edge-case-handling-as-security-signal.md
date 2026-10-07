@@ -69,3 +69,4 @@ Editing runs the mechanism backwards. Participants changed 29.2 lines on average
 - [Trust Without Verify](trust-without-verify.md) — The general form: polish standing in for verification, of which the edge-case cue is one instance.
 - [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md) — The other attention failure at review time: scrutiny scales inversely with diff size.
 - [From Preventive to Reactive: Front-Loading Security in AI Coding Prompts](../../human/preventive-to-reactive-security-prompting.md) — Moves the security decision to prompt time instead of the accept-time check this page finds unreliable.
+- [Treating a Cleared Review Comment as a Fixed Flaw](cleared-review-comment-as-fix.md) — the machine version of the same shortcut, reading a resolved finding as proof the vulnerability is gone.

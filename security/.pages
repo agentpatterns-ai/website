@@ -168,6 +168,7 @@ nav:
       - deterministic-control-plane-llm-coding-agents.md
       - llm-pinned-vulnerable-versions.md
       - skill-composition-risk.md
+      - vetting-constrained-skill-composition.md
       - skill-supply-chain-poisoning.md
       - single-decision-suite-approval.md
       - skill-closure-declaration-gap.md

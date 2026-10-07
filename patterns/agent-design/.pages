@@ -114,6 +114,7 @@ nav:
       - grill-me-technique.md
       - inference-time-tool-call-reviewer.md
       - judge-advisor-split.md
+      - watcher-side-agents.md
       - minimum-sufficient-control-ladder.md
       - orchestrator-attention-budget.md
       - plan-compliance-in-agents.md
@@ -149,6 +150,7 @@ nav:
       - administrative-effort-ceilings.md
       - agent-circuit-breaker.md
       - agent-client-admission-control.md
+      - agent-escalation-ladder-energy.md
       - caller-actionable-error-steps.md
       - residual-completion-stateful-handoffs.md
       - retry-switch-abstain-recovery-policy.md
@@ -170,6 +172,7 @@ nav:
       - dual-budget-control-search-agents.md
       - effective-feedback-compute.md
       - effort-as-verification-dial.md
+      - enforced-stop-on-useless-results.md
       - escalation-channels-defect-disclosure.md
       - evidence-first-diagnosis-reports.md
       - gateway-model-routing.md

@@ -90,6 +90,7 @@ nav:
       - llm-review-overcorrection.md
       - blind-tool-deference.md
       - silent-adoption-of-corrupted-tool-returns.md
+      - changed-tool-call-attribution.md
       - unsignalled-tool-failure-envelope.md
       - silent-failure-mechanism-taxonomy.md
       - destructive-failure-mechanism-attribution.md
@@ -108,6 +109,7 @@ nav:
       - code-first-test-oracle-bias.md
       - state-anchored-test-oracles.md
       - test-homogenization-trap.md
+      - verifier-reads-the-same-premise.md
       - generated-assertion-signoff.md
       - tdd-inside-the-agent-loop.md
       - artifact-only-verification.md
@@ -139,6 +141,7 @@ nav:
       - constraint-loss-and-tool-reach-scored-separately.md
       - worktree-as-safety-boundary.md
       - fixed-width-credential-assumptions.md
+      - spelled-path-permission-scope.md
   - "Injection & Untrusted Input":
       - single-layer-injection-defence.md
       - direct-prompt-injection-collaboration.md
@@ -149,6 +152,7 @@ nav:
       - adversarial-only-leakage-threat-modelling.md
   - "False Security Evidence":
       - model-confidence-as-security-verification.md
+      - cleared-review-comment-as-fix.md
       - static-clean-as-security-evidence.md
       - cumulative-best-hides-repair-regressions.md
       - edge-case-handling-as-security-signal.md

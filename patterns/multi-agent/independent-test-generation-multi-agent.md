@@ -132,6 +132,7 @@ The test designer generates tests from the spec alone — including edge cases l
 - [TDD Agent Development](../../verification/tdd-agent-development.md) — human-written tests as spec for agents, complementary to agent-generated tests
 - [Closed-Loop Role-Based Refinement](closed-loop-role-based-refinement.md) — five-role decomposition for self-improving agent systems
 - [Multi-Agent SE Design Patterns](multi-agent-se-design-patterns.md) — taxonomy classifying this as Role-Based Cooperation + Sequential Execution
+- [When Your Agent's Verifier Reads the Same False Premise](../anti-patterns/verifier-reads-the-same-premise.md) — hiding the code is not independence when the test writer reads the same task description
 
 ## Sources
 

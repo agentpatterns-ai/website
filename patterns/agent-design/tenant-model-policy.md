@@ -11,7 +11,7 @@ tags:
 aliases:
   - organization-scoped model rules
   - org-admin model governance
-last_reviewed: 2026-09-26
+last_reviewed: 2026-10-06
 maturity: established
 ---
 
@@ -78,6 +78,10 @@ To hold back one bad release without going full default-deny, keep prefix matchi
 ```
 
 A blocked model disappears from the `/model` picker and is rejected by name everywhere the allowlist applies ([Claude Code: Model configuration](https://code.claude.com/docs/en/model-config#block-specific-models-or-versions)). It leaves every unnamed release on the default-allow path.
+
+### Provider restriction is a separate key
+
+The `allowedProviders` managed setting limits which API providers a machine may use ([Claude Code: Changelog](https://code.claude.com/docs/en/changelog#2-1-285)). The list covers the Anthropic API, a custom endpoint, Bedrock, Mantle, Vertex AI, Foundry, Claude Platform on AWS, and a Cloud gateway. A model allowlist does not constrain the provider, so a residency rule that names a cloud rather than a model needs this key too.
 
 ### Traps in the recipe
 

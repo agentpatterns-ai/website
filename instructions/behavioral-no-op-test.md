@@ -83,3 +83,4 @@ The same source names the opposite error. Doing the work once and asking the age
 - [Rule Lifecycle Metadata for Prunable Instruction Surfaces](rule-lifecycle-metadata.md) — metadata that tells you which rules to test first
 - [Against-Prior Accuracy: Score the Rules That Fight Defaults](../verification/against-prior-accuracy.md) — the same deletion probe pointed at a compliance score instead of a pruning decision
 - [Write Agent Rules You Can Grade From the Transcript](transcript-gradable-agent-rules.md) — the prior question: whether the line's effect is countable at all, without which the test has nothing to compare
+- [Skill Rule Novelty: Add What the Skill Does Not Name](skill-rule-novelty.md) — the token-novelty prior that predicts a deletion test's result before you spend the run

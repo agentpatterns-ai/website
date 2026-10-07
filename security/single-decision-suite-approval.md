@@ -79,3 +79,4 @@ Indispensability gives incident response a lever. Withdrawing a single modificat
 - [The Skill Closure Declaration Gap](skill-closure-declaration-gap.md) — what a skill root declares versus what one run of it can reach
 - [Compositional Vulnerability Induction in Coding Agents](compositional-vulnerability-induction.md) — the same decomposition idea applied to engineering tickets rather than skills
 - [Enterprise-Managed Plugin Governance](enterprise-managed-plugin-governance.md) — the administrative surface where suite approval is granted or withheld
+- [Vetting-Constrained Skill Composition](vetting-constrained-skill-composition.md) — the attacker-side version, where each skill is tuned to keep passing the scanner that reviews it

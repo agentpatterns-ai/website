@@ -92,3 +92,4 @@ One caution against over-correcting: LLM review is not worthless here. Removing 
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md) — relying on one review layer is exactly what this pipeline did before the entry provenance control.
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](tool-error-implicit-authority.md) — the same authority-confusion mechanism applied to the error stream instead of the approval claim.
 - [Security Review Gap in AI-Authored PRs](../../code-review/security-review-gap-in-ai-prs.md) — the broader review-coverage failure that authority framing exploits.
+- [Treating a Cleared Review Comment as a Fixed Flaw](cleared-review-comment-as-fix.md) — where the deference is to the reviewer's own earlier finding rather than to a claimed approval.
