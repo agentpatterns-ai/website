@@ -79,3 +79,4 @@ Only the file-modification row expires. Edits are frequent and the class is broa
 - [Binding an Agent's Effect to the Approval It Claims](interaction-effect-obligations.md) — what happens to an approval during the wait this page measures, and what the effect must carry to prove it still holds
 - [Verification Capacity Saturation: Three Levers, One Default](../../verification/verification-capacity-saturation.md) — what remains once the gate is already past its service rate
 - [Fleet-Level Irreversibility Budgets for Agent Effects](fleet-irreversibility-budget.md) — the aggregate a per-action gate cannot see, whatever granularity you set it at
+- [Action-Class Permission Gates Leave Task Fit and Reversibility to the Human](action-class-permission-gates.md) — which inputs each of those decisions actually carries

@@ -61,3 +61,4 @@ Writing a standing rule asks two things at once: a preference, and a decision ab
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](../../security/enforced-versus-advisory-controls.md) — sorting safeguards by where they are evaluated, which is what an ask rule fails to do
 - [Human-in-the-Loop Confirmation Gates](../../security/human-in-the-loop-confirmation-gates.md) — the per-action baseline this policy shape was measured against
 - [Managing Cognitive Load and AI Fatigue](../../human/cognitive-load-ai-fatigue.md) — the approval-fatigue mechanism in its wider form
+- [Action-Class Permission Gates Leave Task Fit and Reversibility to the Human](../agent-design/action-class-permission-gates.md) — which inputs a permission decision carries, whenever it is made
