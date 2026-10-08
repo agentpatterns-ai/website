@@ -236,6 +236,7 @@ nav:
       - dual-write-append-mirror-transcript.md
       - deferred-permission-pattern.md
       - deny-fallback-unattended-permissions.md
+      - action-class-permission-gates.md
       - most-restrictive-wins-fusion.md
       - plugin-co-installation-safety.md
       - natural-language-tool-selection.md

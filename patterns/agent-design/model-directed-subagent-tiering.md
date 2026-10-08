@@ -10,7 +10,7 @@ aliases:
   - core-loop delegation
   - agent-chosen subagent tier
   - model-directed delegation
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-07
 maturity: emerging
 ---
 
@@ -18,7 +18,7 @@ maturity: emerging
 
 > The lead agent picks the subagent tier, effort and reuse at each dispatch, in place of a router or a fixed sidekick.
 
-Model-directed subagent tiering gives the lead model (Replit calls it the core loop) a small menu at each step: what kind of subagent to send, at what size and effort, whether to return to one it has already briefed, and how hard to think ([Replit: Free the models](https://replit.com/blog/free-the-models)). It is a third option next to a [router](router-imposed-quality-ceiling.md) and a fixed lead plus sidekick split. It fits when three conditions hold: the lead model delegates without being told, the provider keeps its cache across effort changes, and you can re-run evals on each model release. All evidence comes from one vendor post, run by the vendor on its own product, so treat the numbers as a claim to test.
+Model-directed subagent tiering gives the lead model (Replit calls it the core loop) a small menu at each step: what kind of subagent to send, at what size and effort, whether to return to one it has already briefed, and how hard to think ([Replit: Free the models](https://replit.com/blog/free-the-models)). It is a third option next to a [router](router-imposed-quality-ceiling.md) and a fixed lead plus sidekick split. It fits when three conditions hold: the lead model delegates without being told, the provider keeps its cache across effort changes, and you can re-run evals on each model release. All benchmark evidence comes from one vendor post, run by the vendor on its own product, so treat the numbers as a claim to test.
 
 ## How it works
 
@@ -34,6 +34,8 @@ Replit's example: "a mechanical rename goes to small at low effort, while genera
 The stated reason is the router argument. Replit argues that a router, whether heuristic or a small model that reads each turn, will always be less capable than the model it chooses for, and "Replit Agent lets the model decide instead".
 
 Effort is not purely the model's call. Replit "trained an escalation system that checks the trajectory at each step and matches effort to task difficulty" ([Replit](https://replit.com/blog/free-the-models)), a learned controller close to [trajectory-conditioned model escalation](trajectory-conditioned-model-escalation.md).
+
+Claude Code 2.1.292 added an `effort` parameter to its Agent tool on 6 October 2026, a second first-party implementation of the same choice ([Claude Code changelog 2.1.292](https://code.claude.com/docs/en/changelog#2-1-292)). The caller names the effort level a subagent runs at. The entry carries no benchmark and no cost comparison, so Replit's DeepSWE and Terminal-Bench figures still rest on one vendor's own runs.
 
 ## The evidence
 

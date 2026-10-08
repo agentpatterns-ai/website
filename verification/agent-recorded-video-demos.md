@@ -6,7 +6,7 @@ tags:
   - testing-verification
   - human-factors
   - tool-agnostic
-last_reviewed: 2026-07-02
+last_reviewed: 2026-10-07
 maturity: emerging
 ---
 
@@ -15,6 +15,8 @@ maturity: emerging
 > A coding agent drives the running app and records a video demo, giving reviewers visual proof-of-work instead of a textual claim it works.
 
 A coding agent can prove a change works by driving the running application and recording a screencast, then attaching the video to its pull request. The reviewer watches the feature run rather than trusting the agent's written "it works". Simon Willison's `shot-scraper video` command, added in shot-scraper 1.10, records a WebM or MP4 from a YAML storyboard for exactly this ([Willison](https://simonwillison.net/2026/Jun/30/shot-scraper-video/)). It is a distinct verification modality: evidence handed to a human, not context the agent consumes to check itself.
+
+Cognition's Devin produces the same artifact. Using GPT-6 Astra, it tests Otter Run, an iPhone game, and "returns a recording of the game running in a simulator, alongside a report identifying checks that passed and areas left untested" ([OpenAI](https://openai.com/index/cognition-devin-testing-with-astra)). OpenAI draws the same split this page does: "The recording shows the application's behavior, while the report documents the scope of the testing." The write-up measures no review-time saving. Cognition co-founder Walden Yan keeps the gain in the future tense: "We expect over time that we have to manually look at less code."
 
 ## When a video adds signal a passing test does not
 

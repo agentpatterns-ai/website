@@ -95,3 +95,4 @@ The friction tax on a CI failure is the dominant cost on otherwise-good agent-au
 - [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](programmatic-cloud-agent-dispatch.md) — the generic dispatch primitive this page specializes for CI failure events
 - [AI Bot CI/CD Workflow Reliability by Agent](ai-bot-ci-workflow-reliability.md) — per-agent CI success rates that quantify the failure baseline the loop is competing with
 - [Agentic Flywheel](../patterns/agent-design/agentic-flywheel.md) — the offline complement, where accepted fixes feed back into harness improvement
+- [Latency-Budgeted Repair: Size the Run to the Wait](latency-budgeted-repair-agents.md) — the pre-submit case, where the fix expires on the developer's next edit and wall clock becomes a yield term
