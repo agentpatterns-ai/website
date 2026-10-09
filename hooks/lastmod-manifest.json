@@ -598,7 +598,7 @@
   "patterns/agent-design/layered-mutability.md": "2026-09-26",
   "patterns/agent-design/ledger-agent-structured-task-state.md": "2026-08-23",
   "patterns/agent-design/llm-as-code-agentic-programming.md": "2026-08-23",
-  "patterns/agent-design/local-model-viability-for-coding.md": "2026-07-27",
+  "patterns/agent-design/local-model-viability-for-coding.md": "2026-10-08",
   "patterns/agent-design/long-running-agents.md": "2026-09-13",
   "patterns/agent-design/managed-vs-self-hosted-harness.md": "2026-09-27",
   "patterns/agent-design/memory-retrieval-as-control.md": "2026-09-25",

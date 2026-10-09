@@ -9,7 +9,7 @@ tags:
 aliases:
   - local model viability for coding
   - self-hosted coding model viability
-last_reviewed: 2026-07-08
+last_reviewed: 2026-10-08
 maturity: adopted
 ---
 
@@ -48,6 +48,8 @@ Local inference costs more than it returns under these conditions:
 - Complex or multi-file tasks blow up reasoning chains and context. Even a capable 80B model crashed on the next turn, and other runs stalled for 8 to 12 minutes before being abandoned ([Böckeler](https://martinfowler.com/articles/exploring-gen-ai/local-models-for-coding-experiences.html)).
 - With no privacy or compliance driver, the tuning time and the quality gap against hosted frontier models make hosted the rational choice.
 - A model that is not fine-tuned for tool calling derails the agentic loop with malformed calls ([XDA](https://www.xda-developers.com/biggest-local-llm-machine-useless-cant-call-single-tool-how-many-parameters/)).
+
+GitHub warns that choosing a local model in Copilot CLI "doesn't turn on offline mode or disable GitHub telemetry". Offline mode is a separate `COPILOT_OFFLINE=true` choice, and even then "a remote provider can still receive prompts and code context over the network" ([GitHub Changelog](https://github.blog/changelog/2026-10-07-discover-local-models-in-github-copilot-cli)).
 
 The gap is narrowing, not closed. Independent evals report several local models now tool-call reliably, which reinforces that viability is a per-configuration question rather than a settled yes or no ([Böckeler](https://martinfowler.com/articles/exploring-gen-ai/local-models-for-coding-factors.html)).
 
