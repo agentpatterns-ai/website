@@ -7,6 +7,7 @@ tags:
   - evals
   - tool-agnostic
   - arxiv
+  - benchmarks
 aliases:
   - benchmark auditing
   - automated benchmark review

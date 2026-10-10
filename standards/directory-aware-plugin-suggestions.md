@@ -5,6 +5,7 @@ tags:
   - standards
   - security
   - claude
+  - plugins
 aliases:
   - pluginSuggestionMarketplaces
   - Plugin Suggestion Marketplaces

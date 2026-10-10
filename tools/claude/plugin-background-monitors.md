@@ -5,6 +5,7 @@ tags:
   - claude
   - tool-engineering
   - observability
+  - plugins
 aliases:
   - plugin monitors manifest key
   - declarative session supervision

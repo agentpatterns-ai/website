@@ -73,6 +73,7 @@ The agent cannot export that variable into its own running process, so the autho
 
 ## Related
 
+- [A Containment Floor for Agent Self-Configuration](agent-self-config-field-classes.md) — the per-field version of this split, applied inside one configuration file rather than across files.
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — the same write-site gate for project build config that grants code execution.
 - [Enforced Versus Advisory Controls](enforced-versus-advisory-controls.md) — why the boundary has to be evaluated by the runtime rather than stated in the agent's context.
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md) — the placement rules that keep an approval step out of the rubber-stamping regime.

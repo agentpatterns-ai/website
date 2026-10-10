@@ -8,6 +8,7 @@ tags:
   - testing-verification
   - mcp
   - arxiv
+  - benchmarks
 aliases:
   - ComplexMCP benchmark
   - interdependent tool benchmark

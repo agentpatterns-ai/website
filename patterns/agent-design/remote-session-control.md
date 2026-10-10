@@ -9,7 +9,7 @@ tags:
 aliases:
   - remote CLI session control
   - mobile steering for coding agents
-last_reviewed: 2026-07-07
+last_reviewed: 2026-10-07
 maturity: established
 ---
 
@@ -20,6 +20,8 @@ maturity: established
 Two tools shipped this capability within 48 hours in April 2026: Copilot CLI's [`copilot --remote`](https://github.blog/changelog/2026-04-13-remote-control-cli-sessions-on-web-and-mobile-in-public-preview/) (public preview, 2026-04-13) and Claude Code v2.1.110's [push notification tool](https://code.claude.com/docs/en/changelog) (2026-04-15) layered on [`claude remote-control`](https://code.claude.com/docs/en/remote-control). The convergence names a distinct pattern: the developer is no longer pinned to the workstation where the agent runs.
 
 OpenAI's Codex CLI reached general availability with the same pattern on 2026-06-25: Codex Remote lets a developer control a locally-running Codex session on a Mac or Windows host from the ChatGPT mobile app — approving actions, handing off threads, and pairing with a 1:1 QR code ([Codex changelog](https://developers.openai.com/codex/changelog)). It is a third vendor converging on remote session control, alongside Copilot CLI's `--remote` and Claude Code's remote control.
+
+A fourth vendor shipped on 2026-10-06, when Cursor's iOS app gained remote control of local agents ([Cursor changelog](https://cursor.com/changelog/remote-control-local-agents)). Cursor also states the workstation-availability constraint in plain terms: "Remote control doesn't move your agents anywhere. It keeps running on your computer, and the app connects to it. Your computer needs to stay on and online for remote control to work."
 
 ## What the pattern is not
 
@@ -68,9 +70,9 @@ The workstation never opens an inbound port. All traffic is outbound HTTPS over 
 
 ## Pairing and gating
 
-Both tools print a session URL and QR code. Copilot CLI uses `copilot --remote` or `/remote` in-session, `Ctrl+E` toggles the QR, and the working directory must be a GitHub repo ([docs](https://docs.github.com/copilot/how-tos/copilot-cli/steer-remotely)). Claude Code uses `claude remote-control` (server mode, spacebar toggles QR) or `/remote-control` in-session ([docs](https://code.claude.com/docs/en/remote-control#start-a-remote-control-session)). Visibility is single-user in both tools.
+Copilot CLI and Claude Code both print a session URL and QR code. Copilot CLI uses `copilot --remote` or `/remote` in-session, `Ctrl+E` toggles the QR, and the working directory must be a GitHub repo ([docs](https://docs.github.com/copilot/how-tos/copilot-cli/steer-remotely)). Claude Code uses `claude remote-control` (server mode, spacebar toggles QR) or `/remote-control` in-session ([docs](https://code.claude.com/docs/en/remote-control#start-a-remote-control-session)). Visibility is single-user in both tools.
 
-Remote access is off by default on paid plans. Copilot: the "Remote Control" policy must be enabled at org or enterprise level ([docs](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-remote-access#administering-remote-access)). Claude Code: an admin flips the Remote Control toggle at `claude.ai/admin-settings/claude-code`; data-retention or compliance configurations can grey it out. Claude Code also requires `claude.ai` OAuth — API keys, `setup-token`, Bedrock, Vertex, and Foundry are rejected.
+Remote access is off by default on Copilot and Claude Code paid plans. Copilot: the "Remote Control" policy must be enabled at org or enterprise level ([docs](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-remote-access#administering-remote-access)). Claude Code: an admin flips the Remote Control toggle at `claude.ai/admin-settings/claude-code`; data-retention or compliance configurations can grey it out. Claude Code also requires `claude.ai` OAuth — API keys, `setup-token`, Bedrock, Vertex, and Foundry are rejected. Cursor ships the opposite default. Remote control is on unless the organization is on Enterprise, where an admin enables it ([Cursor changelog](https://cursor.com/changelog/remote-control-local-agents)).
 
 ## When remote control helps
 
@@ -89,7 +91,7 @@ Remote access is off by default on paid plans. Copilot: the "Remote Control" pol
 
 ## Keep-alive
 
-The pattern trades workstation availability for steering flexibility. Copilot ships `/keep-alive on|off|busy|<N>m|<N>h|<N>d` ([docs](https://docs.github.com/copilot/how-tos/copilot-cli/steer-remotely#preventing-your-machine-from-going-to-sleep)). Claude Code reconnects after sleep and drops but times out after ~10 minutes offline. The developer owns workstation power and network — a cost cloud agents sidestep.
+The pattern trades workstation availability for steering flexibility. Copilot ships `/keep-alive on|off|busy|<N>m|<N>h|<N>d` ([docs](https://docs.github.com/copilot/how-tos/copilot-cli/steer-remotely#preventing-your-machine-from-going-to-sleep)). Claude Code reconnects after sleep and drops but times out after ~10 minutes offline. Cursor exposes the same control as a desktop setting called "Keep this computer awake". It works only with the computer "plugged in with the lid open" ([Cursor changelog](https://cursor.com/changelog/remote-control-local-agents)). The developer owns workstation power and network — a cost cloud agents sidestep.
 
 ## Example
 
@@ -115,7 +117,7 @@ The same flow works with Claude Code: `claude remote-control`, open `claude.ai/c
 
 - Remote session control streams a locally-running CLI agent to a web or mobile client over outbound HTTPS — the agent, tools, and filesystem stay local
 - Distinct from cloud-agent dispatch (agent runs in cloud) and permission relay (approves individual calls only) — the remote surface here covers messages, modes, plans, and prompts
-- Single-user session visibility, URL+QR pairing, off by default on paid plans until an admin enables it
+- Copilot and Claude Code pair over a session URL plus QR code, keep visibility single-user, and gate remote access behind an admin on paid plans; Cursor inverts that last default, on unless the organization is on Enterprise
 - Credential surface widens to any authenticated device — treat the remote client as equivalent to terminal access
 - Session-output ceilings, network-outage timeouts, and workstation keep-alive are the practical failure modes; for inner-loop work or fully unattended runs, pick a different pattern
 

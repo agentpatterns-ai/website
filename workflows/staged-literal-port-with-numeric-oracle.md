@@ -8,6 +8,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - migration
 aliases:
   - staged LLM port with numeric oracle
   - two-stage literal translation with reference output

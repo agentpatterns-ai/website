@@ -9,6 +9,7 @@ nav:
       - agents-md-distributed-conventions.md
       - evaluating-agents-md-context-files.md
       - probe-and-refine-guidance-tuning.md
+      - verified-norm-packages.md
       - knowledge-gap-vs-skill-gap-triage.md
       - encoding-values-in-agents-md.md
       - rules-file-corpus-evidence.md
@@ -42,6 +43,7 @@ nav:
       - three-knowledge-tiers.md
       - cost-aware-skill-rewriting.md
       - typed-pseudocode-skill-libraries.md
+      - multi-skill-stage-plans-and-artifact-handoffs.md
       - codified-effort-escalation-policy.md
       - advisory-prompts-from-reasoning-traces.md
       - controlling-agent-output.md
@@ -95,6 +97,7 @@ nav:
       - policy-file-validation.md
       - pre-execution-skill-selection.md
       - skill-pack-registry-distribution.md
+      - shared-toolkit-plugin-ownership.md
       - workspace-hosted-skills.md
       - skill-file-linting.md
       - plugin-component-co-change.md

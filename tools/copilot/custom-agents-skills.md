@@ -6,6 +6,7 @@ tags:
   - instructions
   - copilot
   - skills
+  - plugins
 applies_to: "copilot@1.x"
 last_reviewed: 2026-05-27
 status: current

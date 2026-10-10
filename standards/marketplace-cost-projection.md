@@ -5,6 +5,7 @@ tags:
   - standards
   - cost-performance
   - claude
+  - plugins
 aliases:
   - Pre-Install Token Cost Projection
   - Plugin Marketplace Cost Projection

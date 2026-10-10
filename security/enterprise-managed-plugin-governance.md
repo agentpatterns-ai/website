@@ -9,6 +9,7 @@ tags:
   - claude
   - cursor
   - supply-chain
+  - plugins
 tool_scope_exempt: true
 aliases:
   - enterprise-managed plugin standards

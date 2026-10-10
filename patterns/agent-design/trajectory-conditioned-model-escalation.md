@@ -8,6 +8,7 @@ tags:
   - tool-agnostic
   - arxiv
   - reliability
+  - model-routing
 aliases:
   - trajectory-based model routing
   - partial-trajectory escalation

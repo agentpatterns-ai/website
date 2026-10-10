@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - model-routing
 aliases:
   - model-neutral harness
   - model portability vs cloud portability

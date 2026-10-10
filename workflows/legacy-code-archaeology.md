@@ -6,6 +6,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+  - migration
 aliases:
   - code archaeology
   - agent-assisted legacy comprehension

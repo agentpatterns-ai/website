@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - copilot
+  - model-routing
 aliases:
   - copilot auto tier
   - efficiency balance intelligence tier

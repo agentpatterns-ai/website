@@ -129,4 +129,5 @@ Each layer's failure mode is independent, so a fabricated claim must survive all
 - [Pre-Completion Checklists](pre-completion-checklists.md)
 - [Verification Ledger](verification-ledger.md)
 - [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md)
+- [Choose Agent Gate Layers by Mechanism Class, Then Measure](mechanism-class-gate-stacking.md) — the independence this page assumes, measured: two layers of the same mechanism class composed to about 1.3 independent layers rather than 2
 - [Defense Patterns](index.md)

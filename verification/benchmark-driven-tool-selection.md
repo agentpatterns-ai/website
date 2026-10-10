@@ -8,6 +8,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - benchmarks
 aliases:
   - DevBench evaluation
   - code generation benchmark selection

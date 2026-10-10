@@ -7,6 +7,7 @@ tags:
   - evals
   - code-review
   - tool-agnostic
+  - benchmarks
 aliases:
   - public code review benchmark
   - ReviewBench (GitHub)

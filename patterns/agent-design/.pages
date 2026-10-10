@@ -25,6 +25,7 @@ nav:
       - continual-learning-layers.md
       - delegation-decision.md
       - delegation-threshold-calibration.md
+      - selective-dynamic-concurrency.md
       - eval-strategy-by-agent-generation.md
       - execution-first-delegation.md
       - execution-lineage-dag.md
@@ -80,6 +81,7 @@ nav:
       - rag-over-thinking-traces.md
       - session-initialization-ritual.md
       - session-recap.md
+      - source-linked-tool-observations.md
       - subtask-level-memory.md
       - tiered-memory-architecture.md
       - wiki-memory-agent-maintained-knowledge-base.md
@@ -98,6 +100,7 @@ nav:
       - interactive-clarification-underspecified-tasks.md
       - critic-agent-plan-review.md
       - cross-session-peer-messaging.md
+      - delegation-scoping-session-and-workspace.md
       - decision-unbundling-orchestrator-load.md
       - deterministic-orchestration-structured-modernization.md
       - llm-as-code-agentic-programming.md
@@ -122,6 +125,7 @@ nav:
       - pr-subscribed-agent-ownership.md
       - proactive-idle-time-anticipation.md
       - progressive-disclosure-agents.md
+      - skill-disclosure-controller.md
       - prompted-uncertainty-decomposition-clarification.md
       - remote-session-control.md
       - self-reporting-loops.md
@@ -133,6 +137,7 @@ nav:
       - verification-gated-agent-autonomy.md
       - capability-declarations-for-agent-actions.md
       - deterministic-precondition-gates.md
+      - schema-checked-rule-extraction.md
       - spec-first-framework-enforcement-modes.md
       - specification-authority-boundary.md
       - trace-learned-execution-guardrails.md
@@ -152,6 +157,7 @@ nav:
       - agent-client-admission-control.md
       - agent-escalation-ladder-energy.md
       - caller-actionable-error-steps.md
+      - retrieval-tool-refusal.md
       - residual-completion-stateful-handoffs.md
       - retry-switch-abstain-recovery-policy.md
       - self-healing-production-agent.md

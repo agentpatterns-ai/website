@@ -6,6 +6,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+  - migration
 aliases:
   - migration visibility prerequisite check
   - whole-codebase visibility migration scoping

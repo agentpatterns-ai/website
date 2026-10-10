@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - reliability
+  - model-routing
 aliases:
   - cross-vendor routing
   - competitive model routing

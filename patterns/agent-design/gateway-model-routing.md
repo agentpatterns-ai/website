@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - claude
   - reliability
+  - model-routing
 aliases:
   - gateway model discovery
   - anthropic-compatible gateway routing

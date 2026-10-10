@@ -11,6 +11,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - plugins
 last_reviewed: 2026-09-04
 maturity: emerging
 status: current

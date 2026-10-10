@@ -6,6 +6,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+  - migration
 aliases:
   - chained agent sessions
   - stacked session branching
@@ -83,7 +84,7 @@ The chain breaks the dependency between review and progress. Because the next se
 
 - The bottom PR sits unreviewed. Auto-rebase and retarget rescue a partially merged stack ([GitHub Changelog](https://github.blog/changelog/2026-07-30-stacked-pull-requests-are-now-in-public-preview/)), but nothing rescues a stack whose base layer never gets read. Every change requested at the bottom propagates upward through each branch.
 - The slices are not actually dependent. Independent passes gain nothing from a chain and cost you a dependency graph plus several open PRs. Land them on main in sequence instead.
-- The platform stacking is immature. GitHub's is public preview as of 2026-07-30, with merge queue support still rolling out ([GitHub Changelog](https://github.blog/changelog/2026-07-30-stacked-pull-requests-are-now-in-public-preview/)). Users of the preview report merges landing only the bottom layer, required status checks that never report because the PR is evaluated against its literal base rather than the stack base, a merge button that stays green when a rebase is required, no stack reordering on the web, and no merging of intermediate stages ([community discussion 201439](https://github.com/orgs/community/discussions/201439)).
+- The platform stacking is still settling. GitHub's reached general availability on 2026-10-06, with auto-merge for stacks listed as still rolling out ([GitHub Changelog](https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available)). During the preview, users reported merges landing only the bottom layer, required status checks that never report because the PR is evaluated against its literal base rather than the stack base, a merge button that stays green when a rebase is required, no stack reordering on the web, and no merging of intermediate stages ([community discussion 201439](https://github.com/orgs/community/discussions/201439)). What general availability fixed and what it moved instead: [Native Pull Request Stacks in an Agent Pipeline](native-pr-stacks-agent-pipeline.md).
 - A tool default silently unstacks a session. A Claude Code worktree created without setting the base branches from the repository's default branch, so a session you believe is stacked is a fresh branch off main that will collide with the layer it was meant to build on ([Claude Code worktrees](https://code.claude.com/docs/en/worktrees)).
 
 ## Example
@@ -109,3 +110,4 @@ The decisions survive; only the branch topology changes. That is why rerooting i
 - [Agent PR Volume vs. Value](../code-review/agent-pr-volume-vs-value.md) — the reviewer-attention cost that motivates keeping each layer small
 - [ACID for Agent Repository State](../patterns/agent-design/acid-for-agent-repository-state.md) — the commit and isolation discipline each session in the stack depends on
 - [Concurrent Agent Pull Requests and Merge-Conflict Cost](concurrent-agent-pr-merge-conflicts.md) — what happens when agent branches run in parallel instead of in a chain
+- [Native Pull Request Stacks in an Agent Pipeline](native-pr-stacks-agent-pipeline.md) — what the platform now manages for you, and the CI and merge-path costs that replaced the tooling cost

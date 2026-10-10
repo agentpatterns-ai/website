@@ -4,6 +4,7 @@ description: "Claude Code 2.1.157 auto-loads plugins from `.claude/skills/<name>
 tags:
   - claude
   - tool-engineering
+  - plugins
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-06-03
 status: current

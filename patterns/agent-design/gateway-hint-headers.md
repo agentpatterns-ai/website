@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - claude
+  - model-routing
 aliases:
   - client-declared routing metadata
   - request-class header

@@ -5,6 +5,7 @@ tags:
   - standards
   - tool-engineering
   - tool-agnostic
+  - plugins
 term: "Agent Plugins"
 aliases:
   - Agent Plugins specification

@@ -45,7 +45,7 @@ Language models generate autoregressively, so once faulty code exists it becomes
 
 Withholding the implementation is not always right. Feeding code as context is a legitimate, separate use in three cases:
 
-- Regression or characterization testing, where the goal is to pin current behavior rather than verify it against a specification — the code is the intended oracle.
+- Regression or characterization testing of stable, trusted behavior, where the goal is to pin current behavior rather than verify it against a specification — the code is the intended oracle. For a new, unreviewed change this carve-out fails: see [Accepting Generated Regression Tests That Pin Faulty Code](fault-enforcing-generated-regression-tests.md).
 - Coverage and compilability goals, where exposing the source raises pass rates and cuts hallucinated symbols. Industry tools such as [Meta's TestGen-LLM](https://arxiv.org/abs/2402.09171) feed the implementation for this — a different axis from fault-detection independence.
 - Trusted, human-reviewed code used as context, where a separate oracle still gates correctness and the derived tests are not the sole proof.
 

@@ -79,6 +79,8 @@ This aligns with the [table of contents pattern](agents-md-as-table-of-contents.
 
 The advice: remove everything the agent can already infer, and keep only what it cannot.
 
+One caveat on the measure: every row above scores task success or cost. A later study graded a different repository-guidance artifact, a generated norm package, on contribution compliance and found a gain there while functional success did not reach significance ([He et al., 2026](https://arxiv.org/abs/2610.07757v1)); see [Verified Norm Packages for Repository Contribution Rules](verified-norm-packages.md).
+
 ## Benchmark limitations
 
 Both studies evaluated well-documented open-source repositories. Context file value is likely higher in:

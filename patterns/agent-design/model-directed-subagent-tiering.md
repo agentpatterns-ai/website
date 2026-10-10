@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - model-routing
 aliases:
   - core-loop delegation
   - agent-chosen subagent tier

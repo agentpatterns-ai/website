@@ -9,7 +9,7 @@ tags:
 aliases:
   - agent PR splitting
   - logical PR decomposition
-last_reviewed: 2026-09-26
+last_reviewed: 2026-10-07
 maturity: established
 ---
 
@@ -46,7 +46,7 @@ Intent-driven slicing adds a sixth axis: which task in the chat session each edi
 
 ## Stacking and dependency order
 
-Independent slices land as parallel PRs against the same base. Dependent slices stack, each targeting the one before it. GitHub's native Stacked PRs (`gh-stack` CLI, [public preview as of 2026-07-30](https://github.blog/changelog/2026-07-30-stacked-pull-requests-are-now-in-public-preview)) makes this first-class: branch protection enforces against the final base, CI runs every layer, and the CLI is "designed for use by AI agents" ([GitHub Stacked PRs](https://github.github.com/gh-stack/), [InfoQ on GitHub Stacked PRs](https://www.infoq.com/news/2026/04/github-stacked-prs/)).
+Independent slices land as parallel PRs against the same base. Dependent slices stack, each targeting the one before it. GitHub's native Stacked PRs (`gh-stack` CLI, [generally available since 2026-10-06](https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available)) makes this first-class: branch protection enforces against the final base, CI runs every layer, and the CLI is "designed for use by AI agents" ([GitHub Stacked PRs](https://github.github.com/gh-stack/), [InfoQ on GitHub Stacked PRs](https://www.infoq.com/news/2026/04/github-stacked-prs/)). Since general availability a stack enters and lands through the merge queue as one merge group. Deleting a stack's base branch now retargets the stack rather than closing its bottom PR. GitHub reports 9% more merged code in repositories using stacks than in peer repositories since the preview opened on 2026-07-30 ([GitHub Changelog, 2026-10-06](https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available)). That figure is vendor telemetry with no repository count and no definition of "peer". Repositories that adopt a new feature are also not a random sample.
 
 Dependency-aware slicing has two parts: identify the slices, then their partial order. Without the order, dependent slices look independent. Reviewers merge them out of sequence, and intermediate states break as a result ([Graphite on PR dependencies](https://graphite.com/guides/github-pr-dependency)).
 
@@ -81,7 +81,7 @@ A 1,500-line refactor sliced by directory becomes four PRs that each touch one l
 - No PR is independently mergeable. If every PR merges in lockstep, the slicer found syntactic boundaries, not semantic ones. The `pr-splitter` hunk-clustering surfaces this on cross-cutting refactors.
 - Reviewers ask for the original diff. Review threads keep referencing files outside the slice ([renovate discussion #14628](https://github.com/renovatebot/renovate/discussions/14628)).
 
-Stacking carries its own cost. Practitioner consensus puts the ceiling at three to four PRs per stack. Beyond that, feedback on an early slice forces a rebase cascade through every downstream slice. Some teams abandon stacking once the cascade cost exceeds the blocking waits it replaced ([stacked PRs guide on dev.to](https://dev.to/alanwest/how-to-stop-drowning-in-giant-pull-requests-with-stacked-prs-2o9d)). The OAuth example below sits at that ceiling; if any layer is likely to churn, a shallower split costs less.
+Stacking carries its own cost. Practitioner consensus puts the ceiling at three to four PRs per stack. Beyond that, feedback on an early slice forces a rebase cascade through every downstream slice. General availability on 2026-10-06 removed one source of that churn. `Rebase stack` now keeps approvals on unchanged code when the base branch moves ahead, "even in repositories that dismiss stale approvals" ([GitHub Changelog, 2026-10-06](https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available)). That covers the rebases a moving base branch triggers. Revising an early slice changes the code above it, so those approvals still drop and each downstream review restarts. Some teams abandon stacking once the cascade cost exceeds the blocking waits it replaced ([stacked PRs guide on dev.to](https://dev.to/alanwest/how-to-stop-drowning-in-giant-pull-requests-with-stacked-prs-2o9d)). The OAuth example below sits at that ceiling; if any layer is likely to churn, a shallower split costs less.
 
 The mitigation is the author's approval gate. Cursor surfaces the proposed split before creating PRs, not after.
 

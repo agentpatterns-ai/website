@@ -50,7 +50,7 @@ With no value set, the default decides per message from the permission class of 
 
 Sender identity never enters that decision. The sender's permission class does, and it arrives as the sender's own assertion, so a message asserting no class is held rather than delivered in a bypassing receiver. The gate fails closed on the one input it cannot verify.
 
-An unanswered hold dialog closes after `dialogExpiry`, five minutes by default, and the message is dropped. A parked message that never resolves is a stuck sender, so v2.1.225 added the missing notice and expiry for headless sessions and startup ([changelog](https://code.claude.com/docs/en/changelog)).
+An unanswered hold dialog closes after `dialogExpiry`, five minutes by default, and the message is dropped. A parked message that never resolves is a stuck sender, so v2.1.225 added the missing notice and expiry for headless sessions and startup ([changelog](https://code.claude.com/docs/en/changelog)). The expiry covers default-held messages, not those held by an explicit `hold` setting, and `dialogExpiry` accepts `"never"` ([cross-session messaging docs](https://code.claude.com/docs/en/cross-session-messaging)). A held message is a different object from VS Code's editable queue with a commit point, described in [Steering Running Agents](steering-running-agents.md#when-the-sender-is-an-agent).
 
 ## Why it works
 

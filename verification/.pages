@@ -85,6 +85,7 @@ nav:
       - planted-bug-observability-calibration.md
       - llm-api-fault-injection-http-layer.md
       - handoff-boundary-fault-injection.md
+      - recovery-as-separate-eval-axis.md
       - behavior-partitioned-security-tests.md
       - route-parity-safeguard-auditing.md
       - timeout-oracles-agent-written-code.md
@@ -111,6 +112,7 @@ nav:
       - skill-evals.md
       - skill-lift.md
       - skill-use-gate-decomposition.md
+      - configuration-specific-skill-utility.md
       - emulated-apis-for-skill-evals.md
       - emulate-ax-changes-before-shipping.md
       - ax-evals-agent-facing-surface.md
@@ -173,6 +175,7 @@ nav:
       - tool-provided-verification.md
       - enforcement-liveness-evidence.md
       - per-layer-suppression-accounting.md
+      - mechanism-class-gate-stacking.md
       - slop-detection-as-review-gate.md
       - evidence-conditioned-execution.md
       - speculative-uncertainty-draft-model-gate.md
@@ -199,6 +202,7 @@ nav:
       - classification-before-repair-analyzer-backlog.md
       - false-pass-liability-harness-triage.md
       - hash-pinned-command-approval.md
+      - behavioral-preflight-rule-replay.md
       - data-fidelity-guardrails.md
       - incremental-verification.md
       - layered-accuracy-defense.md

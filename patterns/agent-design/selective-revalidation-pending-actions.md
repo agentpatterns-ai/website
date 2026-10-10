@@ -75,3 +75,4 @@ Treat the evidence as feasibility, not proof. The 210,000 executions ran on one 
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — the duplicate-effect half of the problem, which revalidation detects but does not solve
 - [ACID for Agent Repository State](acid-for-agent-repository-state.md) — transaction properties applied to an agent's own commits
 - [Approval Gate Granularity](approval-gate-granularity.md) — where the pause that opens the stale-state window comes from
+- [Source-Linked Tool Observations: Repairing Stale Context](source-linked-tool-observations.md) — the prompt-side counterpart, repairing the observation already in context rather than gating a pending action

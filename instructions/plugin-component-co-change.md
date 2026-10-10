@@ -12,6 +12,7 @@ tags:
   - human-factors
   - claude
   - arxiv
+  - plugins
 last_reviewed: 2026-09-02
 maturity: emerging
 ---

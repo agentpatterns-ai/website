@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - benchmarks
 aliases:
   - "embedding-within-strata selection"
   - "outcome-grouped centroid selection"

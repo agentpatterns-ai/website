@@ -23,6 +23,7 @@ nav:
       - cargo-cult-agent-setup.md
       - catastrophic-remembering-instruction-files.md
       - configuration-smells-agents-md.md
+      - model-judged-hook-as-deterministic-control.md
       - stale-ai-configuration-artifacts.md
       - compound-prompt-constraints.md
       - constraint-evasive-fabrication.md
@@ -41,6 +42,7 @@ nav:
       - agent-sprawl.md
       - per-user-agents-contested-resource.md
       - agent-extension-conflicts.md
+      - silent-skill-substitution.md
       - cross-component-interference.md
       - blaming-the-model-for-scaffolding-regressions.md
       - constraint-tax-tool-suppression.md
@@ -93,6 +95,7 @@ nav:
       - changed-tool-call-attribution.md
       - unsignalled-tool-failure-envelope.md
       - silent-failure-mechanism-taxonomy.md
+      - loud-failures-quiet-failures-tool-fault-detection.md
       - destructive-failure-mechanism-attribution.md
       - tool-call-success-as-workflow-evidence.md
       - task-completion-as-tool-certification.md
@@ -107,6 +110,7 @@ nav:
       - lazy-generation.md
       - assertion-free-test-theater.md
       - code-first-test-oracle-bias.md
+      - fault-enforcing-generated-regression-tests.md
       - state-anchored-test-oracles.md
       - test-homogenization-trap.md
       - verifier-reads-the-same-premise.md
@@ -122,6 +126,7 @@ nav:
       - frozen-judge-release-decisions.md
       - density-normalized-quality-metric.md
       - trigger-conditioned-skill-comparisons.md
+      - pass-only-grading-lucky-pass.md
   - "Permissions & Access Control":
       - prompt-only-tool-access-control.md
       - unenforced-claude-md-security-rules.md
@@ -130,6 +135,7 @@ nav:
       - self-justification-as-scope-control.md
       - scoped-looking-permission-grants.md
       - unbound-approval-records.md
+      - guard-approves-truncated-input.md
       - task-uniform-agent-permissions.md
       - ask-everything-permission-policies.md
       - bypass-permissions-overrides-allowlist.md
@@ -152,6 +158,7 @@ nav:
       - adversarial-only-leakage-threat-modelling.md
   - "False Security Evidence":
       - model-confidence-as-security-verification.md
+      - model-upgrade-as-security-improvement.md
       - cleared-review-comment-as-fix.md
       - static-clean-as-security-evidence.md
       - cumulative-best-hides-repair-regressions.md
@@ -187,4 +194,5 @@ nav:
       - agent-laundered-bug-reports.md
       - proactive-team-agent-tool-rollout.md
       - agent-headcount-vanity-metric.md
+      - client-version-metric-dip-as-adoption-loss.md
   - ...

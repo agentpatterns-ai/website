@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - copilot
+  - model-routing
 aliases:
   - surface-scoped routing controls
   - routing visibility per client

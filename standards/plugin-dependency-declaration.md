@@ -5,6 +5,7 @@ tags:
   - standards
   - agent-design
   - claude
+  - plugins
 last_reviewed: 2026-06-03
 maturity: emerging
 ---

@@ -5,6 +5,7 @@ description: "Packaging conformance is checkable on one plugin alone. The failur
 tags:
   - agent-design
   - tool-agnostic
+  - plugins
 aliases:
   - capability name collision
   - plugin composition safety
@@ -77,3 +78,4 @@ Renaming the directories to `plugin-a-troubleshooting` and `plugin-b-troubleshoo
 - [Plugin Dependency Declaration and Disable-Chain Hints](../../standards/plugin-dependency-declaration.md) — one vendor's answer to the relation between plugins that v1.0.0 leaves undefined.
 - [Pre-Install Plugin Transparency: Capability Inventory and Cost Projection](../../standards/pre-install-plugin-transparency.md) — showing a user what a bundle exports before it is installed, which a declared capability surface would make cheap.
 - [Scoped MCP Server Discovery: Most-Specific-Wins Resolution](../../tool-engineering/scoped-mcp-server-discovery.md) — a worked precedence rule at the configuration layer, against the one the plugin specification declines to write.
+- [Shipping a Shared Agent Toolkit as a Versioned Plugin](../../instructions/shared-toolkit-plugin-ownership.md) — the internal single-owner bundle this page scopes out, where the collision is with the consuming repository rather than with a stranger.

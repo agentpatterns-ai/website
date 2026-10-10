@@ -93,6 +93,7 @@ The model never sees the dangerous tools at discovery. If an injection convinces
 
 ## Related
 
+- [A Containment Floor for Agent Self-Configuration](../../security/agent-self-config-field-classes.md) — the same leak on config writes, where the prompt blocks only the wording it names
 - [MCP Runtime Control Plane](../../security/mcp-runtime-control-plane.md)
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](../../security/hybrid-deterministic-semantic-tool-authorization.md)
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)

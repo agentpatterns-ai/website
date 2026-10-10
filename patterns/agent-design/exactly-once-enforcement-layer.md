@@ -86,3 +86,4 @@ That leaves two jobs: pin the key, and carry unresolved outcomes into the final 
 - [Tool-Call Success as Workflow Effect Evidence](../anti-patterns/tool-call-success-as-workflow-evidence.md) — the anomaly catalog behind the reporting gap a green call log hides
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — the wider recovery vocabulary an ambiguous write failure sits inside
 - [Observation Contract Preservation](observation-contract-preservation.md) — the other way a second call to the same tool goes wrong, through mutated tool output rather than a lost response
+- [Recovery as a Separate Eval Axis (UndoBench)](../../verification/recovery-as-separate-eval-axis.md) — how to measure whether your agent has this problem before deciding which layer pays

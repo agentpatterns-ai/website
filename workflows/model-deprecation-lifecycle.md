@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - agent-design
+  - migration
 aliases:
   - model retirement migration
   - llm deprecation workflow

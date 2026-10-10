@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - copilot
   - long-form
+  - model-routing
 aliases:
   - cloud agent auto model selection
   - harness-side model routing

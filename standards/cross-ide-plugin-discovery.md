@@ -5,6 +5,7 @@ tags:
   - standards
   - tool-engineering
   - copilot
+  - plugins
 last_reviewed: 2026-08-07
 maturity: adopted
 ---
