@@ -128,3 +128,4 @@ The cheap model surfaces its own uncertainty; the tier label propagates through 
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](../../token-engineering/cost-aware-agent-design.md) — the legitimate form of the same idea, with the eval-gated escalation pattern this page complements
 - [Gateway Model Routing](../agent-design/gateway-model-routing.md) — the infrastructure layer underneath; useful when paired with the per-tier observability this page argues for
 - [Cheaper-Per-Token Model Upgrades That Cost More Per Task](cheaper-per-token-costlier-per-task.md) — the sibling cost-signal trap: a leaderboard-and-price model swap that inflates effective per-task cost
+- [Treating a Model Upgrade as a Security Improvement](model-upgrade-as-security-improvement.md) — the tier question on the security axis, where most flagship-versus-compact comparisons in one 32-model study found no significant difference at all

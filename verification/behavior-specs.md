@@ -107,3 +107,4 @@ Each spec in a file is graded on its own, with one of three verdicts. A run wher
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — measuring judge error before scaling a rubric across production traces
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — designing graded signals that survive being optimized against
 - [Dual Executable Specifications for Long-Horizon Features](dual-executable-specifications.md) — the executable, output-keyed counterpart to a judge-read behavior spec
+- [Pass-Only Grading Treats Luck and Judgment the Same](../patterns/anti-patterns/pass-only-grading-lucky-pass.md) — what the outcome check misses when it stands alone: 10.7% of 1,136 passing OpenHands trajectories on SWE-bench Verified reached a correct patch through a weak process

@@ -55,7 +55,7 @@ Stacked PRs and strict atomic discipline create overhead that outweighs the bene
 
 - Small or solo teams: one person reviews everything in sequence anyway, so stacking adds branching complexity without shortening the queue.
 - Fast-merge workflows: teams that merge to trunk many times a day may find stacked chains slower to maintain than batching and merging once.
-- Tooling gaps: stacked PRs need explicit support such as Graphite or ghstack, and without it rebasing chains is error-prone and breaks dependents on force-push.
+- Tooling gaps: a stack needs explicit support to hold the chain, and without it rebasing is error-prone and a force-push breaks dependents. GitHub closed that gap for same-repo chains on github.com when [native stacked pull requests](https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available) reached general availability on 2026-10-06, which moved the cost to CI and the merge path rather than removing it — see [Native Pull Request Stacks in an Agent Pipeline](../../workflows/native-pr-stacks-agent-pipeline.md).
 
 The 400-line threshold is a heuristic — a 600-line rename diff may be trivial while a 200-line cryptographic change is not. Apply limits to complexity, not character count.
 

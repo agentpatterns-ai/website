@@ -18,6 +18,7 @@ nav:
       - oracle-poisoning-knowledge-graph.md
       - owasp-llm-top-10-2025-agent-crosswalk.md
       - owasp-2026-update-agent-control-standard.md
+      - reading-exploit-roundups-against-defense-catalog.md
       - pre-trust-execution-surface.md
       - rag-architecture-poisoning-robustness.md
       - replayable-encrypted-reasoning-blocks.md
@@ -36,6 +37,7 @@ nav:
       - action-selector-pattern.md
       - adaptive-evaluation-out-of-band-defenses.md
       - authgraph-dual-graph-injection-defense.md
+      - boundary-laundering-subagent-briefs.md
       - camel-control-data-flow-injection.md
       - close-attack-to-fix-loop.md
       - covert-success-rate-injection.md
@@ -86,6 +88,7 @@ nav:
       - privacy-preserving-llm-requests.md
       - protecting-sensitive-files.md
       - public-placeholder-credentials-injecting-proxy.md
+      - push-boundary-secret-defense-agent-volume.md
       - sandbox-credential-masking.md
       - scoped-credentials-proxy.md
       - secrets-management-for-agents.md
@@ -103,6 +106,7 @@ nav:
       - approval-laundering-transitive-effects.md
       - agent-network-egress-policy.md
       - aggregation-bounds-agent-authorization.md
+      - agent-self-config-field-classes.md
       - self-state-update-boundary.md
       - authority-confusion-untrusted-context.md
       - authorization-continuity-across-agent-mutation.md
@@ -175,6 +179,7 @@ nav:
       - setup-documentation-install-time-attacks.md
       - slopsquatting-hallucinated-package-names.md
       - neutral-prompting-hallucination-steering.md
+      - rule-file-package-substitution.md
       - tool-signing-verification.md
       - enterprise-managed-plugin-governance.md
       - npm-signing-channel-containment-playbook.md

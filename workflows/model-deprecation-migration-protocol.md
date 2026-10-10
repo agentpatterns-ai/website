@@ -7,6 +7,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - migration
 aliases:
   - model id as dependency
   - model deprecation migration protocol

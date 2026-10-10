@@ -5,6 +5,7 @@ tags:
   - claude
   - tool-engineering
   - security
+  - plugins
 aliases:
   - plugin settings.json agent field
   - plugin bin directory PATH injection

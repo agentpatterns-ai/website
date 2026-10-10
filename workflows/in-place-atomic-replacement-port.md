@@ -11,6 +11,7 @@ tags:
   - agent-design
   - testing-verification
   - tool-agnostic
+  - migration
 last_reviewed: 2026-09-17
 maturity: emerging
 ---

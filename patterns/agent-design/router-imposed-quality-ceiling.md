@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - model-routing
 aliases:
   - single-commit routing ceiling
   - trigger-order quality cap

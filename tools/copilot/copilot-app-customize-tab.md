@@ -4,6 +4,7 @@ description: "The Copilot app's Customize tab installs MCP servers, plugins, ski
 tags:
   - copilot
   - instructions
+  - plugins
 aliases:
   - Copilot app Customize tab
   - Copilot app plugin install

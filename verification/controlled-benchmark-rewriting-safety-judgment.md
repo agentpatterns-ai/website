@@ -9,6 +9,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - benchmarks
 aliases:
   - deceptive trajectory rewriting
   - safety judgment OOD evaluation

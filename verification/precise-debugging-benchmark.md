@@ -8,6 +8,7 @@ tags:
   - code-review
   - tool-agnostic
   - arxiv
+  - benchmarks
 aliases:
   - "precise debugging benchmark"
   - "PDB benchmark"

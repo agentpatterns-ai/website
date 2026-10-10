@@ -4,6 +4,7 @@ description: "An Agent Plugins package is portable at skills/ and mcp.json and n
 tags:
   - tool-engineering
   - copilot
+  - plugins
 term: "Per-Surface Plugin Verification"
 aliases:
   - per-surface plugin testing

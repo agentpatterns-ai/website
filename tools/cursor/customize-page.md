@@ -5,6 +5,7 @@ tags:
   - cursor
   - tool-engineering
   - instructions
+  - plugins
 aliases:
   - cursor customize surface
   - cursor unified customization

@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - claude
+  - plugins
 aliases:
   - Pre-Install Plugin Disclosure
   - Plugin Capability Inventory

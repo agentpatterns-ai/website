@@ -10,7 +10,7 @@ tags:
   - human-factors
   - tool-agnostic
   - agent-design
-last_reviewed: 2026-08-23
+last_reviewed: 2026-10-09
 maturity: adopted
 ---
 
@@ -81,6 +81,40 @@ Follow-up messages work best when the current step is short. For long-running st
 
 Interface behavior varies: Claude Code queues messages typed during execution and delivers them at the next turn boundary — pressing Enter alone does not interrupt the current step ([issue #36326](https://github.com/anthropics/claude-code/issues/36326)). To interrupt immediately, press Ctrl+C first, then send your message. Cursor queues a follow-up for the agent's next tool call, so the run continues rather than halting mid-step ([Cursor changelog, 2026-08-19](https://cursor.com/changelog/08-19-26)).
 
+## When the sender is an agent
+
+An orchestrator can edit a worker's queued message only when both sessions run on the same VS Code agent host, the worker's turns are long, and the orchestrator learns new facts while earlier briefs still wait. VS Code 1.141 gives the `send_message` tool four actions in that setting: steer an active conversation, queue a follow-up as a separate turn, replace a queued message while keeping its place, and cancel a queued message. The release notes state the lock point: "Queued messages run in order. After a message starts processing, it can no longer be replaced or cancelled." ([VS Code 1.141 release notes](https://code.visualstudio.com/updates/v1_141#_more-control-for-agent-triggered-messages))
+
+The sender's motive differs from a human's. A person who replaces a queued message corrects their own wording. An orchestrator replaces a brief because new information arrived after it briefed the worker. This is the gap [Anthropic describes](https://www.anthropic.com/engineering/multi-agent-research-system) in synchronous designs: the lead agent cannot steer its subagents while they run.
+
+### What the caller sees
+
+The release notes say nothing about a late call. The 1.141.0 tool source does. A replace or cancel on a message that already started returns `notReplaced` or `notCancelled` with a `processing` or `completed` status, not an error. The tool description tells the caller to "decide whether to send a steering correction or a queued follow-up" ([`sessionServerTools.ts` at 1.141.0](https://github.com/microsoft/vscode/blob/1.141.0/src/vs/platform/agentHost/node/shared/sessionServerTools.ts)). An orchestrator that treats every cancel as a success leaves the worker running the superseded brief.
+
+The same source adds three checks. Replace and cancel need the message ID and revision from an earlier call. A stale revision returns `revisionConflict`. A chat can edit only its own messages, so a second coordinator gets `messageNotOwned`. These are implementation details, not a documented contract, and they can change.
+
+### Whose rules these are
+
+The Agent Host Protocol (AHP) defines the queue: one steering slot, a first-in first-out list of queued messages, and removal of the head message when a turn starts ([AHP state model](https://github.com/microsoft/agent-host-protocol/blob/bd6124c4ca470c47034cbfa0c7790157b32de4f3/docs/guide/state-model.md)). The `send_message` operations, the ownership check, and the revision check belong to VS Code's tool layer. The two differ on steering. The AHP spec says a new steering message replaces the existing one. The VS Code tool rejects a steer with `cannotSteer` when the target is idle or already has one pending.
+
+### Other harnesses
+
+No other surveyed agent-to-agent interface documents a queued-message edit:
+
+- Claude Code agent teams deliver messages to a mailbox file automatically, and the [agent teams docs](https://code.claude.com/docs/en/agent-teams) describe no cancel or replace operation.
+- The [OpenAI multi-agent guide](https://developers.openai.com/api/docs/guides/responses-multi-agent) lists `send_message` to queue a message and `interrupt_agent` to interrupt an active turn.
+- LangSmith cancels whole runs in `pending` or `running` status, not single messages ([cancel a run](https://docs.langchain.com/langsmith/cancel-run)).
+
+For most orchestrators, an interrupt plus a fresh follow-up covers the same need. The editable queue pays off only when worker turns are long.
+
+### When the queue is the wrong tool
+
+- Short worker turns drain the queue before the orchestrator can act, so most replace and cancel calls return `notReplaced` or `notCancelled`.
+- A worker that has started cannot be rolled back by a steer. The [rollback-first](rollback-first-design.md) caveat above applies unchanged.
+- Replace removes the first brief from the worker's view. Append-only corrections keep both versions in the worker's transcript, which gives a reviewer the reason the plan changed.
+- After context compaction, the orchestrator may lose the IDs and revisions it needs, and must read them back before it edits.
+- VS Code labels the Agent Host as under active development ([VS Code docs](https://code.visualstudio.com/docs/agents/concepts/agent-host)), so the semantics may change.
+
 ## Example
 
 You ask Claude Code to refactor the authentication module. After two tool calls you see it is reading files in the payment module instead.
@@ -119,6 +153,7 @@ Both messages preserve the file reads and reasoning the agent has already accumu
 - Both preserve accumulated context; restarting discards it
 - Steer early — detecting wrong direction from tool calls beats correcting finished output
 - Over-steering signals an underspecified prompt; fix the prompt, not the run
+- On a VS Code agent host, an agent can replace or cancel a queued message until it starts processing; after that, only a steer or a new follow-up works
 
 ## Why it works
 

@@ -62,3 +62,4 @@ A validity-preserving protocol change moves the one variable held-out tasks cann
 - [Answer-Reachable Eval Environments](answer-reachable-eval-environments.md) — the other way a benchmark environment inflates a score, by leaving the fix reachable
 - [Eval Blind Spots](../../verification/eval-blind-spots.md) — what a held-out task set does and does not cover
 - [Reliability of an Automatically Selected Agent Harness](../agent-design/harness-selection-reliability.md) — run-to-run selection variance when a search picks the winning configuration
+- [Pass-Only Grading Treats Luck and Judgment the Same](pass-only-grading-lucky-pass.md) — the shortcut the protocol keeps whichever tasks you swap in: a green run that reached green through retries scores like a clean one

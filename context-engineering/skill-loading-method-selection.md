@@ -90,3 +90,4 @@ Run that over a representative multi-turn session per method and compare medians
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](../tool-engineering/mcp-eager-vs-jit-loading.md) — the same eager-or-deferred decision at MCP server granularity
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — why the prefix hierarchy constrains any loading design
 - [Skill Loadout Curation for Coding Agents](skill-loadout-curation.md) — which skills to carry at all, before deciding how to load each one
+- [Three Skill Disclosure Decisions to Move Off the Model](../patterns/agent-design/skill-disclosure-controller.md) — which component decides a skill loads, once the method is settled

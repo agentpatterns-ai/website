@@ -6,6 +6,7 @@ tags:
   - observability
   - cost-performance
   - claude
+  - plugins
 aliases:
   - Per-Plugin Token Cost
   - Plugin Token Budget

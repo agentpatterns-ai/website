@@ -7,11 +7,12 @@ tags:
   - cost-performance
   - arxiv
   - tool-agnostic
+  - model-routing
 aliases:
   - natural cache boundaries
   - cache boundary routing
   - cache-safe model switching
-last_reviewed: 2026-09-25
+last_reviewed: 2026-10-07
 maturity: emerging
 ---
 
@@ -23,7 +24,9 @@ Cache-safe routing boundaries are the three points in an agent session where cha
 
 ## The conditions that make this bind
 
-Three things have to hold before the boundary matters. Cache reads must be discounted: Anthropic bills them at 0.1x the input price, 0.025x on Fable 5.1, and bills writes at 1.25x for the five-minute cache and 2x for the hour ([Anthropic, Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). The cache must belong to one model: "Each model has its own cache. Switching with `/model` means the next request reads the entire conversation history with no cache hits, even though the content is identical" ([Claude Code, Prompt caching](https://code.claude.com/docs/en/prompt-caching#switching-models)). And the cache must be warm. Claude Code acts on that last condition itself, asking you to confirm a switch only while the cache still lives: "once that time passes, the cache has expired, so Claude Code switches without asking" ([Claude Code](https://code.claude.com/docs/en/prompt-caching#switching-models)). A cold return is a free re-choice.
+Three things have to hold before the boundary matters. Cache reads must be discounted: Anthropic bills them at 0.1x the input price, 0.025x on Fable 5.1, and bills writes at 1.25x for the five-minute cache and 2x for the hour ([Anthropic, Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). OpenAI states its own read discount as an upper bound: "Cached input tokens cost up to 95% less than uncached input tokens, depending on the model" ([OpenAI](https://openai.com/index/practical-guide-building-gpt-6)). The post attaches no per-model table to that figure, and it tells you to "Include cache writes and any long-context rates when estimating the cost of a complete workflow". The cache must belong to one model: "Each model has its own cache. Switching with `/model` means the next request reads the entire conversation history with no cache hits, even though the content is identical" ([Claude Code, Prompt caching](https://code.claude.com/docs/en/prompt-caching#switching-models)). And the cache must be warm. Claude Code acts on that last condition itself, asking you to confirm a switch only while the cache still lives: "once that time passes, the cache has expired, so Claude Code switches without asking" ([Claude Code](https://code.claude.com/docs/en/prompt-caching#switching-models)). A cold return is a free re-choice.
+
+Not every knob is pinned to the model's cache. OpenAI reports that in its API "you can change reasoning effort mid-conversation without breaking cache" ([OpenAI](https://openai.com/index/practical-guide-building-gpt-6)). Effort moves mid-task; a model change waits for a boundary.
 
 ## The payback arithmetic
 

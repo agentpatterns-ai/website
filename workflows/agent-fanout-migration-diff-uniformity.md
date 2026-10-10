@@ -6,6 +6,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+  - migration
 aliases:
   - agent fan-out migration batch sizing
   - diff uniformity budget for migrations

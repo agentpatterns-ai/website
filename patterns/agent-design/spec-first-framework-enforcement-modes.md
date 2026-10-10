@@ -72,3 +72,4 @@ That is the half with independent measurement behind it. The other half has an a
 - [Spec-Driven Development with Spec Kit](../../workflows/spec-driven-development.md) — the front-loaded exemplar in this taxonomy
 - [Learning Execution Guardrails from Agent Failure Traces](trace-learned-execution-guardrails.md) — a measurement of mode one, where mined prose rules cut abnormal execution while introducing a refusal cost of their own
 - [Protecting the Test Oracle From the Agent](protect-the-oracle-from-the-agent.md) — the same write-reach axis applied to one artifact class, including the waiver routes that never edit a test
+- [Extension Layers for an Organization-Wide Spec Toolkit](../../workflows/spec-toolkit-extension-layers.md) — the same ordering question asked about the developer instead of the agent, read off one toolkit's published resolution stack

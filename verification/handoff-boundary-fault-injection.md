@@ -88,3 +88,4 @@ Compute amplification per pair, then read the spread rather than the average. Fi
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — the calibration step this technique assumes has already passed
 - [Failure-Aware Observability for Multi-Agent LLM Systems](../observability/failure-aware-observability-multi-agent.md) — six trace signals for diagnosing an organic failure, where this page causes one
 - [Subagent OTel Trace Correlation via agent_id Attribute](../observability/subagent-otel-trace-correlation.md) — the attribute propagation that makes per-agent span queries work
+- [Recovery as a Separate Eval Axis (UndoBench)](recovery-as-separate-eval-axis.md) — the same paired-run design scored for recovery rather than runtime, stratified by where the fault lands relative to a committed mutation

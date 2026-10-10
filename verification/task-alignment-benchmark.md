@@ -8,6 +8,7 @@ tags:
   - security
   - tool-agnostic
   - arxiv
+  - benchmarks
 aliases:
   - task alignment benchmark
   - selective compliance evaluation

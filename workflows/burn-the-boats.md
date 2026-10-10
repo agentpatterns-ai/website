@@ -6,6 +6,7 @@ tags:
   - workflows
   - tool-agnostic
   - agent-design
+  - migration
 aliases:
   - commitment-forcing deprecation
   - credible commitment product strategy

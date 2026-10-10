@@ -173,3 +173,4 @@ Specification size. Larger spec files take longer to compile and consume more of
 - [Bootstrapping Coding Agents](../emerging/bootstrapping-coding-agents.md) — the theoretical extension where the spec alone is sufficient to regenerate the implementation
 - [Design Docs as the Durable Artifact](design-docs-as-durable-artifact.md) — the tier above this one, where the code is discarded and rebuilt from prose on every version change
 - [Specification Portability Across Coding Agents](../instructions/specification-portability-across-agents.md) — what happens to the spec when a different agent implements from it
+- [Extension Layers for an Organization-Wide Spec Toolkit](spec-toolkit-extension-layers.md) — what has to be added before an organization rather than one developer sets the templates, and why the resolution order limits what the layers enforce

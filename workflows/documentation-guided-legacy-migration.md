@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - migration
 aliases:
   - documentation-driven C to Rust migration
   - blueprint-driven legacy migration

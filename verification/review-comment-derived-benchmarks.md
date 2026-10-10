@@ -7,6 +7,7 @@ tags:
   - evals
   - code-review
   - tool-agnostic
+  - benchmarks
 aliases:
   - PR-comment-derived eval
   - reviewer-derived code review benchmark

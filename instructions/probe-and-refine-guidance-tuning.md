@@ -87,3 +87,4 @@ Practitioners running Claude Code today do an unautomated version of this every 
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the alternative when the rule is critical enough that prompts are the wrong surface
 - [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md) — empirical null on file structure, complementary to this page's content-tuning angle
 - [Knowledge Gap or Skill Gap: Triage Before Writing Context](knowledge-gap-vs-skill-gap-triage.md) — the triage that decides whether guidance tuning is the right spend at all
+- [Verified Norm Packages for Repository Contribution Rules](verified-norm-packages.md) — the other acquisition route, verifying each rule against repository evidence rather than tuning against probes

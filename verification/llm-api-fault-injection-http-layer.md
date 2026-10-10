@@ -79,3 +79,4 @@ A single configuration names four things: the fault type, the target field, the 
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — the same inject-then-check-detection loop applied to instrumentation
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — per-stage attribution for the runs an injection campaign flags
 - [Agent Circuit Breaker](../patterns/agent-design/agent-circuit-breaker.md) — the runtime mitigation for the crash faults this technique simulates
+- [Recovery as a Separate Eval Axis (UndoBench)](recovery-as-separate-eval-axis.md) — injects at the external-mutation boundary instead, and conditions the recovery score on an identical-seed control run

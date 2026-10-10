@@ -171,6 +171,7 @@ When the task genuinely needs every skill at once: each load is another read ope
 ## Related
 
 - [Agent Skills: Cross-Tool Task Knowledge Standard](../../standards/agent-skills-standard.md)
+- [Three Skill Disclosure Decisions to Move Off the Model](skill-disclosure-controller.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](../../standards/agent-definition-formats.md)

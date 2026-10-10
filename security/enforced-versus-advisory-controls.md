@@ -100,6 +100,7 @@ Nothing here depends on the agent honoring a rule; the file is not in the reposi
 
 ## Related
 
+- [A Containment Floor for Agent Self-Configuration](agent-self-config-field-classes.md) — the same enforced-versus-advisory split measured on an agent's own config fields, where the advisory wording only blocks the vocabulary it uses
 - [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](permission-framework-over-model.md) — controlled benchmark of the same enforcement effect on one failure class
 - [Protecting Sensitive Files from Agent Context Access](protecting-sensitive-files.md) — the prescriptive control whose limits this page tests against field reports
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — environment-variable injection as the enforced alternative to ignore files
