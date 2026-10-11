@@ -11,7 +11,7 @@ aliases:
   - guard approves truncated input
   - silent input truncation in a guard
   - fail-open on partial input
-last_reviewed: 2026-10-09
+last_reviewed: 2026-10-10
 maturity: emerging
 ---
 
@@ -41,7 +41,7 @@ The pattern matters when all of these hold:
 Each fail-closed control a reader already knows triggers on an error.
 
 - A settings command hook that exits with code 1 is a non-blocking error, and the hooks reference says: "If your hook is meant to enforce a policy, use `exit 2`." ([Claude Code hooks](https://code.claude.com/docs/en/hooks)).
-- Claude Code 2.1.295 added `onFailure: "block"`, so a command or HTTP hook that cannot start, times out, or exits with an unexpected code blocks the action ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+- Claude Code 2.1.295 added `onFailure: "block"`, so a command or HTTP hook that cannot start, times out, or exits with an unexpected code blocks the action ([Claude Code changelog 2.1.295](https://code.claude.com/docs/en/changelog#2-1-295)).
 - A mod hook that fails is skipped. The docs tell the author to add a `.catch` error handler to fail closed ([React to events with a mod](https://code.claude.com/docs/en/plugins/mods/events)). That handler fires on a throw, a timeout, or a wrong-shaped answer.
 
 A hook handed a truncated input does none of those things. It starts, finishes in time, and returns a well-formed allow. That is why the changelog names "no error" as the defect.
