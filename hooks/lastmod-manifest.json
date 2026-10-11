@@ -815,7 +815,7 @@
   "patterns/anti-patterns/frozen-judge-release-decisions.md": "2026-10-05",
   "patterns/anti-patterns/frozen-playbook-reuse-validation.md": "2026-08-07",
   "patterns/anti-patterns/generated-assertion-signoff.md": "2026-08-26",
-  "patterns/anti-patterns/guard-approves-truncated-input.md": "2026-10-09",
+  "patterns/anti-patterns/guard-approves-truncated-input.md": "2026-10-10",
   "patterns/anti-patterns/happy-path-bias.md": "2026-07-20",
   "patterns/anti-patterns/held-out-tasks-as-shortcut-defense.md": "2026-10-09",
   "patterns/anti-patterns/homogeneous-debate-panel-groundedness.md": "2026-08-05",
