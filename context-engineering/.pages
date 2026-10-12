@@ -45,6 +45,7 @@ nav:
       - control-context-compression-budget.md
       - reacquisition-cost-measurement.md
       - compaction-policy-latency-and-cost.md
+      - per-agent-compaction-window.md
       - injected-context-cost-attribution.md
       - working-memory-evaluation-levels.md
       - prompt-caching-architectural-discipline.md

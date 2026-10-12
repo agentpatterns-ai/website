@@ -79,4 +79,5 @@ This is a well-formed string, so it commits clean and shows up in `/hooks`. It a
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — the enforcement layer whose config is the most common thing worth validating
 - [Agent Config as a Managed Supply Chain](agent-config-as-managed-supply-chain.md) — provenance and rollback for the same files, upstream of the correctness check
 - [Frontmatter and Body Rule Drift in Agentic Workflows](frontmatter-body-rule-drift.md) — the half of a config file no validator can check, because prose has no schema
+- [Auditing an Instruction File for Interference Between Its Own Rules](../verification/instruction-file-interference-audit.md) — the prose half of the same artifact, where the defect is two rules that cannot both hold rather than a malformed key
 - [Per-Surface Verification of Agent Plugin Packages](../tool-engineering/per-surface-plugin-verification.md) — a different route to the same silence, where a valid policy names a key the client does not implement

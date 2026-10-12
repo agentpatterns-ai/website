@@ -84,3 +84,4 @@ Emulating both against the same baseline surfaces the difference in minutes; shi
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — Why an emulated score can improve while the real outcome does not — the measurement gap this technique can fall into.
 - [Baseline-Aware Test Evaluation for Multi-Agent Issue Resolution (Phoenix)](baseline-aware-test-evaluation-issue-resolution.md) — The baseline-versus-changed discipline this technique depends on, applied to gating agent PRs on the diff.
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md) — The broader loop that supplies the stable tasks and success criteria an AX experiment measures against.
+- [Measure Agent Experience Against a Bare Baseline](ax-bare-baseline-lift-drag.md) — The baseline this technique compares against, and the rule that decides which surface to emulate a change to first.

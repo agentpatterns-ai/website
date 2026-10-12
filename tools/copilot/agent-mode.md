@@ -8,7 +8,7 @@ tags:
   - agent-design
   - copilot
 applies_to: "copilot@1.x"
-last_reviewed: 2026-07-28
+last_reviewed: 2026-10-12
 status: current
 ---
 
@@ -36,7 +36,9 @@ For complex tasks, Copilot generates a [plan that lists all steps](https://code.
 
 ## Inline agent mode (JetBrains)
 
-Inline agent mode hosts the same agent toolkit — workspace search, multi-file edits, terminal commands, and editor lint and compile error reads ([GitHub Changelog 2025-05-19](https://github.blog/changelog/2025-05-19-agent-mode-and-mcp-support-for-copilot-in-jetbrains-eclipse-and-xcode-now-in-public-preview/)) — in the JetBrains inline chat popover instead of the chat tool window, in public preview since April 24, 2026 ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)). Open inline chat with `Shift+Ctrl+I` (Windows) or `Shift+Cmd+I` (Mac), right-click and select **Open Inline Chat**, or click the gutter icon, then switch the popover to agent mode. On Copilot Business and Enterprise, an admin must enable the **Editor preview features** policy before the surface appears.
+Inline agent mode hosts the same agent toolkit — workspace search, multi-file edits, terminal commands, and editor lint and compile error reads ([GitHub Changelog 2025-05-19](https://github.blog/changelog/2025-05-19-agent-mode-and-mcp-support-for-copilot-in-jetbrains-eclipse-and-xcode-now-in-public-preview/)) — in the JetBrains inline chat popover instead of the chat tool window, in public preview since April 24, 2026 ([GitHub Changelog 2026-04-24](https://github.blog/changelog/2026-04-24-inline-agent-mode-in-preview-and-more-in-github-copilot-for-jetbrains-ides/)). Open inline chat with `Shift+Ctrl+I` (Windows) or `Shift+Cmd+I` (Mac), right-click and select **Open Inline Chat**, or click the gutter icon, then switch the popover to agent mode. On Copilot Business and Enterprise, an admin must enable the **Editor preview features** policy before the surface appears. The plugin needs JetBrains IDE 2025.2 or later, because GitHub ended support for 2025.1 ([GitHub Changelog 2026-10-10](https://github.blog/changelog/2026-10-10-new-controls-and-chat-improvements-in-copilot-for-jetbrains)).
+
+Diagnostic intention menus include a Fix action that opens inline chat and asks Copilot to repair the issue. It "uses agent mode when it is available and ask mode otherwise" ([GitHub Changelog 2026-10-10](https://github.blog/changelog/2026-10-10-new-controls-and-chat-improvements-in-copilot-for-jetbrains)). The changelog does not say what makes agent mode unavailable.
 
 | Dimension | Inline agent mode | Chat-panel agent mode |
 |-----------|------------------|----------------------|

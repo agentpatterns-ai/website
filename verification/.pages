@@ -116,6 +116,7 @@ nav:
       - emulated-apis-for-skill-evals.md
       - emulate-ax-changes-before-shipping.md
       - ax-evals-agent-facing-surface.md
+      - ax-bare-baseline-lift-drag.md
       - agent-driven-eval-flywheel.md
       - eval-difficulty-product-smell.md
       - agent-authored-eval-suites.md
@@ -156,6 +157,7 @@ nav:
       - risk-based-task-sizing.md
       - predictive-claim-gate.md
       - cross-model-review-independence.md
+      - instruction-file-interference-audit.md
   - "Rubric Design":
       - anti-reward-hacking.md
       - symptom-reduction-as-root-cause.md

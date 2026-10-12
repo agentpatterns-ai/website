@@ -11,7 +11,7 @@ aliases:
   - programmatic tool calling
   - tools as code stubs
   - code-mode tool calling
-last_reviewed: 2026-08-09
+last_reviewed: 2026-10-11
 maturity: emerging
 ---
 
@@ -39,7 +39,7 @@ Fan-out is where the difference stops being a matter of degree, for some models.
 
 That ceiling is not universal, and the paper says so: "This asymmetry does not appear in GPT-5.6-Sol, which holds 100% baseline enumeration accuracy through N=100, suggesting the structural limit is specific to how Anthropic models serialize parallel tool-call blocks rather than a universal property of JSON tool calling" ([Patel et al., 2026](https://arxiv.org/abs/2608.06370v1)). Measure the drop on your own model rather than assuming the paradigm has it.
 
-Chaining gains scale with depth: the accuracy gap reaches 18.8 percentage points at chains of 12 or more calls, at 0.32 to 0.96 of baseline per-entry latency ([Patel et al., 2026](https://arxiv.org/abs/2608.06370v1)). That range covers 13 of the 14 models; GPT-5 is the exception at 2.8x baseline latency, so a budget set from the range alone gets it wrong there. Under schema flooding with 128 schemas and decoys, mean accuracy moved +5.5% for the programmatic path against −2.3% for JSON and −32.0% for filesystem-based tool discovery ([Patel et al., 2026](https://arxiv.org/abs/2608.06370v1)).
+Chaining gains scale with depth: the accuracy gap reaches 18.8 percentage points at chains of 12 or more calls, at 0.32 to 0.96 of baseline per-entry latency ([Patel et al., 2026](https://arxiv.org/abs/2608.06370v1)). That range covers 13 of the 14 models; GPT-5 is the exception at 2.8x baseline latency, so a budget set from the range alone gets it wrong there. Under schema flooding with 128 schemas and decoys, mean accuracy moved +5.5% for the programmatic path against −2.3% for JSON and −32.0% for filesystem-based tool discovery ([Patel et al., 2026](https://arxiv.org/abs/2608.06370v1)). Claude Code 2.1.293 added `isDeferred` to `$.tool.register`: `false` lists a tool's schema in the prompt from the start instead of behind tool search ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-293)).
 
 Token cost inverts at scale. Below roughly 26 parallel calls the programmatic path is the expensive one, running 1.5× the input tokens on the chaining ablation. The overhead is the instruction template, which sits in the system prompt as prose instead of the API `tools` parameter. At a fan-out of 48 it needs 3,535 input tokens against 5,097 for JSON ([Patel et al., 2026](https://arxiv.org/abs/2608.06370v1)). Anthropic measured roughly 38% fewer billed input tokens on a 75-tool agent benchmark, with no change in accuracy ([Anthropic](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)).
 

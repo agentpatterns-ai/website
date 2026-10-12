@@ -11,7 +11,7 @@ aliases:
   - workflow-state canvas
   - canvas as workflow state surface
   - agentic workflow canvas blueprint
-last_reviewed: 2026-10-05
+last_reviewed: 2026-10-11
 maturity: emerging
 ---
 
@@ -38,6 +38,8 @@ The mechanism is externalization rather than rendering. A canvas earns the diffe
 ## What the build actually costs
 
 GitHub's post quotes two figures: "Site Studio cost me about 2,000 AI credits, and the modernization canvas cost me about 3,000 AI credits" ([Gupta, 2026-08-17](https://github.blog/ai-and-ml/github-copilot/how-canvases-make-agentic-workflows-visible-steerable-and-cost-efficient/)). The billing reference sets the conversion at "1 AI credit = $0.01 USD" ([GitHub Docs](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)), so the two builds cost roughly $20 and $30 of model spend. Amortizing a sum that size across future runs is not a decision anyone needs to make.
+
+Microsoft ships three canvases of its own through the Awesome Copilot marketplace: Azure Functions Hosted Skills, Azure Resources Query, and Azure Cost Health Check ([Microsoft, 2026-09-29](https://devblogs.microsoft.com/blog/azure-canvases/)). The pitch is a workspace that you and your agent share. On it, routine interactions such as filtering a table or selecting an option run in code rather than going back to the model. Microsoft is describing its own product there, and the post publishes no measurement of the saving.
 
 The cost that decides the build is what you now own: a code artifact your team maintains against an evolving extension API, rendering inside one vendor's app. That investment depreciates as the platform beneath it moves — Manus "rebuilt our agent framework four times" and chose to be "the boat, not the pillar stuck to the seabed" ([Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)).
 

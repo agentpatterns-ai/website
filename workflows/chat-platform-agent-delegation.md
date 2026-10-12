@@ -126,3 +126,4 @@ Skip it when the agent's IDE or PR-comment entry point already covers the workfl
 - [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — the threat model this pattern concentrates
 - [Agent Governance Policies](agent-governance-policies.md) — enterprise-level controls for chat-platform agent surfaces
 - [GitHub Copilot Cloud Agent](../tools/copilot/coding-agent.md) — the GitHub-native cloud agent surface chat delegation often targets
+- [Agent Status Signals as Inference](../patterns/agent-design/agent-status-signals-as-inference.md) — what the acknowledgment and loading state in the thread may honestly claim

@@ -95,3 +95,4 @@ Compare that with "uses proper security practices." The checklist version return
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — how far judge calibration has to go once verdicts gate a pipeline
 - [Eval Awareness: Designing Evals Agents Cannot Recognize](eval-awareness.md) — the other reason eval-shaped signals in the environment change what you measure
 - [Skill Evals](skill-evals.md) — the same paired with-and-without runner applied to a skill instead of a product surface
+- [Measure Agent Experience Against a Bare Baseline](ax-bare-baseline-lift-drag.md) — how to read the number this eval produces: propensity against efficacy, task cost beside quality, and the agent profile the result belongs to

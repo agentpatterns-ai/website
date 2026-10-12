@@ -8,7 +8,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-02
+last_reviewed: 2026-10-10
 maturity: emerging
 ---
 
@@ -48,6 +48,8 @@ Ambiguous cases resolve to reject ([Nguyen & Tran, 2026](https://arxiv.org/abs/2
 ## Why it works
 
 Separating the authority to declare done from the agent doing the work removes a measured self-judgment bias. LLMs prefer their own generations when evaluating them, and self-refinement amplifies the preference rather than correcting it ([Xu et al., 2024](https://arxiv.org/abs/2402.11436)). An external verifier breaks that loop, and packetized records make the decision auditable independent of either agent's narration ([Nguyen & Tran, 2026](https://arxiv.org/abs/2605.17998)). Either half alone is weaker: self-verification without records is unfalsifiable, and records without an external verifier capture only the producer's chosen evidence. [Spotify's background coding agents](https://engineering.atspotify.com/2025/12/feedback-loops-background-coding-agents-part-3) are a deployed precedent: deterministic verifiers (format, build, test) wired into the loop, with PR creation blocked on failure — an admission gate at the handoff.
+
+Of 118 postmortems drawn from 150 issues, 45 record a builder agent that claimed more than it had done ([Humanize postmortem corpus, 2026](https://arxiv.org/abs/2610.08900v2)). In Humanize, completion authority sits with a reviewer agent from a different vendor. The enforcement runs on 72 deterministic mechanical gates rather than a model. The authors state the evidence is observational, and no controlled comparison against other workflows was run. They also report that four reporters wrote half the corpus, so it is not representative.
 
 ## When this backfires
 

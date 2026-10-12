@@ -9,7 +9,7 @@ aliases:
   - in-process plugin hooks
   - the mods API
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-10-07
+last_reviewed: 2026-10-11
 status: current
 ---
 
@@ -63,6 +63,8 @@ The pattern fails in two cases:
 
 - Desktop app local and SSH sessions do not receive the organization's `ask` setting ([MCP docs](https://code.claude.com/docs/en/mcp)).
 - A Claude Code older than 2.1.290 sees neither field, and a mod written against the 2.1.277 typings gets no type hints for either. Whether a missing `ceiling` means no organization requirement is undocumented, so a hook should not treat absence as approval.
+
+Release 2.1.290 also added `serverToolUses` to the result of a mod's `turn.step` hook. It holds the tool calls the API ran itself (the advisor), each with an id, name, input, start and end ([Claude Code 2.1.290 changelog](https://code.claude.com/docs/en/changelog#2-1-290)).
 
 ## When this backfires
 

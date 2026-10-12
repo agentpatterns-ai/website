@@ -107,3 +107,4 @@ The first sentence is OpenAI's recommended preamble instruction. The remainder a
 - [Observability Legible to Agents](../../observability/observability-legible-to-agents.md)
 - [Trajectory Logging and Progress Files](../../observability/trajectory-logging-progress-files.md)
 - [Steering Running Agents](steering-running-agents.md)
+- [Agent Status Signals as Inference](agent-status-signals-as-inference.md) — the off-path case, where a classifier or a timer sources the signal instead of the working model

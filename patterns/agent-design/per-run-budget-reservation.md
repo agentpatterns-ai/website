@@ -130,3 +130,4 @@ On the first response — 1,200 input tokens split 300 ordinary / 400 cached / 5
 - [Centralized LLM Gateway for Per-Dimension Agent Budgets](../../observability/llm-gateway-per-dimension-budgets.md) — the fleet-scope enforcement point that per-run reservation complements at the run scope
 - [Tail Control for Agent Workflows](tail-control-for-agent-workflows.md) — engineering for worst-case behavior; the reservation is the cost-side analogue
 - [Fleet-Level Irreversibility Budgets for Agent Effects](fleet-irreversibility-budget.md) — the same reserve-before-commit shape applied to residual risk across a fleet rather than dollars inside one run
+- [Refilling Tool Budgets: Rationing by Rate, Not Session Cap](refilling-tool-budgets.md) — what happens when the balance this page reserves against refills over time instead of depleting once

@@ -76,3 +76,4 @@ Do not extend that into a claim that static tools cannot see weak randomness. Ba
 - [Deterministic Guardrails Around Probabilistic Agents](../../verification/deterministic-guardrails.md) — what a deterministic gate does buy, and where its reach stops.
 - [The Security Review Gap in AI-Authored PRs](../../code-review/security-review-gap-in-ai-prs.md) — the human half of the same gate, where reviewer heuristics miss AI-specific CWE clusters.
 - [Treating a Cleared Review Comment as a Fixed Flaw](cleared-review-comment-as-fix.md) — the same error inside a review loop, where an adversary adapts the code to whatever the reviewer said.
+- [Treating a Bundled Bytecode Cache as a Build Artifact](bundled-bytecode-cache-as-build-artifact.md) — the case where the scanner reads the wrong file entirely, because a shipped bytecode cache supplies the body Python runs.
