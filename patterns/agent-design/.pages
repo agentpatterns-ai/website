@@ -134,6 +134,7 @@ nav:
       - sprint-contracts.md
       - steering-running-agents.md
       - tool-preamble-status-update.md
+      - agent-status-signals-as-inference.md
       - verification-gated-agent-autonomy.md
       - capability-declarations-for-agent-actions.md
       - deterministic-precondition-gates.md
@@ -151,6 +152,7 @@ nav:
       - agent-native-filesystem-mediation.md
       - model-directed-subagent-tiering.md
       - provider-hosted-subagent-delegation.md
+      - verdict-driven-inspection-cadence.md
   - "Reliability":
       - administrative-effort-ceilings.md
       - agent-circuit-breaker.md
@@ -206,6 +208,7 @@ nav:
       - reasoning-budget-allocation.md
       - reasoning-effort-over-tool-scaffolding.md
       - recoverability-gated-self-evolution.md
+      - refilling-tool-budgets.md
       - requirement-keyed-checkpoints.md
       - rollback-first-design.md
       - router-imposed-quality-ceiling.md

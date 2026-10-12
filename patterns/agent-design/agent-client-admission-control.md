@@ -11,7 +11,7 @@ aliases:
   - client-side admission control for agents
   - agent retry budget and 429 handling
   - client-side throttling for agent fleets
-last_reviewed: 2026-08-19
+last_reviewed: 2026-10-11
 maturity: adopted
 ---
 
@@ -36,7 +36,7 @@ If the callers are third parties or forked SDKs, treat the client control as an 
 
 Four controls, each decided before a request leaves the process.
 
-Retry budget. Cap attempts per operation and stop. The originating write-up caps at three attempts ([Chakravarty, 2026](https://towardsdatascience.com/three-generations-of-autoscaling-and-why-agentic-traffic-breaks-all-of-them/)). Contract-bounded execution with a 50K token budget and a maximum of three iterations, measured across 70 LiveCodeBench problems, "achieves 90% token reduction compared to UNCONTRACTED (p=0.0007, paired t-test), with 525× lower variance" ([arXiv:2601.08815v3](https://arxiv.org/abs/2601.08815v3)).
+Retry budget. Cap attempts per operation and stop. The originating write-up caps at three attempts ([Chakravarty, 2026](https://towardsdatascience.com/three-generations-of-autoscaling-and-why-agentic-traffic-breaks-all-of-them/)). Contract-bounded execution with a 50K token budget and a maximum of three iterations, measured across 70 LiveCodeBench problems, "achieves 90% token reduction compared to UNCONTRACTED (p=0.0007, paired t-test), with 525× lower variance" ([arXiv:2601.08815v3](https://arxiv.org/abs/2601.08815v3)). Claude Code 2.1.286 moved retry budgeting to a single limit covering a whole model call. Under the default retry settings, a failing call sends at most 14 requests ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-286)).
 
 Honor the 429. A rate-limit response carries the wait, and retrying through it cannot succeed. The Claude API returns 429 with a `retry-after` header giving "the number of seconds to wait until you can retry the request. Earlier retries will fail" ([Claude API rate limits](https://platform.claude.com/docs/en/api/rate-limits)).
 
@@ -80,3 +80,4 @@ The remedy the vendor documents is client-side: "ramp up your traffic gradually 
 - [Tail Control for Agent Workflows](tail-control-for-agent-workflows.md) — bounded loops, per-step timeouts, and graceful degradation for the same failure tail
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](../../loop-engineering/loop-budgeting.md) — budget allocation inside one agent loop, where this page covers admission across a fleet
 - [Agent Backpressure: Automated Feedback for Self-Correction](agent-backpressure.md) — a different sense of backpressure: tooling feedback for self-correction, not traffic admission
+- [Refilling Tool Budgets: Rationing by Rate, Not Session Cap](refilling-tool-budgets.md) — the same token bucket with the actors reversed: a harness rationing its own agent rather than a client protecting an upstream

@@ -79,3 +79,4 @@ The second policy bills a third more for 2.4 percentage points less resolve.
 - [Choosing a Compression Budget for Agent Control Context](control-context-compression-budget.md) — the same argument applied to the static instruction layer rather than the running trajectory.
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — why an invalidated prefix is the expensive part of a rewrite.
 - [Context Compression Strategies](context-compression-strategies.md) — the compaction operations themselves, offloading and summarization.
+- [Per-Agent Compaction Windows for Orchestrator and Worker](per-agent-compaction-window.md) — the same threshold question asked per subagent rather than per run.

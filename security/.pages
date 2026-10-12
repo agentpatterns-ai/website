@@ -128,6 +128,7 @@ nav:
       - revocable-resource-effect-capabilities.md
       - enrolled-identity-peer-routing.md
       - safe-outputs-pattern.md
+      - repo-committed-settings-scope-demotion.md
       - static-first-shell-command-gating.md
       - task-based-access-control-hybrid-inspection.md
       - team-scoped-policy-delegation.md
@@ -176,6 +177,7 @@ nav:
       - skill-supply-chain-poisoning.md
       - single-decision-suite-approval.md
       - skill-closure-declaration-gap.md
+      - skill-source-audit-ranking.md
       - setup-documentation-install-time-attacks.md
       - slopsquatting-hallucinated-package-names.md
       - neutral-prompting-hallucination-steering.md

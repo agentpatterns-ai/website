@@ -11,7 +11,7 @@ aliases:
   - serverName allowlist trap
   - MCP label-based allowlist
   - identity-vs-label allowlist failure
-last_reviewed: 2026-08-08
+last_reviewed: 2026-10-11
 maturity: established
 ---
 
@@ -30,6 +30,8 @@ A key the controlled principal chooses is not an access-control primitive. The M
 GitHub's enterprise managed settings accept the same three matchers. Its changelog carries the matching caveat: `serverName` is supplied as a convenience, not a security control ([MCP allowlists in enterprise managed settings](https://github.blog/changelog/2026-08-06-mcp-allowlists-in-enterprise-managed-settings)).
 
 Anthropic's evaluation order makes the demotion mechanical: when the allowlist contains any `serverUrl` entry, "A `serverName` match counts only when the allowlist contains no `serverUrl` entries", and the equivalent rule applies to stdio and `serverCommand` ([How a server is evaluated](https://code.claude.com/docs/en/managed-mcp#how-a-server-is-evaluated)). A mixed allowlist silently never matches `serverName` entries against the transport that has the stricter rule.
+
+Anthropic closed the same trap for skills in Claude Code 2.1.282. The `Skill(anthropic-skills:*)` allow rule now covers only skills synced from claude.ai, not plugins or other skills that merely use that name ([Claude Code changelog, 2.1.282](https://code.claude.com/docs/en/changelog#2-1-282)). Skill folders, command files, and workflow commands in the `anthropic-skills` namespace no longer load. MCP servers configured under that name list no skills or prompts. The same release reserved `claude-ai` too, but 2.1.283 reverted that reservation, so `claude-ai` names load again and `Skill(claude-ai:*)` is an ordinary prefix rule ([Claude Code changelog, 2.1.283](https://code.claude.com/docs/en/changelog#2-1-283)).
 
 The same logic underwrites [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) and [permission-framework-over-model](../../security/permission-framework-over-model.md): enforcement must depend on a signal the controlled party cannot author. Microsoft's Agent Governance Toolkit measures 26.67% policy violations under prompt-only controls versus 0.00% under deterministic enforcement ([agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit)) — same failure mode, one layer up.
 

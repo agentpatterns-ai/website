@@ -11,7 +11,7 @@ aliases:
   - SLM as agent tool
   - nested model tool
   - small model sub-tool
-last_reviewed: 2026-06-02
+last_reviewed: 2026-10-11
 maturity: established
 ---
 
@@ -60,6 +60,8 @@ The pattern fits operations that are high-volume and narrow:
 - Pre-aggregated data fetching — multiple primitive calls combined into one tool result
 
 Belcak et al. argue SLMs are "sufficiently powerful, inherently more suitable, and necessarily more economical for many invocations in agentic systems" ([Belcak et al., 2025](https://arxiv.org/abs/2506.02153v2)). This composes with API-level features rather than replacing them — VS Code 1.118 reports the Anthropic Tool Search Tool delivers "up to 20% in token savings" on its own ([VS Code 1.118 release notes](https://code.visualstudio.com/updates/v1_118); [Anthropic — Advanced Tool Use](https://www.anthropic.com/engineering/advanced-tool-use)).
+
+GitHub announced a purpose-built model for leaked-secret detection on 2026-10-07. It already powers AI-detected secret alerts, and its push-protection use is in private preview ([GitHub Changelog, purpose-built secret-detection model](https://github.blog/changelog/2026-10-07-purpose-built-model-for-leaked-secret-detection)). The changelog describes a fine-tuned model that reads surrounding code "without generating code or prose". It does not describe an orchestrating agent calling the model as a nested tool, so it supports narrow purpose-built models and not the nesting this pattern describes.
 
 ## When it backfires
 

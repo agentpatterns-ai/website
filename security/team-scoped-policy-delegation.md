@@ -10,7 +10,7 @@ tags:
   - security
   - instructions
   - copilot
-last_reviewed: 2026-08-08
+last_reviewed: 2026-10-12
 maturity: emerging
 ---
 
@@ -25,6 +25,10 @@ Team-scoped policy delegation splits one agent configuration into keys a team ma
 A key becomes eligible only when the enterprise marks it with the `{ "overridable": <VALUE> }` syntax in `copilot/managed-settings.json`. Everything else is closed by default: "Keys not marked overridable remain an enterprise-level decision that teams can't modify" ([GitHub Docs: Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)).
 
 The allowlist is narrow today. The syntax "applies to the governance keys `permissions.model` and `permissions.disableBypassPermissionsMode`", and two further keys compose additively instead: `enabledPlugins` and `extraKnownMarketplaces` let a team file add to the enterprise baseline rather than replace it ([Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)). GitHub extended the marking to MCP servers on 6 August 2026, so the new MCP allowlist keys can carry `overridable` too. That release also makes MCP access fail closed, and a server must pass every configuration layer before it loads ([GitHub Changelog](https://github.blog/changelog/2026-08-06-mcp-allowlists-in-enterprise-managed-settings)).
+
+The `model` key sets a default, not a restriction. The reference says it "Sets your preferred model as the default for new conversations" and that "Users can still select a different model on a per-conversation basis" ([Enterprise managed settings reference](https://docs.github.com/en/copilot/reference/enterprise-managed-settings-reference)). The reference also says new configurations should use the top-level `model` key, not `permissions.model`.
+
+Client support differs between sources. The JetBrains plugin honours the managed `model` default from 1.19.0 ([JetBrains Marketplace: GitHub Copilot versions](https://plugins.jetbrains.com/plugin/17718-github-copilot--your-ai-pair-programmer/versions)). The [changelog](https://github.blog/changelog/2026-10-10-new-controls-and-chat-improvements-in-copilot-for-jetbrains) announces the same feature without a version number. The reference matrix, fetched 2026-10-12, still lists `model` as "Not supported" for JetBrains IDEs. This page follows the changelog and reads the matrix as not yet updated for the release, since two GitHub sources agree against it. Test the default on a JetBrains client before you rely on it. Version 1.19.0 also fixed a bug where the default was not applied to the initial blank agent chat.
 
 Teams select among enterprise-authored values and do not write new ones. "The enterprise defines all settings—team membership only determines which users receive a given set of values" ([Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)). A team file releases a key by setting it to `"unmanaged"`. It does not invent one.
 

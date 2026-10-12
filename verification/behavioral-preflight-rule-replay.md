@@ -73,6 +73,7 @@ The stronger objection is to the method. A live shadow mode evaluates the rule o
 ## Related
 
 - [Policy File Validation: Catching Silent Non-Enforcement](../instructions/policy-file-validation.md) — structural checks on the policy file, which this behavioral check follows
+- [Auditing an Instruction File for Interference Between Its Own Rules](instruction-file-interference-audit.md) — the static sibling, checking rules against each other instead of against recorded runs
 - [Schema-Checked Rule Extraction for Tool-Call Gates](../patterns/agent-design/schema-checked-rule-extraction.md) — the static check that runs before this replay
 - [Leave-One-Out Permission Testing](../security/leave-one-out-permission-testing.md) — removes a permission and re-runs the task live
 - [Cut-Point Replay](cut-point-replay-agent-regression-tests.md) — replays a recorded run to test a fix

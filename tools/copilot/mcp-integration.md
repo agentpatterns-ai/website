@@ -6,7 +6,7 @@ tags:
   - copilot
   - mcp
 applies_to: "copilot@1.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-10-12
 status: current
 ---
 
@@ -33,6 +33,21 @@ The coding agent can use [MCP tools](https://docs.github.com/en/copilot/concepts
 ## VS Code MCP bridging (v1.113+)
 
 [VS Code 1.113](https://code.visualstudio.com/updates/v1_113) automatically bridges MCP servers registered in VS Code to Copilot CLI and Claude agent sessions running in the editor. Tools you configure in `settings.json` are then available to CLI and Claude agents, with no separate configuration.
+
+## MCP server autostart
+
+Turning autostart off is not proven to be a containment control until you test each agent type. A local MCP server is code that runs on the developer's machine, so the questions are when it starts and which agents the toggle reaches.
+
+JetBrains plugin 1.19.0 adds an MCP setting that disables automatic server startup. The changelog says it applies "for Copilot and Claude, giving you more control over when configured tools become active" ([GitHub Changelog 2026-10-10](https://github.blog/changelog/2026-10-10-new-controls-and-chat-improvements-in-copilot-for-jetbrains)). The plugin notes add that manual Start and Restart stay available ([JetBrains Marketplace: GitHub Copilot versions](https://plugins.jetbrains.com/plugin/17718-github-copilot--your-ai-pair-programmer/versions)). Neither source names the setting key or its Settings path, lists its values, or says whether it covers the Copilot CLI agent.
+
+VS Code uses `chat.mcp.autostart`, which is experimental and takes three values: `never`, `onlyNew`, and `newAndOutdated` (the default). It does not cover Agent Host sessions: "setting chat.mcp.autostart to never doesn't prevent an Agent Host session from starting its configured MCP servers" ([VS Code: Add and manage MCP servers](https://code.visualstudio.com/docs/copilot/customization/mcp-servers)).
+
+| Surface | Control | Covers | Known gap |
+|---------|---------|--------|-----------|
+| JetBrains | MCP setting, key unpublished | Copilot and Claude agents | CLI agent not mentioned in the sources |
+| VS Code | `chat.mcp.autostart` | The VS Code autostart pass | Agent Host sessions manage their own servers |
+
+After you change the setting, start a session with each agent type you use and check whether the servers still launch.
 
 ## CLI and MCP
 
@@ -73,6 +88,7 @@ The following VS Code `settings.json` snippet configures two MCP servers for Cop
 - Custom MCP servers extend Copilot to any external service
 - The coding agent supports MCP tools (not resources or prompts)
 - VS Code 1.113+ bridges registered MCP servers to CLI and Claude agent sessions automatically
+- Disabling MCP autostart in JetBrains or VS Code does not prove that no server starts; test each agent type
 
 ## When this backfires
 

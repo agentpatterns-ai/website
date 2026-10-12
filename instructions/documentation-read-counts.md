@@ -71,3 +71,4 @@ The figure therefore licenses a review policy, not a budget increase. The questi
 - [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md) — why retrievability decides what an agent reads
 - [Agent Context File Evolution](agent-context-file-evolution.md) — how these files change once a team starts maintaining them
 - [Stale AI Configuration Artifacts (Context Rot)](../patterns/anti-patterns/stale-ai-configuration-artifacts.md) — what an ungoverned agent-facing surface becomes
+- [Measure Agent Experience Against a Bare Baseline](../verification/ax-bare-baseline-lift-drag.md) — where this distribution belongs in an AX measurement: read your own run's trail to pick the surface to fix, rather than importing a published read-count

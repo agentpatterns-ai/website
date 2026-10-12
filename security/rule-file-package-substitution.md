@@ -106,6 +106,7 @@ This page makes no case against shared rule files. The payloads in the paper are
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — the same delivery channel carrying a payload inside a skill
 - [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md) — another file an agent trusts when it picks what to install
 - [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — a dependency failure where the package name is real
+- [Scope Demotion for Repository-Committed Settings](repo-committed-settings-scope-demotion.md) — the configuration-key half of the same committed file, where a loader check does what a prose rule cannot
 
 ## Sources
 

@@ -84,6 +84,7 @@ nav:
       - agent-on-agent-maintenance-penalty.md
       - large-codebase-agent-failure-patterns.md
       - coding-agent-misalignment-forms.md
+      - excess-risk-treatment.md
   - "Verification Gaps":
       - trust-without-verify.md
       - premature-completion.md
@@ -161,6 +162,7 @@ nav:
       - model-upgrade-as-security-improvement.md
       - cleared-review-comment-as-fix.md
       - static-clean-as-security-evidence.md
+      - bundled-bytecode-cache-as-build-artifact.md
       - cumulative-best-hides-repair-regressions.md
       - edge-case-handling-as-security-signal.md
       - judging-agent-safety-by-task-completion.md
