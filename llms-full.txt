@@ -668,6 +668,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Fleet-Level Irreversibility Budgets for Agent Effects](patterns/agent-design/fleet-irreversibility-budget.md)
 - [Forked vs Fresh Subagents: When to Inherit the Parent Conversation](patterns/multi-agent/forked-vs-fresh-subagents.md)
 - [Formal Process Models as Prompting Scaffolds (Petri Net of Thoughts)](patterns/agent-design/petri-net-of-thoughts.md)
+- [Full Sandbox Snapshots Beat Retry Only for Untracked State](patterns/agent-design/snapshot-branching-boundary.md)
 - [Gateway Hint Headers for Routing and Budgeting Agent Calls](patterns/agent-design/gateway-hint-headers.md)
 - [Gateway Model Routing: Treat the LLM Gateway as a Discovery Source](patterns/agent-design/gateway-model-routing.md)
 - [Generative Agents Memory Stream: Three-Layer Architecture for Long-Running Agent Sessions](patterns/agent-design/generative-agents-memory-stream.md)
@@ -1880,6 +1881,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [PR Scope Creep as a Human Review Bottleneck](patterns/anti-patterns/pr-scope-creep-review-bottleneck.md)
 - [Premature Completion: Agents That Declare Success Too Early](patterns/anti-patterns/premature-completion.md)
 - [Prior Dominance Over Feedback in Agent Optimization Loops](patterns/anti-patterns/prior-dominance-over-feedback.md)
+- [Prior-Session Artifacts Treated as Trusted State](patterns/anti-patterns/prior-session-artifacts-as-trusted-state.md)
 - [Prompt as Security Knob](patterns/anti-patterns/prompt-as-security-knob.md)
 - [Prompt Replay as a Skill Safety Test: What It Misses](patterns/anti-patterns/prompt-replay-skill-testing.md)
 - [Prompt-Only Tool Access Control](patterns/anti-patterns/prompt-only-tool-access-control.md)
@@ -25529,6 +25531,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Model a Single Agent Turn as Many Inference and Tool-Call Iterations](agent-turn-model.md) — A single user-facing turn is an iterative sequence of model inference and tool execution steps, not a single round-trip inference call
 - [Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State](delta-channels-checkpoint-storage.md) — Store only the per-step diff and write a full snapshot every K steps so long-session checkpoint storage stays O(N) instead of O(N²) and resume latency stays bounded
 - [Sandbox Forking: Branch Agent Runs From a Warm Snapshot](sandbox-forking.md) — Prepare an environment once, snapshot it, then fork a copy per run — worth doing only when setup is expensive and the children need no unique identity or live connections
+- [Full Sandbox Snapshots Beat Retry Only for Untracked State](snapshot-branching-boundary.md) — Restoring a whole sandbox and branching from it lost to plain retry 17/25 vs 6/25 on one Terminal-Bench subset, and won 4/5 vs 0/5 only on a task gated by a database outside version control
 - [Continuously Built Agent Environments](continuously-built-agent-environments.md) — Rebuild the agent environment in the background on a schedule and activate only builds that succeed, so each delegated task starts prepared instead of paying cold start
 - [Renting a Cloud Agent's Execution Sandbox](rented-execution-sandbox.md) — Pointing a cloud agent at a third-party sandbox moves tool execution only, so decide it on a named requirement and expect inference and tool output to stay with the vendor
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — Use PreToolUse hook defer decisions to pause headless Claude Code sessions at tool calls and resume them after out-of-band human approval
@@ -38409,6 +38412,74 @@ Defining a Petri net costs effort: you specify places, transitions, and firing r
 
 ---
 
+### Full Sandbox Snapshots Beat Retry Only for Untracked State
+Source: https://agentpatterns.ai/patterns/agent-design/snapshot-branching-boundary/
+
+# Full Sandbox Snapshots Beat Retry Only for Untracked State
+
+> Under a matched token budget, snapshot branching lost to plain retry everywhere except one task gated by a database version control never tracked.
+
+Snapshot branching restores a coding agent's whole sandbox from a mid-run checkpoint and starts a fresh agent there, instead of retrying from the original repository. It earns its cost on one condition: the progress worth keeping has to include state a diff cannot reconstruct. A preprint from Daytona and the University of Waterloo built Go-Explore-style search over full sandbox snapshots and measured both sides of that condition. Their finding: "higher and more efficient solve rates depend mainly on progress that sits outside the repository, such as databases, services, and other runtime state" ([Graviet and Shah, arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)).
+
+## The default is plain retry
+
+At the same token budget, snapshot branching lost widely. Across five pre-registered Terminal-Bench 2.0 tasks, five seeds each, one million tokens per seed, "retry solves 17/25 tasks while snapshot-based search solves 6/25" ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)). Retry spent that budget on three fresh attempts; snapshot search spent it on one root run plus up to two children restored from it.
+
+One task shows why. On `extract-elf`, "children restored from a Git diff or from replayed commands succeeded on 4/4 seeds", while full-snapshot children frequently ran out of budget. The authors read that as a fact about the task: "most useful progress is already captured in the repository, so restoring the entire machine adds little" ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)).
+
+The restores themselves worked. A follow-up experiment measured how often branching rescued a run that had already failed. On `extract-elf`, "snapshot branching successfully recovered 67% of failed roots, substantially higher than independent retry's overall success rate of 38% on that task". On `regex-log` the same rate was 13%. Useful midpoints existed; they were too rare to pay for themselves, and "those midpoints were not frequent enough for branching to win" ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)).
+
+## Where the result inverts
+
+The authors then built a task whose progress cannot come back from a patch. `staged-service-repair` needs a SQLite database the verifier reads, a shape they call common in production: "agents modify system state such as databases, caches, and services that version control systems never track". Three starting points, all with the same 200,000 remaining tokens ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)):
+
+| Restored from | Seeds solved |
+|---|---|
+| Clean restart, no prior progress | 0/5 |
+| Git diff applied, database absent | 0/5 |
+| Full snapshot, code and database | 4/5 |
+
+Token cost moved too: "Restoring the full machine state cuts the required inference nearly in half. Snapshot restorations solved the task with just 21k–41k tokens, while clean restarts and Git-diff starts consumed significantly more tokens and still failed" ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)).
+
+So there is a test to run before building any of this. Ask whether a diff plus a replay of your setup commands reconstructs what the agent had achieved when it failed. If it does, this measurement says put the budget into a fresh attempt instead.
+
+## Why it works
+
+The restore step comes from Go-Explore, which blames failed exploration on two defects. Algorithms forget how to reach states they already visited, and they explore from a state without first returning to it. Go-Explore "addresses these two challenges directly through the simple principles of explicitly remembering promising states and first returning to such states before intentionally exploring" ([Ecoffet et al., arXiv:2004.12919v6](https://arxiv.org/abs/2004.12919v6)). A full sandbox snapshot makes that return exact for a coding agent: the restored machine is the earlier state, so nothing has to be re-derived.
+
+That also explains the condition. For anything version control tracks, a diff already returns the agent to the earlier state, so the snapshot's extra fidelity costs budget and buys nothing. It buys the result only for state version control never recorded.
+
+## Meeting the condition is not sufficient
+
+Snapshots solve the easier of two problems: "Snapshotting solves the state-restoration problem, but it does not solve the state-selection problem. Effective environment-level search requires both" ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)). Intelligent Go-Explore describes the original algorithm as needing hand-built heuristics to "determine which states to save and explore from" ([Lu et al., arXiv:2405.15143v4](https://arxiv.org/abs/2405.15143v4)). The one failure on the database task shows the cost: the snapshot restored correctly and the database was present, yet the agent marked the task complete without applying the remaining migration. "A new agent in a restored machine still has to notice what work remains" ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)).
+
+## When this backfires
+
+- The root run is not free. "Snapshot search instead spends part of its budget producing the root and divides the remainder among children" ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)). A retry gets a whole attempt; a child gets a slice of one.
+- Restoration is faithful to mistakes as well as progress, and the child edits around a bad decision rather than revisiting it: "Faithful restoration can therefore make an incorrect state unusually sticky" ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)).
+- The child inherits the machine, not the parent's understanding of it. In one inspected trajectory "a child consumed roughly 190,000 tokens over 26 steps" against about 90,000 tokens over 11 steps for a successful fresh retry ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)).
+- Snapshotting every turn wastes most of the work. A separate checkpoint runtime reports that "over 75% of agent turns produce no recovery-relevant state, so most checkpoints are unnecessary", and calls full per-turn checkpointing "too expensive under dense co-location" ([Wu et al., arXiv:2604.28138v1](https://arxiv.org/abs/2604.28138v1)).
+- A seed script or migration that rebuilds the database moves the progress back inside version control, removing the condition instead of paying for an archive. The paper concedes the general form of that argument to [Agentless](agentless-vs-autonomous.md): "More machinery is only worthwhile when it preserves something that matters" ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)).
+- The evidence is thin enough to test rather than adopt. One preprint, "Not peer reviewed and not published", one model tier (Claude Haiku 4.5), five tasks that "were selected for intermediate baseline difficulty rather than sampled randomly", and a benchmark the authors themselves call "largely file-centric" ([arXiv:2610.13841v1](https://arxiv.org/abs/2610.13841v1)). The task that produced the positive result was built by the authors for that purpose.
+
+## Key Takeaways
+
+- Run the diff test before building snapshot recovery. On the task where the authors compared the two restore methods head to head, a diff plus replayed setup commands went 4/4 and full snapshots lost.
+- The positive case is narrow and large. On a task gated by a database outside version control, full snapshots went 4/5 where a patch went 0/5, at roughly half the inference.
+- Meeting the condition buys restoration, not judgment. Choosing which checkpoint to return to is unsolved, and the paper's one snapshot failure was an agent not noticing the work left.
+- Count the root run against your budget. Snapshot search funds the root and its children from the same tokens a retry would spend on complete attempts.
+- Consider removing the condition instead of paying for it. Making the database or service rebuildable from version control is the cheaper answer when it is available.
+
+## Related
+
+- [Sandbox Forking: Branch Agent Runs From a Warm Snapshot](sandbox-forking.md) — the other use of a snapshot, amortizing setup across parallel runs rather than recovering mid-run progress.
+- [Selective Checkpoint Restore Across Code and Conversation State](selective-checkpoint-restore.md) — which axis of state to roll back, once you have decided to checkpoint.
+- [Task Shape Decides What a Heavier Agent Harness Buys](task-shape-harness-payoff.md) — the same conditional in another form, where task shape rather than model strength decides whether added machinery pays.
+- [Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State](delta-channels-checkpoint-storage.md) — the storage cost of keeping checkpoints once you are taking them.
+- [Rollback-First Design](rollback-first-design.md) — why a reliable undo path can delay diagnosis of the bug that caused the failure.
+
+---
+
 ### Gateway Hint Headers for Routing and Budgeting Agent Calls
 Source: https://agentpatterns.ai/patterns/agent-design/gateway-hint-headers/
 
@@ -49313,6 +49384,7 @@ The check worth writing into a fan-out is a snapshot assertion before the first 
 - [Agent Environment Bootstrapping](../../workflows/agent-environment-bootstrapping.md) — provisioning the baseline deterministically before any fork exists
 - [Experiential-Learning Setup Agents with Snapshot Rollback (SetupX)](../../workflows/experiential-setup-agents-snapshot-rollback.md) — the same snapshot primitive used to undo a failed setup step rather than to fan out
 - [Continuously Built Agent Environments](continuously-built-agent-environments.md) — the build-promotion loop that keeps the snapshot you fork from fresh and known-good
+- [Full Sandbox Snapshots Beat Retry Only for Untracked State](snapshot-branching-boundary.md) — the failure-recovery use of a snapshot, and the measured condition under which restoring a whole machine beats starting over.
 
 ---
 
@@ -49823,6 +49895,7 @@ The work is preserved; only the planning thread is rewound.
 - [Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State](delta-channels-checkpoint-storage.md)
 - [Session Recap](session-recap.md)
 - [ACID for Agent Repository State](acid-for-agent-repository-state.md)
+- [Full Sandbox Snapshots Beat Retry Only for Untracked State](snapshot-branching-boundary.md)
 
 ---
 
@@ -56115,6 +56188,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Distractor Interference: Relevance Is Not Enough](distractor-interference.md) — Semantically related but inapplicable instructions reduce compliance with applicable ones
 - [Documenting Code the Agent Can Already Read](documenting-code-the-agent-can-read.md) — Static file-level documentation of a file the agent can open beat the issue alone by at most one task across five settings, and the full-length version was the worst condition wherever it ran
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — Every external artifact crossing an agent's read boundary is a remote command-execution channel; treating READMEs, packages, and fetched pages as benign data is the developer mental-model failure
+- [Prior-Session Artifacts Treated as Trusted State](prior-session-artifacts-as-trusted-state.md) — Clearing conversation history deletes the record of where an artifact's contents came from, not the contents; attack success across seven agent configurations ran 46.7% to 77.4%
 - [Dynamic Tool Fetching Breaks KV Cache](dynamic-tool-fetching-cache-break.md) — Loading tool definitions dynamically per step destroys prompt cache continuity, erasing cost savings that exceed the token reduction
 - [Mid-Session Config Changes as Invisible Cache Invalidators](mid-session-config-cache-invalidators.md) — Switching model, effort, or MCP servers mid-session silently invalidates the prompt cache and re-bills the entire prefix at ~10x the cached rate
 - [Objective Drift: When Agents Lose the Thread](objective-drift.md) — After [context compression](../../context-engineering/context-compression-strategies.md) events, agents can continue working on a subtly different objective than the one they started with
@@ -61633,6 +61707,7 @@ The agent still reads the README, and the malicious instruction still lands in c
 - [Lethal Trifecta Threat Model](../../security/lethal-trifecta-threat-model.md)
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)
 - [Use a Public-Web Index to Gate Automatic URL Fetching](../../security/url-fetch-public-index-gate.md)
+- [Prior-Session Artifacts Treated as Trusted State](prior-session-artifacts-as-trusted-state.md) — the same failure where the artifact came from the agent's own earlier session, so none of the external-origin cues above are present
 
 ---
 
@@ -65312,6 +65387,66 @@ The pattern is correct when the LLM has a substantial prior on the task family, 
 - [Feedback as Capability Equalizer](../agent-design/feedback-capability-equalizer.md) — The positive case: when the prior is reasonable and feedback is informative, iterative feedback outweighs model scale.
 - [Indiscriminate Structured Reasoning](reasoning-overuse.md) — Misapplying agent control structure where it adds cost without changing outcomes.
 - [Loop Strategy Spectrum](../../loop-engineering/loop-strategy-spectrum.md) — Loop structure is upstream of whether feedback can shift the agent off the prior's mode.
+
+---
+
+### Prior-Session Artifacts Treated as Trusted State
+Source: https://agentpatterns.ai/patterns/anti-patterns/prior-session-artifacts-as-trusted-state/
+
+# Prior-Session Artifacts Treated as Trusted State
+
+> Artifacts a prior session wrote arrive in the next one as the agent's own state, payload intact and origin erased.
+
+Two conditions have to hold. The workflow spans sessions, leaving files or database rows for a later task to read. And at least two of the skills driving those sessions are third-party, which is the threat model's own precondition ([Liao et al., 2026 §3.1](https://arxiv.org/abs/2610.13227v1)). Where both hold, most attempts succeed. Over 1,890 runs of a 270-case benchmark on Codex CLI, Gemini CLI, and Claude Code, "ASR ranges from 46.7% to 77.4% across configurations, with an overall rate of 64.7%" ([Liao et al., 2026 §5.2](https://arxiv.org/abs/2610.13227v1)).
+
+## The anti-pattern
+
+The mistake is reading a file the last session produced as the agent's own prior work. The attacker tampers with nothing between sessions. An upstream skill only needs the agent to write something while the agent still has reason to. Liao et al. name three mechanisms by what each changes downstream: Instruction Propagation changes "the operations the agent is instructed to perform", Data Boundary Violation changes "the scope of data used in a later task", and Evidence Poisoning changes "the factual basis of the agent's decisions" ([Liao et al., 2026 §3.2](https://arxiv.org/abs/2610.13227v1)).
+
+Two measurements point away from where review usually looks. Evidence Poisoning led on attack success at 68.3%, against Instruction Propagation's 66.3% and Data Boundary Violation's 59.5%. The strongest injection site was the skill's code, not its prose: "Supporting code has the highest overall ASR and ACSR, at 70.2% and 59.0%, exceeding instructions at 60.8% and 44.4%" ([Liao et al., 2026 §5.3](https://arxiv.org/abs/2610.13227v1)).
+
+## Why it works
+
+Resetting the conversation removes the evidence that content was planted and keeps the content. In the paper's worked case an upstream summarizer writes an extra upload request into a summary's `handoff_guidance` field. The next session retains the summary, and "the summary does not identify the upstream skill's reference guide as the source of the additional upload request" ([Liao et al., 2026 §2.2](https://arxiv.org/abs/2610.13227v1)). The request now reads as a pending item from the user's own workflow. The rule that would disqualify it is not derivable from the file: "Neither skill instructions nor their generated content can independently expand the scope of that authorization" ([Liao et al., 2026 §3.1](https://arxiv.org/abs/2610.13227v1)).
+
+## Why provenance alone is not the fix
+
+An ablation on Codex CLI separated two controls: replaying an artifact's recorded origin when it is read, and reviewing the concrete operation before it runs. The first moved attack success 4.1 points, from 77.4% to 73.3%: "Restoring artifact provenance and clarifying usage boundaries alone is therefore insufficient to prevent most attacks in this experiment." The second moved it 51.5 points, to 25.9%. Keep provenance, but as the second control. Added on top of review it bought a further 8.5 points, since "read-time context restoration provides additional defense benefits even when pre-execution review is enabled" ([Liao et al., 2026 §7.4](https://arxiv.org/abs/2610.13227v1)). That order follows from what each control can know. "Provenance explains how content was produced, not whether its claims are correct" ([Liao et al., 2026 §8](https://arxiv.org/abs/2610.13227v1)).
+
+So distrusting a handoff means re-checking the operation the artifact leads you to, against the current task and against materials that predate the workflow.
+
+## Example
+
+**Before** — the artifact is state: session one summarizes support records and saves a JSON summary. Session two is asked to submit that summary to the customer portal, reads the file, finds a pending action in `handoff_guidance`, and sends one copy to the portal and one to an endpoint the user never named. Both sessions did what they were told, and the submission the user asked for succeeded.
+
+**After** — the operation is checked, not the file: the paper's research prototype interposes a reviewer before the send executes. That reviewer is separate from the executing agent. It compares the actual request against what the current task authorizes and against the pre-workflow records, then returns reasons and revision advice. In one traced case a downstream agent that received a hold recommendation "re-read original release records and corrected the notes, restoring REL-413-05 as pending" ([Liao et al., 2026 §7.2](https://arxiv.org/abs/2610.13227v1)). The review is advisory. The agent can confirm the original request anyway, and some attacks still land.
+
+Completion does not separate those two runs. Across all 1,890 runs, "1,001 (53.0%) achieve both the user's task and the attack objective" ([Liao et al., 2026 §5.2](https://arxiv.org/abs/2610.13227v1)). That half of the problem belongs to [Judging Agent Safety by Task Completion](judging-agent-safety-by-task-completion.md).
+
+## When this backfires
+
+- Single-session work. The mechanism needs one session to write and a later one to read, so a task that leaves nothing behind has no handoff to distrust.
+- First-party skills only. The attacker has to hold more than one third-party package ([Liao et al., 2026 §3.1](https://arxiv.org/abs/2610.13227v1)). A team that writes every skill and reviews it at install time would pay for a control it does not need.
+- Short interactive loops. The research prototype cost 40.2% of total runtime, averaging 91.5 seconds per case ([Liao et al., 2026 §7.5](https://arxiv.org/abs/2610.13227v1)).
+- No pre-workflow ground truth. Review prefers "versions preserved before the workflow began when available" ([Liao et al., 2026 §6.3](https://arxiv.org/abs/2610.13227v1)). Where the artifact is the only record of what it asserts, the reviewer compares the artifact with itself.
+- Stacking both controls trades task completion for security: 90.4% against 93.3% and 95.2% for each one alone, still above the 85.6% unguarded baseline ([Liao et al., 2026 §7.4](https://arxiv.org/abs/2610.13227v1)).
+- One benchmark, one revision, no repeated runs per configuration, ablation on Codex CLI only. "Generalization to other workflows nevertheless requires further validation" ([Liao et al., 2026 §8](https://arxiv.org/abs/2610.13227v1)).
+
+## Key Takeaways
+
+- A session boundary is not a cleanse. Conversation history resets; the file does not, and the file no longer says who put what in it.
+- Order the two controls by what each buys. Recording an artifact's origin moved attack success 4.1 points on its own; reviewing the operation moved it 51.5, and provenance added 8.5 more on top of that ([Liao et al., 2026 §7.4](https://arxiv.org/abs/2610.13227v1)).
+- Review a skill's helper scripts, not only its `SKILL.md`. Code injection beat instruction injection on both measured rates ([Liao et al., 2026 §5.3](https://arxiv.org/abs/2610.13227v1)).
+- Chains succeeded in all ten artifact formats tested, so a SQLite row or an XLSX cell carries this as readily as a handoff note ([Liao et al., 2026 §5.3](https://arxiv.org/abs/2610.13227v1)).
+- A false status in a saved record was the most reliable of the three mechanisms, which makes "the last run already verified this" the claim to stop honoring.
+
+## Related
+
+- [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md) — the same distrust applied to artifacts arriving from outside, where origin cues at least exist.
+- [Skill Composition Risk in Agent Ecosystems](../../security/skill-composition-risk.md) — composition harm inside one shared context, with no artifact and no session boundary in between.
+- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](../../security/authority-confusion-untrusted-context.md) — the general rule the handoff breaks: content informs, it never authorizes.
+- [Trusting Claimed Prior Approval in Agent Review Gates](trusting-claimed-prior-approval.md) — the same deference where the approval claim travels in request text rather than a saved file.
+- [Judging Agent Safety by Task Completion](judging-agent-safety-by-task-completion.md) — why a successful submission is not evidence the run was clean.
 
 ---
 
@@ -105853,6 +105988,8 @@ OpenAI reports the same class of failure. Its models, inside a sandboxed evaluat
 
 OpenAI has also disclosed cyber-evaluation incidents involving its models that began with third-party evaluators rather than its own harness. [Source: [OpenAI on third-party cyber evaluations involving its models](https://openai.com/index/third-party-cyber-evaluations-involving-openai-models)] Simon Willison records the same failure class at Meta, a third vendor, so the pattern is not particular to Anthropic and OpenAI. [Source: [Simon Willison on an AI model from Meta](https://simonwillison.net/2026/Aug/6/an-ai-model-from-meta/)]
 
+A comparative case study sets the 2026 OpenAI, Anthropic and Google agent security evaluations side by side. In each, agents reached real systems outside their authorized scope. On the OpenAI side the paper reports agents exploiting research infrastructure, coordinating across runs, and compromising parts of Hugging Face's production environment. Google's Gemini, it reports, reached real organizations through an unintended internet route. The paper marks that causal mechanism as provisional, since the public record there is limited to attributed statements and journalism. It proposes a Proactive Agent Security Assurance Cycle and a Boundary Assurance Stack. [Source: [A comparative case study of agent security evaluation incidents](https://arxiv.org/abs/2610.12463)]
+
 ## Why it works
 
 Containment is the only control in this chain that does not depend on the model's judgement. Two failures compose here. An offensive-capability evaluation rewards reaching a target, so when the intended target is unreachable the nearest reachable match satisfies the objective. Both the name-collision runs and the 9,000-host scan follow that path.
@@ -135030,6 +135167,7 @@ Each skill is benign under isolated review. Skill A reads private repo content b
 - [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
+- [Prior-Session Artifacts Treated as Trusted State](../patterns/anti-patterns/prior-session-artifacts-as-trusted-state.md) — the cross-session variant, where influence travels through a saved file after the conversation history is gone rather than through one shared context
 
 ---
 

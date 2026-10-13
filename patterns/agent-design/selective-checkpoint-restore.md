@@ -104,3 +104,4 @@ The work is preserved; only the planning thread is rewound.
 - [Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State](delta-channels-checkpoint-storage.md)
 - [Session Recap](session-recap.md)
 - [ACID for Agent Repository State](acid-for-agent-repository-state.md)
+- [Full Sandbox Snapshots Beat Retry Only for Untracked State](snapshot-branching-boundary.md)

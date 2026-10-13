@@ -110,3 +110,4 @@ The agent still reads the README, and the malicious instruction still lands in c
 - [Lethal Trifecta Threat Model](../../security/lethal-trifecta-threat-model.md)
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)
 - [Use a Public-Web Index to Gate Automatic URL Fetching](../../security/url-fetch-public-index-gate.md)
+- [Prior-Session Artifacts Treated as Trusted State](prior-session-artifacts-as-trusted-state.md) — the same failure where the artifact came from the agent's own earlier session, so none of the external-origin cues above are present

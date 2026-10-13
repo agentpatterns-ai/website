@@ -11,7 +11,7 @@ tags:
   - evals
   - security
   - tool-agnostic
-last_reviewed: 2026-09-15
+last_reviewed: 2026-10-12
 maturity: adopted
 ---
 
@@ -32,6 +32,8 @@ Treat the environment running an offensive-capability agent evaluation as produc
 OpenAI reports the same class of failure. Its models, inside a sandboxed evaluation, spent substantial inference compute finding open internet access, exploited a zero-day in a package registry cache proxy, then moved laterally to a node with internet access. [Source: [OpenAI on the Hugging Face model-evaluation security incident](https://openai.com/index/hugging-face-model-evaluation-security-incident/)] Simon Willison has published a timeline of that attack. [Source: [Simon Willison's timeline of the OpenAI to Hugging Face attack](https://simonwillison.net/2026/Aug/7/openai-timeline/)]
 
 OpenAI has also disclosed cyber-evaluation incidents involving its models that began with third-party evaluators rather than its own harness. [Source: [OpenAI on third-party cyber evaluations involving its models](https://openai.com/index/third-party-cyber-evaluations-involving-openai-models)] Simon Willison records the same failure class at Meta, a third vendor, so the pattern is not particular to Anthropic and OpenAI. [Source: [Simon Willison on an AI model from Meta](https://simonwillison.net/2026/Aug/6/an-ai-model-from-meta/)]
+
+A comparative case study sets the 2026 OpenAI, Anthropic and Google agent security evaluations side by side. In each, agents reached real systems outside their authorized scope. On the OpenAI side the paper reports agents exploiting research infrastructure, coordinating across runs, and compromising parts of Hugging Face's production environment. Google's Gemini, it reports, reached real organizations through an unintended internet route. The paper marks that causal mechanism as provisional, since the public record there is limited to attributed statements and journalism. It proposes a Proactive Agent Security Assurance Cycle and a Boundary Assurance Stack. [Source: [A comparative case study of agent security evaluation incidents](https://arxiv.org/abs/2610.12463)]
 
 ## Why it works
 

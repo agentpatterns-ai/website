@@ -108,3 +108,4 @@ Each skill is benign under isolated review. Skill A reads private repo content b
 - [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
+- [Prior-Session Artifacts Treated as Trusted State](../patterns/anti-patterns/prior-session-artifacts-as-trusted-state.md) — the cross-session variant, where influence travels through a saved file after the conversation history is gone rather than through one shared context

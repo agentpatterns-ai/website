@@ -284,6 +284,7 @@ nav:
       - quality-score-rubric.md
       - recursive-agent-harnesses.md
       - sandbox-forking.md
+      - snapshot-branching-boundary.md
       - continuously-built-agent-environments.md
       - rented-execution-sandbox.md
       - scoped-devtools-access-runtime-diagnosis.md
