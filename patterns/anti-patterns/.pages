@@ -153,6 +153,7 @@ nav:
       - single-layer-injection-defence.md
       - direct-prompt-injection-collaboration.md
       - external-artifacts-as-data.md
+      - prior-session-artifacts-as-trusted-state.md
       - tool-error-implicit-authority.md
       - multi-tool-threshold-poisoning-mcp.md
       - llm-api-router-mitm.md
