@@ -855,6 +855,7 @@
   "patterns/anti-patterns/objective-drift.md": "2026-03-28T09:17:05+00:00",
   "patterns/anti-patterns/over-privileged-tool-selection.md": "2026-06-19T19:31:44+00:00",
   "patterns/anti-patterns/pass-only-grading-lucky-pass.md": "2026-10-09T10:03:43+00:00",
+  "patterns/anti-patterns/passing-tests-as-performance-evidence.md": "2026-10-13T21:21:21+00:00",
   "patterns/anti-patterns/patchwork-problem.md": "2026-07-13T22:07:51+00:00",
   "patterns/anti-patterns/pattern-replication-risk.md": "2026-03-28T09:17:05+00:00",
   "patterns/anti-patterns/peer-refusal-as-coordination-control.md": "2026-09-17T21:19:50+00:00",

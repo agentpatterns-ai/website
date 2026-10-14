@@ -1749,6 +1749,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Mid-Session Config Changes as Invisible Cache Invalidators](patterns/anti-patterns/mid-session-config-cache-invalidators.md)
 - [Minimality Prompts as a Patch-Size Control](patterns/anti-patterns/minimality-prompt-as-patch-size-control.md)
 - [Pass-Only Grading Treats Luck and Judgment the Same](patterns/anti-patterns/pass-only-grading-lucky-pass.md)
+- [Passing Tests Are Not Evidence a Patch Is Fast](patterns/anti-patterns/passing-tests-as-performance-evidence.md)
 - [Pattern Replication Risk in Agentic Code Generation](patterns/anti-patterns/pattern-replication-risk.md)
 - [Peer Refusal as a Coordination Control](patterns/anti-patterns/peer-refusal-as-coordination-control.md)
 - [Per-User Agents on a Contested Shared Resource](patterns/anti-patterns/per-user-agents-contested-resource.md)

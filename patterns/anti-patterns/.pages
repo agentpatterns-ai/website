@@ -128,6 +128,7 @@ nav:
       - density-normalized-quality-metric.md
       - trigger-conditioned-skill-comparisons.md
       - pass-only-grading-lucky-pass.md
+      - passing-tests-as-performance-evidence.md
   - "Permissions & Access Control":
       - prompt-only-tool-access-control.md
       - unenforced-claude-md-security-rules.md
