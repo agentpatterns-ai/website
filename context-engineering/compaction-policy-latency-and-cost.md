@@ -80,3 +80,4 @@ The second policy bills a third more for 2.4 percentage points less resolve.
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — why an invalidated prefix is the expensive part of a rewrite.
 - [Context Compression Strategies](context-compression-strategies.md) — the compaction operations themselves, offloading and summarization.
 - [Per-Agent Compaction Windows for Orchestrator and Worker](per-agent-compaction-window.md) — the same threshold question asked per subagent rather than per run.
+- [Running an Agent's Context Step on a Smaller Model](../patterns/agent-design/context-step-model-split.md) — which model executes the policy once you have scored it, and why that decision comes second.

@@ -11,7 +11,7 @@ aliases:
   - serverName allowlist trap
   - MCP label-based allowlist
   - identity-vs-label allowlist failure
-last_reviewed: 2026-10-11
+last_reviewed: 2026-10-14
 maturity: established
 ---
 
@@ -32,6 +32,8 @@ GitHub's enterprise managed settings accept the same three matchers. Its changel
 Anthropic's evaluation order makes the demotion mechanical: when the allowlist contains any `serverUrl` entry, "A `serverName` match counts only when the allowlist contains no `serverUrl` entries", and the equivalent rule applies to stdio and `serverCommand` ([How a server is evaluated](https://code.claude.com/docs/en/managed-mcp#how-a-server-is-evaluated)). A mixed allowlist silently never matches `serverName` entries against the transport that has the stricter rule.
 
 Anthropic closed the same trap for skills in Claude Code 2.1.282. The `Skill(anthropic-skills:*)` allow rule now covers only skills synced from claude.ai, not plugins or other skills that merely use that name ([Claude Code changelog, 2.1.282](https://code.claude.com/docs/en/changelog#2-1-282)). Skill folders, command files, and workflow commands in the `anthropic-skills` namespace no longer load. MCP servers configured under that name list no skills or prompts. The same release reserved `claude-ai` too, but 2.1.283 reverted that reservation, so `claude-ai` names load again and `Skill(claude-ai:*)` is an ordinary prefix rule ([Claude Code changelog, 2.1.283](https://code.claude.com/docs/en/changelog#2-1-283)).
+
+Anthropic's changelog records that Claude Code 2.1.299 narrowed MCP allow rules to the server each rule names ([Claude Code changelog, 2.1.299](https://code.claude.com/docs/en/changelog#2-1-299)). A rule written as `mcp__a` no longer allows a server called `a__b` or `a_`, and the correct form is `mcp__<server>__*`. The same release applied the rule to agent `tools:` lists. That is a second, distinct failure: prefix matching over a server name that can itself hold the `__` delimiter, with no user-chosen label involved.
 
 The same logic underwrites [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) and [permission-framework-over-model](../../security/permission-framework-over-model.md): enforcement must depend on a signal the controlled party cannot author. Microsoft's Agent Governance Toolkit measures 26.67% policy violations under prompt-only controls versus 0.00% under deterministic enforcement ([agent-governance-toolkit](https://github.com/microsoft/agent-governance-toolkit)) — same failure mode, one layer up.
 

@@ -51,6 +51,12 @@ Then take work away from it. Judges make arithmetic errors, so have the judge re
 
 Run-over-run variance inside one condition measures environmental instability. Variance between conditions measures your surface. A scenario passing 90% with your extension and 50% without demonstrates a reliable benefit; 70% in both conditions says the extension does nothing for that task. [Source: [Microsoft AX evals](https://developer.microsoft.com/blog/building-ax-evals-that-actually-work/)] Version your rubrics, and do not compare scores across rubric versions without recalibrating.
 
+Treat a judge change as a new measurement boundary too. If the evaluation system cannot guarantee the same verdicts after the change, the Microsoft AX Practitioner Playbook says: "don't compare its scores directly with earlier results." [Source: [playbook chapter 5](https://github.com/microsoft/scope/blob/283d14c52821f7f97b21ccc9c03378e9fd50601a/docs/ax-playbook/ax-practitioner/references/playbook/ch05-writing-evaluation-criteria.md)]
+
+## Do not let an LLM write your criteria
+
+The same playbook names this as a trap. Hand a model your scenarios to generate criteria and it "fails three ways": its knowledge cutoff bakes stale patterns into what you measure, it cannot know what you care about, and what it writes is either biased (when it also judges) or too vague for a different judge to score consistently. [Source: [playbook chapter 5](https://github.com/microsoft/scope/blob/283d14c52821f7f97b21ccc9c03378e9fd50601a/docs/ax-playbook/ax-practitioner/references/playbook/ch05-writing-evaluation-criteria.md)]
+
 ## Why it works
 
 An agent's output is a function of its entire input stream, so any uncontrolled part of that stream becomes a rival explanation for the score. The effect is measurable: on one task, several models picked .NET on Windows and Python or Node.js on Linux, and one model flipped its runtime choice outright. [Source: [Microsoft, hidden variables](https://developer.microsoft.com/blog/the-hidden-variables-in-your-agent-eval/)] Every rule above holds one more part of that stream constant, so the between-condition delta belongs to your surface. Neutral paths and generic identities remove semantic confounds, prompt purity keeps the rubric out of what the agent optimizes against, building and running replaces a proxy with the outcome, and repeat runs separate the delta from the non-determinism that remains.
@@ -95,4 +101,5 @@ Compare that with "uses proper security practices." The checklist version return
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](meta-evaluate-llm-judge-rubric-verification.md) — how far judge calibration has to go once verdicts gate a pipeline
 - [Eval Awareness: Designing Evals Agents Cannot Recognize](eval-awareness.md) — the other reason eval-shaped signals in the environment change what you measure
 - [Skill Evals](skill-evals.md) — the same paired with-and-without runner applied to a skill instead of a product surface
+- [Running an Agent Experience Evaluation From Gates to Fixes](../workflows/ax-evaluation-end-to-end.md) — the end-to-end order: stacked gates, trajectory triage, failure attribution, and source-first fixes
 - [Measure Agent Experience Against a Bare Baseline](ax-bare-baseline-lift-drag.md) — how to read the number this eval produces: propensity against efficacy, task cost beside quality, and the agent profile the result belongs to

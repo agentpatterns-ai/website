@@ -72,7 +72,7 @@ This design also satisfies Zero Data Retention (ZDR) requirements. ZDR prohibits
 
 The same harness code works across providers, because the full conversation state lives in the client.
 
-The trade-off is that the request payload grows with conversation length. Mitigate it with [observation masking](observation-masking.md), [context compression](context-compression-strategies.md), and truncation policies.
+The trade-off is that the request payload grows with conversation length. Mitigate it with [observation masking](observation-masking.md), [context compression](context-compression-strategies.md), and truncation policies. How often such a policy fires decides whether the history can be cached at all — see [Batched Context Eviction for Cache Reuse](batched-context-eviction.md).
 
 ## Cache-safe forking for compaction
 
@@ -264,5 +264,6 @@ After the first turn, `cache_read_input_tokens` should cover the system prompt a
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Typed Context Buys Addressability, Not Token Savings](typed-context-addressability.md) — a typed store that re-serializes each turn forfeits the prefix discount this page protects
 - [Attributed Cache Misses: Reading Why a Prefix Diverged](attributed-cache-miss-diagnostics.md) — reading the provider's own reason code instead of inferring the cause from a creation-token spike
+- [Batched Context Eviction for Cache Reuse](batched-context-eviction.md) — the eviction cadence that decides whether the growing history is cacheable
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
   - long-form

@@ -60,7 +60,7 @@ Claude Code's approval scopes are class bundling with the class width written do
 | File modification | Until session end |
 | Web fetch | Permanently per repository and domain |
 
-Only the file-modification row expires. Edits are frequent and the class is broad, so that approval is capped at the session rather than written to a settings file. A reviewer who approves a Bash command sets durable policy; a reviewer who approves an edit sets policy that ends with the session. Read the width before deciding whether one click is enough scrutiny for it.
+Only the file-modification row expires. Edits are frequent and the class is broad, so that approval is capped at the session rather than written to a settings file. A reviewer who approves a Bash command sets durable policy; a reviewer who approves an edit sets policy that ends with the session. Read the width before deciding whether one click is enough scrutiny for it. Where a prompt also offers an answer that saves nothing, that answer pre-authorizes no future action at all ([One-Shot Permission Answers for Out-of-Directory Reads](one-shot-permission-answers.md)).
 
 ## Key Takeaways
 

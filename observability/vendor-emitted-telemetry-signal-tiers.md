@@ -10,7 +10,7 @@ aliases:
   - signal tier sizing
   - vendor-emitted agent telemetry
   - hosted agent telemetry gap
-last_reviewed: 2026-09-23
+last_reviewed: 2026-10-13
 maturity: emerging
 ---
 
@@ -18,7 +18,7 @@ maturity: emerging
 
 > Classify each agent surface by the signal tier its vendor emits, because the tier decides which diagnostic question the telemetry can answer.
 
-A telemetry signal tier is the strongest shape a vendor emits for one agent surface: a joined trace, a detached trace, or counters alone. Sizing by tier means reading the vendor's signal tables surface by surface and writing down which question each tier supports, before any of it becomes a dashboard panel. Do this before you build something durable: an alert, a shared dashboard, a triage runbook. If you are switching telemetry on to look around, skip the exercise and read the traces.
+A telemetry signal tier is the strongest shape a vendor emits for one agent surface: a joined trace, a detached trace, or counters alone. The tier is the vendor's to set. The attributes riding inside it are partly yours: six capture classes default to off until an administrator enables them. Sizing by tier means reading the vendor's signal tables surface by surface and writing down which question each tier supports, before any of it becomes a dashboard panel. Do this before you build something durable: an alert, a shared dashboard, a triage runbook. If you are switching telemetry on to look around, skip the exercise and read the traces.
 
 The GitHub Copilot app added OpenTelemetry export through enterprise-managed settings on 22 September 2026. Administrators "Configure the `telemetry` property in your enterprise's `managed-settings.json` file to enable export and specify the endpoint that will receive the data" ([GitHub Changelog](https://github.blog/changelog/2026-09-22-opentelemetry-in-the-github-copilot-app)). The client emits the data and sends it where you point it, with "no phone-home behavior" ([VS Code documentation](https://code.visualstudio.com/docs/agents/guides/monitoring-agents)). So you get vendor-authored instrumentation rather than a vendor-hosted feed, and it is uneven across surfaces.
 
@@ -34,18 +34,31 @@ Copilot sends traces, metrics, and events ([GitHub Docs](https://docs.github.com
 
 The middle tier is a stated limit rather than an oversight. "Terminal traces appear as independent root traces under service `github-copilot` and are not linked to extension traces" ([VS Code documentation](https://code.visualstudio.com/docs/agents/guides/monitoring-agents)). The bottom tier catches people out. That same reference documents trace structure for the Copilot SDK, the CLI, and Claude agents, and never for cloud agents. Those appear only as the counters `copilot_chat.cloud.session.count` and `copilot_chat.cloud.pr_ready.count`, plus the event `copilot_chat.cloud.session.invoke`. A trace-shaped dashboard aimed at the hosted coding agent renders empty.
 
-One more cut runs underneath all three tiers. Prompts, responses, and tool arguments are excluded by default and need an opt-in to content capture, which the documentation warns "can include sensitive information such as code, file contents, and user prompts" ([VS Code documentation](https://code.visualstudio.com/docs/agents/guides/monitoring-agents)).
+## The cut you configure
+
+Six capture classes sit underneath all three tiers, and every one defaults to off ([GitHub Changelog, 2026-10-12](https://github.blog/changelog/2026-10-12-client-telemetry-user-attribution-and-configurable-capture)). `telemetry.capture` is "An object with independent, fine-grained controls for identity and sensitive content. Every sub-property defaults to `false`" ([GitHub Docs](https://docs.github.com/copilot/reference/enterprise-administrators/enterprise-managed-settings)).
+
+Five classes govern content: `prompts`, `responses`, `toolArguments`, `toolOutput`, and `policyDetail`. The sixth, `identity`, "adds three attributes to OpenTelemetry (OTel) data": `user.name`, currently the GitHub login, plus `process.user.name` for the local operating-system account and `host.name` for the local machine name (2026-10-12 changelog).
+
+So the sizing pass now ends in two outputs: a tier per surface, and a capture decision. That decision is bounded in both directions. You cannot recover the records you declined to enrich, and you cannot enable a class against a purpose you have not named. Record the decision with the audit question it serves, because the gap it opens cannot be filled later.
+
+Identity shows why. Switching it on puts the GitHub login on a client-side record, which ties editor-side activity to a named account. Usage metrics show the same split: server-side data "reliably shows who was active, but it can't see what happens in the editor" ([GitHub Changelog, 2026-10-06](https://github.blog/changelog/2026-10-06-update-your-ide-to-restore-agent-activity-in-copilot-usage-metrics)). The gap does not close. Identity capture "remains separate from the existing pseudonymous user identifier" (2026-10-12 changelog) and "does not affect the pseudonymous `enduser.pseudo.id` attribute" (GitHub Docs), so identity is a separate, off-by-default control that sits beside `enduser.pseudo.id` and does not replace it. A record emitted while identity is off carries no `user.name`.
+
+Two details decide whether the setting you wrote is the setting that runs. Support is uneven. The controls work in "Copilot CLI, the GitHub Copilot app, and VS Code sessions using Agent Host" ([GitHub Docs](https://docs.github.com/copilot/reference/enterprise-administrators/enterprise-managed-settings)). VS Code's local agent harness takes `capture.identity` and the legacy `captureContent`, and does not apply the five content classes independently (same reference). Managed sources also replace rather than merge. "If more than one managed source defines `telemetry`, the highest-precedence source supplies the complete managed `telemetry` object. Objects from lower-precedence managed sources are not merged into it" (same reference). A broad partial `telemetry` object therefore drops a narrower team's classes.
+
+GitHub draws the second bound itself. Content classes can carry source code, file contents, commands, and paths that may hold secrets, and the guidance is to "Enable only the capture classes required for your use case" (same reference). Under UK data-protection rules, personal data must stay "limited to what is necessary – you do not hold more than you need for that purpose" ([ICO](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/data-protection-principles/a-guide-to-the-data-protection-principles/data-minimisation/)). Enabling a class on the chance it proves useful is the practice that rule forbids.
 
 ## Why it works
 
 Signal tier predicts diagnostic power because each projection drops specific telemetry factors, and the dropped factors are the ones causal attribution needs. TelemetrySuffBench renders agent traces through seven factor masks and reports that "Metadata, OpenTelemetry-compatible, and OpenInference-compatible views preserve 99.5% to 100% detection F1 but limit origin-step accuracy to at most 0.5%" ([Zhu and Pu, 2026](https://arxiv.org/abs/2608.07899v1)). Such a view retains "only canonical identity, tool, observation, status, and relation fields", so decision content and provenance mapping fall out of it. The ablation isolates the cause: "removing decision content reduces origin-step accuracy to zero for every model".
 
-Copilot's default export makes that exact cut, so the default configuration is a detection-grade signal by construction and no amount of dashboard work converts it into a localization-grade one. Part of the gap survives configuration entirely. Across six vendor SDK regimes, reasoning trace is a regime-independent gap ([Solozobov, 2026](https://arxiv.org/abs/2605.12078v1)).
+Copilot's default export makes that exact cut, so the default configuration is a detection-grade signal by construction and no amount of dashboard work converts it into a localization-grade one. A class left off is unrecoverable for the same reason the October 2026 IDE attribution break was: nothing recorded the field, and GitHub states "We can't backfill missing data" ([GitHub Changelog, 2026-10-06](https://github.blog/changelog/2026-10-06-update-your-ide-to-restore-agent-activity-in-copilot-usage-metrics)). Part of the gap survives configuration entirely. Across six vendor SDK regimes, reasoning trace is a regime-independent gap ([Solozobov, 2026](https://arxiv.org/abs/2605.12078v1)).
 
 ## When this backfires
 
-- Content capture is off the table. In a regulated or secret-bearing codebase the opt-in stays false, so the localization tier is unreachable by policy, and a runbook ending in "open the trace and find the bad step" never pays off.
+- Capture is off the table by policy. In a regulated or secret-bearing codebase the content classes stay at their defaults, so the localization tier is unreachable and a runbook ending in "open the trace and find the bad step" never pays off.
 - The tiers move under you. The GenAI span conventions are marked "Status: Development", not stable ([OpenTelemetry semantic conventions](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-spans.md)). Copilot already dual-emits a legacy `copilot_chat.*` namespace beside the canonical `github.copilot.*` one ([VS Code documentation](https://code.visualstudio.com/docs/agents/guides/monitoring-agents)). A later release can also raise a surface's tier, so a gap analysis can outlive the product it describes.
+- Retention is shorter than the investigation horizon. If traces age out in a week and nobody runs a post-hoc origin analysis, the hole you declined costs nothing.
 - Volume is low. At a handful of agent sessions a week, the VS Code Agent Debug Log panel shows the same SDK hierarchy as a trace viewer and costs nothing to read.
 - Detection is the whole requirement. If the question is only whether runs fail and what they cost, the default tier already reaches 99.5% to 100% detection F1 ([Zhu and Pu, 2026](https://arxiv.org/abs/2608.07899v1)) and the sizing pass buys you nothing.
 
@@ -57,11 +70,15 @@ Failure rate is available at every tier. The `error.type` attribute rides the sp
 
 Failing tool calls need joined traces, through `execute_tool` spans carrying `gen_ai.tool.name`. Cloud agents contribute nothing there, so the panel gets scoped to `service.name = copilot-chat` and labeled as covering editor sessions, instead of shipping as a fleet-wide view that omits the hosted agent.
 
+The capture decision for this enterprise: the content classes stay at their defaults, because failure rate and tool-call counts need none of them. Turn on `toolArguments` only when an audit question names it, for example "which command did the failing `execute_tool` span run", and record that question next to the setting. Turn on `identity` only if the same audit needs a named account.
+
 ## Key Takeaways
 
 - Read the vendor's signal tables per surface, not the feature announcement. Copilot's changelog says traces; the reference says cloud agents get counters.
 - Convention-shaped telemetry is strong at detection and weak at localization, because the projection drops decision content ([Zhu and Pu, 2026](https://arxiv.org/abs/2608.07899v1)).
 - Label a dashboard with the surfaces it covers. A fleet-wide claim built on joined traces excludes the hosted agent silently.
+- Six capture classes default to off, so the sizing pass now produces a capture decision you have to record.
+- Enabling `identity` adds `user.name`, `process.user.name`, and `host.name` to records emitted while it is on. It sits beside `enduser.pseudo.id` and does not replace it.
 - Skip the sizing pass when you are exploring, when volume is low, or when detection is all you need.
 
 ## Related
@@ -70,3 +87,4 @@ Failing tool calls need joined traces, through `execute_tool` spans carrying `ge
 - [Subagent OTel Trace Correlation via `agent_id` Attribute](subagent-otel-trace-correlation.md) — recovering identity when span lineage breaks across a boundary.
 - [Agent Observability with OpenTelemetry and Trajectory Logging](agent-observability-otel.md) — the self-instrumented case, where you choose the attributes.
 - [Debugging the Tool-Call Loop Before Reaching for a Framework](tool-call-loop-instrumentation.md) — per-hop instrumentation when you own the loop.
+- [Reading a Client-Version Metric Dip as Lost Adoption](../patterns/anti-patterns/client-version-metric-dip-as-adoption-loss.md) — the same no-backfill mechanism arriving by accident instead of by setting.

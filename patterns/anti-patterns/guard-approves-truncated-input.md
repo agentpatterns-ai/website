@@ -101,3 +101,4 @@ The research found no source that argues for approving partial input as a securi
 - [Parser Versus Shell Permission Evasion](../../security/parser-versus-shell-permission-evasion.md)
 - [Hostname Allowlist TLS Blind Spot](../../security/hostname-allowlist-tls-blind-spot.md)
 - [Approval Records That Bind No Identity and No Session](unbound-approval-records.md)
+- [Treating a Gate Model's Option Labels as Trusted Configuration](option-labels-as-trusted-config.md)

@@ -11,7 +11,7 @@ aliases:
   - graduated cost circuit breaker
   - soft spend limit alerts
   - staged budget alerting
-last_reviewed: 2026-07-28
+last_reviewed: 2026-10-12
 maturity: established
 ---
 
@@ -89,6 +89,8 @@ The release pairs three primitives the pattern depends on: a configurable soft l
 
 The 50/80/100 split is the Cursor implementation; the pattern itself is "progressive thresholds against a soft cap with a defined overshoot zone." Cloud-cost platforms typically expose the same primitive at account scope, with operator-chosen threshold percentages — the implementation is closest in shape to a budget alert ladder, not to a hard quota.
 
+A second vendor now shows live spend against a cap. Claude Code 2.1.284 added dollar amounts to the Claude apps gateway spend limit in `/usage` and in the status line ([Claude Code changelog, 2.1.284](https://code.claude.com/docs/en/changelog#2-1-284)). The same release added `used_usd`, `limit_usd`, and `period` to the status line's `rate_limits.spend_limit` field. The dollar amounts show when the gateway runs 2.1.284 or later. This reports spend and fires no alerts, which puts it beside the 50/80/100 pattern rather than inside it.
+
 ## Key Takeaways
 
 - Cost accumulates monotonically inside a billing window — percent-of-budget is a forecasting signal, not just a failure signal.
@@ -105,3 +107,4 @@ The 50/80/100 split is the Cursor implementation; the pattern itself is "progres
 - [Circuit Breakers for Agent Loops](../../observability/circuit-breakers.md) — loop-level stops including a single cost threshold; this pattern decomposes that signal
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — controls per-turn cost; progressive alerts catch what the per-turn allocation lets through over a period
 - [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — defines the unit (GitHub AI credits vs Anthropic token rates) over which the budget window is measured, plus credit pooling and forfeiture
+- [Model Selection Guidelines with Budget Quotas](../../human/model-selection-guidelines-with-budget-quotas.md) — the organizational version: published task-to-model guidance plus per-department and per-person caps, where the hard stop replaces the alert

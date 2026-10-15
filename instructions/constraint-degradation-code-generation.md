@@ -139,3 +139,4 @@ Turn-by-turn constraint application assumes the model preserves all prior constr
 - [Negative Space Instructions](negative-space-instructions.md) — explicit "what not to do" constraints as an alternative to positive-only constraint lists
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — encoding form (natural language vs. compact headers) has no measurable effect on compliance; token savings are the only real benefit
 - [Compound Prompt Constraints Degrade More Than Their Parts Predict](../patterns/anti-patterns/compound-prompt-constraints.md) — the interaction term this page's additive model cannot express: constraints that each test clean combining into a super-additive loss
+- [Ordering Is the Weakest Process Constraint You Write](ordering-constraint-weakness.md) — the same degradation in a repository-grounded agent run, where sequence requirements fail first

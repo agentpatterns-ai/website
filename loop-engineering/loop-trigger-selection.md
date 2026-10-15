@@ -94,3 +94,4 @@ Stop after 10 turns.
 - [Session Scheduling with Loop and Cron in Claude Code](../tools/claude/session-scheduling.md) — the scheduled shape as one tool implements it, with its expiry and jitter semantics
 - [Developer as CPU Scheduler: Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md) — why adding triggers past your review capacity converts loop throughput into unread diffs
 - [Trigger-to-Function Architecture for Unprompted Codebase Maintenance](../workflows/trigger-function-maintenance-architecture.md) — the layer above this choice, where a catalogue of triggers dispatches a small set of callable agent functions
+- [Whose Permissions a Self-Scheduled Agent Run Carries](../security/self-scheduled-run-authority.md) — the authority question a detached trigger raises, where the principal is pinned when the schedule is written

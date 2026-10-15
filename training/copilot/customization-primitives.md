@@ -5,7 +5,7 @@ tags:
   - training
   - agent-design
   - copilot
-last_reviewed: 2026-05-27
+last_reviewed: 2026-10-13
 ---
 
 # GitHub Copilot: Customization Primitives
@@ -70,7 +70,7 @@ Encoding conventions, constraints, and context that Copilot would otherwise have
 
 ### When to use it
 
-Every non-trivial repository should have at least a repository-wide instructions file. If you've corrected Copilot for the same thing twice, put it in instructions.
+Every non-trivial repository should have at least a repository-wide instructions file. If you've corrected Copilot for the same thing twice, put it in instructions. GitHub suggests finding a ready-made instruction from Awesome Copilot that addresses a workflow you already repeat, then reviewing what it contains and adapting it to your repository's tools and standards ([How to teach Copilot about your codebase](https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-how-to-teach-copilot-about-your-codebase/)).
 
 ### When NOT to use it
 

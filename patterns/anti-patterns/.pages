@@ -88,6 +88,7 @@ nav:
   - "Verification Gaps":
       - trust-without-verify.md
       - premature-completion.md
+      - building-on-inherited-test-failures.md
       - yes-man-agent.md
       - self-review-modernization-failure.md
       - llm-review-overcorrection.md
@@ -110,7 +111,9 @@ nav:
       - happy-path-bias.md
       - lazy-generation.md
       - assertion-free-test-theater.md
+      - assertion-weakening-as-test-repair.md
       - code-first-test-oracle-bias.md
+      - interpretive-lock-in-revision-loops.md
       - fault-enforcing-generated-regression-tests.md
       - state-anchored-test-oracles.md
       - test-homogenization-trap.md
@@ -159,6 +162,7 @@ nav:
       - multi-tool-threshold-poisoning-mcp.md
       - llm-api-router-mitm.md
       - adversarial-only-leakage-threat-modelling.md
+      - option-labels-as-trusted-config.md
   - "False Security Evidence":
       - model-confidence-as-security-verification.md
       - model-upgrade-as-security-improvement.md

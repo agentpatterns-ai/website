@@ -86,3 +86,4 @@ Claude's overall pass rate moved from 53.3% without context to 55.6% under selec
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — why an enlarged context file degrades rather than improves behavior past a threshold
 - [Method Map: Failure-Mode to Smallest-Artifact Triage](method-map-failure-mode-triage.md) — the same triage discipline generalized across artifact types
 - [Discoverable vs Non-Discoverable Context](../context-engineering/discoverable-vs-nondiscoverable-context.md) — the test for which facts belong in a context file at all
+- [Irreducibility Triage](irreducibility-triage.md) — once the knowledge half is worth writing, which artifacts keep paying as models improve

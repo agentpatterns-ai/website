@@ -11,7 +11,7 @@ aliases:
   - remote agent host
   - remote agent execution
   - agent host over SSH
-last_reviewed: 2026-06-02
+last_reviewed: 2026-10-12
 maturity: established
 ---
 
@@ -39,6 +39,8 @@ This is [Session Harness Sandbox Separation](session-harness-sandbox-separation.
 - Cloud worker. Cursor's self-hosted cloud agents invert the network shape — "a worker process connects outbound via HTTPS to Cursor's cloud—no inbound ports, firewall changes, or VPN tunnels required" — with inference in the cloud and tool execution on the worker ([Cursor: Self-Hosted Cloud Agents](https://cursor.com/blog/self-hosted-cloud-agents)).
 
 All three colocate the agent loop with the filesystem it edits and put session state on something that outlives the client. Several clients can then attach to one session at once, which [Multi-Client Session Attachment](multi-client-session-attachment.md) covers.
+
+VS Code 1.139 extends Dev Container sessions from local folders to projects on SSH, Tunnel, and WSL hosts, so the agent runs inside the project's Dev Container. The remote host needs Docker. The setting is `chat.agentHost.devContainer.enabled`, and the release notes say the feature is rolling out gradually ([VS Code 1.139 release notes](https://code.visualstudio.com/updates/v1_139)).
 
 ## State location matters
 

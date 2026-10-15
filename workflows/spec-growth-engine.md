@@ -10,7 +10,7 @@ tags:
   - context-engineering
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-28
+last_reviewed: 2026-10-12
 maturity: emerging
 ---
 
@@ -64,6 +64,10 @@ Implementation proceeds in vertical slices that cut through the spec graph end-t
 
 A deterministic CI check compares the post-change code against the contract half of every touched spec node, typically a signature-equivalence check on declared interfaces plus property or contract tests on declared invariants. If a contract has shifted without a corresponding spec change, or the inverse, a spec change without a corresponding code update, the merge is blocked. The structural prior art is architectural fitness functions: ArchUnit for the JVM, Dependency Cruiser for TypeScript, both of which "as CI gates catch cyclic dependencies and permission drift that no other layer touches" ([Augment Code, 2026](https://www.augmentcode.com/guides/ai-agent-pre-merge-verification)). Independent SDD tooling has converged on the same direction: Spec Kit shipped `/speckit.reconcile` for post-hoc drift reconciliation, OpenSpec proposes changes through delta specs (ADDED / MODIFIED / REMOVED) merged into the source of truth on archive ([Spec Kit vs OpenSpec](https://intent-driven.dev/knowledge/spec-kit-vs-openspec/)), and Tessl marketed "zero spec drift by construction" before pivoting away ([Spec-Driven Tool Landscape](https://specdriven.com/landscape/)).
 
+## The two-layer implementation
+
+The same author's follow-up paper implements this design in two layers it keeps apart ([Grabowski, 2026 implementation paper](https://arxiv.org/abs/2610.11725)). The deterministic layer validates the spec graph against the code's import graph. It also earns a node's verified status from recorded test evidence, and classifies every change by what it can break. The layer does all three without calling a model. The agent layer is where an intent author, a planner, and a coder extend the graph in rounds. After each round a deterministic rule decides whether the run continues. The paper also reports three independent switches that set how much human judgement the implementation delegates.
+
 ## Triggers and constraints
 
 - Trigger — every code change. The gate runs at PR-open and at every push to the PR branch.
@@ -76,7 +80,7 @@ Tool-agnostic. The spec graph is implementation-defined, the spine context assem
 
 The closest practitioner-shipped surface today is nested AGENTS.md in Codex, Copilot CLI, and Cursor — the file-system path is the de facto ownership path, and `chat.useNestedAgentsMdFiles` is the assembler ([Codegateway, 2026](https://www.codegateway.dev/en/blog/agents-md-playbook-2026)). The Spec Growth Engine generalizes this to a graph that does not map one-to-one to directories, so cross-cutting concerns can be expressed as edges rather than as duplicate files.
 
-## When This Backfires
+## When this backfires
 
 - Early-stage or exploratory work — when requirements are still being discovered, a blocking drift gate locks in premature contracts. Scott Logic rebuilt one feature with Spec Kit (3.5+ hours, 2,577 lines of spec) versus iterative prompting (23 minutes) and reported comparable bug counts — the spec ceremony was waterfall in Markdown ([Scott Logic, 2025](https://blog.scottlogic.com/2025/11/26/putting-spec-kit-through-its-paces-radical-idea-or-reinvented-waterfall.html)). The drift gate sharpens this overhead by codifying it as a merge block.
 - Weak or stale specs at rollout — flipping the gate from advisory to blocking before auditing spec quality produces false positives that destroy trust in the gate. The recommended posture is advisory mode until the spec corpus is known-clean ([Augment Code, 2026](https://www.augmentcode.com/guides/ai-agent-pre-merge-verification)).

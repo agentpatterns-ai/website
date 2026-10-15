@@ -96,3 +96,4 @@ Here nothing outside the allowlist and the read-only set runs at all ([Choose a 
 - [Ask-Everything Permission Policies Protect Less than Per-Action Approval](../anti-patterns/ask-everything-permission-policies.md) — why a policy that resolves to ask protects less than one that settles
 - [bypassPermissions Silently Overrides allowedTools](../anti-patterns/bypass-permissions-overrides-allowlist.md) — the widening failure this posture exists to avoid
 - [Headless Claude Code in CI](../../workflows/headless-claude-ci.md) — the surrounding non-interactive run this flag configures
+- [Whose Permissions a Self-Scheduled Agent Run Carries](../../security/self-scheduled-run-authority.md) — which principal that unattended run is denying or allowing on behalf of

@@ -96,3 +96,4 @@ The added text gives the calling model the context to decline `../../etc/passwd`
 - [Execution-Layer Security Invariants for MCP Runtimes](mcp-execution-security-invariants.md) — the metadata-non-authority invariant explaining why descriptions guide but never enforce
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — the principle that runtime content informs a decision but must not authorize it
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md) — deterministic enforcement at the tool call, the control descriptions cannot provide
+- [Enforce a Tool's Documented Argument Limits in the Tool](tool-enforced-argument-semantics.md) — the code-level fix this technique buys time for, and the rate at which runnable MCP servers carried at least one such violation (118 of 273)
