@@ -60,6 +60,8 @@ Within the controllable surface, Mastykarz names three failure modes, each with 
 - Selection failure — the agent sees the extension but does not connect it to intent. It is the "most common and most fixable" mode, usually a naming or description problem.
 - Quality failure — the extension is invoked but returns content that hurts outcomes, producing drag instead of lift.
 
+The readout reports a failed criterion without saying which mode caused it. The trajectory is the evidence that separates them: an extension that never loads, one that loads and goes unused, and one that is used and applied wrongly. [Source: [playbook chapter 9](https://github.com/microsoft/scope/blob/283d14c52821f7f97b21ccc9c03378e9fd50601a/docs/ax-playbook/ax-practitioner/references/playbook/ch09-investigating-agent-trajectories.md)] The [end-to-end workflow](../../workflows/ax-evaluation-end-to-end.md) shows how to triage them.
+
 ## Why it works
 
 The stack works as a diagnostic vocabulary, not a description of architectural independence. Its mechanism matches the [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md): asking "which layer changed?" before "which model should we swap to?" closes the cheaper interventions first. Anthropic notes that a model swap is the most expensive option ([Anthropic](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)).

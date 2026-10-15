@@ -104,6 +104,7 @@ nav:
       - workload-identity-federation-for-agents.md
   - "Permissions":
       - approval-laundering-transitive-effects.md
+      - authority-set-binding-approvals.md
       - agent-network-egress-policy.md
       - aggregation-bounds-agent-authorization.md
       - agent-self-config-field-classes.md
@@ -139,6 +140,7 @@ nav:
       - sensitive-terminal-prompt-interception.md
       - skill-shell-execution-gate.md
       - sufficiency-tightness-policy-decomposition.md
+      - self-scheduled-run-authority.md
   - "Code Injection":
       - code-injection-multi-agent-defence.md
   - "Multi-Agent Propagation":
@@ -164,6 +166,7 @@ nav:
       - mcp-runtime-control-plane.md
       - security-aware-tool-descriptions-mcp.md
       - mid-trajectory-guardrail-selection.md
+      - tool-enforced-argument-semantics.md
       - tool-invocation-attack-surface.md
       - vetting-tool-definitions-before-install.md
       - customer-hosted-mcp-tunnel.md

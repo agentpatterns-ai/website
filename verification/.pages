@@ -29,6 +29,7 @@ nav:
       - review-constraint-acceptance-gate.md
       - nonstandard-errors-ai-agents.md
       - benchmark-driven-tool-selection.md
+      - task-flow-calibration.md
       - ambiguity-stability-model-selection.md
       - frozen-stimulus-behavior-panels.md
       - purpose-built-eval-suites.md
@@ -108,6 +109,7 @@ nav:
       - cut-point-replay-agent-regression-tests.md
       - trajectory-aware-benchmark-subset-selection.md
       - per-change-deploy-monitors.md
+      - harness-change-belief-check.md
   - "Eval-Driven Development":
       - skill-evals.md
       - skill-lift.md
@@ -150,6 +152,7 @@ nav:
       - expected-metric-gate-performance-prs.md
       - transcript-measured-review-coverage.md
       - task-category-security-review-routing.md
+      - defect-visibility-review-autonomy.md
       - chain-of-verification-coding-agents.md
       - demand-driven-repo-auditing.md
       - llm-static-verification-natural-language-requirements.md

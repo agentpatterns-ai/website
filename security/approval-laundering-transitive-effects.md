@@ -63,6 +63,7 @@ Two controls do the work for shell commands: turning lifecycle scripts off by de
 ## Related
 
 - [The Skill Closure Declaration Gap](skill-closure-declaration-gap.md) — the same record-names-less-than-it-grants shape for Agent Skills instead of shell commands and MCP calls
+- [Authority-Set Binding: Who Names an Approval's File Set](authority-set-binding-approvals.md) — the same gap counted over the repository files a run reads, and the finding that an agent asked to list them binds different sets from run to run
 - [Parser-Versus-Shell Evasion in Command Permission Checks](parser-versus-shell-permission-evasion.md) — a rule that matches the wrong command text; this page covers a rule that matches the right command and still misses its effects
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — the write-side control on the same expansion sources, `.npmrc` and `.devcontainer/` included
 - [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — a different MCP approval gap, where the reviewer cannot even see the metadata the model reads

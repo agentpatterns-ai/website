@@ -96,3 +96,4 @@ The model, the tools, and the task are identical across the two shapes. Only wha
 - [Per-Type Retention Policy for Agent Compaction](per-type-retention-under-compaction.md) — retention fidelity set by content type rather than by age
 - [Addressable Recall Compaction](addressable-recall-compaction.md) — keeping the full observation addressable so a truncated view stays recoverable
 - [Context-Window Diagnostic Tooling](context-window-diagnostic-tooling.md) — finding which tool calls fill the window before choosing a policy
+- [Batched Context Eviction for Cache Reuse](batched-context-eviction.md) — the prompt-cache cost of shortening a result on every call rather than in batches

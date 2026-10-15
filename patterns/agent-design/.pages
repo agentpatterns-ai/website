@@ -147,6 +147,7 @@ nav:
       - delegated-autonomy-boundary-artifacts.md
       - trigger-level-agent-intake-gating.md
       - approval-gate-granularity.md
+      - one-shot-permission-answers.md
       - interaction-effect-obligations.md
       - fleet-irreversibility-budget.md
       - agent-native-filesystem-mediation.md
@@ -183,6 +184,7 @@ nav:
       - enforced-stop-on-useless-results.md
       - escalation-channels-defect-disclosure.md
       - evidence-first-diagnosis-reports.md
+      - evidence-path-divergence.md
       - gateway-model-routing.md
       - gateway-hint-headers.md
       - exactly-once-enforcement-layer.md
@@ -213,6 +215,7 @@ nav:
       - rollback-first-design.md
       - router-imposed-quality-ceiling.md
       - routing-break-even.md
+      - context-step-model-split.md
       - task-distribution-router-fit.md
       - per-surface-routing-visibility.md
       - rubric-refine-pre-execution-tool-use.md
@@ -275,6 +278,7 @@ nav:
       - suspect-the-harness-not-the-model.md
       - lane-based-execution-queueing.md
       - managed-vs-self-hosted-harness.md
+      - open-framework-compose-or-fork.md
       - local-model-viability-for-coding.md
       - multi-shape-byok-provider.md
       - observability-driven-harness-evolution.md

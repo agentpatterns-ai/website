@@ -58,6 +58,7 @@ Three tools from three vendors converged on the same per-category ordering. That
 ## Related
 
 - [Risk-Based Task Sizing for Agent Verification Depth](risk-based-task-sizing.md) — the general case: scale verification depth to task risk, classified by file path
+- [Defect Visibility as the Unsupervised Review Boundary](defect-visibility-review-autonomy.md) — the same routing shape keyed on whether a bug is decidable from the diff
 - [Severity-Stratified Evaluation of Security Prompts](severity-stratified-security-prompt-evaluation.md) — why an unstratified finding count misreads a security intervention as an improvement
 - [Audit-Budget Allocation for Agent Fleets](audit-budget-allocation-agent-fleets.md) — what happens to a ranked review queue once the ranking signal stops discriminating
 - [Root Causes of Vibe-Coded Application Vulnerabilities](../security/vibe-coded-vulnerability-root-causes.md) — the defect rates that survive prompt and harness changes

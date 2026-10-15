@@ -101,6 +101,7 @@ Run both when the budget allows. Build the archive first when your costly defect
 ## Related
 
 - [Review-Comment-Derived Benchmarks for Code Review Agents](review-comment-derived-benchmarks.md) — the private, own-archive alternative; not the same artifact as GitHub's ReviewBench
+- [Defect Visibility as the Unsupervised Review Boundary](defect-visibility-review-autonomy.md) — a per-change property to route unsupervised review on, in place of an aggregate score
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — why a public static set leaks into tuning
 - [Judge Self-Preference Detection](judge-self-preference-detection.md) — the bias check for one model that both produces and grades
 - [Benchmark Noise-Floor Audit](benchmark-noise-floor-audit.md) — sizing a score gap before reading it as an order

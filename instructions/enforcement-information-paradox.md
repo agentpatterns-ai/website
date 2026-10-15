@@ -95,3 +95,4 @@ The rule line and the mandate line are the study's own imperative framing and an
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — parallel finding that reformatting a constraint is not a compliance fix
 - [Plan Compliance in Agents: Measure What They Execute, Not What You Wrote](../patterns/agent-design/plan-compliance-in-agents.md) — measuring whether the instructed behavior actually runs
 - [Write Agent Rules You Can Grade From the Transcript](transcript-gradable-agent-rules.md) — a rule about manner breaks with no trace, so phrase it so the violation counts
+- [Ordering Is the Weakest Process Constraint You Write](ordering-constraint-weakness.md) — which class of constraint most needs that external enforcement, measured

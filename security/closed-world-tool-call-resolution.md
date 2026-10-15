@@ -92,3 +92,4 @@ The digest comparison is the staleness check: a server that mutates a tool's sch
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](mcp-runtime-control-plane.md) — the single interception point where a resolver would be installed
 - [Vetting Tool Definitions for Exfiltration Signatures](vetting-tool-definitions-before-install.md) — the install-time complement, which inspects contracts rather than the calls that reference them
 - [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — the other listing-time-against-call-time gap, where approved metadata and model-visible bytes diverge
+- [Enforce a Tool's Documented Argument Limits in the Tool](tool-enforced-argument-semantics.md) — the next rung, where a resolved call's arguments still break what the tool's description promised

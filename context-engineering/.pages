@@ -49,6 +49,7 @@ nav:
       - injected-context-cost-attribution.md
       - working-memory-evaluation-levels.md
       - prompt-caching-architectural-discipline.md
+      - batched-context-eviction.md
       - static-content-first-caching.md
       - prompt-cache-keepalive-agent-pauses.md
       - attributed-cache-miss-diagnostics.md

@@ -44,6 +44,8 @@ Review burden moves, it does not disappear. High-AI-adoption teams merged 98% mo
 
 Context window blindness is structural. ADRs, tribal knowledge, and style rationale live outside the context window by default.
 
+A controlled study of a related cost (failing earlier tests, not architectural drift) adds a limit. Over three events, agents building on their own earlier changes lost ground mainly when inherited code already failed earlier tests. When it passed them, the gap on task resolution was −1.1 points with an interval that includes zero ([Pan et al., 2026](https://arxiv.org/abs/2610.14768v1)). The study covers tested behavior only, and [SlopCodeBench](https://arxiv.org/abs/2603.24755v2) reports structural erosion over longer chains, so the two do not agree. See [Building on Inherited Test Failures](building-on-inherited-test-failures.md).
+
 ## The risk escalates in CI/CD
 
 Without review gates, Shadow Tech Debt accumulates at machine speed. JetBrains Air concluded that complex codebases are not yet ready for pure agentic coding ([JetBrains Air blog](https://blog.jetbrains.com/air/2026/03/air-launches-as-public-preview-a-new-wave-of-dev-tooling-built-on-26-years-of-experience/)).

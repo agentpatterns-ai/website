@@ -9,7 +9,7 @@ tags:
   - multi-agent
   - claude
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-06-14
+last_reviewed: 2026-10-12
 status: current
 ---
 
@@ -46,6 +46,8 @@ Team agents inherit the model configured on the leader. The [Claude Code v2.1.73
 ## Per-agent observability
 
 Hook events include `agent_id` and `agent_type` fields, added in [v2.1.69](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md). These let hooks tell the team lead, teammates, and sub-agents apart. Use them to apply different enforcement rules per agent role, or to tag audit logs with agent identity. For example, let the lead push to a remote while teammates stay local.
+
+Claude Code 2.1.289 added `agent.spawn` for teammates, one agent id across plugin hook events, and idle and waiting states in `$.agent.list()` ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-289)). `agent.spawn` is a plugin hook (the [2.1.299 changelog](https://code.claude.com/docs/en/changelog#2-1-299) calls it "the `agent.spawn` mod hook"), and `$.agent.list()` is a plugin API. Neither is one of the team hooks below.
 
 ## Hooks for teams
 

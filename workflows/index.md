@@ -18,7 +18,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 ## Pages
 
 - [Agent Debugging](../observability/agent-debugging.md) — Diagnosing bad agent output
-- [Agent Commit Attribution: Signed Commits and Agent Identity](agent-commit-attribution.md) — Configure agents to sign or annotate their commits with verifiable identity metadata so audit trails distinguish agent-generated changes from human-authored ones
+- [Agent Commit Attribution: Signed Commits and Agent Identity](agent-commit-attribution.md) — Use signatures, commit trailers, and the authenticated pusher record to tell an agent's commits apart and to know who put them on the branch
 - [Agent-Driven Greenfield Product Development](agent-driven-greenfield.md) — Build a new product agent-first by defining roles, decomposing to context-safe tasks, and executing through autonomous agent loops
 - [Central Repo for Shared Agent Standards](central-repo-shared-agent-standards.md) — Distribute shared agent skills, instruction files, and coding conventions from a central repository to downstream projects
 - [Enterprise Skill Marketplace: Distribution, Usage Reporting, and Quality Evals](enterprise-skill-marketplace.md) — Scale a shared skill library with MDM distribution, private plugin marketplaces, OTel usage telemetry, and a manual eval cadence for high-traffic skills
@@ -29,6 +29,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Continuous Documentation as an Agent-Driven Practice](continuous-documentation.md) — AI agents detect documentation-code drift on schedule or push and open reviewable PRs to realign docs as a continuous pipeline
 - [Notebook-Documented Automation for Repeat Operational Work](notebook-documented-automation.md) — The agent writes an executable notebook while it works, records the dead ends and the decision, and drops an index file the next run can find it by
 - [Unattended Run Reporting: What the One Message Must Say](unattended-run-reporting-contract.md) — The message an unattended agent run posts must separate unreadable from empty, quiet from failed, and posted from maybe posted
+- [Recurring Agent Job Delegation: Widen Remit on Evidence](recurring-agent-job-delegation.md) — Hand a recurring agent job to your team in stages: pick work you would delegate, widen its remit only on per-run evidence, and keep the job visible to the team
 - [Accumulated Behavioral Rules from Review Feedback](accumulated-behavioral-rules.md) — Codify each accepted review comment as a persistent behavioral rule the agent loads and self-checks, so it stops repeating the same class of mistake
 - [The Error-Class Governance Loop for Instruction Libraries](instruction-library-governance-loop.md) — Classify each recurrence as novelty or drift, move rules along a fixed pathway from prose to mechanized check to archive, and pair every metric with its inverse
 - [Escape Hatches](escape-hatches.md) — Unsticking stuck agents
@@ -125,3 +126,4 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Choosing the Right Surface for a Coding Agent Task](agent-surface-selection.md) — Keep a task in chat while its intent is forming, then move it off chat; a two-question rule maps each task shape to an inline action, a background agent, a CI job, a hook, or a canvas
 - [Agent-Driven Fuzzing with Human-Gated Crash Triage](agent-driven-fuzzing-human-gated-triage.md) — An agent can run the harness, coverage, and crash-triage loop on a C/C++ repo unattended, but a human must still confirm every vulnerability verdict before it ships
 - [Downstream Disclosure Coordination for Agent-Found Defects](downstream-disclosure-coordination.md) — Map every hop between a vendored library and your deploy, mitigate centrally where a chokepoint exists, and track the fixed version into your lockfile rather than waiting on the advisory
+- [Running an Agent Experience Evaluation From Gates to Fixes](ax-evaluation-end-to-end.md) — Stack gates, read trajectories, attribute each failure, and fix the source before writing a skill, with the playbook's five-run limit and Microsoft's self-reported results stated up front

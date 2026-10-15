@@ -91,4 +91,5 @@ Every split above is harness-configured: a human sets `chat.utilityModel` (or th
 - [Auto Model Selection](auto-model-selection.md) — Vendor-side per-request routing from a managed model pool by availability and policy.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — Match model capability to task complexity across the full agent loop.
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — Hide a fine-tuned small model behind a tool-call interface to offload narrow operations.
+- [Running an Agent's Context Step on a Smaller Model](context-step-model-split.md) — The same split applied to a long-running agent's in-loop summarize and compress calls, with the ordering condition that makes the cheap tier sufficient.
 - [The Advisor Strategy](advisor-strategy.md) — Pair a cost-effective executor with a frontier advisor for strategic guidance within one API call.

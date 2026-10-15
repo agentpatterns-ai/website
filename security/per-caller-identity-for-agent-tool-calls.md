@@ -91,3 +91,4 @@ Swapping `"user"` for `"agent"` moves the call to a different cell of the table 
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — what happens to a grant when the subject it names changes
 - [Deep Agent Runtime: The Layer Beneath the Harness](../patterns/agent-design/deep-agent-runtime.md) — the runtime layer that attaches caller identity to a run
 - [Treating Agent Delegation as Routing, Not Authorization](../patterns/anti-patterns/agent-delegation-as-routing.md) — the same question one hop further out, where the caller is another agent
+- [Whose Permissions a Self-Scheduled Agent Run Carries](self-scheduled-run-authority.md) — the same question after the conversation ends, where the agent writes the schedule and nobody is present when it fires

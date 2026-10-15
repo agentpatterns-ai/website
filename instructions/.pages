@@ -23,6 +23,7 @@ nav:
       - instruction-polarity.md
       - guardrails-beat-guidance-coding-agents.md
       - restraint-rules-need-external-enforcement.md
+      - ordering-constraint-weakness.md
       - enforcement-information-paradox.md
       - transcript-gradable-agent-rules.md
       - security-knowledge-priming.md
@@ -89,6 +90,7 @@ nav:
       - rule-lifecycle-metadata.md
       - behavioral-no-op-test.md
       - skill-rule-novelty.md
+      - irreducibility-triage.md
       - encoded-rule-failure-diagnosis.md
       - agent-context-file-evolution.md
       - prompt-governance-via-pr.md

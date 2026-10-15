@@ -157,3 +157,4 @@ Add targeted trajectory constraints scoped to the steps that matter — the audi
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — Extends outcome grading to harm severity, scoring red-team trajectories on an L0 to L6 scale
 - [Behavior Specs: Grading the Trajectory, Not the Result](behavior-specs.md) — When the outcome is expensive or ambiguous to verify, declared behaviors give the process supervision an end-state check cannot
 - [Profile Your Agent Test Suite Against Measured Practice](agent-test-suite-profiling.md) — Measures where a suite's effort actually sits before deciding whether to add anything, and names path assertions as the wrong way to close a coverage gap
+- [Belief Checks for Agent Harness Changes](harness-change-belief-check.md) — The case outcome grading cannot see: the same task and model under two harnesses, where terminal success shows nothing and the agent's reading of the task state moves

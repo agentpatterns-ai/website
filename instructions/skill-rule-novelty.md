@@ -70,3 +70,4 @@ The counter-case is the same study's overhead tally. For one rule-model pair in 
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — why a gain shrinks as the file grows against the window.
 - [Agent Context File Evolution](agent-context-file-evolution.md) — the maintenance loops around files that only ever grow.
 - [Pre-Execution Skill Selection](pre-execution-skill-selection.md) — scoring a skill's layers before it runs, instructions included.
+- [Irreducibility Triage](irreducibility-triage.md) — the same novelty question asked against any training corpus rather than against the file.

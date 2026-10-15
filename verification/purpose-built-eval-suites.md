@@ -105,4 +105,5 @@ LangChain publishes the benchmark setup it runs against its own deep agents, wit
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md) — why public scores drift from real capability over time
 - [AX Evals: Measure the Agent-Facing Surface, Not the Model](ax-evals-agent-facing-surface.md) — the inversion: hold the configuration fixed and vary your own product's agent-facing surface instead
 - [Adaptive Validation Task Selection](adaptive-validation-task-selection.md) — spending less of the suite per round once it is large enough that a full pass costs real money
+- [Calibrate a Benchmark's Interaction Layer to Your Users](task-flow-calibration.md) — shaping how the suite delivers each task, once you have chosen which tasks it holds
 - [Offline Evaluation as an Integration Test for LLM Features](../workflows/offline-eval-integration-test.md) — wiring the finished suite to a change trigger so it gates releases instead of settling one swap

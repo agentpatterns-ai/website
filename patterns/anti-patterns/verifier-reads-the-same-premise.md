@@ -86,3 +86,4 @@ The Before form writes tests from the text under suspicion. The After form withh
 - [Independent Test Generation in Multi-Agent Code Systems](../multi-agent/independent-test-generation-multi-agent.md) — hiding the implementation from the test writer, and the independence it does not buy on its own
 - [Test Oracles That Read Their Expectation From the Code](state-anchored-test-oracles.md) — oracle independence lost through state rather than through prompt text
 - [Assumption Propagation](assumption-propagation.md) — the single-agent version, where one faulty premise compounds across turns
+- [Revising Code Against Its Own Tests (Interpretive Lock-In)](interpretive-lock-in-revision-loops.md) — the revision counterpart, where ordinary task ambiguity rather than an injected premise is what the editable suite carries forward

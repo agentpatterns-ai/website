@@ -173,6 +173,7 @@ A typed boundary between coordinator and clusters. Each cluster returns a struct
 - [Circuit Breakers for Agent Loops](../../observability/circuit-breakers.md)
 - [File-Based Agent Coordination](file-based-agent-coordination.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](../agent-design/cognitive-reasoning-execution-separation.md)
+- [Evidence-Path Divergence for Multi-Agent Fault Tolerance](../agent-design/evidence-path-divergence.md) — the same topology choice made for fault tolerance, measured under injected communication faults
 - [Observation-Driven Coordination: CRDT-Based Parallel Agent](crdt-observation-driven-coordination.md)
 - [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](multi-agent-se-design-patterns.md)
 - [Fan-Out and Synthesis Pattern](fan-out-synthesis.md)

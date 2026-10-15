@@ -12,7 +12,7 @@ tags:
   - skills
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-09-14
+last_reviewed: 2026-10-14
 maturity: adopted
 ---
 
@@ -53,9 +53,13 @@ Claude Code answers the third question in-harness. Its changelog records `/skill
 
 The trace report is the pruning signal that matters. A skill that never appears in traces is either invisible to the router or redundant, and both diagnoses point at its description rather than its length.
 
+Pass rate can hide this. On a 37-task subset, Claude Opus 4.6 holds Pass@3 at 62.2% against 64.9% at zero irrelevant skills, while its loaded-skill recall falls 81.3% to 30.9% ([arxiv:2610.18522v1](https://arxiv.org/abs/2610.18522v1)). The paper warns that "task success alone can therefore make a failing skill system look healthy."
+
 ## Why it works
 
 The causal channel is selection interference, not context pressure. An agent chooses a skill by matching the request against the preloaded descriptions, so every added skill is another distractor competing for that match. When a distractor fits the request better than the intended skill, the router picks it every time — Song and Wei's worked case is a video-frame-extraction skill that beat the intended skill on a coin-counting query in every trajectory they ran ([arxiv:2605.24050](https://arxiv.org/abs/2605.24050)). Because the interference happens between descriptions, cutting the candidate set is what recovers accuracy: restricting candidates by retrieval lifts tool selection from 13.62% to 43.13% while roughly halving prompt tokens ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275v1)).
+
+Implicit routing fails where explicit selection holds. A SkillsBench run holds the tasks and their golden skills fixed while irrelevant skills grow from 0 to 1,000. Loaded-skill recall under implicit routing falls 73.6% to 27.4%, and the zero-load rate rises 9.3% to 51.6% ([arxiv:2610.18522v1](https://arxiv.org/abs/2610.18522v1)). Asked only to choose from that same full library, the same models keep 73.9% selected-skill recall. Masking only the irrelevant skills' descriptions largely restores loading, which the authors read as semantic interference from those descriptions. The run covers open-weight models including Kimi K2.5 and MiniMax M2.5. Each model ran every task and condition 3 times, over 15,000 trajectories in all.
 
 OpenAI's Codex adds a second channel on top of that. It shortens skill descriptions as the catalog grows: "when you add too many skills, Codex starts shortening their descriptions to fit. The model ends up seeing less of each description, making it harder to know which skill to pick" ([Provencher, 2026](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra)). The same post reports that descriptions "can often contradict each other or over-emphasize when skills should be used". Where a harness truncates this way, the description you wrote is not the description the model reads.
 
