@@ -29,7 +29,7 @@ Check all four before wiring a timer:
 - Your pauses stay under the break-even horizon. Repeated ping costs add up over a long pause, while the re-prefill they prevent is a single charge. Khailo puts the crossover near 46 minutes on Anthropic's five-minute tier ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214v2)).
 - Your provider actually evicts. The same measurements found Google's implicit cache "never reliably evicts" and DeepSeek's re-prefill "too cheap to insure," which empties the paying band on both.
 
-Miss any one and the honest answer is to do nothing, or to buy a longer lifetime instead. See [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md), which covers the five-minute against one-hour tier decision.
+Miss any one and the honest answer is to do nothing, or to buy a longer lifetime instead. See [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md), which covers the five-minute against one-hour tier decision. A third route shrinks the prefix instead of warming it: see [Compact Before Cache Expiry, Not at Context Pressure](compact-before-cache-expiry.md).
 
 ## Why it works
 

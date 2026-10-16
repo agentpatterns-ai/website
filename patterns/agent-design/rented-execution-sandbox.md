@@ -75,3 +75,4 @@ Your control plane then claims each queued request and starts a worker with `CUR
 - [Cloud-Agent Three-Layer State Decoupling](cloud-agent-state-layer-decoupling.md) — why the machine is separable from the loop and the thread.
 - [Cursor Self-Hosted Cloud Agents](../../tools/cursor/self-hosted-cloud-agents.md) — the tool-level view of running your own workers.
 - [Workload-Keyed Sandbox Selection for Agent-Generated Code](../../security/workload-keyed-sandbox-selection.md) — picking the sandbox once you have decided to supply one.
+- [Recording Guest-Reported Values as Platform State](../anti-patterns/guest-reported-values-as-platform-state.md) — the trust question on the return path, where tool output flowing back becomes tenant input.

@@ -340,6 +340,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Choosing a Skill Loading Method for Agents](context-engineering/skill-loading-method-selection.md)
 - [Claim-Scoped Invalidation for Agent Memory](context-engineering/claim-scoped-invalidation.md)
 - [Comment Content as Code-Generation Context](context-engineering/comment-content-as-generation-context.md)
+- [Compact Before Cache Expiry, Not at Context Pressure](context-engineering/compact-before-cache-expiry.md)
 - [Corpus Shape as a Retrieval Design Constraint](context-engineering/corpus-shape-retrieval-architecture.md)
 - [Coverage-Aware Skill Selection Under a Token Budget](context-engineering/coverage-aware-skill-selection.md)
 - [Fact Supersession Memory for Code Assistants](context-engineering/fact-supersession-memory.md)
@@ -1905,6 +1906,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Prompt-Only Tool Access Control](patterns/anti-patterns/prompt-only-tool-access-control.md)
 - [Reading a Client-Version Metric Dip as Lost Adoption](patterns/anti-patterns/client-version-metric-dip-as-adoption-loss.md)
 - [Reading Visible Edge-Case Handling as a Security Check](patterns/anti-patterns/edge-case-handling-as-security-signal.md)
+- [Recording Guest-Reported Values as Platform State](patterns/anti-patterns/guest-reported-values-as-platform-state.md)
 - [Refactoring Runaway: Tangled Refactorings in Agent Patches](patterns/anti-patterns/refactoring-runaway.md)
 - [Repairing a Failing Test by Weakening Its Assertion](patterns/anti-patterns/assertion-weakening-as-test-repair.md)
 - [Repository Skill Release Drift](patterns/anti-patterns/repository-skill-release-drift.md)
@@ -2321,6 +2323,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Batched Context Eviction for Cache Reuse](batched-context-eviction.md) — Trimming an agent's history every step leaves the whole history uncacheable; evict in large batches instead, once you have confirmed you must evict at all
 - [Static Content First for Cache Hits](static-content-first-caching.md) — Place static content at the beginning of the prompt and variable content at the end to maximize prompt cache hits and keep inference costs linear
 - [Prompt Cache Keepalive for Agent Pauses](prompt-cache-keepalive-agent-pauses.md) — Replay a cached prefix on a timer so it survives tool runs and approval waits, and the billing, pause-length, and interval conditions that decide whether it saves money or costs 4x more
+- [Compact Before Cache Expiry, Not at Context Pressure](compact-before-cache-expiry.md) — Claude Code compacts an idle 200K+ token conversation about 54 minutes in, before the one-hour cache expires, and the five conditions and fidelity costs decide whether that saves money
 - [Attributed Cache Misses: Reading Why a Prefix Diverged](attributed-cache-miss-diagnostics.md) — Read the provider's documented cache-miss reason beside the usage counters, because the reason code says whether the request changed, not whether the cache hit
 - [Mask Tools Instead of Removing Them](mask-tools-instead-of-removing.md) — Restrict which tools an agent may call through a per-request field instead of editing the tools array, so a changing action space costs no cache write — and when removing them is still cheaper
 - [Stateful Iteration State-Carry](stateful-iteration-state-carry.md) — Carry typed persistent state across long agent loops through a state-read tool instead of replaying the full transcript each turn; converts O(n²) total token cost to O(n) when loops are long and observations are large
@@ -3730,6 +3733,71 @@ Treat comments describing other problems as context to remove, not context to ig
 - [Source Code Minification for State-in-Context Agents](source-code-minification-trade-off.md) — the token-versus-accuracy trade of stripping comments and docstrings from agent input.
 - [Context Poisoning: When Hallucinations Become Premises](../patterns/anti-patterns/context-poisoning.md) — the same conditioning failure at session scale, where one wrong premise steers every later step.
 - [Token-Efficient Code Generation](../token-engineering/token-efficient-code-generation.md) — output-token levers, of which comment suppression is one with a measurable pass-rate cost.
+
+---
+
+### Compact Before Cache Expiry, Not at Context Pressure
+Source: https://agentpatterns.ai/context-engineering/compact-before-cache-expiry/
+
+# Compact Before Cache Expiry, Not at Context Pressure
+
+> Claude Code compacts an idle conversation just before its prompt cache expires, while the prefix is still cheap to read.
+
+Idle compaction compacts an idle conversation shortly before its prompt cache expires, so the next message reprocesses a summary instead of the full history. Claude Code 2.1.299 describes it this way: "a 200K+ token conversation left idle for about 54 minutes is compacted before its one-hour prompt cache expires, so your next message doesn't reprocess it all" ([changelog](https://code.claude.com/docs/en/changelog)). The saving depends on five conditions, and it trades detail for cost.
+
+## When it fires
+
+Idle compaction is on by default only when all five conditions hold ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)):
+
+- Session: you are in an interactive terminal session.
+- Prompt cache: the conversation is on the one-hour prompt cache TTL.
+- Feature flags: Claude Code can fetch feature flags from Anthropic.
+- Size: the context has reached the token threshold, 200,000 by default.
+- Idle time: about 54 minutes have passed since the last request, and your computer is awake.
+
+Two of these limit the scope more than they first appear.
+
+- 1M window only, at the default. A 200K-window conversation auto-compacts before it reaches 200,000 tokens, so it never qualifies until you lower `CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS`. Values below 100000 are raised to 100000 ([settings reference](https://code.claude.com/docs/en/settings-reference#change-the-idle-compaction-threshold)).
+- One-hour TTL only. Claude Code requests that TTL by default only on a Claude subscription within plan usage. With an API key or a cloud provider, you must set `promptCacheTtl` to `1h` ([prompt caching](https://code.claude.com/docs/en/prompt-caching#which-ttl-each-request-gets)).
+
+## Why it works
+
+Compaction is a request that sends the whole history plus a summarization instruction. While the cache is warm, "that request reads your prefix from the cache, so a mid-session `/compact` costs a fraction of what the context size suggests and spends most of its time generating the summary." After a longer break, "the summarization request reprocesses the full history as uncached input" ([prompt caching](https://code.claude.com/docs/en/prompt-caching)). Idle compaction moves the shrink step to the last moment the prefix is cheap to read.
+
+Worked example, from the [Opus 5.5 prices](https://platform.claude.com/docs/en/build-with-claude/prompt-caching#pricing) ($4 base input, $8 one-hour cache write, $0.20 cache hit, per million tokens) for an API-key user on a 500K-token conversation. Returning at 70 minutes with no compaction rewrites 500K tokens at $8 per million, which is $4.00. Compacting at about 54 minutes reads the prefix for $0.10, plus the summary output. The docs give no summary size, so that output cost is unknown.
+
+## Version history
+
+- 2.1.286: the behavior appears, with "no opt-out and no warning" ([anthropics/claude-code#98747](https://github.com/anthropics/claude-code/issues/98747)).
+- 2.1.290: the `idleCompaction` setting and the threshold variable arrive. On earlier versions, turn off `autoCompactEnabled` to stop it.
+- 2.1.299: the changelog entry describes the feature (dated October 14, 2026).
+
+`"idleCompaction": false` in settings.json turns it off, and `DISABLE_AUTO_COMPACT` turns it off along with auto-compaction ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)).
+
+## When this backfires
+
+- You return between minute 54 and minute 60. The cache was still warm, so compaction lost detail for no saving.
+- You never return. The summarization call is spent on a conversation nobody reads.
+- The work depends on exact detail. One user had working context replaced by a summary in 7 of about 20 parallel sessions overnight: "the context is the valuable part, and a cache re-read is a cost I'd gladly pay to keep it" ([#98747](https://github.com/anthropics/claude-code/issues/98747)). Another saw compactions at 209K to 783K tokens on a 1M window ([#101616](https://github.com/anthropics/claude-code/issues/101616)).
+- Your laptop sleeps at minute 54. The docs require the computer to be awake, so the cache expires with no compaction.
+- You rely on hooks. #98747 found no documentation that `PreCompact` fires for idle compaction, and through 2.1.289 the trigger was logged as `manual`, which hid the cause. Version 2.1.290 changed it to `auto`.
+- The feature needs feature flags fetched from Anthropic ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)), so the version number does not tell you whether it is on. One reporter on 2.1.292 guessed "a server-side rollout rather than something introduced in one release" ([#101616](https://github.com/anthropics/claude-code/issues/101616)).
+
+Anthropic says compaction is lossy: "whatever the summary leaves out is no longer in Claude's context" ([sessions](https://code.claude.com/docs/en/sessions#resume-from-a-summary)). A collaborator replied that "we need to get to the place where a compaction is less disruptive" ([#98747](https://github.com/anthropics/claude-code/issues/98747)). The figures here are Claude Code's own.
+
+## Key Takeaways
+
+- Check the five conditions before you expect idle compaction: terminal session, one-hour TTL, feature flags, token threshold, 54 idle minutes with the computer awake.
+- API-key and cloud-provider users never see it until they set `promptCacheTtl` to `1h`.
+- Keep it for sessions you resume to start new work. Set `"idleCompaction": false` for sessions you resume in full detail.
+- The 500K-token example saves about $3.90 minus the summary cost, and only when you return after expiry.
+
+## Related
+
+- [Prompt Cache Keepalive for Agent Pauses](prompt-cache-keepalive-agent-pauses.md) — keep the cache warm instead of shrinking the prefix
+- [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — choosing a TTL by session shape
+- [Scoring a Compaction Policy on Latency and Billed Cost](compaction-policy-latency-and-cost.md) — judging a compaction setting by its bill
+- [Manual Compaction Strategy for Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md) — compacting at a natural break yourself
 
 ---
 
@@ -9727,7 +9795,7 @@ Check all four before wiring a timer:
 - Your pauses stay under the break-even horizon. Repeated ping costs add up over a long pause, while the re-prefill they prevent is a single charge. Khailo puts the crossover near 46 minutes on Anthropic's five-minute tier ([arXiv:2607.19214](https://arxiv.org/abs/2607.19214v2)).
 - Your provider actually evicts. The same measurements found Google's implicit cache "never reliably evicts" and DeepSeek's re-prefill "too cheap to insure," which empties the paying band on both.
 
-Miss any one and the honest answer is to do nothing, or to buy a longer lifetime instead. See [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md), which covers the five-minute against one-hour tier decision.
+Miss any one and the honest answer is to do nothing, or to buy a longer lifetime instead. See [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md), which covers the five-minute against one-hour tier decision. A third route shrinks the prefix instead of warming it: see [Compact Before Cache Expiry, Not at Context Pressure](compact-before-cache-expiry.md).
 
 ## Why it works
 
@@ -9941,6 +10009,8 @@ The decision reduces to session shape:
 | Walk-away workflows (return next day) | > 60 min idle | Neither — cache will expire |
 
 A third option sits between paying the 1-hour premium and letting the entry die: replay the prefix on a timer so the 5-minute entry never expires. That trade has its own break-even and its own failure modes — see [Prompt Cache Keepalive for Agent Pauses](prompt-cache-keepalive-agent-pauses.md).
+
+For walk-away sessions on the one-hour tier, Claude Code can instead compact the idle conversation just before expiry: see [Compact Before Cache Expiry, Not at Context Pressure](compact-before-cache-expiry.md).
 
 ## TTL cost model and troubleshooting
 
@@ -11651,6 +11721,7 @@ The second policy bills a third more for 2.4 percentage points less resolve.
 - [Context Compression Strategies](context-compression-strategies.md) — the compaction operations themselves, offloading and summarization.
 - [Per-Agent Compaction Windows for Orchestrator and Worker](per-agent-compaction-window.md) — the same threshold question asked per subagent rather than per run.
 - [Running an Agent's Context Step on a Smaller Model](../patterns/agent-design/context-step-model-split.md) — which model executes the policy once you have scored it, and why that decision comes second.
+- [Compact Before Cache Expiry, Not at Context Pressure](compact-before-cache-expiry.md) — a timing trigger tied to cache expiry rather than to window size.
 
 ---
 
@@ -48743,6 +48814,7 @@ Your control plane then claims each queued request and starts a worker with `CUR
 - [Cloud-Agent Three-Layer State Decoupling](cloud-agent-state-layer-decoupling.md) — why the machine is separable from the loop and the thread.
 - [Cursor Self-Hosted Cloud Agents](../../tools/cursor/self-hosted-cloud-agents.md) — the tool-level view of running your own workers.
 - [Workload-Keyed Sandbox Selection for Agent-Generated Code](../../security/workload-keyed-sandbox-selection.md) — picking the sandbox once you have decided to supply one.
+- [Recording Guest-Reported Values as Platform State](../anti-patterns/guest-reported-values-as-platform-state.md) — the trust question on the return path, where tool output flowing back becomes tenant input.
 
 ---
 
@@ -56855,6 +56927,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Treating a Model-Judged Hook as a Deterministic Control](model-judged-hook-as-deterministic-control.md) — Claude Code prompt and agent hooks decide by model judgement, not exit code, so relying on one as the only guard on a boundary leaves enforcement to wording and harness version
 - [A Guard Hook Approves the Truncated Input It Was Handed](guard-approves-truncated-input.md) — A policy gate handed a silently cut input rules on the fragment and the harness applies the verdict to the whole call; exit 2, onFailure block, and a mod catch all trigger on errors, so none of them fires
 - [Excess Risk Treatment: Defensive Work the Evidence Rules Out](excess-risk-treatment.md) — Agents keep treating a risk the task has already settled; a stated bound cuts the rate, and 11.2% to 58.7% of runs still over-treat
+- [Recording Guest-Reported Values as Platform State](guest-reported-values-as-platform-state.md) — A value returned by code inside a sandbox is tenant input; Vercel's control plane recorded a guest-supplied `{storage_url, size, checksum}` snapshot record, and rewriting it restored another account's entire filesystem
 
 ---
 
@@ -66621,6 +66694,74 @@ Editing runs the mechanism backwards. Participants changed 29.2 lines on average
 
 ---
 
+### Recording Guest-Reported Values as Platform State
+Source: https://agentpatterns.ai/patterns/anti-patterns/guest-reported-values-as-platform-state/
+
+# Recording Guest-Reported Values as Platform State
+
+> A value your sandbox reports is tenant input. Recording it as platform state gives the guest a write into state the host trusts.
+
+Vercel states the rule without qualification: "Anything that crosses the boundary should be derived server-side or signed with a key the guest cannot reach" ([Vercel, 14 Oct 2026](https://vercel.com/blog/findings-from-the-1-million-dollar-vercel-sandbox-challenge)). Read strictly it covers the agent's own work product. What it governs in practice is the boundary value, one something other than the reporting sandbox resolves against later. That covers a storage path, an authorization scope, or a record a second request reads. A number shown back to the same tenant is not one. A rule applied to every crossing value leaves a sandbox that cannot report anything.
+
+Vercel's control plane crossed that line on its snapshot record. Snapshotting a sandbox meant recording where the data landed as `{storage_url, size, checksum}`. Vercel describes the flaw: "that answer came from software running inside the guest, and services running on the host trusted it" ([Vercel, 14 Oct 2026](https://vercel.com/blog/findings-from-the-1-million-dollar-vercel-sandbox-challenge)). A researcher combined a documented container escape with that flaw and intercepted the snapshot response inside their own sandbox. They rewrote it, "swapping the storage objects of two snapshots belonging to two separate accounts they owned". Restoring one snapshot then produced the other account's entire filesystem, readable and writable.
+
+## Containment is the wrong place to look
+
+Trail of Bits flagged this root cause in the same engagement that cleared the isolation. They spent four engineer-weeks in the source and "concluded that our virtualization boundary is sound" ([Vercel, 14 Oct 2026](https://vercel.com/blog/findings-from-the-1-million-dollar-vercel-sandbox-challenge)). Each sandbox runs on its own Firecracker microVM with a dedicated guest kernel. So a harness on per-task microVMs can pass a virtualization review and still hand a tenant a cross-tenant write. The defect sits in the data path out of the sandbox, not in its isolation. That is why the remedy is a rule about the path.
+
+## Why it works
+
+Deriving the value host-side removes the write instead of filtering it. An attacker controlling the guest can then produce only values the host would have produced anyway. Nothing attacker-chosen reaches the record for a later request to resolve against. That is why the fix was relocation rather than stricter validation: "Snapshot creation moved out of the guest-reachable environment into a host-side service, and storage paths are project-scoped with strictly validated URLs" ([Vercel, 14 Oct 2026](https://vercel.com/blog/findings-from-the-1-million-dollar-vercel-sandbox-challenge)). Signing works for the same reason. It puts the value's authority in a component the attacker cannot execute code in.
+
+## When this backfires
+
+- The value is a claim about what happened inside. A test outcome or a build log has no host-side derivation short of re-running the work, and no outside signer can witness it. Treat it as a tenant assertion and keep it out of anything that decides.
+- One tenant, one trust domain. Where no second account's data is reachable, the cross-tenant consequence does not exist and the work buys defense in depth at full price.
+- Per-task telemetry. Counters, sizes, and durations cost host CPU to re-derive on every run. A snapshot record is state other requests resolve against; a progress percentage is not.
+- Treating one fixed field as closure. Vercel reports no submission reached customer data, and SecurityWeek's coverage of the same challenge ends on what that result does not establish: "not finding a vulnerability does not mean there is no vulnerability" ([SecurityWeek, 2026](https://www.securityweek.com/1-million-sandbox-challenge-uncovers-linux-kernel-flaws/)).
+
+## Example
+
+Vercel's snapshot record before and after the fix, with every line from the write-up ([Vercel, 14 Oct 2026](https://vercel.com/blog/findings-from-the-1-million-dollar-vercel-sandbox-challenge)).
+
+**Before — the control plane records the guest's answer:**
+
+```text
+record:        {storage_url, size, checksum}
+produced by:   software running inside the guest
+host services: trust it as authoritative
+```
+
+**After — a host-side service produces the record:**
+
+```text
+record:        {storage_url, size, checksum}
+produced by:   a host-side service, outside the guest-reachable environment
+storage_url:   project-scoped, strictly validated
+binding:       every snapshot object bound to the project that created it
+```
+
+The counter-argument against doing this is strong, and the source answers it. Vercel states that "Aiming the swap at a specific victim required knowing that victim's internal snapshot storage key, a random 96-bit identifier the platform generates per snapshot and never exposes through the API". The key appears only inside the victim's own sandbox, and "there was no demonstrated path for a stranger to target another tenant". On that reading the researcher needed to own both accounts, and the realistic exposure was corrupting their own records. The fix shipped within a week anyway, "because a boundary that depends on a secret staying secret is not a boundary".
+
+Apply that test to your own harness. List the guest-reported fields your orchestrator writes down, and for each one name what stops a tenant choosing its value. If the answer is a secret that lives inside the sandbox, you have the same defect at a different severity.
+
+## Key Takeaways
+
+- Sort the values crossing out of your sandbox by whether anything else later resolves against them. That subset is the boundary set, and it is much smaller than everything the sandbox reports.
+- Relocate the work instead of validating the answer. Vercel moved snapshot creation into a host-side service and bound every snapshot object to the creating project rather than checking the guest's record harder.
+- A sound virtualization boundary is not evidence about the control plane. Ask a sandbox vendor which crossing values it derives host-side, separately from how the isolation is built.
+- The low-severity tail is the same bug. Vercel describes its Medium, Low, and Informative findings as small policy-boundary gaps, including "a field that trusted the guest more than it should".
+
+## Related
+
+- [Treating a Worktree as a Safety Boundary](worktree-as-safety-boundary.md) — the inverse error, where the isolation mechanism is weaker than it looks rather than sound and undone downstream
+- [Renting a Cloud Agent's Execution Sandbox](../agent-design/rented-execution-sandbox.md) — the deployment shape that creates this seam, with execution in a supplied sandbox and output flowing back to the vendor's loop
+- [Multi-Tenant Isolation Knobs for Shared-Container Agent SDK Hosting](../../security/multi-tenant-isolation-knobs-agent-sdk.md) — the per-tenant controls this defect routes around without defeating
+- [Field-Level Source Ownership for Agent Capabilities](../../security/field-level-source-ownership.md) — the same question one layer up, asking which source is allowed to fill each field of a tool call
+- [Silent Adoption of Corrupted Tool Returns by Agents](silent-adoption-of-corrupted-tool-returns.md) — the model-layer version, where the agent rather than the control plane adopts a returned value it should doubt
+
+---
+
 ### Refactoring Runaway: Tangled Refactorings in Agent Patches
 Source: https://agentpatterns.ai/patterns/anti-patterns/refactoring-runaway/
 
@@ -71163,6 +71304,7 @@ The worktree still prevents the merge conflicts it was chosen for. Keeping only 
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](../../security/enforced-versus-advisory-controls.md) — sorting safeguards by where they are evaluated
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md) — the fan-out that reaches for worktrees in the first place
 - [Peer Refusal as a Coordination Control](peer-refusal-as-coordination-control.md) — what a peer session can do to your worktree once its refusal has been declined
+- [Recording Guest-Reported Values as Platform State](guest-reported-values-as-platform-state.md) — the inverse case, where the isolation is sound and the control plane dissolves the boundary by writing down what the guest reported
 
 ---
 
