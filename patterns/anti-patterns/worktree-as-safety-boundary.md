@@ -78,3 +78,4 @@ The worktree still prevents the merge conflicts it was chosen for. Keeping only 
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](../../security/enforced-versus-advisory-controls.md) — sorting safeguards by where they are evaluated
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md) — the fan-out that reaches for worktrees in the first place
 - [Peer Refusal as a Coordination Control](peer-refusal-as-coordination-control.md) — what a peer session can do to your worktree once its refusal has been declined
+- [Recording Guest-Reported Values as Platform State](guest-reported-values-as-platform-state.md) — the inverse case, where the isolation is sound and the control plane dissolves the boundary by writing down what the guest reported

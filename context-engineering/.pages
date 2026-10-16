@@ -52,6 +52,7 @@ nav:
       - batched-context-eviction.md
       - static-content-first-caching.md
       - prompt-cache-keepalive-agent-pauses.md
+      - compact-before-cache-expiry.md
       - attributed-cache-miss-diagnostics.md
       - mask-tools-instead-of-removing.md
       - stateful-iteration-state-carry.md

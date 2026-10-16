@@ -163,6 +163,7 @@ nav:
       - llm-api-router-mitm.md
       - adversarial-only-leakage-threat-modelling.md
       - option-labels-as-trusted-config.md
+      - guest-reported-values-as-platform-state.md
   - "False Security Evidence":
       - model-confidence-as-security-verification.md
       - model-upgrade-as-security-improvement.md
