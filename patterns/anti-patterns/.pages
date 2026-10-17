@@ -107,6 +107,7 @@ nav:
       - clean-final-state-as-compliance-evidence.md
       - clean-merge-as-compatibility-evidence.md
       - pooled-evidence-mcp-factuality-conflation.md
+      - static-skill-defect-count-as-runtime-risk.md
   - "Testing & Evaluation":
       - happy-path-bias.md
       - lazy-generation.md
@@ -128,6 +129,7 @@ nav:
       - cross-day-config-comparisons.md
       - homogeneous-debate-panel-groundedness.md
       - frozen-judge-release-decisions.md
+      - derivation-gap-tool-call-judges.md
       - density-normalized-quality-metric.md
       - trigger-conditioned-skill-comparisons.md
       - pass-only-grading-lucky-pass.md

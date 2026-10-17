@@ -77,6 +77,7 @@ Applied to GitHub's flow, that means not selecting 25 findings in dashboard orde
 
 ## Related
 
+- [Out-of-Query Evidence for Agent-Fixed Code Scanning Alerts](out-of-query-evidence-code-scanning-alerts.md) — The security-alert variant of this queue, where the agent cannot suppress and the analyzer re-run becomes its own stopping condition.
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — What to do after a finding is classified real: stack behavioral oracles, because clearing the scanner rule is not the same as fixing the policy.
 - [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](bug-discriminating-validation-evidence.md) — The pre-fix replay this technique assumes, measured on repair agents that have no on-demand oracle.
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Cost-ascending gate ordering for the repair half, where a target test exists to constrain intent.

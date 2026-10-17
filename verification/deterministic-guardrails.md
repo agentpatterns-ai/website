@@ -175,6 +175,7 @@ Guardrails impose fixed costs that don't scale with value, so they backfire in s
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)
 - [Structured Output Constraints](structured-output-constraints.md)
 - [Test-Driven Agent Development: Tests as Spec and Guardrail](tdd-agent-development.md)
+- [Replacing the LLM Filter Stage With a Fine-Tuned Classifier](fine-tuned-classifier-over-llm-filter-stage.md)
 - [Verification Ledger](verification-ledger.md)
 - [Slop Detectors Fail as Per-Item Review Gates](slop-detection-as-review-gate.md)
 - [Enforcement Modes in Spec-First Agent Frameworks](../patterns/agent-design/spec-first-framework-enforcement-modes.md)

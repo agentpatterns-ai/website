@@ -102,3 +102,4 @@ The research found no source that argues for approving partial input as a securi
 - [Hostname Allowlist TLS Blind Spot](../../security/hostname-allowlist-tls-blind-spot.md)
 - [Approval Records That Bind No Identity and No Session](unbound-approval-records.md)
 - [Treating a Gate Model's Option Labels as Trusted Configuration](option-labels-as-trusted-config.md)
+- [Reading a Tool-Call Judge's Rejection as an Argument Defect](derivation-gap-tool-call-judges.md) — the same cut input on a judge rather than a gate, where it produces false rejections instead of false approvals

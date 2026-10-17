@@ -23,6 +23,7 @@ nav:
       - instruction-polarity.md
       - guardrails-beat-guidance-coding-agents.md
       - restraint-rules-need-external-enforcement.md
+      - stop-and-report-instruction.md
       - ordering-constraint-weakness.md
       - enforcement-information-paradox.md
       - transcript-gradable-agent-rules.md
