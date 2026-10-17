@@ -77,3 +77,4 @@ Do not extend that into a claim that static tools cannot see weak randomness. Ba
 - [The Security Review Gap in AI-Authored PRs](../../code-review/security-review-gap-in-ai-prs.md) — the human half of the same gate, where reviewer heuristics miss AI-specific CWE clusters.
 - [Treating a Cleared Review Comment as a Fixed Flaw](cleared-review-comment-as-fix.md) — the same error inside a review loop, where an adversary adapts the code to whatever the reviewer said.
 - [Treating a Bundled Bytecode Cache as a Build Artifact](bundled-bytecode-cache-as-build-artifact.md) — the case where the scanner reads the wrong file entirely, because a shipped bytecode cache supplies the body Python runs.
+- [Counting Static Skill Defects as a Runtime Risk Ranking](static-skill-defect-count-as-runtime-risk.md) — the same static-to-runtime gap on skill artifacts, where the defect count is inventory rather than a risk order.

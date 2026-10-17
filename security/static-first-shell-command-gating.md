@@ -102,3 +102,4 @@ Realized harm counts commands that pass the guard and then succeed in a Docker s
 - [Safe Command Allowlisting](safe-command-allowlisting.md) — the deterministic allowlist that should absorb the high-volume benign tail before any scorer sees it
 - [Parser-Versus-Shell Evasion in Command Permission Checks](parser-versus-shell-permission-evasion.md) — why bounded canonicalization leaves a residue, and what that implies about where enforcement belongs
 - [Blast Radius Containment](blast-radius-containment.md) — the layer underneath, which the guard explicitly does not replace
+- [Replacing the LLM Filter Stage With a Fine-Tuned Classifier](../verification/fine-tuned-classifier-over-llm-filter-stage.md) — what can sit in the second stage once the static layer has narrowed the band

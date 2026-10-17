@@ -87,3 +87,4 @@ The Before form writes tests from the text under suspicion. The After form withh
 - [Test Oracles That Read Their Expectation From the Code](state-anchored-test-oracles.md) — oracle independence lost through state rather than through prompt text
 - [Assumption Propagation](assumption-propagation.md) — the single-agent version, where one faulty premise compounds across turns
 - [Revising Code Against Its Own Tests (Interpretive Lock-In)](interpretive-lock-in-revision-loops.md) — the revision counterpart, where ordinary task ambiguity rather than an injected premise is what the editable suite carries forward
+- [Reading a Tool-Call Judge's Rejection as an Argument Defect](derivation-gap-tool-call-judges.md) — the input-side version, where what the verifier was never shown decides the verdict

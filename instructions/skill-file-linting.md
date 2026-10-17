@@ -114,3 +114,4 @@ Two of the three checks are this cheap to clear. The third, externalizing code, 
 - [Skill Library Technical Debt](../tool-engineering/skill-library-technical-debt.md) — library-level defects that per-file linting cannot see
 - [Skill Specification Violation Fuzzing](../verification/skill-specification-violation-fuzzing.md) — the behavioral layer a structural gate leaves untouched
 - [Per-Step Preconditions and Postconditions in Skill Files](per-step-skill-preconditions.md) — the semantic check to reach for once the structural defects are gone
+- [Counting Static Skill Defects as a Runtime Risk Ranking](../patterns/anti-patterns/static-skill-defect-count-as-runtime-risk.md) — how to read the finding count this gate prints, measured against runtime outcomes across three models

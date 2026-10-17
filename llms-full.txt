@@ -498,6 +498,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Specification Portability Across Coding Agents](instructions/specification-portability-across-agents.md)
 - [Stage Plans and Artifact Handoffs for Multi-Skill Tasks](instructions/multi-skill-stage-plans-and-artifact-handoffs.md)
 - [Standard-Grounded NFR Specs: Quality Up, Correctness Flat](instructions/standard-grounded-nfr-specification.md)
+- [Stop-and-Report Instructions Need a Resuming Loop](instructions/stop-and-report-instruction.md)
 - [Typed Pseudocode for Skill Libraries (Skill-as-Pseudocode)](instructions/typed-pseudocode-skill-libraries.md)
 - [Ubiquitous Language for AI Plans](instructions/ubiquitous-language-for-ai-plans.md)
 - [Verified Norm Packages for Repository Contribution Rules](instructions/verified-norm-packages.md)
@@ -1369,6 +1370,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Mutation Testing for LLM Judges: Scoring an Evaluator on Injected Defects](verification/mutation-testing-llm-judges.md)
 - [Name the Check That Passed Before Accepting AI Code](verification/named-check-over-evaluation-confidence.md)
 - [Nonstandard Errors in AI Agents: Model-Family Variance](verification/nonstandard-errors-ai-agents.md)
+- [Out-of-Query Evidence for Agent-Fixed Code Scanning Alerts](verification/out-of-query-evidence-code-scanning-alerts.md)
 - [Overeager-Behavior Elicitation: Scope + Trap Fragments as a Diagnostic for Out-of-Scope Tool Calls](verification/overeager-behavior-elicitation-scope-trap-fragments.md)
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](verification/pass-at-k-t-agentic-rl-eval.md)
 - [Per-Attempt Sandboxes for Agents That Change the Filesystem](verification/per-attempt-eval-sandboxes.md)
@@ -1393,6 +1395,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Red-Team Your Blocking Monitor Before You Trust It](verification/red-teaming-blocking-monitors.md)
 - [Reject on a Failing Check, Never Accept on a Passing One](verification/asymmetric-check-evidence.md)
 - [Rented Sandboxes for Coding-Agent Benchmark Runs](verification/rented-benchmark-sandboxes.md)
+- [Replacing the LLM Filter Stage With a Fine-Tuned Classifier](verification/fine-tuned-classifier-over-llm-filter-stage.md)
 - [Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)](verification/repository-perturbation-context-reasoning-diagnosis.md)
 - [Reproduce-Before-Report Verification Gate](code-review/reproduce-before-report-verification-gate.md)
 - [Require the Metric the Optimization Should Move](verification/expected-metric-gate-performance-prs.md)
@@ -1859,6 +1862,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Conceptual Integrity Erosion in Agent-Built Codebases](patterns/anti-patterns/conceptual-integrity-erosion.md)
 - [Context Poisoning: When Hallucinations Become Premises](patterns/anti-patterns/context-poisoning.md)
 - [Cost-Inefficient Behaviors in Coding Agents](patterns/anti-patterns/cost-inefficient-agent-behaviors.md)
+- [Counting Static Skill Defects as a Runtime Risk Ranking](patterns/anti-patterns/static-skill-defect-count-as-runtime-risk.md)
 - [Cross-Component Interference in Agent Scaffolds](patterns/anti-patterns/cross-component-interference.md)
 - [Cross-Day Config Comparisons Under an Injected Date](patterns/anti-patterns/cross-day-config-comparisons.md)
 - [Cross-Session Re-Implementation of Existing Agent Code](patterns/anti-patterns/cross-session-reimplementation.md)
@@ -1905,6 +1909,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Prompt Replay as a Skill Safety Test: What It Misses](patterns/anti-patterns/prompt-replay-skill-testing.md)
 - [Prompt-Only Tool Access Control](patterns/anti-patterns/prompt-only-tool-access-control.md)
 - [Reading a Client-Version Metric Dip as Lost Adoption](patterns/anti-patterns/client-version-metric-dip-as-adoption-loss.md)
+- [Reading a Tool-Call Judge's Rejection as an Argument Defect](patterns/anti-patterns/derivation-gap-tool-call-judges.md)
 - [Reading Visible Edge-Case Handling as a Security Check](patterns/anti-patterns/edge-case-handling-as-security-signal.md)
 - [Recording Guest-Reported Values as Platform State](patterns/anti-patterns/guest-reported-values-as-platform-state.md)
 - [Refactoring Runaway: Tangled Refactorings in Agent Patches](patterns/anti-patterns/refactoring-runaway.md)
@@ -13982,6 +13987,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — Positive directives outperform negative instructions in agent compliance, especially as instruction count grows
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — On SWE-bench, negative constraints are the only individually beneficial rule type; positive directives actively hurt — and rules work through context priming, not instruction specificity
 - [Restraint Rules Need External Enforcement](restraint-rules-need-external-enforcement.md) — Agents comply with rules that add work and never with rules that stop it; additive rules belong in the auto-loaded instruction file, restraint rules in CI or required review
+- [Stop-and-Report Instructions Need a Resuming Loop](stop-and-report-instruction.md) — One prompt line telling a Codex-based agent to stop when unsure raised mean scores on two game benchmarks at 2-52% more token cost, and left a terminal-coding benchmark mixed
 - [Ordering Is the Weakest Process Constraint You Write](ordering-constraint-weakness.md) — Agents satisfy the steps of a workflow and drop their required order; ordering held 46.7% on ANCHOR, the weakest of three relation types
 - [Do Not Price the Rules in Your Agent Instruction File](enforcement-information-paradox.md) — Naming a penalty beside a rule can lower compliance with it, because a stated price turns a prohibition into an affordable option
 - [Write Agent Rules You Can Grade From the Transcript](transcript-gradable-agent-rules.md) — A deployed agent followed every prompt rule that could be scored from its output and none of the rules about manner; countability buys an observable failure, not compliance
@@ -23259,6 +23265,7 @@ Two of the three checks are this cheap to clear. The third, externalizing code, 
 - [Skill Library Technical Debt](../tool-engineering/skill-library-technical-debt.md) — library-level defects that per-file linting cannot see
 - [Skill Specification Violation Fuzzing](../verification/skill-specification-violation-fuzzing.md) — the behavioral layer a structural gate leaves untouched
 - [Per-Step Preconditions and Postconditions in Skill Files](per-step-skill-preconditions.md) — the semantic check to reach for once the structural defects are gone
+- [Counting Static Skill Defects as a Runtime Risk Ranking](../patterns/anti-patterns/static-skill-defect-count-as-runtime-risk.md) — how to read the finding count this gate prints, measured against runtime outcomes across three models
 
 ---
 
@@ -23892,6 +23899,73 @@ When standards files grow large, the correct response is decomposition — not m
 - [Layer Agent Instructions by Specificity: Global, Project, and Directory Scopes](layered-instruction-scopes.md)
 - [The Specification as Prompt: Existing Artifacts as Agent Instructions](specification-as-prompt.md)
 - [Deferred Standards Enforcement via Review Agents](../code-review/deferred-standards-enforcement.md)
+
+---
+
+### Stop-and-Report Instructions Need a Resuming Loop
+Source: https://agentpatterns.ai/instructions/stop-and-report-instruction/
+
+# Stop-and-Report Instructions Need a Resuming Loop
+
+> What this instruction changes is when the agent returns control, so the measured gain belongs to the agent and its resuming loop together.
+
+Three conditions decide whether this instruction earns its place. Something must re-invoke the agent after it returns. The run must have room for more tokens. And the effect has to be measured on your own tasks, because the study that measured it found a gain on two benchmarks and none on a third.
+
+The change is a single line in the text a harness sends at the start of a run and again on every continuation. One study ran a Codex-based agent in two variants differing only in that line, deployed unchanged across three benchmarks, on GPT-5.5 at high and xhigh reasoning effort and GPT-5.6-sol at xhigh and max ([Rodionov, 2026](https://arxiv.org/abs/2610.22289v1)). The baseline reads "Continue working until you have completed your task." The replacement reads:
+
+> Continue working on the task as long as you can proceed confidently. If you encounter a problem, ambiguity, unexpected issue, or anything that makes you unsure how to proceed, stop and report it back to me before taking further action.
+
+## Nobody answers the report
+
+The report has no reader. "Here, 'report it back to me' refers to the automated controller, not a human: the controller does not answer the report or supply a task-specific suggestion" ([Rodionov, 2026](https://arxiv.org/abs/2610.22289v1)). A script resumes the same conversation and workspace with a fixed reminder of the goal and a suggestion to reread the environment description. The baseline variant receives that same reminder whenever it returns, so what the instruction changes is when the agent gets there. "The intended difference is therefore when the same task-solving process returns control, not a change in its tools or environment-specific capabilities."
+
+## Where it transferred and where it did not
+
+Every figure below comes from the same study, as means over three evaluation blocks per condition, and the cost ranges are its own approximations ([Rodionov, 2026](https://arxiv.org/abs/2610.22289v1)).
+
+| Benchmark | Comparisons | Change in mean score | Change in mean cost tokens |
+|---|---|---|---|
+| ARC-AGI-3, 25 games | higher in 4 of 4 | +1.4 to +7.3 percentage points RHAE | +2% to +52% |
+| AGI Maze, 106 targets | higher in 8 of 8 | +0.37 to +4.95 percentage points RHAE70 | +7% to +39% |
+| Terminal-Bench 2.1, 89 tasks | mixed direction | -1.50 to +2.25 percentage points reward | lower in 1 of 4 configurations, slightly higher in the rest |
+
+AGI Maze is the result that argues for transfer rather than tuning, because "AGI Maze performance was not used to select this instruction" ([Rodionov, 2026](https://arxiv.org/abs/2610.22289v1)). The line was developed on ARC-AGI-3. Terminal-Bench argues against adopting it blind, and the author refuses to read that null as a tie: "The small, mixed differences in mean Terminal-Bench scores do not establish that Stop-and-report is at least as effective as Baseline."
+
+Read every figure above as descriptive. Each condition is a mean over three repetitions, and "Contrasts are descriptive differences between means; their direction alone does not establish statistical significance or non-inferiority."
+
+## Why it works
+
+The study names two candidate causes and separates neither. The first is reconsideration: returning control puts the agent back at a continuation prompt pointing it to the goal and the environment description, which "creates an opportunity for reconsideration rather than enforcing a reflection procedure" ([Rodionov, 2026](https://arxiv.org/abs/2610.22289v1)). The second is inference volume, since writing the report and then resuming may add reasoning at the moments the agent is least sure. Within every ARC-AGI-3 configuration the ordering of mean cost matched the ordering of mean score across the four agents compared, which "makes additional inference a plausible contributor to the gains, but does not establish that greater expenditure causes the improvement."
+
+Both candidates run through the same two steps, the return and the resumption that follows it.
+
+## Moving a decision into the controller
+
+ARC-AGI-3 hands the agent its reset rule: "The environment description already tells the agent to reset after GAME_OVER and avoid unnecessary resets otherwise" ([Rodionov, 2026](https://arxiv.org/abs/2610.22289v1)). A diagnostic variant added only a reset-management intervention on top of Stop-and-report: "Codex is instructed not to call RESET, and the controller issues it at GAME_OVER." That recovered "roughly one-third to three-fifths of the gap between Stop-and-report and twma_v1.61, without closing it", where twma_v1.61 is the ARC-AGI-3-specific agent the general one still trails. The study does not claim the scripted policy is optimal: an agent that spots an unrecoverable attempt early could save the actions spent reaching GAME_OVER.
+
+## When this backfires
+
+- No loop resumes the agent. Every measured run sat behind a controller that resumes the same conversation and workspace when the agent returns early, and a harness that just ends the run turns this line into "stop".
+- Your tasks look more like Terminal-Bench 2.1 than like a game. That is the one tested environment family where the effect disappeared, and the study does not say why.
+- The run is under a token budget. Cost rose 2-52% on ARC-AGI-3 and 7-39% on AGI Maze, and the comparisons are not at matched inference cost.
+- You borrow the number instead of measuring. Three repetitions per condition, four model-effort configurations, one Codex version.
+- You assume more relevant context helps for the same reason. Prefixing seven tutorials to each AGI Maze target lowered scores for both GPT-5.5 agents at both effort settings; "the same curriculum can therefore help or hurt depending on the model-effort configuration".
+- Your domain is code and the tasks are genuinely underspecified. There the measured intervention is a scaffold rather than a prompt line: a multi-agent system that "decouples underspecification detection from code execution" reached a 69.40% task resolve rate on an underspecified variant of SWE-bench Verified ([Edwards and Schuster, 2026](https://arxiv.org/abs/2603.26233v3)).
+
+## Key Takeaways
+
+- What the line changes is when the agent hands control back. The measured variant hands it to a controller that resumes the same conversation and workspace, so budget for that controller before budgeting for the line.
+- In the study measuring it, the line raised mean scores in all 4 ARC-AGI-3 comparisons and all 8 AGI Maze comparisons, and moved a terminal-coding benchmark by -1.50 to +2.25 percentage points with no consistent direction. The author treats that null as unresolved rather than as parity.
+- Price it. The game-benchmark gains came with 2-52% and 7-39% more cost tokens, against a baseline not held to matched inference spend.
+- The adjacent diagnostic carries the stronger lesson. Moving one decision the agent already knew the rule for out of the prompt and into the script recovered roughly a third to three-fifths of the gap to a specialized agent.
+
+## Related
+
+- [Restraint Rules Need External Enforcement](restraint-rules-need-external-enforcement.md) — a measured counterweight, where rules telling an agent to stop contributing scored 0% compliance while this mid-task return of control did move the score
+- [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — the SWE-bench result on which rule types help coding agents, in the same domain where this instruction showed no consistent direction
+- [The No-Op Test: Prune Agent Docs by Behavior, Not Length](behavioral-no-op-test.md) — the per-environment measurement this page asks for, as a repeatable procedure
+- [Probe-and-Refine Tuning of Repository Guidance for Coding Agents](probe-and-refine-guidance-tuning.md) — how to develop a guidance line against your own tasks rather than importing one
+- [Escape Hatches: Unsticking Stuck Agents](../workflows/escape-hatches.md) — the operator-driven version of the same recovery, for when the agent does not return on its own
 
 ---
 
@@ -56921,6 +56995,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Empty Commitments: Promises No Runtime Can Keep](empty-commitments.md) — A promise of action after the turn ends is empty when nothing in the agent's tools or runtime can carry it out, and the paper defining it reports no measured rates
 - [Trigger-Conditioned Skill Comparisons](trigger-conditioned-skill-comparisons.md) — Pairing a with-skill and without-skill run on the same task, then reporting only the runs where the skill fired, selects the sample on an event the treatment caused; report the trigger rate and both segments
 - [Deciding an Agent Upgrade on a Frozen Judge's Verdict](frozen-judge-release-decisions.md) — A frozen judge's verdicts depend on which agent version wrote the trajectory, so its error cannot be assumed to cancel in a version delta; eight of 60 judge-by-pair units declared an upgrade the execution interval left inconclusive, and transporting the old version's calibration was worse than no correction in 59 of 60
+- [Reading a Tool-Call Judge's Rejection as an Argument Defect](derivation-gap-tool-call-judges.md) — A correct tool-call argument whose source the judge's input never showed is accepted less often, and burying that source drops argument AUROC from 91.89-99.88 to 39.80-49.03 across four judges
 - [Treating a Cleared Review Comment as a Fixed Flaw](cleared-review-comment-as-fix.md) — Feedback-guided revision won approval for still-exploitable code on 33 of 159 CVE-based PRs, and re-running the same default review caught 23 of those 33 in round one and none by round five
 - [Pass-Only Grading Treats Luck and Judgment the Same](pass-only-grading-lucky-pass.md) — Of 1,136 passing agent trajectories 10.7% reached a correct patch through a weak process — regression cycles, blind retries, missing verification or disordered phases — and those weak passes reorder model rankings while averaging 34,032 to 1,377,226 tokens per class for identical binary credit
 - [Passing Tests Are Not Evidence a Patch Is Fast](passing-tests-as-performance-evidence.md) — Two correct patches for the same issue ran 3.97 and 9.15 seconds in one measured case; a green test gate reports repair, never cost, and correctness rank and runtime rank came out nearly reversed across four frontier models
@@ -56928,6 +57003,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [A Guard Hook Approves the Truncated Input It Was Handed](guard-approves-truncated-input.md) — A policy gate handed a silently cut input rules on the fragment and the harness applies the verdict to the whole call; exit 2, onFailure block, and a mod catch all trigger on errors, so none of them fires
 - [Excess Risk Treatment: Defensive Work the Evidence Rules Out](excess-risk-treatment.md) — Agents keep treating a risk the task has already settled; a stated bound cuts the rate, and 11.2% to 58.7% of runs still over-treat
 - [Recording Guest-Reported Values as Platform State](guest-reported-values-as-platform-state.md) — A value returned by code inside a sandbox is tenant input; Vercel's control plane recorded a guest-supplied `{storage_url, size, checksum}` snapshot record, and rewriting it restored another account's entire filesystem
+- [Counting Static Skill Defects as a Runtime Risk Ranking](static-skill-defect-count-as-runtime-risk.md) — Repairing one validated skill-contract defect moved verifier pass rate by +0.136, +0.085 and +0.023 across three models, so the audit count ranks artifacts rather than runtime risk
 
 ---
 
@@ -57021,6 +57097,7 @@ The research found no source that argues for approving partial input as a securi
 - [Hostname Allowlist TLS Blind Spot](../../security/hostname-allowlist-tls-blind-spot.md)
 - [Approval Records That Bind No Identity and No Session](unbound-approval-records.md)
 - [Treating a Gate Model's Option Labels as Trusted Configuration](option-labels-as-trusted-config.md)
+- [Reading a Tool-Call Judge's Rejection as an Argument Defect](derivation-gap-tool-call-judges.md) — the same cut input on a judge rather than a gate, where it produces false rejections instead of false approvals
 
 ---
 
@@ -60622,6 +60699,64 @@ Result:  under Claude Code, subsumed retrieval down >75%,
 - [Cheaper Per Token, Costlier Per Task](cheaper-per-token-costlier-per-task.md) — the pricing side of the subagent shift that made the retrieval tool more expensive
 - [Request Shaping to Cut Wasted Agent Turns](../../token-engineering/request-shaping-wasted-turns.md) — the prompt-side lever against retrieval the agent did not need
 - [Indiscriminate Structured Reasoning](reasoning-overuse.md) — the adjacent case of paid tokens that do not change the outcome
+
+---
+
+### Counting Static Skill Defects as a Runtime Risk Ranking
+Source: https://agentpatterns.ai/patterns/anti-patterns/static-skill-defect-count-as-runtime-risk/
+
+# Counting Static Skill Defects as a Runtime Risk Ranking
+
+> A skill audit's defect count ranks artifacts rather than runtime risk, and the same repair list moves one model six times as much as another.
+
+A static audit of 575 agent skills produced 1,182 manually validated contract inconsistencies, present in 67.4% of the 488 GitHub skills and 64.4% of the 87 SkillBench skills ([arXiv:2610.18927v1](https://arxiv.org/abs/2610.18927v1)). That total is what a skill linter prints. It is not a risk ranking, because how much a given inconsistency costs depends on the model that executes the skill. The authors state it plainly: "Static inconsistency counts are thus poor proxies for runtime risk and motivate runtime-aware Skill quality assessment."
+
+## What the paired experiment measured
+
+Forty-nine executable tasks were each built around one confirmed inconsistency and scored by a deterministic verifier, with no LLM judge. Each ran under three conditions and three replicates: no skill, the shipped skill, and a minimally repaired skill ([arXiv:2610.18927v1](https://arxiv.org/abs/2610.18927v1)).
+
+| Model | No skill | Shipped | Repaired | Gain from the repair |
+|---|---|---|---|---|
+| Claude Haiku 4.5 | 0.534 | 0.741 | 0.877 | +0.136 |
+| Qwen3.6-35B | 0.498 | 0.707 | 0.792 | +0.085 |
+| DeepSeek-V4-Flash | 0.689 | 0.870 | 0.893 | +0.023 |
+
+Supplying any skill was worth +0.18 to +0.21 for all three models. The gain from repairing the defect ran almost six times higher for Haiku than for DeepSeek ([arXiv:2610.18927v1](https://arxiv.org/abs/2610.18927v1)). One audit report, three risk profiles.
+
+## Why it works
+
+Seeing the defect is not the variable. Across 441 paired executions the agent read the skill in 97.1% of runs, and the per-model rates of 100%, 98% and 93% do not track the repair gains ([arXiv:2610.18927v1](https://arxiv.org/abs/2610.18927v1)). The authors' coding rule names the gap in four words: "contact is not use".
+
+What does line up is adoption. The count of runs where the agent followed the inconsistency into a failed verifier check was 44 for Haiku, 35 for Qwen and 18 for DeepSeek, reproducing the repair-gain ordering exactly. The whole benefit sits in that one class, at +0.366 score points per incident, while every other response class lands within ±0.05 of zero ([arXiv:2610.18927v1](https://arxiv.org/abs/2610.18927v1)). "Fixing a skill pays off exactly when it stops the agent from delivering the inconsistency to the final artifact." A static audit counts files. Runtime harm is a count of executions in which a particular model adopted what it read, and no file carries that number.
+
+## What predicts harm instead
+
+Defect type does. Of the 97 follow-into-failure cases, 41 came from over-promised documentation, where the docs commit to a capability the implementation never provides. Semantic contradictions recovered in 13 of 18 cases: "A contradiction in meaning is noticed and worked around far more often than a promised but absent capability" ([arXiv:2610.18927v1](https://arxiv.org/abs/2610.18927v1)). Where audit effort is rationed, the authors tell skill authors to "prioritize the Document Code boundary, especially cases where documentation promises behavior not supported by the implementation" ([arXiv:2610.18927v1](https://arxiv.org/abs/2610.18927v1)).
+
+## When this backfires
+
+- You already know your model and it recovers well. DeepSeek-V4-Flash gained +0.023 from the whole repair effort, so a runtime triage rig built to rank defects for it costs more than the defects do.
+- Your triage harness is built to trigger the defect, as this one was. The authors withdraw the exposure figure themselves: "The high exposure rate observed in RQ3 should therefore be interpreted as a property of controlled defect-exposing tasks rather than as a general exposure rate in practical Skill use."
+- You expect the ranking to survive a model swap. The effect is a joint property of the contract and the executing model, so a routing change invalidates the order.
+- You expect the repair to pay for itself in tokens. For DeepSeek the inconsistent skill was the cheapest condition at 316k median tokens and 69 seconds, and the repair added 55k tokens and 20 seconds ([arXiv:2610.18927v1](https://arxiv.org/abs/2610.18927v1)). "A fix buys correctness, not compute savings."
+- You treat the top-ranked repair as safe. In the 103-run control class where both arms failed, 38 runs improved by +0.352, 37 were unchanged, and 28 got worse by −0.380 ([arXiv:2610.18927v1](https://arxiv.org/abs/2610.18927v1)). "Removing one inconsistency can still mislead the agent by altering the execution path in an unexpected direction."
+- Counting is defensible in conventional code, and someone on your team will say so. On Windows Server 2003, Nagappan and Ball report "a strong positive correlation between the static analysis defect density and the pre-release defect density determined by testing" ([Microsoft Research, May 2005](https://www.microsoft.com/en-us/research/publication/static-analysis-tools-as-early-indicators-of-pre-release-defect-density/)). What that predicts is defects found by testing, not task outcomes under an executing model.
+
+## Key Takeaways
+
+- Report the defect count as inventory. Attach a model before you call any part of it risk.
+- Exposure does not discriminate between models and adoption does, so a triage signal built on reachability ranks nothing useful.
+- Over-promised documentation is the class worth fixing without measuring, at 41 of 97 observed follow-into-failure cases.
+- A targeted repair made 28 of 103 control-class runs worse. Re-run the task after fixing, not just the linter.
+- Weaker models carry more of the cost, so cheap-model routing raises the price of an unrepaired skill library.
+
+## Related
+
+- [Skill Lift: Measuring What a Skill Adds at Runtime](../../verification/skill-lift.md) — the paired with-skill and without-skill measurement, where this page's comparison is repaired against shipped.
+- [Skill File Linting: Which Three Checks to Run First](../../instructions/skill-file-linting.md) — the static gate whose output this page tells you how to read.
+- [Treating a Clean Static Scan as Security Evidence](static-clean-as-security-evidence.md) — the same gap on the security axis, where a cleared file is not a cleared behavior.
+- [Repository Skill Release Drift](repository-skill-release-drift.md) — how a skill acquires these inconsistencies over time as the release it was distilled from moves.
+- [Skill Over-Trust](skill-over-trust.md) — what the agent does with a skill it should have questioned, which is the adoption step this page measures.
 
 ---
 
@@ -66635,6 +66770,73 @@ Measurement changes also move numbers up. In June 2026 GitHub began counting any
 
 ---
 
+### Reading a Tool-Call Judge's Rejection as an Argument Defect
+Source: https://agentpatterns.ai/patterns/anti-patterns/derivation-gap-tool-call-judges/
+
+# Reading a Tool-Call Judge's Rejection as an Argument Defect
+
+> Burying the source of a correct argument drops AUROC from 91.89-99.88 to 39.80-49.03 across four judges, which then prefer the visible wrong value.
+
+A tool-call judge's rejection is a fact about what its input contained. Ma and colleagues scored seven argument judges across three tool-calling benchmarks and found that a correct value is accepted less often when no text in the judge's input says what that value should be. They name the drop the derivation gap, and scaling the judge from 4B to 27B parameters does not remove it ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
+
+## When the gap bites
+
+- The judge reads a trimmed transcript. The authors truncated on purpose, because harnesses do: "the OpenAI Agents SDK provides a trimmer that cuts tool outputs above 500 characters outside the last two turns" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)). A value copied from an earlier tool return then matches nothing the judge can see.
+- The value is a schema default nobody asked for. No truncation needed: "On FCRB nothing is cut, the default is written in the schema the judge reads, and correct defaults still carry the largest gap of any path" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
+- A plausible wrong value sits in view. In a relocation test the judges did not hesitate. They switched: "Against the distractor in view alone, AUROC is between 26.71 and 39.88, so all four judges rank the wrong value they can see above the correct value that was cut" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
+
+Where a request has no earlier calls, the first condition drops out: "On FCRB it is small, and defaults carry the largest gap" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)). The default case survives.
+
+## Why it works
+
+The judge matches the candidate against text in its input that names the expected value, instead of deriving that value itself: "A judge scores a value higher when a reference in its input matches it, whether the value is right or wrong", and "It does not reliably rebuild the derivation on its own, even from the full history" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
+
+Information in view is not a reference. On the uncut benchmark the default is printed in the schema the judge reads, and on the 142 of 185 correct defaults whose derived reference says the default applies, "a line that restates the schema default and lists which related words appear in the request changes acceptance by at most 6.18 points". Writing out the derivation raised acceptance "to between 73.02 and 88.06" on that same subset, which the reference itself selects ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
+
+## What to do instead
+
+1. Record the derivation path beside each verdict, so a rejection on a cut tool return reads differently from one on a value the judge could see.
+2. Check a schema default in code, with a string comparison. It needs no judge, and it carries the largest gap where nothing is truncated.
+3. Derive the reference before the candidate is seen. In DeRef a separate model reads the uncut history and writes the expected value and its source into the judge input: "DeRef raises argument AUROC over Plain in all 12 pairs, by between 1.44 and 22.14 points, and every gain is significant" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
+4. Do not reach for the full history first. It recovered three of four judges on the relocation test, but on the CFB values matching no span of the history "it raises AUROC for none of the three judges, and it lowers it for Jev by 2.83 points and for Qwen3-8B by 13.83 points" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
+
+## When this backfires
+
+A judge that follows a reference follows a wrong one just as willingly, so the fix inherits the defect.
+
+- Swapping one value inside the reference reversed verdicts. On the two benchmarks whose wrong values came from real models, at a 0.5 threshold, "acceptance of correct values drops by between 15.36 and 57.07 points, and acceptance of wrong values rises by between 20.38 and 57.79 points". The deriver reads every tool return uncut, and the authors name the consequence: "a deriver that errs, or a tool return written to mislead it, could make a judge accept a wrong argument" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
+- One gold value per argument is their data's assumption, not yours. "a reference that names it can lead judges to reject another value that is also correct" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
+- A judge holding a prior belief about the value behaves the opposite way. Under swapped references in QA grading, "grading reliability drops sharply under swapped references across a broad set of judge models", because of "judges' over-reliance on parametric knowledge, leading judges to disregard the given reference under conflict" ([Lee et al., 2026](https://arxiv.org/abs/2601.07506v2)). Booking IDs and timestamps carry no such prior. Entity names in a financial query might.
+- The deriver is a second full-history pass, 2.44 to 7.27 seconds per reference on the authors' hardware, shared by only 1.33 to 1.83 candidates. A pre-execution gate on a latency budget may have no room for it.
+
+The authors do not call it solved: "We therefore see DeRef as support for review, not a replacement for it" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
+
+## Example
+
+The deriver prompt is the whole mechanism, and it is one instruction. Ma and colleagues give the deriver the request, every earlier call and return uncut, and the function and parameter lines of the call being judged, then ask:
+
+> Before seeing any proposed value: what should the value of parameter {name} be in this call, and where in the context does it come from? Quote the source text if there is one, or say that the context does not determine it. Answer in at most 3 sentences.
+
+Two properties do the work. The deriver never sees the candidate, so the reference cannot echo the value under test. And it is allowed to answer that the context does not fix the value, which is what keeps a reference from being invented for a value nothing determines ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
+
+## Key Takeaways
+
+- Ask what the judge could see before asking whether the argument was wrong. The rejection is evidence about the input.
+- Schema defaults are the one case you can take away from the judge entirely, and they carry the largest gap where nothing is cut.
+- A truncated judge does not become uncertain. It ranks the visible wrong value above the correct one it cannot source.
+- Supplying a derived reference moves the single point of failure onto the deriver, which reads every tool return uncut.
+- Price the deriver before you plan on it: a second full-history pass, 2.44 to 7.27 seconds per reference, shared by 1.33 to 1.83 candidates.
+
+## Related
+
+- [A Guard Hook Approves the Truncated Input It Was Handed](guard-approves-truncated-input.md) — the mirror case, where a cut input makes a policy gate fail open instead of over-rejecting
+- [When Your Agent's Verifier Reads the Same False Premise](verifier-reads-the-same-premise.md) — the other way a verifier's input decides its verdict, through a shared prompt rather than a cut transcript
+- [Deciding an Agent Upgrade on a Frozen Judge's Verdict](frozen-judge-release-decisions.md) — what a path-dependent judge error does to a version comparison
+- [Inference-Time Tool-Call Reviewer](../agent-design/inference-time-tool-call-reviewer.md) — the pre-execution review slot this gap sits in
+- [Silent Adoption of Corrupted Tool Returns](silent-adoption-of-corrupted-tool-returns.md) — the upstream problem that makes an attacker-written tool return worth worrying about
+
+---
+
 ### Reading Visible Edge-Case Handling as a Security Check
 Source: https://agentpatterns.ai/patterns/anti-patterns/edge-case-handling-as-security-signal/
 
@@ -70831,6 +71033,7 @@ Do not extend that into a claim that static tools cannot see weak randomness. Ba
 - [The Security Review Gap in AI-Authored PRs](../../code-review/security-review-gap-in-ai-prs.md) — the human half of the same gate, where reviewer heuristics miss AI-specific CWE clusters.
 - [Treating a Cleared Review Comment as a Fixed Flaw](cleared-review-comment-as-fix.md) — the same error inside a review loop, where an adversary adapts the code to whatever the reviewer said.
 - [Treating a Bundled Bytecode Cache as a Build Artifact](bundled-bytecode-cache-as-build-artifact.md) — the case where the scanner reads the wrong file entirely, because a shipped bytecode cache supplies the body Python runs.
+- [Counting Static Skill Defects as a Runtime Risk Ranking](static-skill-defect-count-as-runtime-risk.md) — the same static-to-runtime gap on skill artifacts, where the defect count is inventory rather than a risk order.
 
 ---
 
@@ -72816,6 +73019,7 @@ The Before form writes tests from the text under suspicion. The After form withh
 - [Test Oracles That Read Their Expectation From the Code](state-anchored-test-oracles.md) — oracle independence lost through state rather than through prompt text
 - [Assumption Propagation](assumption-propagation.md) — the single-agent version, where one faulty premise compounds across turns
 - [Revising Code Against Its Own Tests (Interpretive Lock-In)](interpretive-lock-in-revision-loops.md) — the revision counterpart, where ordinary task ambiguity rather than an injected premise is what the editable suite carries forward
+- [Reading a Tool-Call Judge's Rejection as an Argument Defect](derivation-gap-tool-call-judges.md) — the input-side version, where what the verifier was never shown decides the verdict
 
 ---
 
@@ -100548,6 +100752,7 @@ Source: https://agentpatterns.ai/verification/
 - [Verification Capacity Saturation: Three Levers, One Default](verification-capacity-saturation.md) — When changes arrive faster than a gate clears them, a genuinely saturated station admits only three responses, and a gate that degrades rather than blocks picks the third on its own
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — Gate an agent's PR on the coverage of its changed lines, not the whole-repo percentage, because agents test under half of code-touching PRs and existing suites cover a minority of what they change
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces
+- [Replacing the LLM Filter Stage With a Fine-Tuned Classifier](fine-tuned-classifier-over-llm-filter-stage.md) — GitHub's new secret scanner pairs regex candidate generation with a fine-tuned ModernBERT classifier; every figure it publishes is relative to its own previous LLM pipeline, and none is absolute
 - [Verification as a Tool, Not an Instruction](tool-provided-verification.md) — Prompting an agent to verify its answer moved reference-based checking from 19% to 22%; a callable scoring tool roughly tripled that share at every prompt level, and improved score and calibration with it
 - [Zero Violations Is Not Evidence Your Hook Works](enforcement-liveness-evidence.md) — A blocking hook writes output only when it denies something, so record a firing trace and run a directed attempt against the locked path before reading a clean run as enforcement
 - [Per-Layer Suppression Accounting in Acceptance Gates](per-layer-suppression-accounting.md) — Record which layer discarded each item, because a composite count hides whether the deterministic half is filtering at all; in one pre-registered 40-run ablation it never fired
@@ -100576,6 +100781,7 @@ Source: https://agentpatterns.ai/verification/
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — Stack scanner-pass, full-scanner, validate, plan, and plan-diff oracles so LLM-generated infrastructure-as-code security fixes have to clear behavioral checks — first-pass agent repairs cleared the targeted Checkov finding 83.3 percent of the time but 71.4 percent of plan-compared repairs were deceptive fixes
 - [Explained Feedback for LLM Vulnerability Repair](explained-feedback-vulnerability-repair.md) — Pass the raw scanner diagnostic back first; rewriting it into an attack mechanism plus ordered repair steps adds roughly 1 to 1.5 points, and reverses on weak instruction-followers, multi-CWE tasks, and the self-explained variant
 - [Classification Before Repair in an Analyzer Backlog](classification-before-repair-analyzer-backlog.md) — Handing a static-analysis backlog to an agent puts the expensive errors in deciding whether each finding is real, not in the patch; gate the queue on classification and read a falling finding count as fixed-or-silenced
+- [Out-of-Query Evidence for Agent-Fixed Code Scanning Alerts](out-of-query-evidence-code-scanning-alerts.md) — Agentic autofix iterates until CodeQL stops reporting the alert, so the closed alert is the loop's stopping condition; route by weakness class to decide which fixes need evidence the query cannot produce
 - [False-Pass Liability Decides the Next Harness Component](false-pass-liability-harness-triage.md) — Price an erroneous accept before choosing between a planner and a terminal completion check; the ordering flips with that liability, and the check withholds correct work rather than improving it
 - [Hash-Pinned Command Approval for Non-Interactive Plugin Installs](hash-pinned-command-approval.md) — Claude Code 2.1.271 accepts the sha256 of a command a previous --json run displayed, binding the approval to the command that was read; the acceptance covers command, plugin and catalog, not what the command produces
 - [Behavioral Preflight: Replay Tool-Call Rules Before Enforcing](behavioral-preflight-rule-replay.md) — Replay each tool-call rule over recorded passing runs and flag any that would have refused most of its calls; one flagged rule on a development domain, and a high firing rate alone is not a defect
@@ -103669,6 +103875,7 @@ Applied to GitHub's flow, that means not selecting 25 findings in dashboard orde
 
 ## Related
 
+- [Out-of-Query Evidence for Agent-Fixed Code Scanning Alerts](out-of-query-evidence-code-scanning-alerts.md) — The security-alert variant of this queue, where the agent cannot suppress and the analyzer re-run becomes its own stopping condition.
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — What to do after a finding is classified real: stack behavioral oracles, because clearing the scanner rule is not the same as fixing the policy.
 - [Bug-Discriminating Validation Evidence for Repair Agents (BSG-VA)](bug-discriminating-validation-evidence.md) — The pre-fix replay this technique assumes, measured on repair agents that have no on-demand oracle.
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Cost-ascending gate ordering for the repair half, where a target test exists to constrain intent.
@@ -106121,6 +106328,7 @@ Guardrails impose fixed costs that don't scale with value, so they backfire in s
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)
 - [Structured Output Constraints](structured-output-constraints.md)
 - [Test-Driven Agent Development: Tests as Spec and Guardrail](tdd-agent-development.md)
+- [Replacing the LLM Filter Stage With a Fine-Tuned Classifier](fine-tuned-classifier-over-llm-filter-stage.md)
 - [Verification Ledger](verification-ledger.md)
 - [Slop Detectors Fail as Per-Item Review Gates](slop-detection-as-review-gate.md)
 - [Enforcement Modes in Spec-First Agent Frameworks](../patterns/agent-design/spec-first-framework-enforcement-modes.md)
@@ -109843,6 +110051,7 @@ A reasonable practitioner can argue the 71.4 percent figure is a function of pro
 - [Layered Accuracy Defense for Reliable Agent Outputs](layered-accuracy-defense.md) — Defense-in-depth framing for stacking independent verification checkpoints across a pipeline.
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Where compile/validate/plan gates sit on the deterministic-vs-probabilistic verification spectrum.
 - [Classification Before Repair in an Analyzer Backlog](classification-before-repair-analyzer-backlog.md) — The step upstream of the oracle stack: deciding which scanner findings should reach an agent at all.
+- [Out-of-Query Evidence for Agent-Fixed Code Scanning Alerts](out-of-query-evidence-code-scanning-alerts.md) — The same gameable-oracle problem on source-code CodeQL alerts, where the vendor ships the scanner re-run as the agent's own validation step.
 - [Honesty Harness: Defense-in-Depth Against Coding Agent Fabrication](honesty-harness-fabrication-defense.md) — The fabrication-defense analogue: four uncorrelated layers instead of five, same defense-in-depth principle.
 
 ---
@@ -111732,6 +111941,83 @@ Multiverse analysis carries real costs that make it impractical in several condi
 - [Grade Agent Outcomes](grade-agent-outcomes.md)
 - [Cross-Vendor Competitive Routing](../patterns/agent-design/cross-vendor-competitive-routing.md)
 - [Evaluator-Optimizer Pattern](../patterns/agent-design/evaluator-optimizer.md)
+
+---
+
+### Out-of-Query Evidence for Agent-Fixed Code Scanning Alerts
+Source: https://agentpatterns.ai/verification/out-of-query-evidence-code-scanning-alerts/
+
+# Out-of-Query Evidence for Agent-Fixed Code Scanning Alerts
+
+> Agentic autofix validates code scanning alerts by re-running the query that raised them, so a closed alert is weaker evidence than it looks.
+
+Take the closed alert as sufficient when all three hold: the alert came from the default code scanning query suite, the diff removes the sink or constrains the source rather than inserting a sanitizer the query already models, and the weakness class is one where agent repair lands. Outside those conditions, accept the fix on evidence the query cannot produce. Treat that as a routing rule rather than a gate on the whole queue, because the second oracle is expensive enough to be worth only where one of the three fails.
+
+## What the gate checks
+
+Copilot "Validates the fix works by rerunning CodeQL" and "Iterates if needed, then opens a draft pull request ready for your review" ([GitHub Changelog, 2026-10-15](https://github.blog/changelog/2026-10-15-agentic-autofix-for-code-scanning-alerts-general-availability)). Those two lines describe one loop. The re-run is the condition the agent iterates until it meets, and the draft pull request appears once it has met it.
+
+The documentation states the bound: "Agentic Autofix works on a best-effort basis. Copilot validates fixes by re-running CodeQL with the code scanning query suite. It can't confirm fixes for alerts from custom CodeQL queries, the `security-extended` CodeQL query suite, or code scanning alerts from third-party tools" ([GitHub Docs](https://docs.github.com/en/code-security/concepts/code-scanning/autofix-for-code-scanning)).
+
+Two of GitHub's own listed limitations are invisible to that gate. The system "may suggest fixes that fail to remediate the underlying vulnerability or introduce new vulnerabilities", and it "may suggest fixes that only partially address the security vulnerability or only partially preserve intended code functionality" ([GitHub Docs](https://docs.github.com/en/code-security/responsible-use/security-and-quality-ai-features)). A misleading fix and a real fix produce the same quiet alert. The agent does flag its own doubt, which is the first thing to read on the pull request: "If it can't validate a fix, or thinks the alert might be a false positive, it says so in the pull request" ([GitHub Docs](https://docs.github.com/en/code-security/how-tos/manage-security-alerts/manage-code-scanning-alerts/resolve-alerts)).
+
+## Why it works
+
+A taint query reports a path only while it can follow one, and the query decides what stops the tracking. CodeQL's documentation defines the construct: "Barriers are data flow nodes or edges through which data should not be tracked for the purposes of this analysis" ([CodeQL docs](https://codeql.github.com/docs/codeql-language-guides/analyzing-data-flow-in-javascript-and-typescript/)). Declaring a function a sanitizer means "any flow through this node is blocked. In particular, the query would no longer flag the flow from `process.argv[2]` to `fs.readFile`" (same page).
+
+Re-running the query after a patch therefore answers whether the query can still follow the path, which is a different question from whether the value arriving at the sink is safe. The two coincide only when the barrier is correct for that sink. Removing a sink or constraining a source satisfies the query for the same reason it would satisfy a person; inserting a recognized sanitizer satisfies it by matching a pattern it was written to accept.
+
+P2Patch measures the general form. Repair systems "typically validate a patch against the same evidence used to construct it", and such a patch "can therefore look successful while remaining vulnerable to the same vulnerability with some variation" ([Iranmanesh et al., 2026](https://arxiv.org/abs/2610.20245v1)). Across 101 CVE subjects whose Java half uses "manually checked CodeQL-derived taint findings", an adversarial exploiter "produced a distinct, execution-confirmed bypass of a patch that had already blocked the PoV it was built from" in 41 of 101 runs ([Iranmanesh et al., 2026](https://arxiv.org/abs/2610.20245v1)). The authors call that an upper bound on semantically distinct bypasses, so read it as a direction rather than a defect rate.
+
+The same paper re-scores a repair system that gated the way the GA loop does. LoopRepair "reports a patch on 30 of 40 subjects, each accepted by its own single-crashing-input verification. Under our certified suites only 10 of 39 measurable shared subjects block every fix-closed path" ([Iranmanesh et al., 2026](https://arxiv.org/abs/2610.20245v1)). That "does not contradict their original evaluations; it shows their validation criteria did not measure the same held-out attack-path coverage."
+
+## Which alerts earn a second oracle
+
+Route on weakness class, not severity. Across 319 LLM-generated patches for 64 Java Vul4J vulnerabilities, fix rates split hard by CWE: 0% on 40 CWE-20 input-validation patches against 45% on 40 CWE-835 infinite-loop patches, with XSS at 17%, path traversal at 20%, permissions at 15%, and XXE at 40% ([Al-Maamari, 2026](https://arxiv.org/abs/2603.10072v1)). Only 6 of 21 categories in that study reached the n of 20 needed for the table, and the patches came from single-shot prompting rather than an agent with codebase access, so treat the ordering as the signal and the rates as indicative.
+
+The same study locates the patches a test suite waves through. "Pure security failures (10.3%) pose the greatest deployment risk: these 33 patches pass all functional tests but remain exploitable, meaning they would pass CI/CD pipelines undetected", and the rate reaches 35% on CWE-264 permissions ([Al-Maamari, 2026](https://arxiv.org/abs/2603.10072v1)). Green CI is the wrong reassurance on an access-control alert.
+
+Batching changes the review arithmetic. One assignment "creates one agent session and one pull request for the selected alerts", and the selection runs to 25 ([GitHub Docs](https://docs.github.com/en/code-security/how-tos/manage-security-alerts/manage-code-scanning-alerts/resolve-alerts)). Sort the selection by weakness class so the reviewer judges the same sanitizer decision 25 times instead of 25 unrelated ones.
+
+## When this backfires
+
+- The alert came from a custom query, the `security-extended` suite, or a third-party tool. Copilot "can't confirm fixes" for those ([GitHub Docs](https://docs.github.com/en/code-security/concepts/code-scanning/autofix-for-code-scanning)), so there is no validation claim to second-guess and the task reverts to reviewing an unvalidated patch.
+- No executable path reaches the sink. Writing an attack-input test then costs more than reading the diff.
+- The yield is thin across a long backlog. P2Patch's number needed to treat, meaning subjects run per net improved subject, was "7.2 for fix-closed coverage and 4.4 for residual coverage", at a mean $2.09 per subject against $0.45 for single-pass repair, and 3 of 101 subjects regressed on at least one oracle ([Iranmanesh et al., 2026](https://arxiv.org/abs/2610.20245v1)).
+- Exploit verification is priced for triage, not coverage. One pipeline spent "roughly 96.3 million tokens and 29 hours" and concluded it "is best deployed selectively within a layered strategy in which static analysis narrows the search space" ([Pourleyli et al., 2026](https://arxiv.org/abs/2609.10762v1)).
+- Review capacity is already the binding constraint. An evidence requirement on a 25-alert pull request turns a thin review into a stalled one.
+
+The strongest case against the technique is that the analyzer re-run is the best automated gate anyone has for this input. Ablating a repair agent's approver shows it plainly: "Omitting only tests has a small effect (961 plausible; 9 false accepts), whereas omitting the static analysis check is far more damaging (861 plausible; 123 false accepts)" ([Joos et al., 2026](https://arxiv.org/abs/2509.11787v5)). Single-pass repair from the finding alone already reached 78.1% held-out fix-closed coverage, which the adversarial loop raised to 84.7% ([Iranmanesh et al., 2026](https://arxiv.org/abs/2610.20245v1)). A team that merges its scanner-validated fixes and spends the saved review on the classes above is making a defensible trade.
+
+It still falls short of proof. Of 654 Python samples clean under a combined Bandit and Semgrep gate, dynamic verification "confirmed or partially confirmed exploitability in 95 files, yielding an inclusive pipeline rate of 14.53% (roughly 1 in 7 statically clean samples)" ([Pourleyli et al., 2026](https://arxiv.org/abs/2609.10762v1)). Those authors read static cleanliness and runtime security as "hierarchical layers of software assurance rather than interchangeable measures".
+
+## Example
+
+A path-traversal alert traces user input to a file read. Three diffs close it, and only one closes it for a reason the query understands independently of its own sanitizer list.
+
+The first deletes the dynamic path and reads a fixed file. The flow is gone, and the re-run reports that.
+
+The second validates the input against an allowlist of permitted names before the read. The flow still exists, but the query loses it at the check. That is the shape CodeQL's worked example uses when `checkPath` becomes a barrier and the query "would no longer flag the flow from `process.argv[2]` to `fs.readFile`" ([CodeQL docs](https://codeql.github.com/docs/codeql-language-guides/analyzing-data-flow-in-javascript-and-typescript/)). Whether the allowlist holds is a property of the allowlist, and the query never looks at it.
+
+The third normalizes the path with a library call the query models as sanitizing. The alert closes, and the question the query did not ask is whether that normalizer is the right one for this sink, in this order, against this input.
+
+Reading the diff for which of the three happened takes about a minute. The third shape, and the second on a subtle sink, are the ones worth a test that sends the attack input through the real path.
+
+## Key Takeaways
+
+- The re-run sits inside the agent's loop rather than after it. "Iterates if needed" means the closed alert is the condition the agent worked toward ([GitHub Changelog, 2026-10-15](https://github.blog/changelog/2026-10-15-agentic-autofix-for-code-scanning-alerts-general-availability)).
+- Read the diff for what it did to the flow. Removing a sink and inserting a recognized sanitizer both silence the query, and only the second depends on the query's sanitizer list being right for that sink.
+- Route by weakness class. Measured fix rates ran from 0% on input validation to 45% on infinite loops, and permissions alerts produced functional-but-insecure patches at 35% against a 10.3% baseline ([Al-Maamari, 2026](https://arxiv.org/abs/2603.10072v1)).
+- Custom queries, `security-extended`, and third-party alerts arrive with no validation at all, by GitHub's own statement. Those are a different review, not a harder one.
+- Price the second oracle before requiring it. A number needed to treat of 7.2 puts it on selected alerts, not on the queue ([Iranmanesh et al., 2026](https://arxiv.org/abs/2610.20245v1)).
+
+## Related
+
+- [Classification Before Repair in an Analyzer Backlog](classification-before-repair-analyzer-backlog.md) — the same queue shape for code-quality findings, where the agent can suppress and the classification call is the expensive one.
+- [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — the Terraform case, with a measured deceptive-fix rate and a prescribed five-layer stack.
+- [Explained Feedback for LLM Vulnerability Repair](explained-feedback-vulnerability-repair.md) — how much of the scanner diagnostic to hand the agent before it starts patching.
+- [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — ordering gates by cost when a target test exists to constrain intent.
+- [Protecting the Test Oracle From the Agent](../patterns/agent-design/protect-the-oracle-from-the-agent.md) — the adjacent failure, where the agent writes to the artifact that defines correctness rather than iterating against it.
 
 ---
 
@@ -114649,6 +114935,86 @@ A concurrency of 8 "fits every plan's concurrency limit, including Hobby's 10 co
 
 ---
 
+### Replacing the LLM Filter Stage With a Fine-Tuned Classifier
+Source: https://agentpatterns.ai/verification/fine-tuned-classifier-over-llm-filter-stage/
+
+# Replacing the LLM Filter Stage With a Fine-Tuned Classifier
+
+> A fine-tuned classifier can replace the LLM that adjudicates a gate's candidates, and the conditions that make it work are narrow.
+
+GitHub shipped a new secret scanner built as two stages, regex candidate generation followed by a fine-tuned ModernBERT classifier, replacing what it calls "the previous LLM pipeline". Against that predecessor it reports higher precision, higher recall, higher owner-weighted customer acceptance, lower median post-push scan execution time, and lower serving cost ([Ozturkler and Fu, 2026](https://github.blog/ai-and-ml/githubs-model-for-secret-detection-finding-more-secrets-with-less-noise/)). The post does not describe how the previous pipeline was structured, so the comparison is pipeline against pipeline. What it does detail is the new adjudicating stage, and that stage is what this page is about: the one in your own gate.
+
+## When the swap applies
+
+GitHub states three conditions as a lesson it drew from the work: "We also learned that model size is not the same as model usefulness. A smaller fine-tuned classifier can be the right answer when the task is narrow, the decision boundary is measurable, and serving efficiency is critical" ([GitHub Blog](https://github.blog/ai-and-ml/githubs-model-for-secret-detection-finding-more-secrets-with-less-noise/)).
+
+A fourth condition sits in how the model was built rather than in that sentence. The training set draws on product feedback with human validation, human-annotated regex candidates with weak labels, and synthetic rows aimed at sparse and difficult cases, and the operating point was chosen on that evidence: "We select thresholds through offline evaluation and then validate behavior on production-like traffic before broader rollout." Both halves of that need labels. A gate with no history of adjudicated true and false positives has nothing to fit and no evidence to pick a threshold on.
+
+## What each stage decides
+
+Stage one stays deterministic and wide. "Regex filters scan content for potential secrets with high recall," and the model is additive to it: "The important design choice is that the model does not replace deterministic scanning."
+
+Stage two reads a bounded window around each candidate. "Each model input includes the candidate value, file path, secret type, and a bounded amount of surrounding context." What it hands back is one number: "The output is a classification score used by the scanner to decide whether the candidate should proceed" ([GitHub Blog](https://github.blog/ai-and-ml/githubs-model-for-secret-detection-finding-more-secrets-with-less-noise/)).
+
+## What GitHub reports, and under which conditions
+
+| Figure | Condition GitHub attaches to it |
+|---|---|
+| 13% higher precision, 19% higher recall | Offline, post-push scanning, same public traffic, against the previous LLM pipeline |
+| 11.5% higher acceptance | Online customer A/B; acceptance weighted by repository owner "to reduce the influence of customers who bulk-resolve large volumes of alerts at once" |
+| 86% lower median scan execution time | Post-push scanning, against the previous LLM-based pipeline |
+| More than 98% lower serving cost | "Cost of the compact classifier compared with remote LLM calls" |
+
+Source: [Ozturkler and Fu, 2026](https://github.blog/ai-and-ml/githubs-model-for-secret-detection-finding-more-secrets-with-less-noise/).
+
+Every figure is relative to GitHub's own previous LLM pipeline. The post publishes no absolute precision or recall, no false-positive rate, no alert volumes and no dataset sizes, so the set gives a direction of travel rather than a target to import. It also never says whether the model in that previous pipeline had been fine-tuned, which leaves the size question and the tuning question tangled together.
+
+The latency figure moved an existing check earlier. Push protection and post-push scanning were already the two moments GitHub's secret scanning runs at; what the speed changed is which detections reach the earlier one. GitHub writes that the efficiency "made it practical to extend generic secret detection to push protection, returning results before developers push changes, not only after code is committed." The post does not claim the previous pipeline missed a deadline. It claims the new one made the extension practical.
+
+## Why it works
+
+Two causes, both stated by the source. The first is that generation is overhead for a stage that only needs a score. ModernBERT gives "contextual understanding comparable to an LLM without the latency and computational overhead of generating natural-language output."
+
+The second is that the model is fitted to the decision the scanner actually makes: "For secret scanning, the model needs to make a calibrated decision over short candidate windows with high throughput and low latency. That makes a fine-tuned encoder classifier a better serving shape than a general-purpose LLM for this stage of the pipeline. The model can be trained directly on our decision boundary, and evaluated using the same recall and precision metrics that matter to secret scanning quality." The deployment detail is ordinary engineering: "The trained model is exported to ONNX format with 8-bit quantization, enabling fast inference" ([GitHub Blog](https://github.blog/ai-and-ml/githubs-model-for-secret-detection-finding-more-secrets-with-less-noise/)).
+
+## When this backfires
+
+- Size may not be what wins. On a 54,148-instance benchmark of secrets in GitHub issue reports, "smaller models such as RoBERTa and CodeBERT greatly improve performance (F1 = 92.70%)" while "fine-tuned open-source larger LLMs such as Qwen and LLaMA reach up to 94.49% F1" ([Ahmed et al., arXiv:2410.23657v4](https://arxiv.org/abs/2410.23657v4)). On that benchmark the larger fine-tuned LLMs scored above the smaller encoder models.
+- Your corpus is not the one these numbers came from. The same authors validated on a different corpus, 178 real-world GitHub repositories, "achieving an F1-score of 81.6% which demonstrates our approach's strong ability to generalize to in-the-wild scenarios" ([Ahmed et al., arXiv:2410.23657v4](https://arxiv.org/abs/2410.23657v4)). That sits below both of their benchmark figures, and the authors read it as strong generalization.
+- The retraining loop is future work. GitHub lists it under what comes next: "We will use production feedback loops to identify new false negatives and false positives, turning real-world signals into higher-quality training and evaluation data" ([GitHub Blog](https://github.blog/ai-and-ml/githubs-model-for-secret-detection-finding-more-secrets-with-less-noise/)). A boundary that shifts every quarter needs that loop in place before the swap.
+- The stage cannot explain itself. Skipping "the latency and computational overhead of generating natural-language output" is where part of the speed comes from, and the output skipped is the rationale. Where your gate has to tell a developer or an agent why it blocked, that is the part you wanted.
+- Volume and hosting decide whether the cost figure means anything. The 98% compares a compact model on GitHub's own inference infrastructure against remote LLM calls. At a few thousand calls a month, or with nowhere to serve a model, the saving is nominal and the operating work moves onto your team.
+
+## Example
+
+GitHub's post pairs each credential shape with the harmless twin that matches the same pattern:
+
+| Likely real credential | Likely harmless lookalike |
+|---|---|
+| A password assigned beside a production database URL | The same password-shaped value in a test fixture |
+| A connection string in deployment configuration | A localhost connection string in a setup guide |
+| A high-entropy value bound to an API credential | A high-entropy checksum, build ID, or asset hash |
+
+Source: [Ozturkler and Fu, 2026](https://github.blog/ai-and-ml/githubs-model-for-secret-detection-finding-more-secrets-with-less-noise/).
+
+Both columns clear stage one, because both match the regex. Only the context around the value separates them, which is why the second stage reads that context and the first cannot. The transferable move is what the table argues for: a recurring false-positive class is a reason to train on context. GitHub names the cost of the alternative directly. "Adding more rules can suppress some of them, but each exception risks hiding a real secret."
+
+## Key Takeaways
+
+- Check four conditions before swapping the adjudicator: a narrow task, a measurable decision boundary, a binding serving cost, and a store of adjudicated examples. GitHub names the first three; the fourth shows up only in how it built the model.
+- Keep the deterministic first stage. The shipped design is explicit that "the model does not replace deterministic scanning", so the regex stays and the classifier filters what it emits.
+- Carry GitHub's figures with their conditions or do not carry them. Every one is relative to a single predecessor, and no absolute precision, recall, or false-positive rate is published.
+- Cost the retraining loop into the decision. GitHub describes its own production feedback loop in the future tense.
+
+## Related
+
+- [Static-First Shell Command Gating with Selective Escalation](../security/static-first-shell-command-gating.md) — the companion decision about which candidates reach a second stage at all.
+- [Specialized Small Language Models as Agent Sub-Tools](../patterns/agent-design/specialized-slm-as-agent-tool.md) — a small model behind a tool call, placed there to absorb context rather than to adjudicate candidates.
+- [Deterministic Guardrails](deterministic-guardrails.md) — where a rule beats a model outright, and how to tell which half of a gate you are writing.
+- [Sizing Secret Defense at the Push as Agent Volume Grows](../security/push-boundary-secret-defense-agent-volume.md) — the capacity argument for moving secret handling to the push boundary.
+
+---
+
 ### Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)
 Source: https://agentpatterns.ai/verification/repository-perturbation-context-reasoning-diagnosis/
 
@@ -115961,6 +116327,7 @@ Running the live layer on the production subset gave a different picture. Across
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — the description and structure work a scan gate can actually improve.
 - [Contract-Domain Tracing for Rubric Credit](contract-domain-tracing-rubric-credit.md) — what to do with the criterion decisions once a lift figure exists, when the arms sit near the rubric's ceiling.
 - [Pre-Execution Skill Selection: Layers Over Install Counts](../instructions/pre-execution-skill-selection.md) — a cheap pre-filter that narrows candidates before a paired run; it does not replace one.
+- [Counting Static Skill Defects as a Runtime Risk Ranking](../patterns/anti-patterns/static-skill-defect-count-as-runtime-risk.md) — the repaired-against-shipped contrast, which isolates one defect instead of a whole skill.
 
 ---
 
@@ -137187,6 +137554,7 @@ Realized harm counts commands that pass the guard and then succeed in a Docker s
 - [Safe Command Allowlisting](safe-command-allowlisting.md) — the deterministic allowlist that should absorb the high-volume benign tail before any scorer sees it
 - [Parser-Versus-Shell Evasion in Command Permission Checks](parser-versus-shell-permission-evasion.md) — why bounded canonicalization leaves a residue, and what that implies about where enforcement belongs
 - [Blast Radius Containment](blast-radius-containment.md) — the layer underneath, which the guard explicitly does not replace
+- [Replacing the LLM Filter Stage With a Fine-Tuned Classifier](../verification/fine-tuned-classifier-over-llm-filter-stage.md) — what can sit in the second stage once the static layer has narrowed the band
 
 ---
 

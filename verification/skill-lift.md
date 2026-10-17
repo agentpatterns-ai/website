@@ -68,3 +68,4 @@ Running the live layer on the production subset gave a different picture. Across
 - [Skill Authoring Patterns](../tool-engineering/skill-authoring-patterns.md) — the description and structure work a scan gate can actually improve.
 - [Contract-Domain Tracing for Rubric Credit](contract-domain-tracing-rubric-credit.md) — what to do with the criterion decisions once a lift figure exists, when the arms sit near the rubric's ceiling.
 - [Pre-Execution Skill Selection: Layers Over Install Counts](../instructions/pre-execution-skill-selection.md) — a cheap pre-filter that narrows candidates before a paired run; it does not replace one.
+- [Counting Static Skill Defects as a Runtime Risk Ranking](../patterns/anti-patterns/static-skill-defect-count-as-runtime-risk.md) — the repaired-against-shipped contrast, which isolates one defect instead of a whole skill.

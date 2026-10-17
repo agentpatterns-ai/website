@@ -177,6 +177,7 @@ nav:
       - verification-capacity-saturation.md
       - diff-coverage-gate-agent-prs.md
       - deterministic-guardrails.md
+      - fine-tuned-classifier-over-llm-filter-stage.md
       - tool-provided-verification.md
       - enforcement-liveness-evidence.md
       - per-layer-suppression-accounting.md
@@ -205,6 +206,7 @@ nav:
       - layered-oracle-iac-security-repair.md
       - explained-feedback-vulnerability-repair.md
       - classification-before-repair-analyzer-backlog.md
+      - out-of-query-evidence-code-scanning-alerts.md
       - false-pass-liability-harness-triage.md
       - hash-pinned-command-approval.md
       - behavioral-preflight-rule-replay.md
