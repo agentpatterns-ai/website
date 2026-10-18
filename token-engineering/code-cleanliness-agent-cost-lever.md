@@ -7,7 +7,7 @@ tags:
   - code-review
   - arxiv
   - tool-agnostic
-last_reviewed: 2026-07-07
+last_reviewed: 2026-10-18
 maturity: emerging
 ---
 
@@ -37,6 +37,23 @@ The study measures cleanliness as SonarQube Cloud rule violations plus cognitive
 
 The inference also runs the other way. At the Future of Software Development Retreat, Martin Fowler proposed the inverse framing: use the token cost of making a given change as a proxy metric for architecture and design quality, so that if the same change requires fewer tokens, that indicates a better architecture ([Martin Fowler — Future of Software Development Retreat](https://martinfowler.com/fragments/2026-07-06.html)). Where the empirical result above uses cleanliness to predict token cost, Fowler's framing uses token cost to diagnose cleanliness, the same mechanism read in reverse.
 
+## Code health and agentic review cost
+
+In agentic review, file size and CodeHealth cannot be separated in this sample: adjusting for the size of the scored files absorbs the association between CodeHealth and tokens. A pre-registered observational study reports: "Adjusting for file size absorbs the CodeHealth association for every LLM. The coefficient moves from -0.062 to -0.009 for deepseek-v4-flash, from -0.049 to -0.023 for qwen3-6, and from -0.036 to +0.018 for sonnet-5, and none of the three adjusted intervals excludes zero" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). The median scored file has 2,146 lines in the unhealthy tier and 128 in the healthy tier, so the score and the line count move together. The authors read the result as mediation, and note that it "does not by itself show the registered association to be spurious".
+
+Two vendors produced the evidence on this page. The review study comes from authors affiliated with CodeScene, which owns the CodeHealth metric; the paper states that "Markus Borg is employed by CodeScene" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). The minimal-pair study above comes from SonarSource, which owns SonarQube Cloud. Neither metric is vendor-neutral.
+
+The study covers 465 agent-authored pull requests across 246 repositories and three models, each run through a frozen pipeline of four review agents and one fix agent ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). Before the size adjustment: "One additional CH point was associated with an estimated 6.1% reduction in total tokens for deepseek-v4-flash (95% CI [3.4, 8.6]%), 4.8% for qwen3-6 (95% CI [1.4, 8.1]%), and 3.5% for sonnet-5 (95% CI [0.1, 6.8]%), holding footprint, language, and repository constant." The authors interpret it as "an association within the fitted model, not as a causal effect" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+
+Four further findings bear on cost:
+
+- The review stage carries the cost. It accounts for "a median of 84.7%, 86.2%, and 85.8% of per-PR tokens for the three LLMs" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+- Healthy code does not yield fewer findings. "The agents report a comparable number of findings on unhealthy and healthy code, but reaching those findings takes more work on unhealthy code" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). The study counted comments and did not grade them, so it "prices an activity whose value it does not establish".
+- Small pull requests do not make up for unhealthy files. "Cost was not carried by PR footprint, so keeping PRs small does not substitute for code quality", although diff size remains the strongest driver of token cost in the study ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+- The absolute saving is small. The authors put the 6.9-point median-to-median CodeHealth difference at "about 91,000 tokens per PR for sonnet-5, 134,000 for qwen3-6, and 360,000 for deepseek-v4-flash, for a single review-and-fix pass" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+
+The lever is long files as well as the score. The authors write that "the estimate does not say what raising CodeHealth while leaving file size unchanged would save", and that the refactoring which would deliver the saving "is the kind that also shrinks files" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). Their file-reading tools return "at most 500 lines per call", so an agent pages through a long file in several calls, the same navigation mechanism as above. On refactoring practice, the authors "believe that quality-improving refactoring is better delivered as its own documented change than as a side effect of another" and "do not interpret the result as an argument for optimizing code for agents" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+
 ## When this backfires
 
 The minimal-pair study compared agents on already-clean versus already-messy code. It did not measure the engineering cost of moving a codebase from messy to clean, which is where the recommendation breaks down in practice:
@@ -46,6 +63,9 @@ The minimal-pair study compared agents on already-clean versus already-messy cod
 - Agents re-introduce mess: a longitudinal MSR 2026 study of 806 Cursor-adopting repositories versus 1,380 controls found static-analysis warnings rise ~30% and code complexity rises ~42% after adoption, persisting six-plus months and surviving any velocity gains ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427v3)). Cleaning a codebase for agent ergonomics without continuous quality gates is a treadmill — the same agents that benefit from cleanliness erode it.
 - Cognitive complexity is a partial proxy: SonarQube cognitive complexity measures intra-function branching depth, not cross-cutting concerns, hidden global state, or naming inconsistency. The 7-8% headline may underweight or overweight different aspects of cleanliness depending on the codebase's actual pathology ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049v1)).
 - Larger cost levers are available: 7-8% token reduction sits below the variance of model-version pricing changes and well below what context engineering, prompt caching, or moving from a frontier to a mid-tier model can deliver. Treating cleanliness as the primary cost lever inverts the value chain.
+- Long files that are not badly designed: generated code, data tables, and test files with many small cases add reading cost through size alone. The review study states that "our data cannot separate them from long, low-cohesion files", so a score-guided cleanup can target the wrong files ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+- Token totals overstate the bill: the review study notes that "cached input tokens are billed at a fraction of uncached ones" and that "the token total is not a complete account of what agentic review costs an organization" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+- Narrow coverage: the three review models are not flagship tiers, and the authors call whether larger models show the same association "open" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). The results "generalize to others only by argument" beyond the study's one pipeline.
 
 The defensible position is narrow. Maintainability investment you would make anyway — linters, complexity budgets, refactoring time — also benefits agent runs as a measurable side effect. Cleaning up for the agent specifically requires the navigation cost to be a top-three line item in your agent spend.
 
@@ -79,6 +99,7 @@ Path A is the posture to take. Capture the cost lever from work the team would d
 - The mechanism is navigation efficiency — fewer hops to locate the right file, fewer tokens spent disambiguating
 - The cost lever is real but small; cleanup justified specifically for agent ergonomics rarely pays back within a year
 - Pair the cleanliness side-effect with quality gates that prevent agents from re-introducing complexity, otherwise the savings decay ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427))
+- In agentic review the CodeHealth association is absorbed by scored-file size, which this sample cannot separate from the score, so watch long files as well as the score; both studies come from metric vendors ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1))
 - Cognitive complexity and rule violations are the operationalized metrics — measurable in CI, not subjective
 
 ## Related
@@ -89,4 +110,5 @@ Path A is the posture to take. Capture the cost lever from work the team would d
 - [Agent-Generated Code Maintenance Asymmetry](../code-review/agent-code-maintenance-asymmetry.md) — the maintenance footprint that determines whether your cleanup decays or holds
 - [Comprehension Debt from AI-Generated Code Velocity](../patterns/anti-patterns/comprehension-debt.md) — the human-side debt that maintainability metrics do not capture
 - [Measuring Refactoring Payback in Tokens](refactoring-payback-in-tokens.md) — the replay protocol that measures the cleanup return on investment this study left open
+- [Bounded Tool Surface for Review Agents](../code-review/bounded-tool-surface-review-agents.md) — the output caps through which file length reaches review cost
 - [Code Health as a Signal for Agent-Generated Test Quality](../verification/code-health-agent-generated-tests.md) — the uncontrolled study whose much larger token gap this page's minimal-pair design bounds

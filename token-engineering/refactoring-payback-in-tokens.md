@@ -46,6 +46,8 @@ Arbitrary splitting does not produce those seams. The same writeup warns that "r
 
 Controlled work finds the same navigation mechanism at a smaller effect size. Across 660 Claude Code trials on six matched repository pairs, Trivedi and Schmitt found cleaner code cut file revisitations 34% and token use 7 to 8%, with pass rate unchanged ([arxiv:2605.20049v1](https://arxiv.org/abs/2605.20049v1)).
 
+An observational study of agentic review found that adjusting for scored-file size absorbed the CodeHealth association with token cost, which supports watching the line count of the files under review as well as a score ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+
 ## When this backfires
 
 - The arithmetic is thin. The published saving is 39.7 cents per change at Sonnet 5 input pricing, and the author could not count what the refactoring itself consumed, bounding it at five million tokens and about eight hours of mostly unattended running ([further work](https://martinfowler.com/articles/exploring-gen-ai/refactoring-economic-benefit.html)). Break-even needs many more changes to that module.

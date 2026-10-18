@@ -10,6 +10,7 @@ aliases:
   - execution lane isolation
   - named queue concurrency
   - per-lane concurrency limits
+last_reviewed: 2026-10-17
 maturity: established
 ---
 
@@ -17,7 +18,7 @@ maturity: established
 
 # Lane-Based Execution Queueing
 
-> Organize agent task execution into named, isolated queues — each draining independently with configurable concurrency — to eliminate the three core hazards of concurrent agent systems.
+> Organize agent task execution into named, isolated queues, each draining independently with configurable concurrency, to eliminate the three core hazards of concurrent agent systems.
 
 ## The problem
 
@@ -46,6 +47,8 @@ Two operations run each lane:
 
 - `drainLane()` — pumps tasks from the queue up to `maxConcurrent`, then yields
 - `enqueueCommandInLane<T>()` — schedules work and returns a promise the caller can await
+
+A shipped harness states the number. Claude Code release 2.1.302 changed "prompt and agent hooks so that at most 12 of one event run at a time; the rest wait their turn" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
 
 Lanes never share state or communicate directly. Isolation is structural, not enforced by locks.
 

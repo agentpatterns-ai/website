@@ -10,7 +10,7 @@ tags:
   - context-engineering
   - cost-performance
   - claude
-last_reviewed: 2026-10-15
+last_reviewed: 2026-10-17
 maturity: emerging
 ---
 
@@ -18,7 +18,7 @@ maturity: emerging
 
 > Claude Code compacts an idle conversation just before its prompt cache expires, while the prefix is still cheap to read.
 
-Idle compaction compacts an idle conversation shortly before its prompt cache expires, so the next message reprocesses a summary instead of the full history. Claude Code 2.1.299 describes it this way: "a 200K+ token conversation left idle for about 54 minutes is compacted before its one-hour prompt cache expires, so your next message doesn't reprocess it all" ([changelog](https://code.claude.com/docs/en/changelog)). The saving depends on five conditions, and it trades detail for cost.
+Idle compaction compacts an idle conversation shortly before its prompt cache expires, so the next message reprocesses a summary instead of the full history. Claude Code 2.1.299 describes it this way: "a 200K+ token conversation left idle for about 54 minutes is compacted before its one-hour prompt cache expires, so your next message doesn't reprocess it all" ([changelog](https://code.claude.com/docs/en/changelog#2-1-299)). The saving depends on five conditions, and it trades detail for cost.
 
 ## When it fires
 
@@ -46,8 +46,9 @@ Worked example, from the [Opus 5.5 prices](https://platform.claude.com/docs/en/b
 - 2.1.286: the behavior appears, with "no opt-out and no warning" ([anthropics/claude-code#98747](https://github.com/anthropics/claude-code/issues/98747)).
 - 2.1.290: the `idleCompaction` setting and the threshold variable arrive. On earlier versions, turn off `autoCompactEnabled` to stop it.
 - 2.1.299: the changelog entry describes the feature (dated October 14, 2026).
+- 2.1.302: the notice shown after an idle compaction now says how to turn the feature off ([changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
 
-`"idleCompaction": false` in settings.json turns it off, and `DISABLE_AUTO_COMPACT` turns it off along with auto-compaction ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)).
+`"idleCompaction": false` in settings.json turns it off, and `DISABLE_AUTO_COMPACT` turns it off along with auto-compaction ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)). From 2.1.302, an `Idle compaction` row in `/config` turns it off or back on ([changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
 
 ## When this backfires
 

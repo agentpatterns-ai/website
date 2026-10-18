@@ -11,7 +11,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - long-form
-last_reviewed: 2026-07-18
+last_reviewed: 2026-10-17
 maturity: established
 ---
 
@@ -27,6 +27,8 @@ Learn it hands-on with [The Immutable Prefix guided lesson](https://learn.agentp
 ## Why architecture, not configuration
 
 Prompt caching reuses [KV cache](https://www.dailydoseofds.com/p/kv-caching-in-llms-explained-visually/) representations of previously computed tokens. When a new request shares an exact prefix with a cached request, the provider skips recomputation for the shared portion. Cached reads cost [10% of the base input price on Anthropic's API](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), while cache writes cost 125 to 200%. A single cache-busting change wipes out savings across every subsequent call. The prompt layout — what goes where, what can change, what must not — decides whether you pay 10% or 100% on every turn.
+
+Claude Code v2.1.302 moved one instruction block for that reason. Anthropic's changelog records the change as "Changed where the Claude in Chrome instructions sit in the system prompt so that new conversations can read them from the shared prompt cache" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
 
 ## The immutable prefix pattern
 
@@ -267,5 +269,6 @@ After the first turn, `cache_read_input_tokens` should cover the system prompt a
 - [Typed Context Buys Addressability, Not Token Savings](typed-context-addressability.md) — a typed store that re-serializes each turn forfeits the prefix discount this page protects
 - [Attributed Cache Misses: Reading Why a Prefix Diverged](attributed-cache-miss-diagnostics.md) — reading the provider's own reason code instead of inferring the cause from a creation-token spike
 - [Batched Context Eviction for Cache Reuse](batched-context-eviction.md) — the eviction cadence that decides whether the growing history is cacheable
+- [Path-Only File Mentions: Deferring @ Expansion](path-only-file-mentions.md) — cache-read pricing is what makes the cost case for deferring a mention weaker than the accuracy case
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
   - long-form

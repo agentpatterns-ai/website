@@ -178,3 +178,4 @@ Both CLAUDE.md files stay short; shared content lives once.
 - [Distributed Conventions via AGENTS.md](agents-md-distributed-conventions.md)
 - [Prompt File Libraries](prompt-file-libraries.md)
 - [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)
+- [Path-Only File Mentions: Deferring @ Expansion](../context-engineering/path-only-file-mentions.md) — the other `@path` surface, where a person triggers the load mid-session and the expansion can be turned off

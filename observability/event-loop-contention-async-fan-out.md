@@ -11,7 +11,7 @@ aliases:
   - event loop starvation under fan-out
   - async fan-out latency inversion
   - serialization bottleneck in agent fan-out
-last_reviewed: 2026-07-26
+last_reviewed: 2026-10-15
 maturity: adopted
 ---
 
@@ -53,6 +53,8 @@ Work upward, and stop when loop lag falls:
 2. Swap the serializer. Planck moved to `orjson` and tuned the `aiohttp` connector limit up from its default of 100; both helped marginally, and latency still rose with agent count ([Towards Data Science](https://towardsdatascience.com/why-adding-more-ai-agents-made-our-system-slower/)).
 3. Offload the CPU segment with `run_in_executor()`. Pure-Python work stays behind the interpreter lock, so this rung pays only for C-accelerated or genuinely blocking calls.
 4. Distribute the loop. Planck's fix was a router fanning requests across worker processes, each with its own event loop and connection pool, which stopped latency growing with agent count ([Towards Data Science](https://towardsdatascience.com/why-adding-more-ai-agents-made-our-system-slower/)). On free-threaded Python the same shape works with one loop per thread ([asyncio and free-threaded Python](https://docs.python.org/3/library/asyncio-threading.html)).
+
+Query backends hit the same contention when reads and compute draw on one limit. Braintrust's Nitro query engine schedules object-store reads separately from CPU dispatch. Its reasoning: "If both reads and compute use the same concurrency limit, it's easy to oversubscribe CPU and memory" ([Nitro](https://www.braintrust.dev/blog/nitro)). A query waiting on storage occupies no compute worker. Braintrust "benchmarked Nitro across our customer base and found that full-text searches ran more than twice as fast on average"; that figure covers full-text search, averaged across customers, and is not a per-query guarantee. Braintrust names agent query load as the driver: an agent can run hundreds of queries at once against trace history, where a person might run a few searches.
 
 ## When this backfires
 
