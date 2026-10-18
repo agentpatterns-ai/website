@@ -67,3 +67,4 @@ Deferring such a tool removes the definition. The impulse survives, so a real ca
 - [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — trimming the same static payload from the user's side rather than the harness author's
 - [GitHub's Copilot Cost Levers at Constant Task Quality](../token-engineering/copilot-cost-levers-fixed-quality.md) — the sibling vendor account, and the traffic-volume condition that gates copying any of these levers
 - [Choosing a Skill Loading Method for Agents](skill-loading-method-selection.md) — the same preload-or-fetch decision applied to skills instead of tool definitions
+- [Path-Only File Mentions: Deferring @ Expansion](path-only-file-mentions.md) — the same decision where a person, not the harness, triggers the load

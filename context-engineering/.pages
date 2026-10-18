@@ -114,6 +114,7 @@ nav:
       - skill-graph-topology-bound.md
       - coverage-aware-skill-selection.md
       - static-context-tool-residence.md
+      - path-only-file-mentions.md
       - per-object-context-allocation.md
       - organizational-context-layer.md
       - generated-questionnaires.md

@@ -209,6 +209,7 @@ nav:
       - out-of-query-evidence-code-scanning-alerts.md
       - false-pass-liability-harness-triage.md
       - hash-pinned-command-approval.md
+      - lock-transitive-ci-dependency-graph.md
       - behavioral-preflight-rule-replay.md
       - data-fidelity-guardrails.md
       - incremental-verification.md

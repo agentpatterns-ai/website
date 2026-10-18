@@ -215,6 +215,7 @@ last_reviewed: 2026-05-27
 - [False-Pass Liability Decides the Next Harness Component](false-pass-liability-harness-triage.md) — Price an erroneous accept before choosing between a planner and a terminal completion check; the ordering flips with that liability, and the check withholds correct work rather than improving it
 - [Hash-Pinned Command Approval for Non-Interactive Plugin Installs](hash-pinned-command-approval.md) — Claude Code 2.1.271 accepts the sha256 of a command a previous --json run displayed, binding the approval to the command that was read; the acceptance covers command, plugin and catalog, not what the command produces
 - [Behavioral Preflight: Replay Tool-Call Rules Before Enforcing](behavioral-preflight-rule-replay.md) — Replay each tool-call rule over recorded passing runs and flag any that would have refused most of its calls; one flagged rule on a development domain, and a high firing rate alone is not a defect
+- [Lock the Transitive CI Dependency Graph](lock-transitive-ci-dependency-graph.md) — A workflow lockfile records the commit each action and its transitive dependencies resolved to, so a moved tag cannot change what runs; coverage stops at reusable-workflow calls and at anything an action fetches at run time
 
 ## Tooling
 

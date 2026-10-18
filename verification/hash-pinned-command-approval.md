@@ -87,3 +87,4 @@ Between the two, a person reads the command string out of `shownCommand`.
 - [Deferred Permission Pattern](../patterns/agent-design/deferred-permission-pattern.md) — collecting a human approval outside a headless session
 - [Enterprise-Managed Plugin Governance for Agent CLIs](../security/enterprise-managed-plugin-governance.md) — the managed-settings layer that can remove plugin capabilities outright
 - [Agent-Driven Deployment: What to Delegate and What to Gate](../workflows/agent-driven-deployment.md) — where an approval boundary belongs in a pipeline an agent drives
+- [Lock the Transitive CI Dependency Graph](lock-transitive-ci-dependency-graph.md) — the same read-then-pin move applied to a CI dependency graph, transitive entries included

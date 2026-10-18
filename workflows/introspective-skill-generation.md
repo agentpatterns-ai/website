@@ -11,7 +11,7 @@ aliases:
   - automated pattern mining
   - self-improving agents
   - meta-skill generation
-last_reviewed: 2026-06-19
+last_reviewed: 2026-10-17
 maturity: established
 ---
 
@@ -48,7 +48,7 @@ Gather raw material from agent sessions:
 - Persistent memory — corrections and constraints gathered across sessions. Claude Code subagents with the `memory` field enabled keep a directory that survives across conversations. [Source: [Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)]
 - User interventions — points where a human corrected, redirected, or overrode the agent mid-session
 
-The collection step needs no new tooling. Transcripts already exist. The gap is that no one reads them systematically.
+The collection step needs no new tooling. Transcripts already exist. The gap is that no one reads them systematically. Braintrust adds a cost argument for the same material: two different developers pay for one uncaptured correction. The post puts it as "That one wrong command has now consumed unnecessary tokens and engineering time twice". [Source: [Braintrust on coding agent insights](https://www.braintrust.dev/blog/coding-agent-insights)]
 
 ## Analyze: mining sessions for recurring patterns
 
@@ -90,7 +90,7 @@ Review criteria:
 - Does it conflict with existing skills or agents? New skills that overlap with entries already in the [skill library](../tool-engineering/skill-library-evolution.md) make tool selection ambiguous.
 - Does it generalize? A pattern seen in one project may not apply across projects. Scope the generated skill or agent to fit — project-level (`.claude/agents/`) or user-level (`~/.claude/agents/`). [Source: [Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)]
 
-After approval, run the new skill or agent against a held-out set of tasks to confirm it resolves the target pattern without introducing regressions.
+After approval, run the new skill or agent against a held-out set of tasks to confirm it resolves the target pattern without introducing regressions. Watch the measure you check it against. Braintrust names the confound in a weekly count: "A lower weekly total could mean your team did less work". [Source: [Braintrust on coding agent insights](https://www.braintrust.dev/blog/coding-agent-insights)]
 
 ## Building the analysis agent
 

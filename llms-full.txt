@@ -358,6 +358,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Measuring Reacquisition Cost Under Context Compaction](context-engineering/reacquisition-cost-measurement.md)
 - [Name-Only Path Routing: Finding Files Without an Index](context-engineering/name-only-path-routing.md)
 - [Narrative Problem Reformulation for Code Generation](context-engineering/narrative-problem-reformulation.md)
+- [Path-Only File Mentions: Deferring @ Expansion](context-engineering/path-only-file-mentions.md)
 - [PEEK: Orientation Cache for Recurring-Context Agents](context-engineering/peek-orientation-cache.md)
 - [Per-Agent Compaction Windows for Orchestrator and Worker](context-engineering/per-agent-compaction-window.md)
 - [Per-Type Retention Policy for Agent Compaction (Knowledge Triage)](context-engineering/per-type-retention-under-compaction.md)
@@ -1358,6 +1359,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [LLM Agent Bug Fix Taxonomy: 23 Fix Patterns from 930 Real Bugs](verification/agent-bug-fix-taxonomy.md)
 - [LLM Static Verification Against Natural-Language Requirements](verification/llm-static-verification-natural-language-requirements.md)
 - [LLM-Driven Benchmark Auditing](verification/llm-benchmark-auditing.md)
+- [Lock the Transitive CI Dependency Graph](verification/lock-transitive-ci-dependency-graph.md)
 - [Macro Evals for Agentic Systems: Population-Level Behavior Patterns](verification/macro-evals-agentic-systems.md)
 - [Markov-Chain Reliability for LLM Agents: Audit the Abstraction Before You Trust the Metric](verification/markov-chain-agent-reliability.md)
 - [Measure Agent Experience Against a Bare Baseline](verification/ax-bare-baseline-lift-drag.md)
@@ -2399,6 +2401,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [When a Skill Graph Cannot Beat the Ranker](skill-graph-topology-bound.md) — A typed skill graph whose candidate edges come from the retriever's own embedding neighbors can relabel what retrieval found but cannot extend its reach; overlay the edges and count what they newly connect
 - [Coverage-Aware Skill Selection Under a Token Budget](coverage-aware-skill-selection.md) — Score candidate skills against the capabilities the selected set still leaves uncovered rather than against the query; the fit needs pass/fail logs and does not transfer across libraries or executors
 - [Static-Context Tool Residence: Two Overrides on Hit Rate](static-context-tool-residence.md) — Hit rate decides which tool definitions stay resident every turn, except for a tool the model calls when it is absent and a tool one product mode depends on
+- [Path-Only File Mentions: Deferring @ Expansion](path-only-file-mentions.md) — Claude Code 2.1.299 can hand over the paths of `@` file mentions instead of the files' contents; the gain is window occupancy rather than billing, and a read the agent skips reports nothing
 - [Per-Object Context Allocation](per-object-context-allocation.md) — Group retrieved fragments by canonical code object and cap each object's token share, so repeated views of one function stop displacing independent dependencies before the model sees them
 - [Organizational Context Layer for Agents](organizational-context-layer.md) — A shared context layer maps many source systems into one governed store that many agents query; deterministic identity and rebuildable index projections transfer well below that scale
 - [Generated Questionnaires: Eliciting Someone Else's Context](generated-questionnaires.md) — Have the agent draft a questionnaire for the one person who holds the missing knowledge, instead of guessing the gap; the technique holds only where that knowledge is statable rather than tacit
@@ -3748,7 +3751,7 @@ Source: https://agentpatterns.ai/context-engineering/compact-before-cache-expiry
 
 > Claude Code compacts an idle conversation just before its prompt cache expires, while the prefix is still cheap to read.
 
-Idle compaction compacts an idle conversation shortly before its prompt cache expires, so the next message reprocesses a summary instead of the full history. Claude Code 2.1.299 describes it this way: "a 200K+ token conversation left idle for about 54 minutes is compacted before its one-hour prompt cache expires, so your next message doesn't reprocess it all" ([changelog](https://code.claude.com/docs/en/changelog)). The saving depends on five conditions, and it trades detail for cost.
+Idle compaction compacts an idle conversation shortly before its prompt cache expires, so the next message reprocesses a summary instead of the full history. Claude Code 2.1.299 describes it this way: "a 200K+ token conversation left idle for about 54 minutes is compacted before its one-hour prompt cache expires, so your next message doesn't reprocess it all" ([changelog](https://code.claude.com/docs/en/changelog#2-1-299)). The saving depends on five conditions, and it trades detail for cost.
 
 ## When it fires
 
@@ -3776,8 +3779,9 @@ Worked example, from the [Opus 5.5 prices](https://platform.claude.com/docs/en/b
 - 2.1.286: the behavior appears, with "no opt-out and no warning" ([anthropics/claude-code#98747](https://github.com/anthropics/claude-code/issues/98747)).
 - 2.1.290: the `idleCompaction` setting and the threshold variable arrive. On earlier versions, turn off `autoCompactEnabled` to stop it.
 - 2.1.299: the changelog entry describes the feature (dated October 14, 2026).
+- 2.1.302: the notice shown after an idle compaction now says how to turn the feature off ([changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
 
-`"idleCompaction": false` in settings.json turns it off, and `DISABLE_AUTO_COMPACT` turns it off along with auto-compaction ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)).
+`"idleCompaction": false` in settings.json turns it off, and `DISABLE_AUTO_COMPACT` turns it off along with auto-compaction ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)). From 2.1.302, an `Idle compaction` row in `/config` turns it off or back on ([changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
 
 ## When this backfires
 
@@ -9318,6 +9322,59 @@ A table's columns are a bounded collection, so a full rescan can safely tombston
 
 ---
 
+### Path-Only File Mentions: Deferring @ Expansion
+Source: https://agentpatterns.ai/context-engineering/path-only-file-mentions/
+
+# Path-Only File Mentions: Deferring @ Expansion
+
+> Handing Claude the path of an `@` file mention instead of the file's contents defers the load to the agent's own read decision.
+
+Switch the expansion off when the mentioned files are large relative to your window, the session is long enough that resident bytes crowd out later evidence, and a missed read would show up in the output rather than pass unnoticed. Leave it on otherwise. A mention is a human saying a file matters, and the flag converts that certainty into a decision the agent can get wrong.
+
+Claude Code 2.1.299 added the control ([Claude Code changelog, October 14, 2026](https://code.claude.com/docs/en/changelog#2-1-299)). Setting `CLAUDE_CODE_DISABLE_FILE_MENTIONS` to `1` stops the harness "from expanding `@` mentions of files and directories. Claude instead gets the mentioned paths with a note to read them using its file tools" ([Claude Code environment variables](https://code.claude.com/docs/en/env-vars)). Two constraints come with it. The variable is "Ignored in project and local settings", so a repository cannot turn it on for contributors, and it "Requires Claude Code v2.1.299 or later".
+
+| Mode | What reaches the model | How to get it |
+|---|---|---|
+| Default | The file's contents, expanded at prompt-build time | Set nothing |
+| Path plus instruction | The mentioned paths and a note to read them | `CLAUDE_CODE_DISABLE_FILE_MENTIONS=1` |
+| Path as text | The mention as plain text, with no expansion and no read instruction | `CLAUDE_CODE_DISABLE_ATTACHMENTS=1` |
+
+The third mode comes from a different variable, which disables "attachment processing" so that mentions "are sent as plain text instead of being expanded into file content" ([Claude Code environment variables](https://code.claude.com/docs/en/env-vars)). It removes the read instruction as well as the bytes, and it governs attachment handling generally, not mentions alone.
+
+## Why it works
+
+The window is an attention budget before it is a bill. Anthropic states the constraint plainly: "Every new token introduced depletes this budget by some amount, increasing the need to carefully curate the tokens available to the LLM" ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). Du and colleagues measured the cost across 5 models on math, question answering and coding, with retrieval held perfect: "even when models can perfectly retrieve all relevant information, their performance still degrades substantially (13.9%–85%) as input length increases but remains well within the models' claimed lengths" ([Du et al., arXiv:2510.05381v1](https://arxiv.org/abs/2510.05381v1)). The drop survived replacing the irrelevant tokens with whitespace, so inert length is still costly length.
+
+A path is a short string, and moving its expansion to tool-call time means the file occupies the window only once the agent commits to it. Claude Code already works this way elsewhere: "CLAUDE.md files are naively dropped into context up front, while primitives like glob and grep allow it to navigate its environment and retrieve files just-in-time" ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)). The flag extends it to the one load a person triggers.
+
+## When this backfires
+
+- The mention was small and deliberate. Fetching a file the user named on purpose costs a round trip and returns the bytes expansion would have supplied. Anthropic names that cost itself: "runtime exploration is slower than retrieving pre-computed data" ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+- The agent never reads the path. Agent Retrieval Bench logged agent trajectories, and even with interactive exploration "the logged agents never touch any gold file on 35.2% of OpenAI strict-context samples and 27.2–29.3% of Codex samples" ([Qin and Xie, arXiv:2607.24882v1](https://arxiv.org/abs/2607.24882v1)). In its 45-sample closed-tool pilot, preloading the gold bytes raised any-gold contact from 0.5111 to 1.0000 and "raises final File F1 by 0.3115". A read the agent skips produces an answer, not an error.
+- The window is not your constraint. Once a prompt prefix is cached, re-reading it costs "0.1 times the base input tokens price", and 0.05x on Claude Opus 5.5 and Claude Sonnet 5.5 ([Anthropic prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)). A resident mention is not re-billed in full each turn, so the accuracy argument has to carry the decision.
+- The mention carries the task statement. A spec referenced by path is the material the model works from, so a skipped read loses requirements rather than background.
+- Several mentions, and the comparison is the job. Read one path and not the other, and the output is half grounded with nothing marking which half.
+
+Anthropic declines to settle the choice in general: "the most effective agents might employ a hybrid strategy, retrieving some data up front for speed, and pursuing further autonomous exploration at its discretion. The decision boundary for the 'right' level of autonomy depends on the task" ([Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)).
+
+## Key Takeaways
+
+- The flag buys window occupancy, so check your cache-hit rate before reaching for it. On a healthy cache the resident bytes were never costing full price each turn.
+- Size the files your team actually mentions. The argument rests on length crowding the window, so a repository of small files has no case to answer.
+- Mention habits decide this more than file sizes do. Speculative mentions gain the most; a reader who names one file on purpose pays a round trip for bytes they would have had.
+- Measure the skip, because nothing else will. Count the turns where a mentioned path never appears in a file-read call.
+- Set it where it is read. Project and local settings ignore the variable, so it belongs in user or managed settings, and the session needs v2.1.299 or later.
+
+## Related
+
+- [Static-Context Tool Residence: Two Overrides on Hit Rate](static-context-tool-residence.md) — the same preload-or-fetch decision applied to tool definitions
+- [Choosing a Skill Loading Method for Agents](skill-loading-method-selection.md) — the decision applied to skills, where the harness picks rather than the person
+- [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — why the repeat cost of a resident mention is smaller than it looks
+- [Discoverable vs Non-Discoverable Context for Agents](discoverable-vs-nondiscoverable-context.md) — the test for what belongs in context up front
+- [@import Composition Pattern for Agent Instruction Files](../instructions/import-composition-pattern.md) — the other `@path` surface, expanded at session start rather than per prompt
+
+---
+
 ### PEEK: Orientation Cache for Recurring-Context Agents
 Source: https://agentpatterns.ai/context-engineering/peek-orientation-cache/
 
@@ -9866,6 +9923,8 @@ Learn it hands-on with [The Immutable Prefix guided lesson](https://learn.agentp
 
 Prompt caching reuses [KV cache](https://www.dailydoseofds.com/p/kv-caching-in-llms-explained-visually/) representations of previously computed tokens. When a new request shares an exact prefix with a cached request, the provider skips recomputation for the shared portion. Cached reads cost [10% of the base input price on Anthropic's API](https://platform.claude.com/docs/en/build-with-claude/prompt-caching), while cache writes cost 125 to 200%. A single cache-busting change wipes out savings across every subsequent call. The prompt layout — what goes where, what can change, what must not — decides whether you pay 10% or 100% on every turn.
 
+Claude Code v2.1.302 moved one instruction block for that reason. Anthropic's changelog records the change as "Changed where the Claude in Chrome instructions sit in the system prompt so that new conversations can read them from the shared prompt cache" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
+
 ## The immutable prefix pattern
 
 Agent systems that achieve high cache efficiency share a common layout: a stable prefix followed by a growing tail.
@@ -10105,6 +10164,7 @@ After the first turn, `cache_read_input_tokens` should cover the system prompt a
 - [Typed Context Buys Addressability, Not Token Savings](typed-context-addressability.md) — a typed store that re-serializes each turn forfeits the prefix discount this page protects
 - [Attributed Cache Misses: Reading Why a Prefix Diverged](attributed-cache-miss-diagnostics.md) — reading the provider's own reason code instead of inferring the cause from a creation-token spike
 - [Batched Context Eviction for Cache Reuse](batched-context-eviction.md) — the eviction cadence that decides whether the growing history is cacheable
+- [Path-Only File Mentions: Deferring @ Expansion](path-only-file-mentions.md) — cache-read pricing is what makes the cost case for deferring a mention weaker than the accuracy case
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
   - long-form
 
@@ -12408,7 +12468,7 @@ Source: https://agentpatterns.ai/context-engineering/skill-loadout-curation/
 
 # Skill Loadout Curation for Coding Agents
 
-> A loadout is the skill set an agent carries into a session; past roughly 30 skills, extras shadow the right one and selection degrades.
+> As irrelevant skills grow from 0 to 1,000, implicit routing's recall of the right skill falls from 73.6% to 27.4%. Explicit selection holds at 73.9%.
 
 A loadout is everything an agent loads before you type a word. It includes the name and description of every installed skill, plus the tools of every connected MCP server ([Breunig, 2026](https://www.dbreunig.com/2026/07/24/manage-your-agent-s-loadout-with-dr-skill.html)). Curating it means choosing what to carry in, beyond what you author. Candidates come from published catalogs too, such as AI Hero's index of its engineering skills ([AI Skills for Real Engineers](https://www.aihero.dev/skills-catalog)). The practice pays above roughly 30 skills. The gain comes from removing descriptions that collide, not from saving tokens.
 
@@ -12449,7 +12509,7 @@ Pass rate can hide this. On a 37-task subset, Claude Opus 4.6 holds Pass@3 at 62
 
 The causal channel is selection interference, not context pressure. An agent chooses a skill by matching the request against the preloaded descriptions, so every added skill is another distractor competing for that match. When a distractor fits the request better than the intended skill, the router picks it every time — Song and Wei's worked case is a video-frame-extraction skill that beat the intended skill on a coin-counting query in every trajectory they ran ([arxiv:2605.24050](https://arxiv.org/abs/2605.24050)). Because the interference happens between descriptions, cutting the candidate set is what recovers accuracy: restricting candidates by retrieval lifts tool selection from 13.62% to 43.13% while roughly halving prompt tokens ([Gan and Sun, 2025](https://arxiv.org/abs/2505.03275v1)).
 
-Implicit routing fails where explicit selection holds. A SkillsBench run holds the tasks and their golden skills fixed while irrelevant skills grow from 0 to 1,000. Loaded-skill recall under implicit routing falls 73.6% to 27.4%, and the zero-load rate rises 9.3% to 51.6% ([arxiv:2610.18522v1](https://arxiv.org/abs/2610.18522v1)). Asked only to choose from that same full library, the same models keep 73.9% selected-skill recall. Masking only the irrelevant skills' descriptions largely restores loading, which the authors read as semantic interference from those descriptions. The run covers open-weight models including Kimi K2.5 and MiniMax M2.5. Each model ran every task and condition 3 times, over 15,000 trajectories in all.
+Implicit routing fails where explicit selection holds. A SkillsBench run holds the tasks and their golden skills fixed while irrelevant skills grow from 0 to 1,000. Loaded-skill recall under implicit routing falls 73.6% to 27.4%, and the zero-load rate rises 9.3% to 51.6% ([arxiv:2610.18522v1](https://arxiv.org/abs/2610.18522v1)). Asked only to choose from that same full library, the same models keep 73.9% selected-skill recall (LLM preselector, pooled). Masking only the irrelevant skills' descriptions largely restores loading, which the authors read as semantic interference from those descriptions. The run covers open-weight models including Kimi K2.5 and MiniMax M2.5. Each model ran every task and condition 3 times, more than 15,000 trajectories in all.
 
 OpenAI's Codex adds a second channel on top of that. It shortens skill descriptions as the catalog grows: "when you add too many skills, Codex starts shortening their descriptions to fit. The model ends up seeing less of each description, making it harder to know which skill to pick" ([Provencher, 2026](https://developers.openai.com/blog/rethinking-skills-and-prompts-for-gpt-6-astra)). The same post reports that descriptions "can often contradict each other or over-emphasize when skills should be used". Where a harness truncates this way, the description you wrote is not the description the model reads.
 
@@ -12952,6 +13012,7 @@ Deferring such a tool removes the definition. The impulse survives, so a real ca
 - [Reducing System-Prompt Token Bloat in Coding Agents](system-prompt-bloat-reduction.md) — trimming the same static payload from the user's side rather than the harness author's
 - [GitHub's Copilot Cost Levers at Constant Task Quality](../token-engineering/copilot-cost-levers-fixed-quality.md) — the sibling vendor account, and the traffic-volume condition that gates copying any of these levers
 - [Choosing a Skill Loading Method for Agents](skill-loading-method-selection.md) — the same preload-or-fetch decision applied to skills instead of tool definitions
+- [Path-Only File Mentions: Deferring @ Expansion](path-only-file-mentions.md) — the same decision where a person, not the harness, triggers the load
 
 ---
 
@@ -14257,6 +14318,7 @@ Both CLAUDE.md files stay short; shared content lives once.
 - [Distributed Conventions via AGENTS.md](agents-md-distributed-conventions.md)
 - [Prompt File Libraries](prompt-file-libraries.md)
 - [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md)
+- [Path-Only File Mentions: Deferring @ Expansion](../context-engineering/path-only-file-mentions.md) — the other `@path` surface, where a person triggers the load mid-session and the expansion can be turned off
 
 ---
 
@@ -42352,7 +42414,7 @@ Source: https://agentpatterns.ai/patterns/agent-design/lane-based-execution-queu
 
 # Lane-Based Execution Queueing
 
-> Organize agent task execution into named, isolated queues — each draining independently with configurable concurrency — to eliminate the three core hazards of concurrent agent systems.
+> Organize agent task execution into named, isolated queues, each draining independently with configurable concurrency, to eliminate the three core hazards of concurrent agent systems.
 
 ## The problem
 
@@ -42381,6 +42443,8 @@ Two operations run each lane:
 
 - `drainLane()` — pumps tasks from the queue up to `maxConcurrent`, then yields
 - `enqueueCommandInLane<T>()` — schedules work and returns a promise the caller can await
+
+A shipped harness states the number. Claude Code release 2.1.302 changed "prompt and agent hooks so that at most 12 of one event run at a time; the rest wait their turn" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
 
 Lanes never share state or communicate directly. Isolation is structural, not enforced by locks.
 
@@ -91826,6 +91890,23 @@ The study measures cleanliness as SonarQube Cloud rule violations plus cognitive
 
 The inference also runs the other way. At the Future of Software Development Retreat, Martin Fowler proposed the inverse framing: use the token cost of making a given change as a proxy metric for architecture and design quality, so that if the same change requires fewer tokens, that indicates a better architecture ([Martin Fowler — Future of Software Development Retreat](https://martinfowler.com/fragments/2026-07-06.html)). Where the empirical result above uses cleanliness to predict token cost, Fowler's framing uses token cost to diagnose cleanliness, the same mechanism read in reverse.
 
+## Code health and agentic review cost
+
+In agentic review, file size and CodeHealth cannot be separated in this sample: adjusting for the size of the scored files absorbs the association between CodeHealth and tokens. A pre-registered observational study reports: "Adjusting for file size absorbs the CodeHealth association for every LLM. The coefficient moves from -0.062 to -0.009 for deepseek-v4-flash, from -0.049 to -0.023 for qwen3-6, and from -0.036 to +0.018 for sonnet-5, and none of the three adjusted intervals excludes zero" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). The median scored file has 2,146 lines in the unhealthy tier and 128 in the healthy tier, so the score and the line count move together. The authors read the result as mediation, and note that it "does not by itself show the registered association to be spurious".
+
+Two vendors produced the evidence on this page. The review study comes from authors affiliated with CodeScene, which owns the CodeHealth metric; the paper states that "Markus Borg is employed by CodeScene" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). The minimal-pair study above comes from SonarSource, which owns SonarQube Cloud. Neither metric is vendor-neutral.
+
+The study covers 465 agent-authored pull requests across 246 repositories and three models, each run through a frozen pipeline of four review agents and one fix agent ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). Before the size adjustment: "One additional CH point was associated with an estimated 6.1% reduction in total tokens for deepseek-v4-flash (95% CI [3.4, 8.6]%), 4.8% for qwen3-6 (95% CI [1.4, 8.1]%), and 3.5% for sonnet-5 (95% CI [0.1, 6.8]%), holding footprint, language, and repository constant." The authors interpret it as "an association within the fitted model, not as a causal effect" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+
+Four further findings bear on cost:
+
+- The review stage carries the cost. It accounts for "a median of 84.7%, 86.2%, and 85.8% of per-PR tokens for the three LLMs" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+- Healthy code does not yield fewer findings. "The agents report a comparable number of findings on unhealthy and healthy code, but reaching those findings takes more work on unhealthy code" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). The study counted comments and did not grade them, so it "prices an activity whose value it does not establish".
+- Small pull requests do not make up for unhealthy files. "Cost was not carried by PR footprint, so keeping PRs small does not substitute for code quality", although diff size remains the strongest driver of token cost in the study ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+- The absolute saving is small. The authors put the 6.9-point median-to-median CodeHealth difference at "about 91,000 tokens per PR for sonnet-5, 134,000 for qwen3-6, and 360,000 for deepseek-v4-flash, for a single review-and-fix pass" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+
+The lever is long files as well as the score. The authors write that "the estimate does not say what raising CodeHealth while leaving file size unchanged would save", and that the refactoring which would deliver the saving "is the kind that also shrinks files" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). Their file-reading tools return "at most 500 lines per call", so an agent pages through a long file in several calls, the same navigation mechanism as above. On refactoring practice, the authors "believe that quality-improving refactoring is better delivered as its own documented change than as a side effect of another" and "do not interpret the result as an argument for optimizing code for agents" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+
 ## When this backfires
 
 The minimal-pair study compared agents on already-clean versus already-messy code. It did not measure the engineering cost of moving a codebase from messy to clean, which is where the recommendation breaks down in practice:
@@ -91835,6 +91916,9 @@ The minimal-pair study compared agents on already-clean versus already-messy cod
 - Agents re-introduce mess: a longitudinal MSR 2026 study of 806 Cursor-adopting repositories versus 1,380 controls found static-analysis warnings rise ~30% and code complexity rises ~42% after adoption, persisting six-plus months and surviving any velocity gains ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427v3)). Cleaning a codebase for agent ergonomics without continuous quality gates is a treadmill — the same agents that benefit from cleanliness erode it.
 - Cognitive complexity is a partial proxy: SonarQube cognitive complexity measures intra-function branching depth, not cross-cutting concerns, hidden global state, or naming inconsistency. The 7-8% headline may underweight or overweight different aspects of cleanliness depending on the codebase's actual pathology ([arxiv:2605.20049](https://arxiv.org/abs/2605.20049v1)).
 - Larger cost levers are available: 7-8% token reduction sits below the variance of model-version pricing changes and well below what context engineering, prompt caching, or moving from a frontier to a mid-tier model can deliver. Treating cleanliness as the primary cost lever inverts the value chain.
+- Long files that are not badly designed: generated code, data tables, and test files with many small cases add reading cost through size alone. The review study states that "our data cannot separate them from long, low-cohesion files", so a score-guided cleanup can target the wrong files ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+- Token totals overstate the bill: the review study notes that "cached input tokens are billed at a fraction of uncached ones" and that "the token total is not a complete account of what agentic review costs an organization" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
+- Narrow coverage: the three review models are not flagship tiers, and the authors call whether larger models show the same association "open" ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). The results "generalize to others only by argument" beyond the study's one pipeline.
 
 The defensible position is narrow. Maintainability investment you would make anyway — linters, complexity budgets, refactoring time — also benefits agent runs as a measurable side effect. Cleaning up for the agent specifically requires the navigation cost to be a top-three line item in your agent spend.
 
@@ -91868,6 +91952,7 @@ Path A is the posture to take. Capture the cost lever from work the team would d
 - The mechanism is navigation efficiency — fewer hops to locate the right file, fewer tokens spent disambiguating
 - The cost lever is real but small; cleanup justified specifically for agent ergonomics rarely pays back within a year
 - Pair the cleanliness side-effect with quality gates that prevent agents from re-introducing complexity, otherwise the savings decay ([He et al., MSR 2026](https://arxiv.org/abs/2511.04427))
+- In agentic review the CodeHealth association is absorbed by scored-file size, which this sample cannot separate from the score, so watch long files as well as the score; both studies come from metric vendors ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1))
 - Cognitive complexity and rule violations are the operationalized metrics — measurable in CI, not subjective
 
 ## Related
@@ -91878,6 +91963,7 @@ Path A is the posture to take. Capture the cost lever from work the team would d
 - [Agent-Generated Code Maintenance Asymmetry](../code-review/agent-code-maintenance-asymmetry.md) — the maintenance footprint that determines whether your cleanup decays or holds
 - [Comprehension Debt from AI-Generated Code Velocity](../patterns/anti-patterns/comprehension-debt.md) — the human-side debt that maintainability metrics do not capture
 - [Measuring Refactoring Payback in Tokens](refactoring-payback-in-tokens.md) — the replay protocol that measures the cleanup return on investment this study left open
+- [Bounded Tool Surface for Review Agents](../code-review/bounded-tool-surface-review-agents.md) — the output caps through which file length reaches review cost
 - [Code Health as a Signal for Agent-Generated Test Quality](../verification/code-health-agent-generated-tests.md) — the uncontrolled study whose much larger token gap this page's minimal-pair design bounds
 
 ---
@@ -92513,6 +92599,8 @@ Edwards-Alexander is explicit that read volume, not code volume, is the mechanis
 Arbitrary splitting does not produce those seams. The same writeup warns that "randomly cutting the file into smaller files is unlikely to help as much: even if each file were smaller, the agent would be forced to read through many files looking for the relevant code". The splits that paid off arrived after extract-function and extract-class passes had surfaced a repeating core to split along.
 
 Controlled work finds the same navigation mechanism at a smaller effect size. Across 660 Claude Code trials on six matched repository pairs, Trivedi and Schmitt found cleaner code cut file revisitations 34% and token use 7 to 8%, with pass rate unchanged ([arxiv:2605.20049v1](https://arxiv.org/abs/2605.20049v1)).
+
+An observational study of agentic review found that adjusting for scored-file size absorbed the CodeHealth association with token cost, which supports watching the line count of the files under review as well as a score ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)).
 
 ## When this backfires
 
@@ -100785,6 +100873,7 @@ Source: https://agentpatterns.ai/verification/
 - [False-Pass Liability Decides the Next Harness Component](false-pass-liability-harness-triage.md) — Price an erroneous accept before choosing between a planner and a terminal completion check; the ordering flips with that liability, and the check withholds correct work rather than improving it
 - [Hash-Pinned Command Approval for Non-Interactive Plugin Installs](hash-pinned-command-approval.md) — Claude Code 2.1.271 accepts the sha256 of a command a previous --json run displayed, binding the approval to the command that was read; the acceptance covers command, plugin and catalog, not what the command produces
 - [Behavioral Preflight: Replay Tool-Call Rules Before Enforcing](behavioral-preflight-rule-replay.md) — Replay each tool-call rule over recorded passing runs and flag any that would have refused most of its calls; one flagged rule on a development domain, and a high firing rate alone is not a defect
+- [Lock the Transitive CI Dependency Graph](lock-transitive-ci-dependency-graph.md) — A workflow lockfile records the commit each action and its transitive dependencies resolved to, so a moved tag cannot change what runs; coverage stops at reusable-workflow calls and at anything an action fetches at run time
 
 ## Tooling
 
@@ -103906,6 +103995,8 @@ The result is narrow. Four conditions bound it.
 ## What the token numbers support
 
 Lower-health code costs more to read. In the study's lowest code-health band, median input tokens ran 45.1% higher for Java and 43.8% higher for C++ than in the near-perfect band ([arXiv:2608.18645v1](https://arxiv.org/abs/2608.18645v1)). Those medians compare different files rather than the same functionality written twice, so file length and content sit inside the gap. The controlled version uses matched repository pairs sharing architecture, dependencies and external behavior, and puts the saving at 7 to 8% with no change in pass rate ([arXiv:2605.20049v1](https://arxiv.org/abs/2605.20049v1)). Size a refactoring business case off the smaller figure. [Code Cleanliness as an Agent Cost Lever](../token-engineering/code-cleanliness-agent-cost-lever.md) carries that argument in full, and [Language Choice as an Agent Token-Cost Lever](../token-engineering/language-choice-token-cost.md) covers the between-language version.
+
+A separate study of agentic code review, on 465 agent-authored pull requests, found the token association did not survive adjusting for the size of the scored files ([arXiv:2610.21914v1](https://arxiv.org/abs/2610.21914v1)). That study adjusts for total lines of scored files, not source lines, so the two controls differ.
 
 ## Why it works
 
@@ -109221,6 +109312,7 @@ Between the two, a person reads the command string out of `shownCommand`.
 - [Deferred Permission Pattern](../patterns/agent-design/deferred-permission-pattern.md) — collecting a human approval outside a headless session
 - [Enterprise-Managed Plugin Governance for Agent CLIs](../security/enterprise-managed-plugin-governance.md) — the managed-settings layer that can remove plugin capabilities outright
 - [Agent-Driven Deployment: What to Delegate and What to Gate](../workflows/agent-driven-deployment.md) — where an approval boundary belongs in a pipeline an agent drives
+- [Lock the Transitive CI Dependency Graph](lock-transitive-ci-dependency-graph.md) — the same read-then-pin move applied to a CI dependency graph, transitive entries included
 
 ---
 
@@ -110522,6 +110614,86 @@ The same paper's deployment on ScienceAgentBench produced 12 author-confirmed is
 - [Anti-Reward Hacking](anti-reward-hacking.md) — agents exploiting weak graders, the failure mode rigid scripts try to prevent
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — using benchmarks for tool evaluation once you trust them
 - [Answer-Reachable Eval Environments](../patterns/anti-patterns/answer-reachable-eval-environments.md) — the defect an artifact audit misses, where the leak is in the container the agent runs in
+
+---
+
+### Lock the Transitive CI Dependency Graph
+Source: https://agentpatterns.ai/verification/lock-transitive-ci-dependency-graph/
+
+# Lock the Transitive CI Dependency Graph
+
+> A `uses:` reference resolves at run time, so locking the CI dependency graph is what ties a reviewed workflow to the commits you read.
+
+Transitive CI dependency locking records the commit every action and reusable workflow in your CI graph resolved to, along with the dependencies those actions pull in, and keeps runs on those commits when a tag moves. Coverage has a documented gap, below. GitHub Actions workflow lockfiles reached public preview on 14 October 2026 for Enterprise Cloud, Enterprise Cloud with data residency, Team, and Free plans ([GitHub Changelog](https://github.blog/changelog/2026-10-14-github-actions-workflow-lockfiles-in-public-preview)).
+
+Read it as a reproducibility control. GitHub says so directly: "Locking does not determine whether the dependency itself is safe, so review dependencies before locking them" (same source). The lockfile makes the artifact you reviewed the artifact that executes.
+
+## When locking earns its place
+
+Three conditions. The third is the one teams skip.
+
+Your workflows depend on actions you do not own. A `uses: octo-org/deploy-action@v3` line is a constraint, because "GitHub Actions resolves that reference to whatever commit the tag or branch points to at run time" ([GitHub Docs](https://docs.github.com/actions/concepts/security/workflow-dependency-lockfiles)). Nothing in your repository changes when that commit does.
+
+Your dependencies have dependencies you cannot see. A composite action resolves its own references, and your workflow file never names them.
+
+Someone regenerates the entries. Dependabot does this without extra configuration: when it opens a version update for an onboarded action, "it also regenerates the matching lockfile entry in the same pull request" ([GitHub Changelog](https://github.blog/changelog/2026-10-14-github-actions-workflow-lockfiles-in-public-preview)). Pair it with the staleness check, which verifies the lockfile "is up to date without modifying files, including in a CI check" (same source). Without both, you have frozen a version rather than pinned one.
+
+## What the lockfile records
+
+The file lives at `.github/workflows/actions.lock`, is generated by the `gh actions-lock` CLI extension, and "should never be edited by hand" ([GitHub Docs](https://docs.github.com/actions/concepts/security/workflow-dependency-lockfiles)). Each dependency entry carries the `ref`, the `commit` it resolved to, and an `owner_id` and `repo_id`. A bare SHA has no room for those. Actions "uses these to confirm at run time that the repository behind the name is still the one you locked" (same source).
+
+Coverage has a stated boundary. The lockfile extends to transitive dependencies, "except for dependencies of reusable workflow calls. A reusable workflow is covered by the lockfile of the repository where it is defined" (same source). One more constraint: the locked commit "must exist within a branch of the source repository" (same source).
+
+## Why it works
+
+Resolution moves from run time to review time. Andrew Nesbitt, credited by name in GitHub's announcement, named the causal step before the feature shipped: "Every run re-resolves from your workflow file, and the results can change without any modification to your code" ([nesbitt.io](https://nesbitt.io/2025/12/06/github-actions-package-manager)). Recording the resolved commit removes the second resolution, so a moved tag cannot change what executes.
+
+Pinning a reference you can read leaves the ones you cannot: "When you pin an action to a SHA, you only lock the outer file", and the pre-lockfile mitigations "do nothing for transitive dependencies, which is the primary attack vector" (same source).
+
+## When this backfires
+
+- Your CI is centralized in reusable workflows. Transitive coverage stops at those calls, so the dependencies a platform team wants pinned sit in someone else's lockfile.
+- The action fetches code at run time rather than drifting its reference. Palo Alto Networks measured this class in 2023 across the top 1,000 starred Marketplace actions: "We learned that 32% of the actions in the top starred list were, in fact, unpinnable." Of roughly 6,000 workflows in 2,000 projects, "we discovered that 67% of the projects pinned unpinnable actions" ([Yaron Avital, Palo Alto Networks](https://www.paloaltonetworks.com/blog/prisma-cloud/unpinnable-actions-github-security/)). JavaScript actions "can still fetch outside resources at runtime, so you should consider them unpinnable actions" (same source). A lock entry there is accurate and worth less than it looks.
+- Nobody wires the regeneration loop. The USENIX Security 2022 survey of 447,238 workflows across 213,854 repositories found "18% of repositories in our dataset execute at least one Action with missing security updates" ([Koishybayev et al.](https://www.usenix.org/conference/usenixsecurity22/presentation/koishybayev)). That survey predates lockfiles, so it measures what no-update looks like rather than locking's cost, and locking is what makes that state durable.
+- Upstream deletes the branch holding your locked commit, or force-pushes past it. An abandoned action is where this lands first.
+- A plan or policy rules it out. The feature is public preview and subject to change, and the Require lockfile policy needs admin reach.
+
+## Example
+
+GitHub documents the two-section shape. `workflows` says which dependencies each onboarded workflow uses; `dependencies` says which commit each reference resolves to ([GitHub Docs](https://docs.github.com/actions/concepts/security/workflow-dependency-lockfiles)):
+
+```yaml
+# This file is machine-generated by `gh actions-lock`.
+# Do not edit by hand; run `gh actions-lock` to update.
+version: 'v0.0.2'
+workflows:
+    '.github/workflows/ci.yml':
+        - 'octo-org/deploy-action@v3.1.0'
+dependencies:
+    'octo-org/deploy-action@v3.1.0':
+        ref: 'v3.1.0'
+        commit: 'sha1-...'
+        owner_id: 44036562
+        repo_id: 197814629
+```
+
+The workflow file still reads `@v3.1.0`. The `commit` line is what runs, and the two id fields are what stop a repository that reclaimed the name from being accepted in its place.
+
+## Key Takeaways
+
+- Treat the lockfile as reproducibility, never as vetting. GitHub's own caveat is the one sentence to carry into a review conversation.
+- A diff-clean repository is not evidence that CI runs the same code it ran last week. The reference stayed; the commit behind it did not.
+- Onboard workflows one at a time: "You can onboard a repository's workflows to the lockfile one at a time or all at once", and afterwards "Every action dependency the workflow uses must be present in the lockfile" ([GitHub Docs](https://docs.github.com/actions/concepts/security/workflow-dependency-lockfiles)).
+- Land the staleness check and Dependabot in the same change as the lockfile, or you have shipped a freeze.
+- Check how much of your graph reaches run-time fetching before you claim coverage. A lock over an action that fetches at run time still leaves new code arriving.
+
+## Related
+
+- [Supply-Chain Security Debt in Agent Pull Requests](../security/supply-chain-security-debt-agent-prs.md) — why unpinned CI references cluster in agent-authored diffs, and where to aim review
+- [Hash-Pinned Command Approval](hash-pinned-command-approval.md) — the same move one layer down: approve the string you read, not what the catalog serves next
+- [Enforcing Who and What Can Trigger an Agent's CI Run](../security/workflow-execution-protections.md) — the other Actions control that sits outside the file an agent can rewrite
+- [Enforced Versus Advisory Controls](../security/enforced-versus-advisory-controls.md) — sorting a CI gate by where it is evaluated
+- [Routing Dependency Updates to Repair Agents by Budget](../workflows/dependency-update-repair-routing.md) — handling the update volume a lockfile's regeneration loop produces
 
 ---
 
@@ -137881,6 +138053,8 @@ The critical-severity slice tells a sharper story. Of 253 critical smells, 99.6%
 
 Supply-chain smells cluster because agents and humans reference GitHub Actions and Docker images by mutable tags such as `@v4` or `:latest` instead of immutable commit SHAs or digests. A mutable tag is a pointer the upstream owner can move: if that account is compromised, the tag silently resolves to malicious code on the next CI run. The tj-actions/changed-files compromise of March 2025 is the realized case — an attacker repointed more than 350 tags to a commit that dumped runner secrets into build logs, affecting over 23,000 repositories ([Unit 42](https://unit42.paloaltonetworks.com/github-actions-supply-chain-attack/)). Pinning to a full commit SHA removes the mutable pointer, which is why GitHub added policy-level SHA-pinning enforcement ([GitHub Changelog](https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/)). GitHub reports it now holds workflows it flags as potentially malicious for human approval before they run, a further platform-side, CI-layer control for the same agent-authored-workflow risk ([GitHub Changelog](https://github.blog/changelog/2026-07-28-github-actions-holds-potentially-malicious-workflows-for-approval)). An independent study of agentic PRs found agents concentrate their security-relevant work in configuration and CI surfaces, which is exactly where this debt accrues ([arXiv:2601.00477](https://arxiv.org/abs/2601.00477v1)).
 
+GitHub now ships a lockfile for the mutable-tag problem. `.github/workflows/actions.lock` pins actions, their transitive dependencies, and reusable workflow dependencies ([GitHub Changelog](https://github.blog/changelog/2026-10-14-github-actions-workflow-lockfiles-in-public-preview)). For an onboarded workflow, Actions requires every dependency in the lockfile and runs the recorded commit even when a tag or branch moves. A Require lockfile policy is in public preview for enterprise, organization, and repository administrators. Dependabot regenerates the matching lockfile entry in the same pull request as an action version update. GitHub states the limit: "Locking does not determine whether the dependency itself is safe, so review dependencies before locking them."
+
 ## When this backfires
 
 - Agent PRs dominated by docs and refactors that never touch CI, Dockerfiles, or manifests: a supply-chain-focused gate adds friction with almost nothing to catch.
@@ -137919,6 +138093,7 @@ The pinned form is what survived the March 2025 compromise: workflows referencin
 - [Reviewer's Playbook for Agent-Authored Pull Requests](../code-review/reviewers-playbook-agent-authored-prs.md) — the inspection order that puts CI and security boundaries early
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the operational pattern for running the gate at PR time
 - [Secrets Management for Agents](secrets-management-for-agents.md) — closing the hard-coded-credential leg with proper secret handling
+- [Lock the Transitive CI Dependency Graph](../verification/lock-transitive-ci-dependency-graph.md) — the lockfile answer to unpinned CI references, extended to the dependencies a review cannot see
 
 ## Sources
 
@@ -137927,6 +138102,7 @@ The pinned form is what survived the March 2025 compromise: workflows referencin
 - [Unit 42 (Palo Alto Networks)](https://unit42.paloaltonetworks.com/github-actions-supply-chain-attack/) — tj-actions/changed-files supply-chain compromise, March 2025
 - [GitHub Changelog, 15 Aug 2025](https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/) — policy-level SHA-pinning enforcement
 - [GitHub Changelog, 28 Jul 2026](https://github.blog/changelog/2026-07-28-github-actions-holds-potentially-malicious-workflows-for-approval) — GitHub Actions holds flagged workflows for human approval
+- [GitHub Changelog, 14 Oct 2026](https://github.blog/changelog/2026-10-14-github-actions-workflow-lockfiles-in-public-preview) — workflow lockfiles in public preview, pinning actions and their transitive dependencies
 
 ---
 
@@ -140273,6 +140449,8 @@ A static `sk-ant-...` API key is the highest-blast-radius credential on an agent
 
 Anthropic is not the only vendor on this pattern. Vercel runs the same short-lived-token model across more than 100 agent connectors and can scope a token to a single repository with read-only permissions. It prices that access at $3 per 1,000 token requests on its Pro plan ([The end of credential sprawl for agents](https://vercel.com/blog/the-end-of-credential-sprawl-for-agents)).
 
+GitHub is working the same problem from the permission side. Its 2026-10-13 changelog adds `repository_creation:write`, so automation that creates repositories no longer needs `repository_administration:write` and the deletion and transfer rights bundled with it. `installation_repositories:write` lets an App or fine-grained PAT add or remove a repository from an installation, where previously only the coarse `repo` scope worked. GitHub says the permission "allows organizations to build automation that controls which repositories are accessible to which GitHub Apps without relying on an administrator's PAT with broad permissions". The same release adds `offline_access` support for GitHub Apps, so developers who disabled token expiration can move back to short-lived rotating tokens in stages. A new Credentials tab for GitHub Apps also reserves space for the workload federation credentials GitHub lists as upcoming ([GitHub App improvements for least privilege and management](https://github.blog/changelog/2026-10-13-github-app-improvements-for-least-privilege-and-management)).
+
 ## The federation contract
 
 Three resources express the trust contract:
@@ -141990,6 +142168,8 @@ Work upward, and stop when loop lag falls:
 2. Swap the serializer. Planck moved to `orjson` and tuned the `aiohttp` connector limit up from its default of 100; both helped marginally, and latency still rose with agent count ([Towards Data Science](https://towardsdatascience.com/why-adding-more-ai-agents-made-our-system-slower/)).
 3. Offload the CPU segment with `run_in_executor()`. Pure-Python work stays behind the interpreter lock, so this rung pays only for C-accelerated or genuinely blocking calls.
 4. Distribute the loop. Planck's fix was a router fanning requests across worker processes, each with its own event loop and connection pool, which stopped latency growing with agent count ([Towards Data Science](https://towardsdatascience.com/why-adding-more-ai-agents-made-our-system-slower/)). On free-threaded Python the same shape works with one loop per thread ([asyncio and free-threaded Python](https://docs.python.org/3/library/asyncio-threading.html)).
+
+Query backends hit the same contention when reads and compute draw on one limit. Braintrust's Nitro query engine schedules object-store reads separately from CPU dispatch. Its reasoning: "If both reads and compute use the same concurrency limit, it's easy to oversubscribe CPU and memory" ([Nitro](https://www.braintrust.dev/blog/nitro)). A query waiting on storage occupies no compute worker. Braintrust "benchmarked Nitro across our customer base and found that full-text searches ran more than twice as fast on average"; that figure covers full-text search, averaged across customers, and is not a per-query guarantee. Braintrust names agent query load as the driver: an agent can run hundreds of queries at once against trace history, where a person might run a few searches.
 
 ## When this backfires
 
@@ -182373,7 +182553,7 @@ Gather raw material from agent sessions:
 - Persistent memory — corrections and constraints gathered across sessions. Claude Code subagents with the `memory` field enabled keep a directory that survives across conversations. [Source: [Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)]
 - User interventions — points where a human corrected, redirected, or overrode the agent mid-session
 
-The collection step needs no new tooling. Transcripts already exist. The gap is that no one reads them systematically.
+The collection step needs no new tooling. Transcripts already exist. The gap is that no one reads them systematically. Braintrust adds a cost argument for the same material: two different developers pay for one uncaptured correction. The post puts it as "That one wrong command has now consumed unnecessary tokens and engineering time twice". [Source: [Braintrust on coding agent insights](https://www.braintrust.dev/blog/coding-agent-insights)]
 
 ## Analyze: mining sessions for recurring patterns
 
@@ -182415,7 +182595,7 @@ Review criteria:
 - Does it conflict with existing skills or agents? New skills that overlap with entries already in the [skill library](../tool-engineering/skill-library-evolution.md) make tool selection ambiguous.
 - Does it generalize? A pattern seen in one project may not apply across projects. Scope the generated skill or agent to fit — project-level (`.claude/agents/`) or user-level (`~/.claude/agents/`). [Source: [Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)]
 
-After approval, run the new skill or agent against a held-out set of tasks to confirm it resolves the target pattern without introducing regressions.
+After approval, run the new skill or agent against a held-out set of tasks to confirm it resolves the target pattern without introducing regressions. Watch the measure you check it against. Braintrust names the confound in a weekly count: "A lower weekly total could mean your team did less work". [Source: [Braintrust on coding agent insights](https://www.braintrust.dev/blog/coding-agent-insights)]
 
 ## Building the analysis agent
 

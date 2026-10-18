@@ -9,7 +9,7 @@ aliases:
   - workload identity federation for AI agents
   - keyless authentication for agent runtimes
   - OIDC federation for Claude API
-last_reviewed: 2026-08-28
+last_reviewed: 2026-10-15
 maturity: established
 ---
 
@@ -22,6 +22,8 @@ Learn it hands-on: [Keys That Expire in Minutes](https://learn.agentpatterns.ai/
 A static `sk-ant-...` API key is the highest-blast-radius credential on an agent runtime — leakable from logs, hooks, and transcripts, with rotation cadences that never match incident timelines. Workload Identity Federation (WIF) removes the key: the workload presents a signed OIDC JWT from an identity provider it already runs inside, and Anthropic mints a short-lived access token bound to a service account. [[Source]](https://platform.claude.com/docs/en/manage-claude/workload-identity-federation)
 
 Anthropic is not the only vendor on this pattern. Vercel runs the same short-lived-token model across more than 100 agent connectors and can scope a token to a single repository with read-only permissions. It prices that access at $3 per 1,000 token requests on its Pro plan ([The end of credential sprawl for agents](https://vercel.com/blog/the-end-of-credential-sprawl-for-agents)).
+
+GitHub is working the same problem from the permission side. Its 2026-10-13 changelog adds `repository_creation:write`, so automation that creates repositories no longer needs `repository_administration:write` and the deletion and transfer rights bundled with it. `installation_repositories:write` lets an App or fine-grained PAT add or remove a repository from an installation, where previously only the coarse `repo` scope worked. GitHub says the permission "allows organizations to build automation that controls which repositories are accessible to which GitHub Apps without relying on an administrator's PAT with broad permissions". The same release adds `offline_access` support for GitHub Apps, so developers who disabled token expiration can move back to short-lived rotating tokens in stages. A new Credentials tab for GitHub Apps also reserves space for the workload federation credentials GitHub lists as upcoming ([GitHub App improvements for least privilege and management](https://github.blog/changelog/2026-10-13-github-app-improvements-for-least-privilege-and-management)).
 
 ## The federation contract
 
