@@ -100,6 +100,7 @@ You cannot reduce what you do not measure — instrument spend before cutting it
 - [Pricier-Per-Token Models That Cost Less Per Task](pricier-per-token-cheaper-per-task.md) — comparing two models under one harness: a 2x per-token premium inverted into a lower bill once the lead could delegate
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the instrument-attribute-fix-verify loop
 - [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — plot each configuration on the (cost, quality) frontier so quality-trading downgrades are visible
+- [Agent Spend Is Set by Velocity, Not by Agent Payoff](spend-payoff-decoupling.md) — a search over 432 scenarios puts the agent bill on velocity and price and the payoff on capability, so the bill cannot report the payoff
 - [GitHub's Copilot Cost Levers at Constant Task Quality](copilot-cost-levers-fixed-quality.md) — a primary operator account: four harness levers that cut per-task token cost by low single digits each (5.5% at most) with task quality held flat, and which ones a team can copy
 - [Probe-Run Calibration for Predicting Agent Token Spend](probe-run-cost-calibration.md) — one $0.11 run cuts median cost-prediction error on an unseen task from 161% to 36%
 - [What an Agent's Own Token Cost Estimate Is Good For](agent-cost-self-prediction.md) — self-predicted spend tops out at 0.39 correlation and runs low for every model tested, so it ranks tasks rather than pricing them

@@ -120,6 +120,7 @@ The next `npm install <pkg>` an agent runs writes `1.12.0`, not `^1.12.0`. CI in
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the broader frame; a permissive range plus untrusted-content tool plus egress is one shape of the trifecta
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the PR-time gate where manifest-diff inspection and CVE audit land
 - [Supply-Chain Security Debt in Agent Pull Requests](supply-chain-security-debt-agent-prs.md) — the empirical picture: supply-chain integrity dominates agent-PR security smells, with unpinned CI/Docker references alongside floating manifest ranges
+- [Mitigation Feasibility Triage for Installed Agent Skills](skill-mitigation-feasibility-triage.md) — the same pin applied to a third-party Skill's bundled script, and what it does not close there
 
 ## Sources
 

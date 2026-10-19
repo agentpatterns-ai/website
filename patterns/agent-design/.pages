@@ -217,6 +217,7 @@ nav:
       - routing-break-even.md
       - context-step-model-split.md
       - task-distribution-router-fit.md
+      - per-stage-model-assignment.md
       - per-surface-routing-visibility.md
       - rubric-refine-pre-execution-tool-use.md
       - scout-then-route.md

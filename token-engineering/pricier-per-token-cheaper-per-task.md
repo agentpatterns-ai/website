@@ -80,3 +80,4 @@ That is the shape Cognition ran, and it is what makes the result interpretable: 
 - [Utility-Model Split: Background Tasks on a Cheaper Model](../patterns/agent-design/utility-model-split.md) — the sidekick architecture this result depends on
 - [Model-Set Parity: Reading Harness Efficiency Claims](../patterns/agent-design/model-set-parity-harness-claims.md) — how to read the vendor's later cross-harness figures, whose efficient arm adds a second model
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — matching model tier to task complexity once the per-task numbers exist
+- [Agent Spend Is Set by Velocity, Not by Agent Payoff](spend-payoff-decoupling.md) — the same capability-over-price finding at team-budget altitude, across 432 simulated scenarios rather than one harness

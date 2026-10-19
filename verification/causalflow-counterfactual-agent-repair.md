@@ -98,3 +98,4 @@ Combine with stage decomposition. [Trajectory decomposition](trajectory-decompos
 - [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md) — How each validated repair becomes a regression eval case
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Cost-orders the repair-validation checks CausalFlow runs per candidate edit
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Cheaper alternative when CRS conditions don't hold
+- [Plan-Stage Checkpoints in Agent Code Repair](plan-stage-checkpoint-repair.md) — The forward direction: a misconception planted at a chosen stage, measured into the code it produces

@@ -63,7 +63,7 @@ Implement against a spec file on disk, not a chat message. [Spec-driven developm
 
 ### Level 3: Verification gates
 
-Put a human checkpoint between interpretation and building — the [plan-first loop](../../workflows/plan-first-loop.md).
+Put a human checkpoint between interpretation and building — the [plan-first loop](../../workflows/plan-first-loop.md). On repair tasks, the implementation plan is the more consequential of the two stages to inspect; see [plan-stage checkpoints in agent code repair](../../verification/plan-stage-checkpoint-repair.md).
 
 ### Level 4: Fresh-context review
 

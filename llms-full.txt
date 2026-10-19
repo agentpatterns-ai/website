@@ -738,6 +738,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Pattern Selection Map: Trade-off Matrix for This Site's Patterns](patterns/selection-map.md)
 - [Per-Call Budget Hints on Tool Invocations](patterns/agent-design/per-call-budget-hints-tool-calls.md)
 - [Per-Model Harness Tuning: Treating the Backing Model as a Harness Variable](patterns/agent-design/per-model-harness-tuning.md)
+- [Per-Stage Model Assignment in a Generate-Repair-Refine Pipeline](patterns/agent-design/per-stage-model-assignment.md)
 - [Per-Surface Routing Visibility in Copilot (HydraFusion)](patterns/agent-design/per-surface-routing-visibility.md)
 - [Per-Task Agent Routing Across Coding Harnesses](patterns/agent-design/per-task-agent-routing.md)
 - [Per-Tool Extended Reasoning Opt-In: Tool-Call-Scoped Budgets](patterns/agent-design/per-tool-extended-reasoning-opt-in.md)
@@ -1035,6 +1036,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Token-Efficient Code Generation: Structural Beats Prompting](token-engineering/token-efficient-code-generation.md)
 - [Tokenizer Swap Tax: Budgeting for Model Migrations That Change Token Counts](token-engineering/tokenizer-swap-tax.md)
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-engineering/token-cost-profiling-always-on-workflows.md)
+- [Agent Spend Is Set by Velocity, Not by Agent Payoff](token-engineering/spend-payoff-decoupling.md)
 - [Code Cleanliness as an Agent Cost Lever](token-engineering/code-cleanliness-agent-cost-lever.md)
 - [Cost-Quality Pareto Measurement for Agent Configurations](token-engineering/cost-quality-pareto-measurement.md)
 - [GitHub's Copilot Cost Levers at Constant Task Quality](token-engineering/copilot-cost-levers-fixed-quality.md)
@@ -1142,6 +1144,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Lock-State Safeguards for Desktop-Controlling Agents](security/locked-desktop-agent-safeguards.md)
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](security/mcp-runtime-control-plane.md)
 - [Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls](security/mid-trajectory-guardrail-selection.md)
+- [Mitigation Feasibility Triage for Installed Agent Skills](security/skill-mitigation-feasibility-triage.md)
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](security/monotonic-capability-attenuation.md)
 - [Multi-Tenant Isolation Knobs for Shared-Container Agent SDK Hosting](security/multi-tenant-isolation-knobs-agent-sdk.md)
 - [Multitenant RAG: Closing the Relevance-Authorization Gap](security/multitenant-rag-authorization-gap.md)
@@ -1380,6 +1383,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Per-Layer Suppression Accounting in Acceptance Gates](verification/per-layer-suppression-accounting.md)
 - [Per-Reviewer Context Views for Code Review Agents](code-review/per-reviewer-context-views.md)
 - [Phantom Symbol Detection for LLM API Migration](verification/phantom-symbol-detection.md)
+- [Plan-Stage Checkpoints in Agent Code Repair](verification/plan-stage-checkpoint-repair.md)
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](verification/planted-bug-observability-calibration.md)
 - [Post-Failure Evidence Contracts for Tool-Using Agents](verification/post-failure-evidence-contract.md)
 - [Post-Merge Fix Signals for Agent Merges](verification/post-merge-fix-signals-agent-merges.md)
@@ -25913,6 +25917,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Per-Surface Routing Visibility in Copilot (HydraFusion)](per-surface-routing-visibility.md) — HydraFusion runs in Copilot CLI, Visual Studio Code, and the Copilot app; the docs say you can follow each step while it works, and only the CLI keeps a record you can export and grade
 - [Cache-Safe Routing Boundaries: Where a Router May Act](cache-safe-routing-boundaries.md) — A model switch only avoids paying for the conversation twice at a session's first prompt, in a fresh side lane, or at a subagent launch; anywhere else the cheaper stretch must last tens of requests to repay two cold cache writes
 - [Task-Distribution Router Fit: Where the Decision Belongs](task-distribution-router-fit.md) — A router's accuracy tracks how well its tier criteria match your real task mix, so measure the mix before picking tiers; LangChain's 64% median cost cut came from a frontier-only control, which tests routing rather than placement
+- [Per-Stage Model Assignment in a Generate-Repair-Refine Pipeline](per-stage-model-assignment.md) — Profile each candidate model separately at generation, repair, and refinement, because the best generator is often not the best repairer; the correctness margin narrows to six ties once the pool is current, and survives on hard tasks, low-resource languages, and performance refinement
 - [RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use](rubric-refine-pre-execution-tool-use.md) — Generate a task- and registry-specific rubric, score candidate tool-use code against explicit contract checks, and repair failures before any execution — for multi-step tool sequences where contract violations run silently to completion
 - [Scout-Then-Route: Verify the Handoff Before Routing](scout-then-route.md) — Send a cheap scout into the repository, sandbox-verify its reproduction claims and strip what fails, then pick the fixer on price rather than skill
 - [Selective Checkpoint Restore Across Code and Conversation State](selective-checkpoint-restore.md) — Restore the agent's mental model and re-edit, restore the edits and re-plan, or reset both — when code and conversation are stored separately, the choice is three actions, not one
@@ -43936,6 +43941,7 @@ Nothing about Kimi's capability separates the two runs, which is why a model-onl
 - [Task Shape Decides What a Heavier Agent Harness Buys](task-shape-harness-payoff.md) — the heavier-against-lighter axis, held against model strength.
 - [Model-Set Parity: Reading Harness Efficiency Claims](model-set-parity-harness-claims.md) — the matching rule for reading someone else's published cross-harness figure.
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — how to attribute a measured advantage to a single harness component.
+- [Per-Stage Model Assignment](per-stage-model-assignment.md) — rankings also reorder between pipeline stages at a fixed harness, so the generator and the repairer are separate measurements.
 
 ---
 
@@ -45687,6 +45693,77 @@ On the first response — 1,200 input tokens split 300 ordinary / 400 cached / 5
 
 ---
 
+### Per-Stage Model Assignment in a Generate-Repair-Refine Pipeline
+Source: https://agentpatterns.ai/patterns/agent-design/per-stage-model-assignment/
+
+# Per-Stage Model Assignment in a Generate-Repair-Refine Pipeline
+
+> Your best generator may be your worst repairer, so profile each pipeline stage. Expect the correctness gain to narrow as models strengthen.
+
+Measure each candidate model once per pipeline stage rather than once overall. Generation accuracy and repair accuracy are separate numbers, and they reorder. On Python, the model with the highest generation pass@1 placed last at repair: "In debugging, Claude achieves the highest fix@1 for both languages (Python: 97.56%; Rust: 80.49%), while GPT-4o, the top Python generator, ranks last among debuggers" ([Chen et al., arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)). A single leaderboard rank gives you one of those two placements and hides the other.
+
+## When this pays
+
+The condition is how much headroom your strongest single model has left. PerfOrch, the system behind this evidence, was re-run with all five candidate models replaced by current-generation successors, and most of the correctness advantage went away: "On eight of the ten multilingual columns, its margin is at most 0.61 pp, and six are ties." The authors name the reason — "The strongest baselines are near the correctness ceiling on the other languages, limiting the possible absolute gains" ([arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)).
+
+Three conditions survived that upgrade.
+
+- Hard task distributions. Where no model was near saturation the margins held: 10.97 percentage points on BigCodeBench and 8.70 on APPS, both over MapCoder as the strongest baseline ([arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)).
+- Low-resource languages. Rust kept a 2.44 pp lead on HumanEval-X and 7.14 pp on EffiBench-X, while six of the ten multilingual columns tied.
+- Execution-performance work rather than correctness. This metric did not flatten: "Unlike correctness, refinement does not saturate with the stronger pool." Execution-time optimization coverage ran 31.85% to 89.70% against 23.60% to 61.59% for the best single-model configuration per column ([arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)).
+
+Outside those three, one current frontier model running the whole pipeline is the baseline to beat, and on saturated work it is not beaten by enough to notice.
+
+## Build the profile first
+
+The profile is the artifact; the pipeline just reads it. Build the table first: pass rate per model, per stage, per language. The reversal is not a Python curiosity. It recurred at five models across five languages and ten algorithmic categories, where "a model's ranking can change substantially between stages": "Grok 3 leads Java generation in most categories" and "ranks fourth or fifth in Java fixing for the same categories" ([arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)).
+
+Two design choices transfer. Candidates are tried in rank order and the search stops at the first one that clears the stage, which cost 7% to 40% of querying every model at every stage. Advancement is decided by execution, not by a model's opinion: "a debugging candidate must pass the tests, and a refinement candidate must preserve correctness and exceed the improvement threshold for the target performance metric" ([arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)). Five candidates was the knee, since "adding more models beyond five incurs extra cost with minimal return on correctness".
+
+## Why it works
+
+Writing code and critiquing code are separable abilities, and the repair stage depends on the second one. Olausson et al. tested this by setting a weaker model as the generator and a separate stronger model as the feedback source. The result: "on APPS, both Code Llama and GPT-3.5 now beat out both their baselines (dark green, gray) and their respective self-repair modes (purple, red)", read as evidence that "self-repair is bottlenecked by the model's ability to provide feedback on its own code" ([Olausson et al., arXiv:2306.09896v5](https://arxiv.org/abs/2306.09896v5)). Swapping the model at the repair stage replaces the critic instead of re-asking the author.
+
+The difference comes partly from training exposure. PerfOrch's authors cite Baltaji et al. identifying Rust as a low-resource language whose limited public code constrains model performance, "consistent with the lower generation and debugging rates we observe for Rust than for Python". They also cite Ding et al.'s SemCoder, trained to reason about execution behavior, as evidence that the training objective shapes repair ability in particular ([arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)).
+
+The two findings agree on the split and disagree about its shape. Olausson's is a ladder, where a stronger critic helps a weaker author. PerfOrch's Python profile is not monotonic, since GPT-4o held the top generation score and the bottom repair score at once. Treat "stronger model for the hard stage" as the weaker version of the pattern and the measured table as the real one.
+
+## When this backfires
+
+- You cannot run tests at every stage. The pattern needs an oracle at each hop: "PerfOrch requires test cases to validate generated code at each pipeline stage" ([arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)). Without one, nothing accepts or rejects a candidate and the rank order becomes a guess.
+- The work is repository-scale rather than function-level. The category vocabulary that drives routing did not transfer. On a SWE-Bench Pro pilot, "the ten algorithmic categories leave 60.0–66.7% without an applicable label", and the authors place inference-time labeling and category-aware routing there in future work ([arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)).
+- Low volume against profile upkeep. The paper's maintenance plan is annual full re-profiling with cheaper updates between runs, and those updates read optimistic: incremental estimates "exceed the fully measured pass@1 values by 1.70–4.51 pp because they carry forward predecessor successes without testing for regressions" ([arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)). A stale table routes confidently to the wrong model.
+- A task mix with many unsolvable items. Retries on work that never lands dominate the bill. On BigCodeBench, "The 223 unsolved tasks exhaust the generate–debug retry budget. These tasks average 13,442 tokens each, compared with 1,112 for the 917 solved tasks" ([arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)).
+- The repair stage may not earn its budget at all. This is the strongest objection and PerfOrch never tests it, because its baselines are fixed-model pipelines and two other multi-agent systems, never matched-token resampling from its own best generator. Olausson et al. found that "when the cost of carrying out repair is taken into account, performance gains are often modest, vary a lot between subsets of the data, and are sometimes not present at all", and that the competition is worst where repair looks best: "stronger models have higher repair success rates on easier tasks—but at the same time, the chance of getting a correct program by resampling also increases the easier a task is" ([arXiv:2306.09896v5](https://arxiv.org/abs/2306.09896v5)). See [Blind Resampling Over Self-Repair](../../loop-engineering/blind-resampling-over-self-repair.md).
+- Every added model is an added boundary, and the general prior runs against adding them. Cemri et al. report that "Despite enthusiasm for Multi-Agent LLM Systems (MAS), their performance gains on popular benchmarks are often minimal" ([arXiv:2503.13657v3](https://arxiv.org/abs/2503.13657v3)).
+
+## Example
+
+HumanEval-X Python/130 asks for the terms of a Tribonacci-like sequence in which odd-indexed terms depend on the next even term. Claude generated code that mishandled index 0 and referenced a value not yet computed. Asked to repair its own output, Claude fixed the base case and broke the recurrence relation instead, and the paper's reading is that "The two Claude attempts stay within the same family of partial fixes." Routed to Grok, the same faulty code got a different strategy: pre-allocate the array, compute the even terms, then fill the odd terms by calculating the next even value on the fly. That passed ([arXiv:2510.01379v3](https://arxiv.org/abs/2510.01379v3)).
+
+The authors generalize it as a change of strategy rather than a change of skill: "In both debugging examples, the original model retains an incorrect solution strategy, while switching models produces a successful repair."
+
+Note what the example does not show. Claude held the highest Python repair score at language level, and the profile still routed this problem elsewhere, because routing reads the per-category row. Ranking first on the language average did not let it repair its own output here.
+
+## Key Takeaways
+
+- Build the per-stage table before you build the pipeline. Two numbers per model, generation and repair, on your own language and task mix.
+- Read your table's spread against what the one published trial bought. Six ties and a 0.61 pp ceiling was its result on saturated work with a current model pool.
+- Spend the effort on the execution-performance stage first. It was the one metric that did not flatten when every candidate model was replaced.
+- No test oracle at a stage means no routing at that stage. The rank order is only worth what the execution check behind it is worth.
+- Price the alternative before adding the second vendor: same tokens, more samples, one model.
+- Re-profile on a schedule and treat the cheap incremental update as an optimistic estimate, not a measurement.
+
+## Related
+
+- [Role Orchestration on a Single Model](role-orchestration-single-model.md) — the same generate-repair-refine role split run on one frozen model under a hardware constraint; it names heterogeneous per-role routing as the stronger baseline, and this page is the evidence for that claim.
+- [Model Rankings Reverse Across Agent Harnesses](model-rankings-reverse-across-harnesses.md) — rankings also reorder when the harness changes, so a stage profile measured under one harness may not hold under another.
+- [Blind Resampling Over Self-Repair](../../loop-engineering/blind-resampling-over-self-repair.md) — the matched-budget case for skipping the repair stage rather than reassigning it.
+- [Per-Task Agent Routing Across Coding Harnesses](per-task-agent-routing.md) — routes whole tasks on measured cost and failure profile, where this page routes stages inside one task.
+- [Routing Break-Even: When a Cheaper Model Actually Pays](routing-break-even.md) — the arithmetic for whether a routing decision covers its own overhead.
+
+---
+
 ### Per-Surface Routing Visibility in Copilot (HydraFusion)
 Source: https://agentpatterns.ai/patterns/agent-design/per-surface-routing-visibility/
 
@@ -46539,6 +46616,7 @@ Looking at [resolution rate](goal-monitoring-progress-tracking.md) alone, both s
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — observing whether the agent executed what was planned
 - [Splitting the Drift Judge from the Advisor (LivePlan)](judge-advisor-split.md) — acting on a detected compliance violation mid-run rather than measuring it after
 - [Objective Drift: When Agents Lose the Thread](../anti-patterns/objective-drift.md) — the failure mode plan reminders mitigate
+- [Plan-Stage Checkpoints in Agent Code Repair](../../verification/plan-stage-checkpoint-repair.md) — why the plan is the stage worth inspecting, and why compliance limits what that inspection proves
 
 ---
 
@@ -49275,7 +49353,7 @@ Source: https://agentpatterns.ai/patterns/agent-design/role-orchestration-single
 
 ## When this applies
 
-The technique targets a specific deployment constraint: an 8B-class model running on a single 24 GB GPU, where a larger model does not fit and additional training is not an option ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465v2)). On unconstrained hardware, running a larger model once — or routing to heterogeneous models per role — is typically a stronger baseline. The result is a competitiveness claim for constrained deployments, not a general recommendation to stack roles on one model.
+The technique targets a specific deployment constraint: an 8B-class model running on a single 24 GB GPU, where a larger model does not fit and additional training is not an option ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465v2)). On unconstrained hardware, running a larger model once, or routing to heterogeneous models per role, is typically a stronger baseline; [Per-Stage Model Assignment](per-stage-model-assignment.md) carries the measured evidence for the second option and the conditions that bound it. The result is a competitiveness claim for constrained deployments, not a general recommendation to stack roles on one model.
 
 ## The three roles
 
@@ -58613,7 +58691,7 @@ Implement against a spec file on disk, not a chat message. [Spec-driven developm
 
 ### Level 3: Verification gates
 
-Put a human checkpoint between interpretation and building — the [plan-first loop](../../workflows/plan-first-loop.md).
+Put a human checkpoint between interpretation and building — the [plan-first loop](../../workflows/plan-first-loop.md). On repair tasks, the implementation plan is the more consequential of the two stages to inspect; see [plan-stage checkpoints in agent code repair](../../verification/plan-stage-checkpoint-repair.md).
 
 ### Level 4: Fresh-context review
 
@@ -91843,6 +91921,7 @@ You cannot reduce what you do not measure — instrument spend before cutting it
 - [Pricier-Per-Token Models That Cost Less Per Task](pricier-per-token-cheaper-per-task.md) — comparing two models under one harness: a 2x per-token premium inverted into a lower bill once the lead could delegate
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the instrument-attribute-fix-verify loop
 - [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — plot each configuration on the (cost, quality) frontier so quality-trading downgrades are visible
+- [Agent Spend Is Set by Velocity, Not by Agent Payoff](spend-payoff-decoupling.md) — a search over 432 scenarios puts the agent bill on velocity and price and the payoff on capability, so the bill cannot report the payoff
 - [GitHub's Copilot Cost Levers at Constant Task Quality](copilot-cost-levers-fixed-quality.md) — a primary operator account: four harness levers that cut per-task token cost by low single digits each (5.5% at most) with task quality held flat, and which ones a team can copy
 - [Probe-Run Calibration for Predicting Agent Token Spend](probe-run-cost-calibration.md) — one $0.11 run cuts median cost-prediction error on an unseen task from 161% to 36%
 - [What an Agent's Own Token Cost Estimate Is Good For](agent-cost-self-prediction.md) — self-predicted spend tops out at 0.39 correlation and runs low for every model tested, so it ranks tasks rather than pricing them
@@ -91858,6 +91937,71 @@ You cannot reduce what you do not measure — instrument spend before cutting it
 - [Context Engineering](../context-engineering/index.md) — the canonical home for lean-context techniques
 - [Agent Design](../patterns/agent-design/index.md) — routing, effort, and offload patterns live here
 - [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the quality guardrail this section must respect
+
+---
+
+### Agent Spend Is Set by Velocity, Not by Agent Payoff
+Source: https://agentpatterns.ai/token-engineering/spend-payoff-decoupling/
+
+# Agent Spend Is Set by Velocity, Not by Agent Payoff
+
+> In simulation, project velocity and token price set agent spend; capability decides whether that spend bought anything.
+
+A team's agent spend and the payoff from its agents move on different variables. How much goes to agents follows the volume of work the project demands and the price of the tokens that absorb it. Whether that money beat a human-only team follows agent capability, which the bill never records. A simulation that searched for cost-optimal mixed human-agent teams states the split directly: "the project velocity determines how much is spent on agents, while the capability of the agents determines whether agents are worth using at all" ([Herbold, arXiv:2610.20394v1](https://arxiv.org/abs/2610.20394v1)).
+
+## The conditions this rests on
+
+This is simulation evidence, so carry the direction and leave the magnitudes behind. The model is a discrete-time stochastic process over sprints, searched with Monte Carlo and evolutionary optimization across "432 scenarios varying developer capability, project velocity, debt dynamics, agent capability and price, and bug costs" (Herbold). Agent capability comes from SWE-bench Verified and CyberBench scores on a third-party leaderboard, and the author names the direction of that error: "All of the estimates above are optimistic, both regarding the capabilities and the costs of agents." The paper then names the two parameters its results lean on hardest, and one of them is the term this page asks you to price: "Future work should validate our model against data from real projects that use agents, in particular regarding the capability of agents to detect bugs and the costs of escaped bugs, which our results depend on most strongly" (Herbold).
+
+The grid includes a deliberately pessimistic agent tier built to break the conclusion, so the direction survives bad assumptions. No individual figure survives the same way.
+
+## What a spend figure leaves out
+
+At realistic velocities the cost-optimal teams pay people more than they pay for tokens. "The developer costs exceed the agent costs for 65% of the optimal teams, with a median ratio of agent to developer costs of 0.32" (Herbold). Treat 0.32 as the middle of a distribution over 432 scenarios and not as a budget, because the same model puts agent spend above 100 times developer spend in some very high velocity cases.
+
+Payoff tracks capability instead, and it separates sharply. Agent teams beat the human-only baseline in 71.6% of scenarios overall, but that average hides the split: high-tier agents won 98.8% of the time, low-tier agents 55.6% and the pessimistic tier 44.4%, which the paper calls "closer to a coin flip" (Herbold).
+
+Cheap tokens did not produce cheap projects. The low agent tier buys the cheapest tokens in the grid and lands second-worst on total cost: "the overall costs increase by a factor of 7.6 at the low tier, even though the tokens are cheaper" (Herbold).
+
+The highest agent-to-developer spend ratio in the whole grid belongs to the pessimistic tier, the one that cleared the baseline less than half the time. That pairing is not evidence that weak agents cause high spend. The tier is expensive by construction, since it "combines the capability of the low tier with ten times the cost of the high tier" (Herbold), so it tests the conclusion under hostile price assumptions rather than showing causation.
+
+## Why it works
+
+Delivery is a constraint in this model rather than an outcome: the team has to ship the features the project demands. Agent spend is then whatever quantity of agent satisfies that demand at the going token price, which is why velocity and price set the size of the bill.
+
+Payoff turns on a cost line the token bill never touches. "Bug impact is also the largest driver of the total costs", worth 72.6 times between its cheapest and most expensive tier (Herbold). Capable agents inject fewer bugs and need less supervision, so their advantage arrives as defects that never reached production and review hours nobody spent. The optimal teams put most of the agent budget there rather than into writing code: "on average, 61% of the agent costs are spent on the Security Audit (33%), Code Review (24%), and Test Development Agents (4%)", against 28% for feature implementation (Herbold). A spend figure measures the input to that process and reports none of its output.
+
+## What to measure instead
+
+The paper names the replacement metric: "We thus believe that token consumption is a poor indicator for the productivity of AI-native development. A better measure is the total cost per delivered feature, including the cost of the bugs that reach production" (Herbold).
+
+Two terms have to be real before that ratio means anything: a count of delivered features, and a price for a bug that escapes to production. Build the second one first, because it carries most of the total. A cost-per-feature figure computed without it is the spend metric with extra arithmetic in front of it.
+
+The ratio also needs a comparison. Every payoff claim in the simulation rests on one: "An important baseline to understand the impact of agents on software development is to compare mixed teams against a baseline with only human developers" (Herbold). A cost per feature improving against its own history cannot say the agents were the cause.
+
+## When this backfires
+
+- You have no price for an escaped bug. The dominant term goes missing and the replacement metric inherits the flaw it was meant to fix. Pair it with [cost-quality Pareto measurement](cost-quality-pareto-measurement.md), which keeps the quality axis visible while the cost axis is incomplete.
+- Your work has no countable feature stream. The model assumes a feature pipeline with fixed effort per item. Platform, infrastructure, and research work has no such denominator, and inventing one makes the metric gameable in the way token counts already are.
+- You run at very high velocity, where the advice inverts. Agent spend should dominate there, so a team reading a large agent bill as a warning sign under-provisions where the simulation says agents are mandatory. Human-only teams could not reach the top demand tier at all: against a target of 1,000 issues per sprint, "the best human-only team of only senior developers manages to deliver 310 features per sprint" (Herbold).
+- Your reporting period is short. Escaped-bug cost lands release cycles after the spend that caused it, so a quarterly review reads the two terms against the wrong spend decision.
+- The throughput premise may not hold on your codebase. In a randomized trial on mature repositories, "allowing AI actually increases completion time by 19%" ([Becker et al., arXiv:2507.09089v2](https://arxiv.org/abs/2507.09089v2)). The simulation treats agent throughput as a dial to turn up. On the repositories that trial measured, the dial ran backwards, which removes the velocity term driving agent spend in the first place.
+
+## Key Takeaways
+
+- Stop asking the agent bill a question it cannot answer. Spend reports the demand you faced and the price you paid, never whether the purchase was worth making.
+- Argue about agent capability in budget reviews, not about the token line. Capability is what separated the tiers that reliably paid off from the coin-flip ones, and the paper's own advice to practitioners is "Focus on capability, not price per token" (Herbold).
+- Price your escaped bugs before you adopt cost per delivered feature. Bug impact moved total cost 72.6 times across this grid's tiers, so a denominator without it is missing the term that dominates.
+- Keep an agent-off comparison. A cost per feature that improves on its own history cannot attribute the improvement.
+- Do not carry any ratio off this page as a target, the 0.32 median included. The paper's conclusion is that no universal token budget per developer and no universal agentic team structure exist.
+
+## Related
+
+- [Pricier-Per-Token Models That Cost Less Per Task](pricier-per-token-cheaper-per-task.md) — the model-selection half of capability over price, inside one harness rather than across a team budget
+- [Cost-Quality Pareto Measurement for Agent Configurations](cost-quality-pareto-measurement.md) — the measurement frame to reach for when the cost axis alone is misleading
+- [The Four Terms That Decide What an Agent Task Costs](four-term-agent-cost-model.md) — the same bill one altitude down, decomposed for a single task
+- [The Token Price Index Fallacy in Agent Cost Planning](../fallacies/token-price-index-fallacy.md) — a published price-per-token figure answering a different question again
+- [Human-Equivalent Hours for Autonomous Coding Agent Productivity](../human/human-equivalent-hours-agent-productivity.md) — the other side of the denominator problem, on the output unit
 
 ---
 
@@ -92259,6 +92403,7 @@ Two findings the bill alone would have hidden: Opus-medium-effort is dominated �
 - [BYOK Model Token Visibility](../observability/byok-model-token-visibility.md) — in-IDE telemetry that supplies the per-turn input the cost axis needs on self-hosted routes
 - [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the guardrail this frame keeps honest: cuts that ignore the quality axis backfire
 - [Comparative Judging for Agent Configuration Ranking](../verification/comparative-judging-config-ranking.md) — a more reliable way to rank configs on the noisy quality axis this plot builds, when the quality signal is a judge score
+- [Agent Spend Is Set by Velocity, Not by Agent Payoff](spend-payoff-decoupling.md) — what belongs in the cost term at team scale, where escaped bugs rather than labor drive the total
 - [Cheaper-Per-Token Model Upgrades That Cost More Per Task](../patterns/anti-patterns/cheaper-per-token-costlier-per-task.md) — the anti-pattern this measurement frame catches: a model swap chosen on price and benchmark instead of effective per-task cost
 
 ---
@@ -92712,6 +92857,7 @@ That is the shape Cognition ran, and it is what makes the result interpretable: 
 - [Utility-Model Split: Background Tasks on a Cheaper Model](../patterns/agent-design/utility-model-split.md) — the sidekick architecture this result depends on
 - [Model-Set Parity: Reading Harness Efficiency Claims](../patterns/agent-design/model-set-parity-harness-claims.md) — how to read the vendor's later cross-harness figures, whose efficient arm adds a second model
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](cost-aware-agent-design.md) — matching model tier to task complexity once the per-task numbers exist
+- [Agent Spend Is Set by Velocity, Not by Agent Payoff](spend-payoff-decoupling.md) — the same capability-over-price finding at team-budget altitude, across 432 simulated scenarios rather than one harness
 
 ---
 
@@ -100820,6 +100966,7 @@ Source: https://agentpatterns.ai/verification/
 - [Defect Visibility as the Unsupervised Review Boundary](defect-visibility-review-autonomy.md) — Diff-visible defects carried an adjusted odds ratio of 2.621 for detection while repository size showed no significant effect once diff size was adjusted, so route unsupervised review on whether the bug is decidable from the diff
 - [When a Second Model Helps in LLM Review](cross-model-review-independence.md) — Same-model fresh-session review leads on code (F1 40.7% vs 37.2%) and cross-model review on documents (42.1% vs 24.5%); pairing a same-model review with a top-tier cross-model one matched 56.7% of 150 planted errors against 42.7% for two same-model reviews
 - [Auditing an Instruction File for Interference Between Its Own Rules](instruction-file-interference-audit.md) — Check rule pairs for mandates another section prohibits; 20 of 21 findings on one vendor prompt needed no model call, and the pairs worth fixing are the ones no action satisfies
+- [Plan-Stage Checkpoints in Agent Code Repair](plan-stage-checkpoint-repair.md) — A planted wrong mechanism failed 1.5 to 2.4 times as often from a repair agent's implementation plan as from its hypothesis across 1,844 requests, so spend one checkpoint on the plan and have it name state ownership, rollback, isolation, and the API contract
 
 ## Rubric Design
 
@@ -103575,6 +103722,7 @@ Combine with stage decomposition. [Trajectory decomposition](trajectory-decompos
 - [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md) — How each validated repair becomes a regression eval case
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Cost-orders the repair-validation checks CausalFlow runs per candidate edit
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Cheaper alternative when CRS conditions don't hold
+- [Plan-Stage Checkpoints in Agent Code Repair](plan-stage-checkpoint-repair.md) — The forward direction: a misconception planted at a chosen stage, measured into the code it produces
 
 ---
 
@@ -112969,6 +113117,72 @@ The check is only as strong as the knowledge base and the AST. It degrades or fa
 
 ---
 
+### Plan-Stage Checkpoints in Agent Code Repair
+Source: https://agentpatterns.ai/verification/plan-stage-checkpoint-repair/
+
+# Plan-Stage Checkpoints in Agent Code Repair
+
+> Repair attempts failed 1.5 to 2.4 times as often when the same wrong idea reached the implementation plan rather than only the hypothesis.
+
+If a repair pipeline affords one review checkpoint, put it between the plan and the code. A controlled study planted defined but incorrect software mechanisms at chosen points in a repair agent's chain and measured what each position cost. A wrong idea sat more cheaply in the explanation.
+
+## Four conditions before you act on this
+
+The evidence sets the placement. It does not yet establish that a checkpoint there works.
+
+1. The misconceptions were planted, not observed. Researchers wrote plausible but wrong accounts of the software and inserted them into the agent's hypothesis, its plan, or both ([arXiv:2610.21514v1](https://arxiv.org/abs/2610.21514v1)). Nothing here measures how often an agent reaches such a commitment unaided.
+2. Two synthetic Python cases carry the whole result: atomic batch claiming on a disk-backed SQLite queue, and a source-keyed filter on NetworkX 3.6 multi-source Dijkstra. Neither is a recovered historical bug, and the authors say so: "The repeated direction across the two tasks supports the experimental method; it does not establish a universal effect size."
+3. The remedy is untested. The study locates the expensive stage and stops: "Whether those checks improve a second repair remains untested." Build the checkpoint as a hypothesis you measure.
+4. Model configuration moves the effect a long way. The plan-versus-hypothesis difference ranged from −3.8% to +45.1% across model and reasoning-effort settings in the queue task, and from +6.6% to +39.1% in Dijkstra.
+
+## What the measurement found
+
+Across 1,844 model requests, moving the wrong mechanism from the hypothesis into the plan raised raw failure from 21.9% to 54.7% in the queue task and from 53.4% to 83.0% in the Dijkstra task. The two conditions did not hold the same mix of families, models, and dependency settings, so the authors also compared only the combinations present in both and weighted them equally. That gave +32.2% [27.0%, 38.8%] and +28.9% [21.1%, 38.6%]: "after balancing the experimental mix, plan-only attempts failed about 2.4 and 1.5 times as often" ([arXiv:2610.21514v1](https://arxiv.org/abs/2610.21514v1)).
+
+Adding a matching hypothesis on top of an already-poisoned plan bought little: 6.3% [0.5%, 12.2%] in the queue task and 2.2% [−4.9%, 8.5%] in Dijkstra, where the interval spans zero.
+
+## What the review has to name
+
+A generic "does this plan look reasonable?" pass has no target. The authors list four things a reviewer can check: whether "the plan assigns state to the right owner, preserves rollback and isolation, carries forward information needed later in execution, and retains the existing API contract" ([arXiv:2610.21514v1](https://arxiv.org/abs/2610.21514v1)).
+
+Which obligation breaks is partly predictable from the misconception. The association between planted mechanism and failed obligation scored 0.475 [0.453, 0.556] on Cramér's V in the queue task and 0.314 [0.307, 0.434] in Dijkstra, which the authors read as structured without being one-to-one: "one family could still produce several failure patterns and different families could converge on the same violated obligation". A plan that compensates for transaction state in memory therefore points a reviewer at cross-connection isolation first, not at rollback alone.
+
+## Why it works
+
+A hypothesis is a claim the model can still discard. A plan is not. "A plan commits the repair to operations, owners of state, update order, error handling, and compatibility choices. When those commitments are wrong, they can pass directly into code" ([arXiv:2610.21514v1](https://arxiv.org/abs/2610.21514v1)). Writing the plan removes the freedom that kept a wrong explanation harmless, which is why the same idea costs more there. The authors do not call planning the problem: a plan "is a high-leverage boundary where a repair system should check whether the proposed operations preserve the software contract."
+
+A second study weighs the plan heavily on a different comparison. Measuring plan compliance across 21,120 SWE-agent trajectories, it reports that "A subpar plan hurts performance even more than no plan at all" ([arXiv:2604.12147v3](https://arxiv.org/abs/2604.12147v3)). That contrast is a bad plan against no plan, not against a bad hypothesis, so it corroborates the plan's weight rather than replicating the stage result.
+
+## Example
+
+In the queue task, poison family A02 took this form. Its hypothesis read: "Restoring each claimed row to ready after failure is equivalent to atomic rollback." Its plan read: "Collect staged row IDs; after a SQLite error, write each status back to ready and then re-raise" ([arXiv:2610.21514v1](https://arxiv.org/abs/2610.21514v1)).
+
+Both sentences describe recovery that a reviewer might wave through. The plan is the one that fails, because writing statuses back one at a time is not one rollback unit, and another database connection can see the intermediate state. Of 25 code-bearing plan-only attempts under A02, 8% passed every selected diagnostic axis and 92% failed on isolation alone. The paper describes the shape directly: "behavior could look correct through one connection while another observed the wrong queue state."
+
+## When this backfires
+
+- The agent does not follow the plan you approved. The compliance study opens by saying "it is unknown to what extent agents actually follow instructed plans" ([arXiv:2604.12147v3](https://arxiv.org/abs/2604.12147v3)), and the primary study notes that generated code "may copy, transform, compensate for, or ignore the supplied mechanism". An approved plan is weak evidence about the patch, so keep the executable checks that already run after the code exists. See [plan compliance in agents](../patterns/agent-design/plan-compliance-in-agents.md).
+- Inserting the stage costs something. The same compliance study reports that "inserting additional task-relevant phases in the early stage can degrade performance, particularly when these phases do not align with the model's internal problem-solving strategy" ([arXiv:2604.12147v3](https://arxiv.org/abs/2604.12147v3)). A plan gate is such a phase.
+- Nobody has written down the obligations. Rollback, isolation, record identity, route validity, weight correctness, and API compatibility were all specified in advance here. Without that contract the checkpoint has no acceptance criteria and degrades into [trust without verify](../patterns/anti-patterns/trust-without-verify.md).
+- Your model configuration sits in the flat part of the range above. Measure the gate on the configuration you run rather than on the pooled average.
+
+## Key Takeaways
+
+- Place a single repair checkpoint after the plan and before the code. The same planted mechanism failed 1.5 to 2.4 times as often from the plan as from the hypothesis across 1,844 requests on two tasks.
+- Give the reviewer a list, not a judgment call: state ownership, rollback, isolation, information the search needs later, and the existing API contract.
+- Treat the gate as unvalidated. The study measures where a wrong commitment is expensive and leaves whether checking there helps as future work, so instrument it on your own model and tasks.
+- Keep the post-code checks. A plan the reviewer approved can still produce code that ignores it.
+
+## Related
+
+- [Assumption Propagation: Compounding Agent Misunderstandings](../patterns/anti-patterns/assumption-propagation.md) — the failure this checkpoint is positioned against, with a five-level mitigation ladder
+- [Plan Compliance in Agents](../patterns/agent-design/plan-compliance-in-agents.md) — why an approved plan does not guarantee the code that follows it
+- [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md) — how to run the critique once you have decided the plan is what gets critiqued
+- [CausalFlow: Counterfactual Repair for Failed Agent Trajectories](causalflow-counterfactual-agent-repair.md) — the backward direction, working from a failure to the step responsible for it
+- [The Plan-First Loop](../workflows/plan-first-loop.md) — the surrounding workflow that produces a plan worth checking
+
+---
+
 ### Planted-Bug Methodology: Deliberate Bugs as Observability Calibration
 Source: https://agentpatterns.ai/verification/planted-bug-observability-calibration/
 
@@ -120677,6 +120891,7 @@ Agents dynamically load tools from MCP servers, plugins, and registries at runti
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — Malicious skills injected into public registries exploit in-context learning to execute payloads hidden in documentation examples, bypassing alignment that blocks explicit instruction injection
 - [Single-Decision Approval of Vendor Skill Suites](single-decision-suite-approval.md) — Approving a vendor's skill bundle in one decision hands the review unit to that vendor; cascades split across the suite hit 89.4% attack success, and concatenating the skills into one review query recovers 5.2 points at best
 - [The Skill Closure Declaration Gap](skill-closure-declaration-gap.md) — Of 526 published Agent Skills that bundle files, 21 name every one of those paths in `SKILL.md`, 67 carry links resolving outside their own root, and none declares a dependency; approving the root approves an incomplete statement of what a run can reach
+- [Mitigation Feasibility Triage for Installed Agent Skills](skill-mitigation-feasibility-triage.md) — Of nineteen Agent Skills threat scenarios, 9 are closable without a specification change, 8 require one and 2 are open; five of the nine are reachable by the installing team, and the three exposures the paper calls most severe sit outside the closable set
 - [Ranking Skill Sources for Review by Copy Out-Degree](skill-source-audit-ranking.md) — In a dated copy network of 2,193,119 skill adoptions, reviewing the 100 top-ranked repositories prevents 14.9% of later high-risk adoptions against 0.5% for the 100 most starred; the ranking names distributors rather than authors, and about half of high-risk adoptions arrive as skills nobody could have ranked
 - [Setup Documentation as an Install-Time Attack Vector](setup-documentation-install-time-attacks.md) — Setup docs are unverified install authority; editing only a README, requirements file, or Makefile redirects an agent's install to a wrong name, untrusted registry, or vulnerable version, and the payload runs at install time — agents catch typosquats but miss source-based redirects almost everywhere
 - [Slopsquatting: Hallucinated Package Names as a Supply-Chain Vector](slopsquatting-hallucinated-package-names.md) — Coding LLMs hallucinate package names at 5.2%-21.7%; 43% of those names persist across re-runs, making them enumerable — attackers register the persistent names and the agent's install step pulls the malicious package
@@ -121634,6 +121849,7 @@ The next `npm install <pkg>` an agent runs writes `1.12.0`, not `^1.12.0`. CI in
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the broader frame; a permissive range plus untrusted-content tool plus egress is one shape of the trifecta
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the PR-time gate where manifest-diff inspection and CVE audit land
 - [Supply-Chain Security Debt in Agent Pull Requests](supply-chain-security-debt-agent-prs.md) — the empirical picture: supply-chain integrity dominates agent-PR security smells, with unpinned CI/Docker references alongside floating manifest ranges
+- [Mitigation Feasibility Triage for Installed Agent Skills](skill-mitigation-feasibility-triage.md) — the same pin applied to a third-party Skill's bundled script, and what it does not close there
 
 ## Sources
 
@@ -131166,6 +131382,78 @@ Key decisions: choose the guard model for structured-data competence, not safety
 - [Prompt Injection Threat Model](prompt-injection-threat-model.md) — foundational injection attack model that multi-step attacks build upon
 - [RL-Automated Red Teamers](rl-automated-red-teamers.md) — RL-based discovery of multi-step attack sequences that mid-trajectory guardrails must catch
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — deterministic pDFA enforcement that complements LLM guard models on the same trajectory surface
+
+---
+
+### Mitigation Feasibility Triage for Installed Agent Skills
+Source: https://agentpatterns.ai/security/skill-mitigation-feasibility-triage/
+
+# Mitigation Feasibility Triage for Installed Agent Skills
+
+> Triage an installed Agent Skill's threats by mitigation feasibility first. The exposures you can close and the exposures that matter most do not overlap.
+
+Mitigation feasibility triage sorts the threats an installed Agent Skill carries by whether you can close them without changing the Agent Skills specification. Li et al. annotate every scenario in their taxonomy with "the mitigation feasibility: I = incremental, deployable without specification change, S = requires a specification change, O = open problem" ([Li et al., 2026](https://arxiv.org/abs/2604.02837v2)). Of their nineteen scenarios, 9 are incremental, 8 need a specification change, and 2 are open.
+
+## When this applies
+
+Run the triage under three conditions, and skip it otherwise.
+
+- The Skills come from outside your repository, where "The major community marketplaces impose no mandatory review before publication" ([Li et al., 2026](https://arxiv.org/abs/2604.02837v2)).
+- Your runtime can bound what a Skill reaches. Claude Code ships filesystem and network isolation modes, and "Both are opt-in rather than required by the specification".
+- Somebody will write the residual down. The triage is honest only if the eight you cannot close become recorded risk.
+
+## What the triage returns
+
+| Feasibility class | Count | Who can act |
+|---|---|---|
+| Incremental, no specification change | 9 of 19 | Marketplace: typosquatting, ranking manipulation, repository hijacking, and hallucinated packages caught at publication time. You: malicious script, deferred dependency, indirect injection, memory file poisoning, config injection. |
+| Requires a specification change | 8 of 19 | Nobody you can call: the consent gap, post-installation modification, unenforced declarations, remote code fetch, three exfiltration scenarios, multi-agent propagation. |
+| Open problem | 2 of 19 | Unsolved: direct injection authored into `SKILL.md`, and replication of a Skill after takedown. |
+
+Read the first row carefully. Four of its nine entries need a marketplace to change its own pipeline. Of the ranking-manipulation fix the paper says "This reform requires marketplace-side changes only and imposes no burden on Skill authors", which is good news for authors and no help to you. Five scenarios out of nineteen are yours.
+
+## Why it works
+
+Feasibility records whether a mitigation exists that needs no change to the specification, which is a different question from how much damage the exposure does. The two orderings come apart at the top. The three exposures the paper calls most severe are "the absence of a data-instruction boundary, a single-approval persistent trust model, and a capability declaration mechanism to which the specification attaches no enforcement semantics", and none of the three has an incremental mitigation: "None of these is addressable through incremental mitigations alone" ([Li et al., 2026](https://arxiv.org/abs/2604.02837v2)). A cheapest-first sweep never reaches them.
+
+Do not use the paper's Origin column as a shortcut for feasibility. It sorts each scenario into "Sp = specification, Im = implementation latitude, Ec = ecosystem distribution", and those classes cut across feasibility both ways: indirect injection is specification-origin yet incrementally mitigable, while all three data-exfiltration scenarios are implementation-origin and still need a specification change.
+
+## What you can close yourself
+
+Pin and lockfile the dependencies a bundled script resolves. The paper calls this near-free twice, as "Dependency pinning and lockfiles would close this path at almost no cost to the author" and as "version pinning and dependency lockfiles impose minimal authorship overhead and are deployable within the existing specification". Resolution happens on every run rather than at install, so "review at installation establishes nothing about what will run later". For the mechanics, see [agent-emitted dependency version ranges](agent-emitted-dependency-ranges.md); for where the pin has to live when no frontmatter field records it, see [the skill closure declaration gap](skill-closure-declaration-gap.md).
+
+Then turn on the runtime's isolation modes, because "a Skill executing under filesystem and network isolation reaches far less than one executing at the user's privilege level". Add integrity monitoring of the instruction and configuration files a Skill can write, which "is deployable today without specification changes, imposes low runtime overhead". Treat anything a Skill fetches mid-task as untrusted before it reaches the context window.
+
+## When this backfires
+
+- The registry CLI overwrites the installed directory on update. A pin edited into a vendored copy is erased on the next sync while your checklist still records the control as done.
+- The helper's dependency closure is wide. He, Vasilescu and Kästner found that pinning direct dependencies "even increases the risk of exposure to malicious package updates in larger dependency graphs due to the specifics of npm's dependency resolution mechanism" ([He et al., 2025](https://arxiv.org/abs/2502.06662v1)).
+- Nobody owns a bump path. Across 1,000 Stack Overflow programming tasks, and counting only the cases where a model specified a version at all, "36.70%-55.70% of tasks contain at least one known CVE", and a pin in a helper nobody watches only sits still ([Wang et al., 2026](https://arxiv.org/abs/2605.06279v1)).
+- The Skill fetches its instructions rather than shipping them. Every control above leaves that path open, and the population is large: one scan "scanned 142,836 published Skills and found that 17,822 of them, accounting for 6.7 million installations, reference at least one external instruction source" ([Li et al., 2026](https://arxiv.org/abs/2604.02837v2)).
+- Somebody reads 9 of 19 as half the risk handled. Four of the nine are not yours, direct injection is one of the two open scenarios, and a scanner does not cover the gap: "A Skill constructed to be malicious passed every scanner applied to it while reaching more than 26,000 agents".
+
+## Key Takeaways
+
+- Five of the nineteen scenarios are reachable by the team doing the installing. Four more are incremental but belong to a marketplace.
+- Pinning a bundled script's dependencies closes one scenario of nineteen. Do it because it is nearly free, not because it moves the severe set.
+- The three worst exposures resist incremental work, so this triage outputs a recorded residual as much as a task list.
+- Review at install time does not bound what runs later. The control has to sit in the artifact or the runtime.
+- A Skill that fetches instructions at runtime defeats the whole incremental set. Check for that first.
+
+## Related
+
+- [The Skill Closure Declaration Gap](skill-closure-declaration-gap.md) — where a pin has to live, given that no `SKILL.md` field declares a dependency
+- [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — the pin-plus-lockfile mechanics this page defers to
+- [Enforced Versus Advisory Controls](enforced-versus-advisory-controls.md) — the orthogonal axis, where a control is evaluated rather than whether it can be deployed
+- [Slopsquatting: Hallucinated Package Names as a Supply-Chain Vector](slopsquatting-hallucinated-package-names.md) — one incremental-class scenario on its own terms
+- [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — what reaches the context when the delivery half of the taxonomy succeeds
+- [Choosing Between a Skill and an MCP Server](../tool-engineering/skill-or-mcp-server-delivery-selection.md) — the same paper's trust-model findings on a delivery decision
+
+## Sources
+
+- [Li, Wu, Ling, Cui, Luo — Towards Secure Agent Skills (arXiv:2604.02837v2)](https://arxiv.org/abs/2604.02837v2) — the taxonomy and its feasibility classes. The authors label it a vision paper, and its Evidence column records which scenarios rest on architectural inference rather than a measured incident.
+- [He, Vasilescu, Kästner — Pinning Is Futile (arXiv:2502.06662v1)](https://arxiv.org/abs/2502.06662v1) — counter-finding on the remedy, from simulated npm resolutions.
+- [Wang, Wu, Ling, Luo, Zhao — Correct Code, Vulnerable Dependencies (arXiv:2605.06279v1)](https://arxiv.org/abs/2605.06279v1) — the CVE cost of a pin with no bump path.
 
 ---
 

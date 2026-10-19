@@ -87,3 +87,4 @@ Looking at [resolution rate](goal-monitoring-progress-tracking.md) alone, both s
 - [Goal Monitoring and Progress Tracking](goal-monitoring-progress-tracking.md) — observing whether the agent executed what was planned
 - [Splitting the Drift Judge from the Advisor (LivePlan)](judge-advisor-split.md) — acting on a detected compliance violation mid-run rather than measuring it after
 - [Objective Drift: When Agents Lose the Thread](../anti-patterns/objective-drift.md) — the failure mode plan reminders mitigate
+- [Plan-Stage Checkpoints in Agent Code Repair](../../verification/plan-stage-checkpoint-repair.md) — why the plan is the stage worth inspecting, and why compliance limits what that inspection proves
