@@ -74,3 +74,4 @@ Nothing about Kimi's capability separates the two runs, which is why a model-onl
 - [Task Shape Decides What a Heavier Agent Harness Buys](task-shape-harness-payoff.md) — the heavier-against-lighter axis, held against model strength.
 - [Model-Set Parity: Reading Harness Efficiency Claims](model-set-parity-harness-claims.md) — the matching rule for reading someone else's published cross-harness figure.
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — how to attribute a measured advantage to a single harness component.
+- [Per-Stage Model Assignment](per-stage-model-assignment.md) — rankings also reorder between pipeline stages at a fixed harness, so the generator and the repairer are separate measurements.

@@ -109,4 +109,5 @@ Two findings the bill alone would have hidden: Opus-medium-effort is dominated �
 - [BYOK Model Token Visibility](../observability/byok-model-token-visibility.md) — in-IDE telemetry that supplies the per-turn input the cost axis needs on self-hosted routes
 - [Token Preservation Backfire](../patterns/anti-patterns/token-preservation-backfire.md) — the guardrail this frame keeps honest: cuts that ignore the quality axis backfire
 - [Comparative Judging for Agent Configuration Ranking](../verification/comparative-judging-config-ranking.md) — a more reliable way to rank configs on the noisy quality axis this plot builds, when the quality signal is a judge score
+- [Agent Spend Is Set by Velocity, Not by Agent Payoff](spend-payoff-decoupling.md) — what belongs in the cost term at team scale, where escaped bugs rather than labor drive the total
 - [Cheaper-Per-Token Model Upgrades That Cost More Per Task](../patterns/anti-patterns/cheaper-per-token-costlier-per-task.md) — the anti-pattern this measurement frame catches: a model swap chosen on price and benchmark instead of effective per-task cost

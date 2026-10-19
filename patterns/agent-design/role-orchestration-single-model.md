@@ -22,7 +22,7 @@ maturity: emerging
 
 ## When this applies
 
-The technique targets a specific deployment constraint: an 8B-class model running on a single 24 GB GPU, where a larger model does not fit and additional training is not an option ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465v2)). On unconstrained hardware, running a larger model once — or routing to heterogeneous models per role — is typically a stronger baseline. The result is a competitiveness claim for constrained deployments, not a general recommendation to stack roles on one model.
+The technique targets a specific deployment constraint: an 8B-class model running on a single 24 GB GPU, where a larger model does not fit and additional training is not an option ([McClendon et al., 2026](https://arxiv.org/abs/2604.11465v2)). On unconstrained hardware, running a larger model once, or routing to heterogeneous models per role, is typically a stronger baseline; [Per-Stage Model Assignment](per-stage-model-assignment.md) carries the measured evidence for the second option and the conditions that bound it. The result is a competitiveness claim for constrained deployments, not a general recommendation to stack roles on one model.
 
 ## The three roles
 

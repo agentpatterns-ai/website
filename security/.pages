@@ -180,6 +180,7 @@ nav:
       - skill-supply-chain-poisoning.md
       - single-decision-suite-approval.md
       - skill-closure-declaration-gap.md
+      - skill-mitigation-feasibility-triage.md
       - skill-source-audit-ranking.md
       - setup-documentation-install-time-attacks.md
       - slopsquatting-hallucinated-package-names.md

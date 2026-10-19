@@ -162,6 +162,7 @@ last_reviewed: 2026-05-27
 - [Defect Visibility as the Unsupervised Review Boundary](defect-visibility-review-autonomy.md) — Diff-visible defects carried an adjusted odds ratio of 2.621 for detection while repository size showed no significant effect once diff size was adjusted, so route unsupervised review on whether the bug is decidable from the diff
 - [When a Second Model Helps in LLM Review](cross-model-review-independence.md) — Same-model fresh-session review leads on code (F1 40.7% vs 37.2%) and cross-model review on documents (42.1% vs 24.5%); pairing a same-model review with a top-tier cross-model one matched 56.7% of 150 planted errors against 42.7% for two same-model reviews
 - [Auditing an Instruction File for Interference Between Its Own Rules](instruction-file-interference-audit.md) — Check rule pairs for mandates another section prohibits; 20 of 21 findings on one vendor prompt needed no model call, and the pairs worth fixing are the ones no action satisfies
+- [Plan-Stage Checkpoints in Agent Code Repair](plan-stage-checkpoint-repair.md) — A planted wrong mechanism failed 1.5 to 2.4 times as often from a repair agent's implementation plan as from its hypothesis across 1,844 requests, so spend one checkpoint on the plan and have it name state ownership, rollback, isolation, and the API contract
 
 ## Rubric Design
 

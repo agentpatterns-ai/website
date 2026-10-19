@@ -161,6 +161,7 @@ nav:
       - predictive-claim-gate.md
       - cross-model-review-independence.md
       - instruction-file-interference-audit.md
+      - plan-stage-checkpoint-repair.md
   - "Rubric Design":
       - anti-reward-hacking.md
       - symptom-reduction-as-root-cause.md
