@@ -10,7 +10,7 @@ aliases:
   - session relationship and workspace
   - dispatch-time delegation scoping
   - delegated work scoping
-last_reviewed: 2026-10-07
+last_reviewed: 2026-10-19
 maturity: emerging
 status: current
 ---
@@ -53,7 +53,7 @@ Worktrees govern write collision instead. They "give each session a separate git
 - File-changing work goes to a peer chat that reuses the checkout. Both chats then share one set of changes, one pull request, and one merge state.
 - An independent session gets a worktree it never needed. Naming an existing folder adds no checkout; a worktree does: "A worktree is a fresh checkout, so initialize your development environment there" ([Claude Code worktrees](https://code.claude.com/docs/en/worktrees)).
 - A worktree is requested for work that must read the parent's uncommitted changes. The default base branches "from the repository's default branch on the remote, usually `main`, so the worktree starts from a clean tree matching the remote" ([Claude Code worktrees](https://code.claude.com/docs/en/worktrees)). Setting `worktree.baseRef` to `"head"` carries "your unpushed commits and feature-branch state", but not uncommitted edits, so the agent still misses that work. Commit first, or skip the worktree.
-- A workspace-free session turns out to need the repository. It "doesn't inherit the source folder", and the delegation tools "do not clone or copy the originating workspace" ([VS Code 1.140 release notes](https://code.visualstudio.com/updates/v1_140)).
+- A workspace-free session turns out to need the repository. It "doesn't inherit the source folder", and the delegation tools "do not clone or copy the originating workspace" ([VS Code 1.140 release notes](https://code.visualstudio.com/updates/v1_140)). VS Code 1.142 lets you change a session's workspace after dispatch, and "it keeps the conversation history intact". "Changing the workspace also works for chats that already have a workspace, and the agent can isolate work in a new worktree" ([VS Code 1.142 release notes](https://code.visualstudio.com/updates/v1_142)). The dispatch-time choice still matters on releases before 1.142, where a workspace-free session cannot acquire one.
 
 Josh McKinney's practice reference argues the opposite default, to "Give each independent agent task its own workspace and execution identity", and conditions it the same way: "Isolation has setup cost. For tiny read-only questions, a side session may be enough" ([Isolate Agent Workspaces](https://www.joshka.net/practice/patterns/isolate-agent-workspaces/)). Default-isolate is the safer error when you cannot tell whether the task writes.
 

@@ -142,6 +142,7 @@ nav:
       - self-justification-as-scope-control.md
       - scoped-looking-permission-grants.md
       - unbound-approval-records.md
+      - agent-justification-as-rule-scope.md
       - guard-approves-truncated-input.md
       - task-uniform-agent-permissions.md
       - ask-everything-permission-policies.md
