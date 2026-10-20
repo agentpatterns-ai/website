@@ -756,6 +756,7 @@
   "patterns/anti-patterns/agent-delegation-as-routing.md": "2026-09-13T20:12:53+00:00",
   "patterns/anti-patterns/agent-extension-conflicts.md": "2026-06-23T21:32:34+00:00",
   "patterns/anti-patterns/agent-headcount-vanity-metric.md": "2026-05-23T19:54:53+00:00",
+  "patterns/anti-patterns/agent-justification-as-rule-scope.md": "2026-10-19T21:23:44+00:00",
   "patterns/anti-patterns/agent-laundered-bug-reports.md": "2026-05-25T20:27:25+00:00",
   "patterns/anti-patterns/agent-on-agent-maintenance-penalty.md": "2026-09-30T21:53:44+00:00",
   "patterns/anti-patterns/agent-sprawl.md": "2026-06-16T23:15:07+00:00",

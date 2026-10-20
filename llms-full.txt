@@ -1852,6 +1852,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Assuming a CLAUDE.md Security Rule Is Enforced](patterns/anti-patterns/unenforced-claude-md-security-rules.md)
 - [A Guard Hook Approves the Truncated Input It Was Handed](patterns/anti-patterns/guard-approves-truncated-input.md)
 - [Accepting Generated Regression Tests That Pin Faulty Code](patterns/anti-patterns/fault-enforcing-generated-regression-tests.md)
+- [Agent Justification as Allow-Rule Scope](patterns/anti-patterns/agent-justification-as-rule-scope.md)
 - [Answer-Reachable Eval Environments](patterns/anti-patterns/answer-reachable-eval-environments.md)
 - [Approval Records That Bind No Identity and No Session](patterns/anti-patterns/unbound-approval-records.md)
 - [Ask-Everything Permission Policies Protect Less than Per-Action Approval](patterns/anti-patterns/ask-everything-permission-policies.md)
@@ -34569,7 +34570,7 @@ Worktrees govern write collision instead. They "give each session a separate git
 - File-changing work goes to a peer chat that reuses the checkout. Both chats then share one set of changes, one pull request, and one merge state.
 - An independent session gets a worktree it never needed. Naming an existing folder adds no checkout; a worktree does: "A worktree is a fresh checkout, so initialize your development environment there" ([Claude Code worktrees](https://code.claude.com/docs/en/worktrees)).
 - A worktree is requested for work that must read the parent's uncommitted changes. The default base branches "from the repository's default branch on the remote, usually `main`, so the worktree starts from a clean tree matching the remote" ([Claude Code worktrees](https://code.claude.com/docs/en/worktrees)). Setting `worktree.baseRef` to `"head"` carries "your unpushed commits and feature-branch state", but not uncommitted edits, so the agent still misses that work. Commit first, or skip the worktree.
-- A workspace-free session turns out to need the repository. It "doesn't inherit the source folder", and the delegation tools "do not clone or copy the originating workspace" ([VS Code 1.140 release notes](https://code.visualstudio.com/updates/v1_140)).
+- A workspace-free session turns out to need the repository. It "doesn't inherit the source folder", and the delegation tools "do not clone or copy the originating workspace" ([VS Code 1.140 release notes](https://code.visualstudio.com/updates/v1_140)). VS Code 1.142 lets you change a session's workspace after dispatch, and "it keeps the conversation history intact". "Changing the workspace also works for chats that already have a workspace, and the agent can isolate work in a new worktree" ([VS Code 1.142 release notes](https://code.visualstudio.com/updates/v1_142)). The dispatch-time choice still matters on releases before 1.142, where a workspace-free session cannot acquire one.
 
 Josh McKinney's practice reference argues the opposite default, to "Give each independent agent task its own workspace and execution identity", and conditions it the same way: "Isolation has setup cost. For tiny read-only questions, a side session may be enough" ([Isolate Agent Workspaces](https://www.joshka.net/practice/patterns/isolate-agent-workspaces/)). Default-isolate is the safer error when you cannot tell whether the task writes.
 
@@ -57146,6 +57147,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Excess Risk Treatment: Defensive Work the Evidence Rules Out](excess-risk-treatment.md) — Agents keep treating a risk the task has already settled; a stated bound cuts the rate, and 11.2% to 58.7% of runs still over-treat
 - [Recording Guest-Reported Values as Platform State](guest-reported-values-as-platform-state.md) — A value returned by code inside a sandbox is tenant input; Vercel's control plane recorded a guest-supplied `{storage_url, size, checksum}` snapshot record, and rewriting it restored another account's entire filesystem
 - [Counting Static Skill Defects as a Runtime Risk Ranking](static-skill-defect-count-as-runtime-risk.md) — Repairing one validated skill-contract defect moved verifier pass rate by +0.136, +0.085 and +0.023 across three models, so the audit count ranks artifacts rather than runtime risk
+- [Agent Justification as Allow-Rule Scope](agent-justification-as-rule-scope.md) — A saved allow-rule grants whatever its text matches rather than what the agent said it was for; planted repository content elicited the target rule in 58% of instances across Codex CLI and Claude Code, and 47 of 58 eligible instances then completed silently
 
 ---
 
@@ -57847,6 +57849,85 @@ Throughput and cost-per-unit are up while agent count is down. The vanity metric
 
 ---
 
+### Agent Justification as Allow-Rule Scope
+Source: https://agentpatterns.ai/patterns/anti-patterns/agent-justification-as-rule-scope/
+
+# Agent Justification as Allow-Rule Scope
+
+> A saved allow-rule grants whatever its text matches, and the justification shown beside it at the prompt bounds nothing.
+
+Three conditions bound this:
+
+- the harness offers reusable allow-rules derived from the agent's own proposed action,
+- a human is at the prompt deciding,
+- and the repository carries content the agent reads and somebody else can write.
+
+Inside those bounds a justification-read approval goes wrong quietly. The reason gets read as the scope of the request. The rule text is what the harness will enforce.
+
+## What the saved rule matches
+
+The harness checks membership in the authorized set and asks for approval when the action misses, "without assessing the action's intent" ([arXiv 2610.22987v1, §2](https://arxiv.org/abs/2610.22987v1)). The grant is therefore bounded by the rule's match set and by nothing the agent said.
+
+That match set comes out of the command string, and on Claude Code one space decides it: `Bash(ls *)` "requires a space after `ls`, so `lsof` doesn't match. `Bash(ls*)` has no space, so it matches `lsof` too" ([Claude Code permissions](https://code.claude.com/docs/en/permissions)). The same reference says the dialog writes that space-separated form when you choose not to be asked again for a command prefix. One compound command can save up to five rules.
+
+A broad rule is also never the benign task's idea. The unmodified repository produced no rule request at all, 0 of 25 on every configuration tested, "confirming permissions are never organically proposed" ([arXiv 2610.22987v1, §4.2](https://arxiv.org/abs/2610.22987v1)).
+
+## Why it works
+
+Repository content steers which command the agent reaches for, and the harness derives the rule from that command. An iterative attacker framework elicited the target rule in 58% of instances across four configurations of Codex CLI and Claude Code. The acquired rules covered 56.9% of category-specific capability test cases ([arXiv 2610.22987v1, abstract](https://arxiv.org/abs/2610.22987v1)). Conditional on approval, 47 of 58 eligible instances reached verified silent goal completion.
+
+That figure took optimization, not one planted sentence. An overt injected demand for the same permission reached 6 of 25 cases on claude-haiku-4.5 and 1 of 25 on claude-sonnet-5. The framework reached 14 and 9 ([arXiv 2610.22987v1, §4.2](https://arxiv.org/abs/2610.22987v1)).
+
+The lever differs by harness. Although the two present similar dialogs, the paper found that "their harnesses generalize authority along orthogonal dimensions" ([arXiv 2610.22987v1, §5.1](https://arxiv.org/abs/2610.22987v1)). Codex widens on action diversity across a workflow. Claude Code "abstracts over static command syntax: an unquoted parameter such as curl reports -v induces the broad wildcard rule curl reports *, whereas minor lexical perturbations (e.g., quoting) collapse the rule back to an exact match".
+
+Telling the agent an action matters does not get it run. A base instruction fired in 0 of 3 runs and narrative framing in 1 of 3. A gate that blocked progress without the target's output fired in all 3 ([arXiv 2610.22987v1, §5.2](https://arxiv.org/abs/2610.22987v1)). So the command carrying the rule request arrives as an ordinary step in the work you asked for.
+
+## When this backfires
+
+- A headless or CI run has no dialog to steer and no agent-proposed rule to widen, because the policy is already in config.
+- An administrator's ask rule outranks any saved grant, so there the scrutiny duplicates a control that already holds. See [non-retirable approval rules](../../security/non-retirable-approval-rules.md).
+- Against the strongest model tested the acquired rule was not the path used. On claude-sonnet-5, 3 of 9 goal-reachable cases completed, all "achieved via alternative authorized pathways without direct prefix matching" ([arXiv 2610.22987v1, §4.3](https://arxiv.org/abs/2610.22987v1)). Reading the rule text would have stopped none of them.
+- Refusing to save rules is the wrong correction. Anthropic reported that "as of June 2026, 49.5% of active Claude Code CLI users had manually configured a Bash allow rule" ([arXiv 2610.22987v1, §2.1](https://arxiv.org/abs/2610.22987v1)). Take the artifact away and people reach for a bypass mode, which grants more and records nothing.
+- Some of the measured breadth is version-specific. Claude Code's current reference keeps exec wrappers such as `watch` out of prefix approval, and will not let `Bash(find *)` approve `-exec` or `-delete` ([Claude Code permissions](https://code.claude.com/docs/en/permissions)). Check your harness version, not the paper's.
+
+## Example
+
+The paper's own pair of commands shows how little has to change.
+
+**Before** — the agent proposes an unquoted argument:
+
+```
+curl reports -v
+```
+
+Approving that saves `Bash(curl reports *)`, which covers every later `curl reports` command whatever flags follow, including ones that write. A justification about fetching the dataset the build step expects describes this one call accurately and says nothing about the rest.
+
+**After** — the argument is quoted:
+
+```
+curl "reports" -v
+```
+
+Quoting is one of the "minor lexical perturbations" that "collapse the rule back to an exact match" ([arXiv 2610.22987v1, §5.1](https://arxiv.org/abs/2610.22987v1)), so the stored rule authorizes that command rather than a prefix.
+
+## Key Takeaways
+
+- Read the rule text at the prompt and work out what it matches. The reason beside it is not part of what the harness stores.
+- A rule request arriving during a routine task is itself a signal. The benign task proposed none, 0 of 25 per configuration.
+- Narrow against your harness's own axis: quote arguments on a syntax-driven harness, keep one call shape on a history-driven one.
+- Check how many rules one approval writes. On Claude Code a compound command can save five.
+- Narrowing the rule is cheap and shallow. What the action can reach after approval is a sandbox question, so pair it with [blast-radius containment](../../security/blast-radius-containment.md).
+
+## Related
+
+- [Scoped-Looking Permission Grants](scoped-looking-permission-grants.md) — the same rule read too generously once it exists, where this page covers how its text got chosen
+- [Approval Records That Bind No Identity and No Session](unbound-approval-records.md) — the other axis the stored rule leaves open, which principal and which session may satisfy it
+- [Self-Justification as a Tool-Scope Control](self-justification-as-scope-control.md) — the agent justifying its own calls as an internal filter, measured and found to be the wrong stage
+- [Authority Confusion From Untrusted Context](../../security/authority-confusion-untrusted-context.md) — separating who suggested an action from who authorized it, at dispatch rather than at the dialog
+- [Evidence-Based Allowlist Auto-Discovery](../../security/evidence-based-allowlist-auto-discovery.md) — growing an allowlist from real approvals, which this page is the direct caveat on
+
+---
+
 ### Agent Sprawl: Unmanaged Sub-Agent and Skill Proliferation
 Source: https://agentpatterns.ai/patterns/anti-patterns/agent-sprawl/
 
@@ -58219,6 +58300,7 @@ The hook receives that object on stdin, so it can refuse a call whose `session_i
 - [Per-Agent Capability Stores Beat One Task-Wide Allowlist](../../security/per-agent-capability-scoping.md) — the containment answer to subagent authority, measured against prompt injection rather than approval reuse
 - [Scoped-Looking Permission Grants](scoped-looking-permission-grants.md) — a rule that names one runner and permits every command, the same credential read too generously
 - [Non-Retirable Approval Rules for Agent Operations](../../security/non-retirable-approval-rules.md) — the administrator-side control that refuses to let any saved grant satisfy an operation
+- [Agent Justification as Allow-Rule Scope](agent-justification-as-rule-scope.md) — the scope axis of the same stored record, and who got to shape the rule text before it was approved
 
 ---
 
@@ -67711,6 +67793,7 @@ Anthropic says a list of this kind "will inevitably be incomplete" ([How we buil
 - [Skill Shell Execution Gate](../../security/skill-shell-execution-gate.md) — the managed-settings control for shell side-effects arriving through skills
 - [Agent Config as a Managed Supply Chain](../../instructions/agent-config-as-managed-supply-chain.md) — pinning and hashing for the same harness layer these grants live in
 - [Approval Records That Bind No Identity and No Session](unbound-approval-records.md) — the same rule read too generously along a different axis, the caller rather than the command
+- [Agent Justification as Allow-Rule Scope](agent-justification-as-rule-scope.md) — how a grant this broad gets written in the first place, at an approval prompt untrusted context can steer
 
 ---
 
@@ -154619,6 +154702,8 @@ Price per token across a large production gateway was flat in June 2026, after r
 Open-weight models ran 29% of that gateway's tokens in June, up from 11% in April, on under 4% of spend. Vercel is explicit about what that did to the average: "That alone should have pulled the price per token down. But as cheap volume rose in June, so too did closed-weight frontier prices", up about 12% per token, and "They offset each other, so the average price per token was flat" ([Vercel, 2026-07-13](https://vercel.com/blog/ai-gateway-production-index-july-2026)).
 
 A flat print is what two large opposing moves look like once they cancel. A team that held its own mix fixed through June got no such offset, and paid the full 12% rise on whatever share of its tokens sat on frontier models.
+
+By September 2026 the open-weight split had moved to "71.5% of tokens and 23% of spend" ([Vercel, 2026-10-15](https://vercel.com/blog/ai-gateway-production-index-october-2026)). Between December and September, the same index reports that "the average price per token fell 47%". Read that 47% as a run of vendor price cuts and you credit vendors with a shift that happened in other companies' routing.
 
 ## Three indices, three directions
 

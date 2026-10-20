@@ -11,7 +11,7 @@ aliases:
   - token price index fallacy
   - blended price per token fallacy
   - price per token is not a price
-last_reviewed: 2026-08-03
+last_reviewed: 2026-10-19
 maturity: emerging
 ---
 
@@ -28,6 +28,8 @@ Price per token across a large production gateway was flat in June 2026, after r
 Open-weight models ran 29% of that gateway's tokens in June, up from 11% in April, on under 4% of spend. Vercel is explicit about what that did to the average: "That alone should have pulled the price per token down. But as cheap volume rose in June, so too did closed-weight frontier prices", up about 12% per token, and "They offset each other, so the average price per token was flat" ([Vercel, 2026-07-13](https://vercel.com/blog/ai-gateway-production-index-july-2026)).
 
 A flat print is what two large opposing moves look like once they cancel. A team that held its own mix fixed through June got no such offset, and paid the full 12% rise on whatever share of its tokens sat on frontier models.
+
+By September 2026 the open-weight split had moved to "71.5% of tokens and 23% of spend" ([Vercel, 2026-10-15](https://vercel.com/blog/ai-gateway-production-index-october-2026)). Between December and September, the same index reports that "the average price per token fell 47%". Read that 47% as a run of vendor price cuts and you credit vendors with a shift that happened in other companies' routing.
 
 ## Three indices, three directions
 

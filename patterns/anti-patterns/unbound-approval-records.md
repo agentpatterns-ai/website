@@ -82,3 +82,4 @@ The hook receives that object on stdin, so it can refuse a call whose `session_i
 - [Per-Agent Capability Stores Beat One Task-Wide Allowlist](../../security/per-agent-capability-scoping.md) — the containment answer to subagent authority, measured against prompt injection rather than approval reuse
 - [Scoped-Looking Permission Grants](scoped-looking-permission-grants.md) — a rule that names one runner and permits every command, the same credential read too generously
 - [Non-Retirable Approval Rules for Agent Operations](../../security/non-retirable-approval-rules.md) — the administrator-side control that refuses to let any saved grant satisfy an operation
+- [Agent Justification as Allow-Rule Scope](agent-justification-as-rule-scope.md) — the scope axis of the same stored record, and who got to shape the rule text before it was approved
