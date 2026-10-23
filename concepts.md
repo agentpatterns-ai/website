@@ -1727,6 +1727,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [AI Agents in CI/CD with Elevated Permissions and Untrusted Content (GitInject)](patterns/anti-patterns/ai-agents-in-ci-cd-with-elevated-permissions.md)
 - [Assuming a CLAUDE.md Security Rule Is Enforced](patterns/anti-patterns/unenforced-claude-md-security-rules.md)
 - [A Guard Hook Approves the Truncated Input It Was Handed](patterns/anti-patterns/guard-approves-truncated-input.md)
+- [A Scoped Token as Proof the Action Was Wanted](patterns/anti-patterns/scoped-token-as-proof-of-intent.md)
 - [Accepting Generated Regression Tests That Pin Faulty Code](patterns/anti-patterns/fault-enforcing-generated-regression-tests.md)
 - [Agent Justification as Allow-Rule Scope](patterns/anti-patterns/agent-justification-as-rule-scope.md)
 - [Answer-Reachable Eval Environments](patterns/anti-patterns/answer-reachable-eval-environments.md)

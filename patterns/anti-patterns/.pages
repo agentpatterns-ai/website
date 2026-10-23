@@ -156,6 +156,7 @@ nav:
       - worktree-as-safety-boundary.md
       - fixed-width-credential-assumptions.md
       - spelled-path-permission-scope.md
+      - scoped-token-as-proof-of-intent.md
   - "Injection & Untrusted Input":
       - single-layer-injection-defence.md
       - direct-prompt-injection-collaboration.md
