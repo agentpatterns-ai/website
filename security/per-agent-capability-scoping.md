@@ -62,3 +62,4 @@ The union property is the whole mechanism. Whatever a single allowlist covers re
 - [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — narrows a static manifest per request; the narrowing here is per principal instead.
 - [Workspace Topology as an Indirect Injection Attack Vector](workspace-topology-injection-attack-vector.md) — the residual `AGENTS.md` surface, and the cheap levers that reduce it.
 - [Aggregation Bounds for Agent Authorization](aggregation-bounds-agent-authorization.md) — the question left after every call is authorized: whether the set of accesses may be synthesized for this principal.
+- [A Scoped Token as Proof the Action Was Wanted](../patterns/anti-patterns/scoped-token-as-proof-of-intent.md) — splitting the ceiling shrinks the residual; an induced request inside a store's own scope still passes every predicate.

@@ -903,6 +903,7 @@
   "patterns/anti-patterns/response-path-control-gap.md": "2026-07-28T22:08:56+00:00",
   "patterns/anti-patterns/run-status-vs-task-status-confusion.md": "2026-05-30T09:56:36+00:00",
   "patterns/anti-patterns/scoped-looking-permission-grants.md": "2026-09-09T21:20:36+00:00",
+  "patterns/anti-patterns/scoped-token-as-proof-of-intent.md": "2026-10-22T21:24:22+00:00",
   "patterns/anti-patterns/self-justification-as-scope-control.md": "2026-10-05T21:42:10+00:00",
   "patterns/anti-patterns/self-review-modernization-failure.md": "2026-05-22T15:13:03+00:00",
   "patterns/anti-patterns/semantic-collapse.md": "2026-07-05T19:49:02+00:00",
