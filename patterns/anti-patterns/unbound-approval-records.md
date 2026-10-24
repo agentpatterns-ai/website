@@ -11,7 +11,7 @@ aliases:
   - unbound approval record
   - delegation laundering
   - temporal laundering
-last_reviewed: 2026-10-01
+last_reviewed: 2026-10-20
 maturity: emerging
 ---
 
@@ -44,6 +44,7 @@ The guard also denied three live runs of each class. In every live delegation ru
 - Nobody tested the call that should pass. "None of the six sessions went on to complete its stated task after the denial", and whether the field set admits a legitimate cross-session or cross-delegation call while refusing a laundered one is something the author says "we did not test" ([arXiv 2609.38983v1, §IX](https://arxiv.org/abs/2609.38983v1)). A control measured only against the attack is half measured.
 - Prompt volume returns. Standing grants exist because repeated prompts stop being read: "Manual prompts sit in the middle, and in practice users accept 93% of them anyway" ([Anthropic: Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)). A session-bound grant is also denied in every new session, so the work that standing grants were meant to unblock stops instead.
 - The session result is seeded rather than captured. The baseline writes the rule into `settings.json` to simulate a persisted decision, and no grant made in one real session was replayed in a second real one ([arXiv 2609.38983v1, §V-A](https://arxiv.org/abs/2609.38983v1)).
+- Binding the fields does not stop a second service from accepting the token. In a separate study a local approval service minted a genuine token, and a different service accepted it through an `authorized_by` argument. No policy-override instruction appeared anywhere in the chain. The run "reached the approval-token transition in 9/9 reruns" against three Enterprise OA document targets ([arXiv 2610.23077v1](https://arxiv.org/abs/2610.23077v1)). Agent and session fields record who approved, not which service may spend it.
 - Command-text gaps need a lower layer, not a richer credential. Claude Code's documentation says a Bash rule "doesn't match the same program invoked in a different form, so a deny or ask rule covers the invocation Claude usually produces and isn't a security boundary around the program", and prescribes sandboxing for enforcement that "doesn't depend on the command text" ([Claude Code permissions](https://code.claude.com/docs/en/permissions)). That axis belongs to [parser-versus-shell evasion](../../security/parser-versus-shell-permission-evasion.md).
 - The evidence base is thin: "All results in this section are for a single harness (Claude Code) under a single, fixed model" ([arXiv 2609.38983v1, §V-B](https://arxiv.org/abs/2609.38983v1)), in a v1 preprint with one author.
 

@@ -11,7 +11,7 @@ aliases:
   - workflow-state canvas
   - canvas as workflow state surface
   - agentic workflow canvas blueprint
-last_reviewed: 2026-10-11
+last_reviewed: 2026-10-19
 maturity: emerging
 ---
 
@@ -25,7 +25,7 @@ A canvas built as workflow state holds the current position of a repeated proces
 
 The workflow has to repeat often enough to amortize a build. Payback is spread across runs, so a one-time migration or a twice-used checklist never recovers the cost. Pick a process that already runs weekly. Burke Holland makes the same amortization case outside canvases: "It's almost always better to have the agent build a tool where all future interactions are free vs treating the agent itself as the tool" ([Holland, GitHub, 2026-09-24](https://github.blog/ai-and-ml/github-copilot/when-chat-is-the-wrong-ui/)). He offers three examples — a Winget package manager, a SQLite browser with intellisense, and a Jekyll post editor — where the payoff needs no agent.
 
-You have to own the persistence. A canvas extension is code in your repository, not a hosted document: it "lives in its own directory under either `.github/extensions` (project scope) or `~/.copilot/extensions` (user scope)", and persisted state arrives as "Optional JSON artifacts" you choose to write ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/github-copilot-app/working-with-canvas-extensions)). Step three of the blueprint is a build instruction, not a platform guarantee. One worked implementation describes its own store as "best-effort JSON persistence" and states plainly: "It is single-user and single-machine. The loopback HTTP server and per-document store are local by design; multi-user is an aspiration, not a shipped capability" ([Stott, 2026-06-29](https://techcommunity.microsoft.com/blog/educatordeveloperblog/github-copilot-app-canvas-is-a-runtime/4531462)).
+You have to own the persistence. A canvas extension is code in your repository, not a hosted document: it "lives in its own directory under either `.github/extensions` (project scope) or `~/.copilot/extensions` (user scope)", and persisted state arrives as "Optional JSON artifacts" you choose to write ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/github-copilot-app/working-with-canvas-extensions)). Step three of the blueprint is a build instruction, not a platform guarantee. One worked implementation describes its own store as "best-effort JSON persistence" and states plainly: "It is single-user and single-machine. The loopback HTTP server and per-document store are local by design; multi-user is an aspiration, not a shipped capability" ([Stott, 2026-06-29](https://techcommunity.microsoft.com/blog/educatordeveloperblog/github-copilot-app-canvas-is-a-runtime/4531462)). Cursor's cloud agents build canvases too ([Cursor changelog, 2026-10-16](https://cursor.com/changelog/cloud-agent-canvases-and-environments)).
 
 The approval points have to be designed for a distracted human. Step four assumes a checkpoint produces scrutiny. Automation-induced complacency says otherwise: a confident-looking automated output shifts attention away from cross-checking, in expert and naive operators alike, and simple practice does not overcome it ([Parasuraman and Manzey, 2010, *Human Factors*](https://journals.sagepub.com/doi/10.1177/0018720810376055)). A gate recording approvals nobody read is worse than no gate, because the audit trail then claims a review that did not happen. Give each checkpoint one narrow question and the evidence behind it.
 

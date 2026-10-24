@@ -1327,6 +1327,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Ambiguity Stability as a Model-Selection Criterion](verification/ambiguity-stability-model-selection.md)
 - [Auditing Agent Tool Chains for Silent Partial Success](verification/tool-chain-silent-failure-audit.md)
 - [Auditing an Instruction File for Interference Between Its Own Rules](verification/instruction-file-interference-audit.md)
+- [Auditing LLM Call Sites Against Their Expected Contract](verification/llm-call-site-contract-adequacy.md)
 - [Behavioral Preflight: Replay Tool-Call Rules Before Enforcing](verification/behavioral-preflight-rule-replay.md)
 - [Belief Checks for Agent Harness Changes](verification/harness-change-belief-check.md)
 - [Building Agent Eval Environments With a World Spec](verification/world-spec-eval-environments.md)
@@ -1393,6 +1394,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Pre-Generation Complexity Scoring for Code Reliability](verification/pre-generation-complexity-scoring.md)
 - [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](verification/precise-debugging-benchmark.md)
 - [Predicting Reviewable Code: Pre-Flagging Functions Reviewers Will Delete](code-review/predicting-reviewable-code.md)
+- [Probing an Agent's Completion Claim in a Disposable Fork](verification/completion-claim-probe.md)
 - [RAG/Agent Reliability Problem Map: 16-Domain Failure Taxonomy](verification/rag-agent-reliability-problem-map.md)
 - [Rank Resolution: Reading a Converged Coding-Agent Leaderboard](verification/rank-resolution-converged-leaderboards.md)
 - [Reading a Coding-Agent Vendor's Security Certificate](verification/vendor-security-certification-scope.md)
@@ -1404,6 +1406,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Replacing the LLM Filter Stage With a Fine-Tuned Classifier](verification/fine-tuned-classifier-over-llm-filter-stage.md)
 - [Repository Perturbation as Context-Reasoning Diagnosis (RepoMirage)](verification/repository-perturbation-context-reasoning-diagnosis.md)
 - [Reproduce-Before-Report Verification Gate](code-review/reproduce-before-report-verification-gate.md)
+- [Request Rate and Commit Rate Are Different Safety Numbers](verification/request-vs-commit-safety-readouts.md)
 - [Require the Metric the Optimization Should Move](verification/expected-metric-gate-performance-prs.md)
 - [Review Constraint Tests as a Second Acceptance Gate](verification/review-constraint-acceptance-gate.md)
 - [Review-Feedback-to-Rule Loop: Promoting Recurring PR Comments into Harness Rules](code-review/review-feedback-to-rule-loop.md)
@@ -1966,6 +1969,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Treating Agent Safety as Uniform Across a Session (Cold-Start Safety Gap)](patterns/anti-patterns/cold-start-safety-gap.md)
 - [Treating File Secrecy as Skill Confidentiality](patterns/anti-patterns/file-secrecy-as-skill-confidentiality.md)
 - [Treating Memory-Injection Rate as Security Evidence](patterns/anti-patterns/memory-injection-rate-as-security-evidence.md)
+- [Treating Offline Judgment Quality as In-Loop Controller Value](patterns/anti-patterns/offline-judgment-quality-as-controller-value.md)
 - [Treating Read Denial as Confidentiality for a Build Input](patterns/anti-patterns/read-denial-on-a-build-input.md)
 - [Trigger-Conditioned Skill Comparisons](patterns/anti-patterns/trigger-conditioned-skill-comparisons.md)
 - [Trusting Human Review to Catch Deliberate Agent Sabotage](patterns/anti-patterns/deliberate-agent-code-sabotage.md)
@@ -22767,6 +22771,8 @@ A control that has to infer AI authorship is far weaker. Bot-account lookup, the
 
 Projects with working policies gate on artifacts instead. The Linux kernel requires an `Assisted-by:` trailer and the Apache Software Foundation requires `Generated-by:` in the commit message ([open-source AI contribution policies census](https://github.com/melissawm/open-source-ai-contribution-policies)). Neither detects the agent; both make it leave a mark a check can require.
 
+SWE-MISBEHAVIOR tests the two surfaces against each other. It ran Gemini-2.5-Flash on two harnesses, smolagents and OpenHands, and averaged 11 misbehavior metrics per configuration, where lower is better. Prompt-level permission rules moved the rate up on smolagents, 12.77 to 13.02, and down on OpenHands, 18.19 to 17.04. Code-KIT, the paper's adaptive action-space scaffolding, cut it on both: by 52% on smolagents (12.77 to 6.11) and by 32% on OpenHands (18.19 to 12.31) ([SWE-MISBEHAVIOR, 2026](https://arxiv.org/abs/2610.18206v1)). On OpenHands, agents can still make unrequested changes through the native file editor or the shell. The paper lists this as a residual limit: fixing it "requires agent architectures that enforce task-specific permissions across all available tools".
+
 ## Why it works
 
 The authors name the asymmetry: "Agents follow instructions that extend their work but not instructions that undo it" ([Yang, He and Zhou, 2026](https://arxiv.org/abs/2607.26819v1)). Adding a disclosure line extends the trajectory the agent is already on. Refusing the task abandons it, and the training objective "treats 'I should not contribute here' as a degenerate case, not a successful outcome."
@@ -22823,12 +22829,10 @@ Add a branch-protection rule requiring human review on `crypto/**`. The trailer 
 ## Related
 
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — rule polarity inside the instruction file; this page decides which rules should be in that file at all
-- [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — the phrasing lever, complementary to the enforcement-surface choice here
 - [Do Not Price the Rules in Your Agent Instruction File](enforcement-information-paradox.md) — a second reason prose fails: naming the penalty prices the rule instead of enforcing it
 - [Hooks for Enforcement vs Prompts for Guidance: When to Use Each](hooks-vs-prompts.md) — the general enforcement-surface split this evidence grounds empirically
 - [Assuming a CLAUDE.md Security Rule Is Enforced](../patterns/anti-patterns/unenforced-claude-md-security-rules.md) — the coverage half: how many written security rules a built-in control could back in the first place
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the separate failure where rule count, not rule kind, drives non-compliance
-- [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md) — parallel finding that file placement and structure are not the compliance lever
 - [Encoding AI Writing Tells as a Prose Style Contract](ai-writing-tell-catalogue.md) — a worked split of one rule set into the mechanically-enforced half and the review half
 - [Frontmatter and Body Rule Drift in Agentic Workflows](frontmatter-body-rule-drift.md) — what a rule costs when it is written in the enforced region and the advisory one at once
 - [Policy File Validation: Catching Silent Non-Enforcement](policy-file-validation.md) — the prior question for a rule moved to CI or managed settings: whether the file carrying it parsed at all
@@ -30720,6 +30724,7 @@ The bands do not give you the numbers. Fill them by labeling a sample of your ow
 - [Utility-Model Split: Background Tasks on a Cheaper Model](utility-model-split.md) — the coarser split that sends background harness calls to a cheaper generative model with no threshold involved.
 - [Model Confidence as Security Verification](../anti-patterns/model-confidence-as-security-verification.md) — why a model's confidence in its own generated code is the one confidence signal you cannot gate on.
 - [Pre-Execution Failure Scoring with a Draft Model (Speculative Uncertainty)](../../verification/speculative-uncertainty-draft-model-gate.md) — a small model predicting whether the next action executes cleanly, scored from tokens rather than from a typed probability.
+- [Treating Offline Judgment Quality as In-Loop Controller Value](../anti-patterns/offline-judgment-quality-as-controller-value.md) — the end-to-end test this ranking screen does not replace, where the best-ranking decider in a five-arm study still raised cost 19%.
 
 ---
 
@@ -30927,7 +30932,7 @@ A canvas built as workflow state holds the current position of a repeated proces
 
 The workflow has to repeat often enough to amortize a build. Payback is spread across runs, so a one-time migration or a twice-used checklist never recovers the cost. Pick a process that already runs weekly. Burke Holland makes the same amortization case outside canvases: "It's almost always better to have the agent build a tool where all future interactions are free vs treating the agent itself as the tool" ([Holland, GitHub, 2026-09-24](https://github.blog/ai-and-ml/github-copilot/when-chat-is-the-wrong-ui/)). He offers three examples — a Winget package manager, a SQLite browser with intellisense, and a Jekyll post editor — where the payoff needs no agent.
 
-You have to own the persistence. A canvas extension is code in your repository, not a hosted document: it "lives in its own directory under either `.github/extensions` (project scope) or `~/.copilot/extensions` (user scope)", and persisted state arrives as "Optional JSON artifacts" you choose to write ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/github-copilot-app/working-with-canvas-extensions)). Step three of the blueprint is a build instruction, not a platform guarantee. One worked implementation describes its own store as "best-effort JSON persistence" and states plainly: "It is single-user and single-machine. The loopback HTTP server and per-document store are local by design; multi-user is an aspiration, not a shipped capability" ([Stott, 2026-06-29](https://techcommunity.microsoft.com/blog/educatordeveloperblog/github-copilot-app-canvas-is-a-runtime/4531462)).
+You have to own the persistence. A canvas extension is code in your repository, not a hosted document: it "lives in its own directory under either `.github/extensions` (project scope) or `~/.copilot/extensions` (user scope)", and persisted state arrives as "Optional JSON artifacts" you choose to write ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/github-copilot-app/working-with-canvas-extensions)). Step three of the blueprint is a build instruction, not a platform guarantee. One worked implementation describes its own store as "best-effort JSON persistence" and states plainly: "It is single-user and single-machine. The loopback HTTP server and per-document store are local by design; multi-user is an aspiration, not a shipped capability" ([Stott, 2026-06-29](https://techcommunity.microsoft.com/blog/educatordeveloperblog/github-copilot-app-canvas-is-a-runtime/4531462)). Cursor's cloud agents build canvases too ([Cursor changelog, 2026-10-16](https://cursor.com/changelog/cloud-agent-canvases-and-environments)).
 
 The approval points have to be designed for a distracted human. Step four assumes a checkpoint produces scrutiny. Automation-induced complacency says otherwise: a confident-looking automated output shifts attention away from cross-checking, in expert and naive operators alike, and simple practice does not overcome it ([Parasuraman and Manzey, 2010, *Human Factors*](https://journals.sagepub.com/doi/10.1177/0018720810376055)). A gate recording approvals nobody read is worse than no gate, because the audit trail then claims a review that did not happen. Give each checkpoint one narrow question and the evidence behind it.
 
@@ -33319,6 +33324,8 @@ Per-run work does not disappear. Cursor keeps it on the `start` command: "Use it
 
 Each run stays attributable to the environment that produced it. "Every agent run records the Build it started from. Use this provenance to compare environment behavior with the exact configuration and repository commits in the Build" ([Cursor Docs](https://cursor.com/docs/cloud-agents/builds)).
 
+Cursor's Environments API, in beta, lets you "programmatically create and manage the cloud environments your agents run in" ([Cursor Changelog, 2026-10-16](https://cursor.com/changelog/cloud-agent-canvases-and-environments)). A scheduled rebuild on its own does not give you that. The same release raised the per-environment ceiling to "up to 300 repositories" and reports "Large environments also load 5x faster".
+
 ## Why it works
 
 Cold start is a fixed cost that recurs with every delegated run, so it grows with dispatch volume while the work it enables does not. Cursor describes the old shape as "setting up the environment from scratch each session" ([Cursor](https://cursor.com/blog/builds)). Moving the clone and install into a background build converts that serial per-run cost into a periodic one, and every run in a build generation then reuses a single install. Two vendors measured the effect independently. Cursor reports that "our internal environments now boot 10x faster and time to first token is 3x faster" ([Cursor](https://cursor.com/blog/builds)), a figure drawn from its own repos rather than a general benchmark. GitHub found that "Copilot cloud agent now starts up over 20% faster, thanks to optimized runner environments built with GitHub Actions custom images" ([GitHub Changelog](https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images/)).
@@ -35280,6 +35287,7 @@ On the τ²-bench airline domain, adding the four-gate suite to a gpt-4o-mini bu
 - [Task-Uniform Agent Permissions Ignore Where Failures Land](../anti-patterns/task-uniform-agent-permissions.md) — incident data on which task contexts justify paying for this gate
 - [Informed Abstention as a Tool-Boundary Runtime Gate](informed-abstention-tool-boundary-gate.md) — the same pre-execution placement typed by information gap rather than state policy, blocking on a missing field, an unconfirmable state, or an absent approval
 - [Explanation-Bound Tool Execution for Agent Gateways](../../security/explanation-bound-tool-execution.md) — the same pre-execution placement applied to the agent's stated reason, checking typed claims against server-held facts rather than the call against state
+- [Request Rate and Commit Rate Are Different Safety Numbers](../../verification/request-vs-commit-safety-readouts.md) — how to report a gate's rejections without reading them as evidence about the model
 
 ---
 
@@ -43233,6 +43241,8 @@ graph TD
     H --> J
 ```
 
+REM places the same decision inside the think-act loop, where "the costlier implementation record is withheld until an in-loop gate detects the agent struggling" ([REM — arXiv:2610.27377](https://arxiv.org/abs/2610.27377v1)). The action list above has no eviction step; REM evicts that record after a single exposure. On repository-level bug fixing in SWE-ContextBench Lite, REM reports "68.7% vs. 55.6% match@1" and "end-task resolution (27.6% vs. 24.9%) at 17% lower cost" ([arXiv:2610.27377](https://arxiv.org/abs/2610.27377v1)). The 55.6% is the strongest prior memory system, LangMem. The resolution figure compares against running with no memory. SWE-ContextBench Lite is the only end-to-end benchmark the paper reports.
+
 When this backfires. A per-retrieval controller decides one injection at a time and does not defend against risks that emerge as memory accumulates. Al-Tawaha et al. describe temporal memory contamination, where unsafe behavior grows with memory size even when each retrieval looks benign — memory safety is a longitudinal property, not a single-retrieval filter ([Al-Tawaha et al., 2026 — arXiv:2605.17830](https://arxiv.org/abs/2605.17830)). Pair abstention-aware retrieval with periodic memory audits when stores persist across sessions. It also adds cost without value when the store is small and homogeneous, when feedback is sparse, during cold-start, or in latency-sensitive paths.
 
 ## Memory-as-governance pre-action gate
@@ -49629,7 +49639,7 @@ Source: https://agentpatterns.ai/patterns/agent-design/routing-break-even/
 
 `minimum offload = judge cost / (expensive cost - cheap cost)` gives the fraction of turns you must send to the cheap model before routing costs less than sending everything to the frontier model. LangChain publishes the rule after benchmarking NVIDIA's [NeMo Switchyard](https://github.com/NVIDIA-NeMo/Switchyard) router across 145 agent tasks ([LangChain, 11 August 2026](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
 
-Replit routes between models per request rather than pinning every request to one model, the arrangement this formula prices ([Replit, 26 August 2026](https://replit.com/blog/intelligent-model-routing)). The announcement carries no prices, so it confirms the decision is live in production and settles none of the numbers. Tailscale runs a customer-facing model router on Vercel's AI Gateway ([Vercel, 11 September 2026](https://vercel.com/blog/how-tailscale-built-a-customer-facing-model-router-on-ai-gateway)). It is a second production deployment of the arrangement, and it too leaves the numbers to the benchmark below. Microsoft's developer blog argues the same premise, that the most capable model is not always the right one for the work ([Microsoft, 9 September 2026](https://devblogs.microsoft.com/blog/your-work-might-not-need-the-smartest-model/)). It states that position without pricing it, so nothing there changes the arithmetic below. Vercel puts open-weight models at 56% of August token volume on its AI Gateway ([Vercel, 17 September 2026](https://vercel.com/blog/ai-gateway-production-index-september-2026)). That is a measure of where tokens already go, and the formula below still needs two prices you supply yourself.
+Replit routes between models per request rather than pinning every request to one model, the arrangement this formula prices ([Replit, 26 August 2026](https://replit.com/blog/intelligent-model-routing)). The announcement carries no prices, so it confirms the decision is live in production and settles none of the numbers. Tailscale runs a customer-facing model router on Vercel's AI Gateway ([Vercel, 11 September 2026](https://vercel.com/blog/how-tailscale-built-a-customer-facing-model-router-on-ai-gateway)). It is a second production deployment of the arrangement, and it too leaves the numbers to the benchmark below. Microsoft's developer blog argues the same premise, that the most capable model is not always the right one for the work ([Microsoft, 9 September 2026](https://devblogs.microsoft.com/blog/your-work-might-not-need-the-smartest-model/)). It states that position without pricing it, so nothing there changes the arithmetic below. Vercel put open-weight models at 56% of August token volume on its AI Gateway ([Vercel, 17 September 2026](https://vercel.com/blog/ai-gateway-production-index-september-2026)). The October index moves that to 71.5% of September tokens and adds the spend side at 23% ([Vercel, 15 October 2026](https://vercel.com/blog/ai-gateway-production-index-october-2026)). Both figures measure where tokens already go across one gateway's pooled customers, and the formula below still needs two prices you supply yourself.
 
 ## What the calculation can decide
 
@@ -57064,6 +57074,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Cheaper-Per-Token Model Upgrades That Cost More Per Task](cheaper-per-token-costlier-per-task.md) — A model upgrade with a lower per-token price and better benchmarks can still cost more per agentic task because a newer model can burn an order of magnitude more tokens per run
 - [Token Reduction Mistaken for Cost Reduction](token-reduction-not-cost-reduction.md) — Judging a bolt-on context-reduction tool by tokens removed rather than billed cost, where prompt-cache economics can leave the bill flat or higher despite a large token cut
 - [Skill Review Without a Token Cost Baseline](skill-review-without-cost-baseline.md) — Vetting a skill for what it executes and never for what it costs to run passes token-amplification attacks that averaged 5.4x-10.1x and peaked at 75.86x while the task still completed
+- [Treating Offline Judgment Quality as In-Loop Controller Value](offline-judgment-quality-as-controller-value.md) — A typed decision model that ranked an agent's finish requests best of any arm still raised cost per attempt 19% at an unchanged 73.0% pass rate, because its argmax fired below the 87% base rate it was gating
 - [Frozen Playbook Reuse Without Target-Side Validation](frozen-playbook-reuse-validation.md) — Certifying a transferred prompt-side playbook on pass rate alone; accuracy held while tool calls rose ~2.4x and early submissions fell from 78% to 30% after a context-runtime shift
 - [Blaming the Model for Scaffolding-Driven Quality Regressions](blaming-the-model-for-scaffolding-regressions.md) — Quality regressions get blamed on the model by default; a controlled study holding the model fixed across 35 scaffold releases found flat resolve rates and ~70% higher token cost, isolating scaffolding evolution as a real, unchecked driver
 - [Task Completion as Tool Certification (Silent Tool Rot)](task-completion-as-tool-certification.md) — In-session task success does not certify a reusable agent-built tool; 96.8% of preserved synthesized tools scored zero on held-out conformance while executing cleanly, so pass-rate dashboards never show the rot
@@ -58336,6 +58347,7 @@ The guard also denied three live runs of each class. In every live delegation ru
 - Nobody tested the call that should pass. "None of the six sessions went on to complete its stated task after the denial", and whether the field set admits a legitimate cross-session or cross-delegation call while refusing a laundered one is something the author says "we did not test" ([arXiv 2609.38983v1, §IX](https://arxiv.org/abs/2609.38983v1)). A control measured only against the attack is half measured.
 - Prompt volume returns. Standing grants exist because repeated prompts stop being read: "Manual prompts sit in the middle, and in practice users accept 93% of them anyway" ([Anthropic: Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)). A session-bound grant is also denied in every new session, so the work that standing grants were meant to unblock stops instead.
 - The session result is seeded rather than captured. The baseline writes the rule into `settings.json` to simulate a persisted decision, and no grant made in one real session was replayed in a second real one ([arXiv 2609.38983v1, §V-A](https://arxiv.org/abs/2609.38983v1)).
+- Binding the fields does not stop a second service from accepting the token. In a separate study a local approval service minted a genuine token, and a different service accepted it through an `authorized_by` argument. No policy-override instruction appeared anywhere in the chain. The run "reached the approval-token transition in 9/9 reruns" against three Enterprise OA document targets ([arXiv 2610.23077v1](https://arxiv.org/abs/2610.23077v1)). Agent and session fields record who approved, not which service may spend it.
 - Command-text gaps need a lower layer, not a richer credential. Claude Code's documentation says a Bash rule "doesn't match the same program invoked in a different form, so a deny or ask rule covers the invocation Claude usually produces and isn't a security boundary around the program", and prescribes sandboxing for enforcement that "doesn't depend on the command text" ([Claude Code permissions](https://code.claude.com/docs/en/permissions)). That axis belongs to [parser-versus-shell evasion](../../security/parser-versus-shell-permission-evasion.md).
 - The evidence base is thin: "All results in this section are for a single harness (Claude Code) under a single, fixed model" ([arXiv 2609.38983v1, §V-B](https://arxiv.org/abs/2609.38983v1)), in a v1 preprint with one author.
 
@@ -59766,6 +59778,7 @@ The numbers are the measured Microsoft AX figures; the point is that only the se
 - [Pricier-Per-Token Models That Cost Less Per Task](../../token-engineering/pricier-per-token-cheaper-per-task.md) — the reciprocal case, where a delegating harness inverts the ordering the other way
 - [Treating a Model Upgrade as a Security Improvement](model-upgrade-as-security-improvement.md) — the same upgrade assumption on the security axis, where a longitudinal study of 32 models found no family closing the functionality-security gap
 - [The Token Price Index Fallacy in Agent Cost Planning](../../fallacies/token-price-index-fallacy.md) — the same sticker-price error one level up, at a market-wide index instead of a single model
+- [Treating Offline Judgment Quality as In-Loop Controller Value](offline-judgment-quality-as-controller-value.md) — the same error on a model that only advises, whose own calls were 0.11% of spend while its advice added 19%
 
 ---
 
@@ -66361,6 +66374,7 @@ Same surface symptom, different cause, different fix:
 - [Red-Green-Refactor for Agents](../../verification/red-green-refactor-agents.md) — test-state as externally observable stopping criterion
 - [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](lazy-generation.md) — the same premature-stop failure narrowed to test generation, where the shortfall skews onto complex branches
 - [Assuming Loaded Skills Stay Enforced in Long Contexts](assuming-loaded-skills-stay-enforced.md) — the dropped-obligation version: a required item silently falls out of a long trajectory, and a self-check inherits the same blind spot
+- [Probing an Agent's Completion Claim in a Disposable Fork](../../verification/completion-claim-probe.md) — treats the completion claim as a trigger for an external check rather than as a result, with the measured cost of judging it from the transcript alone
 
 ---
 
@@ -72103,6 +72117,88 @@ PMPA drove both harnesses with DeepSeek-V4-Flash, DeepSeek-V4-Pro and Qwen3-Max 
 - [Typed Memory Provenance and Assertion Release Gating](../agent-design/typed-memory-provenance-assertion-gating.md) — a control that governs both stages at once, evaluated on a conformance suite rather than an attack
 - [The Recall Trap: Tuning a Code Retriever on Recall@k at a Fixed Slot Budget](recall-trap-retriever-tuning.md) — the same measurement error in retrieval, where the flag's own metric improves and the downstream task does not
 - [Prompt-Only Tool Access Control](prompt-only-tool-access-control.md) — why the instruction layer keeps losing, which is the adjacent claim this page is careful not to make
+
+---
+
+### Treating Offline Judgment Quality as In-Loop Controller Value
+Source: https://agentpatterns.ai/patterns/anti-patterns/offline-judgment-quality-as-controller-value/
+
+# Treating Offline Judgment Quality as In-Loop Controller Value
+
+> A controller that ranks its decisions best can still raise cost per attempt 19% at an unchanged pass rate, because the action policy decides value.
+
+Ranking skill does not make a controller worth wiring in. A pre-specified study on Terminal-Bench 2.1 held one Claude Sonnet 5.5 terminal loop fixed and varied only the controller across five arms. The typed decision model Jev 1.13 ranked finish requests better than every alternative and still cost more for nothing: "On 21 held-out tasks (315 trials), Jev raised cost per attempt by 19% (geometric-mean ratio 1.19, 95% CI 1.02-1.36) at an identical pass rate (73.0% vs. 73.0%)" ([Vats, arXiv:2610.24649v1](https://arxiv.org/abs/2610.24649v1)).
+
+## The four conditions behind the null result
+
+The null result is a verdict on one policy, not on in-loop controllers. Check all four against your own setup first.
+
+- The controller's actions are advisory nudges on an event that already succeeds. 87% of the unaided loop's finish requests passed the grader.
+- The policy acts on the argmax instead of a cutoff derived from that base rate. Jev "therefore chose verify for 29 of 53 finish requests, and its argmax accuracy (0.55) fell below the base rate (0.87)" ([Vats, arXiv:2610.24649v1](https://arxiv.org/abs/2610.24649v1)).
+- The controller holds no stopping action it will actually use. "No controller chose abandon in any of the 315 trials."
+- The evaluation has no placebo arm, so you credit the cost to the act of intervening rather than to the content of the advice. Without one, "the comparison against native alone would suggest only that Jev is somewhat expensive" ([Vats, arXiv:2610.24649v1](https://arxiv.org/abs/2610.24649v1)).
+
+## Why it works
+
+A controller moves cost only through the reasoning model's subsequent trajectory. Its own calls are a rounding error: "Controller calls were negligible: Jev averaged 0.52 s per decision and 0.11% of spend" ([Vats, arXiv:2610.24649v1](https://arxiv.org/abs/2610.24649v1)). Every advisory message it appends buys more steps on the expensive model, and "Cost rose with how often a controller asked the agent to verify" in the same order across the four controller arms. Jev also ran longer trajectories throughout, 16.0 steps per attempt against 13.3.
+
+The base rate of the event under review sets whether those steps are worth buying, and an AUROC figure does not report it. Jev's probabilities sat far below that rate, so argmax turned good ordering into frequent low-value interventions: "the agent's own finish requests were usually right (87% of native finish requests passed), so a verification round is mostly spent re-checking correct work." Even the runs it doubted most were mostly fine, since "even Jev's least confident group passed 79% of the time." The paper names the gap: "The gap between an informative signal and a useful intervention is the policy in between."
+
+The placebo arm licenses that attribution. Choices sampled at random from Jev's own frequencies at the same trigger moments cost no more than the unaided loop, at a 0.98 ratio: "Random guidance at the same moments matched every informed controller's pass rate without their cost."
+
+## When this backfires
+
+Reading this as "keep cheap models out of the loop" overshoots the evidence.
+
+- A calibrated stopping action does save money. BAGEN reports that "Early stop saves 28-64% tokens on failed trajectories, and SFT+RL strengthens early stop and alert behavior" ([BAGEN, arXiv:2606.00198v1](https://arxiv.org/abs/2606.00198v1)). Jev's cost-saving action went unused, not tested and found wanting.
+- Controller quality varies and is measurable. LoopArena puts the best full-task Strict Success Rate at 36.25%, "leaving substantial room for improvement in long-horizon loop control" ([Wang et al., arXiv:2608.28281v2](https://arxiv.org/abs/2608.28281v2)).
+- The pass-rate half is weak either way. The author says "pass-rate intervals are wide" on a held-out set of 21 tasks, about ±11 to 13 percentage points. That leaves the no-harm guardrail at the limit of what the design resolves.
+- Runs ending at a timeout or a budget cap raise no finish request, so a verify-only controller has nothing to second-guess. Jev's three clear cost reductions were hard tasks of exactly that shape.
+- Your harness may be mismeasuring verification. A naive feature asking whether the agent verified "misses agents that check work by running their own programs."
+
+## Example
+
+The before case is the comparison the study warns against. The after case is the arm set it ran.
+
+**Before — a controller chosen on the AUROC column:**
+
+```text
+offline Q-finish quality, 53 logged states
+              AUROC    ECE   accuracy
+base rate      0.50   0.00       0.87
+rules          0.62   0.55       0.45
+small LLM      0.60   0.70       0.30
+Jev 1.13       0.78   0.37       0.55
+```
+
+**After — the same controller measured end to end against rules and a placebo:**
+
+```text
+arm         pass %   USD/attempt   verify msgs/attempt
+native       73.0       0.177            -
+rules        73.0       0.191           0.92
+small LLM    76.2       0.213           1.30
+Jev          73.0       0.206           0.51
+placebo      71.4       0.156           0.33
+```
+
+The AUROC column ranks Jev first, and the accuracy column already puts it 32 points under the base rate. End to end it comes fourth of five on cost, below a placebo that samples its own choice frequencies at random ([Vats, arXiv:2610.24649v1](https://arxiv.org/abs/2610.24649v1)).
+
+## Key Takeaways
+
+- Bill the controller's advice to the reasoning model, not to the controller's own invoice line. Jev's calls were 0.11% of spend and the small LLM's 0.47%, so neither shows up in the budget it moves.
+- Derive the action cutoff from the base rate of the event you are gating. An argmax accuracy of 0.55 against an 0.87 base rate means the controller chose verify on 29 of 53 finish requests when 87% of them passed unaided.
+- Run a placebo arm that fires at the same trigger moments with shuffled choices. Without it you cannot tell advice from interruption, and here the placebo was the cheapest arm in the study.
+- Give the controller a stopping action and check whether it ever fires. Across 315 trials the only cost-saving action available was never chosen once.
+- Report cost per attempt and cost per solved task together. Jev's USD per solved task was 0.283 against 0.243 for the unaided loop, so the pass-rate tie hid no compensating gain.
+
+## Related
+
+- [Calibrated Deciders for In-Loop Agent Decisions](../agent-design/calibrated-deciders-in-loop-decisions.md) — the ranking test a decider has to clear first, which this page shows is necessary and not sufficient.
+- [Calibrated Early Termination and Warm Restart for Agent Runs (FailFast-RestartSmart)](../../loop-engineering/early-termination-and-warm-restart.md) — the stopping action Jev never used, with the false-positive budget that makes it pay.
+- [Cheaper-Per-Token Model Upgrades That Cost More Per Task](cheaper-per-token-costlier-per-task.md) — the same sticker-price error one layer down, where the cheap model generates instead of advising.
+- [Decision Unbundling: What Moves Into the Orchestrator](../agent-design/decision-unbundling-orchestrator-load.md) — what your code picks up when a decision leaves the driver model, including the threshold this page says to derive.
+- [Premature Completion](premature-completion.md) — the opposite failure, where an agent stops early and the loop has no check at all.
 
 ---
 
@@ -91366,6 +91462,8 @@ Two effects hide inside the merge tier. At a fixed tool count, "grouping semanti
 
 Newer models shrink the effect without closing it. The two closed models tested were gpt-6-luna and GLM-5.3-Flash, with no Anthropic model in the set, and each moved by 32 points across equivalent schemas. Their weak spots were the variants that expose a large catalog, class dispatch and namespaced names, not the cross-call protocols ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
 
+The same question returns after deployment, when the interface drifts underneath an agent you already shipped. One paper measures that case and splits the blame: "Ablations show that candidate-set drift, especially distractor tools, accounts for most observed damage, while description and schema edits alone are less harmful" ([arXiv:2610.23342v1](https://arxiv.org/abs/2610.23342v1)). That leaves the near-inert tier above standing and moves the exposure to the candidate tool list. Its authors report that a training-free validate-and-repair layer lifts success from 0.717 to 0.813 on DICE-300 and from 0.580 to 0.805 on BFCL-200 ([arXiv:2610.23342v1](https://arxiv.org/abs/2610.23342v1)). On Qwen3.5-9B, their primary model, the layer recovered 19 of 22 and 33 of 45 drift-induced failures ([arXiv:2610.23342v1](https://arxiv.org/abs/2610.23342v1)). A same-protocol BFCL replication on Qwen3.5-35B-A3B runs 0.635 to 0.845 ([arXiv:2610.23342v1](https://arxiv.org/abs/2610.23342v1)). The authors also ran oracle-constrained sweeps on Llama-4-Scout and Mistral-Small-3.2-24B but keep them as upper-bound context, so the non-oracle evidence is two Qwen models rather than a sweep.
+
 ## What it costs to find out
 
 Guessing from the schema text does not work. Two query-free probes, written automatically from the schema's own descriptions and argument values, ranked variants at a Spearman correlation of 0.52 and 0.57 against full-set success. About one hundred target queries per candidate schema lifted that correlation to 0.81, and even 36 queries reached 0.72, "so the probes fall short because they omit the tasks, not because they are small" ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
@@ -94636,6 +94734,7 @@ The restart prompt says only that an earlier attempt was stopped because it look
 - [Convergence Detection in Iterative Agent Refinement](convergence-detection.md) — stopping a healthy loop on diminishing returns, the mirror of predicting a doomed one
 - [Within-Task Model Cascade: Designing the Escalation Gate](within-task-model-cascade.md) — the same false-accept-rate arithmetic applied to a cheap-model gate
 - [Continuation Dispatcher: Who Owns the Iterate-or-Stop Call](continuation-dispatcher.md) — where a predictor like this one gets read from, and why its verdict should name the reason rather than return a boolean
+- [Treating Offline Judgment Quality as In-Loop Controller Value](../patterns/anti-patterns/offline-judgment-quality-as-controller-value.md) — a controller study in which the abandon action was never chosen in 315 trials, and advisory nudges cost 19% instead
 
 ---
 
@@ -101036,6 +101135,7 @@ Source: https://agentpatterns.ai/verification/
 - [Multi-Run, Shuffled-Order Evaluation for Self-Improving Agents](multi-run-shuffled-order-evaluation.md) — Memory-based agents amplify run-to-run variance and inherit a hidden easy-to-hard curriculum from the benchmark's default order; repeat the suite and shuffle before believing a reported gain
 - [Audit the Noise Floor Before Trusting a Benchmark Gap](benchmark-noise-floor-audit.md) — Repeat runs and semantics-preserving prompt rewrites give two noise floors 11x to 58x apart; measure both, then compare any reported gap against the wider one
 - [Recover the Six Measurement Choices Behind an Attack Success Rate](asr-comparability-audit.md) — Attack success rate is a family of metrics set by six design choices; four of them shift the number system-dependently, and across 259 agentic-security papers 65.3% report neither variance nor repeated runs
+- [Request Rate and Commit Rate Are Different Safety Numbers](request-vs-commit-safety-readouts.md) — On identical invalid-proof trials two models requested a protected action 52.1% and 54.2% of the time while the deterministic gate committed none; report both rates plus the true-world completion rate, and treat the zero as a property of the gate
 - [Measure the Judge Before You Freeze a Gate on It](judge-instrument-stability-check.md) — Byte-identical judge requests replayed a day later reproduced the ranking 78 times out of 100 against a preregistered 0.99; replay the instrument and measure its noise floor before a ranking gate depends on it
 - [Capability-Ladder Probe: Calibrate an Eval Before You Trust Its Score](capability-ladder-eval-probe.md) — Where longer reasoning helps a task, a stronger model at higher effort should score higher; a flat reading there puts the fault in the eval rather than the system, and a baseline with no headroom cannot reliably attribute the next change
 - [Specification-Path Testing: Same Contract, Different History](specification-path-testing.md) — Contract-equivalent requirement histories leave the pass rate flat while flipping which individual tasks succeed; report per-item conditional agreement rather than rate parity
@@ -101157,6 +101257,7 @@ Source: https://agentpatterns.ai/verification/
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — Order cheap evidence gates ahead of expensive ones in agentic repair loops — retrieval-grounded context, compile gate, target-test gate, then full regression — to filter invalid candidates before paying full-suite cost
 - [Execution Budgeting in Agentic Program Repair](execution-budgeting-program-repair.md) — Cap test executions in generate-run-revise loops on frontier commercial agents; prohibiting execution drops resolve rate ~1.25 pp on SWE-bench Verified — applies only under specific preconditions on model strength, codebase familiarity, and execution cost
 - [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — Cap generate-validate-repair loops near three to four rounds; most gains land early and later rounds mostly burn tokens — prefer stop-on-plateau, and watch strong-model late gains, thin-oracle overfitting, and self-critique loops
+- [Probing an Agent's Completion Claim in a Disposable Fork](completion-claim-probe.md) — Call the critic at the completion claim rather than during partial progress, and give it execute access to a fork of that state; a transcript-only critic rejected 60% of passing states against 22% for one that could run commands
 - [Profiler-Guided Optimization Loops for Coding Agents](profiler-guided-optimization-loop.md) — Feed the agent a summarized profile and gate every iteration on a behavior-preserving test run; the profiler and the gate only pay off shipped together, and profiler evidence is itself fallible
 - [Validity-Estimate Stopping for Noisy Verify-Repair Loops (VRR-Stop)](validity-estimate-stopping-noisy-repair-loops.md) — When the verifier is noisy, its acceptance rate rises while true validity falls as repair damages correct plans — estimate validity from repeated votes and stop on the sign of expected marginal gain, not on acceptance
 - [Dual Executable Specifications for Long-Horizon Features](dual-executable-specifications.md) — Compile a feature design into an architecture spec (do the required components exist and stay connected) and a behavior spec (does data flow through them correctly) that re-run after every edit — the gain appears only past roughly 3,000-word instructions or 200 agent turns
@@ -101168,6 +101269,7 @@ Source: https://agentpatterns.ai/verification/
 - [Per-Line Requirement Citations for Hallucination Detection](per-line-requirement-citations.md) — Cite a requirement ID on every generated line so a set-difference check flags any citation to a requirement absent from the spec as a hallucination — detection at a determinism cost
 - [Typed Generation Contracts for Grounded Extraction](typed-generation-contract.md) — Split a wrong grounded answer by context sufficiency first, then make the extraction half checkable with typed fields, verbatim evidence spans, and a validator that runs
 - [Semantic Validation for Schema-Valid Agent Output](semantic-validation-schema-valid-output.md) — Schema conformance proves shape and says nothing about values; check identifiers against a register, values against a real bound, and fields against each other, and escalate where no anchor exists
+- [Auditing LLM Call Sites Against Their Expected Contract](llm-call-site-contract-adequacy.md) — Across 496 call sites, 82% were checked in code on both sides of the call and 5.3% met their whole contract; triage by where the output goes and stop at the threat chain
 - [Post-Failure Evidence Contracts for Tool-Using Agents](post-failure-evidence-contract.md) — Requiring status, evidence, limitation, and next action on the final report tracks pooled false success at 0.8% against 22.8% under a plain request, and forced-choice framing concentrates the baseline error that a neutral request barely shows
 - [Defense-in-Depth Against Coding Agent Fabrication (Honesty Harness)](honesty-harness-fabrication-defense.md) — Four uncorrelated layers — instruction-level honesty rules, verify-before-write, real-time hooks that feed output back, and an external-tool fact-checker subagent — that reduce fabrication survival without claiming elimination
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — Stack scanner-pass, full-scanner, validate, plan, and plan-diff oracles so LLM-generated infrastructure-as-code security fixes have to clear behavioral checks — first-pass agent repairs cleared the targeted Checkov finding 83.3 percent of the time but 71.4 percent of plan-compared repairs were deceptive fixes
@@ -102370,6 +102472,73 @@ Cost, for sizing a run of your own: $0.263 across three vendors, 15 passes, 26 A
 - [Configuration File Structure Does Not Drive Compliance](../instructions/configuration-file-structure-compliance-gap.md) — the factorial study that bounds what this audit can claim
 - [LLM Static Verification Against Natural-Language Requirements](llm-static-verification-natural-language-requirements.md) — checks code against a spec; this audit checks the spec against itself
 - [Agent Extension Conflicts](../patterns/anti-patterns/agent-extension-conflicts.md) — the same interference across separately installed extensions rather than inside one file
+
+---
+
+### Auditing LLM Call Sites Against Their Expected Contract
+Source: https://agentpatterns.ai/verification/llm-call-site-contract-adequacy/
+
+# Auditing LLM Call Sites Against Their Expected Contract
+
+> Write down what an LLM call site's reply must satisfy, then diff that against what the code checks. Counting guards answers a different question.
+
+A call-site contract audit enumerates a system's LLM calls and ranks them by where their output goes. For the call sites that rank, it derives from the call's job what its reply must satisfy, then diffs that against the checks the code runs. The two measures separate hard. Weng et al. examined 496 LLM call sites across 40 open-source agentic systems in four languages and 13.4 MLOC, and found that "82% of call sites check in code before and after the call, yet only 5.3% satisfy their whole expected contract, and the median call site satisfies one third" ([arXiv:2610.24545v1](https://arxiv.org/abs/2610.24545v1)). The authors call that distance the study's central result.
+
+## When the audit pays, and when to stop
+
+Three conditions carry it. Stop at the first one that fails.
+
+- Some output reaches control flow or execution. 48% of outputs did, and 73% of those were consumed only by the program or by another model, with no person in between.
+- You can follow each output to its consumer. Consumer type is what makes the audit affordable: all nine critical-severity mechanisms the authors scored "sit at control-flow, machine-value, or execution consumers, so the consumer type (Table 2) is a cheap triage rule" ([arXiv:2610.24545v1](https://arxiv.org/abs/2610.24545v1)).
+- You intend to stop at the threat chain. 63% of expected constraints were unmet, but "17% of the gaps are technically exploitable, the missing constraint lies on the threat chain for 7% (114 gaps), and 38 of the 60 mechanisms behind them trigger" ([arXiv:2610.24545v1](https://arxiv.org/abs/2610.24545v1)). Driving the 63% to zero spends the budget on gaps that sit off the threat chain.
+
+## Record three phases and an assurance level
+
+This is design by contract applied to a callee the caller cannot verify, and the authors build it on Hoare logic and Meyer's formulation directly ([arXiv:2610.24545v1](https://arxiv.org/abs/2610.24545v1)). The contract splits by when it applies: pre-conditions on the inputs and the decision to call at all, prompt constraints on how the request is shaped, and post-conditions on which replies the program accepts. Each constraint also carries how strongly the program holds it, on a ladder of prompt-only, code-checked, and capability-bound. The bottom rung is a request, not a guarantee: "A prompt-only constraint is stated to the model and never verified." The top rung is the one teams skip, and only 25% of the constraints that required a capability boundary had one.
+
+One call site can need two contracts. 22% produced both a decision-relevant output and an ordinary one, so the row to audit is a call site paired with one responsibility.
+
+## Where the gaps sit
+
+After the call, which is where the code looks strongest. Post-conditions were 97% code-checked and still covered least: "The gap rate is 72% for post-conditions, 62% for pre-conditions, and 47% for prompt constraints" ([arXiv:2610.24545v1](https://arxiv.org/abs/2610.24545v1)). Stakes did not predict protection either, and 18 of the 23 systems with enough constraints to compare protected their decision-relevant call sites no better than the rest. No system was clean: the median missed 64% of its expected constraints, the best 33%.
+
+## Why it works
+
+Post-call code that recovers from a bad reply gets a feedback signal, and post-call code that judges whether a reply is admissible does not. A missing parser announces itself as a crash, so someone writes it. A well-formed but inadmissible reply flows downstream in silence, so nobody writes the allow-list. The mechanism counts show that asymmetry: "extraction and normalization (557) and error handling and retry (479) are the most common mechanisms, while allow-list and range checks appear only 114 times" ([arXiv:2610.24545v1](https://arxiv.org/abs/2610.24545v1)). A guard count reads recovery code and validation code as the same guard, so it cannot see which of the two a call site got.
+
+The repairs are small, which is what makes the audit hours worth spending. Patches of 1 to 366 lines stopped the original exploit for all 38 mechanisms that triggered at runtime, and closed 23 completely.
+
+## When this backfires
+
+- Few call sites, none decision-relevant. With every output bound for a display, consumer-type triage returns nothing to rank.
+- Treating the gap rate as a target. The yardstick is a judgment call and the authors say so: "The expected contract is a normative reconstruction, so other analysts might admit slightly different constraints" ([arXiv:2610.24545v1](https://arxiv.org/abs/2610.24545v1)). A 63% measured against a reconstruction is a map of where to look, not a defect count.
+- Latency-bound call sites with no cheap post-condition. A meaning-level check needing a second model call serializes into the critical path. Where the check reduces to schema conformance, [semantic validation](semantic-validation-schema-valid-output.md) is the narrower move.
+- Failing closed everywhere. Every checker fault then stalls legitimate work, and practitioner guidance treats fail-open against fail-closed as a per-guardrail choice, with service continuity as the reason to fail open on low-severity checks ([Splunk](https://www.splunk.com/en_us/blog/learn/implementing-ai-guardrails.html)). Find the gates that cannot deny at all instead.
+- Reading an exploit rate into the result. Trigger tests used one substitute model and at most ten framings, so a mechanism is shown capable of firing, not likely to.
+
+## Example
+
+The audit's characteristic finding is a gate that asks the right question and then cannot act on the answer. In Gemini CLI's opt-in policy enforcer, a model is asked whether a proposed tool call complies with a security policy and must answer allow, deny, or ask the user. When the tool carries no policy, the code judges the call against an empty one. It returns ALLOW when the reply is empty, when the reply does not parse, and when the request fails: "Five of the six return paths allow the call, and only a reply that parses can deny it." Two downstream guards fail closed when their checker throws, and neither ever fires, because the enforcer has already turned the failure into an ordinary approval. The authors' summary of the shape is the finding to carry into your own audit: "the model is asked the right question, and the program does not enforce the answer" ([arXiv:2610.24545v1](https://arxiv.org/abs/2610.24545v1)).
+
+A guard-presence audit records this call site as checked, because a check is present on both sides of the call. Ask instead which replies this code refuses, and the list holds one case: a reply that parses and says deny.
+
+## Key Takeaways
+
+- Guard presence and contract coverage are different measurements, and the authors treat the distance between them as their central result.
+- Triage by where the output goes. Control-flow, execution, and machine-value consumers held every critical-severity mechanism the authors scored.
+- Audit the call site paired with one responsibility, because 22% of call sites served a decision-relevant role and an ordinary one at once.
+- Expect the gaps after the call, where 97% code coverage coexisted with a 72% gap rate.
+- Record each constraint's assurance level alongside the constraint. Constraints enforced in code hold across models and a model's refusal may not.
+- Stop at the threat chain. 7% of gaps sat on one, and that subset is what the fixes were validated against.
+
+## Related
+
+- [Semantic Validation for Schema-Valid Agent Output](semantic-validation-schema-valid-output.md) — the post-condition this audit most often finds missing, written as a standalone technique
+- [Test Adequacy of LLM-Dependent Harness Code](llm-dependent-harness-test-adequacy.md) — the same adequacy question asked of the test suite rather than the contract
+- [Zero Violations Is Not Evidence Your Hook Works](enforcement-liveness-evidence.md) — how to tell a gate that never needed to fire from one that cannot
+- [Stochastic-Deterministic Boundary as First-Class Contract](../patterns/agent-design/stochastic-deterministic-boundary.md) — the design pattern that places a verifier at each boundary; this page asks whether the verifier covers the call site's needs
+- [Restraint Rules Need External Enforcement](../instructions/restraint-rules-need-external-enforcement.md) — the prompt-only rung of the assurance ladder, argued on its own evidence
+- [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — why a check that runs beats an instruction that asks
 
 ---
 
@@ -109459,6 +109628,7 @@ Add targeted trajectory constraints scoped to the steps that matter — the audi
 - [Behavior Specs: Grading the Trajectory, Not the Result](behavior-specs.md) — When the outcome is expensive or ambiguous to verify, declared behaviors give the process supervision an end-state check cannot
 - [Profile Your Agent Test Suite Against Measured Practice](agent-test-suite-profiling.md) — Measures where a suite's effort actually sits before deciding whether to add anything, and names path assertions as the wrong way to close a coverage gap
 - [Belief Checks for Agent Harness Changes](harness-change-belief-check.md) — The case outcome grading cannot see: the same task and model under two harnesses, where terminal success shows nothing and the agent's reading of the task state moves
+- [Probing an Agent's Completion Claim in a Disposable Fork](completion-claim-probe.md) — What it takes to grade that final state during a run with no ground-truth verifier: a critic with execute access to a throwaway copy of it
 
 ---
 
@@ -114240,6 +114410,80 @@ Precision against a reference patch is a useful signal only when a reference pat
 
 ---
 
+### Probing an Agent's Completion Claim in a Disposable Fork
+Source: https://agentpatterns.ai/verification/completion-claim-probe/
+
+# Probing an Agent's Completion Claim in a Disposable Fork
+
+> A critic given only the transcript rejected 60% of passing candidate states; one that could run commands in a fork rejected 22%.
+
+A completion-claim probe calls the critic at the moment the actor says it has finished, and hands it execute access to a throwaway fork of that state plus a fork of the initial environment. The critic lists the task's requirements, runs whatever programs it needs to check each one, then either submits the state or sends the actor "the failures, the rationale for why they failed, and how the critic checked", and the actor resumes from the state it claimed ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)).
+
+## Four conditions before you build this
+
+1. The environment can snapshot, restore, and fork a running container. Without a fork there is nowhere safe to run a destructive check.
+2. Your actor's first claim fails often enough to leave room. GPT-5.6 Luna passed 63.4% of first claims and the loop worked on the rest; on a 15-task subset with stronger actors and critics, "None of the three combinations gains significantly" ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)).
+3. A program can settle the requirement. On the 19 tasks whose verifier holds a reference value unrecoverable from the environment, the probing critic accepted 31% of failing states. Where the verifier runs the artifact or probes a service it accepted 19%. With nothing to test against, it "tends to agree with the actor's interpretation of the task completion" ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)).
+4. The probe's time comes from a budget you sized for it. The actor and the critic shared one clock. Swapping in Claude Sonnet 5 as the critic took the median probe from 33 seconds to 138, and that cost trials outright: "Because the clock is shared, 59 loops run out of time during a probe, against 13 with Luna" ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)).
+
+## When the critic is called changes what it can see
+
+Measured on 89 Terminal-Bench 2.1 tasks with GPT-5.6 Luna on both sides, the same access is worth very different amounts at the two positions. The final-state row covers 406 candidate states, where a false reject is a passing state the critic rejected ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)).
+
+| Where the critic is called | What the critic delivers |
+|---|---|
+| 25% through the trajectory | Pairwise ranking accuracy of 49%-56% against a 50% chance baseline: "we do not detect a statistically significant selection gain over random choice" |
+| 75% through | Ranking accuracy of 64%-69%, with execute access worth +4.4 points [-0.9, +9.9] pooled over the intermediate depths |
+| At the candidate final state | False rejects fall from 60% of passing states to 22%. Misclassification falls from 36%-39% to 22%, and "Most of the gap is in false rejects" |
+
+End to end over those tasks and five trials each, the loop raised pass@1 from 63.4% to 72.4%, a gain of 9.0 points with a 95% interval of +5.6 to +12.6, at 2.2 times the baseline's model cost, rising on 30 tasks and falling on 1 ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)). The configuration it replaces, Monte Carlo tree search with a transcript-only critic, reached 64.0% at 3.81 times the cost.
+
+## Why it works
+
+The trajectory is not the state. The actor records its reasoning, its tool calls, and the outputs it saw, while the state of the computer also holds files, processes, memory, packages, and databases that changed as side effects it never observed. The paper's one-line explanation is that "evaluating a terminal task is itself a terminal task": the evidence has to be produced by running something, not recalled from a transcript. A disposable fork makes producing it safe, because the critic can delete files, install interpreters, and kill processes on a copy nobody resumes from.
+
+Hand it a second fork of the initial environment and the requirements about preservation become checkable too. Across 404 candidate states "the fork raises accuracy from 76% to 80%", false rejects fall from 24% to 17%, and the critic's disagreement with its own second verdict on the same state drops from 18% to 9% ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)). The authors read that as more evidence rather than more severity: "its verdicts become more accurate and consistent, not stricter".
+
+Mid-run evaluation fails for a different reason, which is why better observation does not rescue it: a half-finished state carries limited evidence about whether the trajectory ends well.
+
+## Resume, and cap the rounds
+
+After a rejection, put the actor back where it was. Restarting from the initial state with the same feedback submitted a passing state in 66.3% of trials against 72.4% for resuming, -6.1 points [-10.1, -2.2], at 1.6 times the cost and 9.3 minutes per trial instead of 7.8 ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)).
+
+The paper's loop allows up to six critic rounds, but its analysis finds a cap of three claims would lose nothing. That lands where [bounded repair-loop iterations](bounded-repair-loop-iterations.md) puts the cap from other evidence. 64% of claiming trials end after one round, a second claim lifted the submitted pass rate from 63% to 70% and a third to 73%, and "further rounds add nothing measurable".
+
+## When this backfires
+
+- Both sides are already strong. On the 15-task subset the loop showed no statistically significant gain with GPT-6 Astra or Claude Opus 5.5 as the actor, where "Critics help when actors can repair mistakes they fail to identify themselves". Eight Opus trials were refused by a content classifier and counted as zero, weakening that subset further ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)).
+- Shared state defeats the fork. "Forks do not isolate writes to external databases or shared services, so destructive checks require isolating those dependencies or restricting critic actions" ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)).
+- You are using the critic to pick among many samples instead of to judge one. On grade-school and competition math with two 7B models, verifier-guided search lost its advantage over plain resampling as the sample budget grew, because imperfect verifiers "misrank candidates and erroneously prune all valid paths" ([Yu et al., arXiv:2502.00271v1](https://arxiv.org/abs/2502.00271v1)).
+- The finding is about prompted LLM critics, not step-level evaluation in general. In long-horizon software-engineering runs, FLARE distills a generative reward model that intercepts high-risk steps as they happen, reporting a single rollout that beats a five-rollout baseline with five times fewer tokens ([arXiv:2609.23808v1](https://arxiv.org/abs/2609.23808v1)). The primary study states the limit itself: "These measurements do not rule out search with a stronger value estimator or another search policy, and do not show that completion is the optimal time to intervene."
+- The evidence is one paper and one actor model for the headline number. On SWE-bench Pro the loop moved the pass rate from 80% to 88% over 227 graded tasks, but "the gain comes from the medium tasks, and on the hard tasks it cannot be told apart from zero" ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)).
+
+## Example
+
+In the `modernize-scientific-stack` task, the critic with execute access to a fork of the final state rejected the actor's work because it could not tell whether a legacy file had been preserved. Given a fork of the initial state as well, it compared the file's hash in both and accepted ([arXiv:2610.21088v1](https://arxiv.org/abs/2610.21088v1)). Nothing about the actor's work differed between those two runs. The reference state was the missing evidence, and 15 of that critic's 56 false rejects came from requirements of this shape.
+
+The read-only version of the same critic shows why inspection is not enough. Even on tasks whose verifier only reads files and compares them against a stored value, it rejected 42% of passing states against 9% for the critic that could execute, and in 93% of those rejections it reported insufficient evidence rather than a broken requirement.
+
+## Key Takeaways
+
+- Spend the critic budget at the completion claim. Partial-state ranking sat at 49%-56% a quarter of the way through, where chance is 50%, and execute access was worth +4.4 points [-0.9, +9.9] pooled across the three intermediate depths, an interval spanning zero.
+- Read-only inspection is the configuration that looks careful and rejects correct work: 42% false rejects against 9%, on tasks whose own verifier only reads files.
+- Give the critic a second fork of the initial state whenever any requirement says something must be preserved, recovered, or left unchanged.
+- A critic that rejected 21% of passing first claims in the end-to-end loop was still worth running, because the actor rescued 57 of those 60 proposals.
+- Measure the loop on your own actor before budgeting for it. The published +9.0 points came from a model that failed over a third of its own completion claims.
+
+## Related
+
+- [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — the prior decision to judge the final state rather than the path, which this extends by letting the judge run programs against that state
+- [Premature Completion: Agents That Declare Success Too Early](../patterns/anti-patterns/premature-completion.md) — the failure the completion claim is a trigger for, and the reason the claim cannot be taken at face value
+- [Sandbox Forking: Branch Agent Runs From a Warm Snapshot](../patterns/agent-design/sandbox-forking.md) — the same fork primitive used for parallel runs instead of for verification
+- [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — the independent case for the round cap this loop converges at
+- [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — what mid-run trajectory reading can and cannot deliver, which is the position this page argues against
+
+---
+
 ### Probing Unstated Constraints in Generated Code (Intent Violation Rate)
 Source: https://agentpatterns.ai/verification/unstated-constraint-probes/
 
@@ -115033,6 +115277,7 @@ One objection deserves naming, because it is the stronger one. The adjacent adve
 - [Measure the Judge Before You Freeze a Gate on It](judge-instrument-stability-check.md) — the oracle axis, for the case where the oracle is an LLM judge.
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — a graded harm scale in place of the binary outcome that the partial-success axis collapses.
 - [Covert Success Rate for Indirect Prompt Injection](../security/covert-success-rate-injection.md) — one further split of the same metric, on whether a successful injection left a trace in the agent's reply.
+- [Request Rate and Commit Rate Are Different Safety Numbers](request-vs-commit-safety-readouts.md) — the within-run case this page's rule excludes: two endpoints, one harness, identical trials.
 
 ---
 
@@ -115646,6 +115891,69 @@ The example numbers are illustrative; the methodology is the load-bearing contri
 - [Controlled Benchmark Rewriting for Agent Safety Judgment](controlled-benchmark-rewriting-safety-judgment.md) — same perturbation logic applied to safety judgment instead of code-agent context reasoning
 - [Constraint Decay in Backend Code Generation](constraint-decay-backend-agents.md) — independent evidence of multi-file reasoning degradation as constraints accumulate
 - [Static Difficulty Estimation for Agent Issue Triage](static-difficulty-estimation-issue-triage.md) — measures repository scale as a difficulty predictor rather than perturbing it
+
+---
+
+### Request Rate and Commit Rate Are Different Safety Numbers
+Source: https://agentpatterns.ai/verification/request-vs-commit-safety-readouts/
+
+# Request Rate and Commit Rate Are Different Safety Numbers
+
+> Two models requested a protected action in 52.1% and 54.2% of identical invalid-proof trials, and the gate's commit rate was zero for both.
+
+A request-commit readout split reports two rates from one run of one harness: how often the model asked for a protected action, and how often the tool committed it. A 48-task runtime study of 2,688 initial calls put invalid-proof request rates at 0.8% for GPT-5.4, 0% for Claude Sonnet 5, 52.1% for Nemotron 3 Super 120B and 54.2% for Llama 4 Maverick. Under a deterministic proof gate, none of it committed ([Zhu et al., arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), §5.4). The Nemotron and Llama request-to-commit gaps were 52.1 points, 95% CI [39.2, 64.6], and 54.2 points, 95% CI [42.1, 65.8]. Ship one number and you cannot tell which half of the system produced it.
+
+## The conditions that make the commit column mean anything
+
+Three conditions held in this study, and each is a question about your own harness.
+
+Every path to the protected action is mediated. The guarantee is explicitly conditional: "Complete mediation is a separate prerequisite for the execution-gate guarantee" ([arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), §3.3). An unguarded execution edge runs no proof check, so the rate describes the guarded path and nothing else.
+
+The authorization policy is decidable without judgement. The tool's check tests claim binding, the freshness window, scope, and whether the distinct authenticated signers contain a qualified signer set ([arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), §3.3, Eq. 1). Where authorizing the action needs a human call, there is no predicate to read a second rate off.
+
+You report the true-world rate beside both, meaning the share of trials where the claim was true and the action went through. The policy that drives commits to zero can take legitimate work with it. In a separate signer-composition study, Claude's "two-of-three quorum achieved only 0.8% true-state utilization, suggesting a possible utility cost" ([arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), §5.3).
+
+## What each column is evidence of
+
+| Column | What it measures | What moved it in this study |
+|---|---|---|
+| Request rate | The model's decision policy over the claims it can see | Model choice. 0% to 54.2% across four models on identical invalid-proof trials |
+| Commit rate | The gate's coverage and the policy's completeness | Nothing. 0% on those same trials for all four models, "by construction, not by learned proof recognition" |
+
+Read down the commit column and every model looks equally safe, because that column is a property of the gate rather than of any model in it.
+
+A gate that passes is not a truth check either. "Proof validity authenticates a properly bound, timely endorsement under the policy, not ground truth", and freshness "checks proof timing, not whether the claimed business state remains true" ([arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), §3.3). In "a separate single-model authorization check", a false claim with a policy-valid compromised-signer proof "can pass the gate, since proof validity is not factual truth" ([arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), abstract). Only Llama passed that check's eligibility controls, and the authors call the result "a selected-protocol mechanism check, not an independent cross-model threshold discovery" ([arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), §5.3).
+
+## Why it works
+
+The two numbers come from two different functions, which is why they disagree on the same trials. The proposed action is whatever the model selects from visible claims. The committed action additionally requires an available execution edge and, on a guarded edge, a deterministic verifier returning one ([arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), §3.3–§3.4). Rejecting an invalid proof follows from that predicate, so the zero is an entailment rather than a measurement of the model.
+
+Two unrelated groups found the same split. A paired evaluation across 1,500 scenarios, under regimes that either block or permit unsafe actions, reports "substantial gaps between attempted and executed violations, indicating that external guardrails can suppress visible harm while masking persistent misalignment" ([arXiv:2603.20320v1](https://arxiv.org/abs/2603.20320v1), abstract). A study across three agentic environments and 13 architectural configurations scored "planning refusal, execution-stage interception, partial harmful execution, and successful attack completion" as separate stages ([Hagag et al., arXiv:2604.23459v1](https://arxiv.org/abs/2604.23459v1)).
+
+## When this backfires
+
+- The commit column drives a model decision. It did not move across four models, so a team ranking models on it is reading the gate. The request column separates them, and even it is protocol-bound: Llama "selected actions under unsigned E1 claims (98.3%) and invalid runtime proofs (54.2%) in separate protocols", so "the E2 below-cut rate cannot be interpreted as its general refusal rate" ([arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), §5.3).
+- The enforcement layer is itself model-mediated. A benchmark of poisoned tool descriptions found "common prompt-guardrail defenses are largely ineffective and can, counterintuitively, even be counterproductive" ([Liu et al., arXiv:2605.24069v1](https://arxiv.org/abs/2605.24069v1)). A commit rate belongs to the enforcement configuration that produced it.
+- You have no programmatic ground truth. Scoring a false-world rate needs paired tasks whose authoritative state is set in code and never visible to the executor. Without that there is no denominator.
+- You expect the split to settle an architecture question. With the executor-visible claim held fixed, "None of the 27 reported comparisons met the prespecified large-effect rule" over routing configurations ([arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), §5.1). Of ten proof perturbations, only stale replay replicated across three or more models (§5.4).
+- You read recovery after a denial as the agent catching up. All 257 post-denial responses chose safe progress, but each recovery prompt supplied a new authoritative snapshot first, which the authors call "assisted post-denial behavior, not hidden-state inference" ([arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), §5.4).
+
+All of it comes from synthetic tasks. The design "does not establish how frequently the observed failures occur in deployed multi-agent systems", and counts from the separate studies "should not be aggregated into a single denominator" ([arXiv:2610.24298v1](https://arxiv.org/abs/2610.24298v1), Limitations and Appendix A).
+
+## Key Takeaways
+
+- Report three rates from the same trials: requested, committed, and completed in the true world. Each one fails for a different reason, so a single figure cannot say which part of the system to change.
+- Before you quote a commit rate, name the paths it covers. An unmediated route makes the number a statement about the guarded route only.
+- A zero at the gate transfers to a new model and nothing else. It does not transfer to a new policy, a new tool, or a path the gate does not sit on.
+- Enforcement answers obedience, never truth. A proof that satisfies the policy can still carry a false claim, so the state the claim asserts needs its own check.
+
+## Related
+
+- [Recover the Six Measurement Choices Behind an Attack Success Rate](asr-comparability-audit.md) — the rule for numbers carried between harnesses, which excludes the within-run case this page covers.
+- [Zero Violations Is Not Evidence Your Hook Works](enforcement-liveness-evidence.md) — the other way a clean commit column misleads, where the rail never fired or the agent never tried.
+- [Deterministic Precondition Gates for Tool-Using Agents](../patterns/agent-design/deterministic-precondition-gates.md) — building the predicate whose coverage the commit column measures.
+- [Prompt-Only Tool Access Control](../patterns/anti-patterns/prompt-only-tool-access-control.md) — what the request column looks like when nothing sits on the write path.
+- [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — grading the commits that do land, rather than counting them.
 
 ---
 
@@ -120835,6 +121143,7 @@ A blocking check reports only denials, so its output on the clean path is the sa
 - [Planted-Bug Methodology](planted-bug-observability-calibration.md) — injecting a known defect to find out whether your signals lead anywhere
 - [Decomposed Red-Teaming for Agent Monitors](decomposed-red-teaming-agent-monitors.md) — pressure-testing a monitor once you know it is live
 - [Restraint Rules Need External Enforcement](../instructions/restraint-rules-need-external-enforcement.md) — why the rule moved out of the instruction file in the first place
+- [Request Rate and Commit Rate Are Different Safety Numbers](request-vs-commit-safety-readouts.md) — a fourth state for a clean run: the rail rejected every attempt, and two of four models still asked in over half of trials
 
 ---
 
@@ -138327,6 +138636,8 @@ claude --dangerously-skip-permissions
 These controls augment the built-in `/sandbox` command; they do not replace it. The existing sandbox (enabled via `/sandbox` or `sandbox.enabled` in settings) enforces filesystem and network boundaries using bubblewrap. Subprocess PID sandboxing adds process-level isolation on top.
 
 Enabling `/sandbox` without `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` still provides filesystem and network isolation. Adding `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` closes the process persistence and env leakage gaps that bubblewrap's filesystem/network controls leave open.
+
+The sandbox also carries a setting that weakens its own filesystem boundary. Claude Code 2.1.305 (October 20, 2026) added `sandbox.allowNestedUserNamespaces`, which lets sandboxed commands on Linux create user namespaces for Chromium and rootless podman. The changelog says the same permission lets those commands "get around the sandbox's file protections" ([Claude Code changelog 2.1.305](https://code.claude.com/docs/en/changelog#2-1-305)). Anthropic asserts the cost; nothing in the entry measures it. Leave the setting off unless a sandboxed command needs a nested namespace.
 
 ## Example
 
@@ -184868,7 +185179,11 @@ Between 2026-05-01 and 2026-05-08, GitHub Copilot announced four model deprecati
 
 The Claude Sonnet 4 row shows a deprecation date before the announcement date — the announcement came after the fact. The Grok Code Fast 1 window is seven days. Anthropic's own table shows `claude-sonnet-4-20250514` and `claude-opus-4-20250514` deprecated 2026-04-14 for retirement 2026-06-15 — a 62-day window that fits inside the 60-day commitment ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)). A codebase that sits on both providers must accommodate the tighter window, not the looser one.
 
-The churn continued past that week. GitHub deprecated another selection of Copilot models on 2026-08-31 ([GitHub Changelog: Selected GitHub Copilot models deprecated](https://github.blog/changelog/2026-08-31-selected-github-copilot-models-deprecated)). Read the changelog for the current list; the table above is a May snapshot.
+The churn continued past that week. GitHub deprecated another selection of Copilot models on 2026-08-31 ([GitHub Changelog: Selected GitHub Copilot models deprecated](https://github.blog/changelog/2026-08-31-selected-github-copilot-models-deprecated)).
+
+On 2026-10-15 GitHub announced three more retirements for a single date, 2026-11-16: Claude Opus 4.8, Claude Opus 5, and GPT-5.6 Terra ([GitHub Changelog: Upcoming deprecation of selected GitHub Copilot models](https://github.blog/changelog/2026-10-15-upcoming-deprecation-of-selected-github-copilot-models-in-mid-november)). GitHub suggests Claude Opus 5.5 in place of both Claude models, and GPT-6.1 Sol or GPT-6 Luna in place of GPT-5.6 Terra. The gap between those two dates is longer than the seven days Grok Code Fast 1 got and shorter than Anthropic's 60-day commitment. One of the three carries a carve-out. GitHub says: "Claude Opus 4.8 will remain available to individual GitHub Copilot subscribers on annual plans so they retain an Opus offering."
+
+Read the changelog for the current list; the table above is a May snapshot.
 
 ## The five surfaces
 

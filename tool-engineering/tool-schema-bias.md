@@ -12,7 +12,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-09-30
+last_reviewed: 2026-10-19
 maturity: emerging
 ---
 
@@ -37,6 +37,8 @@ Most measurements come from a synthetic environment of 12 domains, 168 native op
 Two effects hide inside the merge tier. At a fixed tool count, "grouping semantically related operations is consistently better than random or deliberately mismatched grouping". And the argument form of a merged tool matters. The nested argument form "costs every model 19 to 73 points", including models that lose under 7 points on the flat form ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
 
 Newer models shrink the effect without closing it. The two closed models tested were gpt-6-luna and GLM-5.3-Flash, with no Anthropic model in the set, and each moved by 32 points across equivalent schemas. Their weak spots were the variants that expose a large catalog, class dispatch and namespaced names, not the cross-call protocols ([Liu et al., arXiv:2609.34971v1](https://arxiv.org/abs/2609.34971v1)).
+
+The same question returns after deployment, when the interface drifts underneath an agent you already shipped. One paper measures that case and splits the blame: "Ablations show that candidate-set drift, especially distractor tools, accounts for most observed damage, while description and schema edits alone are less harmful" ([arXiv:2610.23342v1](https://arxiv.org/abs/2610.23342v1)). That leaves the near-inert tier above standing and moves the exposure to the candidate tool list. Its authors report that a training-free validate-and-repair layer lifts success from 0.717 to 0.813 on DICE-300 and from 0.580 to 0.805 on BFCL-200 ([arXiv:2610.23342v1](https://arxiv.org/abs/2610.23342v1)). On Qwen3.5-9B, their primary model, the layer recovered 19 of 22 and 33 of 45 drift-induced failures ([arXiv:2610.23342v1](https://arxiv.org/abs/2610.23342v1)). A same-protocol BFCL replication on Qwen3.5-35B-A3B runs 0.635 to 0.845 ([arXiv:2610.23342v1](https://arxiv.org/abs/2610.23342v1)). The authors also ran oracle-constrained sweeps on Llama-4-Scout and Mistral-Small-3.2-24B but keep them as upper-bound context, so the non-oracle evidence is two Qwen models rather than a sweep.
 
 ## What it costs to find out
 

@@ -9,7 +9,7 @@ aliases:
   - prebuilt cloud agent environments
   - environment build promotion
   - agent cold start tax
-last_reviewed: 2026-09-22
+last_reviewed: 2026-10-20
 maturity: emerging
 ---
 
@@ -38,6 +38,8 @@ Three conditions have to hold before the pipeline earns its maintenance cost:
 Per-run work does not disappear. Cursor keeps it on the `start` command: "Use it for services that must be fresh when the session begins, like bringing up Docker containers or other long-running processes" ([Cursor](https://cursor.com/blog/builds)). That boundary is the [Cloud-Agent Session Bootstrap](cloud-agent-session-bootstrap.md) split, moved one layer out.
 
 Each run stays attributable to the environment that produced it. "Every agent run records the Build it started from. Use this provenance to compare environment behavior with the exact configuration and repository commits in the Build" ([Cursor Docs](https://cursor.com/docs/cloud-agents/builds)).
+
+Cursor's Environments API, in beta, lets you "programmatically create and manage the cloud environments your agents run in" ([Cursor Changelog, 2026-10-16](https://cursor.com/changelog/cloud-agent-canvases-and-environments)). A scheduled rebuild on its own does not give you that. The same release raised the per-environment ceiling to "up to 300 repositories" and reports "Large environments also load 5x faster".
 
 ## Why it works
 

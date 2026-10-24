@@ -64,6 +64,7 @@ nav:
       - multi-run-shuffled-order-evaluation.md
       - benchmark-noise-floor-audit.md
       - asr-comparability-audit.md
+      - request-vs-commit-safety-readouts.md
       - judge-instrument-stability-check.md
       - capability-ladder-eval-probe.md
       - specification-path-testing.md
@@ -191,6 +192,7 @@ nav:
       - staged-evidence-gates-program-repair.md
       - execution-budgeting-program-repair.md
       - bounded-repair-loop-iterations.md
+      - completion-claim-probe.md
       - profiler-guided-optimization-loop.md
       - validity-estimate-stopping-noisy-repair-loops.md
       - dual-executable-specifications.md
@@ -202,6 +204,7 @@ nav:
       - per-line-requirement-citations.md
       - typed-generation-contract.md
       - semantic-validation-schema-valid-output.md
+      - llm-call-site-contract-adequacy.md
       - post-failure-evidence-contract.md
       - honesty-harness-fabrication-defense.md
       - layered-oracle-iac-security-repair.md

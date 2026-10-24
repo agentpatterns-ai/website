@@ -67,6 +67,7 @@ nav:
       - token-reduction-not-cost-reduction.md
       - cost-routing-without-quality-monitoring.md
       - skill-review-without-cost-baseline.md
+      - offline-judgment-quality-as-controller-value.md
   - "Generated Code Quality":
       - abstraction-bloat.md
       - copy-paste-agent.md

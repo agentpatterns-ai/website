@@ -6,7 +6,7 @@ tags:
   - sandboxing
 description: "Add PID namespace isolation and env var scrubbing to Bash subprocesses in Claude Code, preventing daemon persistence and secret leakage beyond the session."
 term: "Subprocess PID Namespace Sandboxing"
-last_reviewed: 2026-06-12
+last_reviewed: 2026-10-21
 maturity: adopted
 ---
 
@@ -69,6 +69,8 @@ claude --dangerously-skip-permissions
 These controls augment the built-in `/sandbox` command; they do not replace it. The existing sandbox (enabled via `/sandbox` or `sandbox.enabled` in settings) enforces filesystem and network boundaries using bubblewrap. Subprocess PID sandboxing adds process-level isolation on top.
 
 Enabling `/sandbox` without `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` still provides filesystem and network isolation. Adding `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` closes the process persistence and env leakage gaps that bubblewrap's filesystem/network controls leave open.
+
+The sandbox also carries a setting that weakens its own filesystem boundary. Claude Code 2.1.305 (October 20, 2026) added `sandbox.allowNestedUserNamespaces`, which lets sandboxed commands on Linux create user namespaces for Chromium and rootless podman. The changelog says the same permission lets those commands "get around the sandbox's file protections" ([Claude Code changelog 2.1.305](https://code.claude.com/docs/en/changelog#2-1-305)). Anthropic asserts the cost; nothing in the entry measures it. Leave the setting off unless a sandboxed command needs a nested namespace.
 
 ## Example
 

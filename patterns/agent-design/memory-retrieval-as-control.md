@@ -13,7 +13,7 @@ aliases:
   - risk-sensitive memory controller
   - pre-action memory gate
   - utility-scored episodic memory
-last_reviewed: 2026-06-15
+last_reviewed: 2026-10-21
 maturity: emerging
 ---
 
@@ -57,6 +57,8 @@ graph TD
     F --> J
     H --> J
 ```
+
+REM places the same decision inside the think-act loop, where "the costlier implementation record is withheld until an in-loop gate detects the agent struggling" ([REM — arXiv:2610.27377](https://arxiv.org/abs/2610.27377v1)). The action list above has no eviction step; REM evicts that record after a single exposure. On repository-level bug fixing in SWE-ContextBench Lite, REM reports "68.7% vs. 55.6% match@1" and "end-task resolution (27.6% vs. 24.9%) at 17% lower cost" ([arXiv:2610.27377](https://arxiv.org/abs/2610.27377v1)). The 55.6% is the strongest prior memory system, LangMem. The resolution figure compares against running with no memory. SWE-ContextBench Lite is the only end-to-end benchmark the paper reports.
 
 When this backfires. A per-retrieval controller decides one injection at a time and does not defend against risks that emerge as memory accumulates. Al-Tawaha et al. describe temporal memory contamination, where unsafe behavior grows with memory size even when each retrieval looks benign — memory safety is a longitudinal property, not a single-retrieval filter ([Al-Tawaha et al., 2026 — arXiv:2605.17830](https://arxiv.org/abs/2605.17830)). Pair abstention-aware retrieval with periodic memory audits when stores persist across sessions. It also adds cost without value when the store is small and homogeneous, when feedback is sparse, during cold-start, or in latency-sensitive paths.
 
