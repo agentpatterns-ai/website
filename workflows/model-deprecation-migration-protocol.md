@@ -12,7 +12,7 @@ aliases:
   - model id as dependency
   - model deprecation migration protocol
   - versioned model dependency
-last_reviewed: 2026-09-02
+last_reviewed: 2026-10-19
 maturity: adopted
 ---
 
@@ -44,7 +44,11 @@ Between 2026-05-01 and 2026-05-08, GitHub Copilot announced four model deprecati
 
 The Claude Sonnet 4 row shows a deprecation date before the announcement date — the announcement came after the fact. The Grok Code Fast 1 window is seven days. Anthropic's own table shows `claude-sonnet-4-20250514` and `claude-opus-4-20250514` deprecated 2026-04-14 for retirement 2026-06-15 — a 62-day window that fits inside the 60-day commitment ([Anthropic: Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations)). A codebase that sits on both providers must accommodate the tighter window, not the looser one.
 
-The churn continued past that week. GitHub deprecated another selection of Copilot models on 2026-08-31 ([GitHub Changelog: Selected GitHub Copilot models deprecated](https://github.blog/changelog/2026-08-31-selected-github-copilot-models-deprecated)). Read the changelog for the current list; the table above is a May snapshot.
+The churn continued past that week. GitHub deprecated another selection of Copilot models on 2026-08-31 ([GitHub Changelog: Selected GitHub Copilot models deprecated](https://github.blog/changelog/2026-08-31-selected-github-copilot-models-deprecated)).
+
+On 2026-10-15 GitHub announced three more retirements for a single date, 2026-11-16: Claude Opus 4.8, Claude Opus 5, and GPT-5.6 Terra ([GitHub Changelog: Upcoming deprecation of selected GitHub Copilot models](https://github.blog/changelog/2026-10-15-upcoming-deprecation-of-selected-github-copilot-models-in-mid-november)). GitHub suggests Claude Opus 5.5 in place of both Claude models, and GPT-6.1 Sol or GPT-6 Luna in place of GPT-5.6 Terra. The gap between those two dates is longer than the seven days Grok Code Fast 1 got and shorter than Anthropic's 60-day commitment. One of the three carries a carve-out. GitHub says: "Claude Opus 4.8 will remain available to individual GitHub Copilot subscribers on annual plans so they retain an Opus offering."
+
+Read the changelog for the current list; the table above is a May snapshot.
 
 ## The five surfaces
 

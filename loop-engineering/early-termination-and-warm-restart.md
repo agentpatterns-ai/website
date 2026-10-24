@@ -100,3 +100,4 @@ The restart prompt says only that an earlier attempt was stopped because it look
 - [Convergence Detection in Iterative Agent Refinement](convergence-detection.md) — stopping a healthy loop on diminishing returns, the mirror of predicting a doomed one
 - [Within-Task Model Cascade: Designing the Escalation Gate](within-task-model-cascade.md) — the same false-accept-rate arithmetic applied to a cheap-model gate
 - [Continuation Dispatcher: Who Owns the Iterate-or-Stop Call](continuation-dispatcher.md) — where a predictor like this one gets read from, and why its verdict should name the reason rather than return a boolean
+- [Treating Offline Judgment Quality as In-Loop Controller Value](../patterns/anti-patterns/offline-judgment-quality-as-controller-value.md) — a controller study in which the abandon action was never chosen in 315 trials, and advisory nudges cost 19% instead

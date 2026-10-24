@@ -67,3 +67,4 @@ A blocking check reports only denials, so its output on the clean path is the sa
 - [Planted-Bug Methodology](planted-bug-observability-calibration.md) — injecting a known defect to find out whether your signals lead anywhere
 - [Decomposed Red-Teaming for Agent Monitors](decomposed-red-teaming-agent-monitors.md) — pressure-testing a monitor once you know it is live
 - [Restraint Rules Need External Enforcement](../instructions/restraint-rules-need-external-enforcement.md) — why the rule moved out of the instruction file in the first place
+- [Request Rate and Commit Rate Are Different Safety Numbers](request-vs-commit-safety-readouts.md) — a fourth state for a clean run: the rail rejected every attempt, and two of four models still asked in over half of trials

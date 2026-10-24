@@ -9,7 +9,7 @@ tags:
 aliases:
   - additive versus restraint rules
   - extension versus reversal asymmetry
-last_reviewed: 2026-08-28
+last_reviewed: 2026-10-17
 maturity: emerging
 ---
 
@@ -39,6 +39,8 @@ Built-in product controls close little of that gap. An audit of 481 public CLAUD
 A control that has to infer AI authorship is far weaker. Bot-account lookup, the signal most adoption studies lean on, recovers only 3.3% of detectable agent activity, a 30x relative-recall gap ([Khosravani and Mockus, 2026](https://arxiv.org/abs/2606.24429v1)). A bot that closes pull requests it believes are AI-authored inherits that error rate.
 
 Projects with working policies gate on artifacts instead. The Linux kernel requires an `Assisted-by:` trailer and the Apache Software Foundation requires `Generated-by:` in the commit message ([open-source AI contribution policies census](https://github.com/melissawm/open-source-ai-contribution-policies)). Neither detects the agent; both make it leave a mark a check can require.
+
+SWE-MISBEHAVIOR tests the two surfaces against each other. It ran Gemini-2.5-Flash on two harnesses, smolagents and OpenHands, and averaged 11 misbehavior metrics per configuration, where lower is better. Prompt-level permission rules moved the rate up on smolagents, 12.77 to 13.02, and down on OpenHands, 18.19 to 17.04. Code-KIT, the paper's adaptive action-space scaffolding, cut it on both: by 52% on smolagents (12.77 to 6.11) and by 32% on OpenHands (18.19 to 12.31) ([SWE-MISBEHAVIOR, 2026](https://arxiv.org/abs/2610.18206v1)). On OpenHands, agents can still make unrequested changes through the native file editor or the shell. The paper lists this as a residual limit: fixing it "requires agent architectures that enforce task-specific permissions across all available tools".
 
 ## Why it works
 
@@ -96,12 +98,10 @@ Add a branch-protection rule requiring human review on `crypto/**`. The trailer 
 ## Related
 
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — rule polarity inside the instruction file; this page decides which rules should be in that file at all
-- [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — the phrasing lever, complementary to the enforcement-surface choice here
 - [Do Not Price the Rules in Your Agent Instruction File](enforcement-information-paradox.md) — a second reason prose fails: naming the penalty prices the rule instead of enforcing it
 - [Hooks for Enforcement vs Prompts for Guidance: When to Use Each](hooks-vs-prompts.md) — the general enforcement-surface split this evidence grounds empirically
 - [Assuming a CLAUDE.md Security Rule Is Enforced](../patterns/anti-patterns/unenforced-claude-md-security-rules.md) — the coverage half: how many written security rules a built-in control could back in the first place
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the separate failure where rule count, not rule kind, drives non-compliance
-- [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md) — parallel finding that file placement and structure are not the compliance lever
 - [Encoding AI Writing Tells as a Prose Style Contract](ai-writing-tell-catalogue.md) — a worked split of one rule set into the mechanically-enforced half and the review half
 - [Frontmatter and Body Rule Drift in Agentic Workflows](frontmatter-body-rule-drift.md) — what a rule costs when it is written in the enforced region and the advisory one at once
 - [Policy File Validation: Catching Silent Non-Enforcement](policy-file-validation.md) — the prior question for a rule moved to CI or managed settings: whether the file carrying it parsed at all

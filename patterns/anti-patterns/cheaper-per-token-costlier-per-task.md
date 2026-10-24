@@ -80,3 +80,4 @@ The numbers are the measured Microsoft AX figures; the point is that only the se
 - [Pricier-Per-Token Models That Cost Less Per Task](../../token-engineering/pricier-per-token-cheaper-per-task.md) — the reciprocal case, where a delegating harness inverts the ordering the other way
 - [Treating a Model Upgrade as a Security Improvement](model-upgrade-as-security-improvement.md) — the same upgrade assumption on the security axis, where a longitudinal study of 32 models found no family closing the functionality-security gap
 - [The Token Price Index Fallacy in Agent Cost Planning](../../fallacies/token-price-index-fallacy.md) — the same sticker-price error one level up, at a market-wide index instead of a single model
+- [Treating Offline Judgment Quality as In-Loop Controller Value](offline-judgment-quality-as-controller-value.md) — the same error on a model that only advises, whose own calls were 0.11% of spend while its advice added 19%

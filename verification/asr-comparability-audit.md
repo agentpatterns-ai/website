@@ -97,3 +97,4 @@ One objection deserves naming, because it is the stronger one. The adjacent adve
 - [Measure the Judge Before You Freeze a Gate on It](judge-instrument-stability-check.md) — the oracle axis, for the case where the oracle is an LLM judge.
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — a graded harm scale in place of the binary outcome that the partial-success axis collapses.
 - [Covert Success Rate for Indirect Prompt Injection](../security/covert-success-rate-injection.md) — one further split of the same metric, on whether a successful injection left a trace in the agent's reply.
+- [Request Rate and Commit Rate Are Different Safety Numbers](request-vs-commit-safety-readouts.md) — the within-run case this page's rule excludes: two endpoints, one harness, identical trials.

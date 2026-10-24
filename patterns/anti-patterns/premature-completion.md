@@ -97,3 +97,4 @@ Same surface symptom, different cause, different fix:
 - [Red-Green-Refactor for Agents](../../verification/red-green-refactor-agents.md) — test-state as externally observable stopping criterion
 - [Shallow Agent Test Coverage from Premature Termination (Lazy Generation)](lazy-generation.md) — the same premature-stop failure narrowed to test generation, where the shortfall skews onto complex branches
 - [Assuming Loaded Skills Stay Enforced in Long Contexts](assuming-loaded-skills-stay-enforced.md) — the dropped-obligation version: a required item silently falls out of a long trajectory, and a self-check inherits the same blind spot
+- [Probing an Agent's Completion Claim in a Disposable Fork](../../verification/completion-claim-probe.md) — treats the completion claim as a trigger for an external check rather than as a result, with the measured cost of judging it from the transcript alone

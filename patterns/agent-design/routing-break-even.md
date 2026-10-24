@@ -11,7 +11,7 @@ aliases:
   - minimum offload fraction
   - router judge cost break-even
   - model routing break-even calculation
-last_reviewed: 2026-10-02
+last_reviewed: 2026-10-19
 maturity: emerging
 ---
 
@@ -21,7 +21,7 @@ maturity: emerging
 
 `minimum offload = judge cost / (expensive cost - cheap cost)` gives the fraction of turns you must send to the cheap model before routing costs less than sending everything to the frontier model. LangChain publishes the rule after benchmarking NVIDIA's [NeMo Switchyard](https://github.com/NVIDIA-NeMo/Switchyard) router across 145 agent tasks ([LangChain, 11 August 2026](https://www.langchain.com/blog/switchyard-agent-routing-benchmark)).
 
-Replit routes between models per request rather than pinning every request to one model, the arrangement this formula prices ([Replit, 26 August 2026](https://replit.com/blog/intelligent-model-routing)). The announcement carries no prices, so it confirms the decision is live in production and settles none of the numbers. Tailscale runs a customer-facing model router on Vercel's AI Gateway ([Vercel, 11 September 2026](https://vercel.com/blog/how-tailscale-built-a-customer-facing-model-router-on-ai-gateway)). It is a second production deployment of the arrangement, and it too leaves the numbers to the benchmark below. Microsoft's developer blog argues the same premise, that the most capable model is not always the right one for the work ([Microsoft, 9 September 2026](https://devblogs.microsoft.com/blog/your-work-might-not-need-the-smartest-model/)). It states that position without pricing it, so nothing there changes the arithmetic below. Vercel puts open-weight models at 56% of August token volume on its AI Gateway ([Vercel, 17 September 2026](https://vercel.com/blog/ai-gateway-production-index-september-2026)). That is a measure of where tokens already go, and the formula below still needs two prices you supply yourself.
+Replit routes between models per request rather than pinning every request to one model, the arrangement this formula prices ([Replit, 26 August 2026](https://replit.com/blog/intelligent-model-routing)). The announcement carries no prices, so it confirms the decision is live in production and settles none of the numbers. Tailscale runs a customer-facing model router on Vercel's AI Gateway ([Vercel, 11 September 2026](https://vercel.com/blog/how-tailscale-built-a-customer-facing-model-router-on-ai-gateway)). It is a second production deployment of the arrangement, and it too leaves the numbers to the benchmark below. Microsoft's developer blog argues the same premise, that the most capable model is not always the right one for the work ([Microsoft, 9 September 2026](https://devblogs.microsoft.com/blog/your-work-might-not-need-the-smartest-model/)). It states that position without pricing it, so nothing there changes the arithmetic below. Vercel put open-weight models at 56% of August token volume on its AI Gateway ([Vercel, 17 September 2026](https://vercel.com/blog/ai-gateway-production-index-september-2026)). The October index moves that to 71.5% of September tokens and adds the spend side at 23% ([Vercel, 15 October 2026](https://vercel.com/blog/ai-gateway-production-index-october-2026)). Both figures measure where tokens already go across one gateway's pooled customers, and the formula below still needs two prices you supply yourself.
 
 ## What the calculation can decide
 
