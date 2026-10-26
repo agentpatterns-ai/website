@@ -8,7 +8,7 @@ aliases:
 tags:
   - security
   - copilot
-last_reviewed: 2026-10-09
+last_reviewed: 2026-10-25
 maturity: emerging
 ---
 
@@ -56,7 +56,7 @@ A second dataset points the same way. GitGuardian found that the validity rate o
 
 Rank the levers by where they act.
 
-1. Short-lived credentials. With OpenID Connect, "your cloud provider issues a short-lived access token that is only valid for a single job, and then automatically expires." ([GitHub docs](https://docs.github.com/en/actions/concepts/security/openid-connect)) A token that expires has little left to leak.
+1. Short-lived credentials. With OpenID Connect, "your cloud provider issues a short-lived access token that is only valid for a single job, and then automatically expires." ([GitHub docs](https://docs.github.com/en/actions/concepts/security/openid-connect)) A token that expires has little left to leak. GitHub announced opt-in expiring, auto-refreshing OAuth tokens for the GitHub CLI on October 21, 2026 ([GitHub Changelog](https://github.blog/changelog/2026-10-21-github-cli-opt-in-to-expiring-auto-refreshing-oauth-tokens)). That puts the lever in the tool an agent shells out to.
 2. A push-time block. A coding agent can act on this lever inside its own loop. GitHub is adding its new classifier to the `/security-review` command in Copilot CLI and Copilot App, "so Copilot users can address secrets before a push even without needing an organization's GitHub Secret Protection plan." ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/))
 3. Issuer revocation. Once GitHub notifies partners, "a large number of these partners immediately revoke the token," so revocation can happen "without waiting for a developer to find and process a GitHub alert." ([GitHub blog](https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/))
 
