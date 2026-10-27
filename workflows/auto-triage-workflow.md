@@ -6,7 +6,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-06-03
+last_reviewed: 2026-10-25
 maturity: established
 ---
 
@@ -45,7 +45,7 @@ flowchart TD
     I -->|Otherwise| L[Tag owner]
 ```
 
-The four stages are not unique to Cognition. The same decomposition appears as perception → reasoning → planning → action in an independent LLM incident-response agent ([arXiv:2602.13156](https://arxiv.org/abs/2602.13156)); a survey of LLM-driven bug-tracking workflows expands the list to seven stages but the four are its core ([arXiv:2510.08005](https://arxiv.org/abs/2510.08005)).
+The four stages are not unique to Cognition. The same decomposition appears as perception → reasoning → planning → action in an independent LLM incident-response agent ([arXiv:2602.13156](https://arxiv.org/abs/2602.13156)); a survey of LLM-driven bug-tracking workflows expands the list to seven stages but the four are its core ([arXiv:2510.08005](https://arxiv.org/abs/2510.08005)). Replit announced a Monitoring Agent on 2026-10-22 that investigates an alert, identifies the cause, validates a fix, and deploys it to production ([Replit: Monitoring Agent](https://replit.com/blog/replit-monitoring-agent)).
 
 ### Stage 1: Monitor
 
