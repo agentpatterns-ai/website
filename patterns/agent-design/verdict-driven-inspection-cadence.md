@@ -94,3 +94,4 @@ This is the replacement branch: the verdict stopped the step rather than advisin
 - [Effective Feedback Compute (EFC) for Harness Comparison](effective-feedback-compute.md) — counting only the feedback that moves the agent, the same placement-over-volume argument at trace level
 - [Watcher Side Agents: Give the Second Agent a Trigger It Did Not Pick](watcher-side-agents.md) — the operator-addressed version, where the trigger decides whether the note is worth reading
 - [Loop Detection for AI Agents](../../observability/loop-detection.md) — deterministic repetition detection, the cheapest trigger in this family
+- [Edit-Request Steering Trigger: One Plan Before the First Source Edit](edit-request-steering-trigger.md) — drops the monitor entirely and fires once on an action the agent already takes

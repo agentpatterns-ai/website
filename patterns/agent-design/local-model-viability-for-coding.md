@@ -71,3 +71,4 @@ After four weeks across an M3 Max (48 GB) and an M5 Pro (64 GB), Böckeler's go-
 - [Gateway Model Routing](gateway-model-routing.md) — route the harness across a model catalog, including local providers
 - [Auto Model Selection](auto-model-selection.md) — hand per-task model choice to the harness instead of pinning one model
 - [Specialized SLM as an Agent Tool](specialized-slm-as-agent-tool.md) — use a small local model as a scoped tool rather than the primary agent
+- [Local Inference Under a Cloud Router](cloud-routed-local-inference.md) — what a vendor router does and does not move when it picks an on-device model for you

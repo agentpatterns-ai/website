@@ -83,3 +83,4 @@ The read-only version of the same critic shows why inspection is not enough. Eve
 - [Sandbox Forking: Branch Agent Runs From a Warm Snapshot](../patterns/agent-design/sandbox-forking.md) — the same fork primitive used for parallel runs instead of for verification
 - [Bounded Repair-Loop Iterations](bounded-repair-loop-iterations.md) — the independent case for the round cap this loop converges at
 - [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — what mid-run trajectory reading can and cannot deliver, which is the position this page argues against
+- [A Separate Critic Over Completion-Time Self-Checking](separate-critic-over-self-recheck.md) — the layer comparison behind calling a separate critic at all, where the agent's own completion-time recheck is the one layer of four its authors recommend against

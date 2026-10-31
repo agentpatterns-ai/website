@@ -68,3 +68,4 @@ Constraining what the optimizer may write shrinks the same variance. Middleware 
 - [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — the hand-written form of prerequisite blocking
 - [Reflective Prompt Evolution with Pareto Selection (GEPA)](gepa-reflective-prompt-evolution.md) — one of the optimizer families measured under this protocol
 - [pass@k and pass^k Metrics](../../verification/pass-at-k-metrics.md) — the reliability-sensitive scoring the τ² domains use
+- [Search-Set Harness Gain as Capability Evidence](../anti-patterns/search-set-gain-as-capability-evidence.md) — the other question about an automatically selected harness: not whether the selection repeats, but what the winning score was made of

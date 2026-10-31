@@ -12,7 +12,7 @@ aliases:
   - permission prompts none
   - unattended permission fallback
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-09-14
+last_reviewed: 2026-10-26
 maturity: emerging
 status: current
 ---
@@ -39,11 +39,13 @@ Upstream decisions are untouched: "Permission rules, `PermissionRequest` hooks, 
 
 Two behaviors change beyond the denial. "With `--permission-prompts none`, Claude Code removes the tools that need an answer from a person, such as `AskUserQuestion`, so Claude can't call them. Any MCP elicitation request that no `Elicitation` hook answers is cancelled." ([headless guide](https://code.claude.com/docs/en/headless))
 
+Claude Code 2.1.310 (October 23, 2026) also changes an MCP timeout error. This applies in non-interactive sessions when the server's elicitation is unanswered: "it now tells Claude that no answer came and not to repeat the call" ([Claude Code changelog 2.1.310](https://code.claude.com/docs/en/changelog#2-1-310)).
+
 The third change is the one most often read backwards. The denial does not stop the job. Claude "is told that nobody can approve the request and not to retry it, and the run continues" ([headless guide](https://code.claude.com/docs/en/headless)). Anthropic reports the same outcome for auto mode's own repeated-block threshold in a non-interactive run: "the action doesn't run and Claude keeps working" ([Choose a permission mode](https://code.claude.com/docs/en/permission-modes)). The action fails closed. The run does not.
 
 ## Why it works
 
-Permission decisions run as an ordered pipeline, and the flag substitutes only its last branch. Anthropic states the order: rules resolve first, then read-only actions and in-working-directory edits auto-approve, then "everything else goes to the classifier" ([Choose a permission mode](https://code.claude.com/docs/en/permission-modes)). The prompt is what is left when none of those settle the call. Swapping ask for deny at that terminal branch leaves every upstream decision intact. That is why the fallback composes with a mode instead of consuming one.
+Permission decisions run as an ordered pipeline, and the flag substitutes only its last branch. Anthropic states the order: rules resolve first, then read-only actions and in-working-directory edits auto-approve, then routes remaining actions to the classifier, with documented exceptions ([Choose a permission mode](https://code.claude.com/docs/en/permission-modes)). The prompt is what is left when none of those settle the call. Swapping ask for deny at that terminal branch leaves every upstream decision intact. That is why the fallback composes with a mode instead of consuming one.
 
 That same property makes the residue legible: whatever reaches the fallback is exactly what your policy could not settle.
 
@@ -53,7 +55,7 @@ Claude Code hands that residue back in a parseable form. "With `--output-format 
 
 ## When this backfires
 
-- The task has no alternative route. After a classifier block, Claude "receives the reason and tries an alternative" ([Choose a permission mode](https://code.claude.com/docs/en/permission-modes)), and after a fallback denial it is told not to retry. A deploy or a migration has none, so the run finishes having skipped what you scheduled it for.
+- The task has no alternative route. After a classifier block, Claude "receives the reason" ([Choose a permission mode](https://code.claude.com/docs/en/permission-modes)), and after a fallback denial it is told not to retry. A deploy or a migration has none, so the run finishes having skipped what you scheduled it for.
 - Nobody parses the denial record. Anthropic documents `permission_denials` for `--output-format stream-json` runs. A cron job emitting plain text into a log gets no structured list.
 - The task is under-specified. With `AskUserQuestion` removed, an agent that should have asked a clarifying question guesses instead.
 - The allowlist was enumerable all along. Where the action set is small and stable, `dontAsk` with explicit `--allowedTools` carries no version floor and one fewer moving part.
@@ -97,3 +99,4 @@ Here nothing outside the allowlist and the read-only set runs at all ([Choose a 
 - [bypassPermissions Silently Overrides allowedTools](../anti-patterns/bypass-permissions-overrides-allowlist.md) — the widening failure this posture exists to avoid
 - [Headless Claude Code in CI](../../workflows/headless-claude-ci.md) — the surrounding non-interactive run this flag configures
 - [Whose Permissions a Self-Scheduled Agent Run Carries](../../security/self-scheduled-run-authority.md) — which principal that unattended run is denying or allowing on behalf of
+- [Bounding an Unattended Run's Wait on a Usage-Limit Reset](usage-limit-wait-ceiling.md) — the quota sibling of this posture, where the run stalls rather than being denied

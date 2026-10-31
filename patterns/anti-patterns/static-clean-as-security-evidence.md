@@ -41,6 +41,8 @@ Do not extend that into a claim that static tools cannot see weak randomness. Ba
 - You read a confirmation as independent, or as severe. One model ran both detection and verification, which the authors flag for "correlated reasoning errors and a degree of self-confirmation", and the confirmed set is "dominated by denial-of-service and weak-randomness weaknesses" that are "among the lower in direct impact" ([arXiv:2609.10762v1](https://arxiv.org/abs/2609.10762v1)).
 - The sandbox is too small for the class. In networkless 256 MB containers, 46 inconclusive verdicts "may reflect environmental limits rather than the absence of a vulnerability" ([arXiv:2609.10762v1](https://arxiv.org/abs/2609.10762v1)). A not-triggered verdict is not a clean bill.
 
+For name-only inputs, see [identifier-only context poisoning in code completion](../../security/identifier-only-context-poisoning.md).
+
 ## Example
 
 **Before — the composite scan is the merge gate, at MEDIUM and above:**

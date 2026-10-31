@@ -109,3 +109,4 @@ The pattern carries real overhead. It degrades or inverts in several conditions:
 - [Pre-Completion Checklists for AI Agent Development](pre-completion-checklists.md) — the post-task verification gate that complements pre-action commitment
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md) — the broader checkpoint principle pre-action annotation specializes for UI-driving agents
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — the failure mode pre-action commitment is designed to make harder
+- [Review That Runs the Application, Not Just the Diff](execution-pass-code-review.md) — the reviewer-side execution pass that needs exactly this kind of written success criteria

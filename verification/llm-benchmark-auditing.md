@@ -17,7 +17,7 @@ maturity: emerging
 
 # LLM-Driven Benchmark Auditing
 
-> Treat the benchmark itself as a software artifact and let a frontier LLM audit its specs, fixtures, and grading scripts before you trust the score it produces.
+> Have a frontier LLM audit the benchmark's specs, fixtures, and grading scripts before you trust its scores.
 
 ## Why benchmarks need auditing
 
@@ -74,3 +74,5 @@ The same paper's deployment on ScienceAgentBench produced 12 author-confirmed is
 - [Anti-Reward Hacking](anti-reward-hacking.md) — agents exploiting weak graders, the failure mode rigid scripts try to prevent
 - [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — using benchmarks for tool evaluation once you trust them
 - [Answer-Reachable Eval Environments](../patterns/anti-patterns/answer-reachable-eval-environments.md) — the defect an artifact audit misses, where the leak is in the container the agent runs in
+- [State-Integrity Checks for an Eval Oracle](oracle-integrity-checks-eval-harness.md) — the deterministic counterpart, which asserts what the grading function does to the state it grades rather than reading the artifacts
+- [Specification-Oracle Gap Audits for Test-Graded Evals](specification-oracle-gap-audit.md) — the same artifacts audited statically and without model calls, for names the tests need and the task text never states

@@ -13,6 +13,7 @@ nav:
       - computer-systems-lens-agent-security.md
       - four-layer-agent-security-taxonomy.md
       - goal-reframing-exploitation-trigger.md
+      - identifier-only-context-poisoning.md
       - improper-output-handling-downstream-sinks.md
       - lethal-trifecta-threat-model.md
       - oracle-poisoning-knowledge-graph.md
@@ -28,6 +29,7 @@ nav:
       - unbounded-consumption-resource-bounds.md
       - workspace-topology-injection-attack-vector.md
       - task-choice-poisoned-repository-exposure.md
+      - reviewer-suspicion-ranking-as-attack-map.md
       - bug-class-hints-as-exploit-input.md
       - vibe-coded-vulnerability-root-causes.md
       - post-authorization-execution-trust-gap.md
@@ -124,6 +126,7 @@ nav:
       - parser-versus-shell-permission-evasion.md
       - per-caller-identity-for-agent-tool-calls.md
       - permission-gated-commands.md
+      - plan-scoped-production-access.md
       - pre-execution-command-risk-classification.md
       - proof-of-presence-step-up-authentication.md
       - revocable-resource-effect-capabilities.md
@@ -147,12 +150,14 @@ nav:
       - foresight-guided-multi-agent-jailbreak-defense.md
   - "PR-Time and Scheduled Review":
       - always-on-pr-security-review.md
+      - per-language-merge-gate-coverage.md
       - capability-pegged-security-rescan.md
       - scanner-as-mcp-server.md
       - cross-repository-security-posture.md
       - black-box-probe-build-loop.md
       - structural-safeguard-monitoring.md
       - security-audit-harness-composition.md
+      - verification-staging-security-audit-skills.md
       - agentic-detection-response-mcp.md
   - "Tool Invocation":
       - behavioral-firewall-tool-call-trajectories.md
@@ -187,6 +192,7 @@ nav:
       - neutral-prompting-hallucination-steering.md
       - rule-file-package-substitution.md
       - tool-signing-verification.md
+      - registry-boundary-install-gate.md
       - enterprise-managed-plugin-governance.md
       - npm-signing-channel-containment-playbook.md
       - semantic-intent-validation-skills.md

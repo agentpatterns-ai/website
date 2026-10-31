@@ -89,3 +89,4 @@ A retrieval-augmented generation task required configurable model parameters. Th
 - [The No-Op Test](../../instructions/behavioral-no-op-test.md) — deleting a line and rerunning the task to test whether it changes behavior.
 - [Judging a Skill's Honesty by the Validity of Its Output](judging-skill-honesty-by-output-validity.md) — the same withheld-skill comparison pointed at policy integrity instead of cost and failure attribution.
 - [Prompt Replay as a Skill Safety Test](prompt-replay-skill-testing.md) — the security-side version of changing how a skill is delivered, where pasting the body as a prompt reproduces under a third of the installed skill's effect.
+- [Treating Co-Loaded Agent Skills as Additive Rule Sets](co-loaded-skills-as-additive-rules.md) — what a second same-job skill in the same context costs, and why the closing worked example usually decides it, with Phi-4-mini mainly following load order.

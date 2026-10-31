@@ -82,3 +82,4 @@ A last caveat is the authors' own: these are two model versions at default reaso
 - [Terminal-First Agent Interfaces with Browser Escalation](terminal-first-browser-escalation.md) — the adjacent enterprise choice, terminal against browser, with its own coverage precondition
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md) — programmatic tool calling as an API feature, with the context-management case for it
 - [Tool Minimalism and High-Level Prompting](tool-minimalism.md) — the catalog-side version of the same pressure, fewer non-overlapping tools rather than none
+- [Interface Realization Repair: Evidence and Limits](../patterns/agent-design/interface-realization-repair.md) — what the available evidence establishes about repair, diagnosis, and comparison limits

@@ -8,6 +8,7 @@ nav:
       - benchmark-contamination-eval-risk.md
       - lexical-leakage-agent-memory-retrieval-evals.md
       - controlled-benchmark-rewriting-safety-judgment.md
+      - surface-form-guard-testing.md
       - black-box-agent-risk-scoring.md
       - decomposed-red-teaming-agent-monitors.md
       - overeager-behavior-elicitation-scope-trap-fragments.md
@@ -15,11 +16,13 @@ nav:
       - pass-at-k-metrics.md
       - comparative-judging-config-ranking.md
       - pass-at-k-t-agentic-rl-eval.md
+      - attempt-budget-sweep-harness-gains.md
       - markov-chain-agent-reliability.md
       - sampling-state-agent-variability-layers.md
       - size-agent-comparisons-by-run-variance.md
       - compliance-gated-best-of-k-selection.md
       - trajectory-decomposition-diagnosis.md
+      - valid-completion-rate-second-axis.md
       - action-class-decomposition-tool-calling-evals.md
       - repository-perturbation-context-reasoning-diagnosis.md
       - static-difficulty-estimation-issue-triage.md
@@ -65,16 +68,20 @@ nav:
       - benchmark-noise-floor-audit.md
       - asr-comparability-audit.md
       - request-vs-commit-safety-readouts.md
+      - injection-failure-composition.md
       - judge-instrument-stability-check.md
       - capability-ladder-eval-probe.md
       - specification-path-testing.md
       - severity-stratified-security-prompt-evaluation.md
       - agent-transcript-analysis.md
       - corpus-level-trace-diagnostics.md
+      - behavioral-trace-retrieval.md
       - cross-framework-signal-semantics.md
       - llm-benchmark-auditing.md
+      - oracle-integrity-checks-eval-harness.md
       - synae-synthetic-eval-quality.md
       - task-alignment-benchmark.md
+      - specification-oracle-gap-audit.md
   - "Behavioral Testing":
       - behavioral-testing-agents.md
       - behavior-specs.md
@@ -99,6 +106,7 @@ nav:
       - skill-specification-violation-fuzzing.md
       - tool-use-sim-to-real-perturbation-taxonomy.md
       - llm-dependent-harness-test-adequacy.md
+      - mock-boundary-validation-agent-built-systems.md
   - "Regression Testing":
       - golden-query-pairs-regression.md
       - human-review-golden-dataset-curation.md
@@ -117,6 +125,7 @@ nav:
       - skill-use-gate-decomposition.md
       - configuration-specific-skill-utility.md
       - emulated-apis-for-skill-evals.md
+      - local-git-remote-eval-fixtures.md
       - emulate-ax-changes-before-shipping.md
       - ax-evals-agent-facing-surface.md
       - ax-bare-baseline-lift-drag.md
@@ -137,6 +146,7 @@ nav:
       - unstated-contract-bug-triage.md
       - pre-test-grounded-plan-assertion-annotation.md
       - agent-recorded-video-demos.md
+      - execution-pass-code-review.md
       - agent-generated-verification-report.md
       - spec-derived-execution-correctness-judging.md
       - specification-grounded-test-generation.md
@@ -154,6 +164,8 @@ nav:
       - transcript-measured-review-coverage.md
       - task-category-security-review-routing.md
       - defect-visibility-review-autonomy.md
+      - circular-ci-verification-agent-prs.md
+      - human-only-approval-rights.md
       - chain-of-verification-coding-agents.md
       - demand-driven-repo-auditing.md
       - llm-static-verification-natural-language-requirements.md
@@ -163,6 +175,8 @@ nav:
       - cross-model-review-independence.md
       - instruction-file-interference-audit.md
       - plan-stage-checkpoint-repair.md
+      - oversight-stage-attribution.md
+      - separate-critic-over-self-recheck.md
   - "Rubric Design":
       - anti-reward-hacking.md
       - symptom-reduction-as-root-cause.md
@@ -174,6 +188,7 @@ nav:
       - judge-model-bake-off.md
       - contract-domain-tracing-rubric-credit.md
       - typed-judge-scorers.md
+      - reference-dependence-online-evals.md
   - "Guardrails":
       - verification-capacity-quality-ceiling.md
       - verification-capacity-saturation.md
@@ -184,6 +199,7 @@ nav:
       - enforcement-liveness-evidence.md
       - per-layer-suppression-accounting.md
       - mechanism-class-gate-stacking.md
+      - source-counted-approval-gates.md
       - slop-detection-as-review-gate.md
       - evidence-conditioned-execution.md
       - speculative-uncertainty-draft-model-gate.md
@@ -191,6 +207,7 @@ nav:
       - non-compensatory-readiness-gates.md
       - staged-evidence-gates-program-repair.md
       - execution-budgeting-program-repair.md
+      - optional-runtime-tool-access-fault-localization.md
       - bounded-repair-loop-iterations.md
       - completion-claim-probe.md
       - profiler-guided-optimization-loop.md
@@ -222,6 +239,7 @@ nav:
   - "Tooling":
       - eval-environment-containment.md
       - per-attempt-eval-sandboxes.md
+      - agent-environment-sandbox-split.md
       - rented-benchmark-sandboxes.md
       - llm-context-test-harness.md
       - runnable-documentation.md

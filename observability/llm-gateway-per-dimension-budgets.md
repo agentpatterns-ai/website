@@ -70,3 +70,4 @@ The gateway helps only for traffic it can see and price correctly. It backfires 
 - [Gateway Model Routing](../patterns/agent-design/gateway-model-routing.md) — the routing role of the same proxy this page uses for budget enforcement
 - [Gateway Hint Headers for Routing and Budgeting Agent Calls](../patterns/agent-design/gateway-hint-headers.md) — how a client populates the per-subagent and per-request-class dimensions these budgets attach to
 - [Developer Control Strategies for AI Coding Agents](../human/developer-control-strategies-ai-agents.md) — the human-side control loop that per-dimension budgets operationalize at the org level
+- [Client-Keyed Gateway Controls](../patterns/agent-design/client-keyed-gateway-controls.md) — header conditions that narrow these LangSmith policy subjects, and why a cap keyed on a caller-supplied identifier binds only when the caller cannot write it

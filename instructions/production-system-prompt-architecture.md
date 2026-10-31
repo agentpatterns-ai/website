@@ -170,6 +170,8 @@ Over-isolation. Separating concerns too finely can cause contradictions between 
 
 The CL4R1T4S capture is a computer-use session prompt. The exact parameter names for reasoning effort and thinking mode at the prompt tail are visible in that capture but not publicly documented by Anthropic. The ~25-section count and XML tag naming conventions may be specific to the computer-use configuration rather than consistent across API, mobile, or enterprise deployments.
 
+A system prompt is also only part of what an agent sends. In one controlled capture of a Claude Code release, the system prompt was 9,517 of 74,078 characters and the 20 tool definitions were 57,346 ([de Sant'Anna Paixão et al., 2026](https://arxiv.org/abs/2610.37332v1)). That measurement covers that release under that configuration, and does not describe the prompt analyzed here. It does bound what prompt-only analysis can see: [capture the assembled request](captured-instruction-stack.md).
+
 ## Sources
 
 - [CL4R1T4S — Claude Opus 4.6 system prompt capture](https://github.com/elder-plinius/CL4R1T4S/blob/main/ANTHROPIC/Claude_Opus_4.6.txt) — Full leaked system prompt from a Claude.ai computer-use session (Feb 2026)

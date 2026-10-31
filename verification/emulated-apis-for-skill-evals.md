@@ -97,3 +97,4 @@ skill request: GET https://api.contoso.com/products
 - [Eval-Driven Development: Write Evals Before Building Agent Features](../workflows/eval-driven-development.md) — the loop this isolation feeds
 - [Emulate Agent-Experience Changes Before Shipping](emulate-ax-changes-before-shipping.md) — the sibling that reuses this interception machinery for the opposite purpose: measuring a *proposed change* to a dependency, not isolating a fixed one
 - [Skill Test Coverage as a Release Gate](skill-test-coverage-release-gate.md) — the adequacy question one level up: which of the skill's specified behaviors does any testcase activate at all
+- [Mock-Boundary Validation for Agent-Built Systems](mock-boundary-validation-agent-built-systems.md) — what a green suite does not cover once the double is in place, reported from one project's escaped defects

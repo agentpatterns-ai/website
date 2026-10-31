@@ -68,6 +68,7 @@ With no channel, the reachable green result is a hardcoded output. With the tool
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](../../verification/anti-reward-hacking.md) — the complementary control: design the rubric so no single metric is gameable, where this page assumes the rubric is already broken.
 - [Task Feasibility Awareness: Stop Before You Start](task-feasibility-awareness.md) — halting on a task the available tools cannot satisfy, where an escalation channel handles a task that looks completable because the agent can fake the pass.
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — the same reach-out move for missing information rather than a defective oracle.
+- [Evidence-Anchored Handoff for Blocked Coding Agents](evidence-anchored-handoff.md) — the timing and report-content half of the same tool, measured on injected environment blockers rather than defective checkers.
 - [Escape Hatches: Unsticking Stuck Agents](../../workflows/escape-hatches.md) — recovery paths for an agent making no progress; its prompt-level "report the blocker" instruction is the weaker form this research measures.
 - [Agent Pushback Protocol for Managing Disagreements](agent-pushback-protocol.md) — the broader case for letting an agent contest the task it was given.
 - [Protecting the Test Oracle From the Agent](protect-the-oracle-from-the-agent.md) — the structural answer to the same conflict: take the oracle out of the agent's write reach instead of offering it a better option.

@@ -101,3 +101,4 @@ No one is present to approve a tool call. MCP toolsets default to `always_ask`, 
 - [Loop Trigger Selection](../loop-engineering/loop-trigger-selection.md)
 - [Cloud-Scheduled Routines vs Local Session Scheduling](../tools/claude/cloud-scheduled-routines.md)
 - [Continuous AI](continuous-ai.md)
+- [Bounding an Unattended Run's Wait on a Usage-Limit Reset](../patterns/agent-design/usage-limit-wait-ceiling.md) — the quota stall this contract has to report as a distinct state

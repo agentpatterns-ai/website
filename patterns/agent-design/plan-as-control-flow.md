@@ -95,3 +95,4 @@ If you will not build executors, the cheaper option is to keep the plan in conte
 - [Recurring Control Belongs in Harness Code](recurring-control-in-harness-code.md)
 - [Minimum-Sufficient Control Ladder](minimum-sufficient-control-ladder.md)
 - [Router-Imposed Quality Ceiling](router-imposed-quality-ceiling.md)
+- [Staged Review for Expensive-to-Render Agent Deliverables](staged-review-expensive-renders.md)

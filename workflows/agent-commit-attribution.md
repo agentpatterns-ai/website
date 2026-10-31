@@ -203,3 +203,4 @@ For the [Copilot cloud agent](../tools/copilot/cloud-agent-org-controls.md), sig
 - [Worktree Isolation](worktree-isolation.md)
 - [Tool Signing and Signature Verification](../security/tool-signing-verification.md)
 - [Secrets Management for Agent Workflows](../security/secrets-management-for-agents.md)
+- [Gated Contribution Intake Under Agent Load](gated-contribution-intake.md) — the contribution gates that rely on these identity records to decide who may submit

@@ -74,6 +74,7 @@ The wider gap between what an agent says and what it does is documented elsewher
 ## Related
 
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md) — finding the injection paths whose successes this metric then classifies by visibility
+- [Separate Ignored Injections From Refused Ones Before Reading an ASR as Defense](../verification/injection-failure-composition.md) — the same reading applied to the attacks that failed, where 76-80% were ignored rather than refused
 - [Adaptive Evaluation of Out-of-Band Prompt-Injection Defenses](adaptive-evaluation-out-of-band-defenses.md) — the other axis on which a reported ASR overstates safety, attacker-adaptivity rather than user-visibility
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — divergence between actions and the audit record, where this page covers divergence between actions and the user-facing reply
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — a trajectory-level control that rejects the off-task call before the summary step is reached

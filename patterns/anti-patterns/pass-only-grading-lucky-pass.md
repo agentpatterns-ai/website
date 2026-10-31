@@ -76,3 +76,4 @@ A second group measured the same drift while training against a unit-test reward
 - [Artifact-Only Verification Hides Skipped Skill Steps](artifact-only-verification.md) — the per-run form, where the skipped step is a mandate in the agent's own skill rather than a benchmark's blind spot
 - [Trajectory-Aware Benchmark Subset Selection for Agents](../../verification/trajectory-aware-benchmark-subset-selection.md) — what noise in the pass label costs when that label is the key a subset is grouped by
 - [Assertion-Free Test Theater](assertion-free-test-theater.md) — the test-suite half of the incomplete-implementation class, where a present test asserts nothing
+- [Single-Tree Crash Verdicts as Execution Understanding](single-tree-crash-verdict-as-execution-understanding.md) — the same credit problem on a diagnosis rather than a patch, solved by running the question on a second tree that does not fail

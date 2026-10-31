@@ -3,9 +3,11 @@ nav:
   - index.md
   - "Context & Memory":
       - infinite-context.md
+      - window-headroom-as-delivery-evidence.md
       - distractor-interference.md
       - context-poisoning.md
       - documenting-code-the-agent-can-read.md
+      - converted-text-as-the-document.md
       - dynamic-tool-fetching-cache-break.md
       - mid-session-config-cache-invalidators.md
       - session-partitioning.md
@@ -13,6 +15,7 @@ nav:
       - verbatim-failure-records.md
       - belief-inertia-after-tool-map-drift.md
       - memory-induced-tool-drift.md
+      - tool-graph-memory-as-next-tool-guidance.md
       - compliance-trap-conflicting-memory.md
       - assuming-loaded-skills-stay-enforced.md
       - objective-drift.md
@@ -43,6 +46,7 @@ nav:
       - per-user-agents-contested-resource.md
       - agent-extension-conflicts.md
       - silent-skill-substitution.md
+      - co-loaded-skills-as-additive-rules.md
       - cross-component-interference.md
       - blaming-the-model-for-scaffolding-regressions.md
       - constraint-tax-tool-suppression.md
@@ -58,6 +62,7 @@ nav:
       - multi-agent-shared-state-isolation-anomalies.md
       - declared-peer-consensus-agent-context.md
       - peer-refusal-as-coordination-control.md
+      - seller-written-listings-as-capability-signal.md
   - "Cost & Efficiency":
       - reasoning-overuse.md
       - deliberation-inducing-prompt-cues.md
@@ -68,6 +73,7 @@ nav:
       - cost-routing-without-quality-monitoring.md
       - skill-review-without-cost-baseline.md
       - offline-judgment-quality-as-controller-value.md
+      - random-restart-as-the-stopping-baseline.md
   - "Generated Code Quality":
       - abstraction-bloat.md
       - copy-paste-agent.md
@@ -78,6 +84,7 @@ nav:
       - patchwork-problem.md
       - deletion-avoidance.md
       - refactoring-runaway.md
+      - over-compliant-refactoring-loop.md
       - codeslop-trajectory-minimization.md
       - minimality-prompt-as-patch-size-control.md
       - dependency-inlining-provenance-loss.md
@@ -104,11 +111,15 @@ nav:
       - task-completion-as-tool-certification.md
       - run-status-vs-task-status-confusion.md
       - completion-summary-as-oversight-surface.md
+      - mention-coverage-as-report-completeness.md
+      - discussion-transcript-as-agent-state.md
       - empty-commitments.md
       - clean-final-state-as-compliance-evidence.md
       - clean-merge-as-compatibility-evidence.md
       - pooled-evidence-mcp-factuality-conflation.md
       - static-skill-defect-count-as-runtime-risk.md
+      - protected-replay-success-as-retry-restraint.md
+      - doc-co-change-as-merge-gate.md
   - "Testing & Evaluation":
       - happy-path-bias.md
       - lazy-generation.md
@@ -124,6 +135,7 @@ nav:
       - tdd-inside-the-agent-loop.md
       - artifact-only-verification.md
       - held-out-tasks-as-shortcut-defense.md
+      - search-set-gain-as-capability-evidence.md
       - answer-reachable-eval-environments.md
       - serving-stack-confound-tool-call-evaluation.md
       - perceived-model-degradation.md
@@ -135,6 +147,9 @@ nav:
       - trigger-conditioned-skill-comparisons.md
       - pass-only-grading-lucky-pass.md
       - passing-tests-as-performance-evidence.md
+      - compaction-tolerant-benchmarks-as-policy-evidence.md
+      - agent-bug-findings-as-maintainer-backlog.md
+      - single-tree-crash-verdict-as-execution-understanding.md
   - "Permissions & Access Control":
       - prompt-only-tool-access-control.md
       - unenforced-claude-md-security-rules.md
@@ -158,6 +173,9 @@ nav:
       - fixed-width-credential-assumptions.md
       - spelled-path-permission-scope.md
       - scoped-token-as-proof-of-intent.md
+      - sandbox-capability-opt-in-as-compatibility-setting.md
+      - mcp-contract-as-filesystem-sandbox.md
+      - per-action-approval-as-episode-authorization.md
   - "Injection & Untrusted Input":
       - single-layer-injection-defence.md
       - direct-prompt-injection-collaboration.md
@@ -168,7 +186,9 @@ nav:
       - llm-api-router-mitm.md
       - adversarial-only-leakage-threat-modelling.md
       - option-labels-as-trusted-config.md
+      - description-prose-as-tool-fit-evidence.md
       - guest-reported-values-as-platform-state.md
+      - compaction-prompt-rules-as-provenance-defense.md
   - "False Security Evidence":
       - model-confidence-as-security-verification.md
       - model-upgrade-as-security-improvement.md
@@ -181,6 +201,7 @@ nav:
       - cold-start-safety-gap.md
       - memory-injection-rate-as-security-evidence.md
       - detector-benchmark-score-as-deployment-evidence.md
+      - english-only-guard-evaluation.md
       - local-trace-as-audit-evidence.md
       - read-denial-on-a-build-input.md
       - trusting-claimed-prior-approval.md
@@ -209,4 +230,5 @@ nav:
       - proactive-team-agent-tool-rollout.md
       - agent-headcount-vanity-metric.md
       - client-version-metric-dip-as-adoption-loss.md
+      - mention-shaped-placeholders-as-inert-text.md
   - ...

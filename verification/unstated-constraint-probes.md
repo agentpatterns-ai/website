@@ -89,3 +89,4 @@ Non-mutation and deep-merge are the two the stated suite cannot reach, because n
 - [Unstated-Contract Bugs: Sort Tickets by Information Gap](unstated-contract-bug-triage.md) — the same blindness one step further out, where the constraint sits in user behavior rather than in a prompt you wrote.
 - [Review Constraint Tests as a Second Acceptance Gate](review-constraint-acceptance-gate.md) — the repository-scale case, where the constraint was stated to the agent and still needs its own suite.
 - [Decision Pins: Confirm an Acceptance Example Discriminates](execution-confirmed-decision-pins.md) — settles the named constraints before generation by running two readings against each other.
+- [Specification-Oracle Gap Audits for Test-Graded Evals](specification-oracle-gap-audit.md) — the opposite direction, where the tests demand a name the task text never stated rather than missing a constraint.

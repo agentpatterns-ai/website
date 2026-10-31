@@ -102,3 +102,4 @@ The maintainer-side defense — telling the agent to "not trust analysis written
 - [Backlog Triage Skill](../../workflows/backlog-triage-skill.md) — automated inbound-issue routing assumes the issue body is a faithful observation
 - [Observation Contract Preservation](../agent-design/observation-contract-preservation.md) — the same discipline applied to tool outputs that downstream tools validate by exact bytes
 - [The Meat Proxy: Relaying Agent Output Without Reading It](meat-proxy.md) — the opposite direction of the same handoff: model output forwarded to a human untouched, instead of a human observation expanded by a model
+- [Agent Bug Findings Are Not the Maintainer Backlog](agent-bug-findings-as-maintainer-backlog.md) — what a whole-repository bug hunt's output is worth once the report shape is right: real bugs, in a different mix from the ones maintainers fix

@@ -106,3 +106,4 @@ A path or ID still puts the injected text in the child's context through its own
 - [Per-Agent Capability Stores Beat One Task-Wide Allowlist](per-agent-capability-scoping.md) — capability limits that hold whatever reaches the child
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — untrusted text read as instruction
 - [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](action-selector-pattern.md) — another design that limits what untrusted data can influence
+- [Treating Compaction Prompt Rules as a Provenance Defense](../patterns/anti-patterns/compaction-prompt-rules-as-provenance-defense.md) — the same laundering across a compaction step instead of an agent hop

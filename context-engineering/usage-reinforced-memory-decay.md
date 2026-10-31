@@ -73,3 +73,4 @@ Read that contrast against its schedule. The last two scheduled recalls sit roug
 - [Memory Retrieval as Control](../patterns/agent-design/memory-retrieval-as-control.md) — why stale-entry lockout makes eviction and freshness discipline mandatory in any persistent memory.
 - [Context Lifecycle Management](context-lifecycle-management.md) — the decide, extract, store, consolidate, compact loop that an eviction policy plugs into.
 - [Fact Supersession Memory for Code Assistants](fact-supersession-memory.md) — the currency question rather than the retention one; retires a row because its value changed, not because nobody read it.
+- [Memory Store Writer Ceiling](memory-store-writer-ceiling.md) — what a retention policy cannot reach: the source text the extraction model never wrote down.

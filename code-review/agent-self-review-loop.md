@@ -162,6 +162,8 @@ Add a review step before pull-request creation: run a separate review prompt or 
 
 It catches mechanical issues: style, known vulnerability patterns, and dependency problems. It does not catch architectural misjudgments, incorrect business logic, or design problems requiring domain knowledge beyond the agent's context. Architectural decisions, mentorship through pull-request threads, and ethical evaluation remain exclusively human functions, which is why GitHub frames the merge button as a human decision.
 
+See [Layered Code Review with a Human-Approval Budget](../workflows/layered-review-human-approval-budget.md) — where pre-PR self-review sits in a published seven-layer stack.
+
 ## Related
 
 - [Review-Then-Implement Loop](review-then-implement-loop.md)

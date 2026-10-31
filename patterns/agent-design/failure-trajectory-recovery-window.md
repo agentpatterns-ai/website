@@ -62,6 +62,7 @@ A CLI agent runs a build step and sees `sudo: not found`. It adopts the false pr
 
 - [Behavioral Drivers of Coding Agent Success and Failure](behavioral-drivers-agent-success.md) — independent trajectory analysis showing early opening-strategy signals predict the outcome
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — reads a partial trajectory to decide when to escalate, an intervention inside the recovery window
+- [The Outer Harness That Adjudicates an Unfinished Run](unfinished-run-adjudication.md) — reads a trajectory after the run has stopped, an application the paper did not test; the paper's prefix monitor flags locked-in runs at 82% precision
 - [Exception Handling and Recovery Patterns for AI Coding Agents](exception-handling-recovery-patterns.md) — failing forward versus catastrophically once an error occurs
 - [Rollback-First Design](rollback-first-design.md) — making actions reversible so intervention can undo, not just abort
 - [Five-Failure-Layers Diagnostic](five-failure-layers-diagnostic.md) — attributing a failure to a harness layer once you have caught it

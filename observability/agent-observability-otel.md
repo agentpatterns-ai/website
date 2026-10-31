@@ -12,7 +12,7 @@ aliases:
   - Trajectory Logging via Progress Files
   - Progress File Pattern
   - Audit Trail for Agent Decisions
-last_reviewed: 2026-08-09
+last_reviewed: 2026-10-28
 maturity: established
 ---
 
@@ -95,6 +95,7 @@ All carry: `session.id`, `user.account_uuid`, `organization.id`, `user.email`, `
 | `claude_code.api_error` | API call fails — includes `status_code`, `error`, `attempt` |
 | `claude_code.tool_decision` | Tool permission decided — includes `tool_name`, `decision`, `source` |
 | `claude_code.tool_result` | Tool finishes — includes `success`, `duration_ms`, `decision_source` |
+| `claude_code.safety_event` | A permission rule, auto mode, a safety check, a hook or the sandbox stops, prompts on, or sends back a tool call (introduced in 2.1.307; 2.1.312 stops sending it) |
 
 All events in a prompt cycle share a `prompt.id` (UUID v4), excluded from metrics (unbounded cardinality) — event-level queries only.
 
@@ -108,13 +109,45 @@ The [claude-code-monitoring-guide](https://github.com/anthropics/claude-code-mon
 
 ## Compliance audit trail via tool decision events
 
-`claude_code.tool_decision` records every tool permission decision: `tool_name`, `decision` (`accept`/`reject`), and `source` (`config` = allow/deny rule; `hook` = PreToolUse hook; `user_permanent` = standing permission). This answers "what tool ran, when, by whom, under what authorization" — no custom instrumentation needed.
+`claude_code.tool_decision` records permission decisions. Its `source` can be `config`, `hook`, `user_permanent`, `user_temporary`, `user_abort`, or `user_reject`. `config` includes several mechanisms, including auto mode; it does not identify the specific check ([monitoring reference](https://code.claude.com/docs/en/monitoring-usage#tool-decision-event)).
 
-Pair these with `tool_result` events, which carry `tool_parameters`, and store them in Elasticsearch, Loki, or ClickHouse. `tool_parameters` may include secrets — configure backend redaction.
+Claude Code 2.1.307 adds `claude_code.safety_event` for calls stopped, prompted, or sent back by permission rules, auto mode, safety checks, hooks, or the sandbox ([changelog](https://code.claude.com/docs/en/changelog#2-1-307)). That entry lists no attribute schema. The [monitoring reference](https://code.claude.com/docs/en/monitoring-usage#safety-event) now documents it, including `category`, `decision`, and `tool_use_id`. Some refused calls have no safety event, so retain tool-decision records too. However, the [2.1.312 changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#21312) says Claude Code stopped sending this event. The monitoring reference still documents it. Treat the schema as version-dependent and verify emission on your installed build before relying on it.
+
+Pair these with `tool_result` events and store them in Elasticsearch, Loki, or ClickHouse. Enable `OTEL_LOG_TOOL_DETAILS=1` for detailed tool parameters; rejected calls need the matching `tool_decision` event rather than a result ([monitoring reference](https://code.claude.com/docs/en/monitoring-usage#tool-decision-event)). `tool_parameters` may include secrets — configure backend redaction.
+
+### Interpret classifier fields before counting denials
+
+`classifier_verdict` and `permission_mode` require Claude Code 2.1.301. Use 2.1.302 as the practical minimum for `classifier_category`. That release fixes missing categories on server-reviewed blocks ([tool-decision reference](https://code.claude.com/docs/en/monitoring-usage#tool-decision-event), [2.1.302 changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#21302)).
+
+The [documented verdicts](https://code.claude.com/docs/en/monitoring-usage#tool-decision-event) distinguish these outcomes:
+
+- `allow`: the classifier approved the call.
+- `block`: the classifier blocked it, or its check failed partway through. A partial outage can therefore increase block counts.
+- `no_verdict`: the check ran without a usable verdict, so Claude Code denied the call. This does not establish that the call was unsafe.
+- `unavailable`: the classifier request failed, or server-side review returned no safety verdict. Claude Code denied the call.
+
+Missing `classifier_verdict` does not establish that the classifier was uninvolved. The [reference lists four omission cases](https://code.claude.com/docs/en/monitoring-usage#tool-decision-event):
+
+- An allow or deny permission rule decided the call.
+- Auto mode approved without asking the classifier.
+- The user answered a prompt after repeated blocks.
+- A `-p` run without `--permission-prompt-tool` denied the call after repeated blocks.
+
+The [verdict field](https://code.claude.com/docs/en/monitoring-usage#tool-decision-event) can also appear when the classifier reviews plan-mode commands.
+
+`permission_mode` records the mode when the permission check began. For a subagent call, it records the subagent's mode ([field reference](https://code.claude.com/docs/en/monitoring-usage#tool-decision-event)).
+
+`OTEL_LOG_TOOL_DETAILS=1` exports Bash commands, MCP server/tool names, skill and user-authored workflow names, and tool input in events and trace attributes. Assess that content's exposure before enabling it ([configuration reference](https://code.claude.com/docs/en/monitoring-usage#common-configuration-variables)). With this flag, `classifier_category` appears only for `block` when the classifier names exactly one built-in rule. It excludes user-written rules and multiple-rule matches; an absent category cannot rule out a classifier block ([category reference](https://code.claude.com/docs/en/monitoring-usage#tool-decision-event)).
+
+Check the client version and `OTEL_LOGRECORD_ATTRIBUTE_COUNT_LIMIT` before interpreting missing fields. From 2.1.302, a low limit can evict `permission_mode`, `classifier_category`, then `classifier_verdict`. From 2.1.310, `parent_agent_id`, `agent_id`, then `request_id` drop before those fields, if present. Before the 2.1.302 fix, new attributes could evict `tool_use_id`, `tool_source`, and `tool_parameters` ([attribute-limit reference](https://code.claude.com/docs/en/monitoring-usage#tool-decision-event), [2.1.302 changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#21302)).
+
+On 2026-10-28, the [monitoring reference](https://code.claude.com/docs/en/monitoring-usage#tool-decision-event) still directs readers to `safety_event.category` and `rule_source`, joined by `tool_use_id`. The conflicting 2.1.312 changelog claim described above would remove this attribution route. Verify the installed build before relying on that join.
+
+Use aggregate category counts to select calls for review. Require per-call evidence that a block was wrong before proposing a narrower guard. Frequency alone cannot justify loosening permissions; keep that judgment separate from measuring the [auto-permission classifier](../patterns/agent-design/classifier-gated-auto-permission.md).
 
 ## LangSmith trajectory tracing for LangChain agents
 
-[LangSmith](https://docs.langchain.com/langsmith/trace-with-langchain) records each agent action with tool name, inputs, outputs, latency, and token counts. You can run parallel analysis agents over the retrieved traces to synthesize harness improvements — a natural automation loop.
+[LangSmith](https://docs.langchain.com/langsmith/trace-with-langchain) records each agent action with tool name, inputs, outputs, latency, and token counts.
 
 Other runtimes have their own vendor write-ups. Braintrust documents tracing for Cloudflare Agents ([Trace and improve Cloudflare Agents](https://www.braintrust.dev/blog/cloudflare-agents), 2026-08-05).
 
@@ -124,7 +157,7 @@ OTel traces are machine-readable. For human-readable trails that survive context
 
 ## Why it works
 
-OTel's push-based model fits agent workloads: agents emit bursts of activity across many tool calls, so pull-based scraping risks missing short-lived sessions. `prompt.id` matters because a single prompt triggers dozens of API calls. Without it, you cannot trace a cost spike after the fact. Structured audit trails let teams query by authorization source without parsing free text.
+`prompt.id` groups events from one prompt. Structured events let teams query permission outcomes and costs without parsing progress messages ([monitoring reference](https://code.claude.com/docs/en/monitoring-usage#events)).
 
 ## When this backfires
 

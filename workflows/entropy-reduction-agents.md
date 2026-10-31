@@ -177,6 +177,8 @@ The pattern is not a substitute for fixing the root-cause process that generates
 - Every agent-generated PR requires human review — two-thirds of unsupervised AI refactors introduce breakage ([CodeScene](https://codescene.com/blog/automatically-fix-technical-debt-with-ai-refactoring))
 - Combine deterministic architectural tests with LLM-based judgment scanning for full coverage
 
+[Flag Cleanup Grounded in Deployed State](deployed-state-flag-cleanup.md) applies the hygiene loop to feature flags, using deployed state before code edits.
+
 ## Related
 
 - [Continuous AI (Agentic CI/CD)](continuous-ai-agentic-cicd.md)

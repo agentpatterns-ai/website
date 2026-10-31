@@ -97,3 +97,4 @@ Called through Instructor with `max_retries=2`, a failed lookup sends `no such p
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — why a check that runs beats an instruction that asks
 - [Phantom Symbol Detection for LLM API Migration](phantom-symbol-detection.md) — the identifier class applied to imports and method names in migration code
 - [Slopsquatting: Hallucinated Package Names as a Supply-Chain Vector](../security/slopsquatting-hallucinated-package-names.md) — what an unchecked invented identifier costs downstream
+- [Measure Tool-Name Resolution Before Adding Call Repair](../patterns/agent-design/tool-name-resolution-gate.md) — the repair layer whose validator only sees malformed calls, which is why the valid-but-wrong ones need this check

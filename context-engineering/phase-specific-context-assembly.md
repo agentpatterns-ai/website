@@ -171,3 +171,4 @@ Each agent operates with under 3,000 tokens of input context; none receives the 
 - [Context Engineering](context-engineering.md)
 - [Treat Task Scope as a Security Boundary](../security/task-scope-security-boundary.md) — scoping each phase's context also limits injection attack surface
 - [Conversation Registers](conversation-registers.md) — the human-facing counterpart: naming your interaction mode and resetting context when it changes
+- [Subtask Boundaries Over Delegation](subtask-boundaries-over-delegation.md) — the same assembly driven by boundaries the agent declares as it works, not phases named up front

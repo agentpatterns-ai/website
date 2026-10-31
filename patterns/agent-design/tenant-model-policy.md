@@ -11,7 +11,7 @@ tags:
 aliases:
   - organization-scoped model rules
   - org-admin model governance
-last_reviewed: 2026-10-06
+last_reviewed: 2026-10-25
 maturity: established
 ---
 
@@ -40,7 +40,9 @@ The picker reflects what a user wants. The [harness routing layer](auto-model-se
 | Claude Code `availableModels` | Managed/policy settings file; arrays merge across user/project/managed surfaces ([Claude Code: Model configuration](https://code.claude.com/docs/en/model-config)) | Default-allow by prefix match; opt-in default-deny via `enforceAvailableModels` and `availableModelsMatch: "exact"` (see Pin direction) | Managed settings take highest priority |
 | Cursor Enterprise admin controls | Enterprise admins "whitelist or blocklist repos, models, and MCP servers" ([Cursor Enterprise](https://cursor.com/enterprise)); Business tier exposes no equivalent surface, per [Cursor Forum](https://forum.cursor.com/t/cursor-business-plan-restrict-models-for-all-users/44556) | Default-allow except where admin restricts | No documented per-team override; teams reach for gateway workarounds |
 
-On 2026-08-26 GitHub made global model policy generally available, an enterprise-scoped control over which models each organization may use ([GitHub Changelog 2026-08-26](https://github.blog/changelog/2026-08-26-global-model-policy-generally-available)).
+On 2026-08-26 GitHub made global model policy generally available, a default-availability policy for organizations and enterprises ([GitHub Changelog 2026-08-26](https://github.blog/changelog/2026-08-26-global-model-policy-generally-available)).
+
+Keep model policy distinct from feature defaults. On 2026-10-22 GitHub started a rollout, through October 26, that enforces a separate default for eligible unconfigured Copilot features in enterprises and organizations. Explicit feature choices remain unchanged, and later default changes do not reset already configured features ([GitHub Changelog 2026-10-22](https://github.blog/changelog/2026-10-22-global-default-for-copilot-features-generally-available)).
 
 The three diverge on a critical detail: Claude Code documents that "With `availableModels: []`, named model selections are blocked and `enforceAvailableModels` has no effect." The Default option stays usable, so an `availableModels` allow-list on its own is not a deny-list. To pin model identity, admins must combine `availableModels`, `enforceAvailableModels`, `model`, and `ANTHROPIC_DEFAULT_*_MODEL` ([Claude Code: Model configuration](https://code.claude.com/docs/en/model-config#enforce-the-allowlist-for-the-default-model)).
 
@@ -102,7 +104,7 @@ The mechanism collapses the moment policy becomes advisory. A picker that hides 
 
 ## When this backfires
 
-- Allow-by-default rules under regulated workloads: when an admin sets a model's stance to `Enabled`, that model is on for every organization until someone disables it ([GitHub Changelog 2026-05-26](https://github.blog/changelog/2026-05-26-target-copilot-models-to-organizations-with-model-rules/)). Note the counter-evidence on rollout: Copilot does not auto-enable a newly-launched model for every org by default. Admins must enable each new model, and a [community request to make new models enabled-by-default](https://github.com/orgs/community/discussions/187083) is still open. So the live risk is a stale `Enabled` rule, not silent auto-onboarding. For tenants under data-residency rules (EU public sector, healthcare), pin explicit per-model rules rather than relying on either default.
+- Default enablement can admit newly available models without a per-model decision. Eligible models in "Delegate to default policy" track that policy dynamically; explicit choices are preserved. Open-weight models and models outside GitHub's data-retention agreement are excluded from default enablement ([GitHub Changelog 2026-08-26](https://github.blog/changelog/2026-08-26-global-model-policy-generally-available/)). If each new model needs review, disable the default and enable individual models deliberately.
 - Silent fallback hides denials: when the picker substitutes a default model without surfacing the denial reason, denial telemetry drops to zero and the developer reads the rejection as "the tool just feels worse." Silent fallback is independently an [anti-pattern that distorts metrics and trust](https://medium.com/@hadiyolworld007/stop-shipping-silent-fallbacks-8-ways-models-hide-errors-6df9330a3114).
 - Picker drift after deprecations: an `availableModels` list that was correct on day one becomes a deny-list of retired model IDs over months. Without a lifecycle tied to model-deprecation calendars, the policy ages into silent denial of every selection. Pair with [Model Deprecation Lifecycle](../../workflows/model-deprecation-lifecycle.md).
 - Missing override depth: a security-research team needs a long-context Opus run that the cost-ceiling rule denies. Without a per-project or team-lead exception path, the request goes off-platform and the audit boundary collapses — the exact failure mode reported on the [Cursor forum](https://forum.cursor.com/t/cursor-business-plan-restrict-models-for-all-users/44556).
@@ -110,21 +112,17 @@ The mechanism collapses the moment policy becomes advisory. A picker that hides 
 
 ## Example
 
-A Copilot Enterprise owner targeting a data-residency-constrained subsidiary with model rules sets each model's stance explicitly rather than relying on the `Enabled` default:
-
-Before — single enterprise-wide setting, one model launch auto-onboards every org:
+An organization that requires a deliberate decision for each new model can disable default model availability and explicitly enable reviewed models. This schematic contrasts the two states documented in the [August 26 changelog](https://github.blog/changelog/2026-08-26-global-model-policy-generally-available/):
 
 ```text
-Enterprise: claude-opus-4-7 → Enabled
-EU-Public-Sector-Org: claude-opus-4-7 → (inherited) Enabled
-```
+Before:
+Default model availability: Enabled
+Eligible new model: Delegate to default policy -> available
 
-After — targeted rules, the regulated org opts in explicitly:
-
-```text
-Enterprise: claude-opus-4-7 → Optional
-US-Engineering-Org: claude-opus-4-7 → enabled
-EU-Public-Sector-Org: claude-opus-4-7 → (no rule) disabled
+After:
+Default model availability: Disabled
+Eligible new model: Delegate to default policy -> unavailable
+Reviewed model: explicitly Enabled -> available
 ```
 
 The Claude Code equivalent in managed settings, pinning a Sonnet 4.5 build to a regulated tenant:
@@ -145,11 +143,13 @@ Without `enforceAvailableModels`, a user who selects `Default` in the picker lan
 ## Key Takeaways
 
 - Tenant model policy is the layer *above* harness routing and *below* the vendor catalog — failure modes come from collapsing it into either neighbour.
-- An `Enabled` Copilot rule applies a model to every org until disabled, so it is the wrong stance for regulated workloads — but note Copilot does not auto-enable newly-launched models, so the standing risk is a stale rule, not silent auto-onboarding. Treat every new model launch as untrusted until an explicit rule says otherwise.
+- Distinguish model defaults from feature defaults: delegated models track later default changes, while the October feature rollout preserves already configured choices. Require an explicit per-model decision where your policy needs one.
 - Allow-lists in isolation are not deny-lists. Claude Code's `availableModels` requires `enforceAvailableModels`, `model`, and `ANTHROPIC_DEFAULT_*_MODEL` companions to pin model identity.
 - `availableModelsMatch: "exact"` plus full model IDs turns model rollout into opt-in, but only on Claude Code v2.1.283+, only in managed settings, and only for model identity — not the harness version, effort default, or serving path that Anthropic's own postmortems show moving behavior on their own. Scope it to calibrated workloads; a general fleet does better on prefix matching plus `deniedModels`.
 - Explicit denial signals matter more than the deny itself: silent fallback erases the audit trail and pushes developers off-platform.
 - Tie rule lifecycle to the model-deprecation calendar — without it, policy ages into accidental total denial.
+
+For the related approach, see [Model Policy Reconciliation: A Copilot Model Allow List as Code](model-policy-reconciliation.md).
 
 ## Related
 

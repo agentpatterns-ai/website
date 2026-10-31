@@ -1,7 +1,7 @@
 ---
 title: "Tool Description Quality for Effective Agent Guidance"
 term: "Tool Description Quality"
-description: "Tool descriptions determine whether agents select the right tool. Treating descriptions as prompt engineering surfaces directly multiplies task success rate."
+description: "Tool descriptions affect whether agents select the right tool and how they use it. Write them as prompts with selection signals, limits, and examples."
 tags:
   - agent-design
   - cost-performance
@@ -16,7 +16,7 @@ maturity: established
 
 # Tool Description Quality
 
-> Tool descriptions — not just tool implementations — determine whether agents select the right tool for a task. Treating descriptions as prompt engineering surfaces is a direct multiplier on task success rate.
+> Tool description quality affects whether agents select the right tool and how they use it.
 
 Learn it hands-on with [The Right Call, Obvious](https://learn.agentpatterns.ai/mcp-server-design/the-right-call-obvious/), a guided lesson with quizzes.
 
@@ -119,6 +119,8 @@ Each description adds tokens on every invocation. This matters in three cases:
 - Test tool selection explicitly by logging which tools are selected for which tasks
 - Add positive selection signals ("use this when...") not just capability descriptions
 - At large tool set sizes (50+ tools), prefer retrieval-based selection over in-context enumeration to manage token cost
+
+For the risk of treating provider descriptions as evidence of suitability, see [Reading Tool Fit Off a Provider-Written Description](../patterns/anti-patterns/description-prose-as-tool-fit-evidence.md).
 
 ## Related
 

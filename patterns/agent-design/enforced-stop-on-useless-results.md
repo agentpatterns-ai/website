@@ -90,3 +90,5 @@ The cheap version in your own harness is a budget-doubling probe. Run the agent 
 - [Silent Adoption of Corrupted Tool Returns by Agents](../anti-patterns/silent-adoption-of-corrupted-tool-returns.md) — the same notice-without-acting gap for returns that are wrong rather than useless
 - [Dual-Budget Control for Search Agents: VOI Scoring Per Action](dual-budget-control-search-agents.md) — scores the next action by value of information, where this only decides when to stop
 - [Informed Abstention as a Tool-Boundary Runtime Gate](informed-abstention-tool-boundary-gate.md) — blocks before execution on a static precondition, not on accumulated evidence
+- [Random Restart as the Baseline for Agent Early Stopping](../anti-patterns/random-restart-as-the-stopping-baseline.md) — why a stop built on a predicted outcome needs a continuation baseline, where this one reads an observed signal
+- [Evidence-Anchored Handoff for Blocked Coding Agents](evidence-anchored-handoff.md) — the softer version of this gate, where the harness only surfaces the accumulated evidence and the agent keeps the choice

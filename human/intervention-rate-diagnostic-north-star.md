@@ -73,4 +73,5 @@ Baseline by task type. Read the category breakdowns (Sniffly-style) before you r
 - [Progressive Autonomy: Scaling Trust with Model Evolution](progressive-autonomy-model-evolution.md) — uses intervention rate as one input to the autonomy-dial decision.
 - [Cohort Segmentation in the Copilot Usage Metrics API](cohort-segmentation-copilot-usage-metrics.md) — same diagnostic-over-aggregate logic applied to Copilot adoption cohorts.
 - [Developer Control Strategies for AI Coding Agents](developer-control-strategies-ai-agents.md) — empirical baseline for how experienced developers actually intervene.
+- [Label Prompt Intent Before Comparing Prompt Counts](prompt-intent-mix.md) — the same categories-under-the-number move applied to a prompt total, where one shadowing study coded 255 prompts by intent.
 - [Suggestion Gating: Fewer Completions, Better DX](suggestion-gating.md) — the autocomplete-surface analogue, where acceptance rate is the corresponding signal.

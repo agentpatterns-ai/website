@@ -131,3 +131,4 @@ Claude Code loads CLAUDE.md content as a user message after the system prompt, a
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [CLAUDE.md Convention for Structuring Agent Instructions](claude-md-convention.md)
 - [Project Instruction File Ecosystem](instruction-file-ecosystem.md)
+- [Size Limits on Instruction Files That Load on Demand](on-demand-instruction-file-size-limit.md) — the other way a subdirectory file reaches context only in part

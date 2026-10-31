@@ -74,7 +74,7 @@ Used for: Cascading edits — rename a parameter, and NES suggests updating all 
 
 When to use it: You're making changes that have a ripple effect across the file. NES handles the follow-on edits so you don't miss any.
 
-When NOT to use it: It's always on by default — no action needed. Adjust eagerness (frequency vs relevance) from the Copilot Status Bar item.
+When NOT to use it: It's always on by default — no action needed. For eagerness settings and their frequency, edit-size, and delay definitions, see [NES configuration](../../tools/copilot/next-edit-suggestions.md#configurable-eagerness).
 
 How to configure:
 
@@ -85,7 +85,7 @@ How to configure:
 }
 ```
 
-NES is enabled by default. Adjust eagerness (frequency vs relevance) from the Copilot Status Bar item.
+NES is enabled by default. For eagerness settings and their frequency, edit-size, and delay definitions, see [NES configuration](../../tools/copilot/next-edit-suggestions.md#configurable-eagerness).
 
 ---
 

@@ -54,7 +54,7 @@ The current deploy does not cause every regression. A triage agent — the attri
 | Outcome | Action |
 |---|---|
 | Regression present before deploy | Log as pre-existing; skip fix dispatch |
-| Regression appeared after deploy | Attribute to current change; dispatch fix agent |
+| Regression linked to the deploy after investigation | Dispatch fix agent |
 | Ambiguous | Escalate to human; do not dispatch |
 
 The causal diff — the changes in the deploy that correlate with the failure — becomes part of the fix agent's input. Without triage, every test flake generates a fix PR, burning tokens and review capacity.
@@ -76,9 +76,11 @@ Without this gate, the loop generates unbounded fix PRs on an unfixable regressi
 
 ## Human gate
 
-Fix PRs go to human review; no auto-merge without approval. This is a structural requirement, not a configuration option. The fix agent operates on a branch, leaving main unchanged until a human confirms — consistent with [rollback-first design](rollback-first-design.md).
+In the recommended workflow, fix PRs go to human review. The fix agent operates on a branch, leaving main unchanged until a human confirms — consistent with [rollback-first design](rollback-first-design.md).
 
-Auto-merge without review converts a reliability pattern into a liability: an agent with write access to production and no approval step.
+Replit's Monitoring Agent makes automatic publication configurable through three controls: monitoring alerts, Auto-fix, and Auto-republish, which are "separate settings". With the last enabled, "Agent can automatically publish its validated fix" to a live app ([Replit docs](https://docs.replit.com/features/publishing/monitoring-agent)). Replit marks it "experimental and requires Auto-fix" and warns that "Some changes, including migrations and index operations, may be risky". The cited page states no retry cap. That does not establish that retries are unbounded; this pattern separately requires a circuit breaker after N failures.
+
+Treat an auto-publish setting as an autonomy promotion, not a convenience toggle. [Progressive autonomy](../../human/progressive-autonomy-model-evolution.md) has the reliability metrics that earn the move. Flip it early and the loop ends with an agent that holds write access to production and no approval step.
 
 ## Scope boundaries
 
@@ -90,35 +92,30 @@ This pattern handles post-deploy regression detection and remediation. It does n
 
 ## Example
 
-A Python service uses pytest as its eval suite. A GitHub Actions workflow triggers on every deploy:
+The following pseudocode describes the orchestration contract. It requires project-specific evaluation, baseline storage, and dispatch implementations:
 
-```yaml
-# .github/workflows/self-heal.yml
-on:
-  deployment_status:
-    types: [success]
-
-jobs:
-  regression-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run post-deploy eval suite
-        id: eval
-        run: |
-          pytest tests/evals/ --json-report --json-report-file=results.json
-          python scripts/compare_baselines.py results.json baseline.json > diff.json
-      - name: Dispatch fix agent if regression detected
-        if: steps.eval.outputs.regression == 'true'
-        run: |
-          python scripts/triage_and_dispatch.py \
-            --diff diff.json \
-            --causal-commit ${{ github.sha }} \
-            --fix-agent claude-code \
-            --circuit-breaker-key "${{ github.repository }}-${{ github.sha }}"
+```text
+on successful deployment:
+    load the deployed revision and its pre-deploy baseline
+    run the same eval suite against the deployed service
+    if the runner fails before producing valid results:
+        escalate the infrastructure failure; stop
+    compare valid results even when individual tests fail
+    for each newly failing test:
+        investigate whether the deployment caused the failure
+        if causality is ambiguous:
+            escalate; continue
+        if the failure is pre-existing:
+            record it; continue
+        use a persistent (repository, regression) attempt counter
+        if the attempt limit is reached:
+            escalate; continue
+        reserve an attempt before dispatch
+        send the failing test, relevant diff, and PR instruction to the fix agent
+        require review before merging the proposed fix
 ```
 
-`compare_baselines.py` compares pass/fail per test case. `triage_and_dispatch.py` checks whether each newly failing test passed in the pre-deploy baseline; if so, it attributes the regression to the current commit and calls the fix agent with three inputs: the failing test path, the git diff, and a PR-creation instruction. It increments a counter keyed by `(repo, failing_test)` in a shared store; once the counter hits N, it opens a human escalation ticket instead of dispatching.
+The regression identifier must survive fix deployments. A new commit SHA must not reset the attempt limit. A newly failing test is evidence for triage, not proof that the deployment caused it.
 
 ## When this backfires
 
@@ -135,7 +132,7 @@ The pattern adds overhead that only pays off under specific conditions:
 - Causality triage is mandatory; without it, pre-existing failures generate spurious fix PRs
 - The fix agent's scope must be bounded to the failing test — broad fixes increase review burden and risk
 - Circuit-break after repeated failures on the same regression; unbounded dispatch wastes tokens and review capacity
-- Human review at merge is non-negotiable — auto-merge without approval is not a variant of this pattern
+- Default to human review at merge; where a product makes it a setting, promote off that default on measured reliability, not on a checkbox
 
 ## Related
 

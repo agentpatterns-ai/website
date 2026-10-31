@@ -58,6 +58,8 @@ Three runner tiers are available. Each trades cost for capability:
 
 Self-hosted runners take two steps. Disable the coding agent's built-in firewall in repository settings, then set up your own network security controls to allow connections to the required hosts ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/customize-the-agent-environment)).
 
+GitHub Agentic Workflows makes the same choice differently, one field per emitted job class; see [Per-Job Runner Placement in Agentic Workflows](per-job-runner-placement.md).
+
 ## Secrets management
 
 For broader patterns on keeping credentials out of agent context, see [Secrets Management for Agent Workflows](../security/secrets-management-for-agents.md).

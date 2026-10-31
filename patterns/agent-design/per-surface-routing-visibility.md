@@ -65,3 +65,4 @@ HydraFusion is the case that argument describes. The pattern is chosen per promp
 - [Cost-Driven Model Routing Without Quality Monitoring](../anti-patterns/cost-routing-without-quality-monitoring.md) — what a missing per-shape record costs over months.
 - [Router-Imposed Quality Ceiling: Committing Before Output](router-imposed-quality-ceiling.md) — a routing failure that no amount of visibility fixes.
 - [Copilot Auto Tiers: Weighting Cost Against Quality](copilot-auto-tier-selection.md) — the other Copilot routing control a developer can reach, and what it does not set.
+- [Local Inference Under a Cloud Router](cloud-routed-local-inference.md) — the routing decision stays in the cloud even when the chosen model runs on your device.

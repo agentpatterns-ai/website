@@ -99,6 +99,8 @@ This is the gateway version of pinning a Bedrock ARN ([Claude Code: Model config
 - Capability detection is separate from discovery: declare effort and thinking support via `_SUPPORTED_CAPABILITIES` for IDs the harness does not recognize.
 - The pattern adds an auth surface and a supply-chain dependency; reserve it for workloads that already need centralized auth, budgets, or multi-vendor routing.
 
+See [Client-Keyed Gateway Controls](client-keyed-gateway-controls.md) for the trust limits of request-supplied policy attributes.
+
 ## Related
 
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — platform-level fan-out across vendors; gateway routing is the infrastructure layer that makes single-harness multi-vendor practical.

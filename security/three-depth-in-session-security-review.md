@@ -83,3 +83,4 @@ A single well-tuned end-of-turn reviewer with tool-calling and clustering is a v
 - [Inline Safety Harness with Cascade Verification (FinHarness)](inline-lifecycle-safety-harness.md) — per-tool-call cascade routing, the runtime-action analogue of the review-time depth ladder
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — defense placement across the agent execution lifecycle
 - [Tunable Effort Levels for Code Review Agents](../code-review/tunable-review-effort.md) — the single-layer effort-dial alternative at PR time
+- [Verification Staging for Security Audit Skills](verification-staging-security-audit-skills.md) — the measured detection yield of public security skills, and the verification step inside them

@@ -93,3 +93,4 @@ Link:  gh pr review 22 --comment                           -> supported
 - [Trajectory as the Monitoring Unit for Production Agents](../../observability/trajectory-as-monitoring-unit.md) — moves the monitored unit from one output to the whole run, which is the record the report omits
 - [Transcript-Measured Review Coverage](../../verification/transcript-measured-review-coverage.md) — the check for one specific claim, whether a scoped review touched the files it says it did, where the mismatch does predict missed defects
 - [Empty Commitments: Promises No Runtime Can Keep](empty-commitments.md) — the same report read forwards, covering a promise of later action that the deployment's affordances cannot carry out
+- [Mention Coverage as Report Completeness](mention-coverage-as-report-completeness.md) — the other half of the same channel: most of what a report fails to convey is already mentioned in it, so a coverage audit scores it a hit

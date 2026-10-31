@@ -92,3 +92,5 @@ Swapping `"user"` for `"agent"` moves the call to a different cell of the table 
 - [Deep Agent Runtime: The Layer Beneath the Harness](../patterns/agent-design/deep-agent-runtime.md) — the runtime layer that attaches caller identity to a run
 - [Treating Agent Delegation as Routing, Not Authorization](../patterns/anti-patterns/agent-delegation-as-routing.md) — the same question one hop further out, where the caller is another agent
 - [Whose Permissions a Self-Scheduled Agent Run Carries](self-scheduled-run-authority.md) — the same question after the conversation ends, where the agent writes the schedule and nobody is present when it fires
+- [Tool Availability by Conversation Visibility](../patterns/agent-design/conversation-visibility-tool-availability.md) — whether to offer a caller-scoped tool at all, once other people can read the conversation it is called from
+- [Human-Only Approval Rights at the Agent Merge Gate](../verification/human-only-approval-rights.md) — what an attributed write costs a review gate, once the logged actor is a person whose account an agent holds

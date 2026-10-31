@@ -66,3 +66,4 @@ The headline figure carries a different baseline. That same $0.47 run is "76x ch
 - [Shortening Old Tool Results Under Context Pressure (Half-Life Truncation)](half-life-tool-result-truncation.md) — a per-step trimming policy, scored on fix rate rather than cache reuse
 - [Attributed Cache Misses: Reading Why a Prefix Diverged](attributed-cache-miss-diagnostics.md) — the provider field that names where the prefix diverged after an eviction
 - [Action-Gated Context Trimming](action-gated-context-trimming.md) — deciding what to hold by the agent's next action, the orthogonal axis to when to cut
+- [Scoring a Context Policy on Executed Prefill](executed-prefill-accounting.md) — the counter that prices a cadence: logical prompt minus reused prefix, with the break-even for deleting history at all

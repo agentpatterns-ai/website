@@ -1,7 +1,7 @@
 ---
 title: "AX/UX/DX Triad: Three Experience Layers in Agent Systems"
 term: "AX/UX/DX Triad"
-description: "Treat Agent Experience, User Experience, and Developer Experience as separate design surfaces -- conflating them degrades all three."
+description: "Treat Agent Experience, User Experience, and Developer Experience as separate design surfaces, and evaluate the formats each audience needs."
 aliases:
   - "Three Experience Layers"
   - "AX UX DX"
@@ -10,17 +10,17 @@ tags:
   - tool-agnostic
   - harness-engineering
   - arxiv
-last_reviewed: 2026-06-12
+last_reviewed: 2026-10-27
 maturity: emerging
 ---
 
 # AX/UX/DX Triad: Three Experience Layers in Agent Systems
 
-> Agent Experience (AX), User Experience (UX), and Developer Experience (DX) are distinct design surfaces; optimizing one often degrades the others.
+> Agent Experience (AX), User Experience (UX), and Developer Experience (DX) are distinct design surfaces; evaluate each audience's information needs before choosing a shared format.
 
 ## The problem
 
-Agent systems have three audiences: the LLM, the end user, and the developer. Most scaffolds conflate at least two -- feeding human-facing logs to the model, or exposing raw traces to end users. The CCA framework formalized this separation after finding that optimizing for one audience routinely degraded another ([CCA paper](https://arxiv.org/abs/2512.10398)). The API design community recognizes the same distinction: agents need structured, machine-readable interfaces rather than human-readable affordances ([Nordic APIs](https://nordicapis.com/what-is-agent-experience-ax/)).
+Agent systems have three audiences: the LLM, the end user, and the developer. CCA separates these audiences ([CCA paper](https://arxiv.org/abs/2512.10398v6)). Agents need structured, machine-readable interfaces ([Nordic APIs](https://nordicapis.com/what-is-agent-experience-ax/)). Microsoft defines AX through two measurable questions ([Microsoft, What is Agent Experience (AX)](https://devblogs.microsoft.com/blog/what-is-agent-experience-ax/)). Propensity asks "does the agent find your technology and choose it?"; efficacy asks "once the agent uses your technology, does it use it correctly?"
 
 ## Three layers
 
@@ -50,12 +50,12 @@ flowchart LR
 
 ### Agent Experience (AX)
 
-What the model sees. Curate context for inference quality, not human readability. When the illegibility lives on a public surface the agent calls from outside, the outward-facing complement is [Designing for Agent Consumers](../../tool-engineering/designing-for-agent-consumers.md):
+What the model sees at each step of the [Agent Turn Model](agent-turn-model.md). Curate context for inference quality. When the illegibility lives on a public surface the agent calls from outside, the outward-facing complement is [Designing for Agent Consumers](../../tool-engineering/designing-for-agent-consumers.md):
 
 - Structured tool output: JSON or typed returns, not prose descriptions
-- Compressed summaries: preserving goals, decisions, TODOs, and error traces near context limits, improving Claude Sonnet 4 from 42.0% to 48.6% on SWE-Bench-Pro ([CCA ablation](https://arxiv.org/abs/2512.10398v6))
+- Context management: hierarchical working memory plus compression improved Claude Sonnet 4 from 42.0% to 48.6% on a 100-example SWE-Bench-Pro subset where both variants produced executable solutions ([CCA ablation](https://arxiv.org/abs/2512.10398v6))
 - Machine-readable error signals: stack traces and [RFC 9457 structured error fields](../../tool-engineering/rfc9457-machine-readable-errors.md), not user-friendly messages
-- Hindsight failure notes: recording failed approaches for cross-session learning, yielding 53.0% to 54.4% improvement on a 151-instance subset ([CCA paper §5.3](https://arxiv.org/abs/2512.10398v6))
+- Persistent notes: a second run on the same 151 tasks with notes from the first run scored 54.4%, versus 53.0% initially ([CCA paper §3.5](https://arxiv.org/abs/2512.10398v6))
 
 ### User Experience (UX)
 
@@ -65,7 +65,7 @@ What the human sees. Clear status, predictable behavior, actionable feedback:
 - Natural language summaries: what was done and why, not the internal reasoning chain, per [Controlling Agent Output](../../instructions/controlling-agent-output.md)
 - Actionable error messages: what went wrong and what to try, not stack traces
 
-Feeding raw agent traces to users is the most common conflation -- iterative reasoning full of dead ends does not help users understand current state.
+Raw traces can obscure current status. Offer a concise summary while keeping diagnostic detail available.
 
 ### Developer Experience (DX)
 
@@ -85,30 +85,30 @@ DX degrades when internals are opaque or when AX concerns leak into the extensio
 | AX = DX | Debug traces in agent context add noise; configuration complexity leaks into prompts |
 | UX = DX | End users exposed to debug interfaces; developers forced to polish internal tools |
 
-CCA's explicit separation contributed to 52.7% on SWE-Bench-Pro with Claude Sonnet 4.5 -- outperforming stronger models on weaker scaffolds ([CCA paper](https://arxiv.org/abs/2512.10398v6)).
+The complete CCA scaffold scored 52.7% on SWE-Bench-Pro with Claude Sonnet 4.5. This result does not isolate the effect of AX/UX/DX separation ([CCA paper](https://arxiv.org/abs/2512.10398v6)).
 
 ## Why it works
 
-Each conflation introduces a specific failure mode at the information-channel level. AX suffers context overflow and spurious anchors when human-readable formatting (whitespace, decorative headings, verbose prose) fills the model's context budget without adding inference value. UX degrades when information is trimmed to fit context limits -- users lose observability. DX becomes harder when agent-facing and human-facing representations entangle, forcing extension authors to reason about both audiences at once ([CCA paper §3](https://arxiv.org/abs/2512.10398)).
-
-The triad works by routing the same data through separate transformation layers, each optimized for one consumer's constraints.
+CCA presents distinct AX, UX, and DX principles as a foundation for scalable, analyzable, and reproducible agent behavior ([CCA paper §1](https://arxiv.org/abs/2512.10398v6)). Treat the table above as design risks to test. Neither structured output nor separate representations guarantee better results.
 
 ## When this backfires
 
-The AX/UX/DX separation adds engineering overhead. It is less valuable when:
+Separation adds overhead. It is less valuable when:
 
-- Simple single-user tools: a CLI agent with one consumer does not need three output formats; one well-structured log serves all audiences.
+- Simple single-user tools: a small CLI may serve its audiences with one well-structured log. Test whether separate formats add value.
 - Prototype or exploratory work: maintaining separate transformation layers slows iteration when requirements change frequently.
 - Thin context budgets: adding a transformation layer near context limits requires care; naive separation can introduce overhead of its own, the cost [context compression strategies](../../context-engineering/context-compression-strategies.md) exist to manage.
-- Scale constraints from CCA's own evaluation: performance degrades substantially for multi-file edits (57.8% for 1--2 files to 44.1% for 5--6 files) and context management requires configurable scopes to be effective -- the triad does not remove complexity, it relocates it ([CCA paper §6](https://arxiv.org/abs/2512.10398v6)).
+- Scale constraints: CCA reports 57.8% for tasks editing 1--2 files and 44.1% for 5--6 files, but 52.6% for 7--10 files. These task groups are observational, not an ablation of the triad ([CCA paper §3.4.2](https://arxiv.org/abs/2512.10398v6)).
+
+Microsoft warns that "a change that sounds agent-friendly can still make agents worse with your technology, or more expensive" ([Microsoft, What is Agent Experience (AX)](https://devblogs.microsoft.com/blog/what-is-agent-experience-ax/)).
 
 ## Applying the triad
 
 Audit each information flow against three questions:
 
-1. Who consumes this output? If the answer is "both the model and the user," you need two formats.
+1. Who consumes this output? If both the model and the user consume it, test whether one format serves both.
 2. What format serves that consumer? Structured data for agents, natural language for users, typed APIs for developers.
-3. Where does the boundary live? An explicit transformation layer between AX and UX prevents one from drifting toward the other.
+3. Where does the boundary live? Use an explicit transformation layer where the consumers need different representations.
 
 ## Example
 
@@ -121,6 +121,8 @@ def tool_return_ax(results):
 
 # UX layer — human-readable summary
 def tool_return_ux(results):
+    if not results:
+        return "No files found."
     return f"Found {len(results)} files. Top match: {results[0][0]}"
 
 # DX layer — full debug payload
@@ -134,9 +136,9 @@ The model receives compact JSON (the `matches` array) it can parse. The user see
 ## Key Takeaways
 
 - AX, UX, and DX are distinct design surfaces with different optimization targets
-- The most common failure is conflating AX and UX -- feeding human-formatted output to models or raw agent traces to users
-- Scaffold quality dominates model capability: a strong scaffold on a weaker model beats a weak scaffold on a stronger one
-- Each boundary needs an explicit transformation layer -- shared data, different format
+- Check whether model-facing output and human-facing output meet their consumers' needs
+- CCA's results support evaluating the whole scaffold; they do not establish a standalone benefit from the triad
+- Add separate formats when evaluation shows the audiences need them
 
 ## Related
 
@@ -147,5 +149,4 @@ The model receives compact JSON (the `matches` array) it can parse. The user see
 - [Agent Backpressure](agent-backpressure.md) -- feedback signals are AX-layer concerns that must not leak into UX
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md) -- loading context proportional to task complexity is an AX optimization
 - [Agent Debugging](../../observability/agent-debugging.md) -- DX-layer concerns for diagnosing agent behavior
-- [Agent Turn Model](agent-turn-model.md) -- turn-level structure shapes what the model sees (AX) at each step
 - [AX Evals: Measure the Agent-Facing Surface, Not the Model](../../verification/ax-evals-agent-facing-surface.md) -- how to evaluate the AX layer once you have separated it, with the model held fixed

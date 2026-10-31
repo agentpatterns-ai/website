@@ -71,3 +71,4 @@ The instrument has limits too. Canedo grants that mutation score is "a proxy, an
 - [Deriving a Specification From Buggy Code Before Generating Tests](../../verification/derived-specification-test-generation.md) — what to do when there is no external specification to anchor on.
 - [Overtrusting Human Sign-Off on Generated Assertions](generated-assertion-signoff.md) — why reading the assertion and nodding is not the audit.
 - [Revising Code Against Its Own Tests (Interpretive Lock-In)](interpretive-lock-in-revision-loops.md) — the loop-level version, where a revision round is allowed to edit the assertions judging it.
+- [State-Integrity Checks for an Eval Oracle](../../verification/oracle-integrity-checks-eval-harness.md) — the adjacent defect in an eval grader, where the expectation is correct and the fault is in the state the grading leaves behind.

@@ -166,7 +166,7 @@ sequenceDiagram
         CC->>CC: Compact and resume
     else Mid-task, sentinel stale
         H-->>CC: {"decision": "block", "reason": "..."}
-        CC->>CC: Continue; reason shown to Claude
+        CC->>CC: Continue and show reason to Claude
         CC->>FS: Agent checkpoints → touch sentinel
         CC->>H: PreCompact (next attempt)
         H-->>CC: exit 0 (allow)

@@ -109,4 +109,5 @@ Reading the card as a ratio moves headcount on a number the vendor itself labels
 - [Rolling Out CLI Coding Agents at Organization Scale](org-scale-cli-agent-rollout.md) — the Microsoft rollout evidence behind the throughput lift, and the conditions that make it observational
 - [Copilot vs Claude Billing Semantics for Enterprise Teams](copilot-vs-claude-billing-semantics.md) — the credit-billing mechanics the panel's metered cost figure is drawn from
 - [Reading Copilot Feature Engagement by Its Threshold](copilot-feature-engagement-threshold.md) — the feature engagement section of the same dashboard, and why its two-day bar detects trials rather than habits
+- [Label Prompt Intent Before Comparing Prompt Counts](prompt-intent-mix.md) — the same question asked of a prompt total: one shadowing study coded 255 prompts by intent and found the artifact-request share differed sharply between participant groups
 - [Stakeholder Trust Through Evals and Observability](../workflows/stakeholder-trust-evals-observability.md) — the Goodhart failure a single stakeholder-facing score invites once it becomes a target

@@ -31,6 +31,7 @@ status: current
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md) — Define specialized agents, reusable skills, and installable bundles
 - [Embedding the Copilot SDK in a Managed Java Runtime](copilot-sdk-managed-runtime.md) — What embedding an agent loop costs a JVM host with its own concurrency model: the executor seam, container context propagation, and the JDK level it assumes
 - [Bounding an Embedded Copilot SDK Agent's Tool Set](copilot-sdk-tool-scoping.md) — The tool allowlist and the permission hook are independent controls, and a handoff orchestrator supplies transfer tools at invocation that the session config never named
+- [Copilot Server-to-Server Authentication: What the Workload Identity Covers](copilot-server-to-server-authentication.md) — A GitHub App installation access token with the organization `Copilot Requests` permission at Read-only makes Copilot SDK requests billed to the organization, in public preview; the cloud agent's tasks API still rejects the same credential
 - [Dependabot Agent Assignment](dependabot-agent-assignment.md) — Route Dependabot alerts to Copilot for autonomous fix generation with human review at merge
 - [Managing Agent Skills from the GitHub CLI](gh-skill-cli-management.md) — Install, pin, update, and publish agent skills with `gh skill` for scriptable provisioning
 - [MCP Integration](mcp-integration.md) — Connect Copilot to external tools via Model Context Protocol

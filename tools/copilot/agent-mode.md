@@ -18,9 +18,21 @@ status: current
 
 ## How it works
 
-Agent mode turns Copilot from a suggestion engine into an autonomous executor. When you submit a prompt, Copilot [iterates across files and works through changes autonomously](https://github.com/newsroom/press-releases/agent-mode). It proposes changes across multiple files, runs terminal commands, checks output, finds errors, and loops back to fix them. It installs packages, runs tests, and migrates code without waiting for your approval at each step.
+Agent mode turns Copilot from a suggestion engine into an autonomous executor. When you submit a prompt, Copilot [iterates across files and works through changes autonomously](https://github.com/newsroom/press-releases/agent-mode). It proposes changes across multiple files, runs terminal commands, checks output, finds errors, and loops back to fix them. It can install packages, run tests, and migrate code. The session mode and effective permission policy determine which actions need approval ([GitHub permission guidance](https://docs.github.com/en/copilot/concepts/customizations/allowing-safe-commands)).
 
 Agent mode runs in [VS Code](https://code.visualstudio.com/blogs/2025/02/24/introducing-copilot-agent-mode) and is [generally available in JetBrains, Eclipse, and Xcode](https://github.blog/changelog/2025-07-16-agent-mode-for-jetbrains-eclipse-and-xcode-is-now-generally-available/).
+
+## Assisted permissions
+
+GitHub made Assisted permissions generally available in Copilot CLI, the Copilot app, and VS Code on October 26, 2026. This announcement does not extend Assisted availability to JetBrains, Eclipse, or Xcode ([GA announcement](https://github.blog/changelog/2026-10-26-github-copilot-assisted-permissions-generally-available/)).
+
+Existing deny rules and enterprise restrictions still apply. Assisted sends unresolved eligible command, path, and URL requests to model review. In CLI, enterprise `ask` rules for shell commands, file reads, file writes, and URLs can receive model approval. Other tool calls requiring enterprise approval and sandbox-bypass requests stay under normal permission handling. In autopilot and non-interactive runs, requests that still need your approval are denied ([Assisted permission behavior](https://docs.github.com/en/copilot/concepts/customizations/allowing-safe-commands)).
+
+GitHub's documentation disagrees on `ask`. The [enterprise reference](https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/enterprise-administrators/enterprise-managed-settings) says auto-approval cannot satisfy it; the [Assisted guide](https://docs.github.com/en/copilot/concepts/customizations/allowing-safe-commands) states the eligible CLI exception above. Do not treat `ask` as an unconditional human-review guarantee in Assisted CLI. In VS Code, granular deny, ask, and allow rules apply to Copilot sessions using Agent Host ([enterprise reference](https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/enterprise-administrators/enterprise-managed-settings)). See [the enforcement prerequisite](../../patterns/agent-design/permission-policy-enforcement-prerequisite.md) for the session boundary.
+
+Administrators control Allow All and Assisted separately through `disableBypassPermissionsMode` and `disableAssistedPermissionsMode`. A default mode supplies a starting choice, not a restriction. A prohibited default falls back to manual approval ([enterprise settings](https://docs.github.com/en/enterprise-cloud@latest/copilot/reference/enterprise-administrators/enterprise-managed-settings), [GA announcement](https://github.blog/changelog/2026-10-26-github-copilot-assisted-permissions-generally-available/)).
+
+In CLI, `--assisted-approval` leaves `--allow-all-paths` and `--allow-all-urls` unchanged. If Assisted cannot turn on, CLI warns on stderr but preserves a separate `--allow-all-tools` option. Check both the warning and the remaining grants. The review model can differ from the chat model; bring-your-own-key sessions use the session model. Copilot cloud sessions have no tool permission controls ([Assisted guide](https://docs.github.com/en/copilot/concepts/customizations/allowing-safe-commands)).
 
 ## Planning mode
 
@@ -62,37 +74,10 @@ Agent mode degrades when the feedback loop is weak or the task exceeds its conte
 - First-step assumption drift. A wrong assumption in step one propagates, so every later edit, test, and fix inherits it. Planning mode reduces this but does not eliminate it.
 - Rate limits and context ceilings. Agent mode consumes [GitHub AI credits, metered by the tokens each interaction uses](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing), and rate-limits the most powerful models, so sustained work across dozens of files is costly. On April 20, 2026, GitHub [paused new signups for Pro, Pro+, and Student plans, added session and weekly token-based limits, and removed Opus models from the Pro tier](https://github.blog/news-insights/company-news/changes-to-github-copilot-individual-plans/) — citing agent-mode workloads as the cause. That direction became the whole model on June 1, 2026, when GitHub [retired premium requests](https://docs.github.com/en/copilot/reference/copilot-billing/request-based-billing-legacy/what-changed-with-billing): budget tokens, not request counts. To ease that budgeting, GitHub made [Auto mode in Copilot Chat generally available to all users on June 17, 2026, auto-selecting the model per request](https://github.blog/changelog/2026-06-17-auto-mode-in-copilot-chat-available-for-all-users) rather than pinning one high-rate model for every turn.
 
-## Example
-
-This example shows agent mode's edit-run-fix loop. Open a project in VS Code with Copilot, switch to agent mode in the Copilot Chat panel, and submit a prompt like:
-
-```
-Migrate the user authentication module from express-session to JWT. Update all routes, add token refresh logic, and fix any test failures.
-```
-
-Copilot responds by reading the affected files, proposing changes across the codebase, running the test suite, and looping back on failures — without asking for step-by-step confirmation. A representative trace looks like:
-
-```
-[agent] Reading src/auth/session.ts, src/routes/user.ts, tests/auth.test.ts
-[agent] Proposing changes to 4 files
-[agent] Running: npm test
-[agent] 2 tests failed — fixing token expiry handling in src/auth/jwt.ts
-[agent] Running: npm test
-[agent] All tests passing
-```
-
-For complex migrations, enable planning mode first — Copilot shows the full plan before touching any files. In VS Code, this is available via the `#plan` directive in the prompt:
-
-```
-#plan Migrate express-session to JWT across the auth module
-```
-
-Review the plan, approve, and then Copilot executes all steps.
-
 ## Key Takeaways
 
 - Agent mode is the local, synchronous counterpart to the async coding agent
-- It iterates autonomously: edit, run, check, fix — without step-by-step approval
+- It iterates through edits and checks; permission mode and effective policy determine approval requirements
 - Planning mode adds transparency for complex multi-step tasks
 - Generally available across VS Code, JetBrains, Eclipse, and Xcode
 

@@ -27,7 +27,7 @@ The pattern moves agent invocation out of the IDE and into the channel where the
 
 ```mermaid
 graph TD
-    A[Team member] -->|@mention in channel| B[Chat platform]
+    A[Team member] -->|"@mention in channel"| B[Chat platform]
     B -->|webhook/event| C[Agent runtime]
     C -->|read thread context| B
     C -->|select repo + model| D[Forge: GitHub/GitLab]
@@ -115,6 +115,8 @@ Skip it when the agent's IDE or PR-comment entry point already covers the workfl
 - Repository binding is heuristic, not channel-bound; enforce binding outside the agent if it must be a security boundary
 - The pattern concentrates the lethal trifecta on the chat principal — extend the trifecta-audit posture used for MCP servers to the chat integration
 - Shared channels, low-engineering-quorum channels, and high-frequency channels are predictable failure conditions
+
+[Tool Availability by Conversation Visibility](../patterns/agent-design/conversation-visibility-tool-availability.md) examines tool availability when other people can read the conversation.
 
 ## Related
 

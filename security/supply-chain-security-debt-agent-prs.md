@@ -75,6 +75,7 @@ The pinned form is what survived the March 2025 compromise: workflows referencin
 - [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the operational pattern for running the gate at PR time
 - [Secrets Management for Agents](secrets-management-for-agents.md) — closing the hard-coded-credential leg with proper secret handling
 - [Lock the Transitive CI Dependency Graph](../verification/lock-transitive-ci-dependency-graph.md) — the lockfile answer to unpinned CI references, extended to the dependencies a review cannot see
+- [Build-Surface Inventory for an Interpreter-Level CVE](../workflows/build-surface-inventory-runtime-cve.md) — the same CI and Docker files read for what they pin rather than for what an agent put there
 
 ## Sources
 

@@ -37,14 +37,18 @@ nav:
       - usage-reinforced-memory-decay.md
       - agent-initiated-self-compaction.md
       - reasoning-retention-and-compaction.md
+      - offload-threshold-by-payload-origin.md
       - half-life-tool-result-truncation.md
       - stage-elision-before-summarization.md
+      - verbatim-prose-compaction.md
       - version-controlled-agent-context.md
       - elastic-context-orchestration.md
       - prompt-compression.md
       - control-context-compression-budget.md
       - reacquisition-cost-measurement.md
       - compaction-policy-latency-and-cost.md
+      - executed-prefill-accounting.md
+      - model-qualification-self-managed-compaction.md
       - per-agent-compaction-window.md
       - injected-context-cost-attribution.md
       - working-memory-evaluation-levels.md
@@ -71,6 +75,7 @@ nav:
       - filter-aggregate-execution-env.md
       - evolving-playbooks.md
       - typed-context-addressability.md
+      - subtask-boundaries-over-delegation.md
   - "Loading & Retrieval":
       - context-hub.md
       - codebase-pattern-library-context.md
@@ -97,9 +102,11 @@ nav:
       - schema-guided-graph-retrieval.md
       - fact-supersession-memory.md
       - claim-scoped-invalidation.md
+      - memory-store-writer-ceiling.md
       - budgeted-constraint-verification.md
       - cross-reference-dereference-hop.md
       - chunking-strategy-rag-code-completion.md
+      - knowledge-density-pruning-code-retrieval.md
       - rag-component-prioritization-software-engineering.md
       - corpus-shape-retrieval-architecture.md
       - llm-driven-logical-retrieval.md
@@ -107,6 +114,8 @@ nav:
       - retrieval-sufficiency-gate.md
       - state-conditioned-evidence-selection.md
       - long-context-vs-retrieval-break-even.md
+      - exact-file-selection-over-compression.md
+      - authoritative-tool-output-declaration.md
       - hypothetical-classification.md
       - compositional-skill-routing.md
       - skill-loadout-curation.md

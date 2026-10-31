@@ -70,7 +70,7 @@ These controls augment the built-in `/sandbox` command; they do not replace it. 
 
 Enabling `/sandbox` without `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` still provides filesystem and network isolation. Adding `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB` closes the process persistence and env leakage gaps that bubblewrap's filesystem/network controls leave open.
 
-The sandbox also carries a setting that weakens its own filesystem boundary. Claude Code 2.1.305 (October 20, 2026) added `sandbox.allowNestedUserNamespaces`, which lets sandboxed commands on Linux create user namespaces for Chromium and rootless podman. The changelog says the same permission lets those commands "get around the sandbox's file protections" ([Claude Code changelog 2.1.305](https://code.claude.com/docs/en/changelog#2-1-305)). Anthropic asserts the cost; nothing in the entry measures it. Leave the setting off unless a sandboxed command needs a nested namespace.
+The sandbox also carries a setting that weakens its own filesystem boundary. Claude Code 2.1.305 (October 20, 2026) added `sandbox.allowNestedUserNamespaces`, which lets sandboxed commands on Linux create user namespaces for Chromium and rootless podman. The changelog says the same permission lets those commands "get around the sandbox's file protections" ([Claude Code changelog 2.1.305](https://code.claude.com/docs/en/changelog#2-1-305)). Anthropic asserts the cost; nothing in the entry measures it. Leave the setting off unless a sandboxed command needs a nested namespace, and read it as [a containment decision rather than a compatibility fix](../patterns/anti-patterns/sandbox-capability-opt-in-as-compatibility-setting.md).
 
 ## Example
 

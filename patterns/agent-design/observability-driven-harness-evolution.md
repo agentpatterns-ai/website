@@ -59,6 +59,21 @@ Ten AHE iterations lifted pass@1 on Terminal-Bench 2 from 69.7% to 77.0%, surpas
 
 For comparison, LangChain's manually-driven changes on Terminal Bench 2.0 moved scores from 52.8% to 66.5% ([LangChain, 2026](https://blog.langchain.com/improving-deep-agents-with-harness-engineering/)). AHE automates that loop without losing attribution.
 
+## Test whether a proposed change transfers
+
+A proposal grounded in a past session still needs a later-task test. A retrospective-adaptation study used Claude Code 2.1.295 with Opus 5.5 on 30 SWE-bench Verified issues. The authors selected 20 of those issues from repositories where exploratory sessions had encountered environment problems. Of 125 proposals, the authors coded 101 as experience-driven, 19 as prior-driven, and 5 as weak. Lint accounted for 18 prior-driven proposals among 43 lint proposals. Generic advice was concentrated in that subset. These counts describe the sampled sessions, not arbitrary coding tasks. [Treude and Baltes, arXiv:2610.34938v1, sections III–IV](https://arxiv.org/abs/2610.34938v1)
+
+Implementations and evaluated adaptations had different counts. Of 24 implemented proposals, 11 produced adaptations for evaluation. One author-written comparison brought the total to 12 adaptations, tested in 13 transfer events with 5 sessions per condition. Humans selected the proposals and later tasks; 7 events encountered enough target problems to be informative. [Treude and Baltes, arXiv:2610.34938v1, methods and results](https://arxiv.org/abs/2610.34938v1)
+
+Use the study's transfer distinctions when reviewing a harness edit:
+
+- Record whether the later task encounters the original problem. An unencountered problem gives no evidence of prevention.
+- Separate loading or consulting an adaptation from following it. Inspect the behavior that the proposal predicts will change.
+- Confirm a proposed check can fail in the target environment. Only 9 of 38 executable checks in the study could report failure as written.
+- Measure success and elapsed time separately from reduced repeated work. Include unrelated tasks to detect extra work introduced by the adaptation.
+
+This checklist applies the authors' transfer analysis. Task success differed by at most one session per event; a test-runner pointer bundled with CI linting increased elapsed time. The targeted later tasks do not establish gains across ordinary production work. [Treude and Baltes, arXiv:2610.34938v1, results and limitations](https://arxiv.org/abs/2610.34938v1)
+
 ## Relationship to adjacent patterns
 
 | Pattern | Scope | Driver |

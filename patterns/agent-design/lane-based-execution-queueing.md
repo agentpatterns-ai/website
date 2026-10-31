@@ -10,7 +10,7 @@ aliases:
   - execution lane isolation
   - named queue concurrency
   - per-lane concurrency limits
-last_reviewed: 2026-10-17
+last_reviewed: 2026-10-30
 maturity: established
 ---
 
@@ -48,7 +48,7 @@ Two operations run each lane:
 - `drainLane()` — pumps tasks from the queue up to `maxConcurrent`, then yields
 - `enqueueCommandInLane<T>()` — schedules work and returns a promise the caller can await
 
-A shipped harness states the number. Claude Code release 2.1.302 changed "prompt and agent hooks so that at most 12 of one event run at a time; the rest wait their turn" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
+A shipped harness states the number. Claude Code release 2.1.302 changed "prompt and agent hooks so that at most 12 of one event run at a time; the rest wait their turn" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-302)). Release 2.1.312 adds a session-wide ceiling for those same hooks. They run "at most 24 at a time per session, sub-agents included, plus at most 12 that have waited longer than their event's timeout" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-312)). The changelog also records that "a `timeout` under 1 second now counts as 1 second".
 
 Lanes never share state or communicate directly. Isolation is structural, not enforced by locks.
 

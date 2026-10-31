@@ -23,19 +23,19 @@ The fix is per-rule lifecycle metadata: every rule declares its origin, its scop
 
 ## The triple
 
-The Walkinglabs harness-engineering curriculum names the three fields explicitly: "Every instruction should have a source ('why was this rule added?'), an applicability condition ('when is this rule needed?'), and an expiry condition ('under what circumstances can this rule be removed?')" ([lecture-04](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md)).
+The Walkinglabs harness-engineering curriculum names the three fields explicitly: "Every instruction should have a source ('why was this rule added?'), an applicability condition ('when is this rule needed?'), and an expiry condition ('under what circumstances can this rule be removed?')" ([lecture-04](https://github.com/walkinglabs/learn-harness-engineering/blob/3bc70096725e5e1eaa616178f9a5f107ae8ce15b/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md)).
 
-| Field | Question it answers | Concrete example |
-|-------|--------------------|------------------|
-| `source` | Why was this rule added? | "Incident 2024-11-03: agent committed `.env` to git" |
-| `applies_to` | When is this rule active? | "Any task that writes files outside `docs/`" |
-| `retire_when` | What signals it is safe to remove? | "Pre-commit hook rejects `.env` paths in commits" |
+| Field | What to record |
+|-------|----------------|
+| `source` | The incident, decision, or requirement that led to the rule |
+| `applies_to` | The tasks or repository state that require the rule |
+| `retire_when` | The evidence required before proposing removal |
 
 The triple is not a writing-style preference. It changes what an audit can do. With `retire_when` present, the auditor can check whether the condition has been met and propose the deletion. Without it, deletion is a judgment call no reviewer wants to make alone.
 
 ## The undead-rule failure mode
 
-Walkinglabs frames the bloat mechanism directly: "Outdated instructions rarely get deleted — because the consequences of deletion are uncertain ('maybe something else depends on this rule?'), while adding new instructions feels free" ([lecture-04](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md)). The companion anti-patterns list calls out "encoding obsolete rules that nobody audits" as a named anti-pattern ([anti-patterns.md](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/code/anti-patterns.md)).
+Walkinglabs frames the bloat mechanism directly: "Outdated instructions rarely get deleted — because the consequences of deletion are uncertain ('maybe something else depends on this rule?'), while adding new instructions feels free" ([lecture-04](https://github.com/walkinglabs/learn-harness-engineering/blob/3bc70096725e5e1eaa616178f9a5f107ae8ce15b/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md)). The companion anti-patterns list calls out "encoding obsolete rules that nobody audits" as a named anti-pattern ([anti-patterns.md](https://github.com/walkinglabs/learn-harness-engineering/blob/3bc70096725e5e1eaa616178f9a5f107ae8ce15b/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/code/anti-patterns.md)).
 
 A rule with no expiry condition and no recent invocation evidence is undead — it consumes its share of the [150-rule budget](instruction-compliance-ceiling.md) but no one can defend or delete it. Undead rules accumulate fastest in incident-driven additions: a one-off failure produces a permanent rule that nobody can later prove is still needed.
 
@@ -43,86 +43,48 @@ The lifecycle triple kills the undead-rule failure mode at the write site: a rul
 
 ## How the audit uses it
 
-An instruction-rule-budget audit counts rules, classifies them by safety/correctness/style, and detects duplication. Lifecycle metadata adds three roll-up percentages and one new finding class:
+Use the [Walkinglabs lifecycle fields](https://github.com/walkinglabs/learn-harness-engineering/blob/3bc70096725e5e1eaa616178f9a5f107ae8ce15b/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md) as audit questions. For each rule, record whether its source and applicability still hold. Check its retirement condition against current evidence.
 
-```markdown
-| Surface | Rules | with source | with applies_to | with retire_when |
-|---------|------:|------------:|----------------:|-----------------:|
-| AGENTS.md | 42 | 41 (98%) | 38 (90%) | 14 (33%) |
-| CLAUDE.md | 28 |  9 (32%) |  6 (21%) |  2 ( 7%) |
-| **Total** | 70 | 50 (71%) | 44 (63%) | 16 (23%) |
+Report the file and rule location with the evidence for keeping or removing it. Treat missing metadata as a review gap. Lack of recent invocation alone does not establish that removal is safe.
 
-## Undead rules (no `retire_when` + no recent invocation evidence)
+## Test the retirement condition
 
-| Surface | Line | Rule | Last referenced |
-|---------|------|------|----------------|
-| CLAUDE.md | 84 | "Always run `npm test` after edits" | git log: 0 hits in 180 days |
-| CLAUDE.md | 102 | "Prefer Vue 2 SFC syntax" | grep: project migrated to Vue 3 |
-```
+Treat `retire_when` as a testable proposal. Replay the original trigger in isolated copies of the same repository state, with and without the fix. Keep task prompts and commit messages identical. This follows the paired replay design in [Lessons Outlive Their Failures, section 4.3](https://arxiv.org/abs/2610.32578v1).
 
-The audit becomes actionable: each undead row is a one-line pruning candidate the auditor can defend with evidence. Without the metadata, the same audit can only emit "70 rules, ceiling is 150, you have room" — which is exactly the report that lets surfaces grow forever.
+Record the model version, original trigger, and exact rule or check removed. Confirm that each run reaches the trigger. Separate completed runs from refusals and incomplete attempts before comparing outcomes. A run that never exercises the relevant behavior cannot establish that a rule is obsolete. [Sections 5.3 and 6](https://arxiv.org/abs/2610.32578v1) explain why that distinction matters.
 
-## Authoring template
+The study replays 5 scenarios in one author's repository, with 3 runs per condition on Claude Sonnet 5.5. Only the superseded-decision scenario both removes a prose rule and reaches its trigger. The em-dash and destructive-reset fixes are a lint check and a guard hook. No destructive-reset run reaches the destructive command. All 6 run-time-estimate runs decline, so that scenario supplies no measurement. Those cases cannot establish that prose rules generally outlive their purpose. [Replay results and discussion](https://arxiv.org/abs/2610.32578v1).
 
-Attach lifecycle metadata at write-time, not after-the-fact. The cheapest form is an inline comment trailing the rule:
+The stale-count replay below shows a check catching errors before commit. Its one-sided Fisher test gives p=0.10, short of statistical significance. Reconstructed triggers and historical model differences further limit attribution. These are exploratory retirement tests, not evidence for removing security controls. [Sections 5.3 and 7](https://arxiv.org/abs/2610.32578v1).
 
-```markdown
-- Never commit `.env*` or `.dev.vars*` files.
-  <!-- source: incident 2024-11-03 | applies_to: any file-write task | retire_when: pre-commit hook rejects these paths -->
-```
+Keep mechanical invariant checks when retiring redundant prose. Use the [behavioral deletion test](behavioral-no-op-test.md) to assess instruction value, and retain [enforced controls](../security/enforced-versus-advisory-controls.md) at the action boundary.
 
-For projects with many rules, a structured frontmatter block per rule file works better:
+## Record metadata when adding a rule
 
-```yaml
----
-rule_id: no-env-commits
-source: incident 2024-11-03 (agent committed .env to public repo)
-applies_to: any task that writes files
-retire_when: .pre-commit-config.yaml rejects .env* paths AND audit shows zero false-negatives over 90 days
----
-
-Never commit `.env*` or `.dev.vars*` files.
-```
-
-The audit runbook in `bootstrap-skill-template` form can ship this template as a fragment the agent attaches to every new rule it authors. Once the template is the default, the undead-rule rate trends to zero.
+Record `source`, `applies_to`, and `retire_when` beside the rule when you add it. Use a comment or structured fields that your audit can read. Link the actual incident or decision; do not substitute a plausible history. These fields implement the [Walkinglabs lifecycle questions](https://github.com/walkinglabs/learn-harness-engineering/blob/3bc70096725e5e1eaa616178f9a5f107ae8ce15b/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md).
 
 ## When the triple is overhead
 
 Lifecycle metadata is not free — every rule carries three extra fields that themselves consume the [context budget](instruction-compliance-ceiling.md) the audit defends. The break-even point depends on surface size and team shape:
 
-- Surfaces under ~50 rules — the whole file is small enough to re-read in two minutes (the Walkinglabs threshold). A quarterly "delete what no one defends" pass achieves the same pruning outcome without per-rule schema overhead.
 - Solo-author projects — the implicit "why this rule exists" lives in the author's head. Writing it down duplicates context that has only one consumer.
 - Universal safety rules — "never commit secrets" needs no source, applicability, or expiry, and is better [enforced by a hook](enforcing-agent-behavior-with-hooks.md) than carried as metadata. The triple earns its keep on project-specific, incident-driven rules where context fades over months.
 - Teams without commit discipline — if authors do not backfill metadata when adding rules, the triple becomes inconsistent decoration and the audit cannot trust it. Enforce at [PR review](prompt-governance-via-pr.md) or skip the scheme entirely.
 
-For medium-to-large instruction surfaces under repeated audit pressure, the per-rule cost is dominated by the gain: the surface can shrink. For small surfaces, plain deletion discipline wins.
-
 ## Example
 
-A 600-line `AGENTS.md` had 220 rules, well over the [150-rule ceiling](instruction-compliance-ceiling.md). The first audit pass identified 60 dead rules covered by hooks and 30 duplicates — leaving 130, still pressed against the ceiling. The audit could not propose more cuts because no rule declared a retire-when condition.
+The stale-count replay tests hardcoded skill counts in the author's repository with Claude Sonnet 5.5. Without the pre-commit lint check, all 3 runs leave those counts stale. [Lessons Outlive Their Failures, section 5.3 and Table 3](https://arxiv.org/abs/2610.32578v1).
 
-The team added the lifecycle triple as an inline comment per rule, backfilled by walking commit history for the originating PR. The second audit pass produced:
+With lint Check 12 enabled, 2 runs still write stale counts. The linter blocks their first commit attempt and prints the affected lines and true count on disk. After correcting the counts, the agent commits. One guarded run declines under the deadline focus rule. [Section 5.3](https://arxiv.org/abs/2610.32578v1).
 
-```markdown
-## Undead rules (no retire_when, last referenced > 180 days)
-
-| Line | Rule | Originating PR |
-|------|------|---------------|
-|  47  | "Use Vue 2 SFC syntax"           | #142 (project migrated to Vue 3 in #890) |
-|  92  | "Reference TICKET-447 in commits" | #203 (ticket closed Q2-2023) |
-| 118  | "Avoid the legacy auth module"   | #310 (module deleted in #1102)            |
-| ...  | (47 more)                         | ...                                     |
-```
-
-After the second pass the surface dropped from 130 to 71 rules — under the ceiling with headroom. The undead column was the entire driver; no other audit dimension produced cuts that large.
+The check catches the error after the edit and before commit. A retirement record must preserve that sequence and distinguish the declined run from a completed repair.
 
 ## Key Takeaways
 
-- The 150-rule [compliance ceiling](instruction-compliance-ceiling.md) forces pruning; lifecycle metadata makes pruning mechanical instead of judgment-based.
-- The triple is `source` (why added), `applies_to` (when active), `retire_when` (deletion condition) — sourced from the [Walkinglabs harness-engineering curriculum](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md).
+- A retirement condition identifies what to test; it does not establish that removal is safe.
+- The triple is `source` (why added), `applies_to` (when active), `retire_when` (deletion condition) — sourced from the [Walkinglabs harness-engineering curriculum](https://github.com/walkinglabs/learn-harness-engineering/blob/3bc70096725e5e1eaa616178f9a5f107ae8ce15b/docs/en/lectures/lecture-04-why-one-giant-instruction-file-fails/index.md).
 - Undead rules — no expiry, no recent invocation — are the named failure mode that lifecycle metadata kills at the write site.
-- An instruction-rule-budget audit gains three roll-up percentages and an undead-rules finding when lifecycle metadata is present.
-- Skip the scheme on surfaces under ~50 rules — overhead dominates and plain deletion discipline already works.
+- Record whether each replay reaches its trigger; refusals and incomplete runs do not establish safe retirement.
 
 ## Related
 

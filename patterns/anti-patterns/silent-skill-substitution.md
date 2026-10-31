@@ -94,3 +94,4 @@ The evidence is one v1 preprint with one run per model, configuration, and pair.
 - [Designing Agent Plugins to Survive Co-Installation](../agent-design/plugin-co-installation-safety.md) — the packaging side, where two plugins claim the same capability name
 - [Skill Composition Risk in Agent Ecosystems](../../security/skill-composition-risk.md) — adversarial chaining between skills, a different failure from silent substitution
 - [Skill Over-Trust](skill-over-trust.md) — attributing a regression to one skill by re-running without it
+- [Treating Co-Loaded Agent Skills as Additive Rule Sets](co-loaded-skills-as-additive-rules.md) — what happens after selection, when both skill bodies are in context and one skill's exclusive rules are dropped anyway

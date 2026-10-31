@@ -159,6 +159,8 @@ Prefer manual or semi-automated updates when the documentation surface is small,
 - Schedule-triggered runs handle cumulative drift; push-triggered runs catch drift at the point of code change
 - Documentation drift and instruction drift share the same detection and remediation patterns
 
+For drift discovered during an outage, see [incident-time code grounding](incident-time-code-grounding.md).
+
 ## Related
 
 - [Continuous AI Agentic CI/CD](continuous-ai-agentic-cicd.md) — parent paradigm; continuous documentation is one of its six workflow categories

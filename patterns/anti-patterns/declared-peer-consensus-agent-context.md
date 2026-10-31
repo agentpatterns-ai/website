@@ -81,3 +81,4 @@ An aggregator combines the independent answers and their cited evidence afterwar
 - [Homogeneous Debate Panels as a Groundedness Quality Lever](homogeneous-debate-panel-groundedness.md) — a related null result on shared-model, shared-evidence panels
 - [The Yes-Man Agent](yes-man-agent.md) — sycophancy toward a human instead of a peer agent, with the same missing-verification root cause
 - [Voting / Ensemble Pattern for AI Agent Development](../multi-agent/voting-ensemble-pattern.md) — why independent runs, not shared context, are what makes an ensemble's diversity real
+- [Discussion Transcript as the Record of Agent Belief](discussion-transcript-as-agent-state.md) — the group-scale version, where the same pressure comes from peers in a live discussion and the transcript hides most of its effect

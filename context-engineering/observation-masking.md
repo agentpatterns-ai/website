@@ -67,7 +67,7 @@ Observation masking reduces context growth from intermediate tool results. It do
 - Conversation history from prior reasoning turns
 - Tool outputs the agent needs to retain for repeated reference
 
-For those cases, combine masking with [context compression](context-compression-strategies.md) (tiered summarization and offloading) and [on-demand retrieval](retrieval-augmented-agent-workflows.md) for content the agent needs to consult several times.
+For those cases, combine masking with [context compression](context-compression-strategies.md) (tiered summarization and offloading) and [on-demand retrieval](retrieval-augmented-agent-workflows.md) for content the agent needs to consult several times. For conversation history, [verbatim prose compaction](verbatim-prose-compaction.md) keeps every user message and all assistant prose word for word and drops the tool outputs.
 
 ## When this backfires
 
@@ -144,3 +144,4 @@ The token saving from masking `read_file` and `edit_file` in this example is rou
 - [Filter, Aggregate, and Execution Environment](filter-aggregate-execution-env.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)
 - [The Infinite Context](../patterns/anti-patterns/infinite-context.md)
+- [Subtask Boundaries Over Delegation](subtask-boundaries-over-delegation.md) — the same substitution applied to a whole declared subtask rather than one tool result

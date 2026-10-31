@@ -43,7 +43,7 @@ graph TD
 
 ### Tier 1: offload large tool responses
 
-Replace large tool payloads (full files, API responses, search results) with a filesystem reference and brief summary. Full content goes to disk, and the agent re-reads it when needed. This keeps content recoverable without holding payloads in active context. [Addressable recall compaction](addressable-recall-compaction.md) generalizes the same move to every compacted observation, keyed by a stable identifier. You can configure the thresholds. Frameworks typically set them in the tens of thousands of tokens.
+Replace large tool payloads (full files, API responses, search results) with a filesystem reference and brief summary. Full content goes to disk, and the agent re-reads it when needed. This keeps content recoverable without holding payloads in active context. [Addressable recall compaction](addressable-recall-compaction.md) generalizes the same move to every compacted observation, keyed by a stable identifier. You can configure the thresholds. Frameworks typically set them in the tens of thousands of tokens. One harness sets a different bar depending on whether a tool or a person produced the payload ([offload thresholds by payload origin](offload-threshold-by-payload-origin.md)).
 
 ### Tier 2: summarize conversation history
 

@@ -101,3 +101,4 @@ Small suites plus a biased judge produce confident noise. Judge rankings moved b
 - [Purpose-Built Eval Suites](../verification/purpose-built-eval-suites.md) — sizing and sourcing the dataset the gate scores against.
 - [Meta-Evaluate the LLM Judge](../verification/meta-evaluate-llm-judge-rubric-verification.md) — measuring the grader before trusting its verdict.
 - [Multi-Turn Conversation Evaluation](../verification/multi-turn-conversation-evaluation.md) — the cross-turn defects a single-turn gate misses.
+- [Reference Dependence Decides Which Evals Run in Production](../verification/reference-dependence-online-evals.md) — which of this gate's evaluators can be reused on live traffic, and how their verdicts shift once the reference is gone.

@@ -59,6 +59,8 @@ Reserve prose for what has no formal equivalent: business rationale, priority tr
 
 A spec covers every possible implementation; code is one of them. A spec is more abstract and transferable than code. But the precision needed for reliable generation pulls it toward code-like structure. The claim is not that specs are useless. It is that a spec precise enough to generate reliable code converges toward code-like structure, and the “simpler than writing code” argument collapses.
 
+The code-like detail carries a second cost once the spec is retained: it names identifiers that refactoring changes. On deciding which of it to keep, see [Partition Spec Content by Expected Longevity](../../workflows/spec-content-longevity-partition.md).
+
 ## Example
 
 A team writes an initial spec for a user authentication feature:

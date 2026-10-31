@@ -77,3 +77,4 @@ The [agentic AI is abstracting away code](https://medium.com/agileinsider/agenti
 - [Strategy Over Code Generation](strategy-over-code-generation.md) — artifact-shaping decisions sit upstream of agent speed.
 - [Suggestion Gating: Why Fewer AI Completions Improve Developer Experience](suggestion-gating.md) — gating lower-density outputs is the same shape as steering away from low-resource languages.
 - [Language Selection Scored on Review Cost](language-selection-review-cost.md) — the other half of the selection decision: what the code costs to review once it exists, rather than what the generator can produce.
+- [Capability Parity Before Cost Parity in Low-Resource Languages](../token-engineering/capability-parity-before-cost-parity.md) — which part of this verification budget a reported pass-rate jump narrows, and which parts it leaves in place.

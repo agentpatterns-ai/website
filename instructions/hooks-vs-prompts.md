@@ -174,6 +174,8 @@ Treat that as an automatic case for external enforcement. When a rule asks the a
 - Hooks are injection-resistant — injected instructions from a [prompt-injection](../security/prompt-injection-threat-model.md) payload can influence what the agent *tries*, not what a hook *allows*.
 - Hooks fail at four boundaries: substitution, intent-blindness, execution-path gaps, and hook-source trust. Pair them with CI and git-level gates for rules that must hold everywhere.
 
+For rules these checks cannot observe, [Enforce the Rules Your Code Cannot Show](per-rule-enforcement-budget.md) sorts such rules by whether the diff shows them and tests anchoring against proof.
+
 ## Related
 
 - [Hook Catalog: Guardrails, Sandboxing, and CLI Enforcement](../tool-engineering/hook-catalog.md)

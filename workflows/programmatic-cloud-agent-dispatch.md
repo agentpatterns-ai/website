@@ -39,6 +39,8 @@ The dispatch endpoint is `POST /agents/repos/{owner}/{repo}/tasks`. The only req
 
 Authentication is constrained to user-to-server tokens: a personal access token, an OAuth app token, or a GitHub App user-to-server token. "Server-to-server tokens, such as GitHub App installation access tokens, are not supported." ([GitHub Docs](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-via-the-api)) That single sentence determines the principal model: a service identity cannot dispatch today; some human's token must.
 
+The restriction is specific to this API, and it still held when the docs were re-checked on 2026-10-28. Since 2026-10-27 an organization-installed GitHub App can authenticate Copilot SDK requests with its own short-lived installation access token, in public preview ([GitHub Changelog](https://github.blog/changelog/2026-10-27-github-copilot-supports-server-to-server-authentication)). So [Copilot server-to-server authentication](../tools/copilot/copilot-server-to-server-authentication.md) gives a service its own identity for model requests while dispatch here keeps needing a person's credential.
+
 The API is in public preview as of 2026-05-13 and limited to Copilot Business and Enterprise. Documented use cases: "Fan out refactors or migrations across many repositories from a simple script; Set up new repositories in one click from your company's internal developer portal; Automatically prepare a new release each week, including release notes." ([GitHub Changelog: Start Copilot cloud agent tasks via the REST API](https://github.blog/changelog/2026-05-13-start-copilot-cloud-agent-tasks-via-the-rest-api/))
 
 ```mermaid

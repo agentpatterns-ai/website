@@ -72,3 +72,4 @@ The first three rows are the dangerous ones, because an unsound binding gives no
 - [The Post-Authorization Execution Trust Gap in Remote MCP](post-authorization-execution-trust-gap.md) — a grant that names the client and never the workload that runs the call
 - [Approval Records That Bind No Identity and No Session](../patterns/anti-patterns/unbound-approval-records.md) — the identity dimension of the same record, where the approved command is replayed by another agent or in a later session
 - [Workflow Execution Protections](workflow-execution-protections.md) — the branch and environment controls that sit around a gated deployment
+- [Plan-Scoped Credentials for Agent Production Access](plan-scoped-production-access.md) — the same review-versus-grant gap on API scopes, where a plan naming one deployment buys deployment write wherever the token reaches

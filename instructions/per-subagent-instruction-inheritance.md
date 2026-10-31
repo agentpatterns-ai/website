@@ -95,3 +95,4 @@ The documented mitigation is narrow. Restate a load-bearing rule "in the prompt 
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md)
 - [Subagent vs In-Context Skill Execution](../patterns/agent-design/subagent-vs-in-context-skill-execution.md)
+- [Size Limits on Instruction Files That Load on Demand](on-demand-instruction-file-size-limit.md) — the per-file character cap on the instruction files a session loads on demand

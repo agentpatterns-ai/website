@@ -37,7 +37,7 @@ The wire format has to be one you can afford to track. The Agent Host Protocol i
 | Turn state, progress, and the session log | Tools an extension contributes in that window |
 | Actions, tool-call approvals, and cancellations from any client | Capabilities only that client can reach |
 
-Extension tools are the sharp edge. "Tools from extensions are only available in chats in an editor window where the extension is running" ([VS Code Agent Host architecture](https://code.visualstudio.com/docs/agents/concepts/agent-host)). Reattach from a browser and the session keeps its full history but loses part of its tool set, with nothing in the transcript marking the change.
+Extension tools are the sharp edge. "Tools from extensions are available only in chats in an editor window where the extension is running" ([VS Code Agent Host architecture](https://code.visualstudio.com/docs/agents/concepts/agent-host)). Reattach from a browser and the session keeps its full history but loses part of its tool set, with nothing in the transcript marking the change. Re-scoping the tool set on purpose is a different move, a harness handoff, and the two are compared in [Surface Switch or Harness Handoff](session-surface-switch-vs-handoff.md).
 
 ## Why it works
 

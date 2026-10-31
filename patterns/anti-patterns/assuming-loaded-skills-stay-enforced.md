@@ -82,3 +82,4 @@ The generic self-check asks the agent to rebuild the validation set it just fail
 - [Artifact-Only Verification Hides Skipped Skill Steps](artifact-only-verification.md) — the measurement counterpart: steps skipped even in a short context, where the artifact checks stay green.
 - [Agent Extension Conflicts](agent-extension-conflicts.md) — how loaded skills interact and degrade under context-budget contention.
 - [Skill Over-Trust](skill-over-trust.md) — the other single-skill failure: a topically matched skill displaces task requirements instead of shedding its own.
+- [Treating Co-Loaded Agent Skills as Additive Rule Sets](co-loaded-skills-as-additive-rules.md) — the two-skill case, where a second same-job skill in the same context takes one skill's exclusive rules with it.

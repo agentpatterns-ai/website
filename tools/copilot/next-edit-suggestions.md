@@ -70,6 +70,16 @@ The unified 3-in-1 model delivered a 10.1% decrease in dismissals. One client be
 
 NES is generally available in VS Code and Visual Studio, and in public preview for JetBrains IDEs ([GitHub changelog, Aug 2025](https://github.blog/changelog/2025-08-29-copilots-next-edit-suggestion-nes-in-public-preview-in-jetbrains/)) and for Xcode and Eclipse ([GitHub changelog, Nov 2025](https://github.blog/changelog/2025-11-18-github-copilot-next-edit-suggestions-nes-now-in-public-preview-for-xcode-and-eclipse/)). Business and Enterprise users require admin opt-in to "Editor Preview Features." In VS Code, toggle `github.copilot.nextEditSuggestions.enabled` ([VS Code docs](https://code.visualstudio.com/docs/copilot/ai-powered-suggestions)).
 
+### Configurable eagerness
+
+Paid Copilot subscribers in VS Code can choose Eagerness in the Copilot settings menu with NES enabled. The [VS Code announcement](https://code.visualstudio.com/blogs/2026/10/27/configurable-eagerness) carries an October 26, 2026 byline despite its October 27 URL.
+
+The blog defines model-training eagerness through suggestion frequency and edit size. Low favors fewer, smaller edits; medium preserves baseline behavior; high favors more proactive, larger edits. These settings guide behavior rather than impose strict limits ([training definition](https://code.visualstudio.com/blogs/2026/10/27/configurable-eagerness#_introducing-configurable-eagerness)).
+
+The extension describes the control differently. Its [setting strings](https://github.com/microsoft/vscode-copilot-chat/blob/5863f5a7088958050792b5dccbe8b46c6e13eccc/package.nls.json) describe frequency and delay: low shows fewer suggestions with longer delays; high shows more with minimal delay. Its [configuration declaration](https://github.com/microsoft/vscode-copilot-chat/blob/5863f5a7088958050792b5dccbe8b46c6e13eccc/package.json) tags `github.copilot.nextEditSuggestions.eagerness` as advanced and experimental. The allowed values are `auto`, `low`, `medium`, and `high`; the declared default is `auto`. Keep that setting default separate from the blog's medium model baseline.
+
+In vendor-reported A/B experiments, low produced a 29% lower dismissal rate and 28% shorter suggestions than medium. High produced 40% more accepted-and-retained characters, 40% more shown suggestions, and 22% longer suggestions than medium. High also increased raw dismissals; its dismissal rate did not change significantly ([online results](https://code.visualstudio.com/blogs/2026/10/27/configurable-eagerness#_online-results)). These interaction metrics do not establish productivity or code safety. Inspect proposed edits at every setting; see [Tab acceptance and critical engagement](../../patterns/anti-patterns/tab-accept-critical-engagement-gap.md).
+
 ## Pattern implications
 
 NES surfaces a general principle: match the AI's initiative level to the task.

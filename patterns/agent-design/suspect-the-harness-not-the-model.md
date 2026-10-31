@@ -70,3 +70,5 @@ A team's agent starts costing about 40% more per pull request over a month, with
 - [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — the boundary condition where you cannot pin or inspect the harness at all
 - [Reliability of an Automatically Selected Agent Harness](harness-selection-reliability.md) — when a search procedure picks the harness, the pick itself is a source of regression
 - [Model Rankings Reverse Across Agent Harnesses](model-rankings-reverse-across-harnesses.md) — the selection version of the same attribution problem, where the harness decides which of two models scores higher
+- [Interface Realization Repair: Evidence and Limits](interface-realization-repair.md) — evidence and diagnostic limits within the tool interface
+- [Capture the Assembled Request, Not the System Prompt](../../instructions/captured-instruction-stack.md) — what to record about a release before a regression appears, measured across 1,886 captured requests

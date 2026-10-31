@@ -150,7 +150,7 @@ graph LR
     B --> C{Site cited?}
     C -- Yes --> D[Record: coverage confirmed]
     C -- No --> E[Note the question and<br>missing coverage]
-    E --> F[/pipeline — create issue<br>from coverage gap]
+    E --> F["/pipeline — create issue<br>from coverage gap"]
     F --> A
 ```
 

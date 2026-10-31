@@ -24,7 +24,7 @@ The workflow:
 graph TD
     A[Dependabot Alert] --> B{Assign}
     B -->|Human / Team| C[Notification sent]
-    B -->|@copilot| D[Agent generates fix]
+    B -->|"@copilot"| D[Agent generates fix]
     D --> E[Draft PR opened]
     E --> F[Human reviews & merges]
 ```

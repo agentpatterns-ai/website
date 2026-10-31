@@ -1,6 +1,6 @@
 ---
 title: "Developer Control Strategies for AI Coding Agents"
-description: "Experienced developers plan before delegating and validate every output — empirical evidence for why control, not vibe coding, drives productive agent use."
+description: "Developer control combines planning and review, but workplace observations distinguish artifact inspection, dialogue-based delegation, and explanation seeking."
 tags:
   - human-factors
   - workflows
@@ -15,7 +15,7 @@ maturity: emerging
 
 # Developer Control Strategies for AI Coding Agents
 
-> Experienced developers do not vibe code in production. They plan tasks before delegating, supervise execution, and validate every output — a control loop that explains why agents accelerate some developers and slow others.
+> Developer control strategies combine planning and review, but observed checking shifts between inspecting artifacts, delegating through dialogue, and seeking explanations.
 
 ## The evidence
 
@@ -23,16 +23,24 @@ maturity: emerging
 
 | Study | Design | Key finding |
 |-------|--------|-------------|
-| [Huang et al. (2025)](https://arxiv.org/abs/2512.14012) | 13 observations + 99 surveys | Developers plan, supervise, and validate — they do not vibe |
+| [Huang et al. (2025)](https://arxiv.org/abs/2512.14012v2) | 13 observations + 99 surveys | Observed planning and supervision practices |
 | [METR (2025)](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | RCT, 16 experienced OSS devs | AI made developers take 19% longer, yet they estimated 20% faster |
 | [Anthropic (2026)](https://www.anthropic.com/research/AI-assistance-coding-skills) | RCT, 52 mostly junior engineers | AI-assisted group scored ~17 points lower on comprehension |
 | [Dhanorkar et al. (2026)](https://arxiv.org/abs/2606.05391v1) | 17 developer interviews | Oversight splits into four forms: a priori control, co-planning, real-time monitoring, post hoc review |
 
-The METR perception gap (~39 points) suggests developers who skip control may not notice the productivity loss.
+The METR result compares perceived and measured speed; it does not establish that skipping control causes the slowdown.
+
+### What workplace checking includes
+
+A [workplace shadowing study (v1)](https://arxiv.org/abs/2610.33588v1) reports 11 developers across two workplaces, a multinational enterprise and an open-source foundation. The paper describes in-person recruitment at a US office. Observations lasted about 90 minutes in meeting-free sessions. The study recorded 13 sessions and excluded 2, leaving 11 for analysis. Developers spent 33.4% of observed time on prompting and response checking: 11.3% formulating prompts plus 22.1% checking AI responses. Those are time shares, not defect-detection rates ([study, sections 3 and 4.1](https://arxiv.org/abs/2610.33588v1)).
+
+The authors describe Supervisor, Delegator, and Learner as overlapping patterns. Supervisors inspect artifacts directly; Delegators coordinate through dialogue and delegate checking; Learners seek explanations to build understanding. Developers can shift between these practices. The patterns are neither fixed developer types nor estimates of prevalence ([study, sections 3.4 and 4.5](https://arxiv.org/abs/2610.33588v1)).
+
+For review records, distinguish reading an agent's explanation of a change from inspecting the changed artifact or its test evidence. Asking the agent to check its work records delegated checking; it does not establish independent inspection. This is a practical implication of the observed patterns, not a tested intervention. For a concrete contrast, the Billing task in [oversight stage attribution](../verification/oversight-stage-attribution.md#example) needs evidence that exposes an omitted refund. A generic request to check the code can leave that defect undiscovered.
 
 ## The plan-supervise-validate loop
 
-Experienced developers follow this loop:
+Use this loop as review guidance. The studies above report varied practices rather than universal validation of every output:
 
 ```mermaid
 graph LR
@@ -43,7 +51,7 @@ graph LR
     D -->|Accept| E[Integrate]
 ```
 
-Independent interviews with 17 developers surface the same structure as four oversight forms — a priori control and co-planning before execution, real-time monitoring during it, and post hoc review after ([Dhanorkar et al., 2026](https://arxiv.org/abs/2606.05391v1)). That mapping shows the loop reflects how developers actually oversee agents, not only how they are advised to.
+Independent interviews with 17 developers surface the same structure as four oversight forms — a priori control and co-planning before execution, real-time monitoring during it, and post hoc review after ([Dhanorkar et al., 2026](https://arxiv.org/abs/2606.05391v1)). These reported oversight forms support the loop as a way to organize review, without proving that every developer performs each step.
 
 ### Plan before delegating
 
@@ -59,9 +67,9 @@ This is the decomposition that makes [execution-first delegation](../patterns/ag
 
 Developers monitor output and redirect before the agent commits to the wrong direction. This maps to [human-in-the-loop placement](../workflows/human-in-the-loop.md) — gating on irreversible actions while letting reversible steps proceed.
 
-### Validate every output
+### Validate the artifact
 
-Developers read diffs, run tests, and check behavior against the original intent. Validation separates controlled agent use from [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) that builds up when developers accept unreviewed code.
+As review guidance, read diffs, run tests, and check behavior against the original intent. Validation separates controlled agent use from [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) that builds up when developers accept unreviewed code.
 
 ## Task suitability
 
@@ -76,13 +84,9 @@ Agents proved effective for well-described, straightforward tasks and ineffectiv
 
 This mirrors the [vibe coding](../patterns/anti-patterns/vibe-coding.md) boundary: vibe coding works for low-risk, well-scoped work; control strategies cover everything else.
 
-## Why control works
+## What to assess in a control loop
 
-The control loop works because it does three things:
-
-- Catches errors early — planning surfaces ambiguity before the agent pursues the wrong approach.
-- Preserves comprehension — reviewing every output prevents the [skill atrophy](skill-atrophy.md) that comes from blind acceptance.
-- Builds calibrated trust — repeated validate cycles teach developers which tasks the agent handles reliably, which enables [progressive disclosure](../patterns/agent-design/progressive-disclosure-agents.md) of autonomy.
+Use the loop to examine whether planning exposed ambiguity and whether review produced evidence about the artifact. Keep comprehension and defect detection separate when assessing the result. The authors caution that observing checks does not establish that developers validated the correctness of an agent's output ([study, section 4.4](https://arxiv.org/abs/2610.33588v1)).
 
 ## When this backfires
 
@@ -107,24 +111,10 @@ For developers: decompose tasks before prompting, review every diff, and match t
 
 For tool designers: support planning workflows, make supervision cheap with real-time output and diff-first review, and surface confidence signals for trust calibration.
 
-## Example
-
-A developer needs to add input validation to a REST endpoint. Rather than prompting "add validation to the user endpoint," they apply the control loop:
-
-Plan: "Add Zod schema validation to `POST /users`. Validate `email` (format), `name` (non-empty string, max 100 chars), and `role` (enum: admin, member). Return 422 with field-level errors. Do not modify the database layer or existing tests."
-
-Delegate: submit the scoped prompt to the agent.
-
-Supervise: watch the agent's output. It starts modifying the database model — interrupt and redirect: "Stop. Only modify `src/routes/users.ts` and add `src/schemas/user.ts`. Do not touch the database layer."
-
-Validate: review the diff. Run `npm test`. Confirm 422 responses include field-level error messages. Check that the agent did not silently change error formats in other endpoints.
-
-The planning step took two minutes but prevented a scope creep that would have required reverting database migrations — the same batching dynamic that causes [PR scope creep](../patterns/anti-patterns/pr-scope-creep-review-bottleneck.md) at review time.
-
 ## Key Takeaways
 
-- Experienced developers use a plan-supervise-validate loop, not vibe coding, for production work
-- Control overhead is what makes agents productive — skipping it creates a perception gap where developers feel faster but aren't
+- Treat plan-supervise-validate as review guidance; observed developers shift between overlapping checking practices
+- Record what the developer checked: the agent's account, the artifact, or evidence capable of exposing a defect
 - Agent-suitable tasks are well-scoped; complex architectural work still requires human judgment
 
 ## Related

@@ -95,3 +95,4 @@ The tool without these lines is used unevenly; the lines are what make the firin
 - [Proprioceptive Context Dashboard](proprioceptive-context-dashboard.md) — surfaces context state so the model can see it; the complementary answer to the same meta-cognitive gap.
 - [Context Compression Strategies](context-compression-strategies.md) — the broader tiered-compression frame this pattern sits inside.
 - [Per-Agent Compaction Windows for Orchestrator and Worker](per-agent-compaction-window.md) — the declarative alternative, where the harness sets each agent's trigger instead of the agent firing its own.
+- [Model Qualification for Self-Managed Compaction](model-qualification-self-managed-compaction.md) — the unscaffolded form on frontier models, and the three measurements that say whether a model can hold the decision without a rubric.

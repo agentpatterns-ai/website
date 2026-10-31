@@ -77,3 +77,4 @@ Snapshots solve the easier of two problems: "Snapshotting solves the state-resto
 - [Task Shape Decides What a Heavier Agent Harness Buys](task-shape-harness-payoff.md) — the same conditional in another form, where task shape rather than model strength decides whether added machinery pays.
 - [Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State](delta-channels-checkpoint-storage.md) — the storage cost of keeping checkpoints once you are taking them.
 - [Rollback-First Design](rollback-first-design.md) — why a reliable undo path can delay diagnosis of the bug that caused the failure.
+- [Out-of-Workspace Writes as the Agent Backup Trigger](out-of-workspace-backup-trigger.md) — the same out-of-repository boundary, used to decide when to preserve state rather than when to branch.

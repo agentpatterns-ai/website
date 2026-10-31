@@ -43,6 +43,16 @@ The policy also moves with the model. Per-step tool-result clearing reached 51.3
 
 Two design choices did carry. On SWE-bench, preserving recent history under structured rewriting gained 6.7, 8.7 and 8.0 percentage points across the three models. Clearing tool outputs before structured rewriting gained 7.7, 9.7 and 9.7 ([arXiv:2609.32961v1](https://arxiv.org/abs/2609.32961v1)).
 
+## Score constraint retention separately
+
+Add process-constraint retention to the acceptance criteria for a compaction policy. A benchmark score can stay stable while summaries lose instructions about how to perform the task. [Benchmarks Are Surprisingly Compaction-Friendly](https://arxiv.org/abs/2610.31778v1) reports this gap in a fixed OpenCode harness and a separate analysis of SWE-chat summaries.
+
+The paper's body evaluates Claude Opus 4.6, GPT-5.3-Codex, GPT-5.4, and Gemini 3.1 Pro Preview, with 2 runs per task and configuration. Its abstract counts 3 models. Gemini rarely triggers compaction, so the authors call its results weak evidence. GPT-5.3-Codex has a 400K-token context window; its tested compaction thresholds span 160K to 380K tokens. On PaperBench, it scores 0.38 at 160K against about 0.60 at 260K and above. The paper's threshold and strategy comparisons include only runs that produce a valid submission; they do not measure overall run success. [Methods, section 4.1, limitations, and appendix 6.7](https://arxiv.org/abs/2610.31778v1).
+
+The SWE-chat analysis samples 44 Claude Code sessions with 269 LLM-extracted constraints, then uses an LLM judge to assess retention. Summaries drop 35.9% of process instructions while preserving 93.8% of feature requirements. This measures summary retention, with a different harness from the controlled experiments. It does not measure downstream violations. [Appendix 6.11](https://arxiv.org/abs/2610.31778v1).
+
+For a policy comparison, keep five measurements separate: task score, retained constraints, observed violations, latency, and billed cost. Use [constraint-loss and tool-reach review](../patterns/anti-patterns/constraint-loss-and-tool-reach-scored-separately.md) to check what an agent can still do after a constraint disappears. The retention study supports adding that check; it does not establish that a retained instruction will be followed or a dropped one will be violated.
+
 ## Why it works
 
 The study prices cached input at a tenth of fresh, so the bill depends on how many input tokens remain eligible for the cached rate. A policy that rewrites the trajectory often can remove tokens and still lose that rate. Another team, measuring compaction on HotpotQA and LoCoMo rather than a coding benchmark, reports that "the blocking call stalls agent inference for tens of seconds" ([Parallel Context Compaction, arXiv:2605.23296v1](https://arxiv.org/abs/2605.23296v1)).
@@ -71,6 +81,8 @@ The second policy bills a third more for 2.4 percentage points less resolve.
 - Sweep the trigger threshold before you change the compaction operation. Raising Qwen's SWE-bench threshold from 10K to 20K improved resolve rate for every tested primitive, and for whole-window summarization it also cut cost and latency.
 - Compare task sets rather than aggregate resolve rates. One SWE-bench policy solved 52 tasks against full context's 53, yet it newly solved 7 and lost 8.
 - Treat a policy choice as model-scoped. The same per-step clearing policy helped two models and cost Devstral 1.42x latency.
+
+- Score process-constraint retention separately. A stable benchmark score does not establish that the summary preserves those constraints.
 
 ## Related
 

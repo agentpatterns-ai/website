@@ -1,7 +1,7 @@
 ---
-title: "MCP-vs-CLI Cost Ratios Are a Property of the Scaffolding"
-term: "Scaffolding-Bound Interface Cost"
-description: "Paired MCP-to-CLI cost ratios span 0.43x to 29x across agent scaffoldings, so a multiplier borrowed from another benchmark cannot size the saving in your harness."
+title: "MCP-vs-CLI Cost Ratios Depend on Interface and Scaffolding"
+term: "Interface and Scaffolding Cost Effects"
+description: "MCP-versus-CLI cost ratios depend on the tested interface and agent scaffolding; measure the pairing in your own harness before assuming savings."
 aliases:
   - MCP CLI cost multiplier portability
   - scaffolding-bound interface cost
@@ -16,11 +16,13 @@ last_reviewed: 2026-08-11
 maturity: emerging
 ---
 
-# MCP-vs-CLI Cost Ratios Are a Property of the Scaffolding
+# MCP-vs-CLI Cost Ratios Depend on Interface and Scaffolding
 
-> A published MCP-versus-CLI cost multiplier describes the scaffolding it was measured on, and the same comparison inverts under a different scaffolding.
+> A published MCP-versus-CLI cost ratio describes the tested interface and agent scaffolding; changing either can change cost.
 
-A cost ratio between MCP tool access and CLI tool access describes one agent scaffolding rather than the two interfaces. Across one fixed software task run on seven scaffoldings and five models, thirteen strictly paired MCP-to-CLI ratios spanned 0.43x to 29x, with outliers on both sides ([Alier Forment et al., arXiv:2608.08654v1](https://arxiv.org/abs/2608.08654v1)). A ratio under 1.0 is a pairing where MCP came out cheaper. Read a quoted multiplier as a report about someone else's harness, and measure the delta in yours before migrating tool access to chase it.
+A cost ratio between MCP tool access and CLI tool access describes the tested pairing of interface and agent scaffolding. Across one fixed software task run on seven scaffoldings and five models, thirteen strictly paired MCP-to-CLI ratios spanned 0.43x to 29x, with outliers on both sides ([Alier Forment et al., arXiv:2608.08654v1](https://arxiv.org/abs/2608.08654v1)). A ratio under 1.0 is a pairing where MCP came out cheaper. Read a quoted multiplier as a report about someone else's harness, and measure the delta in yours before migrating tool access to chase it.
+
+Interface representation can still affect behavior when capabilities and runtime match. In their controlled-study abstract, Shi and colleagues report MICA comparisons across 6 models and 3 interactive environments. MICA renders MCP and CLI from a shared semantic action contract and routes decoded actions through the same runtime. They report substantial differences in task performance and interaction cost, alongside changes in semantic action selection, failure pathways, and recovery. The abstract gives no provider-billed cost ratio. Treat this as abstract-level evidence when comparing matched interfaces. [Shi et al., MICA v1 abstract](https://arxiv.org/abs/2610.34298v1)
 
 ## The conditions this applies under
 
@@ -67,11 +69,11 @@ A run that reports success while the log shows four commits is a failure that a 
 
 ## Key Takeaways
 
-- Paired MCP-to-CLI cost ratios ran from 0.43x to 29x across scaffoldings on one fixed task, so the multiplier is not a property of the interface ([Alier Forment et al., arXiv:2608.08654v1](https://arxiv.org/abs/2608.08654v1)).
+- Paired MCP-to-CLI cost ratios ran from 0.43x to 29x across scaffoldings on one fixed task, so do not assume the multiplier transfers unchanged to another scaffolding ([Alier Forment et al., arXiv:2608.08654v1](https://arxiv.org/abs/2608.08654v1)).
 - Price the same task under your own scaffolding with and without the server attached; that is the only ratio that applies to you.
 - Verify which interface the agent actually used from end state, because agents frequently ignore the one they were assigned.
 - Failure frequency was equal across interfaces while wasted spend was not, at 12.9 per cent against 2.2 per cent, so track failed-run cost as a separate line.
-- The evidence is one paper, one task, thirteen paired ratios, and a configuration confound in the headline comparison. Treat the magnitudes as directional.
+- The cost-ratio evidence is one paper, one task, thirteen paired ratios, and a configuration confound in the headline comparison. Treat the magnitudes as directional.
 
 ## Related
 

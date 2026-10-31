@@ -74,6 +74,7 @@ Read the size caveat alongside that result. The authors "deliberately keep each 
 
 - [Parser-Versus-Shell Evasion in Command Permission Checks](../../security/parser-versus-shell-permission-evasion.md) — why a command-text check keeps losing to the shell that runs it
 - [Rollback-First Design](rollback-first-design.md) — choosing the undo before choosing the action
+- [Out-of-Workspace Writes as the Agent Backup Trigger](out-of-workspace-backup-trigger.md) — preserving the state this one cannot reach, before the call lands
 - [Approval Gate Granularity in Agent Pipelines](approval-gate-granularity.md) — when batching approvals actually cuts reviewer load
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](../../security/enforced-versus-advisory-controls.md) — where a control is evaluated decides whether it binds
 - [Sandbox Runtime Comparison](../../security/sandbox-runtime-comparison.md) — picking the isolation layer beneath all of this

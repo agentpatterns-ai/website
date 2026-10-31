@@ -103,3 +103,4 @@ The structural difference is step 1. The epoch bump happens before any state mov
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — what makes step 6's reconciliation of ambiguous effects survivable
 - [Portable Agent Definitions: Full-Stack Identity as Code](../../standards/portable-agent-definitions.md) — packaging the identity half as a version-controlled artifact
 - [The Handoff Tax: What a Receiving Model Should Inherit](../../context-engineering/handoff-tax-model-switch-context.md) — the behavioral cost a mechanically clean model swap still pays
+- [Permission Policy Binds Only at an Enforcement Point](permission-policy-enforcement-prerequisite.md) — a policy the current harness cannot enforce is one reason a platform relocates a session

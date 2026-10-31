@@ -20,7 +20,7 @@ status: current
 
 On 7 August 2026 the Copilot Usage Metrics API gained an optional `totals_by_3rd_party_agent` array carrying "one entry per recognized agent app", in the enterprise, organization, enterprise-user, and organization-user reports over both 1-day and 28-day periods ([GitHub Changelog, 2026-08-07](https://github.blog/changelog/2026-08-07-copilot-usage-metrics-api-adds-agent-app-activity)).
 
-GitHub extended the same API to agentic CLI customizations on 17 September 2026. That adds a second breakdown dimension the API reports, beyond the agent-app one this page covers ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-agentic-cli-customizations-now-in-the-usage-metrics-api)).
+GitHub extended the same API to agentic CLI customizations on 17 September 2026. That adds a second breakdown dimension the API reports, beyond the agent-app one this page covers ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-agentic-cli-customizations-now-in-the-usage-metrics-api)). The customization arrays began carrying customer-defined names in October 2026, under their own conditions: see [named customization metrics](named-customization-metrics-copilot.md).
 
 ## Read the breakdown under four limits
 
@@ -94,3 +94,4 @@ The first form invents 860 interactions that were never prompts. The second keep
 - [Reading Copilot Feature Engagement by Its Threshold](copilot-feature-engagement-threshold.md) — the other non-partitioning breakdown in this API, where the residual comes from users counted under several features.
 - [Delegating Delivery Stages to GitHub Agent Apps](../workflows/agent-apps-delivery-stage-delegation.md) — the install decision this metric is joined to, decided per delivery stage.
 - [Anonymized Customization Metrics in the Copilot CLI](anonymized-customization-metrics-copilot-cli.md) — the same API one month later, where the reporting unit stops matching the decision and the metric no longer joins to it.
+- [Count Agent Usage at the Model-Provider Boundary](provider-boundary-usage-attribution.md) — the array that counts model traffic from any tool, which GitHub distinguishes from the agent app job starts this page covers.

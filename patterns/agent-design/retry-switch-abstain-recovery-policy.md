@@ -78,4 +78,6 @@ The evidence above came from a framework that turns failure-free tool-use benchm
 - [Harness-Enforced Stopping on Judged-Useless Tool Results](enforced-stop-on-useless-results.md) — measures the "policy could live below the model" caveat above: a stopping rule stated in the prompt was followed at most partly, and only harness enforcement made stopping track the evidence
 - [Task Feasibility Awareness: Stop Before You Start](task-feasibility-awareness.md) — checks the tool manifest up front, so nothing is attempted when the capability is simply absent
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — the broader escalation hierarchy this policy slots into
+- [The Outer Harness That Adjudicates an Unfinished Run](unfinished-run-adjudication.md) — the same three-way choice made by a separate process after the run stops, with a human as the third route
 - [Belief Inertia After Tool-Map Drift](../anti-patterns/belief-inertia-after-tool-map-drift.md) — what a stale fallback map produces once the tool surface moves underneath it
+- [Measure Tool-Name Resolution Before Adding Call Repair](tool-name-resolution-gate.md) — the recovery move that repairs the call in place, and the base-model property that caps what it can recover

@@ -104,6 +104,7 @@ A second vendor now shows live spend against a cap. Claude Code 2.1.284 added do
 
 - [Cost-Aware Agent Design: Route by Complexity, Not Habit](../../token-engineering/cost-aware-agent-design.md) — the routing layer that determines spend rate; progressive alerts are the governance layer above it
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — per-tool failure-rate state machine; complementary, operates on a different signal
+- [Agent-Gated Pager Escalation: Judged Criticality on the Notification Destination](agent-gated-pager-escalation.md) — the judged alternative to a fixed threshold, placed on the notification destination instead of the rule
 - [Circuit Breakers for Agent Loops](../../observability/circuit-breakers.md) — loop-level stops including a single cost threshold; this pattern decomposes that signal
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — controls per-turn cost; progressive alerts catch what the per-turn allocation lets through over a period
 - [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — defines the unit (GitHub AI credits vs Anthropic token rates) over which the budget window is measured, plus credit pooling and forfeiture

@@ -177,6 +177,8 @@ The audit-before-rewriting step is the safeguard: steps that cannot be made unam
 - Use a routing skill to direct the agent to the relevant runbook sub-skill without loading all runbooks into context
 - A binary pass/fail test ("can the agent follow this runbook end-to-end?") is a more effective adoption driver than qualitative improvement goals
 
+For drift discovered during an outage, see [incident-time code grounding](incident-time-code-grounding.md).
+
 ## Related
 
 - [Generated Procedure Drivers: Skills That Emit a Program](../tool-engineering/generated-procedure-drivers.md)

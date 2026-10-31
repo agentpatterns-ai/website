@@ -23,10 +23,10 @@ Agents fail mid-task. Context windows fill, API calls time out, and tool errors 
 
 Without idempotent design:
 
-- Second run creates a duplicate branch → both exist, conflict
-- Second run posts a duplicate comment → noise in the issue thread
-- Second run applies a label that is already set → harmless but wasteful
-- Second run tries to create a PR that already exists → error and confusion
+- Second run attempts to create a branch that already exists
+- Second run posts a duplicate comment in the issue thread
+- Second run applies a label that is already set
+- Second run tries to create a PR that already exists
 
 With idempotent design, the second run detects existing state and produces the same result as if the first run had succeeded.
 
@@ -46,15 +46,28 @@ Upsert over create. Update existing artifacts rather than failing on existence. 
 
 Unique identifiers. Use issue numbers, commit SHAs, or task IDs as keys. You can find and update a comment containing `[#123]` rather than duplicate it. A branch named `feature/issue-123` has a natural uniqueness constraint.
 
-State labels as checkpoints. Issue labels encode pipeline state: `idea → researching → researched → drafting`. An agent that checks the current label before transitioning avoids re-processing work that is already done.
-
-Git as natural idempotency. Committing identical content twice produces the same tree SHA, because git deduplicates at the object level. Pushing an already-pushed branch with `git push` is a no-op when no new commits exist. File writes are idempotent by nature; comment posts are not.
+State labels as checkpoints. Issue labels encode pipeline state: `idea`, `researching`, `researched`, and `drafting`. An agent that checks the current label before transitioning avoids re-processing work that is already done.
 
 ## Checkpoints
 
 [Claude Code checkpoints](https://code.claude.com/docs/en/checkpointing) capture file state automatically before each user prompt. When a task goes wrong, run `/rewind` (or press `Esc` twice at an empty prompt) to restore an earlier checkpoint, reverting code, conversation, or both, rather than re-running from the beginning. This shrinks the window of work that must be idempotent. Only the segment since the last checkpoint needs to be safe to retry.
 
 The catch: checkpoints only capture edits made through Claude's file-editing tools. [Changes made by bash commands are not tracked](https://code.claude.com/docs/en/checkpointing). You cannot rewind an `rm`, `mv`, or migration script run as a shell call. Most agent side effects (branch creation, API calls, deployments) happen through tool and shell calls rather than file edits. So checkpoints shrink the retry window but do not replace per-artifact idempotency.
+
+## Recheck authority before retrying
+
+An idempotency key does not establish permission to send another write. Authorization can expire or change while an agent waits for an uncertain result. [Permission to Retry](https://arxiv.org/abs/2610.31916v1) separates four obligations in durable recovery:
+
+- Checkpoint state records where execution can resume.
+- A current dispatch grant authorizes the proposed write under the present policy and payload.
+- Independent effect observations establish what the provider actually did.
+- Reconciliation permission allows recovery to settle an earlier effect without granting another write.
+
+The study's ledger-reconciliation policy preserves unknown outcomes and reservations when the provider cannot certify absence. A local revocation also cannot cancel an already admitted delivery that later commits. Revalidate dispatch authority and reconcile the earlier effect separately. [Recovery model and policies](https://arxiv.org/abs/2610.31916v1).
+
+The evidence comprises 336 synthetic histories across LangGraph and Temporal, with 14 schedules, 3 provider contracts, and 4 application policies. Ledger reconciliation passes 42 histories per host: 21 checked completions, 15 denials, and 6 unknown outcomes with reservations retained. Passing therefore includes safe refusal and unresolved work. These are authored policy comparisons, not framework defaults; no actual provider, billing account, or model server participates. [Evaluation and limitations](https://arxiv.org/abs/2610.31916v1).
+
+Use [exactly-once enforcement](exactly-once-enforcement-layer.md) to assess whether read-back can settle an uncertain effect. Check [authorization continuity](../../security/authorization-continuity-across-agent-mutation.md) separately when the agent or policy changes. In [recovery evaluations](../../verification/recovery-as-separate-eval-axis.md), report completion, denial, and unresolved outcomes separately so a safety pass does not imply task completion.
 
 ## What cannot be made idempotent
 
@@ -79,49 +92,30 @@ Prefer atomic upserts, database-backed keys, or server-enforced unique constrain
 
 ## Example
 
-A multi-step agent workflow that creates a GitHub issue, branches off it, and posts a comment — each step made idempotent.
+GitHub CLI supports updating the current user's last issue comment with `--edit-last` and reading replacement text with `--body-file`. Without `--create-if-none`, this command does not create a comment when none exists. [GitHub CLI issue comment manual](https://cli.github.com/manual/gh_issue_comment).
 
-```python
-def run_issue_workflow(repo, task_title, task_body):
-    """
-    Idempotent agent workflow: create issue → create branch → post comment.
-    Each step checks for existing state before acting.
-    """
-    gh = GitHubClient(repo)
+Set `ISSUE_URL` to the issue you are authorized to update and `COMMENT_FILE` to the file containing the intended comment. First inspect the comments with the documented [`gh issue view --comments`](https://cli.github.com/manual/gh_issue_view) command:
 
-    # Step 1: check-before-act — find or create the issue
-    existing = gh.find_issues(title=task_title, state="open")
-    if existing:
-        issue = existing[0]
-    else:
-        issue = gh.create_issue(title=task_title, body=task_body)
-
-    # Step 2: upsert branch — create only if absent; use issue number as key
-    branch_name = f"feature/issue-{issue.number}"
-    branches = gh.list_branches()
-    if branch_name not in branches:
-        gh.create_branch(branch_name, from_ref="main")
-
-    # Step 3: idempotent comment — post only if no prior comment contains the marker
-    marker = f"[workflow-run issue-{issue.number}]"
-    existing_comments = gh.list_comments(issue.number)
-    already_posted = any(marker in c.body for c in existing_comments)
-    if not already_posted:
-        gh.post_comment(issue.number, f"{marker} Branch `{branch_name}` ready.")
-
-    return issue.number, branch_name
+```bash
+: "${ISSUE_URL:?Set the authorized issue URL}"
+: "${COMMENT_FILE:?Set the comment body file}"
+gh issue view "$ISSUE_URL" --comments
 ```
 
-Running `run_issue_workflow` twice with the same inputs produces the same end state: one issue, one branch, one comment. The second run skips every creation step because the check-before-act guards short-circuit on existing state.
+Confirm that your last comment is the intended target before updating it:
 
-The unique identifier (`issue.number`) is the key throughout: it names the branch and marks the comment. This makes every artifact findable rather than requiring a new one.
+```bash
+gh issue comment "$ISSUE_URL" --edit-last --body-file "$COMMENT_FILE"
+```
+
+Repeating the update with the same file restores the same comment body, provided the target remains your last comment. The check-before-act sequence is not atomic. Another writer using your identity can change which comment is last between inspection and update. Use a stored comment identifier when that targeting assumption cannot hold. A failed or uncertain read is not evidence that no earlier write occurred; keep the outcome unresolved until reconciliation supplies evidence.
 
 ## Key Takeaways
 
 - Agents fail and get re-run — idempotent design makes retry produce the same result, not duplicate state
 - Check-before-act is the foundational technique: one read to avoid a conflicting write
 - Unique identifiers (issue numbers, SHAs) enable lookup instead of creation
-- Git operations are naturally idempotent; comment and label operations are not — treat them differently
+- Verify the target identity before a retry; editing the last comment depends on no intervening comment from the same account
 - Checkpoints reduce the retry window; only the segment since the last checkpoint needs idempotency
 
 ## Related

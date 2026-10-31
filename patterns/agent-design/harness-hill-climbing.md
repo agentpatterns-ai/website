@@ -113,3 +113,4 @@ The [agentic flywheel](agentic-flywheel.md) extends this: agents propose candida
 - [Reasoning Budget Allocation](reasoning-budget-allocation.md) — reasoning sandwich as a concrete tunable component
 - [DSPy Programmatic Prompt Optimization](dspy-programmatic-prompt-optimization.md) — automated prompt search as an alternative to the manual hill-climbing loop, using the same eval signal
 - [Belief Checks for Agent Harness Changes](../../verification/harness-change-belief-check.md) — what the eval score misses when the change is to gating, logging or verification exposure
+- [Attempt-Budget Sweep for Harness Changes](../../verification/attempt-budget-sweep-harness-gains.md) — the aggregate score this loop climbs is a single-budget measurement, and the budget can decide the answer

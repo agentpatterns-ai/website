@@ -67,6 +67,8 @@ That last clause names the trade: the failure moves from the summarizer's discre
 
 One caveat about the evidence. Every TypeCompact baseline is itself a lossy compactor ([Zerhoudi et al., 2026](https://arxiv.org/abs/2608.22752v1)). Pinning appears nowhere in the comparison or the reference list, so the 2-to-4x advantage is measured against the wrong alternative for the common case.
 
+[Verbatim prose compaction](verbatim-prose-compaction.md) makes the case for not classifying at all. It keeps every sentence that was said and declares what the checkpoint dropped.
+
 ## Key Takeaways
 
 - Treat compaction as a safety surface and test it: run past a round, then check whether your rules are still quoted exactly.
