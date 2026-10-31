@@ -88,3 +88,4 @@ Use the ranking to place an expensive control, not to pick a safer verb.
 - [Clarification Mode Amplifies Prompt Injection](clarification-mode-injection-amplification.md) — Another user-side interaction choice that moves attack success
 - [Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — The gate that turns an alert into a stop
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — Closing the exfiltration path this benchmark scores
+- [Reviewer Suspicion Ranking as an Attack Map](reviewer-suspicion-ranking-as-attack-map.md) — The attacker-side half: how a mount point inside the repository gets chosen

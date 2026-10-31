@@ -114,3 +114,5 @@ The user sees a brief pause, not a restart. On resume, the model call dominates 
 - [Event Sourcing for Agents](../../observability/event-sourcing-for-agents.md) — the event-sourcing pattern that the Session log instantiates
 - [Scaffold Architecture Taxonomy](harness-design-dimensions.md) — where this pattern sits among agent scaffolding choices
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md) — a finer-grained split within the harness layer
+- [Agent Workspace Volumes: Picking the Persistence Boundary](agent-workspace-persistence-boundary.md) — a finer-grained split within the Sandbox primitive, where the working tree detaches from the environment
+- [Durable Turn Log for Agent Crash Recovery](durable-turn-log-crash-recovery.md) — the same logging idea applied per model and tool call, so recorded outcomes can be reused after a crash

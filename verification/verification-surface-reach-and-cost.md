@@ -80,3 +80,4 @@ A boot probe is a weaker tool by any static-analysis standard. It cannot read co
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md) — when to fire the checks this page selects
 - [Agent Backpressure: Automated Feedback for Self-Correction](../patterns/agent-design/agent-backpressure.md) — the loop that consumes these signals
 - [Assertion-Free Test Theater in Agent-Authored Patches](../patterns/anti-patterns/assertion-free-test-theater.md) — why an agent's own test suite is the weakest rung on this ladder
+- [A Separate Critic Over Completion-Time Self-Checking](separate-critic-over-self-recheck.md) — the same cost-per-check question asked about who holds the tools, where a second model beat the agent rechecking itself

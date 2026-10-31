@@ -126,6 +126,8 @@ When re-running is already cheaper than building a rollback primitive. Idempoten
 - External side effects (emails, webhooks, payments) cannot be made reversible — gate them instead
 - If recovery requires more than one command, reconsider the approach
 
+For state outside the workspace, see [Out-of-Workspace Writes as the Agent Backup Trigger](out-of-workspace-backup-trigger.md).
+
 ## Related
 
 - [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../../workflows/human-in-the-loop.md)

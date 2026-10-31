@@ -126,6 +126,7 @@ The second version names the mechanism, asks for the trigger, and demands a poin
 - [Author-to-Reviewer Role Inversion in AI-Assisted Teams](../human/author-to-reviewer-role-inversion.md) — why the review minute this gate spends is the scarce one
 - [Per-Task Verification Budget: Size the Task to Fit the Check](per-task-verification-budget.md) — the sizing rule that decides whether a change fits a gate at all
 - [The Delegation Decision: When to Use an Agent vs Do It Yourself](../patterns/agent-design/delegation-decision.md) — where gate eligibility gets set, before dispatch
+- [Gated Contribution Intake Under Agent Load](gated-contribution-intake.md) — the intake-side response to the same review-capacity shortage this gate spends attention on
 
 ## Sources
 

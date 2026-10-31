@@ -90,6 +90,19 @@ Track `cache_read_input_tokens` / total as a session metric. The healthy baselin
 
 The alarm signal is magnitude, not presence: creation tracking the per-turn delta is healthy; a mid-session creation spike approaching the full prefix size signals a prefix change.
 
+### Verify the request and the usage meter
+
+Correct answers do not prove that caching works or that your usage meter reports it correctly. Zhang and colleagues studied 120 caching defects across 10 open-source agent systems; 108 defects (90%) caused no observable runtime failure. Their selected fixes describe failure mechanisms, not the prevalence of caching defects across all agents. [Zhang et al., arXiv:2610.34817v2](https://arxiv.org/abs/2610.34817v2)
+
+The study separates prefix stability, provider capability, and accounting safety. Use those categories to check your integration:
+
+- Compare the outgoing prefix across turns, including tool definitions and any reassembled history.
+- Check model support and cache markers against dated official provider documentation; record the documentation date with your test.
+- Compare raw returned usage fields with the values your parser, cost calculation, and dashboard use.
+- Repeat the test across turns and context changes. A static check of one invocation cannot establish that later prefix assembly stays correct.
+
+This checklist applies the study's request-side and read-side defect categories. Its static detector, CacheLint, leaves cross-turn mutation and prefix reassembly outside its grammar; runtime checks remain necessary. [Zhang et al., arXiv:2610.34817v2, sections V–VII](https://arxiv.org/abs/2610.34817v2)
+
 ## SDK cache invalidation: a case study
 
 Claude Code's SDK `query()` method contained a bug (fixed in [v2.1.72](https://github.com/anthropics/claude-code/releases/tag/v2.1.72)) that caused cache invalidation on every call, reducing input token costs up to 12x when fixed. Cache misses are silent — the API charges the full rate without erroring. Monitor `cache_read_input_tokens` against `cache_creation_input_tokens`; anomalies indicate structural problems.

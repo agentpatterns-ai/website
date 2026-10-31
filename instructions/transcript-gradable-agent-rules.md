@@ -87,6 +87,7 @@ Neither version makes the agent comply. The second makes non-compliance countabl
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — why rewriting one rule into three can cost more than it buys.
 - [Negative Space Instructions: What NOT to Do](negative-space-instructions.md) — banned-phrase rules are the cheapest gradable form.
 - [The No-Op Test: Prune Agent Docs by Behavior, Not Length](behavioral-no-op-test.md) — the deletion test for lines that change nothing.
+- [Enforce the Rules Your Code Cannot Show](per-rule-enforcement-budget.md) — once a rule is gradable, how much checking it actually buys depends on whether the finished code already shows compliance.
 
 ## Sources
 

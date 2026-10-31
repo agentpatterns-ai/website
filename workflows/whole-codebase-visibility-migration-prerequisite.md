@@ -93,3 +93,4 @@ Contrast with the opposite case: a deprecation migration confined to one 90K-LOC
 - [Indexed Regex Search for Agent Tools](../tool-engineering/indexed-regex-search-agent-tools.md) — the single-repo counterpart when the visibility surface is a local index rather than a remote service.
 - [Documentation-Guided Legacy Migration](documentation-guided-legacy-migration.md) — adjacent migration pattern where the precondition is an architecture doc instead of a code-search surface.
 - [Pattern Selection Map](../patterns/selection-map.md) — the trade-off matrix where blast radius and verification cost decide where preparation like this pays off.
+- [Build-Surface Inventory for an Interpreter-Level CVE](build-surface-inventory-runtime-cve.md) — the unplanned case, where the trigger is an advisory and the enumeration targets version pins rather than call sites.

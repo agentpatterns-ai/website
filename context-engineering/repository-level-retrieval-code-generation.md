@@ -12,7 +12,6 @@ tags:
   - code-generation
   - tool-agnostic
   - rag
-  - long-form
 last_reviewed: 2026-05-27
 maturity: established
 ---
@@ -140,4 +139,3 @@ The resulting prompt contains cross-file type signatures and conventions that a 
 - [Token-Efficient Code Generation](../token-engineering/token-efficient-code-generation.md) — reducing token cost of generated code, relevant when retrieval expands prompt size
 - [Context Compression Strategies](context-compression-strategies.md) — compressing retrieved context to fit within budget after repository-level retrieval
 - [Per-Object Context Allocation](per-object-context-allocation.md) — the stage after this one: how ranked candidates are packed into a bounded prompt, and why retrieved evidence still goes missing
-  - long-form

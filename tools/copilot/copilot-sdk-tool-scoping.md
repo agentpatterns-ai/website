@@ -94,3 +94,4 @@ The merge deduplicates by name, because the orchestrator and the host can both o
 - [Agent as Tool vs Handoff: Who Keeps the Conversation](../../patterns/agent-design/agent-as-tool-vs-handoff.md) — why a handoff needs transfer tools at all, and when delegation is the better shape
 - [MCP Integration](mcp-integration.md) — how the document and record services in this sample reach the agent
 - [Tool Minimalism and High-Level Prompting](../../tool-engineering/tool-minimalism.md) — the general case for a small, non-overlapping tool set
+- [Copilot Server-to-Server Authentication: What the Workload Identity Covers](copilot-server-to-server-authentication.md) — which principal the session authenticates as before any tool runs

@@ -201,6 +201,8 @@ Through misclassification. A migration adding a PII column, a config change broa
 - Layer CODEOWNERS + branch protection + automatic AI review to approximate tiered review on GitHub today
 - Severity-driven merge gates prevent critical findings from drowning in noise
 
+See [Layered Code Review with a Human-Approval Budget](../workflows/layered-review-human-approval-budget.md) — one team's published stack with these tiers as its fifth layer.
+
 ## Related
 
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md)

@@ -70,3 +70,4 @@ Access control scored 11.25 on the multi-agent system, the lowest of the seven d
 - [Severity-Stratified Evaluation of Security Prompts](severity-stratified-security-prompt-evaluation.md) — the same headline-number problem on the defense side
 - [Black-Box Probing in the Agent Build Loop](../security/black-box-probe-build-loop.md) — probing the application an agent built, rather than the agent itself
 - [Four-Layer Taxonomy of Agent Security Risks](../security/four-layer-agent-security-taxonomy.md) — a control-placement taxonomy, with no scoring method attached
+- [Valid Completion Rate as a Second Scoring Axis](valid-completion-rate-second-axis.md) — scoring normal termination and evaluator handoff separately, so the report distinguishes execution failures from task scores

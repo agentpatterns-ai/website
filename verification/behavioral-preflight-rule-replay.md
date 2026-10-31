@@ -78,3 +78,4 @@ The stronger objection is to the method. A live shadow mode evaluates the rule o
 - [Leave-One-Out Permission Testing](../security/leave-one-out-permission-testing.md) — removes a permission and re-runs the task live
 - [Cut-Point Replay](cut-point-replay-agent-regression-tests.md) — replays a recorded run to test a fix
 - [Zero Violations Is Not Evidence Your Hook Works](enforcement-liveness-evidence.md) — why a quiet gate proves little
+- [Test a Tool-Call Guard in the Surface Form Your Agent Emits](surface-form-guard-testing.md) — the same over-refusal question for a learned guard, found by re-rendering the call rather than by replaying runs

@@ -109,7 +109,7 @@ retriever:
   context_tokens: 8192
 ```
 
-The chunking change moves the configuration onto the Pareto frontier; the context-length change moves along it. Re-evaluate on a held-out task slice before committing. The controlled study's directionality is robust on RepoEval and CrossCodeEval, but task shape matters (see "When the default inverts").
+The chunking change moves the configuration onto the Pareto frontier; the context-length change moves along it. Re-evaluate on a held-out task slice before committing. The controlled study's directionality is robust on RepoEval and CrossCodeEval, but task shape matters (see "When the default inverts"). On issue resolution, where the patch has to quote the lines it edits, chunk BM25 resolved 29.0% against 43.7% for [exact-file selection at a matched budget](exact-file-selection-over-compression.md) ([Yang et al., arXiv:2610.21073v1](https://arxiv.org/abs/2610.21073v1)).
 
 ## Related
 

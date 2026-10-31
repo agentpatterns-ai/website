@@ -34,6 +34,14 @@ Major AI coding tools implement graduated autonomy levels:
 
 This staged framing is not just a vendor convention: developer Addy Osmani independently proposed a comparable named taxonomy, "Agentic Autonomy Levels" ([Addy Osmani](https://addyo.substack.com/p/agentic-autonomy-levels)), reinforcing that graduated, evidence-gated autonomy is an industry-wide pattern rather than one tool's rollout scheme.
 
+## A configurable production counter-instance
+
+[Replit announced Monitoring Agent on October 22, 2026](https://replit.com/blog/replit-monitoring-agent), with automatic publication of fixes as an operator choice. This goes beyond the table's PR-review endpoint.
+
+As of October 28, 2026, [Replit documents](https://docs.replit.com/features/publishing/monitoring-agent) separate monitoring alerts, Auto-fix, and Auto-republish settings for each published app. Auto-fix investigates alerts and attempts a validated fix. Experimental Auto-republish requires Auto-fix and lets the agent publish that fix automatically. With Auto-republish off, the operator reviews the result in Agent chat and publishes it.
+
+The documented setup permits enabling Auto-republish during the first publish; it specifies no reliability threshold or evaluation period before activation. Operators can disable Auto-republish while keeping automatic fixes. This is configurable production authority, with a manual reduction path. The settings alone do not establish the measured promotion process described below ([Replit setup instructions](https://docs.replit.com/features/publishing/monitoring-agent#set-up-monitoring-agent)).
+
 ## How trust actually builds
 
 Anthropic's Claude Code usage data shows how developers grant autonomy over time ([Measuring Agent Autonomy](https://www.anthropic.com/research/measuring-agent-autonomy)):

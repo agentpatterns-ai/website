@@ -30,6 +30,8 @@ The frontmatter declares:
 - `tools` — available integrations, for example `github`
 - `imports` — shared fragments for reusable tool configs or formatting conventions
 
+For which runner each compiled job lands on, see [Per-Job Runner Placement in Agentic Workflows](../../workflows/per-job-runner-placement.md).
+
 ## Seven design patterns
 
 GitHub defines seven named patterns for common automation scenarios ([GitHub Blog](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)):

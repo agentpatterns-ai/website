@@ -111,4 +111,5 @@ This is the same diagnostic posture as [MCP alwaysLoad](mcp-eager-vs-jit-loading
 - [Advanced Tool Use: Scaling Agent Tool Libraries](advanced-tool-use.md)
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](mcp-eager-vs-jit-loading.md)
 - [Lexical-First Retrieval for Agentic Search](lexical-first-retrieval-for-agentic-search.md)
+- [Tool Discovery Architecture: Retrieve-Then-Plan or Plan-Then-Retrieve](../patterns/agent-design/tool-discovery-architecture-by-query-shape.md) — the architecture choice above the depth choice, where one paradigm raises effective width by generating several retrieval queries instead of one
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)

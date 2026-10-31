@@ -71,3 +71,4 @@ The counter-case is the same study's overhead tally. For one rule-model pair in 
 - [Agent Context File Evolution](agent-context-file-evolution.md) — the maintenance loops around files that only ever grow.
 - [Pre-Execution Skill Selection](pre-execution-skill-selection.md) — scoring a skill's layers before it runs, instructions included.
 - [Irreducibility Triage](irreducibility-triage.md) — the same novelty question asked against any training corpus rather than against the file.
+- [Writing Retained Instructions for Later Tasks](retained-experience-scope.md) — check whether retained guidance covers what later sessions encounter.

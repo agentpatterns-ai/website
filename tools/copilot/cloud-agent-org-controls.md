@@ -115,3 +115,4 @@ Enterprise: Let organizations decide
 - [Enterprise Skill Marketplace](../../workflows/enterprise-skill-marketplace.md)
 - [Central Repo Shared Agent Standards](../../workflows/central-repo-shared-agent-standards.md)
 - [Agent Governance Policies](../../workflows/agent-governance-policies.md)
+- [Per-Job Runner Placement in Agentic Workflows](../../workflows/per-job-runner-placement.md) — the equivalent runner choice for GitHub Agentic Workflows, set per emitted job class

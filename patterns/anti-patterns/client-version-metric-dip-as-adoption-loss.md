@@ -11,7 +11,7 @@ tags:
   - human-factors
   - observability
   - copilot
-last_reviewed: 2026-10-09
+last_reviewed: 2026-10-27
 maturity: emerging
 ---
 
@@ -77,6 +77,8 @@ Twyman's law supplies the prior: surprising movements in data are more often mea
 
 Measurement changes also move numbers up. In June 2026 GitHub began counting any active user it could confirm server-side who client telemetry had missed, which raised daily active user coverage with no change in behavior ([GitHub Changelog, 2026-06-15](https://github.blog/changelog/2026-06-15-copilot-usage-metrics-now-include-more-of-your-active-users/)). Check step changes in either direction.
 
+The client set itself can widen. On 2026-10-23 GitHub added a `totals_by_client` array to the same API. It reports successful model requests per client, IDEs included, and adds tools such as OpenCode, Claude Code, Codex, and Zed. Those tools often send no editor telemetry, so "their usage was missing from" the `totals_by_ide` breakdown. GitHub says "Counting requests on the server closes that gap" ([GitHub Changelog, 2026-10-23](https://github.blog/changelog/2026-10-23-usage-metrics-api-adds-usage-from-tools-like-opencode)). Compare client request counts separately from active-user counts. The `request_count` field "counts model calls, not prompts", and one prompt can trigger several.
+
 ## When this backfires
 
 - The dip is gradual and spreads across all IDE versions, or it also appears in server-side active-user counts. The measurement explanation does not fit, and defaulting to it delays a real response. Sentiment can fall: the 2025 Stack Overflow survey reports positive sentiment toward AI tools at 60%, down from more than 70% in 2023 and 2024 ([Stack Overflow Developer Survey 2025](https://survey.stackoverflow.co/2025/ai)). That figure measures sentiment, not usage.
@@ -100,3 +102,4 @@ Measurement changes also move numbers up. In June 2026 GitHub began counting any
 - [Vendor-Emitted Telemetry Signal Tiers](../../observability/vendor-emitted-telemetry-signal-tiers.md)
 - [Agent Headcount as a Vanity Metric](agent-headcount-vanity-metric.md)
 - [Perceived Model Degradation](perceived-model-degradation.md)
+- [Count Agent Usage at the Model-Provider Boundary](../../human/provider-boundary-usage-attribution.md)

@@ -110,3 +110,4 @@ Yes. Checking after every token or line suppresses exploration, since a model fo
 - [Five-Pass Blunder Hunt](five-pass-blunder-hunt.md)
 - [Deterministic Guardrails](deterministic-guardrails.md)
 - [Pre-Change Impact Analysis](pre-change-impact-analysis.md)
+- [Staged Review for Expensive-to-Render Agent Deliverables](../patterns/agent-design/staged-review-expensive-renders.md)

@@ -87,3 +87,4 @@ Scoped correctly, personality memory pays off: [MAPLE](https://arxiv.org/abs/260
 - [Objective Drift: When Agents Lose the Thread](objective-drift.md)
 - [Belief Inertia After Tool-Map Drift](belief-inertia-after-tool-map-drift.md)
 - [The Anthropomorphized Agent](anthropomorphized-agent.md)
+- [Tool Graph Memory as Next-Tool Guidance](tool-graph-memory-as-next-tool-guidance.md)

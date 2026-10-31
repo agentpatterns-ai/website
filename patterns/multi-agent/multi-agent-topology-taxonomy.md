@@ -101,6 +101,18 @@ Context blindness — agents act without orientation in unfamiliar environments,
 
 Centralized is the default because its failure modes are deterministic. Decentralized topologies need shared-state primitives (file locks, [CRDTs](crdt-observation-driven-coordination.md)) that add implementation surface.
 
+## Evidence from held-out workflow searches
+
+Compare prompt templates and shared state alongside topology. Cadet and colleagues searched 30 Enigmata puzzle types with GPT-5.4 mini/nano workers and a GPT-5.4 optimizer. They excluded 4 sliding-tile types where all baselines and workflows scored zero, leaving 26 types. A predictability gate admitted 13 types for principle testing. Coding-task transfer remains future work. [Cadet et al., arXiv:2610.31709v1, methods and limitations](https://arxiv.org/abs/2610.31709v1)
+
+The held-out comparisons report these median score differences:
+
+- Star-first workflows, with independent solvers and one-shot aggregation, scored 0.045 lower than alternative entry structures. The direction agreed on 9 of 12 test puzzles; 4 of 12 had 95% cluster confidence intervals entirely below zero. See [fan-out and synthesis](fan-out-synthesis.md) for that coordination pattern. [Cadet et al., arXiv:2610.31709v1, principle 1](https://arxiv.org/abs/2610.31709v1)
+- Workflows with SharedMemory scored 0.135 higher than workflows without it, with gains on 6 of 10 test puzzles. This comparison does not isolate a randomized replacement of [debate](opponent-processor-debate.md). SharedMemory also costs more than Debate in the study. [Cadet et al., arXiv:2610.31709v1, principle 2 and limitations](https://arxiv.org/abs/2610.31709v1)
+- Above-median prompt-template character length scored 0.118 higher than shorter templates, with gains on 6 of 13 test puzzles. The authors do not identify length alone as the cause. [Cadet et al., arXiv:2610.31709v1, principle 3](https://arxiv.org/abs/2610.31709v1)
+
+These results support testing the complete workflow configuration on held-out tasks. Few independent search clusters limit per-puzzle significance; direction replication is stronger evidence here than a universal topology ranking. [Cadet et al., arXiv:2610.31709v1, limitations](https://arxiv.org/abs/2610.31709v1)
+
 ## Choose a coordination pattern
 
 Topology answers where the task graph lives; the coordination pattern answers how agents pass work. Before reaching for any pattern, walk down the complexity ladder — adopt the next level only when the current one stops being reliable. Microsoft's [AI agent orchestration patterns](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/ai-agent-design-patterns) page frames the same rule: "Use the lowest level of complexity that reliably meets your requirements."

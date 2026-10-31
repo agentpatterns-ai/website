@@ -102,6 +102,7 @@ Each sub-agent filtered its own test files before returning. The orchestrator's 
 
 ## Related
 
+- [On-Demand Fault Localization for Agentic Repair](../../workflows/on-demand-fault-localization-agentic-repair.md) — whether to run a localization phase at all when the repair agent can already search the repository.
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md) — Sequential two-phase localize-then-repair as the baseline parallel exploration must beat.
 - [Discrete Phase Separation](discrete-phase-separation.md) — The same isolate-then-distil mechanism, applied across phases rather than across domain scopes.
 - [Sub-Agents and Fan-Out](../multi-agent/sub-agents-fan-out.md) — The general fan-out primitive this pattern specializes for localization.

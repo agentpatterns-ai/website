@@ -11,7 +11,7 @@ tags:
 aliases:
   - effort scaling
   - effort-based resource allocation
-last_reviewed: 2026-06-12
+last_reviewed: 2026-10-27
 maturity: adopted
 ---
 
@@ -23,7 +23,7 @@ Related lesson: [Orchestrator-Worker](https://learn.agentpatterns.ai/harness-eng
 
 ## The problem with rigid instructions
 
-Fixed instructions like "always use three subagents" waste tokens on simple fact-finding and under-invest on complex tasks. "Be thorough" gives no actionable constraint. [Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) spawned up to 50 subagents for queries needing one until explicit complexity tiers were encoded.
+[Anthropic's multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) spawned up to 50 subagents for queries needing one until explicit complexity tiers were encoded.
 
 ## Complexity tiers
 
@@ -39,13 +39,13 @@ These numbers come from [Anthropic's documented experience](https://www.anthropi
 
 ## Breadth-first before narrowing
 
-Specific query instructions push agents into narrow searches — the over-low [system-prompt altitude](../../instructions/system-prompt-altitude.md) failure mode. A breadth-first heuristic beats step-by-step specificity because the agent can adapt to what it discovers. Encode it directly: "Start with short, broad queries. Evaluate what's available. Then progressively narrow focus." [Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system) prompted this pattern after seeing the failure mode. A broad query returning 50 filterable results beats a specific query returning zero.
+Specific query instructions push agents into narrow searches — the over-low [system-prompt altitude](../../instructions/system-prompt-altitude.md) failure mode. A breadth-first heuristic beats step-by-step specificity because the agent can adapt to what it discovers. Start with broad queries, inspect the results, then narrow the search. [Anthropic](https://www.anthropic.com/engineering/multi-agent-research-system) prompted this pattern after seeing the failure mode. A broad query returning 50 filterable results beats a specific query returning zero.
 
 ## Extended thinking as a planning phase
 
 Before committing to a tool strategy, a lead agent can use extended thinking to assess complexity, select tool paths, set subagent count, and plan division of labor. [Anthropic's system](https://www.anthropic.com/engineering/multi-agent-research-system) uses this as a planning scratchpad before spawning subagents. Subagents use interleaved thinking after each tool result to decide whether to continue, pivot, or escalate.
 
-Include "ultrathink" anywhere in a Claude Code skill to enable extended thinking for that invocation — see [Claude Code skills documentation](https://code.claude.com/docs/en/skills#advanced-patterns).
+The skills documentation says to include `ultrathink` anywhere in skill content to request deeper reasoning ([skills documentation](https://code.claude.com/docs/en/skills#advanced-patterns)). The automatic effort increase has a narrower scope: the interactive terminal. Release 2.1.311 raises that turn to `xhigh` on Opus 5.5, Sonnet 5.5, Haiku 5.5, and Fable 5.1 through Anthropic's API. Typed mid-turn, it raises the rest of that turn. The rainbow indicator appears only where the keyword can raise effort; quoted words and file paths do not qualify ([changelog 2.1.311](https://code.claude.com/docs/en/changelog#2-1-311)).
 
 ## Parallelization rules
 
@@ -58,24 +58,15 @@ Combining both reduced complex query time by up to 90%. The system prompt should
 
 ## Agent self-diagnosis
 
-Claude models can identify their own failure modes when prompted to. [Anthropic's system](https://www.anthropic.com/engineering/multi-agent-research-system) used a "tool-testing agent" that rewrote poor [MCP](../../standards/mcp-protocol.md) tool descriptions — a 40% reduction in completion time. Route diagnostic observations back into the prompt refinement loop.
+Claude models can identify their own failure modes when prompted to. [Anthropic's system](https://www.anthropic.com/engineering/multi-agent-research-system) used a "tool-testing agent" that rewrote poor [MCP](../../standards/mcp-protocol.md) tool descriptions — a 40% reduction in completion time. Route diagnostic observations back into the prompt refinement loop and check [convergence](../../loop-engineering/convergence-detection.md).
 
 ## Iterative refinement protocol
 
-[Anthropic's team](https://www.anthropic.com/engineering/multi-agent-research-system) found ~20-query test sets sufficient to detect regressions when refining effort-scaling prompts. Early iterations showed prompt tweaks moving success rates from 30% to 80%.
-
-The refinement loop:
-
-1. Run the current prompt against a fixed 20-query test set
-2. Identify tiers where effort was misallocated (over or under)
-3. Adjust tier thresholds or heuristic phrasing
-4. Re-run and verify no regression on previously-passing queries
-
-Avoid large test sets at the refinement stage — they slow the loop without proportional signal gain.
+[Anthropic's team](https://www.anthropic.com/engineering/multi-agent-research-system) started with about 20 queries representing real usage to assess early changes. The post uses a possible 30%-to-80% improvement to illustrate a large effect; it does not report that range as a measured result.
 
 ## Runtime effort adjustment in Claude Code
 
-Claude Code's `/effort` command sets the reasoning effort level for the session (low, medium, high, or max). Run it between turns to escalate or reduce effort without re-prompting from scratch. The system prompt encodes default scaling heuristics; `/effort` lets the operator override them at runtime — see [model configuration documentation](https://code.claude.com/docs/en/model-config#adjust-effort-level).
+Claude Code's `/effort` command selects low, medium, high, xhigh, or max, subject to model support. `xhigh` sits between high and max. Run it between turns to escalate or reduce effort without re-prompting from scratch. The system prompt encodes default scaling heuristics; `/effort` lets the operator override them at runtime — see [model configuration documentation](https://code.claude.com/docs/en/model-config#adjust-effort-level).
 
 ## When this backfires
 
@@ -84,8 +75,6 @@ Heuristic effort scaling adds coordination overhead and multiplies token consump
 1. High inter-dependency tasks — if subtasks must share state or a later step depends on an earlier output, parallel subagents cause duplication and merge conflicts. Most coding tasks fall here: file-level changes conflict, and agents exploring the same module independently produce overlapping results.
 2. Cost-sensitive or latency-sensitive workloads — spawning 10+ subagents is justified only when the answer's value scales with thoroughness. Routine lookups routed to Tier 3 by a miscalibrated classifier over-spend by an order of magnitude.
 3. Synchronous execution constraints — the lead agent cannot steer subagents after spawning, and subagents cannot coordinate mid-run. If the search space shifts partway through, the system cannot adapt until the full batch completes.
-
-Apply effort-scaling heuristics selectively: research, synthesis, and audit workloads fit well; implementation tasks with shared mutable state typically do not.
 
 ## Example
 
@@ -120,7 +109,7 @@ A query like "What does `validateSession` return?" triggers Tier 1: the agent ru
 - Breadth-first discovery heuristics outperform step-by-step specificity because they adapt to discovered context.
 - Extended thinking gives lead agents a planning phase before committing to a tool strategy — see [reasoning budget allocation](reasoning-budget-allocation.md) for sizing it alongside tool-call budgets.
 - Parallelization gains compound: parallel subagents and parallel tool calls within subagents are independent multipliers.
-- Small test sets (~20 queries) are sufficient for detecting regressions during prompt refinement.
+- Anthropic began early evaluation with about twenty representative queries to observe large changes; this does not establish a general regression-detection threshold ([research post](https://www.anthropic.com/research/multi-agent-research-system)).
 - Claude Code's `/effort` command allows runtime effort adjustment between turns, complementing prompt-level heuristics.
 
 ## Related
@@ -133,4 +122,3 @@ A query like "What does `validateSession` return?" triggers Tier 1: the agent ru
 - [Code-Health-Gated LLM Tier Routing](auto-model-selection.md) — route by file-level code health as a pre-generation signal
 - [Specialized Agent Roles](specialized-agent-roles.md) — assigning distinct roles to the subagents each tier spawns
 - [Loop Strategy Spectrum: Accumulated, Compressed, and Fresh Context](../../loop-engineering/loop-strategy-spectrum.md) — context strategies that pair with effort tiers
-- [Convergence Detection in Iterative Refinement](../../loop-engineering/convergence-detection.md) — knowing when the refinement loop has converged

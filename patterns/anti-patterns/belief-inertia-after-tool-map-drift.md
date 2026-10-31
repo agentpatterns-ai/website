@@ -63,3 +63,4 @@ Even with memory in place, agents still did not adopt the deductive recovery (12
 - [Prior Dominance Over Feedback](prior-dominance-over-feedback.md) — the same refusal to move off a prior, measured in propose-evaluate-revise loops instead of tool discovery.
 - [Usage-Reinforced Memory Decay for Long-Running Agents](../../context-engineering/usage-reinforced-memory-decay.md) — a retention policy for the store this page recommends, scoring what survives on recall rather than recency.
 - [Episodic Memory Retrieval](../agent-design/episodic-memory-retrieval.md) — storing the attempt-and-outcome arc, the transient half that a drift event should leave alone.
+- [Tool Graph Memory as Next-Tool Guidance](tool-graph-memory-as-next-tool-guidance.md) — the structure side of the same question: what form stored tool experience should take before it is retrieved at all.

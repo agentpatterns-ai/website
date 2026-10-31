@@ -78,3 +78,4 @@ GitHub gives the second as its "recommended regex to match both new and current 
 - [Sandbox Credential Masking: Authenticate Without Seeing the Secret](../../security/sandbox-credential-masking.md) — keeping the real token out of agent context entirely.
 - [Credential Hygiene for Agent Skill Authorship](../../security/credential-hygiene-agent-skills.md) — the authoring-time half of the same leak surface.
 - [AI Agents in CI/CD with Elevated Permissions and Untrusted Content (GitInject)](ai-agents-in-ci-cd-with-elevated-permissions.md) — what a leaked pipeline token buys an attacker.
+- [Copilot Server-to-Server Authentication: What the Workload Identity Covers](../../tools/copilot/copilot-server-to-server-authentication.md) — a `ghs_` installation token used as a Copilot credential, and the hourly refresh it needs.

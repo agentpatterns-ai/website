@@ -148,6 +148,7 @@ Yes. pass@k assumes independent attempts, so if your harness shares context, see
 - [Golden Query Pairs as Regression Tests](golden-query-pairs-regression.md)
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — Design tests that account for agent non-determinism across multiple trials
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — Extends pass@k by also varying interaction depth *T* for tool-use agents
+- [Attempt-Budget Sweep for Harness Changes](attempt-budget-sweep-harness-gains.md) — applies the same pass@1-versus-pass@k split to a harness change made with model weights frozen
 - [Markov-Chain Reliability for LLM Agents](markov-chain-agent-reliability.md) — Treats pass@k and pass^k as projections of one underlying success first-passage distribution
 - [Decomposing Agent Output Variability by Layer (Sampling vs Orchestration State)](sampling-state-agent-variability-layers.md) — Pass@k/pass^k summarizes the aggregate spread; this technique attributes the spread to the layer that should be mitigated
 - [LLM-as-Judge Evaluation with Human Spot-Checking](../workflows/llm-as-judge-evaluation.md)

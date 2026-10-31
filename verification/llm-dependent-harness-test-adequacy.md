@@ -83,3 +83,4 @@ Reaching that line took a complete valid chain. The test had to build a schema-v
 - [LLM API Fault Injection at the HTTP Layer (AgentChaos)](llm-api-fault-injection-http-layer.md) — varying provider responses at the transport, where this page varies them at the fixture
 - [Spec-Driven Test Generation: Contract Coverage Is the Lever](spec-driven-test-generation-contract-coverage.md) — the same contract-first move applied to general software rather than harness code
 - [Cut-Point Replay: Test a Fix Against a Recorded Agent Run](cut-point-replay-agent-regression-tests.md) — the alternative when fixture fidelity is the hard part, since a recorded run satisfies the contract by construction
+- [Mock-Boundary Validation for Agent-Built Systems](mock-boundary-validation-agent-built-systems.md) — a related thinning read from the other end: one project's escaped defects, located at the seams its suite mocked

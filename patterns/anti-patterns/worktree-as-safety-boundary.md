@@ -79,3 +79,4 @@ The worktree still prevents the merge conflicts it was chosen for. Keeping only 
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md) — the fan-out that reaches for worktrees in the first place
 - [Peer Refusal as a Coordination Control](peer-refusal-as-coordination-control.md) — what a peer session can do to your worktree once its refusal has been declined
 - [Recording Guest-Reported Values as Platform State](guest-reported-values-as-platform-state.md) — the inverse case, where the isolation is sound and the control plane dissolves the boundary by writing down what the guest reported
+- [Treating an MCP Tool's Contract as Its Sandbox (Filesystem Capability Laundering)](mcp-contract-as-filesystem-sandbox.md) — the same placement-versus-reach mistake one layer in, where a tool's declared arguments are read as the limit on a process holding ambient filesystem permissions

@@ -122,6 +122,7 @@ nav:
       - orchestrator-attention-budget.md
       - plan-compliance-in-agents.md
       - plan-as-control-flow.md
+      - staged-review-expensive-renders.md
       - pr-subscribed-agent-ownership.md
       - proactive-idle-time-anticipation.md
       - progressive-disclosure-agents.md
@@ -154,15 +155,18 @@ nav:
       - model-directed-subagent-tiering.md
       - provider-hosted-subagent-delegation.md
       - verdict-driven-inspection-cadence.md
+      - edit-request-steering-trigger.md
   - "Reliability":
       - administrative-effort-ceilings.md
       - agent-circuit-breaker.md
       - agent-client-admission-control.md
+      - agent-gated-pager-escalation.md
       - agent-escalation-ladder-energy.md
       - caller-actionable-error-steps.md
       - retrieval-tool-refusal.md
       - residual-completion-stateful-handoffs.md
       - retry-switch-abstain-recovery-policy.md
+      - unfinished-run-adjudication.md
       - self-healing-production-agent.md
       - advisor-strategy.md
       - agent-backpressure.md
@@ -179,14 +183,18 @@ nav:
       - difficulty-aware-topology-selection.md
       - dispatch-time-reasoning-level.md
       - dual-budget-control-search-agents.md
+      - durable-turn-log-crash-recovery.md
       - effective-feedback-compute.md
       - effort-as-verification-dial.md
       - enforced-stop-on-useless-results.md
       - escalation-channels-defect-disclosure.md
+      - evidence-anchored-handoff.md
       - evidence-first-diagnosis-reports.md
       - evidence-path-divergence.md
       - gateway-model-routing.md
       - gateway-hint-headers.md
+      - gateway-session-affinity.md
+      - client-keyed-gateway-controls.md
       - exactly-once-enforcement-layer.md
       - exception-handling-recovery-patterns.md
       - failure-trajectory-recovery-window.md
@@ -195,13 +203,17 @@ nav:
       - heuristic-effort-scaling.md
       - idempotent-agent-operations.md
       - tool-operability-lost-responses.md
+      - tool-name-resolution-gate.md
       - interactive-effort-sliders.md
       - long-running-agents.md
       - remote-agent-host-sessions.md
+      - model-policy-reconciliation.md
       - multi-client-session-attachment.md
+      - session-surface-switch-vs-handoff.md
       - per-user-supervisor-process.md
       - observation-contract-preservation.md
       - outcome-monitors-recovery-affordances.md
+      - out-of-workspace-backup-trigger.md
       - per-call-budget-hints-tool-calls.md
       - per-run-budget-reservation.md
       - per-tool-extended-reasoning-opt-in.md
@@ -218,6 +230,7 @@ nav:
       - context-step-model-split.md
       - task-distribution-router-fit.md
       - per-stage-model-assignment.md
+      - cloud-routed-local-inference.md
       - per-surface-routing-visibility.md
       - rubric-refine-pre-execution-tool-use.md
       - scout-then-route.md
@@ -228,12 +241,14 @@ nav:
       - task-feasibility-awareness.md
       - tenant-model-policy.md
       - trajectory-conditioned-model-escalation.md
+      - usage-limit-wait-ceiling.md
       - wink-agent-misbehavior-correction.md
       - wip-1-littles-law-agent-throughput.md
   - "Harness & Tools":
       - agent-composition-patterns.md
       - embedded-harness-integration-layer.md
       - harness-adapter-layer.md
+      - interface-realization-repair.md
       - agent-sdk-hosting-topology.md
       - cloud-agent-state-layer-decoupling.md
       - continuation-authority-agent-migration.md
@@ -249,9 +264,13 @@ nav:
       - dual-write-append-mirror-transcript.md
       - deferred-permission-pattern.md
       - deny-fallback-unattended-permissions.md
+      - approver-named-permission-answers.md
       - action-class-permission-gates.md
+      - permission-policy-enforcement-prerequisite.md
+      - conversation-visibility-tool-availability.md
       - most-restrictive-wins-fusion.md
       - plugin-co-installation-safety.md
+      - tool-discovery-architecture-by-query-shape.md
       - natural-language-tool-selection.md
       - product-operation-tool-surface.md
       - typed-tool-surface-out-of-loop-gate.md
@@ -291,6 +310,7 @@ nav:
       - sandbox-forking.md
       - snapshot-branching-boundary.md
       - continuously-built-agent-environments.md
+      - agent-workspace-persistence-boundary.md
       - rented-execution-sandbox.md
       - scoped-devtools-access-runtime-diagnosis.md
       - session-harness-sandbox-separation.md

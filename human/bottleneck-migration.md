@@ -161,3 +161,4 @@ Because it fragments logically unified changes. Each atomic PR passes review on 
 - [Author-to-Reviewer Role Inversion](author-to-reviewer-role-inversion.md) -- the team-level staffing and measurement shift this economic migration produces
 - [Language Selection Scored on Review Cost](language-selection-review-cost.md) -- the technology-selection consequence: score a language on review cost once generation is cheap
 - [Reducing Fixed CI Overhead Before Adding Shards](../workflows/ci-setup-overhead-before-sharding.md) -- the machine-side constraint: CI capacity rather than review capacity
+- [Developer Infrastructure Readiness at Agent Merge Rates](../workflows/merge-rate-infrastructure-readiness.md) -- the machine-side constraint at high merge rates: source control, builds, and CI

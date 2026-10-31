@@ -70,3 +70,4 @@ Eval and production disagree because they measure different things. Fu and colle
 - [Encoding Product-Design Taste into Agent Context](encoding-product-design-taste.md) — the in-repo instruction file these corrections land in, and why design rules need observable forms.
 - [Probe-and-Refine Tuning of Repository Guidance for Coding Agents](probe-and-refine-guidance-tuning.md) — the offline counterpart, refining guidance against synthetic probes rather than production complaints.
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — the density limit that bounds how many diagnosis rounds you can answer with more prose.
+- [Writing Retained Instructions for Later Tasks](retained-experience-scope.md) — what to check when a rule the agent loads and follows still misses: its enumeration may not cover what the run encounters.

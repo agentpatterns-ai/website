@@ -93,3 +93,4 @@ One caution against over-correcting: LLM review is not worthless here. Removing 
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](tool-error-implicit-authority.md) — the same authority-confusion mechanism applied to the error stream instead of the approval claim.
 - [Security Review Gap in AI-Authored PRs](../../code-review/security-review-gap-in-ai-prs.md) — the broader review-coverage failure that authority framing exploits.
 - [Treating a Cleared Review Comment as a Fixed Flaw](cleared-review-comment-as-fix.md) — where the deference is to the reviewer's own earlier finding rather than to a claimed approval.
+- [Treating Compaction Prompt Rules as a Provenance Defense](compaction-prompt-rules-as-provenance-defense.md) — the same fabricated approval after compaction has erased the fact that an attacker wrote it.

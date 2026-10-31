@@ -74,3 +74,4 @@ Partial coverage of a conjunction behaves like no coverage, and no metric averag
 - [Per-Object Context Allocation](per-object-context-allocation.md) — caps repeated views of one code object, the within-corpus half of the redundancy problem
 - [Measuring Reacquisition Cost Under Context Compaction](reacquisition-cost-measurement.md) — measures the retrieval calls an agent spends rebuilding state it has lost
 - [Exhaustive Retrieval for Listing Questions](exhaustive-retrieval-for-listing-questions.md) — the other case where ranked top-k truncates a set-shaped answer
+- [Knowledge-Density Pruning for Retrieved Code Context](knowledge-density-pruning-code-retrieval.md) — redundancy removed inside one retrieved set rather than against the agent's reading history

@@ -85,3 +85,4 @@ Applied to the Kim et al. measurement corpus: 7,508 MCP repositories containing 
 - [Tool Signing and Signature Verification](../security/tool-signing-verification.md)
 - [Scoped MCP Server Discovery](scoped-mcp-server-discovery.md)
 - [MCP Server Design](mcp-server-design.md)
+- [Seller-Written Tool Listings as a Capability Signal](../patterns/anti-patterns/seller-written-listings-as-capability-signal.md) — claim inflation rather than duplicate entries, under competition between sellers on one shelf

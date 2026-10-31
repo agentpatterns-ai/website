@@ -82,3 +82,4 @@ Deduplicating at the server is what moved the number. Deployed across all 12 wor
 - [Exactly-Once Enforcement Layer: Model, Harness or Contract](../patterns/agent-design/exactly-once-enforcement-layer.md) — which layer should fix each fault class once this measurement has found it
 - [Tool Operability: Interfaces That Survive a Lost Response](../patterns/agent-design/tool-operability-lost-responses.md) — the interface-side attack on the ambiguity that makes post-commit recovery hard
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — the outcome-scoring baseline this technique splits in two
+- [Protected-Replay Success as Retry Restraint Evidence](../patterns/anti-patterns/protected-replay-success-as-retry-restraint.md) — a second split inside recovery itself, separating whether a retry was permitted from whether it completed

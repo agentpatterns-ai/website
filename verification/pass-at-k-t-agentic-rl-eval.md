@@ -31,7 +31,7 @@ graph TD
     A[Pick task suite] --> B[Define interaction budgets T]
     B --> C[Define sampling budgets k]
     C --> D[For each k,T: run k rollouts capped at T rounds]
-    D --> E[Pass@k,T = any rollout correct]
+    D --> E["Pass@k,T = any rollout correct"]
     E --> F[Plot surface over k x T]
 ```
 
@@ -109,3 +109,4 @@ If the team had only measured pass@1 (+0.21 at T=32), they would call RL "better
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — outcome-based grading that PASS@(k,T) builds on
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — why outcome-only metrics need trajectory audits
 - [Behavioral Testing for Non-Deterministic AI Agents](behavioral-testing-agents.md) — multi-trial evaluation design
+- [Attempt-Budget Sweep for Harness Changes](attempt-budget-sweep-harness-gains.md) — the same budget sweep where the intervention is a harness change rather than RL post-training

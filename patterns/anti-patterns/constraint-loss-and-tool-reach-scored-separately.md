@@ -82,3 +82,4 @@ That is the paper's production-rollback case: 100% loss of control under constra
 - [Objective Drift](objective-drift.md) — the mirror case, where compression loses the goal instead of the limit.
 - [Task-Uniform Agent Permissions](task-uniform-agent-permissions.md) — the reach half, scoped per task rather than per agent.
 - [Constraint Drift](../../security/constraint-drift-multi-agent-safety.md) — six runtime surfaces where constraints weaken.
+- [Reading Benchmark Compaction Tolerance as Policy Evidence](compaction-tolerant-benchmarks-as-policy-evidence.md) — why a benchmark score will not tell you the constraint half survived.

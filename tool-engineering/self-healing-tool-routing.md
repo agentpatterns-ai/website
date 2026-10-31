@@ -159,3 +159,4 @@ When `summarizer` is healthy, the router selects the lower-cost path `web_search
 - [Tool Engineering](tool-engineering.md)
 - [RFC 9457 Machine-Readable Errors](rfc9457-machine-readable-errors.md)
 - [Token-Efficient Tool Design](../token-engineering/token-efficient-tool-design.md)
+- [Measure Tool-Name Resolution Before Adding Call Repair](../patterns/agent-design/tool-name-resolution-gate.md)

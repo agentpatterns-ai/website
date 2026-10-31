@@ -75,3 +75,5 @@ None of that rescues the detection side. After any of these format changes, neit
 - [Recover the Six Measurement Choices Behind an Attack Success Rate](../../verification/asr-comparability-audit.md) — what else hides inside one published security number
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md) — why a detector belongs alongside system-level defenses rather than in place of them
 - [Treating Memory-Injection Rate as Security Evidence](memory-injection-rate-as-security-evidence.md) — the same selection error one layer over, where the metric a defense improves and the exposure move independently
+- [Reading Benchmark Compaction Tolerance as Policy Evidence](compaction-tolerant-benchmarks-as-policy-evidence.md) — the same transfer gap for compaction, where the benchmark's on-disk state carries the score
+- [Treating English-Only Guard Evals as Language Evidence](english-only-guard-evaluation.md) — the same error inside one benchmark, where only the request language changed and small guards' verdicts moved with it

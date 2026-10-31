@@ -17,7 +17,7 @@ maturity: established
 
 # Remote Agent Host Sessions over SSH and Dev Tunnels
 
-> A remote agent host is an agent loop running in a process on a remote machine, attached to over SSH or a dev tunnel; the host owns the session log so disconnects, sleeps, and editor restarts are UI events rather than state events.
+> A remote agent host owns the session log and runs the agent independently of clients that connect through SSH or dev tunnels.
 
 The pattern applies when three conditions hold: the host is a process or service whose lifecycle is decoupled from the client editor, the tunnel auth is account-bound (not anonymous), and the team owns the operational cost of keeping that host alive. Without all three, [a cloud agent](cloud-agent-session-bootstrap.md) or a [tmux-wrapped local CLI](#example) is the lighter choice.
 
@@ -30,7 +30,7 @@ The pattern applies when three conditions hold: the host is a process or service
 | Remote agent host (this pattern) | Remote host you operate | Host-owned session log |
 | Plain SSH agent | Client-attached process | Nothing — process dies on disconnect |
 
-This is [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — durable session, stateless harness, disposable sandbox — projected across a network boundary.
+This is [Session Harness Sandbox Separation](session-harness-sandbox-separation.md) — durable session, stateless harness, disposable sandbox — projected across a network boundary. Moving a live session between clients on top of these transports is a separate decision from changing its configuration; see [surface switch or harness handoff](session-surface-switch-vs-handoff.md).
 
 ## Three transports
 

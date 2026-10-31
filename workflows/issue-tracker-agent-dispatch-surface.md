@@ -74,13 +74,13 @@ graph TD
     B -->|gated out| Z[Stays in human triage]
     B -->|gated in| C[Dispatch mode]
     C -->|assignment| D[New agent session]
-    C -->|@mention| E[Resume / refine session]
+    C -->|"@mention"| E[Resume / refine session]
     D --> F[Agent reads ticket + comments + attachments]
     E --> F
     F --> G[Sandboxed execution]
     G --> H[Status echo: gated comments + PR link]
     H --> I[Human review on PR]
-    I -->|refine via @mention| E
+    I -->|"refine via @mention"| E
     I -->|merge| J[Ticket auto-closed]
 ```
 

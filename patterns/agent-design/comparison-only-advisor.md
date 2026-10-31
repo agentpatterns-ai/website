@@ -63,3 +63,4 @@ Ranking two concrete actions is easier to learn than scoring either alone. The a
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — the other way to put a small model inside a large agent's loop, behind a tool call rather than a ranking gate
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — routes between models on a partial trajectory rather than ranking actions one step at a time
 - [Stuck-Loop Recovery: Detecting and Escaping Non-Converging Agent Loops](../../loop-engineering/stuck-loop-recovery.md) — the recovery ladder that fires after a detector reports a stuck loop; this advisor runs every step and needs no such signal
+- [Edit-Request Steering Trigger: One Plan Before the First Source Edit](edit-request-steering-trigger.md) — one intervention at the first source edit rather than advice on every action

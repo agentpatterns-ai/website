@@ -76,3 +76,4 @@ The GStack workflow under test already required agents to "enumerate everything 
 - [Issue Requirements Preprocessing: Structured Input Before Code Generation](../patterns/agent-design/issue-requirements-preprocessing.md) — the enrichment move measured across a benchmark; this page is how to tell which tickets are worth the effort.
 - [Interactive Clarification for Underspecified Tasks](../patterns/agent-design/interactive-clarification-underspecified-tasks.md) — the other repair for the same gap, where the agent asks instead of you writing the contract up front.
 - [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](precise-debugging-benchmark.md) — another case of a pass rate hiding what the patch actually did.
+- [Agent Bug Findings Are Not the Maintainer Backlog](../patterns/anti-patterns/agent-bug-findings-as-maintainer-backlog.md) — the population-level version of the same mismatch, measured against 2,457 bugs maintainers chose to fix

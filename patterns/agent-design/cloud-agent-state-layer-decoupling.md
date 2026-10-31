@@ -116,3 +116,4 @@ The structural change is that no single layer holds the full agent state — eac
 - [Cloud-Agent Session Bootstrap](cloud-agent-session-bootstrap.md) — install/start lifecycle for the machine-state layer
 - [Long-Running Agents](long-running-agents.md) — the durability, checkpointing, and resumability primitives across Anthropic, Cursor, and Google designs
 - [Delta Channels: Bounded Checkpoint Storage](delta-channels-checkpoint-storage.md) — keeps the conversation layer's append-only log linear in storage cost
+- [Agent Workspace Volumes: Picking the Persistence Boundary](agent-workspace-persistence-boundary.md) — splits the machine-state layer again, detaching the working tree from the environment that runs it

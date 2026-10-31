@@ -76,3 +76,4 @@ Each of those limits wants its own check, and none of them is a type. Two are pa
 - [Improper Output Handling: Validate Agent Output Before Downstream Use](improper-output-handling-downstream-sinks.md) — the same untrusted-input discipline applied on the return path
 - [Execution-Layer Security Invariants for MCP Runtimes](mcp-execution-security-invariants.md) — named runtime invariants for the MCP execution path these checks sit inside
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — the attacker's side of the same boundary, where a malicious tool steers argument generation rather than an honest tool failing to check it
+- [Treating an MCP Tool's Contract as Its Sandbox (Filesystem Capability Laundering)](../patterns/anti-patterns/mcp-contract-as-filesystem-sandbox.md) — where to put the containment when the tool is somebody else's code, which is the inverted lesson at the end of this page

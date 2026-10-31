@@ -98,3 +98,4 @@ One objection deserves naming, because it is the stronger one. The adjacent adve
 - [Action-Graded Severity for Agent Red-Team Outcomes](action-graded-severity-red-team-outcomes.md) — a graded harm scale in place of the binary outcome that the partial-success axis collapses.
 - [Covert Success Rate for Indirect Prompt Injection](../security/covert-success-rate-injection.md) — one further split of the same metric, on whether a successful injection left a trace in the agent's reply.
 - [Request Rate and Commit Rate Are Different Safety Numbers](request-vs-commit-safety-readouts.md) — the within-run case this page's rule excludes: two endpoints, one harness, identical trials.
+- [Separate Ignored Injections From Refused Ones Before Reading an ASR as Defense](injection-failure-composition.md) — the split over failed attacks, where 76-80% were ignored rather than refused.

@@ -8,11 +8,13 @@ nav:
       - agents-md-as-table-of-contents.md
       - agents-md-distributed-conventions.md
       - evaluating-agents-md-context-files.md
+      - instruction-category-coverage.md
       - probe-and-refine-guidance-tuning.md
       - verified-norm-packages.md
       - knowledge-gap-vs-skill-gap-triage.md
       - encoding-values-in-agents-md.md
       - rules-file-corpus-evidence.md
+      - counted-census-figures-as-baseline.md
       - committed-ai-configuration-quality-cost.md
       - documentation-read-counts.md
       - natural-language-customization-bootstrap.md
@@ -22,7 +24,9 @@ nav:
   - "Instruction Design":
       - instruction-polarity.md
       - guardrails-beat-guidance-coding-agents.md
+      - code-precedence-over-instruction-files.md
       - restraint-rules-need-external-enforcement.md
+      - per-rule-enforcement-budget.md
       - stop-and-report-instruction.md
       - ordering-constraint-weakness.md
       - enforcement-information-paradox.md
@@ -52,12 +56,14 @@ nav:
   - "Architecture & Composition":
       - layered-instruction-scopes.md
       - hierarchical-claude-md.md
+      - on-demand-instruction-file-size-limit.md
       - claude-md-excludes.md
       - per-subagent-instruction-inheritance.md
       - import-composition-pattern.md
       - prompt-file-libraries.md
       - production-system-prompt-architecture.md
       - prompt-transpilation.md
+      - captured-instruction-stack.md
       - hooks-vs-prompts.md
       - shared-context-bundle-registry.md
   - "System Prompts":
@@ -90,6 +96,7 @@ nav:
       - enforcing-agent-behavior-with-hooks.md
       - rule-lifecycle-metadata.md
       - behavioral-no-op-test.md
+      - retained-experience-scope.md
       - skill-rule-novelty.md
       - irreducibility-triage.md
       - encoded-rule-failure-diagnosis.md

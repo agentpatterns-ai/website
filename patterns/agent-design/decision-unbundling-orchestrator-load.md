@@ -11,7 +11,7 @@ aliases:
   - unbundled decision model orchestration
   - decision model harness load
   - cheap-by-default escalation routing
-last_reviewed: 2026-10-07
+last_reviewed: 2026-10-25
 maturity: emerging
 ---
 
@@ -19,11 +19,9 @@ maturity: emerging
 
 > Moving a decision onto a decision model hands the orchestrator the candidate list, the threshold number, and the durability the model drops.
 
-A decision model answers one bounded question and returns a typed value with a probability. It does not hold the conversation, pick what to ask next, or survive a crash. Those jobs land in your code the moment the decision leaves the driver model. LangChain quotes TypeSafe AI for the split: "code owns the workflow and AI handles narrow, structured decisions" ([Runkle and Lovell, LangChain, 25 September 2026](https://www.langchain.com/blog/building-prod-with-jev-and-langgraph)).
+A decision model answers one bounded question and returns a typed value with a probability. It does not hold the conversation, pick what to ask next, or survive a crash. Those jobs land in your code the moment the decision leaves the driver model. LangChain quotes TypeSafe AI for the split: "code owns the workflow and AI handles narrow, structured decisions" ([Runkle and Lovell, LangChain, 25 September 2026](https://www.langchain.com/blog/building-prod-with-jev-and-langgraph)). OpenAI announced general availability of its Decisions API on 22 October 2026, another instance of this bounded-question shape ([OpenAI, Decisions API](https://openai.com/index/decisions-api)).
 
 ## Conditions before the swap pays
-
-All three have to hold. The third has no vendor number behind it.
 
 - Decision volume is high enough for a per-step saving to show up in the run.
 - The question fits the model's cardinality limit. TypeSafe's `Choice` type "selects one option from a defined set (of max 255)" ([Browserbase, What is Jev](https://www.browserbase.com/blog/what-is-jev)), so an open action space has to become a list first.
@@ -31,28 +29,23 @@ All three have to hold. The third has no vendor number behind it.
 
 ## What the orchestrator takes on
 
-The decision model answers. Your code assembles the options, compares each answer against your threshold number, routes each outcome to its own downstream, and keeps a resumed run from repeating work. A gateway can now carry two of those four. LangChain reports the same relocation on the knowledge side: "Instead of packing domain knowledge into prompts, you encode it in the topology of the graph: which decisions get made, in what order, and what state each one sees" ([Runkle and Lovell, LangChain, 25 September 2026](https://www.langchain.com/blog/building-prod-with-jev-and-langgraph)).
+The orchestrator owns candidate assembly, the threshold comparison, routing and recovery. A gateway can now take the comparison and the escalation route. LangChain describes the knowledge split: "Instead of packing domain knowledge into prompts, you encode it in the topology of the graph: which decisions get made, in what order, and what state each one sees" ([Runkle and Lovell, LangChain, 25 September 2026](https://www.langchain.com/blog/building-prod-with-jev-and-langgraph)).
 
-The comparison and the escalation route can now sit in the platform. Vercel AI Gateway reads a confidence condition from `providerOptions.gateway.models` and escalates on it: "AI Gateway can now escalate a decision request to a fallback model when the primary model's answer trips a confidence condition you set." Confidence conditions cover two of the three question types, because "Confidence conditions cover Choice and Score questions. Boolean questions escalate on a probability range instead." A Boolean question still escalates, on a different predicate. Vercel also names the cost: "Because a triggered fallback runs a second decision, it bills both stages." The changelog gives no calibration data, so you still pick the threshold number, and the resume path stays yours ([Vercel, 6 October 2026](https://vercel.com/changelog/confidence-based-decision-fallbacks)).
+Vercel AI Gateway reads a confidence condition from `providerOptions.gateway.models` and escalates on it: "AI Gateway can now escalate a decision request to a fallback model when the primary model's answer trips a confidence condition you set." Confidence conditions cover two of the three question types, because "Confidence conditions cover Choice and Score questions. Boolean questions escalate on a probability range instead." Vercel also names the cost: "Because a triggered fallback runs a second decision, it bills both stages." The changelog gives no calibration data, so you still pick the threshold number, and the resume path stays yours ([Vercel, 6 October 2026](https://vercel.com/changelog/confidence-based-decision-fallbacks)).
 
-Runtime guarantees do not relax. LangChain is direct: "None of this is specific to LLMs. Jev still takes in unstructured text context and returns a judgment, so it needs the same guarantees, and a graph gives them to every node automatically." The post argues durability for model-driven steps in general: "Restarting from scratch after a failure is worse than slow, since the rerun might not retrace the same path". It also claims the decision model itself is stable: "Jev is designed to return the same answer for the same input." Its evidence is one early experiment in which Jev's scores "barely moved across 100 repeated runs" ([LangChain, 25 September 2026](https://www.langchain.com/blog/building-prod-with-jev-and-langgraph)).
+LangChain states: "None of this is specific to LLMs. Jev still takes in unstructured text context and returns a judgment, so it needs the same guarantees, and a graph gives them to every node automatically." It claims Jev returns stable answers, based on one early experiment where scores "barely moved across 100 repeated runs" ([LangChain](https://www.langchain.com/blog/building-prod-with-jev-and-langgraph)).
 
-Treat both published multiples as vendor-reported. LangChain measured its own graph: "Jev was 5–6x faster on the classification step across trials" against Sonnet in the judge role. The relayed multiple is TypeSafe's own benchmark, and the source states its baseline and its task scope: "On narrow decision tasks, like the routing and classification steps many agents are built around, TypeSafe's benchmarks show Jev running up to 200x faster and 400x cheaper than leading LLMs" ([LangChain, 25 September 2026](https://www.langchain.com/blog/building-prod-with-jev-and-langgraph)). Neither figure covers a whole request.
+Both multiples are vendor-reported. LangChain measured its own graph: "Jev was 5–6x faster on the classification step across trials" against Sonnet in the judge role. The relayed multiple is TypeSafe's own benchmark, and the source states its baseline and its task scope: "On narrow decision tasks, like the routing and classification steps many agents are built around, TypeSafe's benchmarks show Jev running up to 200x faster and 400x cheaper than leading LLMs" ([LangChain, 25 September 2026](https://www.langchain.com/blog/building-prod-with-jev-and-langgraph)). Neither figure covers a whole request.
 
 ## Why it works
 
-A cheap-first system pays its cheap stage on every call, before anything has been decided. Bouchard's decision-theoretic study of cascades ends there: "These results suggest that cascade performance is limited primarily by structural cost, since cascades pay the cheap model before any escalation decision, rather than by a shortage of intermediate stages" ([Bouchard, arXiv:2605.06350v1](https://arxiv.org/abs/2605.06350v1)). That study's cheap stage generates text, so a decision model pays a smaller version of the same cost rather than none of it. You pay the expensive stage only on the fraction that escalates. That fraction governs the total, and a step multiple does not compose into a system multiple.
-
-Reliability has a different cause. LangChain rests it on the input and output shape, not on run-to-run variance: the decision model "still takes in unstructured text context and returns a judgment, so it needs the same guarantees". That means durable execution, interrupts and traces. Supplying them to a second node type is orchestration work the swap creates rather than removes.
+A cascade pays for every stage it executes. Bouchard's current formulation sums each stage's cost through the stopping index ([Bouchard, arXiv:2605.06350v2, §3.1](https://arxiv.org/abs/2605.06350v2)). Applied to a two-stage decision workflow, this means the first call is always paid and the fallback adds another cost. A step-level speedup therefore does not establish whole-workflow savings.
 
 ## When this backfires
 
-- A cheap feature already predicts difficulty before any model runs. Dispatching up front then beats paying the cheap stage first: "A lightweight pre-generation router exceeds the best cascade policy on four of five datasets, mainly because it avoids the cheap model's generation cost on queries sent directly to a larger model rather than because of a stronger routing signal" ([Bouchard, arXiv:2605.06350v1](https://arxiv.org/abs/2605.06350v1)). Bouchard measured that margin against a generating cheap stage, so expect a narrower one with a decision model. Where such features are uninformative, the same paper finds "confidence-based cascading remains competitive".
 - Generation and open-ended reasoning dominate the run. LangChain caps the claim itself: "Jev doesn't fully replace an LLM for most use cases. It handles the bounded choices it's confident about and hands everything else to an LLM" ([LangChain, 25 September 2026](https://www.langchain.com/blog/building-prod-with-jev-and-langgraph)).
 - You have no runtime supplying durability, interrupts and traces to every node. Building one is the project; the cheapened decision is a line of it.
 - Nobody owns the escalation share as a metric. Without it you cannot tell a saving from a redistribution.
-
-The honest alternative is to leave the decision with the driver model, which already holds the conversation, the prior tool results and the reasoning behind the proposed action. You keep one vendor, one trace surface, and no threshold to recalibrate.
 
 ## Example
 
@@ -65,7 +58,6 @@ Three of the five steps are orchestration code. Browserbase's own number covers 
 - Unbundling a decision moves reliability work into the orchestrator rather than deleting it. Your code gains the candidate list, the threshold number and the resume path, plus the comparison and the escalation route unless a gateway supplies them.
 - Published speedups for this shape are step-scoped and vendor-reported: 5–6x on one classification step, and a median `act()` latency of 1.97 seconds falling to 0.46 seconds in early testing.
 - Cost follows the escalation share, because the system pays the cheap stage on every call and the expensive one only on the fraction that escalates.
-- When a cheap pre-decision feature predicts difficulty, routing before the cheap stage beat the cascade shape on four of five datasets in Bouchard's evaluation.
 - A decision node still takes unstructured context and returns a judgment, so checkpointing, interrupts and traces have to cover it as they cover the model node, even though the vendor claims it returns stable answers.
 
 ## Related

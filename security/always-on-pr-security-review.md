@@ -133,6 +133,8 @@ Both draw from a shared usage pool and a shared suppression-rule store. [Source:
 - The reviewer agent is itself an injection target whenever it processes PR text with credentials in scope; mitigations are structural
 - The pattern fails on false-positive economics unless suppression rules are first-class
 
+See [Verification Staging for Security Audit Skills](verification-staging-security-audit-skills.md) for checking candidate findings before reporting them.
+
 ## Related
 
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md)

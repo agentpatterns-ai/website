@@ -91,3 +91,5 @@ Rewriting the service in Python to capture at most 1.57x would trade a bounded t
 - [Tokenizer Swap Tax: Budgeting for Model Migrations That Change Token Counts](tokenizer-swap-tax.md) — the other multiplier that moves cost without any code change
 - [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — the larger lever this page defers to when compile loops are not the bottleneck
 - [Language Selection Scored on Review Cost](../human/language-selection-review-cost.md) — the human-cost view of the same decision, with the same free-variable caveat
+- [Capability Parity Before Cost Parity in Low-Resource Languages](capability-parity-before-cost-parity.md) — what a vendor pass-rate jump on sparse languages does, and does not, retire from this multiplier
+- [Observed-Pass Token Accounting for Post-Success Agent Spend](observed-pass-token-accounting.md) — the post-success half of the same study: splitting the cosmetic-churn spend by whether the agent ever ran the provided check

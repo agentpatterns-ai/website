@@ -73,3 +73,4 @@ After about a dozen completed jobs (a rule of thumb from this page, not a figure
 - [The Four Terms That Decide What an Agent Task Costs](four-term-agent-cost-model.md) — reading a finished bill back to its cause, which is what the estimate is guessing at
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — the instrument-attribute-fix-verify loop that builds the history
 - [Programming Language Choice as a Token-Cost Lever](language-choice-token-cost.md) — the same study's variance findings applied to a different decision
+- [Random Restart as the Baseline for Agent Early Stopping](../patterns/anti-patterns/random-restart-as-the-stopping-baseline.md) — what a ranking signal still cannot authorize, once it is used to kill a run mid-flight

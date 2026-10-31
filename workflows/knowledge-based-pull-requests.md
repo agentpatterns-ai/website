@@ -86,6 +86,28 @@ Treat the published evidence as a controlled simulation, not a deployment valida
 
 The authors flag what the pilot does not show: it does not validate maintainer-burden reduction, does not measure project-side regeneration effectiveness at scale, and the enterprise, vendor, and contractor examples are "plausible extensions of the same trust-boundary pattern, not as empirically validated deployment settings" ([arXiv:2606.26721](https://arxiv.org/abs/2606.26721v1) §5). The single failure case in the pilot — an automated plugin-list update — is the predictable one: a compact summary cannot reconstruct an exact target state, so regeneration drifts on changes that require literal output.
 
+## Adoption evidence for PR alternatives
+
+Treude and Baltes reviewed 50 gray-literature documents from 31 sources, published between October 2025 and October 6, 2026. Vendors supplied 22 documents. These counts describe the reviewed corpus, not industry adoption ([review methods and limitations](https://arxiv.org/abs/2610.34933v1), §III).
+
+Among replacement proposals in that corpus, only Zed reported use: its staff used Delta on Delta's repository. The two documents proposing external contribution through prompt requests reported no project using those workflows ([adoption findings](https://arxiv.org/abs/2610.34933v1), §IV.B). Keep shipped tools, internal use, and external-contributor adoption separate when assessing a replacement. Those prompt-request proposals provide context for KPR; they do not validate its regeneration pipeline.
+
+The review used two models to code documents, with one author resolving disagreements and no second human coder. The authors did not reproduce vendor measurements ([limitations](https://arxiv.org/abs/2610.34933v1), §III). Use these findings to bound adoption claims alongside the KPR pilot's separate limits.
+
+### Check what a replacement preserves
+
+The following practitioner checklist adapts the review's five-role framework. The roles are an analytical aid, not an exhaustive account of pull requests ([Table I](https://arxiv.org/abs/2610.34933v1), §II). Before adopting KPR or another alternative, identify the record or control that meets each check:
+
+| PR role | Evidence to require from the alternative |
+|---|---|
+| Integration | A defined change set, test results, and a controlled merge step for the regenerated code |
+| Review | Inspection of the implementation and a place to discuss defects before acceptance |
+| Rationale | Retained intent, rejected alternatives, and reasons for acceptance or rejection |
+| Accountability | Named proposer and approver, with explicit authority to merge |
+| External contribution | A submission and feedback path for contributors without repository write access |
+
+For KPR, apply the review check after regeneration as well as at knowledge-package confirmation. Record missing roles before replacing a contribution path; a tool announcement alone does not demonstrate that the replacement preserves them.
+
 ## Attribution and licensing
 
 Regenerating code in-project "does not automatically remove license or authorship concerns" ([arXiv:2606.26721](https://arxiv.org/abs/2606.26721v1) §4.6). Without explicit credit, the workflow becomes "a worse deal for contributors than an ordinary PR" and bona fide contributors disengage. Three operational rules from the paper:

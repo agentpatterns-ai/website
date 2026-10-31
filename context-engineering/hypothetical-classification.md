@@ -99,3 +99,4 @@ For that query the model produces something like `Furniture / Living Room / Tabl
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — one shared schema across graph construction, query decomposition, and typed retrieval
 - [LLM-Driven Logical Retrieval](llm-driven-logical-retrieval.md) — letting the model emit Boolean queries against an inverted index
 - [Component-Wise RAG Prioritization](rag-component-prioritization-software-engineering.md) — empirical evidence that retriever choice dominates generator choice, which is why the retrieval baseline comes first
+- [Tool Discovery Architecture: Retrieve-Then-Plan or Plan-Then-Retrieve](../patterns/agent-design/tool-discovery-architecture-by-query-shape.md) — the same invent-then-resolve step applied to a tool registry, where it wins multi-tool pass rate with one planner and loses on single-tool queries

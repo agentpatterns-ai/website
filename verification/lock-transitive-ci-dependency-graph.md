@@ -18,7 +18,7 @@ maturity: emerging
 
 > A `uses:` reference resolves at run time, so locking the CI dependency graph is what ties a reviewed workflow to the commits you read.
 
-Transitive CI dependency locking records the commit every action and reusable workflow in your CI graph resolved to, along with the dependencies those actions pull in, and keeps runs on those commits when a tag moves. Coverage has a documented gap, below. GitHub Actions workflow lockfiles reached public preview on 14 October 2026 for Enterprise Cloud, Enterprise Cloud with data residency, Team, and Free plans ([GitHub Changelog](https://github.blog/changelog/2026-10-14-github-actions-workflow-lockfiles-in-public-preview)).
+Transitive CI dependency locking records resolved commits for actions, their dependencies, and reusable workflows. Runs use those commits even when an upstream tag moves. Coverage has a documented gap, below. GitHub Actions workflow lockfiles reached public preview on 14 October 2026 for Enterprise Cloud, Enterprise Cloud with data residency, Team, and Free plans ([GitHub Changelog](https://github.blog/changelog/2026-10-14-github-actions-workflow-lockfiles-in-public-preview)).
 
 Read it as a reproducibility control. GitHub says so directly: "Locking does not determine whether the dependency itself is safe, so review dependencies before locking them" (same source). The lockfile makes the artifact you reviewed the artifact that executes.
 

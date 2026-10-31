@@ -74,3 +74,4 @@ Every standard correction is partial. The measured limits matter more than the r
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — the umbrella for measurement gaps a stronger model cannot close
 - [Measure the Judge Before You Freeze a Gate on It](judge-instrument-stability-check.md) — the stability axis, which a biased judge can pass
 - [When a Second Model Helps in LLM Review](cross-model-review-independence.md) — the two-reviewer case, where swapping the model lowered finding overlap and swapping the session did not
+- [Reference Dependence Decides Which Evals Run in Production](reference-dependence-online-evals.md) — the lane where this bias runs unchecked, since a judge scoring live traffic has no reference to anchor against

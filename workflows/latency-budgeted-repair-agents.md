@@ -120,3 +120,4 @@ The numbers come from one organization, and the authors say so: "our findings ma
 - [Closed-Loop CI Failure Remediation with Cloud Coding Agents](closed-loop-ci-failure-remediation.md) — the dispatcher controls deciding which CI failures reach an agent at all
 - [Staged Evidence Gates for Agentic Program Repair](../verification/staged-evidence-gates-program-repair.md) — what the agent must prove before a fix is shown
 - [Monitor or Wait: The Supervision Choice During Agent Execution](monitor-or-wait-during-agent-execution.md) — the same wait, priced from the supervising human's side
+- [On-Demand Fault Localization for Agentic Repair](on-demand-fault-localization-agentic-repair.md) — whether to spend any of the budget on a localization stage before the repair agent starts

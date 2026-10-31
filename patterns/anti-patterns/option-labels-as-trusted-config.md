@@ -86,3 +86,4 @@ Three questions to ask of a gate you already run, in this order.
 - [Treating a Model-Judged Hook as a Deterministic Control](model-judged-hook-as-deterministic-control.md) — the same mistake one layer out, counting a model's verdict as part of the deterministic hook layer
 - [Splitting the Drift Judge from the Advisor (LivePlan)](../agent-design/judge-advisor-split.md) — the shape this page argues for, with a deterministic component deciding and the model advising
 - [Model Confidence as Security Verification](model-confidence-as-security-verification.md) — why the returned probability is not the risk dial a threshold setting assumes
+- [Reading Tool Fit Off a Provider-Written Description](description-prose-as-tool-fit-evidence.md) — the same channel confusion in tool selection, where a provider's sales copy arrives as a capability claim

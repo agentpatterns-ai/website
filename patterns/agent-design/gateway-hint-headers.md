@@ -71,5 +71,7 @@ One case argues for the opposite design. Where routing fidelity matters more tha
 
 - [Centralized LLM Gateway for Per-Dimension Agent Budgets](../../observability/llm-gateway-per-dimension-budgets.md) — the budget dimensions these headers populate, and the chokepoint that enforces them
 - [Gateway Model Routing](gateway-model-routing.md) — the same gateway as a model catalog, and the other headers Claude Code sends it
+- [Gateway Session Affinity: Read the Pin, Not the Cache Rate](gateway-session-affinity.md) — the outcome side of the same request: these headers declare intent, affinity records which provider actually served the turn
 - [Per-Call Budget Hints on Tool Invocations](per-call-budget-hints-tool-calls.md) — the in-body sibling, where the hint goes to the model rather than to an intermediary
 - [Cost Routing Without Quality Monitoring](../anti-patterns/cost-routing-without-quality-monitoring.md) — what happens when a cheap routing signal drives model choice with nothing watching the output
+- [Client-Keyed Gateway Controls](client-keyed-gateway-controls.md) — the operator half: what a gateway enforces itself, and why keying a spend cap on a client-set header keeps it on the accounting side

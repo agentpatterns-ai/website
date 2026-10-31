@@ -54,7 +54,7 @@ graph TD
     C --> D[Estimate Q-hat with<br/>Laplace-smoothed MLE]
     D --> E[Order check<br/>AIC: 1st vs 2nd order]
     E --> F[Fit certificate<br/>composite KS + AIC]
-    F -->|Accept| G[Report R(d), pass@k,<br/>pass^k with CIs]
+    F -->|Accept| G["Report R(d), pass@k,<br/>pass^k with CIs"]
     F -->|Reject| H[Segment, re-featurize,<br/>or use richer process]
 ```
 

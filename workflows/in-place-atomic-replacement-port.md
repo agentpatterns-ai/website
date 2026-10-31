@@ -86,3 +86,4 @@ GitHub's runtime port is a first-party account of its own project, with no indep
 - [Documentation-Guided Legacy Migration](documentation-guided-legacy-migration.md) — building the blueprint an agent ports from
 - [Verification-Gated Agent Autonomy](../patterns/agent-design/verification-gated-agent-autonomy.md) — the building block this workflow composes, one check per unit of delegated work
 - [Whole-Codebase Visibility as a Migration Prerequisite](whole-codebase-visibility-migration-prerequisite.md) — the scoping check that runs before any port strategy
+- [Configuration-Scoped Acceptance for Agent-Run Migrations](configuration-scoped-migration-acceptance.md) — what to do when the target hardware configuration, not the language, is the axis that moves

@@ -55,7 +55,7 @@ Same surface symptom, different cause, different fix:
 |---------|--------------|-----|
 | Premature completion | First-signal-of-progress stop token | Externalize stopping criterion to test-suite state |
 | [Objective drift](objective-drift.md) | Context compression lost specifics | Structured session intent re-read after compaction |
-| Continuing past completion | Missing termination signal | Max-iteration cap; sentinel hash check |
+| Continuing past completion | Missing termination signal | Max-iteration cap; sentinel hash check — after [splitting the post-success spend](../../token-engineering/observed-pass-token-accounting.md), since a stop-on-first-pass rule needs an observed result |
 | Context-pressure abandonment | Token budget exhausted | Context compression; sub-agent delegation |
 
 ## Mitigations that work

@@ -142,6 +142,8 @@ Centralized governance creates bottlenecks when allowlist approval cycles are sl
 - MCP server access is disabled by default on Business/Enterprise plans, requiring explicit administrative enablement — this default-deny posture prevents unvetted tool integrations.
 - Agent activity metrics (feature usage, model consumption, adoption trends) provide the visibility layer that makes governance data-driven rather than policy-driven.
 
+For the related approach, see [Model Policy Reconciliation: A Copilot Model Allow List as Code](../patterns/agent-design/model-policy-reconciliation.md).
+
 ## Related
 
 - [Governing Production Agents: Cost, Control, Compliance](governing-production-agents.md) — the tool-agnostic tri-axis framework these product-policy controls implement.

@@ -87,3 +87,5 @@ That leaves two jobs: pin the key, and carry unresolved outcomes into the final 
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — the wider recovery vocabulary an ambiguous write failure sits inside
 - [Observation Contract Preservation](observation-contract-preservation.md) — the other way a second call to the same tool goes wrong, through mutated tool output rather than a lost response
 - [Recovery as a Separate Eval Axis (UndoBench)](../../verification/recovery-as-separate-eval-axis.md) — how to measure whether your agent has this problem before deciding which layer pays
+- [Durable Turn Log for Agent Crash Recovery](durable-turn-log-crash-recovery.md) — the harness-side record that narrows an ambiguous write to one interrupted call, and stops there
+- [Protected-Replay Success as Retry Restraint Evidence](../anti-patterns/protected-replay-success-as-retry-restraint.md) — the other side of the unprompted-key competence reported here, measured as a separate count from refusing an unprotected retry

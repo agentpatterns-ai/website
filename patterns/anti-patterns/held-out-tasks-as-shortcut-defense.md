@@ -63,3 +63,5 @@ A validity-preserving protocol change moves the one variable held-out tasks cann
 - [Eval Blind Spots](../../verification/eval-blind-spots.md) — what a held-out task set does and does not cover
 - [Reliability of an Automatically Selected Agent Harness](../agent-design/harness-selection-reliability.md) — run-to-run selection variance when a search picks the winning configuration
 - [Pass-Only Grading Treats Luck and Judgment the Same](pass-only-grading-lucky-pass.md) — the shortcut the protocol keeps whichever tasks you swap in: a green run that reached green through retries scores like a clean one
+- [Search-Set Harness Gain as Capability Evidence](search-set-gain-as-capability-evidence.md) — what to do with the gain once held-out tasks have failed to defend it: split it into overfitting, extra inference compute, and residual
+- [Single-Tree Crash Verdicts as Execution Understanding](single-tree-crash-verdict-as-execution-understanding.md) — the control arm applied to one instance rather than a protocol: two trees differing by one commit, scored on the difference

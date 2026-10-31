@@ -109,6 +109,8 @@ This timeline fits inside Anthropic's 60-day notice. For a Copilot same-day reti
 - Keep the previous model as a tested fallback until the successor passes evals; the fallback terminates at the retirement date regardless.
 - Use display-name aliases where possible, and reserve pinned dated IDs for reproducibility-sensitive workloads.
 
+For the related approach, see [Model Policy Reconciliation: A Copilot Model Allow List as Code](../patterns/agent-design/model-policy-reconciliation.md).
+
 ## Related
 
 - [Model-ID-as-Dependency: Migration Protocol for Deprecation Churn](model-deprecation-migration-protocol.md) — the codebase-side complement: how to treat pinned model IDs as dependencies inside the repo

@@ -70,3 +70,4 @@ The study's prescriptions follow from those measurements: heterogeneous models w
 - [Meta-Evaluate the LLM Judge Before Trusting Rubric Verdicts](../../verification/meta-evaluate-llm-judge-rubric-verification.md)
 - [Pooled-Evidence Factuality Checks for MCP Agents (Cross-Source Conflation)](pooled-evidence-mcp-factuality-conflation.md)
 - [Agent Headcount as a Vanity Metric](agent-headcount-vanity-metric.md)
+- [Discussion Transcript as the Record of Agent Belief](discussion-transcript-as-agent-state.md) — what a panel's transcript does not tell you about what its members hold

@@ -64,3 +64,4 @@ One single-author preprint, not peer reviewed, built on three earlier preprints 
 - [Distillation-Induced Similarity Metrics for Tool-Use Agents](distillation-induced-similarity-metrics.md) — measuring shared behavior between two models before treating them as independent
 - [Choosing the Judge Model That Grades Your Agent Evals](judge-model-bake-off.md) — picking the second model once you know you want one
 - [Committee Review Pattern](../code-review/committee-review-pattern.md) — the multi-reviewer structure this result caps at two models
+- [A Separate Critic Over Completion-Time Self-Checking](separate-critic-over-self-recheck.md) — the prior question of whether to add a second model at all, measured against three agent-only verification layers

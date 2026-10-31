@@ -88,3 +88,4 @@ Two details differ from the paper, and both are deliberate. Strands supports par
 - [Selective Rewind Summarization](selective-rewind-summarization.md) — choosing a cut point when summarization is the right tool
 - [Agent-Initiated Rubric-Gated Self-Compaction](agent-initiated-self-compaction.md) — deciding when compaction fires, orthogonal to what it leaves behind
 - [Event Sourcing for Agents](../observability/event-sourcing-for-agents.md) — the append-only event log as a general agent-state substrate
+- [Verbatim Prose Compaction for Lightweight Agents](verbatim-prose-compaction.md) — the same exactness applied to conversation prose, kept in context rather than addressed from outside it

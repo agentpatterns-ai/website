@@ -164,6 +164,7 @@ The same five branches map onto Claude Code hooks via `permissionDecision` and `
 ## Related
 
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — pause a headless session at a tool call and resume after out-of-band approval; the right primitive when no human is at the surface
+- [Approver-Named Permission Answers](approver-named-permission-answers.md) — the answer that names who may approve instead of what the verdict is, which is why it is not a seventh shape here
 - [Tool Confirmation Carousel](tool-confirmation-carousel.md) — a UI surface for the residual prompts the six shapes have to land on, and the same approval-fatigue trap surfaced at the UI level
 - [Classifier-Gated Auto-Permission](classifier-gated-auto-permission.md) — a different shape entirely; classify silently and only surface the prompt on escalations, reducing the per-prompt budget
 - [Permission Framework Choice Outweighs Model Choice](../../security/permission-framework-over-model.md) — the framework (ask-to-continue vs permissive) dominates the model choice; the six shapes only matter inside the ask-to-continue arm

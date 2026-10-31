@@ -139,6 +139,8 @@ When per-worktree initialization costs more than the parallelism returns. Each w
 - Failed agent outputs cost nothing to discard; successful outputs become branches ready for review.
 - The [batch pattern](../tools/claude/batch-worktrees.md) (N agents, N worktrees, N PRs) enables natural parallelism across independent tasks.
 
+[Flag Cleanup Grounded in Deployed State](deployed-state-flag-cleanup.md) describes a deployed pipeline that encountered corrupted diffs before adopting worktree isolation.
+
 ## Related
 
 - [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md)

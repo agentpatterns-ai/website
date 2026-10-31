@@ -1,6 +1,6 @@
 ---
 title: "Recursive Best-of-N Delegation"
-description: "Run K parallel candidate workers at each recursion node and select the best result via a judge before the parent consumes it — preventing error compounding in recursive agent trees."
+description: "Run K parallel candidate workers at each recursive delegation node and have a judge pick the best result before the parent consumes it."
 term: "Recursive Best-of-N Delegation"
 tags:
   - multi-agent
@@ -10,13 +10,13 @@ tags:
 aliases:
   - recursive best-of-N
   - parallel candidate selection
-last_reviewed: 2026-05-27
+last_reviewed: 2026-10-25
 maturity: adopted
 ---
 
 # Recursive Best-of-N Delegation
 
-> Run K parallel candidate workers at each recursion node and select the best result via a judge before the parent consumes it — preventing error compounding in recursive agent trees.
+> Run K parallel candidate workers at each recursive delegation node and have a judge pick the best result before the parent consumes it.
 
 ## The problem
 
@@ -49,6 +49,8 @@ graph TD
 ```
 
 This differs from the [voting and ensemble pattern](voting-ensemble-pattern.md) (flat parallel evaluation of the same task) and from [fan-out synthesis](fan-out-synthesis.md) (merging complementary strengths). Here, selection happens at each internal node of a decomposition tree, not at a single top-level aggregation point. The [ReDel toolkit](https://arxiv.org/abs/2408.02248) gives a reference implementation of recursive multi-agent delegation with configurable delegation schemes.
+
+VS Code 1.143 offers an adjacent, flat comparison in preview. Compare model results runs one task across selected models and harnesses in parallel. An optional judge recommends a result; synthesis starts only when the user requests it ([release notes](https://code.visualstudio.com/updates/v1_143)). The notes describe one comparison, without selection at internal nodes of a delegation tree. This fits the [voting and ensemble pattern](voting-ensemble-pattern.md) and [fan-out synthesis](fan-out-synthesis.md).
 
 ## Judge design
 

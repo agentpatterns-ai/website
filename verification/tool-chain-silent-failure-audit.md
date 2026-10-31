@@ -35,11 +35,30 @@ Candidates came from documentation, not from traffic. The authors assembled each
 
 The test-design rule is the part worth copying. Each query named a concrete identifier, asked the agent to report what came back, and never asked it to grade itself: "Queries were designed to test the target failure rather than ask the agent to independently determine whether a failure existed" ([§2](https://arxiv.org/abs/2609.26836v1)). An agent asked whether its own output is complete answers from the same truncated payload that caused the problem.
 
+## Compare computed results with rendered text
+
+Extend the audit through the formatter. A tool can compute the right result, then print text that hides its limits. [Who Verifies the Tools?](https://arxiv.org/abs/2610.32110v1) studies this boundary in one archive research deployment, across 4 selected defect families.
+
+Compare the rendered response against the internal result or authoritative data. The study's cases suggest four checks:
+
+- State the search scope, including sources or records the query excludes.
+- Distinguish returned records from the total, with any result cap.
+- Label an estimate and preserve its uncertainty.
+- Identify the namespace of each identifier before using it to retrieve provenance.
+
+These checks follow the disclosure checklist in [section 5](https://arxiv.org/abs/2610.32110v1). Namespace labels also need enforcement; the study finds that clearer wording alone leaves provenance errors largely intact.
+
+For verifier testing, hold an incorrect answer fixed and vary only the tool text supplied with it. The paper uses 30 false answers, 10 each for scope, completeness, and uncertainty, judged by 3 verifiers. All 90 paired verdicts change from acceptance under misleading text to rejection under clear text. These are repeated judgments of selected answers, not 90 independent tasks. [Section 4.2](https://arxiv.org/abs/2610.32110v1).
+
+Provenance is the counterexample: verifier acceptance changes only from 18/30 to 14/30. In the agent experiment, provenance overclaim remains at 94% under clear wording. Repairs also combine factual disclosures with behavioral instructions, so that experiment cannot isolate disclosure alone. These stress tests do not estimate how often formatter defects occur. [Results and limitations](https://arxiv.org/abs/2610.32110v1).
+
+The [shared-premise verifier failure](../patterns/anti-patterns/verifier-reads-the-same-premise.md) can therefore enter through tool output as well as a task description. Give the verifier an independent reference. In selected scope and completeness cases, the paper's control shows verifiers rejecting errors when given the missing facts and a correctness question. The control does not establish general verifier competence. [Verifier control, Table 1](https://arxiv.org/abs/2610.32110v1).
+
 ## Why it works
 
-A response carries no field for what was not returned. A complete payload and a truncated one are the same object with different contents, so the agent has nothing to condition on. The paper's illustration is an API that "returns its first 1,000 records (out of 10000 records)" while the agent reports the records ([§1](https://arxiv.org/abs/2609.26836v1)). The cost arrives one layer later, in what the authors call silent amplification: "An upstream limitation that is relatively benign at the tool or API layer can become a more consequential error when the agent interprets the partial output as complete evidence" ([§1](https://arxiv.org/abs/2609.26836v1)). That is why task-success benchmarks miss this class. They score the answer, and the answer is well formed.
+When a response omits its limits, the agent cannot infer completeness from a success status alone. The paper's illustration is an API that "returns its first 1,000 records (out of 10000 records)" while the agent reports the records ([§1](https://arxiv.org/abs/2609.26836v1)). The cost arrives one layer later, in what the authors call silent amplification: "An upstream limitation that is relatively benign at the tool or API layer can become a more consequential error when the agent interprets the partial output as complete evidence" ([§1](https://arxiv.org/abs/2609.26836v1)). That is why task-success benchmarks miss this class. They score the answer, and the answer is well formed.
 
-Auditing the chain works because it tests the one property the response schema never carries, which the authors call contextual reliability, "the extent to which an Agent–Tool interaction preserves and communicates the information, qualifiers, provenance, scope, and meaning required to support the intended scientific conclusion" ([§5](https://arxiv.org/abs/2609.26836v1)).
+Auditing the chain checks whether the output preserves what the authors call contextual reliability, "the extent to which an Agent–Tool interaction preserves and communicates the information, qualifiers, provenance, scope, and meaning required to support the intended scientific conclusion" ([§5](https://arxiv.org/abs/2609.26836v1)).
 
 ## When this backfires
 
@@ -51,7 +70,7 @@ Auditing the chain works because it tests the one property the response schema n
 
 ## Key Takeaways
 
-- Treat a successful tool call as evidence the call ran, and nothing more. Completeness is not a field in the response, so the agent cannot check it.
+- Treat a successful tool call as evidence the call ran, and nothing more. Check whether the output discloses scope and limits before relying on it.
 - Pick the tools to audit by whether they expose more than your wrapper reaches, and by whether a missing field would change the answer.
 - Write test queries that name a concrete identifier and ask what came back, then check the answer against the richer surface yourself. Asking the agent to judge its own completeness reads the same short payload twice.
 - The 51-to-25 API-to-wrapper split is an observation from one environment, not a prior. The authors say so themselves.

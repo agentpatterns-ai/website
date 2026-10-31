@@ -30,7 +30,7 @@ Hacktron, which describes itself as "an AI-native security platform for code rev
 
 The receiving queues are already over capacity. GitHub's advisory team reports three numbers from 2026: "Private vulnerability reports across the platform increased from ~550/week in January to more than 3,000/week for most of May." May produced "1,560 reviewed advisories—more than five times our typical monthly output and the highest in its history." And the queue is visibly behind, because "Processing times extended first to about a week, then to multiple weeks for a meaningful share" ([GitHub Blog](https://github.blog/security/supply-chain-security/inside-the-advisory-database-and-what-happens-when-vulnerability-volume-breaks-records/)).
 
-Vercel expects the input side to keep growing. "As LLMs accelerate vulnerability research, we expect to see more upstream vulnerabilities like the libheif RCE surface across the OSS ecosystem" ([Vercel](https://vercel.com/blog/reproducing-disclosing-and-fixing-the-libheif-vulnerability-with-hacktron-and-the-maintainers)).
+Vercel expects the input side to keep growing. "As LLMs accelerate vulnerability research, we expect to see more upstream vulnerabilities like the libheif RCE surface across the OSS ecosystem" ([Vercel](https://vercel.com/blog/reproducing-disclosing-and-fixing-the-libheif-vulnerability-with-hacktron-and-the-maintainers)). When the finder is a vendor running models at volume rather than a team reacting to one report, the same defect is handled a level up, through [ecosystem-scale pre-disclosure coordination](ecosystem-predisclosure-coordination.md).
 
 ## Three implementation layers
 

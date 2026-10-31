@@ -79,3 +79,4 @@ One measurement caveat travels with the result. The same paper scored a 37-query
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — the case for typed graphs on multi-hop document reasoning, a different task shape
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md) — the on-demand retrieval baseline both approaches extend
 - [Control Lexical Leakage in Agent-Memory Retrieval Evals](../verification/lexical-leakage-agent-memory-retrieval-evals.md) — why an author-written query set overstates every retriever it scores
+- [Tool Graph Memory as Next-Tool Guidance](../patterns/anti-patterns/tool-graph-memory-as-next-tool-guidance.md) — a graph over tool transitions rather than skill embeddings, where removing the graph's suggestions retained most of its measured gain.

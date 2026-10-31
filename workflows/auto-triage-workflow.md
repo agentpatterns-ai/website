@@ -6,7 +6,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-10-25
+last_reviewed: 2026-10-27
 maturity: established
 ---
 
@@ -18,12 +18,12 @@ Auto-triage is a bug-monitoring agent wired to alert streams. It watches a strea
 
 ## Why auto-triage
 
-Traditional alerting "usually stop[s] at detection: they create a message, ticket, or alert, and then a human has to reconstruct the context around it" ([Cognition: Introducing Auto-Triage](https://cognition.ai/blog/auto-triage)). That reconstruction has measurable cost — production SOC deployments see false-positive rates "approach 99% in some cases" ([Security Boulevard: AI Alert Triage, Apr 2026](https://securityboulevard.com/2026/04/ai-alert-triage-reducing-false-positives-analyst-fatigue/)), and ~25% of CI failures are flake rather than real defects ([Slack Engineering: Handling Flaky Tests at Scale](https://slack.engineering/handling-flaky-tests-at-scale-auto-detection-suppression/)). A human moving through monitor → correlate → investigate → propose-fix pays a fresh context-loading cost at each transition; auto-triage collapses that chain into one agent context.
+Alerting systems "usually stop at detection: they create a message, ticket, or alert, and then a human has to reconstruct the context around it" ([Cognition: Introducing Auto-Triage](https://cognition.ai/blog/auto-triage)). Slack describes manual triage of flaky-test failures as a reason to automate their detection and suppression ([Slack Engineering: Handling Flaky Tests at Scale](https://slack.engineering/handling-flaky-tests-at-scale-auto-detection-suppression/)). A human moving through monitor → correlate → investigate → propose-fix pays a fresh context-loading cost at each transition; auto-triage collapses that chain into one agent context.
 
 The workflow is worth adopting only when all three of the following preconditions hold:
 
 - A failure classifier sits upstream of dispatch. Architecture changes, database migrations, security-sensitive code, and ambiguous business logic are outside the safe scope of autonomous fix generation; an un-classified stream produces `sleep` patches around races and retry wrappers around real outages.
-- A confidence floor exists on the propose-fix branch. Cognition's contract relies on the agent self-assessing that "the fix is clear" ([Cognition: Introducing Auto-Triage](https://cognition.ai/blog/auto-triage)), yet Devin "does not always surface uncertainty or flag dangerous actions" ([Idlen: Devin Review 2026](https://www.idlen.io/blog/devin-ai-engineer-review-limits-2026/)). Without an external gate, the PR branch over-fires.
+- A confidence floor exists on the propose-fix branch. Cognition's contract relies on the agent self-assessing that "the fix is clear" ([Cognition: Introducing Auto-Triage](https://cognition.ai/blog/auto-triage)), yet Devin "does not reliably identify or prevent security vulnerabilities" ([Idlen: Devin Review 2026](https://www.idlen.io/blog/devin-ai-engineer-review-limits-2026/)). Without an external gate, the PR branch over-fires.
 - Reviewer attention is not at capacity. 30 of 32 successfully merged AI fix PRs depended on actionable review loops ([arXiv:2602.19441](https://arxiv.org/html/2602.19441v1)); reviewers who rubber-stamp the output collapse the workflow's final gate and ship agent-judgement code unsupervised.
 
 If any one is missing, the workflow transfers diagnostic cost to reviewers instead of removing it.
@@ -45,7 +45,7 @@ flowchart TD
     I -->|Otherwise| L[Tag owner]
 ```
 
-The four stages are not unique to Cognition. The same decomposition appears as perception → reasoning → planning → action in an independent LLM incident-response agent ([arXiv:2602.13156](https://arxiv.org/abs/2602.13156)); a survey of LLM-driven bug-tracking workflows expands the list to seven stages but the four are its core ([arXiv:2510.08005](https://arxiv.org/abs/2510.08005)). Replit announced a Monitoring Agent on 2026-10-22 that investigates an alert, identifies the cause, validates a fix, and deploys it to production ([Replit: Monitoring Agent](https://replit.com/blog/replit-monitoring-agent)).
+The four stages are not unique to Cognition. The same decomposition appears as perception → reasoning → planning → action in an independent LLM incident-response agent ([arXiv:2602.13156](https://arxiv.org/abs/2602.13156)); a survey of LLM-driven bug-tracking workflows expands the list to seven stages but the four are its core ([arXiv:2510.08005](https://arxiv.org/abs/2510.08005)). Replit announced a Monitoring Agent on 2026-10-22 that investigates an alert, identifies the cause, validates a fix, and deploys it to production ([Replit: Monitoring Agent](https://replit.com/blog/replit-monitoring-agent)). Vercel's alert validation covers investigation and notification filtering. With validation enabled for a webhook destination, Vercel Agent investigates alerts "before they reach your paging system", and only the ones it classifies as Critical reach that destination ([Vercel: Vercel Agent can now validate alerts before paging you](https://vercel.com/changelog/vercel-agent-can-now-validate-alerts-before-paging-you)). The investigate step is narrow: "Agent checks logs and metrics to assess impact."
 
 ### Stage 1: Monitor
 
@@ -82,7 +82,9 @@ The workflow is push-driven — the agent runs on each inbound event, not on a s
 
 Side-effecting authority is concentrated in stage 4, which makes it the safest place to add a control — partition out-of-scope alert classes, require an external confidence evaluator, or follow the Seer default below — without redesigning the workflow.
 
-## The two published defaults: Cognition vs Seer
+Vercel's Observability Plus includes ten Agent investigations per billing cycle on Pro and Enterprise plans. Additional investigations are billed separately; this allowance is not an execution cap ([Vercel: Vercel Agent can now validate alerts before paging you](https://vercel.com/changelog/vercel-agent-can-now-validate-alerts-before-paging-you)).
+
+## Two published defaults for proposing fixes
 
 The shape has converged across vendors, but the default posture on stage 4 has not. Two production implementations ship opposite defaults:
 
@@ -103,9 +105,9 @@ Auto-triage produces faster recovery than serial human triage because it collaps
 
 ## When this backfires
 
-- Upstream alert quality is poor. Auto-triage inherits the platform's grouping; dedupe-by-memory cannot fix a stream where one flake emits many distinct fingerprints, nor separate one where distinct bugs share a fingerprint. Per [Slack Engineering](https://slack.engineering/handling-flaky-tests-at-scale-auto-detection-suppression/), roughly a quarter of CI failures are flake — an un-classified stream yields `sleep` patches and retry wrappers shaped like fixes.
+- Upstream alert quality is poor. Auto-triage inherits the platform's grouping; dedupe-by-memory cannot fix a stream where one flake emits many distinct fingerprints, nor separate one where distinct bugs share a fingerprint. [Slack Engineering](https://slack.engineering/handling-flaky-tests-at-scale-auto-detection-suppression/) separates flaky-test handling from other test failures. Keep that distinction in the dispatch decision.
 - Reviewer attention is saturated. Empirically, agent-PR merge success correlates with actionable review loops ([arXiv:2602.19441](https://arxiv.org/html/2602.19441v1)). Teams where reviewers are at capacity will rubber-stamp the auto-triage output, collapsing the workflow's final gate; the design then ships agent-judgement code unsupervised at scale.
-- The agent does not surface uncertainty. Cognition's escalation contract assumes the agent self-assesses confidence accurately, but Devin specifically "does not always surface uncertainty or flag dangerous actions" ([Idlen: Devin Review 2026](https://www.idlen.io/blog/devin-ai-engineer-review-limits-2026/)). Without an external confidence floor — a separate classifier that rejects low-signal investigations before they reach stage 4 — the propose-fix branch over-fires.
+- The agent misses security risks. Cognition's escalation contract assumes the agent can identify a clear fix, but the Idlen review reports that Devin "does not reliably identify or prevent security vulnerabilities" ([Idlen: Devin Review 2026](https://www.idlen.io/blog/devin-ai-engineer-review-limits-2026/)). Without an external confidence floor — a separate classifier that rejects low-signal investigations before they reach stage 4 — the propose-fix branch over-fires.
 - High-blast-radius alert classes are not partitioned out. Architecture changes, database migrations, security-sensitive code, ambiguous business logic, and zero-day attacks fall outside the safe scope of autonomous fix generation ([Idlen review](https://www.idlen.io/blog/devin-ai-engineer-review-limits-2026/); [Panther: AI Alert Triage Automation](https://panther.com/blog/alert-triage-automation)). Dispatching these without a per-incident-class gate is unsafe.
 - Long-lived memory drifts. The dedupe-by-memory mechanism has no published expiry policy ([Cognition: Introducing Auto-Triage](https://cognition.ai/blog/auto-triage)). A single mislabeled dedupe compounds across months of correlated alerts unless the memory store is bounded or rotated explicitly.
 
@@ -159,6 +161,7 @@ The contract makes the three preconditions executable rather than implicit — e
 ## Related
 
 - [Agent Circuit Breaker](../patterns/agent-design/agent-circuit-breaker.md) — the per-fingerprint retry budget pattern that prevents stacked low-confidence fixes against the same alert
+- [Agent-Gated Pager Escalation: Judged Criticality on the Notification Destination](../patterns/agent-design/agent-gated-pager-escalation.md) — the gate upstream of stage 1, where an agent decides whether an alert reaches a human at all
 - [Incident Log Investigation Skill: Parallel Queries](incident-log-investigation-skill.md) — the stage-3 investigate sub-pattern in isolation, with parallel observability queries and eval-backed precision
 - [Closed-Loop CI Failure Remediation with Cloud Coding Agents](closed-loop-ci-failure-remediation.md) — the propose-fix branch's three required preconditions documented for the adjacent CI-failure trigger
 - [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map placing this in the triage family alongside the continuous-* workflows
