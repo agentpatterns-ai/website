@@ -108,3 +108,4 @@ Search-replace is the practical choice for a frontier API model on this file. Be
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
 - [Repository Map Pattern](../context-engineering/repository-map-pattern.md)
 - [Field-Change Intent Instead of Model-Written Diffs](../patterns/agent-design/field-change-intent-over-generated-diffs.md) — the option outside this spectrum, where the model emits no edit format at all.
+- [Overwriting a File After a Partial Read](../patterns/anti-patterns/partial-read-overwrite.md) — the data-loss case that rules a full rewrite out on any file past the read limit, whatever its accuracy score.

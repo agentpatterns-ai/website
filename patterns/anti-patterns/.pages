@@ -51,6 +51,7 @@ nav:
       - blaming-the-model-for-scaffolding-regressions.md
       - constraint-tax-tool-suppression.md
       - cli-json-payload-rewrite.md
+      - partial-read-overwrite.md
       - positional-response-parsing.md
       - entity-binding-failures.md
       - first-proposal-execution.md

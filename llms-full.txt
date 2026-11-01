@@ -698,6 +698,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Field-Change Intent Instead of Model-Written Diffs](patterns/agent-design/field-change-intent-over-generated-diffs.md)
 - [Five-Failure-Layers Diagnostic: Attribute Before Swapping the Model](patterns/agent-design/five-failure-layers-diagnostic.md)
 - [Interface Realization Repair: Evidence and Limits](patterns/agent-design/interface-realization-repair.md)
+- [Choosing a Scheduled Agent's Firing Interval](patterns/agent-design/scheduled-agent-firing-interval.md)
 - [Fleet-Level Irreversibility Budgets for Agent Effects](patterns/agent-design/fleet-irreversibility-budget.md)
 - [Forked vs Fresh Subagents: When to Inherit the Parent Conversation](patterns/multi-agent/forked-vs-fresh-subagents.md)
 - [Formal Process Models as Prompting Scaffolds (Petri Net of Thoughts)](patterns/agent-design/petri-net-of-thoughts.md)
@@ -793,6 +794,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Running an Agent's Context Step on a Smaller Model](patterns/agent-design/context-step-model-split.md)
 - [Schema-Checked Rule Extraction for Tool-Call Gates](patterns/agent-design/schema-checked-rule-extraction.md)
 - [Selective Dynamic Concurrency for Long-Horizon Coding Agents](patterns/agent-design/selective-dynamic-concurrency.md)
+- [Signed Model-Catalog Distribution for Agent Harnesses](patterns/agent-design/signed-model-catalog-distribution.md)
 - [Source-Linked Tool Observations: Repairing Stale Context](patterns/agent-design/source-linked-tool-observations.md)
 - [Specification Authority Boundary: Agents Propose, the Runtime Commits](patterns/agent-design/specification-authority-boundary.md)
 - [Staged Review for Expensive-to-Render Agent Deliverables](patterns/agent-design/staged-review-expensive-renders.md)
@@ -1183,6 +1185,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](security/llm-pinned-vulnerable-versions.md)
 - [Local Sandboxing in the Copilot App: The Credential Axis](security/copilot-app-local-sandbox-credentials.md)
 - [Lock-State Safeguards for Desktop-Controlling Agents](security/locked-desktop-agent-safeguards.md)
+- [Reading Customer Actions in Security Disclosure Reports](security/control-position-remediation-cost.md)
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](security/mcp-runtime-control-plane.md)
 - [Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls](security/mid-trajectory-guardrail-selection.md)
 - [Mitigation Feasibility Triage for Installed Agent Skills](security/skill-mitigation-feasibility-triage.md)
@@ -1518,6 +1521,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Verification Surface: Match the Tool to the Failure](verification/verification-surface-reach-and-cost.md)
 - [Verify Agent Diagnoses and Fix Proposals Before Acting](verification/predictive-claim-gate.md)
 - [When a Second Model Helps in LLM Review](verification/cross-model-review-independence.md)
+- [Whole-Build Pass Rates in Long-Horizon Agent Benchmarks](verification/whole-build-pass-rates.md)
 - [Zero Violations Is Not Evidence Your Hook Works](verification/enforcement-liveness-evidence.md)
 - [Preempting Agentic PR Rejection by Failure-Mode Category](code-review/preempting-agentic-pr-rejection.md)
 - [Agent Self-Review Loop for Iterative Self-Improvement](code-review/agent-self-review-loop.md)
@@ -1990,6 +1994,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Mid-Session Config Changes as Invisible Cache Invalidators](patterns/anti-patterns/mid-session-config-cache-invalidators.md)
 - [Minimality Prompts as a Patch-Size Control](patterns/anti-patterns/minimality-prompt-as-patch-size-control.md)
 - [Over-Compliant Refactoring: Agents That Keep Editing Clean Code](patterns/anti-patterns/over-compliant-refactoring-loop.md)
+- [Overwriting a File After a Partial Read](patterns/anti-patterns/partial-read-overwrite.md)
 - [Pass-Only Grading Treats Luck and Judgment the Same](patterns/anti-patterns/pass-only-grading-lucky-pass.md)
 - [Passing Tests Are Not Evidence a Patch Is Fast](patterns/anti-patterns/passing-tests-as-performance-evidence.md)
 - [Pattern Replication Risk in Agentic Code Generation](patterns/anti-patterns/pattern-replication-risk.md)
@@ -2277,6 +2282,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [PowerShell Tool: Native Windows Shell for Claude Code](tools/claude/powershell-tool.md)
 - [Reloading Skills Mid-Session in Claude Code](tools/claude/reload-skills-mid-session.md)
 - [Session Scheduling with Loop and Cron in Claude Code](tools/claude/session-scheduling.md)
+- [Shared Copilot Automations: Team Ownership Outside Git](tools/copilot/shared-copilot-automations.md)
 - [Skill disallowed-tools Frontmatter: Skill-Layer Tool Denial](tools/claude/skill-disallowed-tools.md)
 - [Skill Eval Loop](tools/claude/skill-eval-loop.md)
 - [Sparse-Checkout Worktrees for Monorepo Agent Isolation](tools/claude/sparse-paths-monorepo-isolation.md)
@@ -3876,17 +3882,20 @@ Source: https://agentpatterns.ai/context-engineering/compact-before-cache-expiry
 
 > Claude Code compacts an idle conversation just before its prompt cache expires, while the prefix is still cheap to read.
 
-Idle compaction compacts an idle conversation shortly before its prompt cache expires, so the next message reprocesses a summary instead of the full history. Claude Code 2.1.299 describes it this way: "a 200K+ token conversation left idle for about 54 minutes is compacted before its one-hour prompt cache expires, so your next message doesn't reprocess it all" ([changelog](https://code.claude.com/docs/en/changelog#2-1-299)). The saving depends on five conditions, and it trades detail for cost.
+Idle compaction compacts an idle conversation shortly before its prompt cache expires, so the next message reprocesses a summary instead of the full history. Claude Code 2.1.299 describes it this way: "a 200K+ token conversation left idle for about 54 minutes is compacted before its one-hour prompt cache expires, so your next message doesn't reprocess it all" ([changelog](https://code.claude.com/docs/en/changelog#2-1-299)). The saving depends on six conditions, and it trades detail for cost.
 
 ## When it fires
 
-Idle compaction is on by default only when all five conditions hold ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)):
+Idle compaction is on by default only when all six conditions hold ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)):
 
-- Session: you are in an interactive terminal session.
+- Session: you are in an interactive terminal session, in the VS Code extension's chat panel, or in the desktop app's Code tab when the session runs on your machine or over SSH.
+- Auto-compaction: `autoCompactEnabled` is on.
 - Prompt cache: the conversation is on the one-hour prompt cache TTL.
 - Feature flags: Claude Code can fetch feature flags from Anthropic.
 - Size: the context has reached the token threshold, 200,000 by default.
 - Idle time: about 54 minutes have passed since the last request, and your computer is awake.
+
+Claude Code 2.1.314 (October 30, 2026) widened two of these. It "added idle compaction to VS Code and Claude Desktop's Code tab", and it "changed idle compaction to also run for subscribers with telemetry turned off, and on Bedrock, Vertex, Foundry and LLM gateways once the one-hour prompt cache is on" ([changelog](https://code.claude.com/docs/en/changelog#2-1-314)). The settings reference still lists the feature-flag condition, and neither source says how the telemetry-off and cloud-provider cases meet it.
 
 Two of these limit the scope more than they first appear.
 
@@ -3905,6 +3914,7 @@ Worked example, from the [Opus 5.5 prices](https://platform.claude.com/docs/en/b
 - 2.1.290: the `idleCompaction` setting and the threshold variable arrive. On earlier versions, turn off `autoCompactEnabled` to stop it.
 - 2.1.299: the changelog entry describes the feature (dated October 14, 2026).
 - 2.1.302: the notice shown after an idle compaction now says how to turn the feature off ([changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
+- 2.1.314: the feature reaches VS Code and the desktop Code tab, and runs for subscribers with telemetry off and on Bedrock, Vertex, Foundry, and LLM gateways ([changelog](https://code.claude.com/docs/en/changelog#2-1-314)).
 
 `"idleCompaction": false` in settings.json turns it off, and `DISABLE_AUTO_COMPACT` turns it off along with auto-compaction ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)). From 2.1.302, an `Idle compaction` row in `/config` turns it off or back on ([changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
 
@@ -3921,7 +3931,7 @@ Anthropic says compaction is lossy: "whatever the summary leaves out is no longe
 
 ## Key Takeaways
 
-- Check the five conditions before you expect idle compaction: terminal session, one-hour TTL, feature flags, token threshold, 54 idle minutes with the computer awake.
+- Check the six conditions before you expect idle compaction: a supported session (terminal, VS Code chat panel, or desktop Code tab), auto-compaction on, one-hour TTL, feature flags, token threshold, 54 idle minutes with the computer awake.
 - API-key and cloud-provider users never see it until they set `promptCacheTtl` to `1h`.
 - Keep it for sessions you resume to start new work. Set `"idleCompaction": false` for sessions you resume in full detail.
 - The 500K-token example saves about $3.90 minus the summary cost, and only when you return after expiry.
@@ -27105,6 +27115,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Provider-Hosted Subagent Delegation: One Model Price for the Whole Tree](provider-hosted-subagent-delegation.md) — Hosted delegation lets the model spawn subagents inside one API request, but every agent inherits the request's model and price, so size that model to the hardest subtask in the tree
 - [Verdict-Driven Inspection Cadence for Agent Monitors (Cadence)](verdict-driven-inspection-cadence.md) — Set a runtime monitor's next inspection interval from its own last verdict: widen after advisory guidance, reset to the base after a discarded step
 - [Edit-Request Steering Trigger: One Plan Before the First Source Edit](edit-request-steering-trigger.md) — Fire one planning intervention when a repair agent first asks to write a source file, a trigger readable from the action type and target path with no monitor and no checkpoint search
+- [Choosing a Scheduled Agent's Firing Interval](scheduled-agent-firing-interval.md) — Set a scheduled run's interval from the job it does, then cap it at the rate its reader can absorb; where the source can push, drop the interval and subscribe
 
 ## Reliability
 
@@ -27258,6 +27269,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Local Model Viability Factors for Coding](local-model-viability-for-coding.md) — The RAM, model-size, context, tool-calling, and privacy factors that gate whether a self-hosted local model is good enough for a coding task, versus staying hosted
 - [Multi-Shape BYOK Provider](multi-shape-byok-provider.md) — One BYOK provider that natively speaks Chat Completions, Responses, and Messages — with the API family declared per endpoint — replaces single-shape compatibility adapters that silently down-translate provider-specific capability
 - [Per-Model Harness Tuning](per-model-harness-tuning.md) — Treat the backing model as a first-class harness variable — express prompt, tool, and middleware deltas as declarative model-keyed overrides instead of forcing one configuration to work everywhere
+- [Signed Model-Catalog Distribution for Agent Harnesses](signed-model-catalog-distribution.md) — Fetching per-model settings as a signed file corrects vendor metadata without a client release, and the signature covers origin tampering while leaving staleness and catalog coverage gaps untouched
 - [Tool Discovery Architecture: Retrieve-Then-Plan or Plan-Then-Retrieve](tool-discovery-architecture-by-query-shape.md) — Retrieve-then-plan wins when a request names its tool; writing tool stubs first wins multi-tool pass rate with one planner, once raising k is ruled out
 - [Natural Language Tool Selection (NLT)](natural-language-tool-selection.md) — Describe tools in prose and parse the model's plain-language choice instead of forcing JSON tool calls — a large accuracy win on weak or non-native-tool-calling models, near-zero on structured-optimized frontier ones
 - [Tools as Typed Code Stubs (Programmatic Tool Calling)](programmatic-tool-calling.md) — Expose tools as typed Python stubs the model calls from a script — it matched or beat JSON tool calling on 11 of 14 models, but only past a code-emission gate and a fan-out-shaped workload
@@ -32629,6 +32641,87 @@ A check the model's own reading can influence is not a check. Wu and Gong moved 
 - [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — the whole-agent authority boundary reviewed before shipping, one level above a per-action declaration.
 - [Agent-Ready Data Architecture for Analytics Agents](agent-ready-data-architecture.md) — the warehouse facts the read path needs, beneath the acting path this page governs.
 - [Governed Sources of Truth for Analytics Agents (Structure Over Access)](governed-sources-of-truth-analytics-agents.md) — the read-side counterpart, routing questions through governed metrics instead of raw tables.
+
+---
+
+### Choosing a Scheduled Agent's Firing Interval
+Source: https://agentpatterns.ai/patterns/agent-design/scheduled-agent-firing-interval/
+
+# Choosing a Scheduled Agent's Firing Interval
+
+> Choose a scheduled agent's polling interval from the finding's useful lifetime and the reader's capacity to act.
+
+Pick the interval from the job the run does, not from a round number. LangChain's post on proactive agents names three jobs and three cadences that differ by two orders of magnitude. Memory consolidation uses "a cron that runs on some cadence (e.g. once a day)", goal progress a cron that "runs on some cadence (once an hour)", and event-stream triage "a cron that runs on a cadence (once every ten minutes)" ([LangChain](https://www.langchain.com/blog/proactive-agents)). The job picks the row.
+
+## Two conditions before the interval is the question
+
+Both have to hold. Settle the first before spending any thought on the number.
+
+The watched source cannot push. Where it can, a subscription deletes the parameter rather than tuning it. Claude Code's [Monitor tool](../../tools/claude/monitor-tool.md) streams a background script's output line by line, which "avoids polling altogether and is often more token-efficient and responsive than re-running a prompt on an interval" ([Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)).
+
+A person reads the output. The ceiling on this parameter comes from reader fatigue, which needs a reader to fatigue. A run whose findings land in a queue is bounded by whatever drains it.
+
+## Cadence follows the job
+
+| Job | Cadence in the source | What the interval decides |
+|---|---|---|
+| Memory consolidation | once a day | how old the agent's picture of the user can get |
+| Goal progress | once an hour | how long a next action waits unproposed |
+| Event-stream triage | once every ten minutes | how late a notification arrives |
+
+On the platform that post describes, scheduled firing is the majority of traffic: "More than 70% of Managed Deepagent runs on LangSmith come from scheduled runs" rather than a human typing a message ([LangChain](https://www.langchain.com/blog/proactive-agents)). That figure is LangChain's own platform telemetry, self-reported, with no method and no absolute run count given.
+
+The chosen cadence then decides which surface can host the run. Ten minutes rules out Claude Code cloud tasks, whose documented minimum interval is 1 hour ([Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)).
+
+## Why it works
+
+A scheduled run gets no second turn. It is "just the prompt that was passed in, triggered at a schedule, with the thread and memory based on the principal who created the schedule" ([LangChain](https://www.langchain.com/blog/proactive-agents)). Unless a scheduling tool is attached, nothing inside the run can change the gap it was started on. Then the interval is the only parameter that decides how long a finding sits undetected.
+
+The interval is therefore a function of how fast the watched thing changes, and one harness ships it as a function instead of a constant. In Claude Code's self-paced loop, after each iteration "it picks a delay between one minute and one hour based on what it observed: short waits while a build is finishing or a PR is active, longer waits when nothing is pending" ([Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)).
+
+The reader bounds the same parameter from the other side, at a rate that does not move. Rizk et al. describe the failure: "too many notifications make individuals desensitized to them", which "causes them to miss some critical notifications that may have detrimental consequences" ([arXiv:2003.02097v1](https://arxiv.org/abs/2003.02097v1)). Their proposed framework keys issuance, suppression and aggregation on "event severity, user preferences, or schedules". That 2020 paper proposes its framework and reports no evaluation, so take the mechanism and no number.
+
+## When this backfires
+
+- Shortening the interval is the chosen fix for a missed finding. Past the reader's absorption rate that makes things worse, because desensitization makes them "miss some critical notifications" ([arXiv:2003.02097v1](https://arxiv.org/abs/2003.02097v1)). Suppression and aggregation are the levers there.
+- The volume the cadence was sized for has changed. A static schedule holds a fixed prompt and a fixed cron, so a daily digest keeps arriving daily long after its source went quiet. Managed Deep Agents also offers dynamic schedules, which an agent creates and deletes at runtime ([LangChain](https://www.langchain.com/blog/proactive-agents)).
+- The finding carries no deadline. Where it is worth the same whenever it arrives, the interval only sets the bill, and the slowest cadence the task tolerates wins.
+- The cadence sits below the floor of every surface you can run on. Claude Code's Desktop and `/loop` options accept sub-hour schedules but require your machine to stay on. Cloud tasks have a one-hour floor. A ten-minute job buys granularity with uptime ([Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)).
+- Nothing changes between fires. That failure sits upstream in the trigger choice, and [Loop Trigger Selection](../../loop-engineering/loop-trigger-selection.md) covers it.
+
+## Example
+
+A weekday sales readout runs on a daily cadence, and the schedule file says so in one line ([LangChain](https://www.langchain.com/blog/proactive-agents)):
+
+```python
+# schedules/daily_digest.py
+from managed_deepagents import define_schedule
+
+schedule = define_schedule(
+    cron="0 8 * * 1-5",
+    timezone="America/Los_Angeles",
+    prompt="Inspect the sales report using your tools and send a KPI readout.",
+)
+```
+
+In this static schedule, the cron is the entire cadence decision and the prompt is the entire run.
+
+## Key Takeaways
+
+- Name the job class before picking a number. One vendor's own cadences for three jobs span ten minutes to once a day.
+- Check whether the source can push before choosing any interval. A stream removes the parameter instead of tuning it.
+- The reader's absorption rate is the real ceiling, and past it the levers are suppression and aggregation rather than a shorter gap.
+- Cadence picks the hosting surface. A sub-hour job cannot run where the documented floor is 1 hour.
+- Where the harness lets a run set its own next delay from what it observed, prefer that to a constant.
+
+## Related
+
+- [Loop Trigger Selection: Pairing the Start with the Stop](../../loop-engineering/loop-trigger-selection.md) — the upstream choice of trigger shape and its stopping rule, which has to pass before an interval is worth setting
+- [Unattended Run Reporting: What the One Message Must Say](../../workflows/unattended-run-reporting-contract.md) — what a fire does with a finding once it has one, and the states its message has to separate
+- [Verdict-Driven Inspection Cadence for Agent Monitors (Cadence)](verdict-driven-inspection-cadence.md) — the same adaptive-interval idea applied inside a single run, keyed on a monitor's own last verdict
+- [Cloud-Scheduled Routines vs Local Session Scheduling](../../tools/claude/cloud-scheduled-routines.md) — the surface trade a sub-hour cadence forces, with the 1-hour cloud floor in full
+- [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — why a shorter interval raises the cost of a fire that duplicates the last one's output
+- [Whose Permissions a Self-Scheduled Agent Run Carries](../../security/self-scheduled-run-authority.md) — the authority a fire spends, decided when the schedule is written rather than when it runs
 
 ---
 
@@ -42946,6 +43039,8 @@ Specific query instructions push agents into narrow searches — the over-low [s
 Before committing to a tool strategy, a lead agent can use extended thinking to assess complexity, select tool paths, set subagent count, and plan division of labor. [Anthropic's system](https://www.anthropic.com/engineering/multi-agent-research-system) uses this as a planning scratchpad before spawning subagents. Subagents use interleaved thinking after each tool result to decide whether to continue, pivot, or escalate.
 
 The skills documentation says to include `ultrathink` anywhere in skill content to request deeper reasoning ([skills documentation](https://code.claude.com/docs/en/skills#advanced-patterns)). The automatic effort increase has a narrower scope: the interactive terminal. Release 2.1.311 raises that turn to `xhigh` on Opus 5.5, Sonnet 5.5, Haiku 5.5, and Fable 5.1 through Anthropic's API. Typed mid-turn, it raises the rest of that turn. The rainbow indicator appears only where the keyword can raise effort; quoted words and file paths do not qualify ([changelog 2.1.311](https://code.claude.com/docs/en/changelog#2-1-311)).
+
+More thinking tokens do not guarantee a measurable gain for Qwen3-32B. Over five runs, turning reasoning on raises its mean pass@1 on HumanEval Pro from 71.1% to 76.5% ([arXiv:2610.36952v1](https://arxiv.org/abs/2610.36952v1)). Its mean tests pass on BugsInPy rises from 3.5% to 7.9%. On MBPP Pro the same switch moves mean pass@1 from 68.1% to 69.5%, which the paper reports as not statistically significant. Qwen3-32B spends a median of over 2,000 thinking tokens per task to get there. In an offline test, the authors cut Qwen3-32B traces short and asked the model, with reasoning off, to produce a solution from what remained. Keeping the first half of a trace caused no statistically significant drop in correctness. That test does not show live token savings. The paper covers five model settings, and these figures are the Qwen3-32B ones alone.
 
 ## Parallelization rules
 
@@ -54441,6 +54536,88 @@ External issue bodies are untrusted input; mirroring them gives every later read
 
 ---
 
+### Signed Model-Catalog Distribution for Agent Harnesses
+Source: https://agentpatterns.ai/patterns/agent-design/signed-model-catalog-distribution/
+
+# Signed Model-Catalog Distribution for Agent Harnesses
+
+> A harness fetches its per-model settings as a signed file at runtime, so vendor metadata corrections land without waiting for a client release.
+
+Per-model settings decide how a harness treats a model, down to the shape of the system prompt it builds. Bundle that table into the client and it goes stale between releases. Fetch it at runtime and the fetch becomes a configuration-injection surface. A signature on the fetched file is what makes the second option safe to take, and it covers less than the word suggests.
+
+## When the pattern applies
+
+Claude Code 2.1.311 (October 26, 2026) applies it to four backends: "Changed Claude Code on Bedrock, Mantle, Vertex, and Foundry to load model settings from a signed file on downloads.claude.ai; set CLAUDE_CODE_MODEL_CATALOG=off to turn this off" ([Claude Code changelog 2.1.311](https://code.claude.com/docs/en/changelog#2-1-311)). The first-party API is absent from that line, and the opt-out ships with the feature.
+
+That scope is the decision rule. Reach for a fetched catalog when all three conditions hold:
+
+- You need vendor metadata corrections between client releases.
+- Your clients can reach the vendor's distribution host when a session starts.
+- You can accept the same client version behaving differently as the catalog moves beneath it.
+
+Where one of those fails, bundle the catalog and pin it. An estate that must attest which prompt went to which model gains more from a stale table it can inspect.
+
+## Why it works
+
+A bundled catalog goes stale between releases, so a remote file separates metadata updates from client releases. It does not guarantee recognition of operator-created identifiers. Claude Code 2.1.312 still names "custom deployment names and inference profile ARNs" as cases it can fail to recognize ([Claude Code changelog 2.1.312](https://code.claude.com/docs/en/changelog#2-1-312)).
+
+The signature earns its place because it moves the trust anchor off the distribution layer. Google Threat Intelligence Group recommends exactly this control: "Remote configuration files (.ini, .json, or .xml) should be digitally signed using asymmetric public key cryptography. If an origin server or content delivery network (CDN) is modified without authorization, client software will detect the invalid signature and reject the configuration" ([Google Cloud, October 2026](https://cloud.google.com/blog/topics/threat-intelligence/investigating-ephemeral-supply-chain-tampering)). The same report warns that clients "should never rely solely on transport-layer HTTPS or remote checksums (such as cleartext MD5 values in an unauthenticated configuration file)".
+
+UNC7017 is the demonstration. The group rewrote AOMEI's remote configuration on the vendor's own origin servers in windows of five to ten minutes, and the file the client trusted carried "the version number, the MD5 hash of the expected update package, and the URL where the client should download `upgrade-now.zip`" ([Google Cloud, October 2026](https://cloud.google.com/blog/topics/threat-intelligence/investigating-ephemeral-supply-chain-tampering)). HTTPS was in place throughout. The integrity check lived inside the unauthenticated file an attacker controlled.
+
+Firefox ships the same shape outside the agent space: Remote Settings manages "evergreen settings data in Firefox" and lists content signing through Autograph among its features ([Mozilla wiki](https://wiki.mozilla.org/Firefox/RemoteSettings)).
+
+## What the signature does not cover
+
+Signing authenticates origin, not freshness. The Update Framework counts staleness as a separate attack class. On indefinite freeze attacks it states: "An attacker cannot respond to client requests with the same, outdated metadata without the client being aware of the problem" ([TUF specification](https://theupdateframework.github.io/specification/latest/)). Meeting that goal takes version numbers and expiry inside the signed metadata, which a signature alone does not supply.
+
+It says nothing about coverage either. A correctly signed catalog that simply lacks your deployment name still degrades you, and Claude Code 2.1.312 states the behavior: those backends now "use the shorter system prompt for model names Claude Code doesn't recognize, such as custom deployment names and inference profile ARNs, even when they front Sonnet or Haiku" ([Claude Code changelog 2.1.312](https://code.claude.com/docs/en/changelog#2-1-312)).
+
+## When this backfires
+
+- Air-gapped or egress-restricted estates. The fetch needs a network path to the distribution host. The changelog documents an opt-out but does not say what the client runs on afterward.
+- Attestation requirements. The documented control is on or off, with no version pin, so one client build stops implying one harness behavior.
+- Strict verification with no fallback. Rejecting an unverifiable catalog is correct and leaves the client with no settings. Firefox documents that end state plainly: "we can end-up in situations where synchronization fails and will leave the local DB in an empty state" ([Firefox source docs](https://firefox-source-docs.mozilla.org/services/settings/index.html)). A trusted bundled copy can keep the client available while it still rejects an invalid remote catalog.
+
+## Example
+
+Three environment variables govern the behavior on Bedrock, Mantle, Vertex and Foundry. Each comes from one changelog line.
+
+- `CLAUDE_CODE_MODEL_CATALOG=off` comes from 2.1.311: "set CLAUDE_CODE_MODEL_CATALOG=off to turn this off" ([Claude Code changelog 2.1.311](https://code.claude.com/docs/en/changelog#2-1-311)).
+- `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` comes from 2.1.312: "set `CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0` to keep the full prompt" ([Claude Code changelog 2.1.312](https://code.claude.com/docs/en/changelog#2-1-312)).
+- `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK=1` comes from 2.1.312: "set `CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK=1` to turn them off" ([Claude Code changelog 2.1.312](https://code.claude.com/docs/en/changelog#2-1-312)).
+
+```bash
+# Turn off signed model-catalog fetching.
+export CLAUDE_CODE_MODEL_CATALOG=off
+
+# Keep the full system prompt for a model name the harness does not recognize.
+export CLAUDE_CODE_SIMPLE_SYSTEM_PROMPT=0
+
+# Turn off automatic model switches after a flagged message.
+export CLAUDE_CODE_DISABLE_REFUSAL_FALLBACK=1
+```
+
+The second and third exist because the recognition gap has consequences beyond prompt length. Claude Code 2.1.312 also extended "automatic model switches after a flagged message to also cover model names Claude Code doesn't recognize, such as custom deployment names" ([Claude Code changelog 2.1.312](https://code.claude.com/docs/en/changelog#2-1-312)). Both changes can apply when Claude Code does not recognize your configured model name.
+
+## Key Takeaways
+
+- Treat the catalog as three options rather than a yes-or-no question: bundle and go stale, fetch and verify, fetch and trust. Only the third is always wrong.
+- When reviewing any harness that fetches configuration, check where the integrity value lives. A hash published inside the file it is meant to protect is the shape UNC7017 exploited, and it buys nothing.
+- Audit freshness separately from authenticity. Ask what the signed metadata says about version and expiry before calling a fetched catalog safe.
+- Check model-name recognition separately from catalog fetching. Claude Code documents the shorter system prompt for unrecognized names on the four listed backends.
+- Record the catalog alongside the client version in any estate that has to reconstruct a session later. The client version alone no longer determines harness behavior.
+
+## Related
+
+- [Gateway Model Routing](gateway-model-routing.md) — the other way a catalog reaches the harness, published by your own gateway as a discovery source rather than fetched from the vendor.
+- [Per-Model Harness Tuning](per-model-harness-tuning.md) — what the catalog's metadata drives once it arrives, and how to declare those deltas yourself.
+- [Tool Signing and Signature Verification for Agents](../../security/tool-signing-verification.md) — the same cryptographic control applied to loaded tools instead of fetched configuration.
+- [Multi-Shape BYOK Provider](multi-shape-byok-provider.md) — the adjacent case where capability is declared per endpoint rather than looked up in a catalog.
+- [Model Deprecation Lifecycle](../../workflows/model-deprecation-lifecycle.md) — the operational wrapper for migrating the model identifiers a catalog has to describe.
+
+---
+
 ### Situated Harness Layers: Fix at the Layer That Owns It
 Source: https://agentpatterns.ai/patterns/agent-design/situated-harness-layers/
 
@@ -59212,6 +59389,7 @@ This is the replacement branch: the verdict stopped the step rather than advisin
 - [Watcher Side Agents: Give the Second Agent a Trigger It Did Not Pick](watcher-side-agents.md) — the operator-addressed version, where the trigger decides whether the note is worth reading
 - [Loop Detection for AI Agents](../../observability/loop-detection.md) — deterministic repetition detection, the cheapest trigger in this family
 - [Edit-Request Steering Trigger: One Plan Before the First Source Edit](edit-request-steering-trigger.md) — drops the monitor entirely and fires once on an action the agent already takes
+- [Choosing a Scheduled Agent's Firing Interval](scheduled-agent-firing-interval.md) — the same adaptive-interval question between runs rather than within one, where the reader's absorption rate supplies the bound
 
 ---
 
@@ -59926,6 +60104,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Per-Action Approval as Episode Authorization](per-action-approval-as-episode-authorization.md) — Four of five authorization conjuncts are single-run properties a per-call guard enforces exactly, while bare per-tool approval covers none of eight measured classes and the purpose conjunct is visible only by comparing two executions
 - [Per-Action Approval as Episode Authorization](per-action-approval-as-episode-authorization.md) — Four of five authorization conjuncts are single-run properties a per-call guard enforces exactly, while bare per-tool approval covers none of eight measured classes and exact detection of relational purpose violations needs executions compared
 - [Per-Action Approval as Episode Authorization](per-action-approval-as-episode-authorization.md) — Four of five authorization conjuncts are single-run properties a per-call guard enforces exactly, while bare per-tool approval covers none of eight surveyed classes and exact detection of relational purpose violations needs executions compared
+- [Overwriting a File After a Partial Read](partial-read-overwrite.md) — A reader that truncates for context economy plus a writer that takes whole-file content deletes every byte past the cut and reports success; Claude Code 2.1.312 and GitLab merge request 251919 both put the fix as a precondition on the write
 
 ---
 
@@ -62521,6 +62700,7 @@ The dates and counts stand in for your own incident record. What transfers is th
 - [Deletion Avoidance](deletion-avoidance.md) — the same asymmetry one level down, where agents guard code instead of removing it
 - [Reducing System-Prompt Token Bloat](../../context-engineering/system-prompt-bloat-reduction.md) — trimming the shipped prefix, a different object from the instruction file
 - [The Error-Class Governance Loop for Instruction Libraries](../../workflows/instruction-library-governance-loop.md) — the standing cycle that puts the recurrence count to work and retires the rule it justifies
+- [Overwriting a File After a Partial Read](partial-read-overwrite.md) — the other way an instruction file loses content, where a whole-file write deletes the part the agent never read
 
 ---
 
@@ -68559,6 +68739,67 @@ Keep the human read for intent, but make correctness the machine's job: run the 
 - [Tab-Accept Rate as a Proxy for Critical Engagement](tab-accept-critical-engagement-gap.md) — the same automation-complacency mechanism measured at the completion-acceptance level.
 - [Model Confidence as Security Verification](model-confidence-as-security-verification.md) — confidence not tracking correctness, on the model side rather than the reviewer side.
 - [LLM Comprehension Fallacy](../../fallacies/llm-comprehension-fallacy.md) — correct-looking output read as understanding; the belief this anti-pattern operationalizes.
+
+---
+
+### Overwriting a File After a Partial Read
+Source: https://agentpatterns.ai/patterns/anti-patterns/partial-read-overwrite/
+
+# Overwriting a File After a Partial Read
+
+> A truncating read plus a whole-file write deletes everything the agent never saw, and the write call is where a harness can stop it.
+
+Neither tool is wrong alone. The reader truncates because the file does not fit the budget it was given. The writer replaces the file because a whole-file write has no way to say "keep the rest". Compose them and the region past the cut is deleted, with a success report and no error.
+
+## How two safety behaviors composed
+
+Claude Code's changelog records the chain one entry at a time ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+
+- 2.1.145, May 19 2026, softened the read: "a truncated first page with a 'PARTIAL view' notice instead of a hard error when a whole-file read exceeds the token limit".
+- 2.1.228, August 11 2026, softened the write: "newer models can overwrite an existing file they haven't read this session".
+- 2.1.312, October 27 2026, landed the guard: "Fixed Claude overwriting a very large CLAUDE.md, rules file or @-included file in a subdirectory after seeing only its start; Write now asks Claude to read it all or edit in place".
+
+Every file class that entry names is an instruction file. That is the worst case, because an agent rewriting the rules it runs under destroys the constraints it was operating under.
+
+The shape is not one vendor's, and it is not confined to a context limit. GitLab's `add_commit` MCP tool hit the same composition at a 10 MB blob cap, described in the Example below ([GitLab merge request 251919](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/251919)). The general pair is any truncating reader feeding any replacing writer, a paged API read driving a `PUT` included.
+
+## Why it works
+
+Truncation is unobservable from the truncated content. The dropped bytes leave no trace in what the reader returned, so detection needs a size reported out of band. That is what GitLab's guard keys off: `size` "reflects the full blob size reported by Gitaly, not the (possibly truncated) loaded byte count" ([GitLab merge request 251919](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/251919)).
+
+The check belongs on the write because the write has nothing to validate against. An anchored edit carries an `old_string` the harness can match against the file on disk. A whole-file write asserts only the end state. The review on AMD's GAIA pull request states why: "Keeping `file_write` strict, since it names no `old_string`, is the right asymmetry" ([amd/gaia pull request 3395](https://github.com/amd/gaia/pull/3395)).
+
+A prompt rule cannot carry it. Prompt-level guardrails are "natural language instructions that operate at the same abstraction level as the threats they attempt to mitigate" ([Fokou, 2026, arXiv:2604.12986v1](https://arxiv.org/abs/2604.12986v1)).
+
+## When this backfires
+
+- Appending to a very large generated file. A complete read makes a one-line append to a multi-megabyte log unaffordable. The two vendors route around that cost in opposite directions, Claude Code toward the anchored edit and GitLab toward full content. Neither remedy is the general one.
+- A file that changed on disk after the read. Completeness says nothing about freshness, so a full read satisfies the precondition and still clobbers a sibling agent's newer version. GAIA carries a separate stale-read rejection for that case ([amd/gaia pull request 3395](https://github.com/amd/gaia/pull/3395)).
+- The edit-in-place branch fails quietly too. A non-unique anchor produced "a real edit, of the right shape, in the wrong place" with a success report, which the same pull request calls "the failure mode least likely to be caught in review" ([amd/gaia pull request 3395](https://github.com/amd/gaia/pull/3395)).
+- Read-tracking state scoped per process. GAIA's tracker is a module singleton, so in its Agent UI server one session's write re-anchors the ledger for every other session. A second agent then edits content it never saw ([amd/gaia pull request 3395](https://github.com/amd/gaia/pull/3395)).
+- Rollback complements prevention. Parallax refuses first and snapshots as well: "Before any destructive or irreversible action, the system captures state sufficient for rollback" ([Fokou, 2026, arXiv:2604.12986v1](https://arxiv.org/abs/2604.12986v1)). The paper adds it for the residual risk that remains when every pre-execution mechanism is bypassed. The guarantee stops at the local environment.
+
+## Example
+
+**Before — partial edit submitted as the whole file**: GitLab's `add_commit` MCP tool loaded a target file through a 10 MB cap, where the loader "returns silently truncated content — no error, no nil". The service matched `old_str` in the truncated content, substituted, and submitted that blob as the file's full content, which "silently deletes everything past the first 10 MB of the file while reporting a successful commit" ([GitLab merge request 251919](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/251919)).
+
+**After — the precondition rejects the call**: the same service now rejects any partial-edit target whose reported blob size exceeds the cap, "raising a `PartialEditError` instructing the caller to submit full file content instead" ([GitLab merge request 251919](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/251919)). Claude Code's guard has the same shape and a different escape route: Write "asks Claude to read it all or edit in place" ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+
+## Key Takeaways
+
+- Check your harness version. The Claude Code fix is in 2.1.312, and the loosening it corrects shipped 11 weeks earlier in 2.1.228.
+- A completeness check must read a size the tool reports, never the bytes it returned.
+- Prefer an anchored edit over a whole-file write on any file past the read limit. The anchor gives the harness something to verify.
+- The precondition covers completeness only. Staleness and non-unique anchors need their own rejections.
+- Keep instruction files in version control. The precondition is the whole defense where there is no commit to recover from.
+
+## Related
+
+- [Graceful Tool-Output Truncation: The PARTIAL Signal](../../tool-engineering/graceful-tool-output-truncation.md)
+- [A Guard Hook Approves the Truncated Input It Was Handed](guard-approves-truncated-input.md)
+- [Edit Format Selection: Diff vs. Search-Replace vs. Full Rewrite](../../tool-engineering/llm-edit-format-selection.md)
+- [Rollback-First Design](../agent-design/rollback-first-design.md)
+- [Catastrophic Remembering: Instruction Files That Only Grow](catastrophic-remembering-instruction-files.md)
 
 ---
 
@@ -86974,6 +87215,7 @@ Search-replace is the practical choice for a frontier API model on this file. Be
 - [Poka-Yoke for Agent Tools](poka-yoke-agent-tools.md)
 - [Repository Map Pattern](../context-engineering/repository-map-pattern.md)
 - [Field-Change Intent Instead of Model-Written Diffs](../patterns/agent-design/field-change-intent-over-generated-diffs.md) — the option outside this spectrum, where the model emits no edit format at all.
+- [Overwriting a File After a Partial Read](../patterns/anti-patterns/partial-read-overwrite.md) — the data-loss case that rules a full rewrite out on any file past the read limit, whatever its accuracy score.
 
 ---
 
@@ -87858,6 +88100,7 @@ For any tool whose output can grow past a fixed limit:
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md)
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Auditing Agent Tool Chains for Silent Partial Success](../verification/tool-chain-silent-failure-audit.md) — how to find the places your wrapper already truncates without saying so
+- [Overwriting a File After a Partial Read](../patterns/anti-patterns/partial-read-overwrite.md) — what the write side does with a PARTIAL result the agent then feeds back
 
 ---
 
@@ -104208,6 +104451,8 @@ Source: https://agentpatterns.ai/code-review/review-feedback-to-rule-loop/
 
 A recurring review comment is evidence of an unencoded invariant. The rule lives in one reviewer's head, and every PR pays the cost of re-deriving it. The promotion threshold (same comment across three or more PRs in a window) is load-bearing: one or two occurrences is a hypothesis, three or more is a pattern. The walkinglabs harness engineering curriculum encodes this loop as a first-class practice ([walkinglabs — review-feedback-to-rule](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-10-why-end-to-end-testing-changes-results/code/review-feedback-to-rule.md)).
 
+Replit puts a person in front of the same promotion. Its workspace memory proposes a skill update, and a reviewer approves it before that update takes effect ([Replit, 27 October 2026](https://replit.com/blog/anyone-can-bring-ideas-to-company-codebase)). The reported gains come from Replit's own internal use of the feature. "Internally at Replit", it helped "reduce token usage by 51%". It also "cut the time agents take to complete a common data task from 16 minutes to 1 minute, without reducing output quality". The post names the data task only as "common" and does not say how many runs the time covers. It reports no comparison across models, languages or task types. The feature is in early access, so read both numbers as one vendor's internal result rather than a general one.
+
 ## The loop
 
 ```mermaid
@@ -105714,6 +105959,7 @@ Source: https://agentpatterns.ai/verification/
 - [Overeager-Behavior Elicitation: Scope + Trap Fragments](overeager-behavior-elicitation-scope-trap-fragments.md) — Compose benign scenarios from reusable scope and trap fragments, score with a judge-free filesystem-delta oracle, and use Thompson sampling to elicit overeager tool calls task-completion and jailbreak benchmarks both miss
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — Evaluate agents by the final state they produce, not the sequence of steps they took to get there
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — pass@k measures capability ceiling; pass^k measures consistency — report both to distinguish agents that sometimes succeed from those that reliably do
+- [Whole-Build Pass Rates in Long-Horizon Agent Benchmarks](whole-build-pass-rates.md) — A whole-build score counts only runs where every check passes, so it sits far below the per-check rate on the same runs; ViBench 2.0's leaders pass over 90% of checks and 49% to 65% of builds
 - [Comparative Judging for Agent Configuration Ranking](comparative-judging-config-ranking.md) — Rank agent configs by best-worst (MaxDiff) elicitation plus a Plackett-Luce utility model instead of averaging noisy absolute scores — for bake-offs where the goal is picking the winner, not clearing a threshold
 - [PASS@(k,T): Evaluate RL for Agents Along Sampling and Interaction Depth](pass-at-k-t-agentic-rl-eval.md) — Vary sampling budget k and interaction depth T jointly to separate capability expansion from efficiency gains when evaluating RL post-training for tool-use agents
 - [Attempt-Budget Sweep for Harness Changes](attempt-budget-sweep-harness-gains.md) — Score a harness change at several values of k, add a larger-model reference arm, and stratify by difficulty; a 16.05 pp pass@1 win on LawBench became a 4.00 pp loss at pass@64
@@ -108200,6 +108446,8 @@ Leading models (GPT-4o, Claude 4 Sonnet) outperform smaller alternatives on aggr
 ### Task type matters more than overall score
 
 DevBench evaluates six task categories derived from what developers actually do: API usage, code purpose understanding, partial completions, and others. Models show uneven profiles across these categories. An overall accuracy number hides whether the model handles your dominant task type well.
+
+Task labels are coarser than they look. An arXiv study scores each benchmark task on three axes it calls SNC: how the reference solution is distributed, how much it adds against what it removes, and the dependencies, history, and complexity of the code it touches. Across 2,487 tasks from five public benchmarks and 14,922 runs of six agent configurations, "Every pair of benchmarks differs on at least two SNC axes, including benchmarks with the same task label" ([arXiv:2609.01271v2](https://arxiv.org/abs/2609.01271v2)). The same paper holds that "practitioners should select evaluation tasks based on their change characteristics" ([arXiv:2609.01271v2](https://arxiv.org/abs/2609.01271v2)). Inspect a candidate suite's actual changes before you trust its category name.
 
 ### Context handling is the differentiator
 
@@ -127024,6 +127272,62 @@ One single-author preprint, not peer reviewed, built on three earlier preprints 
 
 ---
 
+### Whole-Build Pass Rates in Long-Horizon Agent Benchmarks
+Source: https://agentpatterns.ai/verification/whole-build-pass-rates/
+
+# Whole-Build Pass Rates in Long-Horizon Agent Benchmarks
+
+> A whole-build score counts only the runs where every check passes, so it sits far below the per-check rate measured on the same runs.
+
+Report both numbers, and read the gap between them only once models clear the floor where the strict score moves at all. A benchmark scoring a multi-hour build has no single passing test to point at, so it has to choose what counts as success. Replit's ViBench 2.0 publishes two metrics side by side. The first is "Pass@1: the share of builds in which every test plan passes". The second is "Plan pass rate: the share of test plans where all steps pass, averaged by product" ([Kirani et al., 2026](https://frontier.replit.com/vibench-2-long-horizon-software-benchmark/)). The distance between them on one set of runs is the part you can act on.
+
+## What the two scores measure
+
+ViBench 2.0 starts the agent on an empty project. The agent builds a product one feature at a time, modeled on products like Uber, GitHub, or Google Docs. The suite holds "seventeen products, 241 feature requests, and 544 test plans". The agent "builds a first version of the given product from a short spec, then adds up to eighteen features on top of its existing code". A grading agent then runs each test plan in a real browser, clicking and typing through it ([Kirani et al., 2026](https://frontier.replit.com/vibench-2-long-horizon-software-benchmark/)).
+
+At the top of the table the two metrics separate by at least 25 points, and by more than 40 for Opus 5.5. GPT-6.1 Sol leads on build-level pass@1 at 65%, GPT-6 Astra scores 60%, and Opus 5.5 scores 49%. "All three pass more than 90% of their test plans, so most of their failed builds miss by only a few plans" ([Kirani et al., 2026](https://frontier.replit.com/vibench-2-long-horizon-software-benchmark/)). Read the strict number alone and the weakest leader fails half its builds. Read the per-check number alone and each leader gets almost everything right.
+
+## Why it works
+
+A whole-build score is a conjunction, so the weakest check governs it. The gap is informative rather than arithmetic because the failures are not spread evenly. Each new feature has to fit a schema and routes the agent committed to earlier, before it knew what was coming. The design "forces it to choose the schema and routes before knowing what's next, so later features can be harder than earlier ones". Replit names the consequence: "New features have to fit code the agent wrote earlier, and that is where builds often break". It also quantifies the clustering: "Nearly three-quarters of those models' failed builds fail only on these intersections" ([Kirani et al., 2026](https://frontier.replit.com/vibench-2-long-horizon-software-benchmark/)).
+
+On ViBench, a wide gap is a statement about where the work is. Few checks fail, and they fail at feature boundaries, so the engineering problem is integration rather than capability. An agent failing checks uniformly would drag its per-check rate down with it.
+
+The threshold sensitivity shows up independently of Replit. Long-Horizon-Terminal-Bench reports threshold-sensitive scores. Its strongest model moves from "10.9% at a perfect-reward threshold of 1.0" to "15.2% pass@1 at a partial-reward threshold of 0.95" ([Li et al., 2026](https://arxiv.org/abs/2607.08964v3)).
+
+## When this backfires
+
+- The models sit below the floor. When almost no build passes, the strict score pins at zero and orders nothing. ViBench's own generational run shows pass@1 "from 0% for GPT-5.4 to 31% for GPT-6 Sol and 53% for GPT-6.1 Sol", while plan pass rate over the same models "climbs from 42% to 95%" ([Kirani et al., 2026](https://frontier.replit.com/vibench-2-long-horizon-software-benchmark/)). At the bottom of that range the per-check rate carries the signal on its own.
+- The work is short-horizon. A bounded fix carries one or a few checks, so conjunction over them returns roughly the per-check rate. The gap is a long-horizon instrument and reports nothing on a single edit.
+- Your harness differs. The source states the confound itself: "All models run in one agent harness built on OpenHands, so a model tuned for a different setup may score lower here" ([Kirani et al., 2026](https://frontier.replit.com/vibench-2-long-horizon-software-benchmark/)).
+- You want to reproduce it locally. Eight of the seventeen products are public in Harbor format and the remaining nine are held out. Public-product scores also run lower, putting the same model at 53% there against 65% overall ([Kirani et al., 2026](https://frontier.replit.com/vibench-2-long-horizon-software-benchmark/)).
+- The grader is also a contestant. Opus 5.5 grades every build and is scored among them. Replit reports a planted-bug check, a cross-model re-grade where "99.2% were confirmed correct", and "no sign that Opus favors builds from Claude models" ([Kirani et al., 2026](https://frontier.replit.com/vibench-2-long-horizon-software-benchmark/)). That bounds the concern without removing it.
+
+A stronger position argues against the strict metric entirely. Long-Horizon-Terminal-Bench holds that final-outcome grading of long tasks "overlooks intermediate progress and partial solutions, yielding sparse reward signals and an incomplete picture of agent capability", and decomposes each task into graded subtasks instead ([Li et al., 2026](https://arxiv.org/abs/2607.08964v3)). For tracking your own progress month over month rather than ranking vendors, that design gives you a gradient the conjunctive score does not.
+
+## Example
+
+ViBench publishes one of the plans the leaders miss. A design tool's undo feature request specifies that "Each person has their own undo history, so undo only takes back your own changes, never a collaborator's." The test plan has Alice and Bob alternate edits on one rectangle. Alice moves it, Bob renames it, Alice recolors it, and Bob changes its opacity. Alice then presses undo, and the plan verifies that her fill change reverted while Bob's rename and opacity change survived. GPT-6.1 Sol, GPT-6 Astra and Opus 5.5 "fail this plan in eight of their twelve builds" ([Kirani et al., 2026](https://frontier.replit.com/vibench-2-long-horizon-software-benchmark/)).
+
+That is one test plan sitting exactly where two features meet, and it is invisible in a plan pass rate above 90%. One failed plan lowers that product's plan pass rate by one plan. It fails the build outright under the whole-build metric. That asymmetry is what the two scores exist to expose.
+
+## Key Takeaways
+
+- Publish the whole-build rate and the per-check rate together; either alone supports a different decision about the same runs.
+- Treat the distance between them as the diagnostic. On ViBench, the leaders' failures concentrate at feature boundaries. A narrower gap at the same build rate would need a different explanation.
+- Check that the strict metric is above its floor before you rank on it. ViBench's GPT-5.4 scores 0% pass@1 at the same end of the range where plan pass rate still reads 42%.
+- Record the harness with the score. ViBench's figures are conditional on one OpenHands-based harness, by its authors' own statement.
+
+## Related
+
+- [pass@k and pass^k: Capability and Consistency Metrics](pass-at-k-metrics.md) — the orthogonal axis: capability against consistency across repeated attempts, rather than granularity within one run
+- [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md) — its held-out test gap is another long-horizon score gap, read for reward hacking instead of integration failure
+- [Audit the Noise Floor Before Trusting a Benchmark Gap](benchmark-noise-floor-audit.md) — how many runs a reported gap needs before it means anything
+- [Valid Completion Rate as a Second Scoring Axis](valid-completion-rate-second-axis.md) — a second axis that separates clean termination from task correctness
+- [Dual Executable Specifications for Long-Horizon Features](dual-executable-specifications.md) — a build-side response to the same feature-intersection failures this score surfaces
+
+---
+
 ### Zero Violations Is Not Evidence Your Hook Works
 Source: https://agentpatterns.ai/verification/enforcement-liveness-evidence/
 
@@ -127325,6 +127629,7 @@ No single safety mechanism is sufficient. Layered defenses ensure that failure o
 - [Inline Safety Harness with Cascade Verification (FinHarness)](inline-lifecycle-safety-harness.md) — Wrap each agent turn with prospective per-call monitors and route verification between a cheap and an advanced judge by per-step risk; worth it for high-stakes, high-call-volume workflows, not low-volume or long-context agents
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](lifecycle-security-architecture.md) — Embed defense mechanisms into each execution lifecycle phase with cross-layer feedback so layers coordinate rather than operate in isolation
 - [Lock-State Safeguards for Desktop-Controlling Agents](locked-desktop-agent-safeguards.md) — Bound an agent driving a logged-in desktop along four axes (time, visibility, presence, recovery) with short-lived authorization, covered displays, relock on local input, and manual-unlock fallback so a failure on any single axis is contained by the others
+- [Reading Customer Actions in Security Disclosure Reports](control-position-remediation-cost.md) — Replit's five October 2026 disclosures cost two customers no action, two a required republish, and one a recommended republish. The reports show which protections already apply and which fixes still need customer action
 - [Runtime Guard as an Installed Skill (Defense-as-Skill)](runtime-guard-as-installed-skill.md) — Holding the policy text identical, loading a runtime guard through skill files instead of an always-on system prompt cut in-distribution attack success from 0.353 to 0.104; it is still an advisory control that sits above permission systems and sandboxing, not in place of them
 - [Security Constitution for AI Code Generation](security-constitution-ai-code-gen.md) — Formalize security constraints as a versioned, machine-readable constitution that feeds agent specs, linters, and CI gates
 - [Security Drift in Iterative LLM Code Refinement](security-drift-iterative-refinement.md) — Iterative fix-test loops optimize for functional correctness while silently accumulating security regressions that no functional test exercises
@@ -133823,6 +134128,7 @@ Nothing here depends on the agent honoring a rule; the file is not in the reposi
 - [Runtime Guard as an Installed Skill (Defense-as-Skill)](runtime-guard-as-installed-skill.md) — a measured difference inside the advisory bucket: the same guard policy performs better loaded as skill files than as system-prompt text
 - [Enforcing Who and What Can Trigger an Agent's CI Run](workflow-execution-protections.md) — the same sorting rule applied to GitHub Actions triggers, where the enforced half is an Actions policy
 - [Delivery-Bound Tool Authorization: When Progressive Discovery Becomes Access Control](delivery-bound-tool-authorization.md) — the sorting rule applied to deferred tool loading, which sits in the advisory bucket until the delivering server refuses the call
+- [Reading Customer Actions in Security Disclosure Reports](control-position-remediation-cost.md) — the adjacent read of a published disclosure, by what the vendor says the customer must do rather than where a control is evaluated
 
 ---
 
@@ -140815,6 +141121,91 @@ Prioritizing by observed exploitation works when the catalog filters for confirm
 - [Eval Environment Containment](../verification/eval-environment-containment.md) — the defense for the dominant class in the roundup
 - [Pre-Trust Execution Surface](pre-trust-execution-surface.md) — what runs when a repository opens
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — a mechanism-based alternative to ranking by incident
+- [Reading Customer Actions in Security Disclosure Reports](control-position-remediation-cost.md) — the other read of a published security event: which protections already apply and which fixes still need your action
+
+---
+
+### Reading Customer Actions in Security Disclosure Reports
+Source: https://agentpatterns.ai/security/control-position-remediation-cost/
+
+# Reading Customer Actions in Security Disclosure Reports
+
+> Security disclosure reports show which protections already apply and which fixes still require customer action.
+
+Read a platform's isolation architecture against your required actions only where the vendor publishes a per-disclosure action list. The statement that a platform runs agents in microVMs says nothing about your work. A list pairing each flaw with your required action makes it checkable, and Replit published one for five October 2026 disclosures ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)).
+
+A control absorbs a flaw when the vulnerable code never receives reachable attacker input, and the customer does nothing. This page calls that outcome disclosure absorption. A control narrows a flaw when it covers one route in and leaves the rest. A third case sits between them: a fix beneath the application that must still be delivered, which can leave you a republish. Replit states the division itself: protections went in "at the firewall level to prevent malicious exploit attempts from reaching your apps, but some fixes require you to take further action to update and republish your apps".
+
+## What one disclosure wave cost at each position
+
+| Disclosure | Control, and where it sat | Customer action |
+|---|---|---|
+| Linux kernel | A per-environment microVM with a hardened kernel configuration | None |
+| LiteLLM supply-chain attack | A package install firewall, ahead of install | None |
+| eMudhra certificate authority compromise | A base-image change, beneath the application, plus a Python tooling patch | Republish Python apps, or follow emailed instructions |
+| Node.js | A web application firewall, beside the inbound request route | Republish Node.js apps |
+| PHP | A web application firewall, beside the inbound request route | Republish, recommended |
+
+The two zero-action rows sit at different positions. Replit's "existing microVM architecture prevented exploitation of all these vulnerabilities, by construction", and its package firewall "blocked all malicious package install attempts" ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)). Beneath and ahead both work. Neither retires the patch: the same kernel entry commits to "upgrade to the latest version that has all the fixes once it's available".
+
+A fix beneath the application still had to be delivered. Replit "removed the compromised CA from our base images and automatically applied the fix to 95% of published apps". The action line is "Republish Python apps to include the tooling update", which ties the republish to a separate patch of Replit's Python tooling. Apps that "require a manual update rather than an automatic fix" get an email with instructions from Replit ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)).
+
+The two web-firewall rows are the instructive pair. The control held; the work remained. Republishing a Node.js app "also addresses attack paths outside the incoming requests covered by the firewall, including responses your app receives from other services" ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)). The firewall covers incoming requests. Replit says patched Node.js also addresses attack paths through responses from other services.
+
+## Why it works
+
+Replit credits its "existing microVM architecture with a hardened kernel configuration" for the kernel outcome, and describes microVMs as giving "each execution environment its own minimal kernel, strengthening isolation between workloads" ([Replit, 2026-10-28](https://replit.com/blog/architecture-behind-secure-agent-work)). The post names both factors, and this page cannot say how much each contributed. The Socket Firewall acts ahead of install: it "blocked all malicious package install attempts" ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)). The Node.js example shows a control covering incoming requests while other attack paths still need a patched runtime.
+
+Timing matters too. Replit attributes the kernel outcome to prior architecture: "The protection came from an architectural decision made before the disclosures."
+
+The split is contractual, which is what makes any of it readable from outside. Replit states where its ownership ends: "we are responsible for securing the harness, the runtime, and the operating system" ([Replit, 2026-10-28](https://replit.com/blog/architecture-behind-secure-agent-work)). Ask for that sentence before you ask for the architecture, because it tells you which rows can ever come back as None.
+
+## When this backfires
+
+- The flaw lands in the boundary component. A root-privileged guest in Firecracker 1.13.0 through 1.14.3 and 1.15.0 "can modify the `queue_size` register, which was already validated during initialization", permitting "Out-of-bounds writes up to 524,284 bytes beyond the virtio queues" ([GHSA-776c-mpj7-jm3r](https://github.com/firecracker-microvm/firecracker/security/advisories/GHSA-776c-mpj7-jm3r)). Reaching host memory needs more: "additional preconditions must be satisfied that require a higher level of control over the guest environment, such as the use of a custom guest kernel or specific snapshot configurations".
+- The workaround charges you. Reverting to the unaffected transport "may result in reduced I/O throughput and increased latency" ([GHSA-776c-mpj7-jm3r](https://github.com/firecracker-microvm/firecracker/security/advisories/GHSA-776c-mpj7-jm3r)).
+- You cannot verify an absorption claim from outside. Replit asserts the kernel outcome about its own architecture and names the limit: "Isolation alone cannot prevent every vulnerability and protection must continue after software ships" ([Replit, 2026-10-28](https://replit.com/blog/architecture-behind-secure-agent-work)). Treat this reading as a planning input, not a reason to slow your patch cadence.
+- The deployment mode moves the line with no disclosure involved. AWS Bedrock AgentCore will "Automatically patch underlying compute OS kernel with latest version" for a container image, while the same row assigns you "Regularly re-build and re-deploy your container image using the latest base image" ([AWS Bedrock AgentCore docs](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-get-started-code-deploy.html)). For direct-deploy runtimes the same docs say "only language runtime patches will be automatically applied and customers are responsible to bring and managed their code dependencies".
+- You host the agent yourself. Nothing sits on a vendor's side, so every row is yours.
+
+## Example
+
+For the Linux kernel, the control sat beneath the vulnerable code:
+
+```text
+How Replit has taken action: Replit's existing microVM architecture
+prevented exploitation of all these vulnerabilities, by construction. [...]
+What you need to do: No action is required for these specific vulnerabilities.
+```
+
+For Node.js, the control sat beside one route into it:
+
+```text
+How Replit has taken action: We deployed web application firewall (WAF)
+protections against exploitation through incoming web requests and made
+patched Node.js versions available.
+What you need to do: Republish your Node.js apps to use the patched runtime.
+This also addresses attack paths outside the incoming requests covered by
+the firewall, including responses your app receives from other services. [...]
+```
+
+Both report a control that worked ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)). Only one ends your involvement.
+
+## Key Takeaways
+
+- Ask a platform for its per-disclosure action list, not its architecture summary; the action list is the only form of the claim you can check.
+- Keep a republish path ready for each runtime. Controls beside one route and fixes beneath application code can both leave deployment work.
+- Of five October 2026 disclosures on one platform, two needed no customer action, two needed a republish, and for one Replit recommended a republish ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)).
+- Replit emails manual-update instructions for apps outside the automatic fix. Budget for those apps as well.
+- Check when each protection took effect. Replit attributes its kernel outcome to architecture that preceded these disclosures.
+
+## Related
+
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — the adjacent axis, sorting controls by where they are evaluated rather than where they sit on the execution route
+- [Sandboxed Coding Environments: Containers vs MicroVMs vs OS-Level Isolators](sandbox-runtime-comparison.md) — choosing the runtime layer that decides which flaws land beneath your code, and what each costs
+- [Reading an Exploit Roundup Against a Defense Catalog](reading-exploit-roundups-against-defense-catalog.md) — the companion read, using published attack instances to promote defenses from argued to observed
+- [Capability-Pegged Security Re-Scans](capability-pegged-security-rescan.md) — the other trigger for reviewing unchanged code, pegged to scanner capability instead of a disclosure
+- [Renting a Cloud Agent's Execution Sandbox](../patterns/agent-design/rented-execution-sandbox.md) — what the split looks like once you supply the execution environment and inherit its patch clock
 
 ---
 
@@ -148738,7 +149129,7 @@ Agents in open-ended loops consume resources without making progress. They apply
 Five signals warrant a circuit break:
 
 1. Iteration limit reached. The agent has taken N steps without completing the task. N varies by task type. Claude Code sub-agents support a `maxTurns` field ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)) that enforces this at the runtime level.
-2. Repeated failure. The same tool call fails repeatedly with the same error. A 429 three times in a row will continue to 429. A test failing for a logic error will continue to fail. A stalled stream is the same signal at the transport layer: Claude Code's streaming idle watchdog, now on by default, aborts and retries a response stream that produces no events for 5 minutes — a runtime breaker the model cannot override, disabled with `CLAUDE_ENABLE_STREAM_WATCHDOG=0` ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+2. Repeated failure. The same tool call fails repeatedly with the same error. A 429 three times in a row will continue to 429. A test failing for a logic error will continue to fail. A stalled stream is the same signal at the transport layer: Claude Code's streaming idle watchdog, now on by default, aborts and retries a response stream that produces no events for 5 minutes — a runtime breaker the model cannot override, disabled with `CLAUDE_ENABLE_STREAM_WATCHDOG=0` ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The client's own retry path can stall a turn too. Claude Code release 2.1.311 fixed the client retrying requests the API marked not to retry ([Claude Code changelog 2.1.311](https://code.claude.com/docs/en/changelog#2-1-311)). Those retries could hold a turn for minutes, or indefinitely in unattended retry mode (`CLAUDE_CODE_RETRY_WATCHDOG`).
 3. Repetition detected. The agent is doing what it already did — fetching the same URL, reading the same file, attempting the same fix. Repetition without new information is a stuck loop.
 4. Context budget exceeded. The context window is approaching the ["dumb zone"](../context-engineering/context-window-dumb-zone.md) where output quality degrades. Chroma's [Context Rot](https://research.trychroma.com/context-rot) study tested 18 frontier models including GPT-4.1, Claude Opus 4, and Gemini 2.5. It found every model degrades non-uniformly as input grows, with onset depending on task similarity and distractor density. Trip the breaker when recall or coherence drops on your task, not at a fixed token count.
 5. Cost threshold exceeded. The task has consumed more than the expected budget. Cost overrun often correlates with loops.
@@ -148843,7 +149234,6 @@ Instrument first. If your agents already fail gracefully — returning partial r
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md)
 - [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../workflows/human-in-the-loop.md)
 - [Idempotent Agent Operations: Safe to Retry](../patterns/agent-design/idempotent-agent-operations.md)
-- [Context Window Management: The Dumb Zone](../context-engineering/context-window-dumb-zone.md)
 - [Agent Debugging: Diagnosing Bad Agent Output](agent-debugging.md)
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
 
@@ -176538,6 +176928,7 @@ Source: https://agentpatterns.ai/tools/copilot/
 - [GitHub Copilot App Slash Commands and What They Change](slash-commands-copilot-app.md) — A fixed, GitHub-provided command set mapped by the session state each one changes; your own named operations ship as a custom agent or agent skill, not a prompt file
 - [Unified Sessions View and CLI Agent in JetBrains](unified-sessions-view.md) — Chat-window registry aggregating CLI agent, agent mode, custom agent, and sub-agent sessions with worktree or workspace isolation
 - [Agent Host Review Comments: Server-Side Feedback Transport](agent-host-review-comments.md) — Server-side review comment storage via three agent tools, enabling async resolution after client disconnect
+- [Shared Copilot Automations: Team Ownership Outside Git](shared-copilot-automations.md) — The shared type moves an agent procedure from one developer's account to the repository and leaves it uncommitted, so a change to it is gated by write access and recorded in change history rather than a pull request
 
 ---
 
@@ -179809,6 +180200,92 @@ A developer renames a TypeScript interface property from `userId` to `accountId`
 - [Agent Backpressure](../../patterns/agent-design/agent-backpressure.md)
 - [Codebase Readiness](../../patterns/agent-design/codebase-readiness.md)
 - [Convenience Loops and AI-Friendly Code](../../human/convenience-loops-ai-friendly-code.md)
+
+---
+
+### Shared Copilot Automations: Team Ownership Outside Git
+Source: https://agentpatterns.ai/tools/copilot/shared-copilot-automations/
+
+# Shared Copilot Automations: Team Ownership Outside Git
+
+> A shared Copilot automation belongs to the repository. Anyone with write access can edit it outside Git and pull request review.
+
+Reach for a shared automation when the procedure's correctness does not depend on repository internals. GitHub announced the shared type on 2026-10-28, beside the personal type that came before it. The type is fixed: "You can't change an automation's type after you create it" ([GitHub Changelog](https://github.blog/changelog/2026-10-28-build-shared-workflows-for-your-team-with-copilot-automations)). The type sets ownership and leaves storage alone: "Automations are stored separately from your repository's contents. They are not committed to Git, so they are not versioned alongside your code or managed through pull requests" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automations)).
+
+## What the shared type changes
+
+Four properties differ by type (same docs page):
+
+| | Personal | Shared |
+| --- | --- | --- |
+| Who can see the automation | Only you | Everyone with read access to the repository |
+| Who can edit the automation | Only you | Everyone with write access to the repository |
+| Who is billed for AI credits | You | The organization or user that owns the repository |
+| Identity used for actions on GitHub | Your identity | Copilot's identity |
+
+Availability conditions sit in front of all of it. GitHub lists three prerequisites (same docs page). The repository must be private or internal. It must enable Copilot cloud agent. The organization must allow cloud agent and automations. Automations are available on the Pro, Pro+, Max, Business, and Enterprise plans. An organization-owned repository also needs the "Allow use of Copilot cloud agent billed to the organization" policy before a shared automation runs.
+
+## What sees a change to it
+
+Write access is the whole gate. "Everyone with read access to the repository can see a shared automation, and anyone with write access can edit it" ([GitHub Changelog](https://github.blog/changelog/2026-10-28-build-shared-workflows-for-your-team-with-copilot-automations)). Nothing stands between that edit and the next run, because automations are "not versioned alongside your code or managed through pull requests" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automations)). A change log is the substitute for a diff: "Change history lets your team see how the tools, triggers, and prompt have evolved" (same changelog).
+
+A second path changes the artifact with nobody authoring the edit. "Automations can propose improvements to their own tools, triggers, and prompts, and to those of other automations" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automations)). You get a notification, then apply or dismiss.
+
+Part of the automation's behavior is still reviewed, which makes the split easy to miss. Automations inherit the Copilot cloud agent configuration of the repository they are scoped to: custom instructions, agent skills, firewall rules, and secrets and variables (same docs page). Pull requests in the repository can review the instruction and skill files. Secrets and variables use separate settings. The prompt that leans on them gets no such review.
+
+## Choosing among the three Copilot surfaces
+
+GitHub routes this decision inside the automations reference, which sends you to Agentic Workflows "To learn how to store your automation as code, review it through pull requests, or run it with a different coding agent" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automations)).
+
+| Surface | Where the artifact lives | What starts a run |
+| --- | --- | --- |
+| [Dynamic workflow](copilot-dynamic-workflows.md) | A Copilot extension directory, shared with a repository at `.github/extensions/` | You, in a session or through `copilot workflow run` |
+| Shared automation | Repository-scoped storage outside Git | Its own triggers, or the API |
+| [Agentic workflow](github-agentic-workflows.md) | Two files committed to the repository | Repository events, through GitHub Actions |
+
+Agentic Workflows take the committed route explicitly: "Commit and push both files to the default branch of your repository" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-github-agentic-workflows)).
+
+None of the three is agent-selected. "An automation runs when one of its triggers fires." The trigger list includes a schedule, a new issue, and an opened or synchronized pull request. Event triggers take optional search-query and changed-files filters (same docs page). A wrong automation therefore costs what its trigger rate and its tool grant allow, not what a model decides to invoke. [Trigger-level agent intake gating](../../patterns/agent-design/trigger-level-agent-intake-gating.md) covers both of those bounds in full.
+
+## Why it works
+
+GitHub gives shared automations Copilot's actor identity, and both continuity and approval policy hang off that. GitHub states the continuity half: "Because a shared automation belongs to the repository rather than to the person who created it, it keeps working if that person leaves the team or loses access to the repository" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automations)). The approval half follows from acting as Copilot instead of as a person. Because the actor is distinct from every human reviewer, the platform can attach a rule the personal type cannot carry: "If your repository requires at least one pull request approval, an additional approval is required by default for pull requests created by a shared automation" (same page). Administrators "can disable this extra requirement in rulesets, but not in branch protection rules" (same page).
+
+AWS's Agentic AI Lens names the layer this satisfies and the part it leaves out. Behavioral configuration needs "a versioned configuration store with strict access controls and change notifications", and separately "Production changes should require documented justification and sign-off" ([AWS Well-Architected](https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops02-bp02.html)). Change history, write-access gating, and proposal notifications give you the store. The sign-off is missing.
+
+## When this backfires
+
+- The prompt names repository internals. A script path, a label taxonomy, or a directory layout in the prompt sits in no diff. A rename pull request does not update the automation's prompt. Reviewers can miss the dependency, and the automation keeps firing against a stale reference.
+- Write access is broad and `.github/` is branch-protected. Moving a procedure out of a workflow file drops the gate on changing it from an approved pull request to plain write access.
+- You need the procedure on a public repository. Automations are unavailable there. For another coding agent, or a configuration reviewed through pull requests, GitHub points to Agentic Workflows.
+- Compliance requires naming the actor. Shared automation actions are attributed to Copilot, so the record no longer says whose intent drove them.
+- The automation grants MCP tools. GitHub tools can act only in the single repository the automation is scoped to, while tools from MCP servers "can access whatever the server's configuration and credentials allow, which may include other repositories and external systems" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automations)). A write-access holder editing the automation can therefore reach systems beyond the repository.
+- Self-improving automation groups are in play. The prompt, the tools, and the triggers can all change through an applied proposal, which is a decision on a notification rather than a review.
+
+AWS names the console-managed case as an anti-pattern for this reason: "If approved baselines live in a wiki, a shell history, or in the AWS console, then drift detection has nothing to compare against" ([AWS Well-Architected](https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops02-bp02.html)).
+
+## Example
+
+Take GitHub's first documented use case: "Attempt to reproduce a reported bug when an issue is opened" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automations)). The decision point is what the prompt has to name.
+
+A prompt that works from the issue text alone, and grants only the tools needed to comment back, has no dependency on the repository's layout. Nothing a pull request changes can break it, so the review it would get in a committed file buys nothing. The shared type gives you the continuity and visibility the personal type does not.
+
+Change one thing about it and the answer flips. A prompt that names the test command, the fixture directory, or the integration-test label is reading the repository. That repository changes through pull requests the automation never sees. Put that one in an Agentic Workflow file so the rename lands in the same diff as the procedure it breaks.
+
+## Key Takeaways
+
+- Decide the ownership question before you click create, since nothing afterwards can change the type.
+- Keep a procedure whose breakage a code review would have caught in a committed file instead.
+- Audit the tool grant rather than the prompt when you want to know what a shared automation can do to you.
+- Add a repository's shared automations to the checklist you work through when renaming a script, retiring a label, or moving a directory.
+
+## Related
+
+- [GitHub Copilot Dynamic Workflows: Orchestration in Code](copilot-dynamic-workflows.md) — the runtime-authored surface, where the steps live in extension code you start yourself
+- [GitHub Agentic Workflows](github-agentic-workflows.md) — the committed surface, compiled to GitHub Actions and reviewed as code
+- [Trigger-Level Agent Intake Gating](../../patterns/agent-design/trigger-level-agent-intake-gating.md) — how automation triggers and tool grants bound what reaches the agent
+- [Comment-Triggered Agent Dispatch](../../workflows/comment-triggered-agent-dispatch.md) — the cost of a repeatable trigger behind a visible phrase
+- [RAMP: Committed AI Configuration and the Quality Cost](../../instructions/committed-ai-configuration-quality-cost.md) — what the measured evidence on repository AI configuration grades, and why it counts only committed artifacts
 
 ---
 
@@ -199810,6 +200287,7 @@ No one is present to approve a tool call. MCP toolsets default to `always_ask`, 
 - [Cloud-Scheduled Routines vs Local Session Scheduling](../tools/claude/cloud-scheduled-routines.md)
 - [Continuous AI](continuous-ai.md)
 - [Bounding an Unattended Run's Wait on a Usage-Limit Reset](../patterns/agent-design/usage-limit-wait-ceiling.md) — the quota stall this contract has to report as a distinct state
+- [Choosing a Scheduled Agent's Firing Interval](../patterns/agent-design/scheduled-agent-firing-interval.md) — how often the run that owes this message fires, and why the reader's absorption rate caps it
 
 ---
 

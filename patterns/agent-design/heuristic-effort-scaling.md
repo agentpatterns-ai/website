@@ -11,7 +11,7 @@ tags:
 aliases:
   - effort scaling
   - effort-based resource allocation
-last_reviewed: 2026-10-27
+last_reviewed: 2026-10-30
 maturity: adopted
 ---
 
@@ -46,6 +46,8 @@ Specific query instructions push agents into narrow searches — the over-low [s
 Before committing to a tool strategy, a lead agent can use extended thinking to assess complexity, select tool paths, set subagent count, and plan division of labor. [Anthropic's system](https://www.anthropic.com/engineering/multi-agent-research-system) uses this as a planning scratchpad before spawning subagents. Subagents use interleaved thinking after each tool result to decide whether to continue, pivot, or escalate.
 
 The skills documentation says to include `ultrathink` anywhere in skill content to request deeper reasoning ([skills documentation](https://code.claude.com/docs/en/skills#advanced-patterns)). The automatic effort increase has a narrower scope: the interactive terminal. Release 2.1.311 raises that turn to `xhigh` on Opus 5.5, Sonnet 5.5, Haiku 5.5, and Fable 5.1 through Anthropic's API. Typed mid-turn, it raises the rest of that turn. The rainbow indicator appears only where the keyword can raise effort; quoted words and file paths do not qualify ([changelog 2.1.311](https://code.claude.com/docs/en/changelog#2-1-311)).
+
+More thinking tokens do not guarantee a measurable gain for Qwen3-32B. Over five runs, turning reasoning on raises its mean pass@1 on HumanEval Pro from 71.1% to 76.5% ([arXiv:2610.36952v1](https://arxiv.org/abs/2610.36952v1)). Its mean tests pass on BugsInPy rises from 3.5% to 7.9%. On MBPP Pro the same switch moves mean pass@1 from 68.1% to 69.5%, which the paper reports as not statistically significant. Qwen3-32B spends a median of over 2,000 thinking tokens per task to get there. In an offline test, the authors cut Qwen3-32B traces short and asked the model, with reasoning off, to produce a solution from what remained. Keeping the first half of a trace caused no statistically significant drop in correctness. That test does not show live token savings. The paper covers five model settings, and these figures are the Qwen3-32B ones alone.
 
 ## Parallelization rules
 

@@ -12,7 +12,7 @@ tags:
 aliases:
   - DevBench evaluation
   - code generation benchmark selection
-last_reviewed: 2026-08-03
+last_reviewed: 2026-10-30
 maturity: established
 ---
 
@@ -35,6 +35,8 @@ Leading models (GPT-4o, Claude 4 Sonnet) outperform smaller alternatives on aggr
 ### Task type matters more than overall score
 
 DevBench evaluates six task categories derived from what developers actually do: API usage, code purpose understanding, partial completions, and others. Models show uneven profiles across these categories. An overall accuracy number hides whether the model handles your dominant task type well.
+
+Task labels are coarser than they look. An arXiv study scores each benchmark task on three axes it calls SNC: how the reference solution is distributed, how much it adds against what it removes, and the dependencies, history, and complexity of the code it touches. Across 2,487 tasks from five public benchmarks and 14,922 runs of six agent configurations, "Every pair of benchmarks differs on at least two SNC axes, including benchmarks with the same task label" ([arXiv:2609.01271v2](https://arxiv.org/abs/2609.01271v2)). The same paper holds that "practitioners should select evaluation tasks based on their change characteristics" ([arXiv:2609.01271v2](https://arxiv.org/abs/2609.01271v2)). Inspect a candidate suite's actual changes before you trust its category name.
 
 ### Context handling is the differentiator
 

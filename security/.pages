@@ -205,6 +205,7 @@ nav:
       - defense-in-depth-agent-safety.md
       - harness-distributed-security-controls.md
       - enforced-versus-advisory-controls.md
+      - control-position-remediation-cost.md
       - workflow-execution-protections.md
       - enterprise-agent-hardening.md
       - inline-lifecycle-safety-harness.md

@@ -95,3 +95,4 @@ This is the replacement branch: the verdict stopped the step rather than advisin
 - [Watcher Side Agents: Give the Second Agent a Trigger It Did Not Pick](watcher-side-agents.md) — the operator-addressed version, where the trigger decides whether the note is worth reading
 - [Loop Detection for AI Agents](../../observability/loop-detection.md) — deterministic repetition detection, the cheapest trigger in this family
 - [Edit-Request Steering Trigger: One Plan Before the First Source Edit](edit-request-steering-trigger.md) — drops the monitor entirely and fires once on an action the agent already takes
+- [Choosing a Scheduled Agent's Firing Interval](scheduled-agent-firing-interval.md) — the same adaptive-interval question between runs rather than within one, where the reader's absorption rate supplies the bound

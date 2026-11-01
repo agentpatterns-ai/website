@@ -8,7 +8,7 @@ tags:
   - agent-design
   - tool-agnostic
   - observability
-last_reviewed: 2026-07-01
+last_reviewed: 2026-10-30
 maturity: adopted
 ---
 
@@ -29,7 +29,7 @@ Agents in open-ended loops consume resources without making progress. They apply
 Five signals warrant a circuit break:
 
 1. Iteration limit reached. The agent has taken N steps without completing the task. N varies by task type. Claude Code sub-agents support a `maxTurns` field ([Claude Code sub-agents docs](https://code.claude.com/docs/en/sub-agents)) that enforces this at the runtime level.
-2. Repeated failure. The same tool call fails repeatedly with the same error. A 429 three times in a row will continue to 429. A test failing for a logic error will continue to fail. A stalled stream is the same signal at the transport layer: Claude Code's streaming idle watchdog, now on by default, aborts and retries a response stream that produces no events for 5 minutes — a runtime breaker the model cannot override, disabled with `CLAUDE_ENABLE_STREAM_WATCHDOG=0` ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+2. Repeated failure. The same tool call fails repeatedly with the same error. A 429 three times in a row will continue to 429. A test failing for a logic error will continue to fail. A stalled stream is the same signal at the transport layer: Claude Code's streaming idle watchdog, now on by default, aborts and retries a response stream that produces no events for 5 minutes — a runtime breaker the model cannot override, disabled with `CLAUDE_ENABLE_STREAM_WATCHDOG=0` ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). The client's own retry path can stall a turn too. Claude Code release 2.1.311 fixed the client retrying requests the API marked not to retry ([Claude Code changelog 2.1.311](https://code.claude.com/docs/en/changelog#2-1-311)). Those retries could hold a turn for minutes, or indefinitely in unattended retry mode (`CLAUDE_CODE_RETRY_WATCHDOG`).
 3. Repetition detected. The agent is doing what it already did — fetching the same URL, reading the same file, attempting the same fix. Repetition without new information is a stuck loop.
 4. Context budget exceeded. The context window is approaching the ["dumb zone"](../context-engineering/context-window-dumb-zone.md) where output quality degrades. Chroma's [Context Rot](https://research.trychroma.com/context-rot) study tested 18 frontier models including GPT-4.1, Claude Opus 4, and Gemini 2.5. It found every model degrades non-uniformly as input grows, with onset depending on task similarity and distractor density. Trip the breaker when recall or coherence drops on your task, not at a fixed token count.
 5. Cost threshold exceeded. The task has consumed more than the expected budget. Cost overrun often correlates with loops.
@@ -134,6 +134,5 @@ Instrument first. If your agents already fail gracefully — returning partial r
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md)
 - [Human-in-the-Loop Placement: Where to Gate Agent Pipelines](../workflows/human-in-the-loop.md)
 - [Idempotent Agent Operations: Safe to Retry](../patterns/agent-design/idempotent-agent-operations.md)
-- [Context Window Management: The Dumb Zone](../context-engineering/context-window-dumb-zone.md)
 - [Agent Debugging: Diagnosing Bad Agent Output](agent-debugging.md)
 - [Agent Observability in Practice: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
