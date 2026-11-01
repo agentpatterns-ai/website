@@ -111,3 +111,4 @@ For any tool whose output can grow past a fixed limit:
 - [Machine-Readable Error Responses (RFC 9457)](rfc9457-machine-readable-errors.md)
 - [Semantic Tool Output](semantic-tool-output.md)
 - [Auditing Agent Tool Chains for Silent Partial Success](../verification/tool-chain-silent-failure-audit.md) — how to find the places your wrapper already truncates without saying so
+- [Overwriting a File After a Partial Read](../patterns/anti-patterns/partial-read-overwrite.md) — what the write side does with a PARTIAL result the agent then feeds back

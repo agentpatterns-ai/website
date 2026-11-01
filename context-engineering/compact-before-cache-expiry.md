@@ -1,7 +1,7 @@
 ---
 title: "Compact Before Cache Expiry, Not at Context Pressure"
 term: "Idle Compaction"
-description: "Claude Code compacts an idle 200K+ token conversation before its one-hour prompt cache expires. Learn the five firing conditions, the scope limits, and when to turn it off."
+description: "Claude Code compacts an idle 200K+ token conversation before its one-hour prompt cache expires. Learn the six firing conditions, the scope limits, and when to turn it off."
 aliases:
   - idle compaction
   - compact before cache expiry
@@ -10,7 +10,7 @@ tags:
   - context-engineering
   - cost-performance
   - claude
-last_reviewed: 2026-10-17
+last_reviewed: 2026-10-31
 maturity: emerging
 ---
 
@@ -18,17 +18,20 @@ maturity: emerging
 
 > Claude Code compacts an idle conversation just before its prompt cache expires, while the prefix is still cheap to read.
 
-Idle compaction compacts an idle conversation shortly before its prompt cache expires, so the next message reprocesses a summary instead of the full history. Claude Code 2.1.299 describes it this way: "a 200K+ token conversation left idle for about 54 minutes is compacted before its one-hour prompt cache expires, so your next message doesn't reprocess it all" ([changelog](https://code.claude.com/docs/en/changelog#2-1-299)). The saving depends on five conditions, and it trades detail for cost.
+Idle compaction compacts an idle conversation shortly before its prompt cache expires, so the next message reprocesses a summary instead of the full history. Claude Code 2.1.299 describes it this way: "a 200K+ token conversation left idle for about 54 minutes is compacted before its one-hour prompt cache expires, so your next message doesn't reprocess it all" ([changelog](https://code.claude.com/docs/en/changelog#2-1-299)). The saving depends on six conditions, and it trades detail for cost.
 
 ## When it fires
 
-Idle compaction is on by default only when all five conditions hold ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)):
+Idle compaction is on by default only when all six conditions hold ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)):
 
-- Session: you are in an interactive terminal session.
+- Session: you are in an interactive terminal session, in the VS Code extension's chat panel, or in the desktop app's Code tab when the session runs on your machine or over SSH.
+- Auto-compaction: `autoCompactEnabled` is on.
 - Prompt cache: the conversation is on the one-hour prompt cache TTL.
 - Feature flags: Claude Code can fetch feature flags from Anthropic.
 - Size: the context has reached the token threshold, 200,000 by default.
 - Idle time: about 54 minutes have passed since the last request, and your computer is awake.
+
+Claude Code 2.1.314 (October 30, 2026) widened two of these. It "added idle compaction to VS Code and Claude Desktop's Code tab", and it "changed idle compaction to also run for subscribers with telemetry turned off, and on Bedrock, Vertex, Foundry and LLM gateways once the one-hour prompt cache is on" ([changelog](https://code.claude.com/docs/en/changelog#2-1-314)). The settings reference still lists the feature-flag condition, and neither source says how the telemetry-off and cloud-provider cases meet it.
 
 Two of these limit the scope more than they first appear.
 
@@ -47,6 +50,7 @@ Worked example, from the [Opus 5.5 prices](https://platform.claude.com/docs/en/b
 - 2.1.290: the `idleCompaction` setting and the threshold variable arrive. On earlier versions, turn off `autoCompactEnabled` to stop it.
 - 2.1.299: the changelog entry describes the feature (dated October 14, 2026).
 - 2.1.302: the notice shown after an idle compaction now says how to turn the feature off ([changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
+- 2.1.314: the feature reaches VS Code and the desktop Code tab, and runs for subscribers with telemetry off and on Bedrock, Vertex, Foundry, and LLM gateways ([changelog](https://code.claude.com/docs/en/changelog#2-1-314)).
 
 `"idleCompaction": false` in settings.json turns it off, and `DISABLE_AUTO_COMPACT` turns it off along with auto-compaction ([settings reference](https://code.claude.com/docs/en/settings-reference#idlecompaction)). From 2.1.302, an `Idle compaction` row in `/config` turns it off or back on ([changelog](https://code.claude.com/docs/en/changelog#2-1-302)).
 
@@ -63,7 +67,7 @@ Anthropic says compaction is lossy: "whatever the summary leaves out is no longe
 
 ## Key Takeaways
 
-- Check the five conditions before you expect idle compaction: terminal session, one-hour TTL, feature flags, token threshold, 54 idle minutes with the computer awake.
+- Check the six conditions before you expect idle compaction: a supported session (terminal, VS Code chat panel, or desktop Code tab), auto-compaction on, one-hour TTL, feature flags, token threshold, 54 idle minutes with the computer awake.
 - API-key and cloud-provider users never see it until they set `promptCacheTtl` to `1h`.
 - Keep it for sessions you resume to start new work. Set `"idleCompaction": false` for sessions you resume in full detail.
 - The 500K-token example saves about $3.90 minus the summary cost, and only when you return after expiry.

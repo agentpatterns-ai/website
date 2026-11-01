@@ -99,3 +99,4 @@ The dates and counts stand in for your own incident record. What transfers is th
 - [Deletion Avoidance](deletion-avoidance.md) — the same asymmetry one level down, where agents guard code instead of removing it
 - [Reducing System-Prompt Token Bloat](../../context-engineering/system-prompt-bloat-reduction.md) — trimming the shipped prefix, a different object from the instruction file
 - [The Error-Class Governance Loop for Instruction Libraries](../../workflows/instruction-library-governance-loop.md) — the standing cycle that puts the recurrence count to work and retires the rule it justifies
+- [Overwriting a File After a Partial Read](partial-read-overwrite.md) — the other way an instruction file loses content, where a whole-file write deletes the part the agent never read

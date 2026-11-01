@@ -12,7 +12,7 @@ tags:
 aliases:
   - recurring review comments to rules
   - promote review feedback to harness checks
-last_reviewed: 2026-06-13
+last_reviewed: 2026-10-30
 maturity: established
 ---
 
@@ -23,6 +23,8 @@ maturity: established
 ## When a comment becomes a signal
 
 A recurring review comment is evidence of an unencoded invariant. The rule lives in one reviewer's head, and every PR pays the cost of re-deriving it. The promotion threshold (same comment across three or more PRs in a window) is load-bearing: one or two occurrences is a hypothesis, three or more is a pattern. The walkinglabs harness engineering curriculum encodes this loop as a first-class practice ([walkinglabs — review-feedback-to-rule](https://github.com/walkinglabs/learn-harness-engineering/blob/main/docs/en/lectures/lecture-10-why-end-to-end-testing-changes-results/code/review-feedback-to-rule.md)).
+
+Replit puts a person in front of the same promotion. Its workspace memory proposes a skill update, and a reviewer approves it before that update takes effect ([Replit, 27 October 2026](https://replit.com/blog/anyone-can-bring-ideas-to-company-codebase)). The reported gains come from Replit's own internal use of the feature. "Internally at Replit", it helped "reduce token usage by 51%". It also "cut the time agents take to complete a common data task from 16 minutes to 1 minute, without reducing output quality". The post names the data task only as "common" and does not say how many runs the time covers. It reports no comparison across models, languages or task types. The feature is in early access, so read both numbers as one vendor's internal result rather than a general one.
 
 ## The loop
 

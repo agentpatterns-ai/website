@@ -156,6 +156,7 @@ nav:
       - provider-hosted-subagent-delegation.md
       - verdict-driven-inspection-cadence.md
       - edit-request-steering-trigger.md
+      - scheduled-agent-firing-interval.md
   - "Reliability":
       - administrative-effort-ceilings.md
       - agent-circuit-breaker.md
@@ -304,6 +305,7 @@ nav:
       - observability-driven-harness-evolution.md
       - recurring-control-in-harness-code.md
       - per-model-harness-tuning.md
+      - signed-model-catalog-distribution.md
       - persistent-connection-agent-transport.md
       - quality-score-rubric.md
       - recursive-agent-harnesses.md

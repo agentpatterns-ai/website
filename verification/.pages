@@ -14,6 +14,7 @@ nav:
       - overeager-behavior-elicitation-scope-trap-fragments.md
       - grade-agent-outcomes.md
       - pass-at-k-metrics.md
+      - whole-build-pass-rates.md
       - comparative-judging-config-ranking.md
       - pass-at-k-t-agentic-rl-eval.md
       - attempt-budget-sweep-harness-gains.md
