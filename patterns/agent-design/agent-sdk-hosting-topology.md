@@ -169,4 +169,5 @@ In TypeScript, each `query()` call still carries `cwd: tenantDir` and `settingSo
 - [Remote Agent Host Sessions over SSH and Dev Tunnels](remote-agent-host-sessions.md) — the transport-shape sibling: how the client reaches a lifecycle-decoupled agent host
 - [Session Harness Sandbox Separation for Long-Running Agents](session-harness-sandbox-separation.md) — the three-primitive theory that this deployment topology projects onto pod boundaries
 - [Managed vs Self-Hosted Agent Harness](managed-vs-self-hosted-harness.md) — the decision frame for whether to self-host at all
+- [Container Operational Contracts for Durable Agent State](container-operational-contracts-agent-state.md) — a study of 433 LangGraph deployments that tests the restart, replacement, and drain obligations this page describes
 - [Cloud-Agent Session Bootstrap](cloud-agent-session-bootstrap.md) — the install/start lifecycle that provisions the machine-state layer these patterns run on

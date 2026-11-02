@@ -102,6 +102,7 @@ nav:
       - schema-guided-graph-retrieval.md
       - fact-supersession-memory.md
       - claim-scoped-invalidation.md
+      - operational-context-validity.md
       - memory-store-writer-ceiling.md
       - budgeted-constraint-verification.md
       - cross-reference-dereference-hop.md

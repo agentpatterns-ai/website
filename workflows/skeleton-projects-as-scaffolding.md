@@ -5,6 +5,7 @@ term: "Skeleton Projects"
 tags:
   - workflows
   - agent-design
+  - testing-verification
   - tool-agnostic
 aliases:
   - repository templates
@@ -28,6 +29,21 @@ One option is to [lay the architectural foundation by hand](architectural-founda
 The distinction matters. [Hand-built foundations](architectural-foundation-first.md) encode your team's specific patterns. Skeleton projects encode community consensus for a language or framework. Use skeleton projects when entering unfamiliar territory. Use hand-built foundations when your team's conventions differ from community defaults.
 
 Why it works: agents generate code by predicting likely continuations given the [context in their window](../context-engineering/context-priming.md). When the context already holds a coherent project layout, dependency declarations, and test patterns, the agent's predictions continue those patterns. The structural prior constrains the output space. Without that prior, the agent must decide every structural question on its own (where to put models, how to organize tests, what CI tooling to use). Each decision is then an independent sampling event with no grounding in established practice. Research on guided project generation finds that supplying LLMs with a structured solution plan and code template improves the coherence of generated multi-file projects compared with unguided open-domain generation ([Xie et al., 2025 — Empowering AI to Generate Better AI Code](https://arxiv.org/abs/2504.15080)). Skeleton projects collapse those decisions by providing the ground truth upfront.
+
+## Skeleton coding as a structural specification
+
+Skeleton Coding specifies types, module boundaries, and function signatures while leaving implementation bodies to the agent. Tests then distinguish implementations within that structure ([Golatkar et al., section 2](https://arxiv.org/html/2610.38214v1#S2)).
+
+Across four models and three benchmarks, the best skeleton specifications reduce mean test error from 40.7% to 21.0%. That is a 48.4% relative error reduction against the best end-to-end behavioral specifications. The experiments use reference-derived specifications ([section 4.1](https://arxiv.org/html/2610.38214v1#S4.SS1), [Appendix D](https://arxiv.org/html/2610.38214v1#A4)). They do not establish this improvement for community templates.
+
+Practical implications for adapting a template:
+
+- Specify required internal interfaces before implementation; signatures constrain the agent's structural choices ([section 2](https://arxiv.org/html/2610.38214v1#S2)).
+- Specify local contracts and test named internal interfaces to inspect intermediate state ([section 2.2](https://arxiv.org/html/2610.38214v1#S2.SS2)).
+- Retain integration tests where individually correct components can compose incorrectly ([section 2.4](https://arxiv.org/html/2610.38214v1#S2.SS4)).
+- Keep contracts concise; extra correct detail lowers performance in the paper's experiments, especially for smaller models ([section 4.1](https://arxiv.org/html/2610.38214v1#S4.SS1)).
+
+A template supplies a starting layout. Skeleton Coding adds explicit structural requirements; check those alongside behavior when adapting it.
 
 ## The workflow
 
@@ -140,6 +156,7 @@ Use a hand-built foundation instead when your team's conventions are well-establ
 
 ## Key Takeaways
 
+- Separate template selection from structural requirements; define interfaces and local contracts before delegating implementation
 - Source existing repository templates rather than prompting agents to build structure from scratch in unfamiliar domains
 - Deploy multiple research agents in parallel to find candidates across GitHub, Reddit, and community sources
 - Evaluate templates against production use, documentation, maintenance activity, modularity, and technology alignment

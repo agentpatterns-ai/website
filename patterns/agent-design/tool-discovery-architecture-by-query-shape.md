@@ -94,3 +94,4 @@ These examples show opposite retrieval outcomes. The paper does not report their
 - [Lexical-First Retrieval for Agentic Search](../../tool-engineering/lexical-first-retrieval-for-agentic-search.md) — the scorer choice underneath either architecture, and when BM25 is enough.
 - [Natural Language Tool Selection (NLT)](natural-language-tool-selection.md) — what to do once candidate tools are in context, which is the step after discovery.
 - [Retrieval Tools That Refuse](retrieval-tool-refusal.md) — making a retrieval miss visible, which is the control the refusal-rate finding above argues for.
+- [Pooled Tool Usage Can Hide Tools Without Past Examples](../../tool-engineering/pooled-tool-usage-retrieval.md) — how shared usage changes retrieval for tools without examples

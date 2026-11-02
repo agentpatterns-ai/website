@@ -79,3 +79,4 @@ The wider gap between what an agent says and what it does is documented elsewher
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](action-audit-divergence-taxonomy.md) — divergence between actions and the audit record, where this page covers divergence between actions and the user-facing reply
 - [Behavioral Firewall for Tool-Call Trajectories](behavioral-firewall-tool-call-trajectories.md) — a trajectory-level control that rejects the off-task call before the summary step is reached
 - [Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — putting the action in front of the user regardless of what the final response says
+- [Memory-File Influence Disclosure](memory-file-influence-disclosure.md) — whether the final message names a malicious memory file that influenced the run

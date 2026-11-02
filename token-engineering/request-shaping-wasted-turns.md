@@ -91,3 +91,4 @@ Note what the second version does not do. It does not restate the project's test
 - [Token-Cost Profiling and Reduction for Always-On Agentic Workflows](token-cost-profiling-always-on-workflows.md) — measure where spend actually goes before tuning phrasing
 - [Probe-Run Calibration for Predicting Agent Token Spend](probe-run-cost-calibration.md) — how much your own task's cost moves with phrasing, measured rather than assumed
 - [Deliberation-Inducing Cues That Multiply Reasoning Cost](../patterns/anti-patterns/deliberation-inducing-prompt-cues.md) — the phrasings that inflate reasoning tokens rather than retrieval turns
+- [Underspecified Research Queries and Prior Substitution](../patterns/agent-design/underspecified-research-queries.md) — the answer-quality side of the same lever, measured on long-horizon research runs

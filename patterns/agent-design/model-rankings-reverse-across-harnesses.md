@@ -75,3 +75,4 @@ Nothing about Kimi's capability separates the two runs, which is why a model-onl
 - [Model-Set Parity: Reading Harness Efficiency Claims](model-set-parity-harness-claims.md) — the matching rule for reading someone else's published cross-harness figure.
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — how to attribute a measured advantage to a single harness component.
 - [Per-Stage Model Assignment](per-stage-model-assignment.md) — rankings also reorder between pipeline stages at a fixed harness, so the generator and the repairer are separate measurements.
+- [Reading a Harness Comparison Run at One Fixed Model](../../verification/fixed-model-harness-comparison.md) — the reverse cut, where the model is pinned and the harness ranking is the thing that needs reading.

@@ -110,3 +110,4 @@ Those two still apply from project scope, "because they turn something off" ([se
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — why a loader check holds where a rules file loses to the task
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — the startup half of the same question, when policy has not yet arrived
 - [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md) — varying agent config inside an admin-owned ceiling rather than below it
+- [One-Way Settings: Keys With a Fixed Write Direction](one-way-settings.md) — fixing the direction a write may move a key, from any writer that reaches it

@@ -64,6 +64,7 @@ The isolated workspace is the reason. Each session "runs in its own isolated wor
 
 ## Related
 
+- [Copilot Working Set Review Coverage](working-set-review-coverage.md) — the VS Code editor working set excludes terminal edits; reconcile it with Git before approval
 - [GitHub Copilot Dedicated App as Agent-First Surface](copilot-dedicated-app.md) — the surface-choice argument these panels sit inside, and the session-as-unit claim they make concrete
 - [GitHub Copilot App Slash Commands and What They Change](slash-commands-copilot-app.md) — the prompt-box surface beside these panels, mapped by the session state each command changes
 - [Canvas as Control Surface: Steering a Long-Running Agent Mid-Run](../../patterns/agent-design/canvas-as-control-surface.md) — the bidirectional-surface pattern the terminal and browser panels instantiate

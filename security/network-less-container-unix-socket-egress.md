@@ -73,6 +73,7 @@ A `--network none` container enters a fresh network namespace with only loopback
 
 ## Related
 
+- [Signed Host-Mediated Exits for Isolated Coding Agents](signed-host-mediated-agent-exits.md)
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md)

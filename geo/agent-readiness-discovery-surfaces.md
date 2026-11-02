@@ -76,6 +76,7 @@ The agentpatterns.ai site ran an [isitagentready.com](https://isitagentready.com
 ## Related
 
 - [AI Crawler Policy](ai-crawler-policy.md)
+- [AI Training Preference Signals in robots.txt](ai-training-preference-signals.md)
 - [llms.txt: Spec, Adoption, and Honest Limitations](llms-txt.md)
 - [Schema and Structured Data](schema-and-structured-data.md)
 - [How AI Engines Cite](how-ai-engines-cite.md)

@@ -94,3 +94,4 @@ The second path is the one to instrument. Count the keystrokes from a status car
 - [Tiled Agent Layout: Supervising Parallel Agents Through Dedicated Panes](../workflows/tiled-agent-layout.md) — the screen-layout version of the same limit, from practitioner accounts rather than a controlled study
 - [Judgment Relocation: Where Human Decisions Land in an Agent Factory](judgment-relocation.md) — the four conditions that decide whether a relocated decision is real, comprehension among them
 - [Criticality and Containment: Scoping Which Agent Code You Read](criticality-containment-oversight-scope.md) — which agent-written internals you still have to open once you accept that a summary is not oversight
+- [Delegation Failures Users Expect to Miss: The MANDATE Taxonomy](delegation-failures-users-cannot-notice.md) — a taxonomy of failures users expect to miss, from Reddit posts and a 73-user study

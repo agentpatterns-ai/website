@@ -80,3 +80,4 @@ The record, the action, the tools, and the refreshed view stay in the applicatio
 - [The Harness as Product: What Listed-Rate Pricing Buys](harness-as-product.md) — what a paid harness layer includes when you do not self-host.
 - [Agent Event Streaming: Consumer Contract Above the Tokens](agent-event-streaming-model.md) — designing the event contract the app-server rung hands you.
 - [Six-Shape Approval Response Taxonomy](approval-response-taxonomy.md) — the approval round-trip the top rung exposes.
+- [Replaying Real Pull Requests as Eval Fixtures for Event-Driven Agents](../../verification/replay-pull-requests-as-eval-fixtures.md) — testing the Cursor Agent SDK's event-driven agents with replayed pull request events.

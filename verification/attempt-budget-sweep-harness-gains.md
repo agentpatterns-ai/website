@@ -71,3 +71,5 @@ The harness made known-reachable tasks much more reliable and moved the reachabl
 - [Harness Hill-Climbing: Eval-Driven Iterative Improvement of Agent Harnesses](../patterns/agent-design/harness-hill-climbing.md) — the optimization loop whose score this sweep re-reads
 - [Isometric Harness Ablation: Rank Subsystem Investment by Removing One at a Time](../patterns/agent-design/isometric-harness-ablation.md) — which harness subsystem to change before measuring it
 - [Size Agent Comparisons by Run-to-Run Variance](size-agent-comparisons-by-run-variance.md) — how many runs each arm of the comparison needs
+- [Judge a Technique Against a Budget-Matched Best-of-n Baseline](budget-matched-best-of-n-baseline.md) — Fixes the budget at the technique's call count and compares with best-of-n sampling, on measures the technique does not optimize.
+- [Reading a Harness Comparison Run at One Fixed Model](fixed-model-harness-comparison.md) — the two terms a fixed-model score is a difference of, at any budget

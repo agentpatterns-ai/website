@@ -74,3 +74,4 @@ The agent infers what happened from execution feedback and picks its next step f
 - [Action-Class Decomposition for Tool-Calling Evals](action-class-decomposition-tool-calling-evals.md) — scoring which class of action was chosen, the measure the blocked-then-reproposed finding needs
 - [Seed-Variance Reporting](seed-variance-reporting.md) — what to do when the quantity you are diffing moves with the seed
 - [Model Rankings Reverse Across Agent Harnesses](../patterns/agent-design/model-rankings-reverse-across-harnesses.md) — the outcome-level version of the same dependence
+- [Reading a Harness Comparison Run at One Fixed Model](fixed-model-harness-comparison.md) — how to read the terminal score this check looks past

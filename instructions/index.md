@@ -36,6 +36,7 @@ Every major AI coding tool ships a project-level instruction file. These pages c
 
 How you phrase, frame, and structure individual rules determines whether agents follow them or quietly ignore them.
 
+- [Written Priority Rules for Coding-Agent Migrations](written-priority-rules-for-migrations.md) — state when the target convention overrides existing handlers
 - [Instruction Polarity: Positive Rules Over Negative](instruction-polarity.md) — Positive directives outperform negative instructions in agent compliance, especially as instruction count grows
 - [Guardrails Beat Guidance: Rule Design for Coding Agents](guardrails-beat-guidance-coding-agents.md) — On SWE-bench, negative constraints are the only individually beneficial rule type; positive directives actively hurt — and rules work through context priming, not instruction specificity
 - [Code Precedence Over Stale Instruction Files](code-precedence-over-instruction-files.md) — One sentence in the user-level instruction file, giving existing code precedence over documentation, moved convention choices from 4.2% code-matching to 91.4% across 320 runs
@@ -70,6 +71,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 
 Structuring instructions across scopes, layers, and files so the right context reaches the right agent at the right time.
 
+- [OpenAI Model Spec Boundaries and Overridable Defaults](vendor-policy-boundaries-and-defaults.md) — distinguish vendor policy boundaries from defaults your instructions can change
 - [Layered Instruction Scopes](layered-instruction-scopes.md) — Structure agent instructions in concentric layers — global defaults, project-level files, and directory overrides — so the most specific rule always wins
 - [Hierarchical CLAUDE.md](hierarchical-claude-md.md) — Layer CLAUDE.md files at multiple scopes so each agent session receives only the context relevant to its working location
 - [Size Limits on Instruction Files That Load on Demand](on-demand-instruction-file-size-limit.md) — Claude Code injects only the start of a subdirectory CLAUDE.md or rules file that is over its per-file character limit, so the rest waits on a Read

@@ -154,6 +154,7 @@ No. Google-Extended is a separate, training-only user-agent from standard Google
 
 ## Related
 
+- [AI Training Preference Signals in robots.txt](ai-training-preference-signals.md)
 - [How AI Engines Cite](how-ai-engines-cite.md)
 - [llms.txt: Spec, Adoption, and Honest Limitations](llms-txt.md)
 - [Agent-Readiness Discovery Surfaces](agent-readiness-discovery-surfaces.md)

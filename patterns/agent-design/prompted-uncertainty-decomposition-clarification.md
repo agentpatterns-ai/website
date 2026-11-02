@@ -98,3 +98,4 @@ The two-axis table is the load-bearing part. A single-scalar router collapses ro
 - [Assumption Propagation](../anti-patterns/assumption-propagation.md) — the failure mode when the request-uncertainty signal is absent or ignored
 - [Agent Pushback Protocol](agent-pushback-protocol.md) — structured agent-initiated clarification on request quality; consumes the same request-uncertainty signal
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — the right control when every action is irreversible and uncertainty estimation adds risk without reducing it
+- [Underspecified Research Queries and Prior Substitution](underspecified-research-queries.md) — what a long-horizon research run does when no routing signal fires and the gap gets filled from training instead

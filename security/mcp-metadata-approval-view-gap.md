@@ -89,3 +89,4 @@ The reviewer sees `Weather lookup tool` in the approval dialog. The model receiv
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — the general injection threat that concealed metadata delivers
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — verifying tool integrity before load, complementary to byte-faithful consent at approval
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — why an approval gate is only as strong as the fidelity of what it displays
+- [Post-Hoc Exfiltration Through MCP Tool Descriptions (Log-To-Leak)](log-to-leak-post-hoc-mcp-exfiltration.md) — an additive poisoning attack that adds a logging call after the task, with no hidden text

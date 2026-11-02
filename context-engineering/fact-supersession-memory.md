@@ -75,3 +75,4 @@ A comparison too loose records a real change as a repeat and leaves the old row 
 - [Dual-Trace Memory Encoding](../patterns/agent-design/dual-trace-memory-encoding.md) — pairs each fact with the scene it was learned in, a different answer to the question of when a memory was formed.
 - [Claim-Scoped Invalidation for Agent Memory](claim-scoped-invalidation.md) — the other trigger for staleness: a repository change rather than an arriving contradiction, decided per stored claim.
 - [Memory Store Writer Ceiling](memory-store-writer-ceiling.md) — a model upgrade is a reason to test the old extraction for missing facts, not evidence that every stored row is stale.
+- [Operational Context Validity for Retrieved Code](operational-context-validity.md) — the case where two implementations stay true in different deployments, which this ledger excludes.

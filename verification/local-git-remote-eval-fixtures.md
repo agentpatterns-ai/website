@@ -82,3 +82,4 @@ Give that repository a name a developer would pick. A random name like `eval-7f3
 - [Eval Awareness: Designing Evals Agents Cannot Recognize](eval-awareness.md) — the general form of the mechanism, applied to prompts and datasets instead of fixtures
 - [Per-Attempt Sandboxes for Agents That Change the Filesystem](per-attempt-eval-sandboxes.md) — the container side of the same fixture question
 - [Building Agent Eval Environments With a World Spec](world-spec-eval-environments.md) — constructing the fixtures these criteria run against
+- [Replaying Real Pull Requests as Eval Fixtures for Event-Driven Agents](replay-pull-requests-as-eval-fixtures.md) — generating signed webhook payloads from an existing pull request instead of building a stand-in remote

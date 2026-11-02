@@ -12,12 +12,15 @@ nav:
       - black-box-agent-risk-scoring.md
       - decomposed-red-teaming-agent-monitors.md
       - overeager-behavior-elicitation-scope-trap-fragments.md
+      - side-effect-aware-agent-evaluation.md
       - grade-agent-outcomes.md
       - pass-at-k-metrics.md
       - whole-build-pass-rates.md
       - comparative-judging-config-ranking.md
       - pass-at-k-t-agentic-rl-eval.md
       - attempt-budget-sweep-harness-gains.md
+      - budget-matched-best-of-n-baseline.md
+      - fixed-model-harness-comparison.md
       - markov-chain-agent-reliability.md
       - sampling-state-agent-variability-layers.md
       - size-agent-comparisons-by-run-variance.md
@@ -25,6 +28,7 @@ nav:
       - trajectory-decomposition-diagnosis.md
       - valid-completion-rate-second-axis.md
       - action-class-decomposition-tool-calling-evals.md
+      - prefix-executability-agent-evaluation.md
       - repository-perturbation-context-reasoning-diagnosis.md
       - static-difficulty-estimation-issue-triage.md
       - pre-generation-complexity-scoring.md
@@ -127,6 +131,7 @@ nav:
       - configuration-specific-skill-utility.md
       - emulated-apis-for-skill-evals.md
       - local-git-remote-eval-fixtures.md
+      - replay-pull-requests-as-eval-fixtures.md
       - emulate-ax-changes-before-shipping.md
       - ax-evals-agent-facing-surface.md
       - ax-bare-baseline-lift-drag.md
@@ -174,6 +179,7 @@ nav:
       - risk-based-task-sizing.md
       - predictive-claim-gate.md
       - cross-model-review-independence.md
+      - sast-and-agent-security-review-division-of-work.md
       - instruction-file-interference-audit.md
       - plan-stage-checkpoint-repair.md
       - oversight-stage-attribution.md

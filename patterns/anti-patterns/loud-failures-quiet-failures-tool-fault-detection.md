@@ -83,3 +83,4 @@ Agents treated 58.8% of quiet faults as a problem, against a 26.8% rate of repor
 - [Silent Adoption of Corrupted Tool Returns by Agents](silent-adoption-of-corrupted-tool-returns.md)
 - [Blind Tool Deference: Agents Parroting Callable Tools](blind-tool-deference.md)
 - [Silent-Failure Mechanism Taxonomy in Production Agent Runtimes](silent-failure-mechanism-taxonomy.md)
+- [Delegation Failures Users Expect to Miss: The MANDATE Taxonomy](../../human/delegation-failures-users-cannot-notice.md) — the user-side counterpart: severity and noticeability ratings for delegation failures

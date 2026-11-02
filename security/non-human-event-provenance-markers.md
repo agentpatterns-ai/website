@@ -80,3 +80,4 @@ The agent reads the same completion text, but the stamped provenance means the "
 - [Forged Reasoning Trace Attacks on Agent Memory (FARMA)](forged-reasoning-trace-memory-attack.md) — the same provenance-blindness root cause in persistent memory rather than the live run.
 - [Provenance-Aware Decision Auditing for LLM Agents](provenance-aware-decision-auditing.md) — traces each action to its source span; the runtime record that a provenance marker makes checkable.
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — the broader threat this vector is one instance of.
+- [Authority Disclaimers Read as Permission to Skip a Step](../patterns/anti-patterns/authority-disclaimers-read-as-skip-permission.md) — a marker that withholds authority without naming a capability makes the agent decline the work, not the action.

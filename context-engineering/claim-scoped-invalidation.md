@@ -83,3 +83,4 @@ If you plan to validate a staleness gate against your own history, this is the t
 - [Execution-State Ledger for Long-Horizon Coding Agents](../patterns/agent-design/execution-state-ledger-coding-agents.md) — tracks whether an observation still describes the repository, one level below whether a claim about it is still true.
 - [Budgeted Verification of Inherited Agent Constraints](budgeted-constraint-verification.md) — the allocation question this gate feeds: once you know which claims are suspect, which ones get the verification budget.
 - [Usage-Reinforced Memory Decay for Long-Running Agents](usage-reinforced-memory-decay.md) — decides what a store keeps at all, where this decides what it still believes.
+- [Operational Context Validity for Retrieved Code](operational-context-validity.md) — labels retrieved artifacts per deployment at retrieval time, where this page checks stored claims after a commit.

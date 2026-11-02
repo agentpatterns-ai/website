@@ -78,7 +78,9 @@ Their trajectory audit of the same 400-attempt cells found strict action-realiza
 ## Related
 
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — the within-task stage split to run after an attempt completes cleanly and still scores low
+- [Prefix Executability as a Tool-Agent Reliability Axis](prefix-executability-agent-evaluation.md) — a third axis over the same runs, scoring whether each tool call was legal when issued rather than whether the run terminated cleanly
 - [Grade Agent Outcomes, Not Execution Paths](grade-agent-outcomes.md) — final-state grading, which the handoff half of valid completion is the precondition for
 - [Black-Box Agent Risk Scoring by Domain](black-box-agent-risk-scoring.md) — a scoring method whose authors record crashed runs entering a domain mean as zeros
 - [Fleet Harness Attribution: Pinning the Model to Compare Whole Harnesses](../patterns/agent-design/fleet-harness-attribution.md) — the crossed design that attributes an outcome to the harness layer
 - [Suspect the Harness Before the Model on a Regression](../patterns/agent-design/suspect-the-harness-not-the-model.md) — which component to look at first when a shipped agent's quality shifts
+- [Side-Effect-Aware Evaluation: Score Authorization Too](side-effect-aware-agent-evaluation.md) — A second axis for authorization compliance instead of run validity.

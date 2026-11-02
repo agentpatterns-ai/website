@@ -39,6 +39,7 @@ nav:
       - repository-skill-release-drift.md
       - frozen-playbook-reuse-validation.md
   - "Agent Architecture":
+      - periodic-completion-hook-firing.md
       - framework-first.md
       - prefer-simplest-agent-architecture.md
       - demo-to-production-gap.md
@@ -97,6 +98,7 @@ nav:
   - "Verification Gaps":
       - trust-without-verify.md
       - premature-completion.md
+      - authority-disclaimers-read-as-skip-permission.md
       - building-on-inherited-test-failures.md
       - yes-man-agent.md
       - self-review-modernization-failure.md
@@ -195,6 +197,7 @@ nav:
       - model-upgrade-as-security-improvement.md
       - cleared-review-comment-as-fix.md
       - static-clean-as-security-evidence.md
+      - passing-tests-as-patch-security-evidence.md
       - bundled-bytecode-cache-as-build-artifact.md
       - cumulative-best-hides-repair-regressions.md
       - edge-case-handling-as-security-signal.md

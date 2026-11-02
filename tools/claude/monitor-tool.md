@@ -10,7 +10,7 @@ aliases:
   - background script monitoring
   - agent event streaming
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-10-31
 status: current
 ---
 
@@ -62,9 +62,9 @@ Claude writes the watch script internally and starts it. To stop, ask Claude to 
 
 ## Permissions and availability
 
-Monitor uses the same [`allow` and `deny` permission rules as Bash](https://code.claude.com/docs/en/permissions#tool-specific-permission-rules). Any pattern you have set for Bash applies to Monitor automatically. No separate permission configuration is needed.
+Monitor uses the same [`allow` and `deny` permission rules as Bash](https://code.claude.com/docs/en/permissions#tool-specific-permission-rules). Any pattern you set for Bash applies to Monitor automatically.
 
-Monitor is not available on Amazon Bedrock, Google Vertex AI, or Microsoft Foundry. [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference)]
+On Bedrock, Vertex AI, Foundry, or with `DISABLE_TELEMETRY` or `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` set, Monitor requires Claude Code v2.1.310 or later. [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference#monitor-tool)]
 
 ## Monitor vs scheduled polling
 
@@ -89,7 +89,7 @@ Push beats poll when events are rare and meaningful. It loses when any of the fo
 - Outcome filters must match every terminal state. When you watch a job for a result, the filter has to match both success and failure signals. Otherwise a failed run produces silence, which Claude reads as "still running". [Source: [Monitor tool description](https://github.com/Piebald-AI/claude-code-system-prompts/blob/main/system-prompts/tool-description-background-monitor-streaming-events.md)]
 - Low-cadence checks do not need streaming. If the thing you watch changes every few minutes (a slow CI run, a nightly build), scheduled polling with `CronCreate` or `/loop` is just as responsive, does not hold a background process open, and survives across idle windows.
 - Session-scoped lifetime. Monitors die when the Claude session exits. For batch jobs that need to outlive a conversation, or monitoring across reboots, use an external supervisor (systemd, cron, CI) instead.
-- Not available on Amazon Bedrock, Google Vertex AI, or Microsoft Foundry, or when `DISABLE_TELEMETRY` / `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set. [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference)]
+- Builds before v2.1.310 lack Monitor on Bedrock, Vertex AI, Foundry, and with telemetry or nonessential traffic off. [Source: [Claude Code Tools Reference](https://code.claude.com/docs/en/tools-reference#monitor-tool)]
 
 ## Example
 
@@ -108,11 +108,12 @@ Claude starts `docker compose up --build`, monitors its stdout, and interjects o
 - Monitor pushes each stdout line to Claude as a notification; `Bash run_in_background` requires the agent to poll manually
 - Session-scoped: monitors stop when the session exits
 - Uses the same permission rules as Bash — no separate configuration required
-- Not available on Bedrock, Vertex AI, or Foundry
+- On Bedrock, Vertex AI, Foundry, or with telemetry or nonessential traffic disabled, Monitor needs v2.1.310 or later
 
 ## Related
 
 - [Plugin Background Monitors](plugin-background-monitors.md)
+- [Wait Primitive Plus Shell-Sleep Deny](../../patterns/agent-design/wait-primitive-shell-sleep-deny.md) — why the 2.1.310 release paired Monitor with a sleep block
 - [Session Scheduling](session-scheduling.md)
 - [Hooks & Lifecycle](hooks-lifecycle.md)
 - [/batch & Worktrees](batch-worktrees.md)
