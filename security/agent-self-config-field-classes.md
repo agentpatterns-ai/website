@@ -114,3 +114,4 @@ The `shell` line is the straddle case. Enabling a shell reads as a capability, s
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — authority that can only shrink, enforced per value through composition rather than per field at a write.
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — the write-site gate applied to project build config that grants code execution.
 - [Scope Demotion for Repository-Committed Settings](repo-committed-settings-scope-demotion.md) — the same field split decided by which scope a key arrives from rather than by who writes it.
+- [One-Way Settings: Keys With a Fixed Write Direction](one-way-settings.md) — the ordered-value case, where a write is refused only in one direction

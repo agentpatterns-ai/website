@@ -86,6 +86,7 @@ nav:
       - tiered-memory-architecture.md
       - wiki-memory-agent-maintained-knowledge-base.md
       - self-correcting-memory-evidence-backed-claims.md
+      - citation-derived-evidence-graphs.md
       - auto-merged-documentation-updates.md
       - typed-memory-provenance-assertion-gating.md
       - filesystem-memory-organization.md
@@ -119,6 +120,7 @@ nav:
       - judge-advisor-split.md
       - watcher-side-agents.md
       - minimum-sufficient-control-ladder.md
+      - model-alone-baseline-gate-rule-coupling.md
       - orchestrator-attention-budget.md
       - plan-compliance-in-agents.md
       - plan-as-control-flow.md
@@ -128,6 +130,7 @@ nav:
       - progressive-disclosure-agents.md
       - skill-disclosure-controller.md
       - prompted-uncertainty-decomposition-clarification.md
+      - underspecified-research-queries.md
       - remote-session-control.md
       - self-reporting-loops.md
       - self-rewriting-meta-prompt-loop.md
@@ -184,6 +187,7 @@ nav:
       - difficulty-aware-topology-selection.md
       - dispatch-time-reasoning-level.md
       - dual-budget-control-search-agents.md
+      - container-operational-contracts-agent-state.md
       - durable-turn-log-crash-recovery.md
       - effective-feedback-compute.md
       - effort-as-verification-dial.md
@@ -228,6 +232,7 @@ nav:
       - rollback-first-design.md
       - router-imposed-quality-ceiling.md
       - routing-break-even.md
+      - task-scoped-model-aliases.md
       - context-step-model-split.md
       - task-distribution-router-fit.md
       - per-stage-model-assignment.md
@@ -243,6 +248,7 @@ nav:
       - tenant-model-policy.md
       - trajectory-conditioned-model-escalation.md
       - usage-limit-wait-ceiling.md
+      - wait-primitive-shell-sleep-deny.md
       - wink-agent-misbehavior-correction.md
       - wip-1-littles-law-agent-throughput.md
   - "Harness & Tools":

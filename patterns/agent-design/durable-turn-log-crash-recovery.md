@@ -92,4 +92,5 @@ Two tools of the same shape get opposite automatic replay behavior from one fiel
 - [Session Harness Sandbox Separation for Long-Running Agents](session-harness-sandbox-separation.md) — the session-level version of the same split, where the append-only log holds the authoritative state
 - [Exactly-Once Enforcement Layer: Model, Harness or Contract](exactly-once-enforcement-layer.md) — which layer has to own a duplicate write when a read-back cannot settle it
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — designing the operations that a `'safe'` declaration asserts something about
+- [Container Operational Contracts for Durable Agent State](container-operational-contracts-agent-state.md) — how often deployments lose the state a turn log would need, measured across 433 LangGraph systems
 - [Dual-Write Append-Mirror for Agent Transcript Externalization](dual-write-append-mirror-transcript.md) — getting the transcript off the local disk without blocking the agent on the remote store

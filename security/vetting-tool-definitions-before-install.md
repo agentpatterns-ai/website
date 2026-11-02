@@ -56,4 +56,5 @@ A schema-and-description scan is a first-pass net, not a complete defense. Obfus
 - [Tool-Invocation Attack Surface](tool-invocation-attack-surface.md) — the deeper attack taxonomy and runtime defenses (guard models, tool isolation) for the same ToolLeak mechanism this page cites for install-time vetting
 - [Security-Aware Tool Descriptions for MCP Servers (SpellSmith)](security-aware-tool-descriptions-mcp.md) — the opposite case: strengthening a trusted tool's own description rather than refusing an untrusted one
 - [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — a concealment attack on the same reviewed metadata, hiding the payload from the human reviewer rather than the model
+- [Post-Hoc Exfiltration Through MCP Tool Descriptions (Log-To-Leak)](log-to-leak-post-hoc-mcp-exfiltration.md) — a plain-text directive that adds a logging call after the task, which classifiers tested in the paper missed or over-flagged
 - [OWASP LLM Top 10 (2025): Agent Security Crosswalk](owasp-llm-top-10-2025-agent-crosswalk.md) — LLM06:2025 Excessive Agency, the framework category this risk sits under

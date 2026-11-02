@@ -74,6 +74,7 @@ GEO analysis is reverse-engineered from AI outputs. No engine publishes ranking 
 | [llms.txt](llms-txt.md) | Full spec walkthrough; adoption examples; honest assessment of limitations |
 | [Schema and Structured Data](schema-and-structured-data.md) | FAQPage / HowTo / DefinedTerm JSON-LD; 2.7× citation lift data |
 | [AI Crawler Policy](ai-crawler-policy.md) | robots.txt for training / index / user-request crawler landscape |
+| [AI Training Preference Signals](ai-training-preference-signals.md) | The `__usage_ai-training` robots.txt group, its two foot-guns, and why OpenAI has not yet implemented it |
 | [Agent-Readiness Discovery Surfaces](agent-readiness-discovery-surfaces.md) | Which machine-readable discovery surfaces a content site should publish vs. skip |
 | [Measuring GEO Performance](measuring-geo-performance.md) | AI Visibility Score, Citation Share, AI Share of Voice; monitoring tools |
 | [Separating Exposure From Selection](exposure-vs-selection-geo-measurement.md) | Why an engine-free page score estimates query-page fit, not visibility; what to report instead |

@@ -73,3 +73,4 @@ The context result splits by benchmark. On Terminal-Bench the two trajectory des
 - [When a Second Model Helps in LLM Review](cross-model-review-independence.md) — whether the critic should come from a different model family
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md) — the mid-run layer this comparison measures as a modest, model-dependent gain
 - [Evaluator-Optimizer Pattern for AI Agent Development](../patterns/agent-design/evaluator-optimizer.md) — the generator-and-critic loop as a general structure
+- [Judge a Technique Against a Budget-Matched Best-of-n Baseline](budget-matched-best-of-n-baseline.md) — A reviewer agent did not beat best-of-n on code-quality measures at matched calls in one study; the control to run on your own tasks.

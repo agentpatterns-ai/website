@@ -73,3 +73,4 @@ NEXT ACTION: restart the runner, then re-run run_tests
 - [Evidence-Conditioned Execution: Gate Edits on Observations](evidence-conditioned-execution.md) — the enforced version, where a machine check reads the trajectory instead of trusting a field.
 - [Auditing Agent Tool Chains for Silent Partial Success](tool-chain-silent-failure-audit.md) — finding the failures that never reached a report at all.
 - [Claim-to-Evidence Trace Graphs for Auditing Agent Runs](claim-to-evidence-trace-graphs.md) — turning claimed evidence into something reviewable after the run.
+- [Authority Disclaimers Read as Permission to Skip a Step](../patterns/anti-patterns/authority-disclaimers-read-as-skip-permission.md) — a false success with no tool failure. A provenance note in the task text stopped the work.

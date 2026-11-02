@@ -138,6 +138,7 @@ Any harness that reads instruction files from the filesystem can do it. Collect 
 
 ## Related
 
+- [OpenAI Model Spec Boundaries and Overridable Defaults](vendor-policy-boundaries-and-defaults.md) — vendor policy authority above application instruction scopes
 - [Hierarchical CLAUDE.md: Structuring Context Files at Multiple Levels](hierarchical-claude-md.md)
 - [AGENTS.md: A README for AI Coding Agents](../standards/agents-md.md)
 - [Encode Project Conventions in AGENTS.md Files](agents-md-distributed-conventions.md)

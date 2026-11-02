@@ -175,3 +175,4 @@ The diagnostic fixes nothing — it specifies the [runtime authority control](..
 - [Controlled Benchmark Rewriting for Agent Safety Judgment](controlled-benchmark-rewriting-safety-judgment.md) — Rewrite existing trajectories to test judgment robustness; complementary lens on safety-eval validity.
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — Why outcome-only grading misses safety violations the trajectory carries; the broader category this technique sits inside.
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — Adjacent rubric-design discipline for evals where the agent might game the metric; the judge-free oracle is one such defense.
+- [Side-Effect-Aware Evaluation: Score Authorization Too](side-effect-aware-agent-evaluation.md) — Scores authorization compliance as a second axis with a deterministic trace oracle on office workflows.

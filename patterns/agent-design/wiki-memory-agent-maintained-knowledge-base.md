@@ -10,7 +10,7 @@ tags:
 aliases:
   - agent-maintained wiki knowledge base
   - LLM wiki knowledge base
-last_reviewed: 2026-07-01
+last_reviewed: 2026-11-02
 maturity: emerging
 ---
 
@@ -46,6 +46,18 @@ Wiki memory works by amortizing structure-discovery across queries. In plain ret
 
 Wiki memory is the general form: it synthesizes arbitrary domain sources into files, where [memory synthesis from execution logs](memory-synthesis-execution-logs.md) narrows to lessons mined from traces and [code-native memory substrates](code-native-memory-substrates.md) narrow to structure rooted in codebase artifacts. It sits between raw-chunk RAG and fuller memory systems such as LangMem, Letta, Mem0, and Zep, and is notable for using the simplest substrate — files ([LangChain, 2026](https://blog.langchain.com/wiki-memory)).
 
+## Evidence graphs and workload limits
+
+OpenWiki is LangChain's open-source wiki compiler. [LangChain's OpenWiki experiment](https://www.langchain.com/blog/building-agent-memory-openwiki-graphs) tests 111 synthetic insurance documents, with 50 cross-source questions and 80 lookups, each repeated three times. Treat these vendor-published results as unreplicated evidence:
+
+- Cross-source accuracy rises from 0.10 with keyword search alone to 0.52 with wiki memory, roughly 5x.
+- Against the wiki alone, the graph improves accuracy by 27%, doubles citation consistency, and cuts cost per correct answer 58%. The post does not say whether 27% is relative or in percentage points.
+- Simple lookups show similar accuracy; search takes 9 seconds and wiki memory takes 12.
+
+The graph gives paragraphs identifiers and turns citations and document references into typed edges. Agents follow claims to passages and newer documents to superseded versions. Construction adds no model calls, but inherits citation errors. Citation consistency measures evidence overlap across runs, separately from correctness ([experiment details](https://www.langchain.com/blog/building-agent-memory-openwiki-graphs)).
+
+Use three checks before adoption: separate lookup and cross-source workloads, score citation consistency separately from accuracy, and include compilation and maintenance costs. The reported answer costs exclude both; reuse must repay them ([cost limits](https://www.langchain.com/blog/building-agent-memory-openwiki-graphs)).
+
 ## When this backfires
 
 - Fast-changing sources with slow maintenance: the wiki drifts from ground truth and becomes a confident source of wrong answers. DeepWiki's auto-generated docs falsely claimed LibreOffice used Buck as its build system and omitted LLVM's TableGen — plausible synthesis that did not match the code ([BigGo Finance, 2025](https://finance.biggo.com/news/202508270142_DeepWiki_Accuracy_Concerns)).
@@ -63,6 +75,7 @@ Wiki memory is the general form: it synthesizes arbitrary domain sources into fi
 
 ## Related
 
+- [Knowledge Graphs as Provenance-Carrying Agent Memory](knowledge-graph-shared-memory.md) — source attribution for graph relations
 - [Self-Correcting Memory: Evidence-Backed Claim Repair](self-correcting-memory-evidence-backed-claims.md) — the maintenance half, where each claim carries a versioned evidence anchor so a diff marks it stale before a model judges it
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md) — the narrower sibling that mines causal lessons from execution traces rather than arbitrary sources
 - [Code-Native Memory Substrates](code-native-memory-substrates.md) — structured memory rooted in codebase artifacts, the code-specific counterpart to a general wiki
@@ -70,3 +83,4 @@ Wiki memory is the general form: it synthesizes arbitrary domain sources into fi
 - [Memory Retrieval as a Control Decision](memory-retrieval-as-control.md) — the query-time retrieval side that wiki memory precomputes away
 - [Organizing Filesystem Agent Memory for Retrieval Cost](filesystem-memory-organization.md) — measured evidence on what organizing a file-based store actually buys, and the store size at which it starts paying
 - [Auto-Merging a Wiki Agent's Documentation Pull Requests](auto-merged-documentation-updates.md) — one named production deployment of this pattern, and what removing review from the maintenance loop costs
+- [Citation-Derived Evidence Graphs for Agent Memory](citation-derived-evidence-graphs.md) — the navigation layer built from a wiki's own citations, measured where compiled synthesis raised accuracy and left evidence retrieval unstable

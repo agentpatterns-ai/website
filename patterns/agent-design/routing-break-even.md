@@ -84,3 +84,4 @@ Clearing the bar that far tells you little. The authors concede that "with a pai
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — the broader tier-routing frame this calculation sits inside.
 - [Cache-Safe Routing Boundaries: Where a Router May Act](cache-safe-routing-boundaries.md) — the second gate, which prices the prompt cache a switch forfeits rather than the judge that decides it.
 - [Task-Distribution Router Fit: Where the Decision Belongs](task-distribution-router-fit.md) — what the router's criteria are fitted to, once this calculation says the offload fraction is reachable.
+- [Task-Scoped Model Aliases](task-scoped-model-aliases.md) — naming each task's model slot in gateway configuration so a model choice from a break-even analysis applies without changing application code.

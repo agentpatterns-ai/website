@@ -16,6 +16,7 @@ nav:
       - identifier-only-context-poisoning.md
       - improper-output-handling-downstream-sinks.md
       - lethal-trifecta-threat-model.md
+      - memory-file-influence-disclosure.md
       - oracle-poisoning-knowledge-graph.md
       - owasp-llm-top-10-2025-agent-crosswalk.md
       - owasp-2026-update-agent-control-standard.md
@@ -70,6 +71,7 @@ nav:
       - dual-boundary-sandboxing.md
       - enterprise-managed-agent-sandbox.md
       - network-less-container-unix-socket-egress.md
+      - signed-host-mediated-agent-exits.md
       - permitted-egress-attack-surface.md
       - sandbox-rules-harness-tools.md
       - selective-network-sandbox-mode.md
@@ -85,6 +87,7 @@ nav:
       - sandbox-approvals-auto-review-triad.md
   - "Data Protection":
       - credential-hygiene-agent-skills.md
+      - browser-credential-handoff.md
       - internal-hostname-disclosure-agent-context.md
       - pii-tokenization-in-agent-context.md
       - privacy-preserving-llm-requests.md
@@ -133,6 +136,7 @@ nav:
       - enrolled-identity-peer-routing.md
       - safe-outputs-pattern.md
       - repo-committed-settings-scope-demotion.md
+      - one-way-settings.md
       - static-first-shell-command-gating.md
       - task-based-access-control-hybrid-inspection.md
       - team-scoped-policy-delegation.md
@@ -168,6 +172,7 @@ nav:
       - hybrid-deterministic-semantic-tool-authorization.md
       - mcp-execution-security-invariants.md
       - mcp-metadata-approval-view-gap.md
+      - log-to-leak-post-hoc-mcp-exfiltration.md
       - mcp-runtime-control-plane.md
       - security-aware-tool-descriptions-mcp.md
       - mid-trajectory-guardrail-selection.md

@@ -15,7 +15,7 @@ aliases:
   - enterprise-managed plugin standards
   - managed plugin contract
   - plugin marketplace allowlist
-last_reviewed: 2026-06-03
+last_reviewed: 2026-10-31
 maturity: established
 ---
 
@@ -40,7 +40,9 @@ A managed plugin contract has four parts. The matrix below is the enforcement sc
 
 ### GitHub Copilot CLI
 
-Admins commit `settings.json` to `.github-private/.github/copilot/settings.json` ([Configuring enterprise plugin standards for Copilot CLI](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/manage-agents/configure-enterprise-plugin-standards)). The preview schema has two keys: `extraKnownMarketplaces` (additional marketplaces, each `{"source": "github", "repo": "OWNER/REPO"}`) and `enabledPlugins` (force-installed plugins, keyed by `PLUGIN-NAME@MARKETPLACE-NAME`). The CLI reads the file at sign-in via a GitHub API endpoint ([About enterprise-managed plugin standards](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-enterprise-plugin-standards)). No allowlist-with-lockdown key and no in-schema version pin yet — pinning lives upstream in the plugin manifest.
+The reference names `copilot/managed-settings.json` inside `.github-private` ([Configuring enterprise plugin standards for Copilot CLI](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/manage-agents/configure-enterprise-plugin-standards)). The preview schema had two keys: `extraKnownMarketplaces` (additional marketplaces, each `{"source": "github", "repo": "OWNER/REPO"}`) and `enabledPlugins` (force-installed plugins, keyed by `PLUGIN-NAME@MARKETPLACE-NAME`). The CLI reads the file at sign-in via a GitHub API endpoint ([About enterprise-managed plugin standards](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-enterprise-plugin-standards)). The preview had no allowlist-with-lockdown key and no in-schema version pin; pinning lives upstream in the plugin manifest.
+
+Managed plugin controls reached general availability on 2026-10-28 in VS Code, Copilot CLI, and the GitHub Copilot app ([GitHub Changelog](https://github.blog/changelog/2026-10-28-repository-plugin-defaults-and-enterprise-plugin-controls-generally-available)). The reference now lists a lockdown key, `strictKnownMarketplaces`, which "Restricts plugin installation to only the marketplaces explicitly defined by the enterprise" ([Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)). The schema has no per-plugin version pin key. Marketplace sources take an optional `ref` (branch, tag, or SHA).
 
 ### Claude Code
 
@@ -51,6 +53,26 @@ The managed file lives at `/etc/claude-code/managed-settings.json` (Linux), `/Li
 ### VS Code and Cursor
 
 VS Code added `extensions.allowed` with `AllowedExtensions` Group Policy enforcement from VS Code 1.96 ([Manage extensions in enterprise environments](https://code.visualstudio.com/docs/enterprise/extensions)); malformed policy is silently dropped. Cursor's May 2026 enterprise release added model/provider allowlists, MCP server allowlists with a new-tool onboarding flow, and hook-based command/secret enforcement deployable via MDM or Group Policy ([Cursor's New Enterprise Admin Controls](https://pondero.ai/coding/guides/cursor-enterprise-admin-controls-may-2026/)). Cursor does not fully honor VS Code's `extensions.allowed` — the schema is portable, the enforcement is not.
+
+## Three scopes: managed, repository, personal
+
+The GA release adds a repository scope between the administrator and the user. A maintainer defines a plugin marketplace and default plugins for a project, so contributors do not repeat setup in each one. Managed requirements and restrictions override repository defaults and member preferences. Members can override a repository default where the surface supports a local override. The changelog says "Required plugins are automatically installed and enabled, and users can't disable them" ([GitHub Changelog](https://github.blog/changelog/2026-10-28-repository-plugin-defaults-and-enterprise-plugin-controls-generally-available)).
+
+| Scope | Where it lives | What it can do | What it cannot do |
+|---|---|---|---|
+| Managed | `managed-settings.json` | Require or block named plugins, add marketplaces, restrict installs to approved marketplaces | Nothing sits above it |
+| Repository | `.github/copilot/settings.json` | Enable plugins by default for everyone in the repository | Enable a blocked plugin, use a disallowed marketplace, or make a plugin mandatory |
+| Personal | The user's own settings | Turn off a repository default where the surface supports a local override | Turn off a required plugin |
+
+The docs state the same order in three places. "Repositories can enable plugins by default, but managed plugin requirements and marketplace restrictions always win" ([About enterprise-managed plugin standards](https://docs.github.com/en/copilot/concepts/agents/about-enterprise-plugin-standards)). "Repository defaults do not make a plugin mandatory," and a member can turn one off "where the surface supports a local override" ([About GitHub Copilot plugins](https://docs.github.com/en/copilot/concepts/agents/about-plugins)). In the settings reference, `enabledPlugins` set to `true` requires a plugin and `false` blocks it, and "Managed values always take precedence over repository defaults and member preferences" ([Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)).
+
+The asymmetry is the useful part. A contributor can decline a repository default. Nobody below the administrator can lower a managed requirement. A team that wants a plugin on every contributor's machine, with no opt-out, must ask the administrator for a managed requirement. A repository commit cannot do it.
+
+Restricting installs to approved marketplaces is a separate control from requiring or blocking named plugins. `strictKnownMarketplaces` disables the built-in marketplaces, and an empty array means complete lockdown ([Enterprise managed settings](https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings)). That is the same trade-off as Claude Code's `strictKnownMarketplaces: []` in [When this backfires](#when-this-backfires). A repository cannot reach around it: repository defaults "cannot enable a plugin that managed policy blocks or use a marketplace that policy disallows" ([About GitHub Copilot plugins](https://docs.github.com/en/copilot/concepts/agents/about-plugins)).
+
+Availability differs by scope. Repository defaults reach individual Copilot users and Copilot Business and Enterprise. Managed controls need GitHub Enterprise Cloud with Copilot Business or Enterprise licenses issued by the enterprise or one of its organizations (changelog above).
+
+This precedence decides which extensions load at all. [Most-Restrictive-Wins Fusion](../patterns/agent-design/most-restrictive-wins-fusion.md) covers a different axis: combining parallel decisions about one tool call. [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md) covers the layer below, where the administrator marks keys that a team file may override.
 
 ## Why it works
 
@@ -64,7 +86,7 @@ The contract is real but not symmetric. Several failure modes follow from schema
 
 - Lockdown bricks the default catalog. On Claude Code, `strictKnownMarketplaces: []` blocks the official Anthropic marketplace alongside everything else ([issue #34873](https://github.com/anthropics/claude-code/issues/34873)) — small teams without an internal marketplace end up worse off.
 - Pre-existing installs survive until the next refresh. Both Copilot's preview and Claude Code gate at marketplace-add and plugin install/update/refresh, not retroactively ([Plugin marketplaces docs](https://code.claude.com/docs/en/plugin-marketplaces)). A revoked plugin keeps running on cached code until refresh — the "freeze now" window is days, not minutes.
-- Cross-tool parity is incomplete. Copilot's preview has no allowlist-with-lockdown analogue and no in-schema version pin, so an org cannot enforce the same posture symmetrically across Copilot CLI, Claude Code, and Cursor today.
+- Cross-tool parity is incomplete. Copilot's GA schema has marketplace lockdown but no per-plugin version pin key. Cross-tool policy enforcement therefore still differs across Copilot CLI, Claude Code, and Cursor.
 - The contract has sometimes been silently no-op'd. Claude Code shipped versions where `extraKnownMarketplaces` was ignored ([issue #16870](https://github.com/anthropics/claude-code/issues/16870)). Treat it as enforce-and-verify, paired with [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md).
 - `enabledPlugins` does not retract user-added MCP servers or hooks. Without `strictPluginOnlyCustomization` set, servers and hooks declared in `.claude/settings.json` keep loading outside the contract.
 
@@ -141,6 +163,7 @@ The first stage adds a managed marketplace without breaking working sessions. Th
 - The managed-plugin contract is four levers — catalog allow/block, plugin enable, version pin, and policy-change behavior — not one switch
 - Restrictions check before network or filesystem access, so a blocked marketplace never executes a postinstall, hook, or `mcpServers` declaration — the structural advantage over runtime-only controls
 - Copilot CLI, Claude Code, and Cursor expose convergent but unequal surfaces today; a single cross-tool policy posture is not yet symmetric
+- Managed plugin requirements and restrictions override repository defaults and personal choice. A contributor can decline a repository default where the surface supports a local override, but not a required plugin
 - Pre-existing installs survive policy until the next refresh on every tool — managed plugins are not a "freeze now" lever
 - Stage the rollout: register internal marketplace, then tighten allowlist with explicit blocks and pinned `sha`, then close MCP and hook side channels last
 
@@ -153,6 +176,6 @@ The first stage adds a managed marketplace without breaking working sessions. Th
 - [Enterprise Agent Hardening](enterprise-agent-hardening.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
 - [Org-Membership-Gated Agent Entitlement](org-membership-gated-agent-entitlement.md)
-- [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md)
+- [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md) — the team layer below the administrator
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](../instructions/skill-pack-registry-distribution.md) — the developer-side install-and-update decision this admin contract sits above
 - [Install-Once Plugin Trust: Vetting That Never Re-Runs on Update](../patterns/anti-patterns/install-once-plugin-trust.md) — the failure mode the `sha` pin and `allowManagedHooksOnly` levers exist to close

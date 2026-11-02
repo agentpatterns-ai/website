@@ -10,7 +10,7 @@ aliases:
   - plugin monitors manifest key
   - declarative session supervision
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-05-27
+last_reviewed: 2026-10-31
 status: current
 ---
 
@@ -77,7 +77,7 @@ Hooks enforce at the tool-call boundary and can deny. Monitor tool calls require
 
 - Session-scoped. Monitors stop only when the session ends. "Disabling a plugin mid-session does not stop monitors that are already running. They stop when the session ends." ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)).
 - Unsandboxed. They "run unsandboxed at the same trust level as hooks" ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)). Treat marketplace-supplied monitors with the same scrutiny as installing arbitrary shell scripts — the [PromptArmor](https://www.promptarmor.com/resources/hijacking-claude-code-via-injected-marketplace-plugins) and [SentinelOne](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/) marketplace-injection disclosures apply directly.
-- Interactive CLI only. Monitors run only in interactive sessions and reuse the [Monitor tool's](https://code.claude.com/docs/en/tools-reference#monitor-tool) availability constraints. They are skipped on Amazon Bedrock, Google Vertex AI, Microsoft Foundry, and when `DISABLE_TELEMETRY` or `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set ([Tools reference — Monitor tool](https://code.claude.com/docs/en/tools-reference#monitor-tool)).
+- Interactive CLI only. Monitors run only in interactive sessions and reuse the [Monitor tool's](https://code.claude.com/docs/en/tools-reference#monitor-tool) availability constraints. On Amazon Bedrock, Google Vertex AI, and Microsoft Foundry, they need Claude Code v2.1.310 or later. The same applies when `DISABLE_TELEMETRY` or `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` is set ([Claude Code changelog, 2.1.310](https://code.claude.com/docs/en/changelog)).
 
 ## What this primitive replaces
 
@@ -90,7 +90,7 @@ Before plugin monitors, cross-cutting supervision needed per-project setup: a `S
 - Chatty processes are auto-killed. Plugin monitors share the [Monitor tool's](monitor-tool.md) behavior — monitors that produce too many events are stopped automatically. A verbose test runner or webpack rebuild leaves a silent gap until you restart with a tighter filter.
 - Stderr and exit codes are invisible. Monitor forwards stdout only. A watcher that errors to stderr or exits non-zero looks healthy.
 - Pipe buffering delays events. When piping through `grep` or similar, use `--line-buffered` — block buffering can hold output for minutes on low-traffic streams.
-- Three hosting providers are a no-op. Bedrock, Vertex AI, and Foundry skip monitors entirely — a plugin shipping monitors as a primary feature ships dead code there.
+- Older builds on three hosting providers are a no-op. Before v2.1.310, Bedrock, Vertex AI, and Foundry had no plugin monitors. A plugin that needs monitors does not work on those builds ([Claude Code changelog, 2.1.310](https://code.claude.com/docs/en/changelog)).
 - Mid-session disable does not stop running monitors. Disabling the plugin leaves the process running until session end ([Plugins reference — Monitors](https://code.claude.com/docs/en/plugins-reference#monitors)).
 
 ## Example
@@ -139,7 +139,7 @@ A consumer installs the plugin once. Every subsequent session arms the watcher a
 - Auto-armed at session start by default, or on first dispatch of a named skill via `when: "on-skill-invoke:<skill>"`
 - Session-scoped and torn down at session end — not a substitute for systemd, cron, or external supervisors for cross-session enforcement
 - Unsandboxed at hook trust level — treat marketplace monitors the same as arbitrary shell scripts
-- Skipped on Bedrock, Vertex AI, Foundry, and when telemetry is disabled
+- On Bedrock, Vertex AI, Foundry, and when telemetry is disabled, monitors need v2.1.310 or later
 - Each stdout line becomes a notification; chatty monitors are auto-killed and stderr-only failures are invisible
 
 ## Related

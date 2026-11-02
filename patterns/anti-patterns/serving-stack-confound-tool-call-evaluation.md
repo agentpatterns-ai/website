@@ -54,6 +54,25 @@ The authors scope the fixed-interface rule to standardized model comparisons. Fo
 - The denominators are too thin to decide anything. Over 8 seeds the intervals reach 34% [9,59] for Qwen-0.5B and 38% [12,75] for Phi-3, "far too wide to rank these models against each other" ([arXiv:2609.26693v1](https://arxiv.org/abs/2609.26693v1)).
 - You stop at the stack and the cause was model-side. Small models hallucinate tool names absent from the schema, and pretraining-aligned renaming cut those errors by 80% ([arXiv:2510.07248v3](https://arxiv.org/abs/2510.07248v3)).
 
+## Example
+
+Vaibhav Jain's retrospective report separates four milestones for self-hosted coding workers ([arXiv:2610.34241v1, sections 1 and 11](https://arxiv.org/html/2610.34241v1#S0.SSx12)):
+
+1. Serve the model.
+2. Generate coherent text.
+3. Execute tool calls through the client.
+4. Pass task-specific behavioral checks on the resulting code.
+
+These levels map to this page. A server that rejects the request fails level 2. A server that returns the call as unparsed text passes level 2 and fails level 3.
+
+Qualify the deployment recipe, including checkpoint, quantization, runtime, parser, context settings, and client ([section 5](https://arxiv.org/html/2610.34241v1#S0.SSx6)).
+
+Measure prefix reuse separately. Jain's Gemma 4 26B-A4B observations show median time to first token of 69.4 seconds for 85 cold jobs (30,000 to 36,000 input tokens). For 280 jobs with at least 90% reuse and under 2,000 fresh tokens, the median is 2.8 seconds. These mixed-runtime, unmatched groups do not isolate caching's causal effect ([section 7.1](https://arxiv.org/html/2610.34241v1#S0.SSx8.SSSx1)).
+
+Compare cost per verified success, including failed attempts and parent review ([cost per token versus cost per task](cheaper-per-token-costlier-per-task.md)). Jain reports lower frontier cost for direct coding in both studies with a direct arm. These are API list-price equivalents; hardware, energy, and engineering time are unmeasured ([section 10](https://arxiv.org/html/2610.34241v1#S0.SSx11)).
+
+This single-author report uses small samples and private records. Treat its results as qualification checks, not model rankings. The paper states these limits in [section 12](https://arxiv.org/html/2610.34241v1#S0.SSx13).
+
 ## Key Takeaways
 
 - Report the serving stack, its version, and the tool-call parser alongside the model identity, the way decoding parameters and hardware already are.
@@ -61,6 +80,7 @@ The authors scope the fixed-interface rule to standardized model comparisons. Fo
 - Pin which question you are answering. A fixed interface serves model comparison; a system evaluation reports the whole model-server configuration.
 - Per-seed and turn-pooled rates can differ by roughly 50 points on the same runs, so publishing one alone hides which you got.
 - Ollama's gate is a release-level policy, so a result that survives one upgrade of the stack is not the same measurement.
+- Qualify a self-hosted worker at four levels: served, coherent text, executed tool calls, verified task completion. Passing a lower level does not show the next.
 
 ## Related
 

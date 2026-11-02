@@ -83,6 +83,7 @@ The gate advances the story only when every hash matches the current tree and th
 
 ## Related
 
+- [Signed Host-Mediated Exits for Isolated Coding Agents](../security/signed-host-mediated-agent-exits.md)
 - [Staged Evidence Gates for Agentic Program Repair](staged-evidence-gates-program-repair.md) — orders evidence gates by cost inside a repair loop; this page gates lifecycle-state transitions on freshness-bound evidence instead.
 - [Verification-Gated Agent Autonomy via Automated Review](../patterns/agent-design/verification-gated-agent-autonomy.md) — gates individual actions with an automated reviewer; the complementary control that screens what an agent does rather than which state it may reach.
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — the hard, deterministic checks that a gate's predicates are built from.

@@ -63,3 +63,4 @@ Three tools from three vendors converged on the same per-category ordering. That
 - [Audit-Budget Allocation for Agent Fleets](audit-budget-allocation-agent-fleets.md) — what happens to a ranked review queue once the ranking signal stops discriminating
 - [Root Causes of Vibe-Coded Application Vulnerabilities](../security/vibe-coded-vulnerability-root-causes.md) — the defect rates that survive prompt and harness changes
 - [Security Drift in Iterative LLM Code Refinement](../security/security-drift-iterative-refinement.md) — how security regressions accumulate while functional tests stay green
+- [Dividing Security Review Between a Static Analyzer and an Agent](sast-and-agent-security-review-division-of-work.md) — which vulnerabilities each engine finds and what the built-in review policy excludes

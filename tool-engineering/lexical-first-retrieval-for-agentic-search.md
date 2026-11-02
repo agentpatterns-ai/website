@@ -118,3 +118,4 @@ The dense pipeline carries three managed dependencies and per-call API costs on 
 - [Dual-Budget Control for Search Agents](../patterns/agent-design/dual-budget-control-search-agents.md)
 - [Cross-Repo Agent Search](cross-repo-agent-search.md)
 - [Indexed Regex Search for Agent Tools](indexed-regex-search-agent-tools.md)
+- [Pooled Tool Usage Can Hide Tools Without Past Examples](pooled-tool-usage-retrieval.md) — how shared usage changes retrieval for tools without examples

@@ -111,3 +111,4 @@ See [Client-Keyed Gateway Controls](client-keyed-gateway-controls.md) for the tr
 - [Copilot CLI BYOK Local Models](../../tools/copilot/copilot-cli-byok-local-models.md) — comparable BYOK pattern in a different harness.
 - [Gateway Hint Headers for Routing and Budgeting Agent Calls](gateway-hint-headers.md) — the other header set the same gateway reads, for routing and attribution rather than model discovery.
 - [Task-Distribution Router Fit: Where the Decision Belongs](task-distribution-router-fit.md) — the argument for keeping the model-choice decision in the harness while the gateway supplies the catalog.
+- [Task-Scoped Model Aliases](task-scoped-model-aliases.md) — the gateway-side alias that moves model choice out of code, so a swap is a configuration edit.

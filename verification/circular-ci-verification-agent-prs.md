@@ -71,3 +71,4 @@ This illustrates infrastructure-path ownership in a public project. The report d
 - [Post-Merge Fix Signals for Agent Merges](post-merge-fix-signals-agent-merges.md) — what an unreviewed agent merge costs after it lands.
 - [Layered Oracle Stack for Agent IaC Security Repair (TerraProbe)](layered-oracle-iac-security-repair.md) — independent oracles for infrastructure changes a single scanner pass clears.
 - [Task Category as the Security Review Routing Key](task-category-security-review-routing.md) — routing review depth by what the change does.
+- [Passing Tests Are Not Evidence an Agent Patch Is Secure](../patterns/anti-patterns/passing-tests-as-patch-security-evidence.md) — the other way a green check carries no assurance, where the patch is in scope but the suite never runs the branch it added.

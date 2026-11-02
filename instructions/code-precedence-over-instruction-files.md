@@ -69,6 +69,7 @@ Codex CLI went further on the same class of conflict. "In 20 of its 80 runs with
 
 ## Related
 
+- [Written Priority Rules for Coding-Agent Migrations](written-priority-rules-for-migrations.md) — stating which new convention overrides existing code during a migration
 - [Stale AI Configuration Artifacts (Context Rot)](../patterns/anti-patterns/stale-ai-configuration-artifacts.md) — the drift this sentence works around, and the CI consistency check that corrects it at source
 - [Coding-Agent Working-Set Coverage (Coherence Debt)](../context-engineering/coherence-debt-working-set.md) — the same conflict measured as fact availability, where a stale convention file scored below code alone
 - [Pattern Replication Risk](../patterns/anti-patterns/pattern-replication-risk.md) — the failure mode a code-wins rule amplifies when the code is the half you meant to retire

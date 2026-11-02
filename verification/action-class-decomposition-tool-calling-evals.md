@@ -69,6 +69,7 @@ The grader compares runtime state against a gold reference trajectory and skips 
 ## Related
 
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — the same split taken along the stage axis, scoring search, read, and edit separately.
+- [Prefix Executability as a Tool-Agent Reliability Axis](prefix-executability-agent-evaluation.md) — checks whether the emitted call was legal under the schema and current state. Action-class decomposition checks whether the turn required that class of action.
 - [Audit the Noise Floor Before Trusting a Benchmark Gap](benchmark-noise-floor-audit.md) — how to get the rerun and perturbation floors a per-class gap has to clear.
 - [Canary Tools for Diagnosing Tool-Selection Reasoning](canary-tools-tool-selection-diagnosis.md) — planted decoy tools that name the cause once the wrong tool is picked.
 - [Informed Abstention as a Tool-Boundary Runtime Gate](../patterns/agent-design/informed-abstention-tool-boundary-gate.md) — the runtime counterpart, enforcing the ask, refuse, and confirm decisions this technique measures.

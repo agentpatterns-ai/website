@@ -72,3 +72,4 @@ All three passed the same test. Measured, "the three strategies cost 48.8/103.4/
 - [Model Rankings Reverse Across Agent Harnesses](../agent-design/model-rankings-reverse-across-harnesses.md) — ranking reversal driven by the scaffold instead of by the axis you measure on
 - [Profiler-Guided Optimization Loops for Coding Agents](../../verification/profiler-guided-optimization-loop.md) — what to give an agent when runtime cost is the goal rather than a side effect
 - [CodeSlop: Search-Trajectory Residue in Agent Patches](codeslop-trajectory-minimization.md) — the other patch property a green suite accepts without comment, removable code the tests never observe
+- [Passing Tests Are Not Evidence an Agent Patch Is Secure](passing-tests-as-patch-security-evidence.md) — the same gate read as a verdict on the security axis, where the unmeasured property is a branch the suite never runs

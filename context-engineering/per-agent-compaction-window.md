@@ -67,3 +67,4 @@ Two adjacent 2.1.296 controls bear on the same decision. `CLAUDE_CODE_WORKFLOW_S
 - [The Subagent Inheritance Contract: What Crosses Down](../patterns/multi-agent/subagent-inheritance-contract.md) — what else a child does and does not take from its parent
 - [Reasoning Retention and Compaction as Harness Settings](reasoning-retention-and-compaction.md) — what a harness keeps across a compaction boundary
 - [Context Compression Strategies: Offloading and Summarization](context-compression-strategies.md) — the tiers a trigger fires into
+- [One-Way Settings: Keys With a Fixed Write Direction](../security/one-way-settings.md) — the 2.1.312 rule that a subagent window can only lower the operator window
