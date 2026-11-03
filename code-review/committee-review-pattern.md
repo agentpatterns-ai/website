@@ -44,15 +44,13 @@ graph TD
     G -->|All PASS| H[Accept Output]
 ```
 
-## Why multiple reviewers beat self-review
+## Why use multiple reviewers
 
-A single agent reviewing its own output shows confirmation bias — it agrees with decisions it already made. Separate implementer and reviewer prompts remove this bias. Domain-split reviewers (correctness, style, security, test coverage) narrow each reviewer's scope, so attention goes to one dimension rather than competing concerns.
+Separate implementer and reviewer roles, and scope each reviewer to one dimension, such as correctness, security, or test coverage. The proposed benefit is more focused scrutiny (inference), not a guarantee that reviewers find different defects or avoid confirmation bias.
 
-Per [OpenAI's Harness engineering post](https://openai.com/index/harness-engineering/), the Harness team pushed almost all code review to agent-to-agent, with humans as the final optional check.
+[OpenAI's Harness engineering post](https://openai.com/index/harness-engineering/) describes agent-to-agent review with optional human review. It reports a workflow, not a measurement of reviewer error independence.
 
-### Why it works
-
-The mechanism is attentional narrowing plus role-induced perspective shift. Research on LLM peer-review simulation ([EMNLP 2024](https://aclanthology.org/2024.emnlp-main.70)) shows distinct reviewer personas reliably shift which defects they surface — a security-scoped reviewer activates different reasoning pathways than a correctness-scoped one on the same diff. Running them in parallel makes their error populations largely non-overlapping, so the committee catches defects any single reviewer would miss.
+[AgentReview (EMNLP 2024)](https://aclanthology.org/2024.emnlp-main.70/) studies simulated academic peer review and how reviewer biases affect paper decisions. It does not measure code-review coverage or establish independent errors between security and correctness reviewers.
 
 ## Reviewer design
 
@@ -62,13 +60,13 @@ Each reviewer should have:
 - A structured output schema, for example `{"verdict": "PASS|FAIL", "issues": [...], "notes": [...]}`
 - Explicit pass criteria — what counts as PASS must be unambiguous
 
-An industrial deployment at Ericsson splits its panel along quality attributes: readability, maintainability, reliability and performance, each with its own reviewer expert. A separate context builder assembles the input each reviewer sees. Across 200+ developer-validated issues the system reached 96% accuracy; about 69% of correctly identified issues were rated important and about 33% severe ([Ericsson multi-agent code review study](https://arxiv.org/abs/2609.15877v1)).
+An industrial evaluation at Ericsson splits its panel along quality attributes: readability, maintainability, reliability and performance, each with its own reviewer expert. A separate context builder assembles the input each reviewer sees. Across 200+ developer-validated issues the system reached 96% accuracy; about 69% of correctly identified issues were rated important and about 33% severe ([Ericsson multi-agent code review study](https://arxiv.org/abs/2609.15877v1)).
 
 Reviewers run in parallel. The orchestrator waits for all verdicts before aggregating. If any reviewer returns FAIL, the issue list goes back to the implementer.
 
 ## Loop termination
 
-Set a maximum round limit — two to three rounds covers most cases. If the implementer cannot satisfy all reviewers within the limit, escalate to human review. Unresolved loops signal underspecified tasks or conflicting reviewer criteria.
+Set a maximum round limit as local policy. For example, cap review at two rounds, then escalate unresolved findings to a human. This is a cost and escalation rule, not an evidence-based claim about how many rounds usually suffice. Check task specifications and reviewer criteria when reviews do not converge.
 
 ## When this backfires
 
@@ -81,7 +79,7 @@ The committee pattern adds cost, latency, and orchestration complexity that can 
 
 ## Cross-model adversarial review
 
-A committee where every reviewer runs on the same model shares the same blind spots. Cross-model review assigns each reviewer to a different provider (for example, GPT, Gemini, Claude) so failure modes are independent.
+Cross-model review assigns reviewers to different providers, such as OpenAI, Google, and Anthropic. Different providers may offer different failure modes (inference). Measure their finding overlap and accuracy on representative changes; provider diversity does not establish independence.
 
 The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) implements this: three review subagents run in parallel on different models, each receiving the same staged diff. It stores each verdict as structured data with the model name attached. Review prompts focus on bugs, security, logic errors, and edge cases and exclude style to reduce noise.
 
@@ -95,18 +93,18 @@ The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.a
 | Medium | 1 | Bug fixes, features, refactors |
 | High | 3 (cross-model) | Auth, crypto, payments, schema migrations |
 
-File-level risk classification drives automatic escalation — changes to authentication or data-deletion code trigger the high tier regardless of task scope. Unresolved findings after two rounds escalate to human review.
+File-level risk classification drives automatic escalation — changes to authentication or data-deletion code trigger the high tier regardless of task scope. Its local policy caps adversarial review at two rounds, then records remaining findings as known issues and presents the result with low confidence.
 
 ## Key Takeaways
 
-- Separate implementer and reviewer roles — [self-review](agent-self-review-loop.md) has inherent blind spots
+- Separate implementer and reviewer roles; compare their findings against [self-review](agent-self-review-loop.md) on representative changes
 - Assign each reviewer a single evaluation dimension; do not combine concerns in one reviewer
 - Run reviewers in parallel and aggregate before routing feedback back
 - Require structured output (JSON) from reviewers so the orchestrator can triage without parsing prose
 - Set a maximum round limit and escalate to human review if unresolved
-- Use different model providers for reviewers so blind spots do not overlap
+- Evaluate different model providers by finding overlap and accuracy; do not assume independent errors
 - Scale reviewer count to task risk — one for medium tasks, three cross-model for high-risk changes
-- Give style to the linter and keep it out of the review prompt entirely. Style comments are the bulk of the noise that teaches reviewers to skim the rest
+- Consider Anvil's policy of leaving style to the linter and focusing agent review on defects
 
 ## Example
 
@@ -148,7 +146,7 @@ else:
     accept(diff)
 ```
 
-Each reviewer receives only the diff, not prior verdicts, so opinions are independent. The orchestrator merges issue lists by line number and deduplicates overlapping findings before sending consolidated feedback to the implementer.
+Give each reviewer the diff without earlier verdicts to limit direct influence between reviews. This input separation does not establish independent errors. The orchestrator merges issue lists by line number and deduplicates overlapping findings before sending consolidated feedback to the implementer.
 
 ## Related
 

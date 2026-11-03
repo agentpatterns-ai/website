@@ -35876,9 +35876,9 @@ The release does not describe how the complementary model is selected, whether a
 
 ### When a critic backfires
 
-A high-accuracy critic is not automatically a net-positive intervention. Vasudev et al. (2026) report that a critic with strong offline accuracy (AUROC 0.94) can still cause a 26-percentage-point collapse on one model while leaving another near-unchanged. Interventions face a [disruption-recovery tradeoff](https://arxiv.org/abs/2602.03338): they recover failing trajectories, but they also disrupt trajectories that would have succeeded. Validate the critic on a sample of representative tasks before you deploy it on a high-success-rate workload. If the critic disrupts more than it recovers, gate or disable it.
+A high-accuracy critic is not automatically a net-positive intervention. Vasudev et al. (2026) report that a critic with strong offline accuracy (AUROC 0.94) can still cause a 26-percentage-point collapse on one model while leaving another near-unchanged. Interventions face a [disruption-recovery tradeoff](https://arxiv.org/abs/2602.03338v1): they recover failing trajectories, but they also disrupt trajectories that would have succeeded. Validate the critic on a sample of representative tasks before you deploy it on a high-success-rate workload. If the critic disrupts more than it recovers, gate or disable it.
 
-A separate theoretical result bounds the upside. Ao, Gao, and Simchi-Levi (2026) show that any delegated planner-plus-critic network is [decision-theoretically dominated by a centralized Bayes decision-maker with the same information access](https://arxiv.org/abs/2603.26993). The comparator is an ideal Bayes decision-maker, not a real planner, so the result sets a ceiling. It does not show that a same-family critic adds nothing. Language-based handoff is a lossy channel. As an inference, give the critic a structured rubric the planner did not see, and test whether a different model adds value.
+A separate theoretical result bounds the upside. Ao, Gao, and Simchi-Levi (2026) show that any delegated planner-plus-critic network is [decision-theoretically dominated by a centralized Bayes decision-maker with the same information access](https://arxiv.org/abs/2603.26993). The comparator is an ideal Bayes decision-maker, not a real planner, so the result sets a ceiling. It does not show that a same-family critic adds nothing. Language-based handoff can lose decision-relevant information. As an inference, give the critic a structured rubric the planner did not see, and test whether a different model adds value.
 
 ## Example
 
@@ -93552,65 +93552,66 @@ Source: https://agentpatterns.ai/tool-engineering/per-surface-plugin-verificatio
 
 # Per-Surface Verification of Agent Plugin Packages
 
-> An Agent Plugins package travels as far as its skills and its `mcp.json`. Verify every other component in each client separately.
+> Agent Plugins 1.0 standardizes skills and MCP configuration; verify client-specific components and installation behavior in each client separately.
 
 Test a plugin in every client you claim to support, and read a vendor changelog as a claim rather than a result. GitHub shipped Agent Plugins 1.0 support in VS Code, Copilot CLI, and the Copilot app on 2026-08-12 ([GitHub Changelog](https://github.blog/changelog/2026-08-12-agent-plugins-1-0-in-vs-code-copilot-cli-and-the-copilot-app)). One vendor, one package format, and the documented behavior still differs on enablement, install-time trust, update timing, and which components load at all.
 
 ## Where the portable guarantee stops
 
-The guarantee covers two component types. Section 7 of the specification states that "Agent Plugins v1 defines exactly two component types: skills and MCP servers. Other component types are outside the v1 format and do not affect conformance" ([Agent Plugins v1.0.0](https://github.com/agentplugins/agent-plugins-spec/blob/main/spec/1.0.0.md)). Those two do travel: "Compatible clients can discover the skills and MCP server configuration they support from the same package" ([GitHub Changelog](https://github.blog/changelog/2026-08-12-agent-plugins-1-0-in-vs-code-copilot-cli-and-the-copilot-app)). Everything else is a per-client question.
+Agent Plugins 1.0 covers skills and MCP servers. Other component types do not affect v1 conformance ([Agent Plugins v1.0.0, §7](https://github.com/agentplugins/agent-plugins-spec/blob/main/spec/1.0.0.md)). This does not guarantee that every client supports every packaged capability.
 
-That includes the client extension namespace the migration guidance recommends. The changelog tells maintainers to "Move Copilot-specific files into the `com.github.copilot/` directory, which other clients ignore," and then says: "Custom agents, commands, rules, and hooks load from there across VS Code, Copilot CLI, and the Copilot app." The VS Code documentation states the opposite: "VS Code currently ignores client extension data and directories in Agent Plugins 1.0 packages" ([VS Code](https://code.visualstudio.com/docs/copilot/customization/agent-plugins)).
+GitHub's changelog places Copilot-specific agents, commands, rules, and hooks under `com.github.copilot/` across the three Copilot clients. The current [VS Code authoring reference](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference) confirms that VS Code reads this namespace and ignores other clients' namespaces. The [CLI reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference) also documents its namespaced component locations. Namespace support is a client feature, not part of the portable contract.
 
 ## What differs across the three clients
 
 | Question | VS Code | Copilot CLI | Copilot app |
 |---|---|---|---|
-| Feature enablement | `chat.plugins.enabled` must be on; troubleshooting opens with "Confirm that agent plugins are enabled" | No enablement setting documented | No enablement setting documented |
-| Install surface | Extensions view, Agent Customizations editor, or a Git URL | `copilot plugin install` | App settings |
-| Install-time trust | "The first time you install a plugin from a new marketplace, VS Code shows a trust prompt" | No approval step documented | No approval step documented |
-| Effect of declaring `$schema` | Switches the package to Agent Plugins semantics | Opts in "additively on top of standard plugin loading" | Not documented |
-| Namespaced components | Ignored | Not documented | Not documented |
+| Feature enablement | `chat.plugins.enabled` must be on | No enablement setting documented | No enablement setting documented |
+| Install surface | Agent Customizations editor, or a Git URL | `copilot plugin install` | Customize in the sidebar, then Browse and Install |
+| Install-time trust | Trust prompt for a new marketplace | No approval step documented | No approval step documented |
+| Effect of declaring `$schema` | Switches the package to Agent Plugins semantics | Recognized schema opts into Agent Plugins semantics | Not documented |
+| Namespaced components | Reads `com.github.copilot` | Reads `com.github.copilot` | Changelog states support for Copilot agents, commands, rules, and hooks |
 
-Table sources: [VS Code](https://code.visualstudio.com/docs/copilot/customization/agent-plugins), [Finding and installing plugins for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-finding-installing), [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference), [Customizing the GitHub Copilot app](https://docs.github.com/en/copilot/how-tos/github-copilot-app/customize-github-copilot-app).
+Table sources: [VS Code authoring reference](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference), [GitHub Changelog](https://github.blog/changelog/2026-08-12-agent-plugins-1-0-in-vs-code-copilot-cli-and-the-copilot-app), [VS Code](https://code.visualstudio.com/docs/agent-customization/agent-plugins), [Finding and installing plugins for GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-finding-installing), [GitHub Copilot CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference), [Customizing the GitHub Copilot app](https://docs.github.com/en/copilot/how-tos/github-copilot-app/customize-github-copilot-app).
 
-Update timing diverges too, so reviewed code does not stay reviewed on every surface. The CLI reference records that "First-party plugins—those installed from the built-in `copilot-plugins` and `awesome-copilot` marketplaces—automatically update at the start of each session in a trusted working directory," disabled with `autoUpdate` or `COPILOT_AUTO_UPDATE=false`. VS Code holds the opposite line for external sources: "Plugins sourced from npm or PyPI never update automatically."
+Update behavior also needs verification. Plugins from the built-in `awesome-copilot` marketplace update at session start in a trusted working directory. Disable this with `autoUpdate: false` or `COPILOT_AUTO_UPDATE=false`. The CLI reference now lists `copilot-plugins` as non-default; fresh installs must register it manually ([CLI reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference)). VS Code supports automatic plugin updates, but npm and PyPI plugins require manual updates and confirmation ([VS Code](https://code.visualstudio.com/docs/agent-customization/agent-plugins)).
 
 ## Why it works
 
-Portability and divergence come from the same clause. The specification buys forward compatibility by making clients drop what they have not implemented: "Clients MUST ignore component types they do not support" (§7), and "A client MUST ignore manifest entries for namespaces it does not implement without validating the contents of their values" (§8.1). Section 8 adds that "Agent Plugins assigns no portable discovery, validation, loading, or failure semantics to client extension data or files." The specification gives the reason it stopped at two types: commands, hooks, agents, rules, and LSP servers "remain too client-specific for a stable portable contract and are outside the v1 format until their formats converge" ([Agent Plugins v1.0.0](https://github.com/agentplugins/agent-plugins-spec/blob/main/spec/1.0.0.md)). That same ignore rule permits one vendor's editor to skip that vendor's own namespace and stay conformant. A vendor shipping three clients gets no exemption, because the standard assigns nothing portable to the layer where clients differ.
+The specification requires clients to ignore unsupported component types and unimplemented namespaces. It assigns no portable loading or failure behavior to client extension files ([Agent Plugins v1.0.0, §§7–8](https://github.com/agentplugins/agent-plugins-spec/blob/main/spec/1.0.0.md)). Thus, portable skills and MCP configuration can coexist with extensions that only some clients implement. Test those extensions against each client's documented paths and behavior.
 
 ## When this backfires
 
-- Your plugin's value sits in hooks, custom agents, or slash commands, and you follow the migration steps. Adding `$schema` puts VS Code into Agent Plugins semantics, and VS Code ignores namespace directories in such a package, so the migration removes those components in VS Code.
-- You verify on Copilot CLI and generalize. The CLI loads spec components additively on top of its standard loading, so a package carrying both layouts works there while losing half its surface elsewhere.
-- You rely on install-time review as the control. The CLI auto-updates first-party plugins at session start, so reviewed code can be replaced without a second prompt.
-- You are an administrator assuming one policy file covers everyone. GitHub documents `enabledPlugins`, `extraKnownMarketplaces`, and `strictKnownMarketplaces` in a per-client support matrix ([enterprise managed settings reference](https://docs.github.com/en/copilot/reference/enterprise-managed-settings-reference)), and warns that "Users must upgrade to a supported client version for these standards to be applied" ([enterprise plugin standards](https://docs.github.com/en/copilot/concepts/agents/about-enterprise-plugin-standards)).
+- Your plugin depends on hooks or custom agents. Check the target client's namespace support and file paths before migration; portable conformance alone does not cover these components.
+- You verify on Copilot CLI and generalize. Both CLI and VS Code recognize Agent Plugins manifests, but this does not establish identical loading across all clients.
+- You rely on install-time review as the control. The CLI updates `awesome-copilot` plugins at session start in trusted directories, so the installed version can change after review.
+- You are an administrator assuming one policy file covers everyone. GitHub documents `enabledPlugins`, `extraKnownMarketplaces`, and `strictKnownMarketplaces` in a per-client support matrix ([enterprise managed settings reference](https://docs.github.com/en/copilot/reference/enterprise-managed-settings-reference)), and requires supported client versions for enforcement ([enterprise plugin standards](https://docs.github.com/en/copilot/concepts/agents/about-enterprise-plugin-standards)).
 - Your team standardizes on one client. There is no fragmentation to collapse, and the native format is simpler than the portable one plus a namespace directory that client may ignore.
 
 ## Example
 
-A testing plugin ships one skill, one MCP server, and a set of hooks. Following the changelog's migration list produces this layout:
+The [VS Code authoring reference](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference) includes a testing-plugin layout. Its relevant paths are:
 
 ```text
-testing-plugin/
+my-testing-plugin/
 ├── plugin.json              # $schema declares Agent Plugins 1.0
 ├── skills/
 │   └── test-runner/
 │       └── SKILL.md         # portable
 ├── mcp.json                 # portable
 └── com.github.copilot/
-    └── hooks.json           # moved here per the migration guidance
+    └── hooks/
+        └── hooks.json       # Copilot-specific hooks
 ```
 
-In VS Code the first three entries load and the fourth does not, because VS Code "currently ignores these namespaces and loads only the portable skills and MCP server configuration" ([VS Code](https://code.visualstudio.com/docs/copilot/customization/agent-plugins)). The same page's hook-discovery table lists file locations only for the Claude format (`hooks/hooks.json`) and the Copilot format (`hooks.json` at the plugin root), under the note that "Hooks are client-specific and are not a portable Agent Plugins 1.0 component type." No Agent Plugins 1.0 row exists. The `com.github.copilot/` directory is named in the changelog and in none of the client reference or how-to pages cited here.
+VS Code documents hooks at `com.github.copilot/hooks/hooks.json` in Agent Plugins packages. The CLI reference lists the same path ([VS Code authoring reference](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference), [CLI reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference)). Verify that the intended hook runs in each target client; a documented path is not a test result for your package.
 
 ## Key Takeaways
 
 - Claim cross-surface support only for `skills/` and `mcp.json`; scope every other claim to a client you installed and exercised.
-- Declaring `$schema` is not a neutral metadata edit. It is additive in Copilot CLI and a semantics switch in VS Code ([CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference), [VS Code](https://code.visualstudio.com/docs/copilot/customization/agent-plugins)).
-- Before moving components into a client namespace, confirm the target client documents reading that namespace. VS Code documents ignoring it.
-- Install-time review is not equivalent across surfaces. Only VS Code documents a marketplace trust prompt, and the CLI auto-updates first-party plugins at session start.
+- A recognized `$schema` selects Agent Plugins semantics in both CLI and VS Code ([CLI plugin reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference), [VS Code authoring reference](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference)).
+- Before moving components into a client namespace, confirm the target client documents reading that namespace. VS Code and CLI document support for `com.github.copilot`.
+- Install-time review is not equivalent across surfaces. VS Code documents a marketplace trust prompt, and the CLI auto-updates `awesome-copilot` plugins in trusted directories.
 - Enterprise plugin policy is keyed per client and per client version, so a supported-in-principle key can be inactive for part of your fleet.
 
 ## Related
@@ -105390,15 +105391,13 @@ graph TD
     G -->|All PASS| H[Accept Output]
 ```
 
-## Why multiple reviewers beat self-review
+## Why use multiple reviewers
 
-A single agent reviewing its own output shows confirmation bias — it agrees with decisions it already made. Separate implementer and reviewer prompts remove this bias. Domain-split reviewers (correctness, style, security, test coverage) narrow each reviewer's scope, so attention goes to one dimension rather than competing concerns.
+Separate implementer and reviewer roles, and scope each reviewer to one dimension, such as correctness, security, or test coverage. The proposed benefit is more focused scrutiny (inference), not a guarantee that reviewers find different defects or avoid confirmation bias.
 
-Per [OpenAI's Harness engineering post](https://openai.com/index/harness-engineering/), the Harness team pushed almost all code review to agent-to-agent, with humans as the final optional check.
+[OpenAI's Harness engineering post](https://openai.com/index/harness-engineering/) describes agent-to-agent review with optional human review. It reports a workflow, not a measurement of reviewer error independence.
 
-### Why it works
-
-The mechanism is attentional narrowing plus role-induced perspective shift. Research on LLM peer-review simulation ([EMNLP 2024](https://aclanthology.org/2024.emnlp-main.70)) shows distinct reviewer personas reliably shift which defects they surface — a security-scoped reviewer activates different reasoning pathways than a correctness-scoped one on the same diff. Running them in parallel makes their error populations largely non-overlapping, so the committee catches defects any single reviewer would miss.
+[AgentReview (EMNLP 2024)](https://aclanthology.org/2024.emnlp-main.70/) studies simulated academic peer review and how reviewer biases affect paper decisions. It does not measure code-review coverage or establish independent errors between security and correctness reviewers.
 
 ## Reviewer design
 
@@ -105408,13 +105407,13 @@ Each reviewer should have:
 - A structured output schema, for example `{"verdict": "PASS|FAIL", "issues": [...], "notes": [...]}`
 - Explicit pass criteria — what counts as PASS must be unambiguous
 
-An industrial deployment at Ericsson splits its panel along quality attributes: readability, maintainability, reliability and performance, each with its own reviewer expert. A separate context builder assembles the input each reviewer sees. Across 200+ developer-validated issues the system reached 96% accuracy; about 69% of correctly identified issues were rated important and about 33% severe ([Ericsson multi-agent code review study](https://arxiv.org/abs/2609.15877v1)).
+An industrial evaluation at Ericsson splits its panel along quality attributes: readability, maintainability, reliability and performance, each with its own reviewer expert. A separate context builder assembles the input each reviewer sees. Across 200+ developer-validated issues the system reached 96% accuracy; about 69% of correctly identified issues were rated important and about 33% severe ([Ericsson multi-agent code review study](https://arxiv.org/abs/2609.15877v1)).
 
 Reviewers run in parallel. The orchestrator waits for all verdicts before aggregating. If any reviewer returns FAIL, the issue list goes back to the implementer.
 
 ## Loop termination
 
-Set a maximum round limit — two to three rounds covers most cases. If the implementer cannot satisfy all reviewers within the limit, escalate to human review. Unresolved loops signal underspecified tasks or conflicting reviewer criteria.
+Set a maximum round limit as local policy. For example, cap review at two rounds, then escalate unresolved findings to a human. This is a cost and escalation rule, not an evidence-based claim about how many rounds usually suffice. Check task specifications and reviewer criteria when reviews do not converge.
 
 ## When this backfires
 
@@ -105427,7 +105426,7 @@ The committee pattern adds cost, latency, and orchestration complexity that can 
 
 ## Cross-model adversarial review
 
-A committee where every reviewer runs on the same model shares the same blind spots. Cross-model review assigns each reviewer to a different provider (for example, GPT, Gemini, Claude) so failure modes are independent.
+Cross-model review assigns reviewers to different providers, such as OpenAI, Google, and Anthropic. Different providers may offer different failure modes (inference). Measure their finding overlap and accuracy on representative changes; provider diversity does not establish independence.
 
 The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.agent.md) implements this: three review subagents run in parallel on different models, each receiving the same staged diff. It stores each verdict as structured data with the model name attached. Review prompts focus on bugs, security, logic errors, and edge cases and exclude style to reduce noise.
 
@@ -105441,18 +105440,18 @@ The [Anvil agent](https://github.com/burkeholland/anvil/blob/main/agents/anvil.a
 | Medium | 1 | Bug fixes, features, refactors |
 | High | 3 (cross-model) | Auth, crypto, payments, schema migrations |
 
-File-level risk classification drives automatic escalation — changes to authentication or data-deletion code trigger the high tier regardless of task scope. Unresolved findings after two rounds escalate to human review.
+File-level risk classification drives automatic escalation — changes to authentication or data-deletion code trigger the high tier regardless of task scope. Its local policy caps adversarial review at two rounds, then records remaining findings as known issues and presents the result with low confidence.
 
 ## Key Takeaways
 
-- Separate implementer and reviewer roles — [self-review](agent-self-review-loop.md) has inherent blind spots
+- Separate implementer and reviewer roles; compare their findings against [self-review](agent-self-review-loop.md) on representative changes
 - Assign each reviewer a single evaluation dimension; do not combine concerns in one reviewer
 - Run reviewers in parallel and aggregate before routing feedback back
 - Require structured output (JSON) from reviewers so the orchestrator can triage without parsing prose
 - Set a maximum round limit and escalate to human review if unresolved
-- Use different model providers for reviewers so blind spots do not overlap
+- Evaluate different model providers by finding overlap and accuracy; do not assume independent errors
 - Scale reviewer count to task risk — one for medium tasks, three cross-model for high-risk changes
-- Give style to the linter and keep it out of the review prompt entirely. Style comments are the bulk of the noise that teaches reviewers to skim the rest
+- Consider Anvil's policy of leaving style to the linter and focusing agent review on defects
 
 ## Example
 
@@ -105494,7 +105493,7 @@ else:
     accept(diff)
 ```
 
-Each reviewer receives only the diff, not prior verdicts, so opinions are independent. The orchestrator merges issue lists by line number and deduplicates overlapping findings before sending consolidated feedback to the implementer.
+Give each reviewer the diff without earlier verdicts to limit direct influence between reviews. This input separation does not establish independent errors. The orchestrator merges issue lists by line number and deduplicates overlapping findings before sending consolidated feedback to the implementer.
 
 ## Related
 
