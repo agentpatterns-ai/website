@@ -11,7 +11,7 @@ aliases:
   - core-loop delegation
   - agent-chosen subagent tier
   - model-directed delegation
-last_reviewed: 2026-10-07
+last_reviewed: 2026-11-02
 maturity: emerging
 ---
 
@@ -36,7 +36,7 @@ The stated reason is the router argument. Replit argues that a router, whether h
 
 Effort is not purely the model's call. Replit "trained an escalation system that checks the trajectory at each step and matches effort to task difficulty" ([Replit](https://replit.com/blog/free-the-models)), a learned controller close to [trajectory-conditioned model escalation](trajectory-conditioned-model-escalation.md).
 
-Claude Code 2.1.292 added an `effort` parameter to its Agent tool on 6 October 2026, a second first-party implementation of the same choice ([Claude Code changelog 2.1.292](https://code.claude.com/docs/en/changelog#2-1-292)). The caller names the effort level a subagent runs at. The entry carries no benchmark and no cost comparison, so Replit's DeepSWE and Terminal-Bench figures still rest on one vendor's own runs.
+Claude Code 2.1.292 added an `effort` parameter to its Agent tool on 6 October 2026, a second first-party implementation of the same choice ([Claude Code changelog 2.1.292](https://code.claude.com/docs/en/changelog#2-1-292)). The caller names the effort level a subagent runs at. Release 2.1.316 added a configured default on 31 October 2026. `CLAUDE_CODE_SUBAGENT_EFFORT` sets "the effort level subagents run at when nothing else names one, instead of inheriting the session's" ([Claude Code changelog 2.1.316](https://code.claude.com/docs/en/changelog#2-1-316)). The harness now fixes that default where the session used to supply it. Neither entry carries a benchmark nor a cost comparison, so Replit's DeepSWE and Terminal-Bench figures still rest on one vendor's own runs.
 
 ## The evidence
 
@@ -88,5 +88,6 @@ The ablation shows that many warm, tiered subagents beat one long-lived worker. 
 - [Trajectory-Conditioned Model Escalation](trajectory-conditioned-model-escalation.md) covers escalation decided from a partial trajectory.
 - [Model-Set Parity in Harness Claims](model-set-parity-harness-claims.md) covers harness comparisons when the model sets differ.
 - [Dispatch-Time Reasoning Level](dispatch-time-reasoning-level.md) covers a human choosing effort at hand-off.
+- [Subagent Effort Floors Instead of Session Inheritance](subagent-effort-floor.md) covers the operator-set default underneath, for dispatches where the model names no level.
 - [Pricier per Token, Cheaper per Task](../../token-engineering/pricier-per-token-cheaper-per-task.md) covers the lead plus sidekick cost inversion.
 - [Provider-Hosted Subagent Delegation](provider-hosted-subagent-delegation.md) covers the hosted form of the same delegation decision, where the tree shares one model and no tier can be chosen.

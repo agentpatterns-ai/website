@@ -11,7 +11,7 @@ aliases:
   - handoff tax
   - non-native trajectory continuation
   - mid-task model switch interface
-last_reviewed: 2026-08-26
+last_reviewed: 2026-11-02
 maturity: emerging
 ---
 
@@ -45,6 +45,8 @@ Quality recovery (QRec) is the fraction of the strong model's quality advantage 
 | Traj-drop | 64% | 84% | 28% | 53% |
 
 Traj-drop is the best escalation interface in both families and the worst downshift interface. Raw transfer, which hands over the session unchanged, recovers less than half the quality gap on escalation and costs the most: "For Claude, Raw costs more than twice as much as starting with HC ($1.61 vs. $0.72)". The authors put the consequence plainly — "even after paying for the LC prefix, abandoning the attempt and restarting with HC is cheaper and more accurate than Raw continuation" ([arXiv:2608.24358v1](https://arxiv.org/abs/2608.24358v1)).
+
+Release 2.1.301 of Claude Code lists "Improved switching to a model with a smaller context window: a conversation too long for the new model is now summarized by the previous model first" ([Claude Code changelog 2.1.301](https://code.claude.com/docs/en/changelog#2-1-301)). The sending model writes that summary, which makes the shipped behavior compact-pre on a downshift. A size limit triggers it, since the conversation no longer fits the new model's context window.
 
 ## Why it works
 

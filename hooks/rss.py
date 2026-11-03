@@ -37,12 +37,12 @@ by release-cut.yaml, like lastmod-manifest.json), with a git-log fallback —
 shallow clones can't see history, so the manifest is the primary source.
 """
 
-import json
-import subprocess
 from datetime import datetime, timezone
 from email.utils import format_datetime
 from pathlib import Path
 from urllib.parse import urljoin
+
+from page_dates import for_build
 from xml.etree import ElementTree as ET
 
 FEED_LENGTH = 30  # most recently added pages
@@ -62,6 +62,8 @@ _EXCLUDED_PREFIXES = ("training/",)
 
 
 def on_config(config):
+    global _dates
+    _dates = for_build(config)
     global _site_url, _site_name, _site_description, _site_dir, _docs_dir
     global _items, _created_manifest
     _items = []
@@ -70,19 +72,8 @@ def on_config(config):
     _site_description = config.get("site_description") or ""
     _site_dir = Path(config.get("site_dir") or "site")
     _docs_dir = Path(config.get("docs_dir") or "docs")
-    _created_manifest = _load_created_manifest()
+    _created_manifest = _dates.created_manifest
     return config
-
-
-def _load_created_manifest() -> dict[str, str]:
-    """Load the created-date manifest that sits next to this hook file."""
-    manifest_path = Path(__file__).resolve().parent / "created-manifest.json"
-    try:
-        with manifest_path.open(encoding="utf-8") as fh:
-            data = json.load(fh)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return {}
-    return {k: v for k, v in data.items() if isinstance(k, str) and isinstance(v, str)}
 
 
 def on_page_context(context, *, page, config, nav, **kwargs):
@@ -144,34 +135,8 @@ def on_post_build(config):
 
 
 def _git_created(src_path: str) -> str:
-    """UTC timestamp of the first commit touching src_path, following renames.
-
-    Fallback only — shallow clones (Cloudflare, --depth 1) see truncated
-    history, so hooks/created-manifest.json is the primary source. A brand-new
-    uncommitted page falls through to now, which is its creation moment.
-    Returns a full ISO 8601 UTC timestamp; `%cI` carries the committer's local
-    offset, so we convert to UTC rather than truncating to a local date (#9837).
-    """
-    if _docs_dir is None:
-        return _now().isoformat()
-
-    abs_path = _docs_dir / src_path
-
-    try:
-        result = subprocess.run(
-            ["git", "log", "--follow", "--format=%cI", "--", str(abs_path)],
-            capture_output=True,
-            text=True,
-            check=True,
-            timeout=5,
-        )
-        lines = result.stdout.split()
-        if lines:
-            return datetime.fromisoformat(lines[-1]).astimezone(timezone.utc).isoformat()
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError, ValueError):
-        pass
-
-    return _now().isoformat()
+    """Use shared history, or build time for a new uncommitted page."""
+    return _dates.created(src_path) or _now().isoformat()
 
 
 def _now() -> datetime:

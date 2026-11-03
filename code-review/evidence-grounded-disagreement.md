@@ -102,3 +102,4 @@ The protocol also ran as a plain `SKILL.md` file that an autonomous agent follow
 - [The Yes-Man Agent](../patterns/anti-patterns/yes-man-agent.md) — the same compliance bias pointed at a human instead of a peer agent
 - [Reproduce-Before-Report Verification Gate](reproduce-before-report-verification-gate.md) — an alternative grounding mechanism that verifies findings by execution rather than citation
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — why the thin-findings failure mode costs more than it appears to
+- [Four Producer Verdicts for Resolving Reviewer Findings](resolving-reviewer-findings.md) — the same citation rule applied to the producer's reply to a finding

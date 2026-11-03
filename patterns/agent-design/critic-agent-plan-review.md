@@ -33,7 +33,9 @@ graph TD
     C -->|Rejected + feedback| B
 ```
 
-The critic is a distinct agent role, not self-review. A different model creates genuine disagreement, because the critic does not share the planner's blind spots. Research on the [self-correction blind spot](https://arxiv.org/abs/2507.02778v3) measured an average 64.5% blind-spot rate across 14 tested LLMs. The models failed to correct errors in their own outputs even while correcting identical errors from external sources. This shows that same-model review inherits the producer's failure modes. GitHub Copilot's built-in Rubber Duck agent applies that reasoning: it "uses a second model to critique plans, code, and tests before you move forward" ([GitHub Blog, 2026-10-02](https://github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out/)).
+The critic receives the plan as another agent's work. [Self-Correction Bench](https://arxiv.org/abs/2507.02778v3) tests 14 open-source non-reasoning models with identical errors attributed to either the user or the model. Models correct some user-attributed errors that they miss when attributed to themselves. The study tests conversational attribution within each model; it does not compare reviewer model families. Presenting the plan in a fresh critic context is a design inference from that result.
+
+Separately, GitHub describes its built-in Rubber Duck agent as using a second model. It "uses a second model to critique plans, code, and tests before you move forward" ([GitHub Blog, 2026-10-02](https://github.blog/ai-and-ml/ai-is-rewriting-the-developer-career-ladder-heres-how-to-stand-out/)).
 
 ## Why plan-gating matters
 
@@ -69,14 +71,14 @@ The release does not describe how the complementary model is selected, whether a
 |--------|--------|
 | Latency | Each plan review adds one model round-trip before execution begins |
 | Token cost | One extra model call per task; most valuable when execution cost is high relative to review cost |
-| Coverage | A complementary model surfaces errors the planner's reasoning style systematically misses |
+| Coverage | A separate critic may catch errors the planner misses; measure this benefit on representative tasks (inference) |
 | Diminishing returns | For simple one-step tasks, critic overhead exceeds the value of catching errors |
 
 ### When a critic backfires
 
-A high-accuracy critic is not automatically a net-positive intervention. Vasudev et al. (2026) report that a critic with strong offline accuracy (AUROC 0.94) can still cause a 26-percentage-point collapse on one model while leaving another near-unchanged. Interventions face a [disruption-recovery tradeoff](https://arxiv.org/abs/2602.03338): they recover failing trajectories, but they also disrupt trajectories that would have succeeded. Validate the critic on a sample of representative tasks before you deploy it on a high-success-rate workload. If the critic disrupts more than it recovers, gate or disable it.
+A high-accuracy critic is not automatically a net-positive intervention. Vasudev et al. (2026) report that a critic with strong offline accuracy (AUROC 0.94) can still cause a 26-percentage-point collapse on one model while leaving another near-unchanged. Interventions face a [disruption-recovery tradeoff](https://arxiv.org/abs/2602.03338v1): they recover failing trajectories, but they also disrupt trajectories that would have succeeded. Validate the critic on a sample of representative tasks before you deploy it on a high-success-rate workload. If the critic disrupts more than it recovers, gate or disable it.
 
-A separate theoretical result bounds the upside. Ao, Gao, and Simchi-Levi (2026) show that any delegated planner-plus-critic network is [decision-theoretically dominated by a centralized Bayes decision-maker with the same information access](https://arxiv.org/abs/2603.26993). Language-based handoff between agents is a lossy channel. A critic adds value only when it brings information the planner lacked, not when it re-reads the same context with the same model family. Pair the critic with a different model and a structured rubric the planner did not see at plan time.
+A separate theoretical result bounds the upside. Ao, Gao, and Simchi-Levi (2026) show that any delegated planner-plus-critic network is [decision-theoretically dominated by a centralized Bayes decision-maker with the same information access](https://arxiv.org/abs/2603.26993). The comparator is an ideal Bayes decision-maker, not a real planner, so the result sets a ceiling. It does not show that a same-family critic adds nothing. Language-based handoff can lose decision-relevant information. As an inference, give the critic a structured rubric the planner did not see, and test whether a different model adds value.
 
 ## Example
 
@@ -91,7 +93,7 @@ The error is caught before a single query runs.
 ## Key Takeaways
 
 - The critic agent reviews the plan before execution, not the output after generation, so it catches errors when they are cheapest to fix
-- A complementary model creates genuine disagreement; self-review by the same model reproduces the same blind spots
+- Present the plan as another agent's work; Self-Correction Bench supports an attribution-sensitive review design, not a requirement for another model family
 - The pattern is most cost-effective for multi-step plans where errors compound across steps
 - Copilot CLI v1.0.18 ships an experimental critic for Claude models that fires automatically
 - For iterative output refinement, use the evaluator-optimizer; for pre-execution plan validation, use the critic agent

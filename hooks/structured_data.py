@@ -16,11 +16,12 @@ import html
 import json
 import logging
 import re
-import subprocess
 from datetime import date
 from pathlib import Path
 from typing import Optional
 from urllib.parse import urljoin
+
+from page_dates import for_build
 
 log = logging.getLogger("mkdocs.hooks.structured_data")
 
@@ -41,6 +42,8 @@ _docs_dir: Optional[Path] = None
 # on_config — build shared schemas once
 # ---------------------------------------------------------------------------
 def on_config(config):
+    global _dates
+    _dates = for_build(config)
     global _organization, _website, _site_url, _docs_dir
 
     _site_url = (config.get("site_url") or "").rstrip("/")
@@ -361,48 +364,14 @@ def _build_defined_term_set(config) -> dict:
 # ---------------------------------------------------------------------------
 
 def _git_lastmod(src_path: str) -> str:
-    """Return YYYY-MM-DD of the last git commit touching src_path."""
-    if not _docs_dir or not src_path:
-        return date.today().isoformat()
-
-    abs_path = _docs_dir / src_path
-    try:
-        result = subprocess.run(
-            ["git", "log", "-1", "--format=%cI", "--", str(abs_path)],
-            capture_output=True, text=True, check=True, timeout=5,
-        )
-        iso_ts = result.stdout.strip()
-        if iso_ts:
-            return iso_ts[:10]
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError):
-        pass
-    return date.today().isoformat()
+    """Use the same published modification date as the sitemap."""
+    return _dates.modified(src_path) or date.today().isoformat()
 
 
 def _git_created(src_path: str) -> Optional[str]:
-    """Return YYYY-MM-DD of the first git commit that added src_path.
-
-    Mirrors _git_lastmod but walks history in reverse so Article schema can
-    carry a datePublished without per-page `date:` frontmatter. Returns None
-    (rather than today) when history is unavailable, so the caller omits the
-    field instead of asserting a misleading publish date.
-    """
-    if not _docs_dir or not src_path:
-        return None
-
-    abs_path = _docs_dir / src_path
-    try:
-        result = subprocess.run(
-            ["git", "log", "--reverse", "--format=%cI", "--", str(abs_path)],
-            capture_output=True, text=True, check=True, timeout=5,
-        )
-        for iso_ts in result.stdout.splitlines():
-            iso_ts = iso_ts.strip()
-            if iso_ts:
-                return iso_ts[:10]
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError):
-        pass
-    return None
+    """Use the same rename-aware publication date as the RSS feed."""
+    created = _dates.created(src_path)
+    return created[:10] if created else None
 
 
 def _safe(value: str) -> str:

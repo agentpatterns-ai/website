@@ -94,6 +94,7 @@ nav:
       - per-step-skill-preconditions.md
       - contractual-skill-files.md
       - living-docs-grounded-design-conversations.md
+      - zero-decision-plans-alternatives-rule.md
   - "Governance & Maintenance":
       - enforcing-agent-behavior-with-hooks.md
       - rule-lifecycle-metadata.md

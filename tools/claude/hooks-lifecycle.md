@@ -25,7 +25,7 @@ Learn it hands-on: [Hooks — Deterministic Guardrails](https://learn.agentpatte
 
 You configure [hooks](https://code.claude.com/docs/en/hooks) in `settings.json` at user, project, or local scope. They live under a top-level `hooks` object keyed by event name. Each matcher group pairs a `matcher` string with one or more `hooks` handlers of `type: "command"`, `http`, `prompt`, or `agent`. Hook input arrives on stdin as JSON rather than through environment variables, so scripts typically pipe stdin through `jq` to read tool input fields ([reference](https://code.claude.com/docs/en/hooks)).
 
-Hooks are deterministic because the harness runs them, not the model. The harness invokes them at fixed points in the request loop: `PreToolUse` before it dispatches a tool call, `PostToolUse` after it receives the result, independent of any sampling. That guarantee makes exit code 2 a reliable block for `PreToolUse`, `PermissionRequest`, `UserPromptSubmit`, `Stop`, and config-change events. For post-tool and notification events, exit code 2 feeds stderr back to Claude without blocking, because the action has already run ([reference](https://code.claude.com/docs/en/hooks)). Beyond stderr, `Stop` and `SubagentStop` hooks can now return `hookSpecificOutput.additionalContext`. This gives Claude feedback and continues the turn without counting as a hook error. It inverts the earlier limit, where only `PostToolUse` hooks could inject context ([Claude Code changelog v2.1.163](https://code.claude.com/docs/en/changelog)).
+Hooks are deterministic because the harness runs them, not the model. The harness invokes them at fixed points in the request loop: `PreToolUse` before it dispatches a tool call, `PostToolUse` after it receives the result, independent of any sampling. That guarantee makes exit code 2 a reliable block for `PreToolUse`, `UserPromptSubmit`, `Stop`, and `ConfigChange` (except `policy_settings`). For `PostToolUse` and `PostToolUseFailure`, exit code 2 shows stderr to Claude without blocking, because the tool already ran. `PermissionRequest` ignores exit code 2 and the permission flow proceeds unchanged. To deny there, return `hookSpecificOutput.decision.behavior: "deny"` ([exit-code table](https://code.claude.com/docs/en/hooks#exit-code-2-behavior-per-event), [decision control](https://code.claude.com/docs/en/hooks#permissionrequest-decision-control)). `Notification` ignores both the exit code and stderr. Beyond stderr, `Stop` and `SubagentStop` hooks can now return `hookSpecificOutput.additionalContext`. This gives Claude feedback and continues the turn without counting as a hook error. It inverts the earlier limit, where only `PostToolUse` hooks could inject context ([Claude Code changelog v2.1.163](https://code.claude.com/docs/en/changelog)).
 
 ## Lifecycle events
 
@@ -53,6 +53,8 @@ See the [official event list](https://code.claude.com/docs/en/hooks) for the com
 ## Matchers
 
 A matcher is a string. `"*"` or an empty string matches everything. A plain identifier or pipe-separated list (`"Bash"`, `"Write|Edit"`) matches exactly. Anything with other characters parses as a JavaScript regex. What the matcher filters depends on the event — tool name for `PreToolUse` / `PostToolUse`, session source (`startup`, `resume`, `clear`, `compact`) for `SessionStart`, notification type for `Notification`, and so on ([reference](https://code.claude.com/docs/en/hooks)).
+
+A matcher takes a list; a handler's `if` condition holds one rule naming one tool, so a shell guard needs [one `if` line per shell-starting tool](../../patterns/agent-design/shell-surface-hook-matcher-coverage.md).
 
 ## Hooks vs prompts
 
@@ -133,7 +135,7 @@ Hooks are the wrong tool when the rule they encode is aspirational rather than a
 - Hidden global state. A misbehaving agent is often a hook silently rewriting, blocking, or reformatting files. Hooks stay invisible in the transcript unless they exit non-zero, so debugging can take longer than the hook saves.
 - Brittle schema coupling. Hook scripts parse `tool_input` JSON. When a tool's schema changes in a new Claude Code release — new field names, renamed events, added matcher semantics — scripts fail silently or block valid calls.
 - Over-scoped blocks. A `PreToolUse` Bash blocker that matches `rm` with a substring check blocks `rm node_modules` and `echo "term"`. The false positives push users to disable the hook rather than live with them.
-- Performance tax. Every `PostToolUse` hook runs synchronously on the hot path, so a slow formatter or network call slows every edit. Move expensive work to `SessionEnd` or out-of-band jobs.
+- Performance tax. Hooks block by default, so a slow `PostToolUse` formatter slows every edit. A command hook can set `async: true` to run in the background, but it cannot block or control the action ([reference](https://code.claude.com/docs/en/hooks#run-hooks-in-the-background)).
 - CLAUDE.md would have worked. If the rule bends gracefully under load — prefer a style, avoid a phrase — a prompt instruction fails softer than a hook rejection and keeps the model in the loop.
 
 ## FAQ
@@ -148,13 +150,13 @@ Schema coupling. Hook scripts parse the `tool_input` JSON that arrives on stdin,
 
 **Where should expensive hook work go?**
 
-Off the hot path. Every `PostToolUse` hook runs synchronously after the tool result, so a slow formatter or a network call slows every single edit. Move that work to `SessionEnd` or an out-of-band job. The `SessionEnd` hook takes no matcher and fires whenever the session ends, which makes it the right place to write progress files or close audit logs.
+Off the hot path. Hooks block by default. A command hook can set `async: true` to run in the background, but it cannot block or control Claude ([reference](https://code.claude.com/docs/en/hooks#run-hooks-in-the-background)). Move other work to `SessionEnd`. The `SessionEnd` hook takes no matcher and fires whenever the session ends, which makes it the right place to write progress files or close audit logs.
 
 ## Key Takeaways
 
 - Hooks fire deterministically at documented lifecycle events across session, tool, subagent, compaction, worktree, and file-change phases
 - Hook input arrives on stdin as JSON — scripts use `jq` to read `tool_input` fields
-- Exit code 2 blocks `PreToolUse`, `PermissionRequest`, `UserPromptSubmit`, `Stop`, and config-change events; for post-hooks and notifications it only feeds stderr back to Claude
+- Exit code 2 blocks `PreToolUse`, `UserPromptSubmit`, `Stop`, and `ConfigChange`; `PostToolUse` and `PostToolUseFailure` only show stderr to Claude; `PermissionRequest` ignores it (deny with `decision.behavior`); `Notification` ignores exit code and stderr
 - Use hooks for non-negotiable rules; use CLAUDE.md for flexible guidance
 - Matchers are strings (exact, pipe-separated, or regex) whose meaning depends on the event
 

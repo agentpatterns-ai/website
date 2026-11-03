@@ -46,6 +46,7 @@ Strategies for splitting work across parallel agents — and controlling the bla
 - [Cache-Prefix Staggering for Sibling Agent Fan-Out](cache-prefix-staggering.md) — Delay each sibling until the first response begins so later siblings read the shared prompt prefix from cache instead of each writing their own entry
 - [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — Decouple the orchestrator's processing loop from subagent lifecycle so it continues planning and processing partial results while delegates execute concurrently
 - [LLM Map-Reduce Pattern](llm-map-reduce.md) — Split a large input into context-window-sized chunks, process each chunk independently, then combine chunk-level results into a coherent output
+- [Source-Grounded Directory Contracts: Chunked Scouts with Symbol Citations](source-grounded-directory-contracts.md) — Scouts read source files in chunks cut at definition boundaries, cite a file and symbol per entry, and parents roll up leaf contracts
 
 ## Coordination
 
@@ -69,6 +70,10 @@ How agents hand off work, share state, and refine each other's output without a 
 - [Rerunnable Claim Graph as Shared Agent Memory](rerunnable-claim-graph.md) — Publish each unattended agent's result as a commit a peer can check out and rerun, so verification costs a checkout; the record still does not stop duplicate work
 - [Verifier-Driven Parallel Coding Agents (Glite ARF)](verifier-driven-parallel-coding-agents.md) — Move the multi-agent coordination contract — task isolation, immutability of completed work, corrections overlay, materialized project overview — out of prose and into deterministic Python verifier scripts that fail loudly, adding ~1% wall-clock to keep per-agent lapses from compounding
 - [Reviewer Precision as a Pipeline Quality Proxy](reviewer-precision-proxy.md) — A more precise reviewer stage does not improve a multi-agent pipeline unless the protocol binds its critique into the next candidate; critique uptake, not reviewer precision, is the binding variable
+- [Elephant-Goldfish Design Review: Deep-Context Drafting with Zero-Context Review](elephant-goldfish-design-review.md) — A long-context session drafts a design document with the human, then fresh reviewer subagents with no conversation history read it and report gaps
+- [Drafter-Side Intent Reconciliation Instead of Self-Grading](drafter-intent-reconciliation.md) — The drafting session checks its draft against the earlier brief and reports changed decisions to the human, while fresh reviewers grade design quality
+- [Failed Reviewer Is Not a Clean Pass: Per-Agent Status in Fan-Out Review](failed-reviewer-not-clean-pass.md) — Record a reviewer that fails or returns nothing as not run, retry it once, and let it block a clean round instead of counting as zero findings
+- [Two-Marker Isolation Probe for Fresh-Context Reviewers](two-marker-reviewer-isolation-probe.md) — Plant one marker in the parent turn and one in an auto-loaded instruction file, then check the child's own transcript for both
 
 ## Multi-Model
 
@@ -79,6 +84,7 @@ Patterns that leverage multiple distinct models — using diversity of reasoning
 - [Voting / Ensemble Pattern](voting-ensemble-pattern.md) — Run the same task N times in parallel, then aggregate results through voting to trade compute for confidence
 - [Opponent Processor / Multi-Agent Debate](opponent-processor-debate.md) — Deploy two agents with structurally opposed incentives to independently critique each other's reasoning, then synthesize into a higher-quality decision
 - [Runtime Workflow Selection Across Models (Project HydraFusion)](runtime-workflow-selection-hydrafusion.md) — Pick the orchestration shape per request (single call, cascade, or cross-family critique) instead of pinning one model; the published payoff is cost at parity, not better answers
+- [Reviewer Independence: Context Reset or Model Diversity](context-reset-vs-model-diversity.md) — Reviewer independence comes from a fresh context, a different model family, or evidence the author never read, and each misses a different class of error
 
 ## Operational
 

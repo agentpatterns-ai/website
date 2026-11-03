@@ -88,6 +88,7 @@ Audit in this order. Search transcripts and scripts for agent-initiated `sleep` 
 ## Related
 
 - [Monitor Tool: Event Streaming from Background Scripts](../../tools/claude/monitor-tool.md) — the wait primitive in this pairing
+- [Per-Surface Hook Matchers for Shell-Starting Tools](shell-surface-hook-matcher-coverage.md) — Monitor, the third shell surface Claude Code added, and the hook rules that did not cover it
 - [Plugin Background Monitors](../../tools/claude/plugin-background-monitors.md) — monitors a plugin starts without a prompt
 - [Session Scheduling](../../tools/claude/session-scheduling.md) — timer-based re-checks for slow-changing conditions
 - [Async Non-Blocking Subagent Dispatch](../multi-agent/async-non-blocking-subagent-dispatch.md) — the same non-blocking idea applied to delegates
