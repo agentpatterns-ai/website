@@ -60,6 +60,7 @@ nav:
       - interpreter-skills.md
       - generated-procedure-drivers.md
       - per-surface-plugin-verification.md
+      - single-source-plugin-builds.md
       - merge-conflict-resolution-skill.md
       - project-writing-skill.md
       - skill-library-technical-debt.md

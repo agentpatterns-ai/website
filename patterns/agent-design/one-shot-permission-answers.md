@@ -72,6 +72,7 @@ Files in an added directory "follow the same permission rules as the original wo
 
 ## Related
 
+- [Write Boundaries Ship as a Setting, Read Boundaries as a Prompt](write-boundary-as-setting.md) — the write half of the same boundary, which 2.1.314 ships as a flat settings key with no answer ladder at all
 - [Six-Shape Approval Response Taxonomy](approval-response-taxonomy.md) — the same persistence knob one layer down, as `updatedPermissions` on the Agent SDK's `canUseTool` callback
 - [Approval Gate Granularity in Agent Pipelines](approval-gate-granularity.md) — the bundling axis; a saved answer is class bundling, and this prompt's class is the whole boundary
 - [Ask-Everything Permission Policies Protect Less than Per-Action Approval](../anti-patterns/ask-everything-permission-policies.md) — the measured comparison between standing rules and deciding per call

@@ -107,7 +107,7 @@ Claude starts `docker compose up --build`, monitors its stdout, and interjects o
 
 - Monitor pushes each stdout line to Claude as a notification; `Bash run_in_background` requires the agent to poll manually
 - Session-scoped: monitors stop when the session exits
-- Uses the same permission rules as Bash — no separate configuration required
+- Uses the same permission rules as Bash — no separate configuration required. Hook `if` conditions are the exception: they name one tool each, so Monitor needs [its own rule](../../patterns/agent-design/shell-surface-hook-matcher-coverage.md)
 - On Bedrock, Vertex AI, Foundry, or with telemetry or nonessential traffic disabled, Monitor needs v2.1.310 or later
 
 ## Related

@@ -10,7 +10,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
-last_reviewed: 2026-10-30
+last_reviewed: 2026-11-02
 maturity: emerging
 ---
 
@@ -34,9 +34,9 @@ A control absorbs a flaw when the vulnerable code never receives reachable attac
 
 The two zero-action rows sit at different positions. Replit's "existing microVM architecture prevented exploitation of all these vulnerabilities, by construction", and its package firewall "blocked all malicious package install attempts" ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)). Beneath and ahead both work. Neither retires the patch: the same kernel entry commits to "upgrade to the latest version that has all the fixes once it's available".
 
-A fix beneath the application still had to be delivered. Replit "removed the compromised CA from our base images and automatically applied the fix to 95% of published apps". The action line is "Republish Python apps to include the tooling update", which ties the republish to a separate patch of Replit's Python tooling. Apps that "require a manual update rather than an automatic fix" get an email with instructions from Replit ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)).
+A fix beneath the application still had to be delivered. Replit "removed the compromised CA from our base images and automatically applied the fix to 95% of published apps". The action line is "Republish Python apps to include the tooling update", which ties the republish to a separate patch of Replit's Python tooling. Apps that require "a manual update rather than an automatic fix" get an email with instructions from Replit ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)).
 
-The two web-firewall rows are the instructive pair. The control held; the work remained. Republishing a Node.js app "also addresses attack paths outside the incoming requests covered by the firewall, including responses your app receives from other services" ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)). The firewall covers incoming requests. Replit says patched Node.js also addresses attack paths through responses from other services.
+The two web-firewall rows are the instructive pair. The firewall protection was in place; the work remained. Republishing a Node.js app "also addresses attack paths outside the incoming requests covered by the firewall, including responses your app receives from other services" ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)). The firewall covers incoming requests. Replit says patched Node.js also addresses attack paths through responses from other services.
 
 ## Why it works
 
@@ -45,6 +45,20 @@ Replit credits its "existing microVM architecture with a hardened kernel configu
 Timing matters too. Replit attributes the kernel outcome to prior architecture: "The protection came from an architectural decision made before the disclosures."
 
 The split is contractual, which is what makes any of it readable from outside. Replit states where its ownership ends: "we are responsible for securing the harness, the runtime, and the operating system" ([Replit, 2026-10-28](https://replit.com/blog/architecture-behind-secure-agent-work)). Ask for that sentence before you ask for the architecture, because it tells you which rows can ever come back as None.
+
+## What the Replit post says about boundaries and operating cost
+
+Replit's architecture post ([Replit, 2026-10-28](https://replit.com/blog/architecture-behind-secure-agent-work)) names few controls. This table records, for each boundary or cost question, what the post states and where this site covers the rest. Where the post is silent, the row says so.
+
+| Question | What the Replit post states | Where to read more |
+|---|---|---|
+| Which control sits on which boundary | Agents run in isolated cloud environments. "MicroVMs give each execution environment its own minimal kernel". "development and production databases are kept separate". "Connector permissions provide another boundary for external systems." The post names no filesystem or process-level control inside the microVM. | [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md), [Session Harness Sandbox Separation](../patterns/agent-design/session-harness-sandbox-separation.md) |
+| What a container does not stop | The post does not discuss containers. It credits its microVM architecture with a hardened kernel configuration for the kernel outcome, and the Firecracker advisory below shows the microVM layer can itself be flawed. | [Containers vs MicroVMs vs OS-Level Isolators](sandbox-runtime-comparison.md), [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) (shared-kernel escapes) |
+| Egress filtering, proxy versus kernel enforcement | The post does not state an agent egress allowlist. It names a web application firewall for inbound exploits and, for Replit's internal use, "a Zero Trust network". It lists "unexpected file access or network connections" as something planned monitoring should "detect and respond to". | [Agent Network Egress Policy](agent-network-egress-policy.md), [Selective Network Access in Agent Sandboxes](selective-network-sandbox-mode.md), [Hostname Allowlist TLS Blind Spot](hostname-allowlist-tls-blind-spot.md) |
+| Credentials an agent run holds | "Replit keeps connector credentials outside the agent's context." "A credential broker authorizes every single request, and only retrieves the credentials from a vault and adds them to outgoing requests after that request is authorized." "The agent runs outside the isolated sandbox where code executes, keeping the two environments separate." | [Scoped Credentials via Proxy](scoped-credentials-proxy.md), [Sandbox Credential Masking](sandbox-credential-masking.md), [Renting a Cloud Agent's Execution Sandbox](../patterns/agent-design/rented-execution-sandbox.md) |
+| Latency, cold starts, controls dropped under pressure | The post gives no sandbox startup or runtime latency figure and does not say which controls teams drop first. Its cost statement about the sandbox is remediation work: "Newly disclosed flaws in dependencies and runtimes can create urgent remediation work even when an application's own code has not changed." | [Containers vs MicroVMs vs OS-Level Isolators](sandbox-runtime-comparison.md) (startup latency), [Scoped Credentials via Proxy](scoped-credentials-proxy.md) (proxy hop), [Selective Network Access in Agent Sandboxes](selective-network-sandbox-mode.md) and [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) (approval pressure) |
+
+Read the middle column as the extent of the vendor's claim. A control the post does not name is not evidence that Replit lacks it.
 
 ## When this backfires
 
@@ -75,7 +89,7 @@ This also addresses attack paths outside the incoming requests covered by
 the firewall, including responses your app receives from other services. [...]
 ```
 
-Both report a control that worked ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)). Only one ends your involvement.
+Both report a control in place ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)). Only one ends your involvement.
 
 ## Key Takeaways
 
@@ -83,6 +97,7 @@ Both report a control that worked ([Replit, 2026-10-22](https://replit.com/blog/
 - Keep a republish path ready for each runtime. Controls beside one route and fixes beneath application code can both leave deployment work.
 - Of five October 2026 disclosures on one platform, two needed no customer action, two needed a republish, and for one Replit recommended a republish ([Replit, 2026-10-22](https://replit.com/blog/security-vulnerabilities-across-the-internet)).
 - Replit emails manual-update instructions for apps outside the automatic fix. Budget for those apps as well.
+- Replit's architecture post states credential brokering and microVM isolation, but no egress allowlist, sandbox latency figure, or list of controls teams drop first. Use the linked sibling pages for those.
 - Check when each protection took effect. Replit attributes its kernel outcome to architecture that preceded these disclosures.
 
 ## Related
@@ -92,3 +107,6 @@ Both report a control that worked ([Replit, 2026-10-22](https://replit.com/blog/
 - [Reading an Exploit Roundup Against a Defense Catalog](reading-exploit-roundups-against-defense-catalog.md) — the companion read, using published attack instances to promote defenses from argued to observed
 - [Capability-Pegged Security Re-Scans](capability-pegged-security-rescan.md) — the other trigger for reviewing unchanged code, pegged to scanner capability instead of a disclosure
 - [Renting a Cloud Agent's Execution Sandbox](../patterns/agent-design/rented-execution-sandbox.md) — what the split looks like once you supply the execution environment and inherit its patch clock
+- [Dual-Boundary Sandboxing: Filesystem and Network Isolation](dual-boundary-sandboxing.md) — the filesystem and network boundaries that the Replit post leaves unspecified
+- [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md) — the credential broker pattern Replit describes, with its latency cost
+- [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — egress filtering, which the Replit post does not state

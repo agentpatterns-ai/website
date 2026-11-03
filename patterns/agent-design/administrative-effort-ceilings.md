@@ -1,7 +1,7 @@
 ---
 title: "Administrative Effort Ceilings for Reasoning Budget"
 term: "Administrative Effort Ceiling"
-description: "The maxEffortLevel cap bounds every operator effort control. Caps compose by minimum across settings scopes, and the clamp is silent in headless runs."
+description: "The maxEffortLevel cap bounds every operator effort control. Caps compose by minimum across settings scopes, and the docs describe no warning when the client cap clamps a run."
 tags:
   - agent-design
   - cost-performance
@@ -11,7 +11,7 @@ aliases:
   - maximum effort level setting
   - organization effort limit
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-09-14
+last_reviewed: 2026-11-03
 status: current
 maturity: emerging
 ---
@@ -20,7 +20,7 @@ maturity: emerging
 
 > An administrative effort ceiling caps reasoning effort above every operator control, so a higher request runs at the cap instead of being refused.
 
-Set an effort ceiling when the levels you remove are ones your workload does not need. Claude Code shipped the control in v2.1.267 on 9 September 2026 ([changelog](https://code.claude.com/docs/en/changelog#2-1-267)). `maxEffortLevel` caps the effort level a session can use, and any higher level "runs at the cap instead, including one from `/effort`, the `/model` picker, `--effort`, `CLAUDE_CODE_EFFORT_LEVEL`, a skill's or subagent's `effort` frontmatter, or the model's own default" ([settings reference](https://code.claude.com/docs/en/settings-reference#maxeffortlevel)). Where task difficulty varies widely, the ceiling takes depth the work needed, and an unattended run gets no warning.
+Set an effort ceiling when the levels you remove are ones your workload does not need. Claude Code shipped the control in v2.1.267 on 9 September 2026 ([changelog](https://code.claude.com/docs/en/changelog#2-1-267)). `maxEffortLevel` caps the effort level a session can use, and any higher level "runs at the cap instead, including one from `/effort`, the `/model` picker, `--effort`, `CLAUDE_CODE_EFFORT_LEVEL`, a skill's or subagent's `effort` frontmatter, or the model's own default" ([settings reference](https://code.claude.com/docs/en/settings-reference#maxeffortlevel)). Where task difficulty varies widely, the ceiling takes depth the work needed, and the docs describe no warning when `maxEffortLevel` clamps a run.
 
 ## What makes it a ceiling rather than a default
 
@@ -35,11 +35,11 @@ The clamp runs in the client. Claude Code "applies the cap itself before each re
 ## When this backfires
 
 - The workload needs the tier you cut. On GameEngineBench's C++ runtime tasks, "Increasing reasoning effort from medium to high to xhigh raises pass@1 from 9.1% to 19.1% to 29.1%" ([GameEngineBench](https://arxiv.org/abs/2607.03525v2)). A ceiling at medium buys that 20-point gap on work of that shape.
-- Nobody reads the warning. Interactive sessions and plain-text `--print` runs get a warning naming the requested and applied levels, but "with `json` or `stream-json` output or in background agents, the clamp applies silently" ([model configuration](https://code.claude.com/docs/en/model-config#organization-effort-limits)). Unattended runs are the case least able to notice and the one told least.
-- The cap removes more than depth. A cap below `xhigh` makes ultracode unavailable: "the session runs at the cap instead and ultracode stays off. Claude then doesn't plan workflows on its own" ([settings reference](https://code.claude.com/docs/en/settings-reference#ultracode)).
+- Nobody sees the clamp. The docs describe no warning for the `maxEffortLevel` client cap. For Enterprise per-role limits, a plain-text `--print` run with `--effort` above the cap writes a warning to stderr naming the requested and applied levels. Interactive sessions, `json` or `stream-json` output, and background agents send it to the debug log instead ([model configuration](https://code.claude.com/docs/en/model-config#organization-effort-limits)). Unattended runs are the case least able to notice.
+- The cap lowers the depth ultracode runs at. From v2.1.284, an effort cap such as `maxEffortLevel` "lowers that level without turning ultracode off", so Claude still plans workflows, each at the capped level. Before v2.1.284, a cap below `xhigh` kept ultracode off ([settings reference](https://code.claude.com/docs/en/settings-reference#ultracode)).
 - Effort was not the binding constraint. Capping to curb overthinking assumes effort drives the behavior you dislike. On FixedBench, correct-abstention across four effort levels moved from 61.5% to 65.8%, a change "notably smaller than the confidence intervals of ∼±7.0%" ([Coding Agents Don't Know When to Act](https://arxiv.org/abs/2605.07769v1)).
 
-The rival control bounds volume instead of depth. GitHub's premium request overage policy offers an enterprise or organization two options, one of which is to "Block usage when your included premium requests are exhausted" ([GitHub Changelog](https://github.blog/changelog/2025-08-22-premium-request-overage-policy-is-generally-available-for-copilot-business-and-enterprise/)). A quota fails loudly. Work stops and somebody asks why. A ceiling fails quietly, and on the four conditions above you learn about it at review.
+The rival control bounds volume instead of depth. GitHub's premium request overage policy offers an enterprise or organization two options, one of which is to "Block usage when your included premium requests are exhausted" ([GitHub Changelog](https://github.blog/changelog/2025-08-22-premium-request-overage-policy-is-generally-available-for-copilot-business-and-enterprise/)). A quota fails loudly. Work stops and somebody asks why. A ceiling fails quietly, and with no documented warning for the client cap you learn about it at review.
 
 ## Example
 
@@ -60,8 +60,8 @@ This caps every model at `medium` and exempts Sonnet 4.6, because a `"max"` valu
 
 - A cap composes by minimum across settings scopes while an `effortLevel` resolves by precedence, so setting the cap anywhere binds every source that sets it higher.
 - The clamp runs client-side before each request, which is why it holds on Bedrock, Google Cloud's Agent Platform, and Microsoft Foundry.
-- Headless and background runs get no warning. If you cap and also run agents in CI, check the applied level yourself rather than assuming the requested one ran.
-- Capping below `xhigh` also switches ultracode off, so the session stops orchestrating dynamic workflows.
+- The docs describe no warning when `maxEffortLevel` clamps a run. Enterprise per-role limits warn on stderr only for plain-text `--print` runs with `--effort`. If you cap and also run agents in CI, check the applied level yourself rather than assuming the requested one ran.
+- From v2.1.284 a cap lowers the level ultracode runs at without switching it off. Before that version, a cap below `xhigh` kept ultracode off.
 
 ## Related
 
@@ -70,3 +70,4 @@ This caps every model at `medium` and exempts Sonnet 4.6, because a `"max"` valu
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — phase-varying effort, which a low ceiling flattens
 - [Tenant Model Policy: Organization-Scoped Rules for AI Model Selection](tenant-model-policy.md) — the same admin tier applied to model choice
 - [Codified Effort and Escalation Policy in the Instruction File](../../instructions/codified-effort-escalation-policy.md) — the written default that a ceiling is not
+- [Subagent Effort Floors Instead of Session Inheritance](subagent-effort-floor.md) — the default underneath the chain, where the ceiling is the bound above it

@@ -81,6 +81,7 @@ Packaging domain knowledge and reusable capabilities as agent skills with reliab
 - [Interpreter Skills](interpreter-skills.md) — Ship a SKILL.md plus an importable module so the model decides when the behavior fires while the runtime executes a reviewed, testable function — the named, versionable unit on top of an embedded code interpreter
 - [Generated Procedure Drivers: Skills That Emit a Program](generated-procedure-drivers.md) — A skill whose output is an executable script that walks a person through a manual procedure, useful only where automation genuinely stops
 - [Per-Surface Verification of Agent Plugin Packages](per-surface-plugin-verification.md) — An Agent Plugins package is portable at `skills/` and `mcp.json` and nowhere else; GitHub's own three clients differ on enablement, install trust, and namespaced components
+- [Single-Source Plugin Builds with a Byte-Compared Distribution](single-source-plugin-builds.md) — Generate every host's plugin package from one tree, require every file the skills read at run time, and fail CI when the checked-in copy differs from a fresh build
 - [The Merge-Conflict Resolution Skill: What to Encode](merge-conflict-resolution-skill.md) — Encode two steps and no more: trace each side to its primary source before touching the diff, then run the repo's own checks before the commit
 
 ## Hooks & Lifecycle

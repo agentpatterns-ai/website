@@ -184,6 +184,7 @@ nav:
       - plan-stage-checkpoint-repair.md
       - oversight-stage-attribution.md
       - separate-critic-over-self-recheck.md
+      - paraphrase-first-review.md
   - "Rubric Design":
       - anti-reward-hacking.md
       - symptom-reduction-as-root-cause.md

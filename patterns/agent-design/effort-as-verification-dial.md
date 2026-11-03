@@ -81,6 +81,7 @@ Every step the xhigh run added is a check, which is the shape of task where the 
 ## Related
 
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — varying the same dial across phases of one run rather than across tasks.
+- [Subagent Effort Floors Instead of Session Inheritance](subagent-effort-floor.md) — where to set the level for dispatched workers, once you know what a level buys.
 - [Dispatch-Time Reasoning Level for Delegated Agents](dispatch-time-reasoning-level.md) — picking the level when the run leaves your view and you cannot correct it.
 - [Reasoning Effort Over Tool Scaffolding for First-Try Reliability](reasoning-effort-over-tool-scaffolding.md) — the competing claim on the same budget.
 - [Interactive Effort Sliders: Per-Turn Reasoning-Budget Controls](interactive-effort-sliders.md) — the operator surface this selection runs on.

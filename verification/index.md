@@ -185,6 +185,7 @@ last_reviewed: 2026-05-27
 - [Oversight Stage Attribution for Missed Agent Defects](oversight-stage-attribution.md) — Study participants checked beyond the mandatory gate on 65 of 71 silent-defect tasks and fixed 28, so grade a missed defect by which of five review stages it reached rather than by whether a review happened
 - [Plan-Stage Checkpoints in Agent Code Repair](plan-stage-checkpoint-repair.md) — A planted wrong mechanism failed 1.5 to 2.4 times as often from a repair agent's implementation plan as from its hypothesis across 1,844 requests, so spend one checkpoint on the plan and have it name state ownership, rollback, isolation, and the API contract
 - [A Separate Critic Over Completion-Time Self-Checking](separate-critic-over-self-recheck.md) — Across 17 verification designs, the strongest separate critic design gained 9.5 points on Terminal-Bench against the strongest completion gate's 6.0, and ran there at 1.13 to 1.25 times baseline cost against the rejection gates' 1.60 to 1.76
+- [Paraphrase-First Review: A Zero-Context Reader Restates the Design Before Listing Gaps](paraphrase-first-review.md) — A zero-context reviewer restates what a design document proposes before it lists gaps, and a wrong restatement is itself a finding
 
 ## Rubric Design
 

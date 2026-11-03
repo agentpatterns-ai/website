@@ -18,12 +18,12 @@ Output:
   <site_dir>/sitemap.xml  — served at /sitemap.xml by nginx / any static host.
 """
 
-import json
-import subprocess
 import xml.etree.ElementTree as ET
 from datetime import date
 from pathlib import Path
 from urllib.parse import urljoin
+
+from page_dates import for_build
 
 
 # ---------------------------------------------------------------------------
@@ -53,24 +53,15 @@ _EXCLUDED_PREFIXES: tuple[str, ...] = ("training/",)
 # on_config — capture site_url and dirs
 # ---------------------------------------------------------------------------
 def on_config(config):
+    global _dates
+    _dates = for_build(config, reset=True)
     global _site_url, _site_dir, _docs_dir, _entries, _lastmod_manifest
     _entries = []
     _site_url = (config.get("site_url") or "").rstrip("/")
     _site_dir = Path(config.get("site_dir") or "site")
     _docs_dir = Path(config.get("docs_dir") or "docs")
-    _lastmod_manifest = _load_manifest()
+    _lastmod_manifest = _dates.modified_manifest
     return config
-
-
-def _load_manifest() -> dict[str, str]:
-    """Load the lastmod manifest that sits next to this hook file."""
-    manifest_path = Path(__file__).resolve().parent / "lastmod-manifest.json"
-    try:
-        with manifest_path.open(encoding="utf-8") as fh:
-            data = json.load(fh)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return {}
-    return {k: v for k, v in data.items() if isinstance(k, str) and isinstance(v, str)}
 
 
 # ---------------------------------------------------------------------------
@@ -146,33 +137,5 @@ def on_post_build(config):
 # ---------------------------------------------------------------------------
 
 def _git_lastmod(src_path: str) -> str:
-    """Return YYYY-MM-DD of the last git commit touching src_path.
-
-    src_path is relative to docs_dir (e.g. 'patterns/architecture/foo.md').
-    We resolve it relative to docs_dir so git receives the correct path.
-    """
-    if _docs_dir is None:
-        return _today()
-
-    abs_path = _docs_dir / src_path
-
-    try:
-        result = subprocess.run(
-            ["git", "log", "-1", "--format=%cI", "--", str(abs_path)],
-            capture_output=True,
-            text=True,
-            check=True,
-            timeout=5,
-        )
-        iso_ts = result.stdout.strip()
-        if iso_ts:
-            # ISO 8601 datetime — keep only the date portion
-            return iso_ts[:10]
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FileNotFoundError):
-        pass
-
-    return _today()
-
-
-def _today() -> str:
-    return date.today().isoformat()
+    """Use shared history for pages absent from the published manifest."""
+    return _dates.modified(src_path) or date.today().isoformat()

@@ -74,3 +74,4 @@ Write the brief as though nothing carries, then delete the lines the table above
 - [Agent Handoff Protocols](agent-handoff-protocols.md) — the structured form of what crosses a boundary between agents.
 - [Static Roster vs Runtime Subagent Definition](static-roster-vs-runtime-subagent-definition.md) — who fixes a delegate's identity, and when.
 - [Role-Declared Context Mode](role-declared-context-mode.md) — where the harness records how much of the conversation crosses down.
+- [Two-Marker Isolation Probe for Fresh-Context Reviewers](two-marker-reviewer-isolation-probe.md) — a test for whether the conversation and instruction files actually cross down.

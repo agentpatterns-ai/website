@@ -16,40 +16,40 @@ maturity: established
 
 # AI Crawler Policy: robots.txt for the Three-Tier Crawler Landscape
 
-> AI crawlers split into retrieval bots (allow for citations), training scrapers (disallow), and non-compliant bots (WAF block) — each requiring a distinct robots.txt strategy.
+> AI crawlers split into retrieval bots (allow), training scrapers (disallow), and bots to WAF-block — each needs a distinct robots.txt strategy.
 
 Related lesson: [Four Engines, Four Backends](https://learn.agentpatterns.ai/geo/four-engines-four-backends/) — this concept features in a hands-on lesson with quizzes.
 
 ## The three-tier taxonomy
 
-AI crawlers are not monolithic. Each major provider now operates separate bots for distinct purposes, each with its own user-agent string:
+AI crawlers are not monolithic. Most major providers operate separate bots for distinct purposes, each with its own user-agent string. Google is the exception: `Google-Extended` is a robots.txt token, not a separate user-agent.
 
 | Tier | Purpose | User-agents | robots.txt behavior |
 |------|---------|-------------|----------------------|
-| Tier 1 — User-facing retrieval | Powers real-time citations in AI chat and search | `ChatGPT-User`*, `OAI-SearchBot`, `Claude-User`, `Claude-SearchBot`, `PerplexityBot`†, `Perplexity-User`† | Allow — drives referral traffic and AI citations |
-| Tier 2 — Training scrapers | Ingests content for model training datasets | `GPTBot`, `ClaudeBot`, `Google-Extended`, `Meta-ExternalAgent` | Disallow — no citation benefit; opts out of training data |
-| Tier 3 — Non-compliant bots | Crawlers documented to ignore robots.txt | `Bytespider` (ByteDance) | CDN/WAF block — robots.txt is ineffective |
+| Tier 1 — User-facing retrieval | Powers real-time citations in AI chat and search | `ChatGPT-User`*, `OAI-SearchBot`, `Claude-User`, `Claude-SearchBot`, `PerplexityBot`‡, `Perplexity-User`‡ | Allow — keeps pages eligible for AI answers and citations (`ChatGPT-User` may ignore the rule*) |
+| Tier 2 — Training scrapers | Ingests content for model training datasets | `GPTBot`, `ClaudeBot`, `Google-Extended`†, `Meta-ExternalAgent` | Disallow — opts out of training data (`Google-Extended` also opts out of Gemini grounding) |
+| Tier 3 — Optional hard block | Bots you want out whatever robots.txt says | `Bytespider` (ByteDance) | CDN/WAF block — a WAF rule enforces what robots.txt only requests |
 
-The tier distinction matters. You can block training crawlers without blocking retrieval bots. That keeps your content eligible for AI search citations while opting out of training datasets.
+The tier distinction matters. You can block most training crawlers without blocking retrieval bots. That keeps your content eligible for AI search citations while opting out of training datasets. `Google-Extended` is the exception: it also controls grounding in Gemini Apps and Vertex AI, so it does not map cleanly to one tier.
 
-\* As of OpenAI's December 2025 policy update, `ChatGPT-User` no longer respects robots.txt; disallow rules are ignored ([coverage](https://ppc.land/openai-revises-chatgpt-crawler-documentation-with-significant-policy-changes/)).
+\* OpenAI says `ChatGPT-User` actions are user-initiated and "robots.txt rules may not apply" ([OpenAI crawler documentation](https://platform.openai.com/docs/bots)). Treat a Disallow rule for it as unreliable.
 
-† Cloudflare documented Perplexity rotating user-agents and ASNs to bypass robots.txt ([August 2025 report](https://blog.cloudflare.com/perplexity-is-using-stealth-undeclared-crawlers-to-evade-website-no-crawl-directives/)). Use WAF for hard blocks.
+† Google documents `Google-Extended` as a standalone product token that controls training and grounding (content from the Google Search index supplied to the model at prompt time) in Gemini Apps and Vertex AI. It does not affect Google Search inclusion or ranking ([Google](https://developers.google.com/search/docs/crawling-indexing/google-common-crawlers)).
+
+‡ Cloudflare documented Perplexity rotating user-agents and ASNs to bypass robots.txt ([August 2025 report](https://blog.cloudflare.com/perplexity-is-using-stealth-undeclared-crawlers-to-evade-website-no-crawl-directives/)). Use WAF for hard blocks.
 
 ## Decision matrix
 
 | Goal | Action |
 |------|--------|
 | Appear in AI search answers (ChatGPT, Claude, Perplexity) | Allow Tier 1 |
-| Prevent content entering training datasets | Disallow Tier 2 |
-| Stop ByteDance/Bytespider from crawling | WAF custom rule |
+| Prevent content entering training datasets | Disallow Tier 2 (`Google-Extended` also limits Gemini grounding) |
+| Block ByteDance/Bytespider | WAF custom rule |
 | Opt out of everything | Disallow all AI user-agents + WAF |
-
-The emerging practitioner consensus for documentation sites: allow Tier 1, disallow Tier 2.
 
 ## Reference configuration
 
-This site's `robots.txt` implements the three-tier policy:
+A three-tier `robots.txt` looks like this:
 
 ```text
 # ── Default: allow all standard crawlers ──────────────────────────────────────
@@ -90,22 +90,28 @@ Disallow: /
 User-agent: Meta-ExternalAgent
 Disallow: /
 
-# ── Tier 3: CDN-level block (robots.txt ineffective) ──────────────────────────
+# ── Tier 3: CDN-level block (optional) ────────────────────────────────────────
 # Bytespider — configure WAF custom rule: User-Agent contains "Bytespider" → Block
 
 Sitemap: https://agentpatterns.ai/sitemap.xml
 ```
 
+### What this site's robots.txt does
+
+This site's [`robots.txt`](../robots.txt) does not use the Tier 2 rules above. One group allows `/` for `GPTBot`, `ClaudeBot`, `Google-Extended`, and the retrieval bots, and a `User-agent: *` group allows `/` for everything else, `Meta-ExternalAgent` included. Both groups carry `Content-Signal: ai-train=yes`. `Bytespider` has no named group, so the wildcard group allows it in the file. The file's header comment says a Cloudflare WAF rule blocks it.
+
+`Allow: /` is the crawl control. `Content-Signal` is a preference signal. The file has no `__usage_ai-training` group, the token that [AI Training Preference Signals](ai-training-preference-signals.md) describes.
+
 ## Compliance caveats
 
 robots.txt is advisory, not enforceable. Watch for these caveats:
 
-- Major providers comply: OpenAI (GPTBot, OAI-SearchBot), Anthropic (ClaudeBot, Claude-SearchBot, Claude-User), and Google (Google-Extended) respect robots.txt directives.
-- ChatGPT-User exempt (December 2025): OpenAI's updated [crawler documentation](https://platform.openai.com/docs/bots) reclassified `ChatGPT-User` as a user-initiated agent and [removed its robots.txt compliance requirement](https://ppc.land/openai-revises-chatgpt-crawler-documentation-with-significant-policy-changes/). Disallow rules for `ChatGPT-User` are now ignored. You can only block interactive ChatGPT browsing at the CDN/WAF layer.
+- Provider documentation names robots.txt as the control for these bots: OpenAI for [GPTBot and OAI-SearchBot](https://platform.openai.com/docs/bots), Anthropic for [ClaudeBot, Claude-SearchBot and Claude-User](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), and Google for [Google-Extended](https://developers.google.com/search/docs/crawling-indexing/google-common-crawlers).
+- ChatGPT-User is user-initiated: OpenAI's [crawler documentation](https://platform.openai.com/docs/bots) says robots.txt rules "may not apply" to it, and [coverage](https://ppc.land/openai-revises-chatgpt-crawler-documentation-with-significant-policy-changes/) reports the December 2025 change. To block interactive ChatGPT browsing, use a CDN/WAF rule.
 - Perplexity stealth crawling documented: [Cloudflare reported in August 2025](https://blog.cloudflare.com/perplexity-is-using-stealth-undeclared-crawlers-to-evade-website-no-crawl-directives/) that Perplexity rotates user-agents and ASNs to evade blocks and has been observed ignoring robots.txt. Treat allow-listing `PerplexityBot` and `Perplexity-User` as directional only, and use WAF rules for any hard block.
-- Bytespider ignores it: ByteDance's Bytespider is documented to not respect robots.txt, so block it at the CDN/WAF level. See [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup.
-- No legal enforcement: robots.txt does not prevent crawling. It signals intent. Legal protection requires ToS, CFAA claims, or contractual agreements.
-- EU AI Act alignment: the EU regulatory framework encourages GPAI providers to document and respect publisher opt-out signals. A `robots.txt` disallow for training crawlers is the de facto mechanism. Verify specific commitments against the published Code of Practice text as obligations evolve.
+- Meta-ExternalFetcher may bypass it: Meta's [crawler documentation](https://developers.facebook.com/docs/sharing/webmasters/web-crawlers/) says this user-requested fetcher "may bypass robots.txt".
+- Hard blocks need the network layer: a CDN/WAF rule blocks a user-agent such as `Bytespider` whatever robots.txt says. See [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup.
+- No enforcement: robots.txt does not prevent crawling. It signals intent.
 
 ## Provider user-agent reference
 
@@ -113,44 +119,47 @@ robots.txt is advisory, not enforceable. Watch for these caveats:
 |----------|----------|-------------|----------------|
 | OpenAI | `GPTBot` | `OAI-SearchBot` | `ChatGPT-User`* |
 | Anthropic | `ClaudeBot` | `Claude-SearchBot` | `Claude-User` |
-| Google | `Google-Extended` | *(standard Googlebot)* | `Google-CloudVertexBot` |
-| Perplexity | *(PerplexityBot serves both)* | `PerplexityBot` | `Perplexity-User` |
-| Meta | `Meta-ExternalAgent` | `Meta-ExternalFetcher` | — |
+| Google | `Google-Extended` (token only; also controls Gemini grounding) | *(standard Googlebot)* | — |
+| Perplexity | — | `PerplexityBot` | `Perplexity-User` |
+| Meta | `Meta-ExternalAgent` | — | `Meta-ExternalFetcher`‡ |
 
-*ChatGPT-User — no longer bound by robots.txt as of OpenAI's December 2025 policy update; block at CDN/WAF if required.
+*ChatGPT-User — OpenAI says robots.txt rules may not apply; block at CDN/WAF if required.
+
+‡ Meta says this fetcher may bypass robots.txt.
+
+Sources: [OpenAI](https://platform.openai.com/docs/bots), [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler), [Google](https://developers.google.com/search/docs/crawling-indexing/google-common-crawlers), [Perplexity](https://docs.perplexity.ai/guides/bots), [Meta](https://developers.facebook.com/docs/sharing/webmasters/web-crawlers/).
 
 ## Why allow Tier 1
 
-Blocking all AI crawlers has a compounding cost:
+Blocking all AI crawlers has a cost:
 
-- Retrieval bots power citation-eligible AI answers — being absent means competitors fill that space
-- AI-referred sessions grew substantially year over year through 2025, so blocking Tier 1 opts out of this traffic source entirely
-- [Cloudflare data](https://blog.cloudflare.com/control-content-use-for-ai-training/) shows the crawl-to-referral ratio for OpenAI is ~1,700:1 and Anthropic ~73,000:1 — training crawlers give no referral return while retrieval bots give direct search traffic
+- Retrieval bots power citation-eligible AI answers — a site that blocks them is absent from those answers
+- [Cloudflare data](https://blog.cloudflare.com/control-content-use-for-ai-training/) shows a June 2025 crawl-to-referral ratio of ~1,700:1 for OpenAI and ~73,000:1 for Anthropic. Crawling returns few visits, which is the argument for disallowing Tier 2 rather than for allowing Tier 1
 
 ## FAQ
 
 **Why not just block all AI crawlers instead of picking tiers?**
 
-Blocking everything cuts off Tier 1 retrieval bots too, which power citation-eligible AI answers — absence there just lets competitors fill the space. AI-referred traffic grew substantially through 2025. [Cloudflare data](https://blog.cloudflare.com/control-content-use-for-ai-training/) shows Anthropic's crawl-to-referral ratio near 73,000:1. Training crawlers give no referral return while retrieval bots drive direct search traffic. Blanket blocking forfeits that entirely.
+Blocking everything cuts off Tier 1 retrieval bots too, which power citation-eligible AI answers. [Cloudflare data](https://blog.cloudflare.com/control-content-use-for-ai-training/) shows a June 2025 crawl-to-referral ratio near 73,000:1 for Anthropic, which is a reason to disallow training crawlers. Blocking only Tier 2 keeps retrieval bots in.
 
-**Does robots.txt actually stop Bytespider from crawling my site?**
+**How do I block Bytespider?**
 
-No. Bytespider (ByteDance) is documented to ignore robots.txt directives entirely, so a Disallow rule has no effect on it. The only effective control is a CDN or WAF custom rule that blocks requests where the User-Agent contains "Bytespider" — see [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup. robots.txt covers Tier 1 and Tier 2 bots. Tier 3 requires enforcement at the network layer.
+Use a CDN or WAF custom rule that blocks requests where the User-Agent contains "Bytespider" — see [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup. A robots.txt Disallow only asks. A WAF rule enforces, so it works whether or not the bot reads robots.txt.
 
-**Is a robots.txt disallow for training crawlers legally enforceable?**
+**Does a robots.txt disallow for training crawlers stop them?**
 
-No — robots.txt is advisory, not a legal mechanism. It signals intent but does not prevent crawling on its own. Legal protection instead requires ToS terms, CFAA claims, or contractual agreements. The EU AI Act encourages GPAI providers to honor publisher opt-out signals like a robots.txt disallow, but site owners should verify specific commitments against the published Code of Practice text as obligations evolve.
+Not by itself. robots.txt is advisory: it signals intent and does not prevent crawling. Providers that name it as their control (see Compliance caveats) honor it. For hard enforcement, use a CDN/WAF rule, which blocks the request before it reaches your content. OpenAI also says robots.txt rules may not apply to ChatGPT-User, a fetcher that acts on a user's request.
 
 **Does disallowing Google-Extended hurt my site's ranking in Google Search?**
 
-No. Google-Extended is a separate, training-only user-agent from standard Googlebot, which handles search indexing and ranking — the reference table lists them separately. Disallowing Google-Extended in robots.txt opts your content out of AI training use without touching Googlebot's crawl for search results. The two directives are independent, so blocking one has no effect on the other.
+No. Google-Extended is a robots.txt product token, not a separate HTTP user-agent. It controls training and grounding in Gemini Apps and Vertex AI. Blocking it does not affect Google Search inclusion, and Google states it is not used as a ranking signal. The block only opts your content out of that training and grounding ([Google](https://developers.google.com/search/docs/crawling-indexing/google-common-crawlers)).
 
 ## Key Takeaways
 
-- The three-tier taxonomy (retrieval / training / non-compliant) maps directly to three distinct robots.txt strategies: allow / disallow / CDN block
-- Blocking training crawlers does not block retrieval bots — they use separate user-agent strings
-- robots.txt compliance is voluntary; most major providers respect it, but `ChatGPT-User` was exempted in December 2025 and Perplexity has been documented evading blocks — use CDN/WAF rules when hard enforcement is required
-- The default strategy for documentation sites: allow Tier 1, disallow Tier 2, WAF-block Bytespider
+- The three-tier taxonomy (retrieval / training / optional hard block) maps to three strategies: allow / disallow / CDN block
+- Blocking training crawlers does not block retrieval bots — they use separate user-agent strings. The exception is `Google-Extended`, a robots.txt token that also controls Gemini grounding
+- robots.txt compliance is voluntary; OpenAI, Anthropic and Google document it as their control, but OpenAI says `ChatGPT-User` may not follow it, Meta says `Meta-ExternalFetcher` may bypass it, and Cloudflare reported Perplexity evading blocks — use CDN/WAF rules when hard enforcement is required
+- The strategy this page describes: allow Tier 1, disallow Tier 2, and WAF-block any bot (such as Bytespider) you want out regardless of robots.txt
 
 ## Related
 
@@ -161,6 +170,4 @@ No. Google-Extended is a separate, training-only user-agent from standard Google
 - [GSC Search Console Monitoring](gsc-search-console-monitoring.md)
 - [URL Fetch Public Index Gate](../security/url-fetch-public-index-gate.md)
 - [SEO vs GEO](seo-vs-geo.md)
-- [What Is GEO?](what-is-geo.md)
 - [Measuring GEO Performance](measuring-geo-performance.md)
-- [GEO for Technical Docs](geo-for-technical-docs.md)

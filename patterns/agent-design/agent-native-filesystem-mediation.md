@@ -78,3 +78,4 @@ Read the size caveat alongside that result. The authors "deliberately keep each 
 - [Approval Gate Granularity in Agent Pipelines](approval-gate-granularity.md) — when batching approvals actually cuts reviewer load
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](../../security/enforced-versus-advisory-controls.md) — where a control is evaluated decides whether it binds
 - [Sandbox Runtime Comparison](../../security/sandbox-runtime-comparison.md) — picking the isolation layer beneath all of this
+- [Approve Shell Commands on Observed Effects, Not Predicted](consequence-aware-approval.md) — the measured cost of showing effects to the agent after the command runs, instead of to an independent approver before the commit

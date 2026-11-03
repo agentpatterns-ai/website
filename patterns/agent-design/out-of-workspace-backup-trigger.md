@@ -78,6 +78,7 @@ RegretBench Appendix C.5 (Figure 14) gives a remote-mailbox recovery case. Witho
 
 ## Related
 
+- [Write Boundaries Ship as a Setting, Read Boundaries as a Prompt](write-boundary-as-setting.md) — the same out-of-workspace write predicate wired to refuse the call rather than to back it up first
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md)
 - [Agent-Native Filesystems: Gating Effects, Not Commands](agent-native-filesystem-mediation.md)
 - [Full Sandbox Snapshots Beat Retry Only for Untracked State](snapshot-branching-boundary.md)
