@@ -205,6 +205,7 @@ nav:
       - gateway-session-affinity.md
       - client-keyed-gateway-controls.md
       - exactly-once-enforcement-layer.md
+      - evidence-guided-recovery-ambiguous-outcomes.md
       - exception-handling-recovery-patterns.md
       - failure-trajectory-recovery-window.md
       - feedback-capability-equalizer.md
@@ -305,6 +306,7 @@ nav:
       - prompt-only-baseline-before-specialized-subsystem.md
       - model-set-parity-harness-claims.md
       - model-rankings-reverse-across-harnesses.md
+      - portable-harness-specification.md
       - harness-selection-reliability.md
       - harness-deletion-and-cost-rules.md
       - last-unconstrained-axis.md

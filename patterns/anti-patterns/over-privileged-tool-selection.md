@@ -11,7 +11,7 @@ tags:
   - security
   - tool-agnostic
   - arxiv
-last_reviewed: 2026-06-19
+last_reviewed: 2026-11-03
 maturity: emerging
 status: current
 ---
@@ -29,6 +29,8 @@ The failure repeats across five recurring shapes — Authority Escalation, Safet
 ## Why it works
 
 The mechanism is a selection prior under reasoning-tax pressure. Tools that advertise broader capability score higher on solving the request, because their descriptions cover a larger envelope. The model picks whichever description anchors most strongly. General safety RLHF tunes refusal of unsafe requests, not selection between two legal tools with different blast radii ([Yang et al., 2026](https://arxiv.org/abs/2606.20023)).
+
+Parkinson et al.'s information condition adds privilege class and cost to each tool description, plus a system-prompt sentence explaining the notes ([§3.3](https://arxiv.org/html/2610.40975v1#S3.SS3)). The main setting makes each standard tool's first call fail; later calls succeed, while risk tools always succeed ([§3.1](https://arxiv.org/html/2610.40975v1#S3.SS1)). For Qwen3.5-397B, information lowers premature escalation from 38.4% to 19.1%, a 19.3-percentage-point reduction (about 50% relative) versus no signal ([Table 4; §4.2](https://arxiv.org/html/2610.40975v1#S4.SS2)). This metric counts scenarios where the agent calls a risk tool within five turns before trying every standard tool ([§3.6](https://arxiv.org/html/2610.40975v1#S3.SS6)). The authors report: "On most models, however, information alone mainly delays escalation until the standard tools have been tried." ([Abstract](https://arxiv.org/html/2610.40975v1#abstract)).
 
 Transient failures amplify the rate. After a tool returns an error, the agent enters corrective-reasoning mode and reaches for a variant that cannot fail — the highest-privilege one. This is the same dynamic that makes [error frames a trusted authority channel](tool-error-implicit-authority.md). Privilege-aware SFT+RL post-training pulls Qwen3-8B from 64.9% down to 27.0%, and Qwen3-4B-Think to 18.9%, but does not eliminate it ([Yang et al., 2026](https://arxiv.org/abs/2606.20023v2)). This is a learnable selection bias, not a missing capability.
 

@@ -110,3 +110,4 @@ A "yes" to 1 and 2 with a "no" to 3 puts the deployment in the gap this anti-pat
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
+- [Per-Call Egress Confirmation for User-Identifying Values](per-call-egress-confirmation.md) — the other thing an egress control can match on: the call's argument rather than its destination

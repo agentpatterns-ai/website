@@ -8,7 +8,7 @@ tags:
 aliases:
   - computer use as last resort integration
   - integration tier selection for agents
-last_reviewed: 2026-10-03
+last_reviewed: 2026-11-03
 maturity: emerging
 status: current
 ---
@@ -18,6 +18,8 @@ status: current
 > Computer use is the bottom rung of the integration ladder — reach for it only when no machine surface reaches the task.
 
 GitHub put computer use into public preview in Copilot CLI and the Copilot app on October 1, 2026. The changelog named a condition rather than a capability. The feature covers "workflows in legacy and GUI-only software that do not provide an API, command-line interface, or MCP integration" ([GitHub Changelog, 2026-10-01](https://github.blog/changelog/2026-10-01-github-copilot-can-now-interact-with-desktop-apps)). That is a tier-selection rule. The GUI is the surface you fall back to. Falling back costs you a standing permission grant plus a reliability penalty that grows with the length of the workflow.
+
+See also OpenAI's [Advancing computer use with Ironclad](https://openai.com/index/advancing-computer-use-with-ironclad), which describes computer-use training and evaluation in Ironclad software.
 
 ## The conditions that hold the bottom rung
 

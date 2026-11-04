@@ -78,3 +78,4 @@ The study's conclusion is a router: keep "a cheap semantic index for retrieval" 
 - [Agent-Tuned Code Search](agent-tuned-code-search.md) — a hosted single-purpose search tool that returns paths and line ranges, the citation contract this page argues for
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — how cross-file retrieval is assembled on the index side
 - [Persistent Shared Search Sub-Agent](../patterns/multi-agent/persistent-search-subagent.md) — delegation tuned for output-token reuse across many workers
+- [Pending Task Registry for Asynchronous Agent Tool Calls](pending-task-registry.md) — the same handoff when the delegated work runs asynchronously and its result returns late

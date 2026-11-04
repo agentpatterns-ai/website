@@ -166,5 +166,7 @@ Keeping agents on track across long sessions by preserving failure signals and r
 
 - [Context-Injected Error Recovery](context-injected-error-recovery.md) — When a tool call fails, inject structured error context into the next inference call to prevent retry loops before they form
 - [Error Preservation in Context](error-preservation-in-context.md) — Keep failed actions and error traces visible in the agent's context window; error history acts as negative examples that shift model behavior
+- [Failure Memory on Agent Retry](retry-failure-memory.md) — Which record of a failed attempt to hand its retry: the transcript, a model-written lesson, or a bare notice, and what each one measurably changes
 - [Goal Recitation](goal-recitation.md) — Periodically rewrite objectives, to-do lists, and status summaries at the tail of context to exploit recency bias and prevent goal drift in long-running sessions
+- [Pending Task Registry for Asynchronous Agent Tool Calls](pending-task-registry.md) — Bind every in-flight asynchronous tool call to a handle the model can name, so the agent stops forgetting pending work or inventing its results
 - [Trajectory Attribution for Context Repair (TRACE)](trajectory-attribution-context-repair.md) — Mine stored trajectories for implicit dissatisfaction cues to attribute a failure to the skill, knowledge-base entry, or tool description that caused it, then propose the edit

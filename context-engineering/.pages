@@ -132,6 +132,8 @@ nav:
   - "Error Handling & Drift Prevention":
       - context-injected-error-recovery.md
       - error-preservation-in-context.md
+      - retry-failure-memory.md
       - goal-recitation.md
+      - pending-task-registry.md
       - trajectory-attribution-context-repair.md
   - ...

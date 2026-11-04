@@ -35,9 +35,9 @@ Actor rules cover who. By default "every user with write access to a repository 
 
 Event rules cover what, across the full trigger list including `push`, `pull_request`, `pull_request_target`, `issue_comment`, `workflow_run` and `workflow_dispatch` ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)). A policy's `workflow_path` condition takes include and exclude globs. GitHub's own example restricts `deploy.yml` to a designated team while CI workflows stay open to all contributors ([GitHub Changelog](https://github.blog/changelog/2026-09-17-workflow-execution-protections-in-github-actions-generally-available)).
 
-## The 2 November 2026 default
+## The 2 December 2026 default
 
-Read the scope before treating it as your deadline. For public repositories with no applicable event policy already configured, GitHub has added a default policy that blocks `pull_request_target`. It "Does not apply to private or internal repositories", it "Does not replace an applicable event policy that you have already configured", and it runs in evaluate mode today. On 2 November 2026 GitHub enforces it "for affected repositories that were using the default `pull_request_target` policy before general availability" ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)). A public-repository agent reviewer that comments on fork pull requests with a write token is the shape most likely to stop working that day.
+Read the scope before treating it as your deadline. For public repositories with no applicable event policy already configured, GitHub has added a default policy that blocks `pull_request_target`. It "Does not apply to private or internal repositories", it "Does not replace an applicable event policy that you have already configured", and it runs in evaluate mode today. On 2 December 2026 GitHub enforces it "for affected repositories that were using the default `pull_request_target` policy before general availability" ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)). The deadline moved from 2 November. Brownouts on 9 and 16 November, 16:00–18:00 UTC, block affected runs before permanent enforcement ([GitHub Changelog, 2 November 2026](https://github.blog/changelog/2026-11-02-pull_request_target-blocked-by-default-december-2)).
 
 ## Why it works
 
@@ -51,7 +51,7 @@ The field record shows the advisory version of the rule failing. The Sysdig Thre
 - You are below Enterprise and cannot run the dry pass. An actor rule that omits the agent's App identity stops its CI on the first push, with no insights run to catch the omission.
 - You read an event allowlist as a fix for pwn requests. GitHub states that they "are also not unique to `pull_request_target`", naming `issue_comment` and `workflow_run` workflows that fetch and run a fork's code as vulnerable in the same way ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
 - You expect the policy to constrain the run itself. It governs the trigger, not the content: token permissions, secret scope and runner isolation stay workflow-file decisions. Practitioners asking for content-level policy on GitHub's 2026 roadmap were pointing at that gap ([community discussion #190621](https://github.com/orgs/community/discussions/190621)).
-- Your repositories are private and internal. The November default never reaches them, so nothing changes until somebody writes a policy.
+- Your repositories are private and internal. The December default never reaches them, so nothing changes until somebody writes a policy.
 
 ## Example
 
@@ -89,12 +89,13 @@ A later commit that changes `ai-review.yml` to `on: pull_request_target` still l
 - Inventory what your agent's workflow is triggered by before you write an event rule, because the run fails outright on a disallowed event ([GitHub Docs](https://docs.github.com/en/actions/concepts/about-actions-policies)).
 - Add your agent's App or bot identity to the actor allowlist before you enforce, or you switch off its CI runs ([GitHub Docs](https://docs.github.com/en/actions/how-tos/administer/control-workflow-execution)).
 - Audit which tokens and Apps hold `administration: write`, since those can delete the policy that bounds them ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)).
-- If your public repositories still run `pull_request_target`, decide before 2 November 2026 whether to move to `pull_request` or write a policy that allows the event ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
+- If your public repositories still run `pull_request_target`, decide before 2 December 2026 whether to move to `pull_request` or write a policy that allows the event ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
 
 ## Related
 
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — the general sorting rule this page applies to CI triggers
 - [AI Agents in CI/CD with Elevated Permissions and Untrusted Content (GitInject)](../patterns/anti-patterns/ai-agents-in-ci-cd-with-elevated-permissions.md) — the workflow-file version of the same rule, and why the trigger matters
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — the complementary control over edits to the workflow file itself
+- [Auditing Agent CI Before the pull_request_target Default Block](pull-request-target-default-block.md) — the audit and migration side of the default event rule described above
 - [Non-Retirable Approval Rules for Agent Operations](non-retirable-approval-rules.md) — keeping a rule in place once an agent can reach the surface that defines it
 - [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md) — layering policy across enterprise, organization and repository

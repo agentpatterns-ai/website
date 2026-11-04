@@ -11,7 +11,7 @@ aliases:
   - harness pruning rule
   - regularized harness evolution
   - cost-gated harness acceptance
-last_reviewed: 2026-09-25
+last_reviewed: 2026-11-03
 maturity: emerging
 ---
 
@@ -63,6 +63,7 @@ Deletion depends on attribution, and a cap on edits per candidate is what suppli
 - Set them too tight and the loop returns nothing. In one counterfactual harness search, every second-round candidate violated an ε=0.05 constraint "despite released gains as high as 15.31%", and the method fell back to the original harness ([arXiv:2609.18366v1](https://arxiv.org/abs/2609.18366v1)).
 - Your footprint is not policy tokens. The cost rule uses "policy-token cost as a common measurable proxy" for the harness footprint ([arXiv:2609.24972v2](https://arxiv.org/abs/2609.24972v2)). Where the cost that hurts is wall-clock, tool-call side effects, or human review, the rule binds on nothing.
 - The thresholds are fitted where the risk is. The authors select every hyperparameter "using only the evolve environment", and state that "held-out and OOD benchmarks are not used for tuning" ([arXiv:2609.24972v2](https://arxiv.org/abs/2609.24972v2)). That is the right discipline, and it means the band defending against evolve-set overfitting is calibrated on the evolve set.
+- Encouraging removal may not shrink much. One study built a harness up from a nearly empty start, admitting only components that improved accuracy, and ran a removal-encouraging loop as its control. It reports "we ran a top-down loop from PI, permitting all modifications and encouraging removals, yet it matched bottom-up on accuracy while barely shrinking the harness" ([arXiv:2611.03434v1](https://arxiv.org/abs/2611.03434v1)). The bottom-up harness reached an 83.8% pass rate, "within 1.2 percentage points and 0.07 soft-score points of the best baseline" ([arXiv:2611.03434v1](https://arxiv.org/abs/2611.03434v1)). The authors call that gap "practical parity rather than a ranking", measured on one investigative-analysis benchmark at a fixed model.
 
 Scope: frozen backbone models only, and the authors state that "broader validation is needed to determine how well the method generalizes to substantially different agent architectures, tool ecosystems, and longer-running self-improvement processes" ([arXiv:2609.24972v2](https://arxiv.org/abs/2609.24972v2)).
 

@@ -10,7 +10,7 @@ tags:
   - agent-design
   - human-factors
   - tool-agnostic
-last_reviewed: 2026-10-24
+last_reviewed: 2026-11-03
 maturity: emerging
 ---
 
@@ -27,6 +27,8 @@ The price git pays for offline work is a complete local copy. "Git is a decentra
 Anthropic's figures show the scale. Its main branch history alone is almost 100 GB and a compressed working copy is over 25 GB. On top of that it runs "on the order of 25 million code checkouts per day for CI, before counting developer environments, agent sandboxes, and research jobs". The post puts the naive cost of that volume at "over 600 PB of git traffic per day" ([Anthropic](https://www.anthropic.com/research/redesigning-source-control)).
 
 The assumption that failed was offline-first clients: "like most companies, we were using git as a centralized system with one authoritative copy, but nearly all of our clients were agents and jobs that are online by definition" ([Anthropic](https://www.anthropic.com/research/redesigning-source-control)).
+
+OpenAI has its own account of git at scale, [Scaling Git at OpenAI](https://openai.com/index/scaling-git-at-openai). This page cites it by title and URL only, so every figure above is still Anthropic's.
 
 ## Three readiness layers
 
