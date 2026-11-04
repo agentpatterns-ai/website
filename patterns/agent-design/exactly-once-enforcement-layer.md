@@ -84,6 +84,7 @@ That leaves two jobs: pin the key, and carry unresolved outcomes into the final 
 - [Tool Operability: Interfaces That Survive a Lost Response](tool-operability-lost-responses.md) — the catalog of what a tool interface should expose, where this page decides which layer to spend on
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — the client-side techniques, including why a check-before-act guard is not enough under concurrency
 - [Tool-Call Success as Workflow Effect Evidence](../anti-patterns/tool-call-success-as-workflow-evidence.md) — the anomaly catalog behind the reporting gap a green call log hides
+- [Evidence-Guided Recovery After an Ambiguous Tool Outcome](evidence-guided-recovery-ambiguous-outcomes.md) — what the caller decides in the fault class where no read-back settles it, and why certifiable completion is a separate verdict from done
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — the wider recovery vocabulary an ambiguous write failure sits inside
 - [Observation Contract Preservation](observation-contract-preservation.md) — the other way a second call to the same tool goes wrong, through mutated tool output rather than a lost response
 - [Recovery as a Separate Eval Axis (UndoBench)](../../verification/recovery-as-separate-eval-axis.md) — how to measure whether your agent has this problem before deciding which layer pays

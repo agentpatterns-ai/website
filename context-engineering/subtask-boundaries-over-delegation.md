@@ -78,3 +78,4 @@ The returns bear that out, and they do it while the input also gains the returne
 - [Stage Elision Before Summarization](stage-elision-before-summarization.md) — what to do when a threshold has to decide instead of a boundary
 - [The Delegation Decision: When to Use an Agent vs Do It Yourself](../patterns/agent-design/delegation-decision.md) — the overhead case against delegating by default
 - [Subtask-Level Memory for Software Engineering Agents](../patterns/agent-design/subtask-level-memory.md) — the retrieval-side counterpart, matching memory to subtask
+- [Pending Task Registry for Asynchronous Agent Tool Calls](pending-task-registry.md) — what the context has to carry once a boundary does spawn concurrent work

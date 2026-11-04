@@ -6,7 +6,7 @@ tags:
   - agent-design
   - claude
   - plugins
-last_reviewed: 2026-06-03
+last_reviewed: 2026-11-03
 maturity: emerging
 ---
 
@@ -76,7 +76,7 @@ The host harness owns the registry of every component a plugin contributes. A sk
 - Always-on token budget pressure: every transitive plugin loads skill and agent descriptions into the always-on context, so check [per-plugin token-cost attribution](../observability/plugin-token-cost-attribution.md) before adding an edge.
 - Air-gapped installs: resolution assumes the marketplace is reachable, so when it is not, missing transitive dependencies disable the dependent plugin the operator never touched.
 - Dependency hell: importing the package-manager primitive imports its failure modes, and the four error codes above are the agent-layer equivalent of package-manager pain.
-- Expanded supply-chain attack surface: force-enabling transitive dependencies and auto-installing them from a marketplace pulls every upstream maintainer into your trust boundary. A compromised marketplace skill can hijack the install and ship a trojanized dependency that imports cleanly while exfiltrating secrets ([SentinelOne: Marketplace Skills and Dependency Hijack in Claude Code](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/)). Vet marketplace provenance and prefer pinned ranges over open auto-update.
+- Expanded supply-chain attack surface: force-enabling transitive dependencies and auto-installing them from a marketplace pulls every upstream maintainer into your trust boundary. A compromised marketplace skill can hijack the install and ship a trojanized dependency that imports cleanly while exfiltrating secrets ([SentinelOne: Marketplace Skills and Dependency Hijack in Claude Code](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/)). Vet marketplace provenance and prefer pinned ranges over open auto-update. Vercel also blocks affected public npm downloads during dependency installation in its builds ([Vercel changelog](https://vercel.com/changelog/blocking-malicious-npm-packages-before-and-during-installation)).
 
 ## Example
 

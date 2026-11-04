@@ -18,7 +18,7 @@ maturity: emerging
 
 > Below 7B, discarding a failed program and resampling from the original prompt beats returning the failure to the model for repair.
 
-Three conditions gate this technique: a model under roughly 7B parameters, a self-contained function as the unit of work, and a real test deciding pass or fail on every attempt. Inside that box, throwing the failed program away wins on accuracy and on tokens. Outside it, a conventional repair loop stays the better default.
+Three conditions gate this technique: a model under roughly 7B parameters, a self-contained function as the unit of work, and a real test deciding pass or fail on every attempt. Inside that box, throwing the failed program away wins on accuracy and on tokens. The study does not establish a default outside those conditions.
 
 The usual evaluation hides the effect. Self-repair returns a failed program to the model with its test output and asks for a correction. It is almost always measured against a single attempt with no retry. That comparison confounds the value of the feedback with the value of getting another draw at all ([Verma, 2026](https://arxiv.org/abs/2607.26117)). A matched-budget design separates the two. On MBPP+ with Qwen2.5-Coder at Q4_K_M quantization, four arms each get eight attempts: blind resampling from the original prompt, a content-free notice that the program was wrong, execution feedback, and feedback plus written self-reflection.
 
@@ -50,7 +50,7 @@ The placebo arm shows this is exposure, not bad information. A content-free noti
 - No real oracle sits in the loop. Every arm relies on differential testing to accept or reject each candidate ([Verma, 2026](https://arxiv.org/abs/2607.26117)). Without a test that can reject a program, resample-and-select is picking at random.
 - The feedback is richer than a failing-test transcript. The null covers test output and verbal reflection, not interactive dynamic analysis such as debugger-driven state inspection ([Wang et al., 2025](https://arxiv.org/abs/2510.18327)).
 
-Counter-evidence above 8B deserves weight. Iterative self-repair lifts pass rates by 4.9 to 17.1 points on HumanEval and 16.0 to 30.0 points on MBPP Sanitized across seven models up to Gemini 2.5 Pro. That is against a single-shot baseline ([Arimbur, 2026](https://arxiv.org/abs/2604.10508)).
+Evidence from models of 8B and above uses a different comparison. Iterative self-repair lifts pass rates by 4.9 to 17.1 points on HumanEval and 16.0 to 30.0 points on MBPP Sanitized across seven models up to Gemini 2.5 Pro. That is against a single-shot baseline ([Arimbur, 2026](https://arxiv.org/abs/2604.10508v1)).
 
 ## Example
 
@@ -90,3 +90,4 @@ A gap between A and B is the cost of exposure. A gap between B and C is the valu
 - [Local Model Viability Factors for Coding](../patterns/agent-design/local-model-viability-for-coding.md) — the deployment context in which sub-7B quantized models are the ones doing the retrying.
 - [Calibrated Early Termination and Warm Restart for Agent Runs (FailFast-RestartSmart)](early-termination-and-warm-restart.md) — the repo-scale counterpart, where a restart keeps the failed attempt's diff behind an optional tool rather than in the prompt.
 - [Verbatim Failure Records in Small-Model Agent Transcripts](../patterns/anti-patterns/verbatim-failure-records.md) — the tool-calling counterpart, which asks what a kept failure record should say rather than whether to keep one.
+- [Failure Memory on Agent Retry](../context-engineering/retry-failure-memory.md) — compares memory formats and a plain retry at repository scale; pass-rate gains remain inconclusive.

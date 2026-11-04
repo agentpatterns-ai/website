@@ -110,3 +110,4 @@ The reviewer never touched the credentialed actor's context. The actor never rea
 - [Always-On Agentic PR Security Review](../../security/always-on-pr-security-review.md)
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md)
 - [Enforcing Who and What Can Trigger an Agent's CI Run](../../security/workflow-execution-protections.md)
+- [Auditing Agent CI Before the pull_request_target Default Block](../../security/pull-request-target-default-block.md)

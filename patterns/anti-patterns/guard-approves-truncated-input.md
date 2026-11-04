@@ -44,7 +44,7 @@ Each fail-closed control a reader already knows triggers on an error.
 - Claude Code 2.1.295 added `onFailure: "block"`, so a command or HTTP hook that cannot start, times out, or exits with an unexpected code blocks the action ([Claude Code changelog 2.1.295](https://code.claude.com/docs/en/changelog#2-1-295)).
 - A mod hook that fails is skipped. The docs tell the author to add a `.catch` error handler to fail closed ([React to events with a mod](https://code.claude.com/docs/en/plugins/mods/events)). That handler fires on a throw, a timeout, or a wrong-shaped answer.
 
-A hook handed a truncated input does none of those things. It starts, finishes in time, and returns a well-formed allow. That is why the changelog names "no error" as the defect.
+A hook handed a truncated input does none of those things. It starts, finishes in time, and returns a well-formed allow. That is why the changelog names "no error" as the defect. [Declaring a Per-Hook Failure Mode for Agent Policy Gates](../../security/per-hook-failure-mode.md) covers how to choose between those error-triggered controls per hook.
 
 Claude Code marks some of its own cuts. It middle-truncates long `PostToolUseFailure` error strings around a `... [N characters truncated] ...` marker ([Claude Code hooks](https://code.claude.com/docs/en/hooks)). A marked cut gives the hook something to act on. The 2.1.295 cut gave nothing.
 

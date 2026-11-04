@@ -86,3 +86,4 @@ The first leaves reframing at 31.9% on gpt-4o. The second drops it to 0% (0/120)
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — the operational form of the destination allow-list, enforced below the model.
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the three ingredients this lab assembles on purpose: a secret in context, untrusted content, and a tool that acts.
 - [Adaptive Evaluation of Out-of-Band Prompt-Injection Defenses](adaptive-evaluation-out-of-band-defenses.md) — why the held-out ROT13 result generalizes: a defense measured only on the attacks its author chose has not been measured.
+- [Per-Call Egress Confirmation for User-Identifying Values](per-call-egress-confirmation.md) — a shipped payload-reading check and the conditions under which it is still worth running next to a destination rule.

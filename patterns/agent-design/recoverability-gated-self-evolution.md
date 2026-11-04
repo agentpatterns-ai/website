@@ -64,3 +64,4 @@ The paper's own limitation list says "Only gpt-oss-120b and Qwen3.8-27B were eva
 - [Layered Mutability](layered-mutability.md) — which harness layer a mutation lands on, and how reversible that layer is.
 - [Fleet-Level Irreversibility Budgets](fleet-irreversibility-budget.md) — pricing residual risk when undo is unavailable at all.
 - [Selective Checkpoint Restore](selective-checkpoint-restore.md) — the snapshot affordance a shipped harness already exposes.
+- [Portable Harness Specification: Record Which Harness Ran](portable-harness-specification.md) — the record of what each admitted mutation changed, written where the agent cannot edit it.

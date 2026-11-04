@@ -10,7 +10,7 @@ tags:
   - technique
   - tool-agnostic
   - workflows
-last_reviewed: 2026-06-13
+last_reviewed: 2026-11-03
 maturity: established
 ---
 
@@ -110,7 +110,7 @@ robots.txt is advisory, not enforceable. Watch for these caveats:
 - ChatGPT-User is user-initiated: OpenAI's [crawler documentation](https://platform.openai.com/docs/bots) says robots.txt rules "may not apply" to it, and [coverage](https://ppc.land/openai-revises-chatgpt-crawler-documentation-with-significant-policy-changes/) reports the December 2025 change. To block interactive ChatGPT browsing, use a CDN/WAF rule.
 - Perplexity stealth crawling documented: [Cloudflare reported in August 2025](https://blog.cloudflare.com/perplexity-is-using-stealth-undeclared-crawlers-to-evade-website-no-crawl-directives/) that Perplexity rotates user-agents and ASNs to evade blocks and has been observed ignoring robots.txt. Treat allow-listing `PerplexityBot` and `Perplexity-User` as directional only, and use WAF rules for any hard block.
 - Meta-ExternalFetcher may bypass it: Meta's [crawler documentation](https://developers.facebook.com/docs/sharing/webmasters/web-crawlers/) says this user-requested fetcher "may bypass robots.txt".
-- Hard blocks need the network layer: a CDN/WAF rule blocks a user-agent such as `Bytespider` whatever robots.txt says. See [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup.
+- Hard blocks need the network layer: a CDN/WAF rule blocks a user-agent such as `Bytespider` whatever robots.txt says. See [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup. Vercel's changelog lists managed rules in Vercel Firewall that control AI crawlers and AI assistants separately ([Vercel changelog](https://vercel.com/changelog/block-ai-crawlers-and-assistants-independently-with-managed-rules)).
 - No enforcement: robots.txt does not prevent crawling. It signals intent.
 
 ## Provider user-agent reference

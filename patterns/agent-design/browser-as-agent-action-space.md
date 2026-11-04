@@ -11,7 +11,7 @@ tags:
   - testing-verification
   - security
   - tool-agnostic
-last_reviewed: 2026-07-27
+last_reviewed: 2026-11-03
 maturity: adopted
 ---
 
@@ -29,7 +29,7 @@ Expose actions that name a target rather than estimate a position. [Playwright M
 
 Refs expire. They are "stable within a single snapshot" and "valid until the next page change", so a ref captured before a DOM update addresses nothing ([Playwright MCP snapshots](https://playwright.dev/mcp/snapshots)). Coordinate primitives remain available as an opt-in capability for canvas and drawing surfaces ([vision mode](https://playwright.dev/mcp/vision-mode)). Take them deliberately, not by default.
 
-The choice is not vendor-specific. Browser Use takes the same element-addressed approach, limiting its action space to a Playwright-controlled browser with a DOM-aware action vocabulary ([agentic framework landscape](../../frameworks/agentic-framework-landscape.md)).
+The choice is not vendor-specific. Browser Use takes the same element-addressed approach, limiting its action space to a Playwright-controlled browser with a DOM-aware action vocabulary ([agentic framework landscape](../../frameworks/agentic-framework-landscape.md)). See LangChain's [Browser Use in Managed Deep Agents](https://www.langchain.com/blog/browser-use-in-managed-deep-agents) for one vendor's account of browser use inside a managed agent product.
 
 ## Budget observations by signal, not by step
 

@@ -100,6 +100,7 @@ nav:
       - system-prompt-delivery-channel.md
       - system-prompt-not-a-secret-store.md
       - url-exfiltration-guard.md
+      - per-call-egress-confirmation.md
       - agent-authored-message-rendered-image-exfiltration.md
       - multitenant-rag-authorization-gap.md
       - mcp-server-credential-isolation.md
@@ -208,10 +209,12 @@ nav:
       - cross-layer-detection-evidence.md
       - cryptographic-governance-audit-trail.md
       - defense-in-depth-agent-safety.md
+      - per-hook-failure-mode.md
       - harness-distributed-security-controls.md
       - enforced-versus-advisory-controls.md
       - control-position-remediation-cost.md
       - workflow-execution-protections.md
+      - pull-request-target-default-block.md
       - enterprise-agent-hardening.md
       - inline-lifecycle-safety-harness.md
       - lifecycle-security-architecture.md

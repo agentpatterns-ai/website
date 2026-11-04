@@ -9,7 +9,7 @@ aliases:
   - managed agent harness
   - self-hosted agent harness
   - agent harness deployment
-last_reviewed: 2026-09-27
+last_reviewed: 2026-11-03
 maturity: established
 ---
 
@@ -25,7 +25,7 @@ OpenAI joined the managed side in September 2026 with an Agents API, released in
 
 The choice mirrors the classic SaaS vs on-prem decision but with a compounding factor: agents accumulate memory over time. Locking memory behind a proprietary API raises migration cost with every session.
 
-LangChain argues that managed agents are the next major step in agent building ([LangChain, August 2026](https://www.langchain.com/blog/why-managed-agents-are-the-next-big-thing-in-agent-building)). The post is vendor advocacy and reports no measurement. Weigh it as a stated position against the five signals below.
+LangChain argues that managed agents are the next major step in agent building ([LangChain, August 2026](https://www.langchain.com/blog/why-managed-agents-are-the-next-big-thing-in-agent-building)). The post is vendor advocacy and reports no measurement. LangChain also offers a managed Deep Agents product of its own ([LangChain: Managed Deep Agents](https://www.langchain.com/blog/introducing-managed-deep-agents)). The page's self-hosted example and this managed product come from the same vendor. Weigh the post as a stated position against the five signals below.
 
 ## Compliance and memory-ownership signals
 

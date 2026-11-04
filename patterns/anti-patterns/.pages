@@ -202,6 +202,7 @@ nav:
       - cumulative-best-hides-repair-regressions.md
       - edge-case-handling-as-security-signal.md
       - judging-agent-safety-by-task-completion.md
+      - expressed-risk-awareness-as-safeguard.md
       - cold-start-safety-gap.md
       - memory-injection-rate-as-security-evidence.md
       - detector-benchmark-score-as-deployment-evidence.md

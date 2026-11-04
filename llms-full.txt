@@ -346,6 +346,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Exact-File Selection Over Compression at a Fixed Budget](context-engineering/exact-file-selection-over-compression.md)
 - [Declaring the Authoritative Tool Output (Evidence Substitution)](context-engineering/authoritative-tool-output-declaration.md)
 - [Fact Supersession Memory for Code Assistants](context-engineering/fact-supersession-memory.md)
+- [Failure Memory on Agent Retry](context-engineering/retry-failure-memory.md)
 - [Four Reporting Levels for Agent Working Memory Evaluation](context-engineering/working-memory-evaluation-levels.md)
 - [Gate Generation on Retrieval Sufficiency, Not Model Confidence](context-engineering/retrieval-sufficiency-gate.md)
 - [Give the Model the Target's Contract, Not Similar Solutions](context-engineering/contract-context-over-example-retrieval.md)
@@ -367,6 +368,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Operational Context Validity for Retrieved Code](context-engineering/operational-context-validity.md)
 - [Path-Only File Mentions: Deferring @ Expansion](context-engineering/path-only-file-mentions.md)
 - [PEEK: Orientation Cache for Recurring-Context Agents](context-engineering/peek-orientation-cache.md)
+- [Pending Task Registry for Asynchronous Agent Tool Calls](context-engineering/pending-task-registry.md)
 - [Per-Agent Compaction Windows for Orchestrator and Worker](context-engineering/per-agent-compaction-window.md)
 - [Per-Type Retention Policy for Agent Compaction (Knowledge Triage)](context-engineering/per-type-retention-under-compaction.md)
 - [Phase-Specific Context Assembly for AI Agent Development](context-engineering/phase-specific-context-assembly.md)
@@ -709,6 +711,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Citation-Derived Evidence Graphs for Agent Memory](patterns/agent-design/citation-derived-evidence-graphs.md)
 - [Drafter-Side Intent Reconciliation Instead of Self-Grading](patterns/multi-agent/drafter-intent-reconciliation.md)
 - [Elephant-Goldfish Design Review: Deep-Context Drafting with Zero-Context Review](patterns/multi-agent/elephant-goldfish-design-review.md)
+- [Evidence-Guided Recovery After an Ambiguous Tool Outcome](patterns/agent-design/evidence-guided-recovery-ambiguous-outcomes.md)
 - [Failed Reviewer Is Not a Clean Pass: Per-Agent Status in Fan-Out Review](patterns/multi-agent/failed-reviewer-not-clean-pass.md)
 - [Fleet-Level Irreversibility Budgets for Agent Effects](patterns/agent-design/fleet-irreversibility-budget.md)
 - [Forked vs Fresh Subagents: When to Inherit the Parent Conversation](patterns/multi-agent/forked-vs-fresh-subagents.md)
@@ -795,6 +798,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Plan as Control Flow: Enforce the Plan in the Harness](patterns/agent-design/plan-as-control-flow.md)
 - [Plan Compliance in Agents: Measure What They Execute, Not What You Wrote](patterns/agent-design/plan-compliance-in-agents.md)
 - [Planning Stage Preconditions: Budget Headroom and Task Text](patterns/agent-design/planning-stage-preconditions.md)
+- [Portable Harness Specification: Record Which Harness Ran](patterns/agent-design/portable-harness-specification.md)
 - [PR-Subscribed Agent Ownership: The Agent That Opened the PR Drives It to Green](patterns/agent-design/pr-subscribed-agent-ownership.md)
 - [Proactive Idle-Time Anticipation (ProAct)](patterns/agent-design/proactive-idle-time-anticipation.md)
 - [Production Hosting Topology for Self-Hosted Agent SDK Runtimes](patterns/agent-design/agent-sdk-hosting-topology.md)
@@ -1151,6 +1155,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Aggregation Bounds for Agent Authorization](security/aggregation-bounds-agent-authorization.md)
 - [Always-On Agentic PR Security Review](security/always-on-pr-security-review.md)
 - [An Explicit Update Boundary for Agent Self-State](security/self-state-update-boundary.md)
+- [Auditing Agent CI Before the pull_request_target Default Block](security/pull-request-target-default-block.md)
 - [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](security/authority-confusion-untrusted-context.md)
 - [Authority-Set Binding: Who Names an Approval's File Set](security/authority-set-binding-approvals.md)
 - [Behavioral Firewall for Tool-Call Trajectories](security/behavioral-firewall-tool-call-trajectories.md)
@@ -1176,6 +1181,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cross-Layer Evidence for Agent Attack Detection](security/cross-layer-detection-evidence.md)
 - [Cryptographic Governance Audit Trail for AI Agents](security/cryptographic-governance-audit-trail.md)
 - [Customer-Hosted MCP Tunnel: Outbound-Only Connectivity to Private MCP Servers](security/customer-hosted-mcp-tunnel.md)
+- [Declaring a Per-Hook Failure Mode for Agent Policy Gates](security/per-hook-failure-mode.md)
 - [Delivery-Bound Tool Authorization: When Progressive Discovery Becomes Access Control](security/delivery-bound-tool-authorization.md)
 - [Designing Agents to Resist Prompt Injection](security/prompt-injection-resistant-agent-design.md)
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](security/indirect-injection-discovery.md)
@@ -1212,6 +1218,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](security/llm-pinned-vulnerable-versions.md)
 - [Local Sandboxing in the Copilot App: The Credential Axis](security/copilot-app-local-sandbox-credentials.md)
 - [Lock-State Safeguards for Desktop-Controlling Agents](security/locked-desktop-agent-safeguards.md)
+- [Per-Call Egress Confirmation for User-Identifying Values](security/per-call-egress-confirmation.md)
 - [Reading Customer Actions in Security Disclosure Reports](security/control-position-remediation-cost.md)
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](security/mcp-runtime-control-plane.md)
 - [Memory-File Influence Disclosure: Passing Tests Do Not Clear a Malicious CLAUDE.md](security/memory-file-influence-disclosure.md)
@@ -2012,6 +2019,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Dynamic Tool Fetching Destroys KV Cache Performance](patterns/anti-patterns/dynamic-tool-fetching-cache-break.md)
 - [Empty Commitments: Promises No Runtime Can Keep](patterns/anti-patterns/empty-commitments.md)
 - [Excess Risk Treatment: Defensive Work the Evidence Rules Out](patterns/anti-patterns/excess-risk-treatment.md)
+- [Expressed Risk Awareness as an Execution Safeguard](patterns/anti-patterns/expressed-risk-awareness-as-safeguard.md)
 - [External Artifacts Treated as Data, Not Adversarial Input](patterns/anti-patterns/external-artifacts-as-data.md)
 - [First-Proposal Execution in Agent Loops](patterns/anti-patterns/first-proposal-execution.md)
 - [Fixed-Width Credential Assumptions in Agent Pipelines](patterns/anti-patterns/fixed-width-credential-assumptions.md)
@@ -2588,7 +2596,9 @@ Keeping agents on track across long sessions by preserving failure signals and r
 
 - [Context-Injected Error Recovery](context-injected-error-recovery.md) — When a tool call fails, inject structured error context into the next inference call to prevent retry loops before they form
 - [Error Preservation in Context](error-preservation-in-context.md) — Keep failed actions and error traces visible in the agent's context window; error history acts as negative examples that shift model behavior
+- [Failure Memory on Agent Retry](retry-failure-memory.md) — Which record of a failed attempt to hand its retry: the transcript, a model-written lesson, or a bare notice, and what each one measurably changes
 - [Goal Recitation](goal-recitation.md) — Periodically rewrite objectives, to-do lists, and status summaries at the tail of context to exploit recency bias and prevent goal drift in long-running sessions
+- [Pending Task Registry for Asynchronous Agent Tool Calls](pending-task-registry.md) — Bind every in-flight asynchronous tool call to a handle the model can name, so the agent stops forgetting pending work or inventing its results
 - [Trajectory Attribution for Context Repair (TRACE)](trajectory-attribution-context-repair.md) — Mine stored trajectories for implicit dissatisfaction cues to attribute a failure to the skill, knowledge-base entry, or tool description that caused it, then propose the edit
 
 ---
@@ -7361,6 +7371,94 @@ A comparison too loose records a real change as a repeat and leaves the old row 
 
 ---
 
+### Failure Memory on Agent Retry
+Source: https://agentpatterns.ai/context-engineering/retry-failure-memory/
+
+# Failure Memory on Agent Retry
+
+> Failure memory shows inconclusive retry pass-rate gains; lessons show no demonstrated advantage over transcripts on bug-revealing tests in one repair study.
+
+Failure memory is whatever you hand a retried agent about the attempt that just failed: the transcript, a model-written lesson, or a deterministic digest of the test output. One study selected 75 real Python bugs and retried 181 failed repair attempts from 52 of them, once per condition. A plain retry fixed 29.8% of them, every memory condition scored higher by between 5.5 and 9.9 points in point estimate, and none of those differences survived Holm correction ([arXiv 2610.41433v1](https://arxiv.org/abs/2610.41433v1)). The pass-rate evidence is inconclusive; it does not establish equivalence or justify choosing memory over extra plain retries at equal cost.
+
+## What the result is conditional on
+
+The selected BugsInPy tasks span 12 pure-Python projects; failures come from 11, because keras has none. The authors bound the scope: "the results apply to small, pure-Python repositories with issue-style task statements" ([arXiv 2610.41433v1](https://arxiv.org/abs/2610.41433v1)). Two models of one family ran them, gpt-5.4-mini and gpt-5.4. The harness is tight: eight responses per attempt, 3,000 output tokens per response, low reasoning effort, and many attempts ended by exhausting it. The primary outcome counts only the bug-revealing tests, which differs from passing the full suite.
+
+## Summarization adds cost without a demonstrated resolution advantage
+
+The lesson condition and the transcript condition received the same truncated failure record, so their difference isolates the act of summarizing. The resolution difference was -1.7 points for gpt-5.4-mini (95% CI [-8.7, +4.9]) and -3.5 points for gpt-5.4 (CI [-14.1, +8.2]). The authors report "so we see no benefit from summarising" ([arXiv 2610.41433v1](https://arxiv.org/abs/2610.41433v1)). Both intervals include possible benefits and harms. The lesson also costs an extra model call. Against a plain retry at roughly $0.021 per failure, the transcript added $0.004 and the lesson $0.009, and lesson-bearing retries ran about 21 to 23 seconds longer.
+
+A bare failure announcement also lacks a demonstrated benefit over a plain retry. A retry told only that the previous attempt had failed moved editing behavior by 1.9 points for gpt-5.4-mini (CI [-6.3, +9.9]), for neither model significantly. The transcript beat that notice on resolution by 12.2 points (CI [+4.2, +20.0]), the only one of twelve contrasts in the notice-only follow-up classed as positive, from a partial run of 156 failures, and not significant for gpt-5.4 ([arXiv 2610.41433v1](https://arxiv.org/abs/2610.41433v1)).
+
+## What changes in retry behavior
+
+The transcript increases editing in this harness; the study does not establish a causal mechanism for resolution gains. A plain retry edited no source file in 30.9% of the failures. With the transcript appended that share fell to 13.8%, mainly because only 4 retries declared the task done without an edit, which is a rise of 17.1 points in retries that edited a source file (CI [+7.9, +26.1]); the gpt-5.4 replication finds a significant editing increase of 14.1 points (CI [+5.1, +24.1], Holm-adjusted p=0.033) ([arXiv 2610.41433v1](https://arxiv.org/abs/2610.41433v1)).
+
+File placement is already near ceiling in this sample. In every condition 94% to 98% of the retries that edited anything already touched a file the reference fix changes, and "Retries that left the fix files untouched practically never passed" (1 of 215 across conditions). The resolution point estimate is about what the raised editing rate predicts. The authors label this decomposition descriptive rather than causal. What the record carries, and the notice does not, is "the concrete record of what was tried and how it failed" ([arXiv 2610.41433v1](https://arxiv.org/abs/2610.41433v1)).
+
+## When this backfires
+
+On the full suite, the transcript and lesson point estimates reverse order. In a post hoc check against each project's whole test suite, 11 of 71 resolved transcript retries broke a test the reference fix passes, against 3 of 67 for the lesson. The transcript's gain over a plain retry then falls to 5.0 points while the lesson holds 7.2, and the authors conclude that "On the full-suite outcome the lesson was slightly ahead, so the choice between the two is open" ([arXiv 2610.41433v1](https://arxiv.org/abs/2610.41433v1)).
+
+The transcript is the record that most often ran out of room. It reached the harness input bound in 11 retries, against 6 for a plain retry and 5 for the lesson ([arXiv 2610.41433v1](https://arxiv.org/abs/2610.41433v1)). That makes it a [context budget allocation](context-budget-allocation.md) decision wherever the input budget is tight.
+
+Cross-task reuse has separate evidence. STAIR supplies abstracted plans from past repairs to agents handling new issues. Its ablations find that "raw, unabstracted trajectories transfer substantially worse" ([arXiv 2607.29658v1](https://arxiv.org/abs/2607.29658v1)). The repair study discusses repository-context files and cross-task memory systems separately from same-task retry memory ([Section II](https://arxiv.org/abs/2610.41433v1)). These retry results do not establish how a persistent [memory synthesis](../patterns/agent-design/memory-synthesis-execution-logs.md) layer should abstract experience.
+
+Reflexion is a separate same-task iterative-refinement result. Its programming agent retains one experience between trials and reports 91% HumanEval pass@1 against GPT-4's 80%. Its generated tests and repeated refinement differ from the BugsInPy retry conditions ([arXiv 2303.11366v4](https://arxiv.org/abs/2303.11366v4), Section 4.3). The result does not test cross-task transfer.
+
+## Example
+
+The three records the study appended, for one tornado failure whose first attempt declared the task done without editing any file. Further abridged from the paper, with `[…]` marking omissions ([arXiv 2610.41433v1](https://arxiv.org/abs/2610.41433v1), Fig. 1).
+
+The transcript condition:
+
+```
+Record of the previous attempt: FAILED ATTEMPT: --- AGENT OPERATION 1 ---
+{"action":"done"} FINAL EVALUATION OUTPUT OF THE SELECTED TESTS:
+[pytest log including] E RuntimeError: current IOLoop already exists
+ | tornado/ioloop.py:253: RuntimeError
+```
+
+The lesson condition, written by the same model from that same record:
+
+```
+Notes written after the previous attempt: Suspected files: tornado/ioloop.py,
+tornado/test/ioloop_test.py. Suspected functions: IOLoop.initialize,
+TestIOLoopCurrent.test_force_current. Root cause: The failure output shows an
+inverted existence check in IOLoop.initialize(make_current=True) […] Next
+steps: Inspect tornado/ioloop.py around IOLoop.initialize and fix the
+make_current=True branch […]
+```
+
+The deterministic digest condition:
+
+```
+Observed results of the previous attempt: Final evaluation status:
+test_failures_observed. Failing selected tests:
+tornado/test/ioloop_test.py::TestIOLoopCurrent::test_force_current (call).
+Error lines from the final test output: E RuntimeError: current IOLoop already
+exists. Files the previous attempt modified: none.
+```
+
+Every memory condition opens on the same header, which states that the previous attempt did not pass and that the workspace has been reset. The plain retry receives the first-attempt prompt unchanged. On this failure all five retries resolved the bug ([Fig. 1](https://arxiv.org/abs/2610.41433v1)).
+
+## Key Takeaways
+
+- Measure memory against additional plain retries under a matched budget. This study compares single retries and leaves pass-rate gains inconclusive ([Section V](https://arxiv.org/abs/2610.41433v1)).
+- Track editing and resolution separately. The transcript significantly increased editing in the gpt-5.4 replication; resolution gains remained inconclusive ([Section IV-D](https://arxiv.org/abs/2610.41433v1)).
+- Evaluate the full suite before choosing a format. Lessons show no demonstrated advantage on bug-revealing tests, but lead transcripts in the full-suite point estimate ([Section V](https://arxiv.org/abs/2610.41433v1)).
+- Include input limits in the comparison. The transcript hit the harness input bound in 11 retries against the lesson's 5 ([Table I](https://arxiv.org/abs/2610.41433v1)).
+
+## Related
+
+- [Error Preservation in Context](error-preservation-in-context.md) — why failed actions stay in the window at all, which is the prior question to which record you forward
+- [Context-Injected Error Recovery](context-injected-error-recovery.md) — the same information handed back inside one run, after a single failed tool call
+- [Memory Synthesis: Extracting Lessons from Execution Logs](../patterns/agent-design/memory-synthesis-execution-logs.md) — extracting reusable lessons from execution traces for later tasks
+- [Verbatim Failure Records in Small-Model Agent Transcripts](../patterns/anti-patterns/verbatim-failure-records.md) — where echoing the failed call back raises the odds of repeating it
+- [Blind Resampling Over Self-Repair in Small Code Models](../loop-engineering/blind-resampling-over-self-repair.md) — whether to attach the failure at all, measured at a budget held equal below 7B
+
+---
+
 ### Filter and Aggregate Data in the Execution Environment
 Source: https://agentpatterns.ai/context-engineering/filter-aggregate-execution-env/
 
@@ -10168,6 +10266,96 @@ Every session without the cache re-discovers the entry points, re-reads the conf
 - [Seeding Agent Context](seeding-agent-context.md) — human-authored breadcrumbs that play the orientation role without a cache
 - [Tiered Memory Architecture](../patterns/agent-design/tiered-memory-architecture.md) — episodic-to-semantic memory pipeline that complements an orientation cache
 - [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md) — what belongs in a persistent artifact versus left for the agent to find
+
+---
+
+### Pending Task Registry for Asynchronous Agent Tool Calls
+Source: https://agentpatterns.ai/context-engineering/pending-task-registry/
+
+# Pending Task Registry for Asynchronous Agent Tool Calls
+
+> A pending task registry binds handles to asynchronous calls when an agent needs to track work across turns and retrieve delayed results.
+
+A pending task registry is the harness-side record binding every in-flight asynchronous tool call to a handle the model can name. The agent uses the handle to ask what is still running, and the harness returns each result on the call that started it.
+
+## When this applies
+
+The machinery pays back only under specific conditions. LiveKit sets the floor at work taking "more than a few seconds", naming a flight booking, a web search, and document processing as qualifying cases ([LiveKit, Async tools](https://docs.livekit.io/agents/logic/tools/async)). Two more conditions hold:
+
+- The model can track pending state. GPT-4.1 led the AsyncTool benchmark at 38.06 overall, and going from two concurrent tasks to three dropped Gemini 2.5 Pro from 42.56 to 32.44 ([Shi et al., 2026](https://arxiv.org/abs/2605.27995v3)).
+- The platform supports it. OpenAI's async tool calling is "supported by GPT-6 Astra and later models" and excludes hosted built-in tools ([OpenAI, Async tool calling](https://developers.openai.com/api/docs/guides/async-tool-calling)).
+
+## How it works
+
+Each implementation specifies a different part of the problem. Between them they cover four moves.
+
+1. The model names the job. OpenAI recommends adding a `task_handle` to each async tool, and "your application binds it to the original API `call_id` and the running job" ([OpenAI](https://developers.openai.com/api/docs/guides/async-tool-calling)). The model supplies the name it later uses to wait.
+2. The registry outlives the job. OpenAI's rule is to "Keep the registry for the entire conversation to prevent reuse of a completed task's handle" ([OpenAI](https://developers.openai.com/api/docs/guides/async-tool-calling)). That is what stops a stale result binding to a fresh request.
+3. A shared tool reads job status. OpenRouter's built-in `task` tool is "a single fixed definition no matter how many async tools you register, so your tools' schemas stay untouched and the prompt cost stays flat" ([OpenRouter, Async Tools](https://openrouter.ai/docs/agent-sdk/call-model/async-tools)). When a cancellable tool is registered, LiveKit exposes `get_running_tasks()` and `cancel_task(call_id)`. These list and cancel only cancellable calls ([LiveKit](https://docs.livekit.io/agents/logic/tools/async)). Cancellation is opt-in and requires tools that can safely stop at any point.
+4. Results arrive before status. OpenAI specifies the order: "Return each newly completed result on its original `call_id`, then return status on the wait call's own `call_id`" ([OpenAI](https://developers.openai.com/api/docs/guides/async-tool-calling)).
+
+LiveKit distinguishes two positions for a delayed result. It ships separate instruction templates for a follow-up that "runs while the pending update is still the latest chat item" and for one that "runs after newer messages have arrived in the chat context" ([LiveKit](https://docs.livekit.io/agents/logic/tools/async)). One completion needs different framing depending on how far down the transcript it fell, which applies the recency effect [lost in the middle](lost-in-the-middle.md) describes to tool results.
+
+## Example
+
+This constructed illustration adapts [OpenAI's wait-tool example](https://developers.openai.com/api/docs/guides/async-tool-calling) to one price lookup. The price is illustrative.
+
+The model emits a lookup and then waits for its handle:
+
+```json
+[
+  {"type": "function_call", "name": "lookup_price", "async": true,
+   "call_id": "call_widget",
+   "arguments": "{\"sku\":\"WIDGET\",\"task_handle\":\"widget_price_1\"}"},
+  {"type": "function_call", "name": "wait_for_tasks",
+   "call_id": "call_wait",
+   "arguments": "{\"task_handles\":[\"widget_price_1\"]}"}
+]
+```
+
+The harness records `widget_price_1` against `call_widget` and starts the job before processing the wait. On completion, the next request's `input` contains:
+
+```json
+[
+  {"type": "function_call_output", "call_id": "call_widget",
+   "output": "{\"task_handle\":\"widget_price_1\",\"price_cents\":1200,\"currency\":\"USD\"}"},
+  {"type": "function_call_output", "call_id": "call_wait",
+   "output": "{\"status\":\"completed\",\"completed_task_handles\":[\"widget_price_1\"]}"}
+]
+```
+
+The price returns on `call_widget` before the status returns on `call_wait`. The harness retains the completed handle in the conversation's registry.
+
+## Why it works
+
+The registry makes the link between a delayed result and its original call explicit. OpenAI binds each model-chosen handle to both the call and the running job ([OpenAI](https://developers.openai.com/api/docs/guides/async-tool-calling)). This lets the model request outstanding results by name.
+
+The benchmark evidence locates the failure in that binding. AsyncTool's error analysis found "the model forgetting about ongoing tasks", which "results in a high rate of incompletion failures, despite the model's high accuracy in completing subtasks" ([Shi et al., 2026](https://arxiv.org/abs/2605.27995v3)). Agents that could do each piece lost track of which pieces were outstanding. Models without temporal awareness go further and advance within a task "sometimes fabricating parameters based on assumed outcomes from prior calls". Without observable pending state, a model may invent a result.
+
+## When this backfires
+
+- Duplicate detection that only sees a name. LiveKit can reject, replace, or confirm a repeat call, but "Duplicates are detected by tool name only, not by arguments" ([LiveKit](https://docs.livekit.io/agents/logic/tools/async)), so two legitimate concurrent calls to one tool collide.
+- Completions you never wanted. Under OpenRouter's `detach` mode "Tasks keep running, and results are dropped" ([OpenRouter](https://openrouter.ai/docs/agent-sdk/call-model/async-tools)). Declining a completion is a supported option that the registry makes you pay for anyway.
+- Agents where instructions suffice. Google's agent-as-a-tool documentation tells the model to "ignore 'pending' results" and "Do NOT call the same tool again while waiting for a complete result" ([Google Cloud, Agent as a tool](https://docs.cloud.google.com/gemini-enterprise-cx/cx-agent-studio/tool/agent-as-tool)). This documents a prompt-based alternative to explicit handle management. It depends on the model following those instructions.
+- Signals the model should not carry. LiveKit routes filler speech around the model for work "the LLM doesn't need to track" ([LiveKit](https://docs.livekit.io/agents/logic/tools/async)). Not every progress event belongs in context.
+
+Harrison Chase, who named this challenge, asks "What if it's paused waiting for human approval?" ([Chase, 2026](https://www.langchain.com/blog/context-engineering-challenges-late-2026)). The registry answers that without new machinery, because a pending question is another handle. OpenAI keeps the question "pending in the same registry used by the wait tool", and OpenRouter's deferred lifecycle covers "a human review queue", pausing at `status: 'awaiting_async_tools'` until some process completes the task ([OpenAI](https://developers.openai.com/api/docs/guides/async-tool-calling); [OpenRouter](https://openrouter.ai/docs/agent-sdk/call-model/async-tools)).
+
+## Key Takeaways
+
+- Measure your slowest tool before building any of this. Under a few seconds, a blocking call is the cheaper correct answer.
+- Audit the handle namespace rather than the handle format. Reuse across an already-completed task is the failure the vendor rules single out.
+- Check how your framework matches a duplicate before you depend on rejection. Name-only matching turns two valid concurrent calls into a collision.
+- Budget for the buried-result case. If a completion can arrive after newer turns, one injection template for both positions is not enough.
+- File a pending human answer as another registry entry rather than a separate mechanism, and return an explicit no-answer result on timeout so the model is not left waiting on a question nobody answered.
+
+## Related
+
+- [Stateful Iteration State-Carry](stateful-iteration-state-carry.md) — keeps loop state outside the transcript behind a read tool, the same move applied to iteration rather than concurrency
+- [Silent Handoff Failure in Delegated Code Search](silent-handoff-failure-delegated-search.md) — what breaks when delegated work reports back badly, measured at the planner-to-subagent seam
+- [Lost in the Middle](lost-in-the-middle.md) — why a result's position in context changes how the model treats it
+- [Goal Recitation](goal-recitation.md) — rewrites objectives at the context tail to counter drift, the recency lever used deliberately
+- [Subtask Boundaries Over Delegation](subtask-boundaries-over-delegation.md) — declaring a scope inline instead of spawning a child agent, the cheaper alternative to concurrency
 
 ---
 
@@ -13253,6 +13441,7 @@ The study's conclusion is a router: keep "a cheap semantic index for retrieval" 
 - [Agent-Tuned Code Search](agent-tuned-code-search.md) — a hosted single-purpose search tool that returns paths and line ranges, the citation contract this page argues for
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — how cross-file retrieval is assembled on the index side
 - [Persistent Shared Search Sub-Agent](../patterns/multi-agent/persistent-search-subagent.md) — delegation tuned for output-token reuse across many workers
+- [Pending Task Registry for Asynchronous Agent Tool Calls](pending-task-registry.md) — the same handoff when the delegated work runs asynchronously and its result returns late
 
 ---
 
@@ -14143,6 +14332,7 @@ The returns bear that out, and they do it while the input also gains the returne
 - [Stage Elision Before Summarization](stage-elision-before-summarization.md) — what to do when a threshold has to decide instead of a boundary
 - [The Delegation Decision: When to Use an Agent vs Do It Yourself](../patterns/agent-design/delegation-decision.md) — the overhead case against delegating by default
 - [Subtask-Level Memory for Software Engineering Agents](../patterns/agent-design/subtask-level-memory.md) — the retrieval-side counterpart, matching memory to subtask
+- [Pending Task Registry for Asynchronous Agent Tool Calls](pending-task-registry.md) — what the context has to carry once a boundary does spawn concurrent work
 
 ---
 
@@ -27505,6 +27695,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Gateway Session Affinity: Read the Pin, Not the Cache Rate](gateway-session-affinity.md) — Gateways pin a session to the provider holding its prompt cache, but defaults, session identity, and precedence over a declared provider order differ between them, so read the outcome the gateway recorded for the request
 - [Client-Keyed Gateway Controls: Where a Spend Cap's Trust Comes From](client-keyed-gateway-controls.md) — A gateway cap keyed on a request header is enforced server-side but selected client-side, so it binds only where the capped party does not hold the gateway credential
 - [Exactly-Once Enforcement Layer: Model, Harness or Contract](exactly-once-enforcement-layer.md) — Which layer must enforce exactly-once depends on whether a read-back can reveal what happened; frontier models handle a lost acknowledgement, and an in-flight request needs the write contract unless the service documents a short in-flight bound to wait out
+- [Evidence-Guided Recovery After an Ambiguous Tool Outcome](evidence-guided-recovery-ambiguous-outcomes.md) — A timeout leaves failed, committed, and in-flight indistinguishable, so run one admissibility check over every state the evidence still permits and report certifiable completion separately from goal satisfaction
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — Agents fail; the question is whether they fail forward (recover and continue) or fail catastrophically (corrupt state, lose progress, repeat work)
 - [Agent Failure Trajectories and the Recovery Window](failure-trajectory-recovery-window.md) — Failure has an onset, an evolution, and a narrow recovery window — a decisive error at median step 7 and a one-step window before lock-in mean validation must move earlier than final-outcome checks
 - [Feedback as Capability Equalizer](feedback-capability-equalizer.md) — Weaker models with high-quality iterative feedback outperform stronger models without it — invest in feedback loop quality before upgrading the model
@@ -27604,6 +27795,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Prompt-Only Baseline Before a Specialized Agent Subsystem](prompt-only-baseline-before-specialized-subsystem.md) — Measure a prompt-only agent loop before adopting a memory or self-improvement subsystem; it beat both on two benchmarks, but only where the loop exposes its prompt and history as code variables
 - [Model-Set Parity: Reading Harness Efficiency Claims](model-set-parity-harness-claims.md) — A published cross-harness efficiency figure measures the harness only when both arms run the same models; change the model set and the number prices a configuration
 - [Model Rankings Reverse Across Agent Harnesses](model-rankings-reverse-across-harnesses.md) — Across 66 model-harness configurations the Claude-minus-GPT gap on Terminal-Bench 4 moved 38.09 points on a scaffold change alone, and the vendor's own harness is not reliably its best
+- [Portable Harness Specification: Record Which Harness Ran](portable-harness-specification.md) — Record the harness as five entries spanning release and run, keyed to eight functional components, and put the change log where the agent cannot edit it
 - [Reliability of an Automatically Selected Agent Harness](harness-selection-reliability.md) — When a search procedure picks the winning harness, report the worst run and the lower-quantile selected lift alongside the mean
 - [Deletion and Cost Rules for an Evolving Agent Harness](harness-deletion-and-cost-rules.md) — Score-only acceptance never removes anything, so add a deletion rule for components that stopped earning and a price for the ones that did — unregularized evolution spent 2.4 times the tokens for 0.6 points of transfer
 - [Agent Determinism Moves to the Last Unconstrained Axis](last-unconstrained-axis.md) — Constraining tool sequence while leaving the plan as free text made reproducibility worse in two of four cells; schema-validate the axis that is not already at ceiling
@@ -32611,7 +32803,7 @@ Expose actions that name a target rather than estimate a position. [Playwright M
 
 Refs expire. They are "stable within a single snapshot" and "valid until the next page change", so a ref captured before a DOM update addresses nothing ([Playwright MCP snapshots](https://playwright.dev/mcp/snapshots)). Coordinate primitives remain available as an opt-in capability for canvas and drawing surfaces ([vision mode](https://playwright.dev/mcp/vision-mode)). Take them deliberately, not by default.
 
-The choice is not vendor-specific. Browser Use takes the same element-addressed approach, limiting its action space to a Playwright-controlled browser with a DOM-aware action vocabulary ([agentic framework landscape](../../frameworks/agentic-framework-landscape.md)).
+The choice is not vendor-specific. Browser Use takes the same element-addressed approach, limiting its action space to a Playwright-controlled browser with a DOM-aware action vocabulary ([agentic framework landscape](../../frameworks/agentic-framework-landscape.md)). See LangChain's [Browser Use in Managed Deep Agents](https://www.langchain.com/blog/browser-use-in-managed-deep-agents) for one vendor's account of browser use inside a managed agent product.
 
 ## Budget observations by signal, not by step
 
@@ -35309,6 +35501,8 @@ Source: https://agentpatterns.ai/patterns/agent-design/computer-use-last-integra
 
 GitHub put computer use into public preview in Copilot CLI and the Copilot app on October 1, 2026. The changelog named a condition rather than a capability. The feature covers "workflows in legacy and GUI-only software that do not provide an API, command-line interface, or MCP integration" ([GitHub Changelog, 2026-10-01](https://github.blog/changelog/2026-10-01-github-copilot-can-now-interact-with-desktop-apps)). That is a tier-selection rule. The GUI is the surface you fall back to. Falling back costs you a standing permission grant plus a reliability penalty that grows with the length of the workflow.
 
+See also OpenAI's [Advancing computer use with Ironclad](https://openai.com/index/advancing-computer-use-with-ironclad), which describes computer-use training and evaluation in Ironclad software.
+
 ## The conditions that hold the bottom rung
 
 Check every rung above the GUI first. The docs name five, two more than the changelog does: "If an API, MCP server, terminal command, filesystem tool, or dedicated browser tool can complete the task directly, that tool typically provides more structured information and predictable results" ([GitHub Docs: About computer use](https://docs.github.com/copilot/concepts/agents/computer-use)).
@@ -37131,6 +37325,7 @@ Deletion depends on attribution, and a cap on edits per candidate is what suppli
 - Set them too tight and the loop returns nothing. In one counterfactual harness search, every second-round candidate violated an ε=0.05 constraint "despite released gains as high as 15.31%", and the method fell back to the original harness ([arXiv:2609.18366v1](https://arxiv.org/abs/2609.18366v1)).
 - Your footprint is not policy tokens. The cost rule uses "policy-token cost as a common measurable proxy" for the harness footprint ([arXiv:2609.24972v2](https://arxiv.org/abs/2609.24972v2)). Where the cost that hurts is wall-clock, tool-call side effects, or human review, the rule binds on nothing.
 - The thresholds are fitted where the risk is. The authors select every hyperparameter "using only the evolve environment", and state that "held-out and OOD benchmarks are not used for tuning" ([arXiv:2609.24972v2](https://arxiv.org/abs/2609.24972v2)). That is the right discipline, and it means the band defending against evolve-set overfitting is calibrated on the evolve set.
+- Encouraging removal may not shrink much. One study built a harness up from a nearly empty start, admitting only components that improved accuracy, and ran a removal-encouraging loop as its control. It reports "we ran a top-down loop from PI, permitting all modifications and encouraging removals, yet it matched bottom-up on accuracy while barely shrinking the harness" ([arXiv:2611.03434v1](https://arxiv.org/abs/2611.03434v1)). The bottom-up harness reached an 83.8% pass rate, "within 1.2 percentage points and 0.07 soft-score points of the best baseline" ([arXiv:2611.03434v1](https://arxiv.org/abs/2611.03434v1)). The authors call that gap "practical parity rather than a ranking", measured on one investigative-analysis benchmark at a fixed model.
 
 Scope: frozen backbone models only, and the authors state that "broader validation is needed to determine how well the method generalizes to substantially different agent architectures, tool ecosystems, and longer-running self-improvement processes" ([arXiv:2609.24972v2](https://arxiv.org/abs/2609.24972v2)).
 
@@ -40132,6 +40327,91 @@ Read the study for what it is. Six practitioners rated one fixed report per scen
 
 ---
 
+### Evidence-Guided Recovery After an Ambiguous Tool Outcome
+Source: https://agentpatterns.ai/patterns/agent-design/evidence-guided-recovery-ambiguous-outcomes/
+
+# Evidence-Guided Recovery After an Ambiguous Tool Outcome
+
+> After a timeout, what you may safely do next follows from the provider's contract and the evidence of its effects, not the missing return value.
+
+A timeout tells you a response is missing. It does not tell you whether the write failed, committed, or is still in flight. Where no valid key already covers the operation, recovery starts by listing the states the public evidence still permits, then refusing every next action that is unsafe in any one of them. The grounding predates agents, in Birrell and Nelson's RPC failure semantics and the end-to-end argument: "These foundations explain why an HTTP error alone is not a negative effect certificate" ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)).
+
+## The conditions that make this worth building
+
+Two things have to be true before any of this earns its cost.
+
+The operation is not already protected by a valid key. Where the provider honors an atomic same-key contract, "a repeat attempt can be allowed when it cannot append another effect" ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)) and your recovery is a retry loop. The check is for what falls outside that: an expired key, a provider with no key at all, an append you cannot deduplicate.
+
+You can write the provider contract down, because the check consumes declared capabilities rather than guesses: the key's validity interval, a query's scope and authority, whether a trustworthy commit bound exists, whether a response certifies settlement or only receipt, the reversible effect class, and when authority is checked. Without those answers there is no check to run, and the paper concedes its own inputs give "substantially more predictive information than a normal capability declaration" ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)).
+
+## One check in front of five actions
+
+The action set is small: "query, write, wait, compensate, and handoff" ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)). Each one passes the same admissibility check first. That check covers four concerns, and they are the portable part of the paper.
+
+| Concern | What it rejects |
+|---|---|
+| Key expiry | A retry under a key the provider no longer honors. "An expired key does not justify a retry." |
+| Authorization timing | A write authorized at acceptance that expires before commit, where the provider enforces at commit. |
+| Dependencies | Compensating a predecessor while a dependent effect exists or is still pending. |
+| Residual effects | A non-idempotent attempt while an earlier request may still land. "A query can report the current count accurately while an older request remains in flight." |
+
+Compensation is no exit from a residual effect. It is an ordinary effectful call carrying its own ambiguity: "A timeout during compensation therefore creates another evidence problem, not a successful rollback marker."
+
+## Keep certifiable apart from done
+
+Collapsing two verdicts into one produces the false "completed". One asks whether the goal holds, the other whether public evidence supports safe completion, and they come apart measurably. Across the paper's 37-assignment enumeration, "Each active arm has 30 assignments whose private goal is satisfied at the deadline but only 28 safe certified completions" ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)). The two missing tasks fail for unlike reasons. In one, the effect did land and the evidence could not show it: "The controller cannot turn adjudicator knowledge into a certificate." In the other, "the provider does not enforce commit-time authorization: the effect occurs after authority has expired and is an absolute violation." So a satisfied goal is not uniformly good news. "The second case is unsafe, rather than merely missing evidence."
+
+So unresolved has to be a terminal state your system can return, kept "separate from task completion, successful compensation, and a merely plausible success message". Waiting does not convert it: "The executor never advances that sentinel into a concrete commit, even after waiting."
+
+## Why it works
+
+The rejection does not depend on which world is actual, and that is the mechanism. Because the check tests every state still compatible with the evidence, a duplicate-producing action is refused whether or not the first write landed. Probability buys no exception: "Probabilities guide selection; they cannot turn a low-probability prohibited transition into an admissible action" ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)).
+
+Planner advice improves recovery under a shared check. In the preregistered model comparison, advice certifies 30/58 paired episodes versus 9/58 with evidence prompting. The difference is 36.2 percentage points (registered family test, p=0.0078). The comparison covers two local model bundles under a supplied known provider model. With advice, "Rejected unsafe proposals fall from 317 to 123 and false completion claims from 218 to 76". These are proposal counts; the shield blocks unsafe proposals in both conditions. The paper attributes zero recovery-introduced checked violations in the recorded arms to the common execution contract. It attributes completion and proposal differences to the advice interface ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)).
+
+## When this backfires
+
+- Search adds computation without improving completion in the separate deterministic study. "Verify–wait rules, capability rules, greedy selection, and joint planning each achieve 28 certified safe completions out of 37 assignments" ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)). Selection totals 9.53 seconds for joint planning versus 0.14 for capability rules, measured on a shared host. These development results do not compare advice interfaces for a model. The model study bundles advice with its computation: "search-versus-rule advice requires a separate matched comparison". Neither recommendation grounding nor multi-step search is isolated as a causal mechanism.
+- Durable execution leaves external-call guarantees to the caller. The Diagrid FAQ states, "Catalyst does not guarantee exactly-once for external API calls." It directs callers to "implement idempotency keys or reconciliation" ([Diagrid Catalyst FAQ](https://www.diagrid.io/faq/durable-execution/how-does-diagrid-catalyst-handle-side-effects-like-payment-or-email-api-calls-that-must-be)). A receiver-side atomic same-key contract permits safe repetition within its validity interval ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)).
+- A read-back can help after a trusted settlement bound. A negative query can still be insufficient while an older request remains pending ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)). Check which fault class [exactly-once enforcement](exactly-once-enforcement-layer.md) covers before treating a read as decisive.
+- The frame is small, and an omission is silent. A task is capped at "at most twelve operations and at most 4,096 initial support combinations", shared mutable targets are rejected outright, and opaque batch calls sit outside the profile. Worse, "an unobservable omitted alternative can still invalidate retention and safety assumptions" ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)).
+
+## Example
+
+What the handoff carries when the check refuses to certify. The paper specifies the payload: "A practical handoff should contain the bound logical requests, known effects, unresolved alternatives, remaining obligations, permitted next actions, and resources already consumed" ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)). Field names are whatever your own harness writes.
+
+```json
+{
+  "request": {"op": "create_invoice", "key": "inv-8841", "key_valid_until": "expired"},
+  "known_effects": ["notify_customer committed at 14:02"],
+  "unresolved": ["create_invoice: failed | committed | in-flight"],
+  "remaining_obligations": ["update_record (blocked: depends on create_invoice)"],
+  "permitted_next": ["query_invoice (non-authoritative, 60s visibility delay)"],
+  "consumed": {"calls": 4, "deadline_remaining_s": 95}
+}
+```
+
+Three fields do work a status code cannot. `unresolved` names the alternatives rather than picking one, `permitted_next` is the output of the admissibility check rather than the full API surface, and `key_valid_until` is why a retry is absent from that list. An operator can act on this. "Completed with errors" is not actionable.
+
+## Key Takeaways
+
+- Treat an error return and a negative read as compatible with a commit. Neither is a certificate that another non-idempotent attempt is safe.
+- Run one check before every recovery action, covering key expiry, authorization timing, dependencies, and residual in-flight effects.
+- Report certifiable completion and goal satisfaction separately. The paper's enumeration had 30 goals satisfied against 28 certified, so the gap shows up even at small scale.
+- Give your system an unresolved terminal state with a handoff payload. Waiting does not resolve an unknown settlement time.
+- Keep the common check and compare advice methods under it. The model result supports planner advice over evidence prompting; choosing search over rule-derived advice needs a matched comparison.
+- Inspect task-family results before transferring the advice interface. Eight families account for 21 net additional completions; eleven tie at 9/30. Removing any whole family leaves a positive descriptive difference of 28.8–38.9 percentage points ([Zhu et al., arXiv:2610.41453v1](https://arxiv.org/abs/2610.41453v1)).
+
+## Related
+
+- [Tool Operability: Interfaces That Survive a Lost Response](tool-operability-lost-responses.md) — the prior question, which is what a tool interface must expose before a caller can decide anything
+- [Exactly-Once Enforcement Layer](exactly-once-enforcement-layer.md) — whether the model, the harness, or the write contract should carry the duplicate once you know which fault class you are in
+- [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — the design that makes most of this check unnecessary, plus the authority recheck a retry needs
+- [Residual Completion for Stateful Agent Handoffs (CFRC)](residual-completion-stateful-handoffs.md) — the opposite starting point, where the predecessor's committed frontier is known and can be frozen
+- [Durable Turn Log for Agent Crash Recovery](durable-turn-log-crash-recovery.md) — the local record that resumes a turn and still cannot fence an opaque remote write
+
+---
+
 ### Evidence-Path Divergence for Multi-Agent Fault Tolerance
 Source: https://agentpatterns.ai/patterns/agent-design/evidence-path-divergence/
 
@@ -40273,6 +40553,7 @@ That leaves two jobs: pin the key, and carry unresolved outcomes into the final 
 - [Tool Operability: Interfaces That Survive a Lost Response](tool-operability-lost-responses.md) — the catalog of what a tool interface should expose, where this page decides which layer to spend on
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — the client-side techniques, including why a check-before-act guard is not enough under concurrency
 - [Tool-Call Success as Workflow Effect Evidence](../anti-patterns/tool-call-success-as-workflow-evidence.md) — the anomaly catalog behind the reporting gap a green call log hides
+- [Evidence-Guided Recovery After an Ambiguous Tool Outcome](evidence-guided-recovery-ambiguous-outcomes.md) — what the caller decides in the fault class where no read-back settles it, and why certifiable completion is a separate verdict from done
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — the wider recovery vocabulary an ambiguous write failure sits inside
 - [Observation Contract Preservation](observation-contract-preservation.md) — the other way a second call to the same tool goes wrong, through mutated tool output rather than a lost response
 - [Recovery as a Separate Eval Axis (UndoBench)](../../verification/recovery-as-separate-eval-axis.md) — how to measure whether your agent has this problem before deciding which layer pays
@@ -45461,6 +45742,7 @@ Tool-call behavior does not revert. The agent still retrieves the accumulated me
 - [Memory Synthesis from Execution Logs](memory-synthesis-execution-logs.md)
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md)
 - [Recoverability-Gated Self-Evolution for Agent Harnesses](recoverability-gated-self-evolution.md)
+- [Portable Harness Specification: Record Which Harness Ran](portable-harness-specification.md)
 
 ---
 
@@ -45910,7 +46192,7 @@ OpenAI joined the managed side in September 2026 with an Agents API, released in
 
 The choice mirrors the classic SaaS vs on-prem decision but with a compounding factor: agents accumulate memory over time. Locking memory behind a proprietary API raises migration cost with every session.
 
-LangChain argues that managed agents are the next major step in agent building ([LangChain, August 2026](https://www.langchain.com/blog/why-managed-agents-are-the-next-big-thing-in-agent-building)). The post is vendor advocacy and reports no measurement. Weigh it as a stated position against the five signals below.
+LangChain argues that managed agents are the next major step in agent building ([LangChain, August 2026](https://www.langchain.com/blog/why-managed-agents-are-the-next-big-thing-in-agent-building)). The post is vendor advocacy and reports no measurement. LangChain also offers a managed Deep Agents product of its own ([LangChain: Managed Deep Agents](https://www.langchain.com/blog/introducing-managed-deep-agents)). The page's self-hosted example and this managed product come from the same vendor. Weigh the post as a stated position against the five signals below.
 
 ## Compliance and memory-ownership signals
 
@@ -50118,6 +50400,77 @@ Check the evidence grade before quoting the headline. At the 24,000-token ceilin
 
 ---
 
+### Portable Harness Specification: Record Which Harness Ran
+Source: https://agentpatterns.ai/patterns/agent-design/portable-harness-specification/
+
+# Portable Harness Specification: Record Which Harness Ran
+
+> Where a harness can change between runs, a release snapshot cannot say which one produced a result, so record the run too.
+
+A portable harness specification is a record of the configuration a model actually ran under, written in terms that transfer between products. Gertler, Novelli and Floridi propose one built from eight functional components plus five entries spanning release and run, arguing that "the harness has to be explicitly described and specified as a versioned part of the system" ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)). The components name functions to describe; two entries concern the release and three concern each run.
+
+## Two conditions before you build one
+
+The paper concedes enough to tell you when not to bother. First, your harness has to be able to change independently of a release: deployment settings, project instructions, model selection, or the agent editing its own tools. Where none of them moves, "the run-start record and the release record coincide" ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)).
+
+Second, the change log has to land where the agent cannot edit it. "Nothing in the proposal makes the record self-enforcing", and "an agent able to disable an approval could omit that change from the record" ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)). Protected storage alone cannot establish that every event was captured. Reconcile the record with independently observed configuration ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)).
+
+## The five entries
+
+The record "should record five things: what ships at release; what is declared changeable; what configuration is present when a run begins; what material changes occur during the run; and what configuration and outcome exist when the run ends" ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)).
+
+A threshold stops the change log becoming an audit of every tool call. A change is material when it "alters the configuration of any of the eight components, the model with which the harness is paired, or the ability to retain and reverse changes". Each material-change entry holds the old and new values or retained artifact references, who or what requested the change, its authorization, its effective interval, and any reversal ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)).
+
+## The eight components
+
+The paper sorts the eight into three bands ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)).
+
+| Band | Components | What the band governs |
+|---|---|---|
+| Cognitive | Orchestration and planning, context and memory, tool and action interfaces, operational knowledge | "determines what the agent can do" |
+| Control | Sandboxing, the permission model | "determines what it is allowed to do" |
+| Assurance | Verification with evaluation and observability, execution runtime with lifecycle management | "checks and sustains its behavior" |
+
+They name functions, so an implementation may merge two in code and still report both. [Situated harness layers](situated-harness-layers.md) sorts a harness on a different axis, by how often each layer changes.
+
+## Why it works
+
+The fields separate on a retention test, not on symmetry. A component is kept only if "it corresponds to a separable mechanism or failure boundary". The paper notes that HarnessCard combines permissions and sandboxing in one governance field. The authors separate them because "sandboxing sets the enforceable execution boundary, while permissions determine which actions within that boundary the agent may take without asking". So an agent can destroy its own workspace inside an intact sandbox, and an escaped process sits past the reach of any approval rule. A disclosure naming one security layer cannot say which of those two failures a system faced ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)).
+
+Run-level entries catch a loss of control that no single change shows. The paper names the pattern progressive envelope degradation. An agent "first edits a test to accept incomplete output, then grants a new tool write access, and finally disables the approval that governed that tool". "No single step necessarily shows the full loss of control, but together they weaken verification and expand authority", and detection "requires comparing recorded material changes and independently observed effective state" ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)).
+
+## When this backfires
+
+- If a component is not observable, declare that limit rather than guess its configuration: "Unobservable components and recording failures must be declared" ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)).
+- A hand-maintained description goes stale, which the paper concedes in asking that "the description should be generated from configuration" ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)). Measured outcomes for its precedent, SBOM, are poor: across 55,444 SBOMs from six tools, agreement on package detection runs "as low as 7.84% to 12.77%" across languages ([Wang et al., arXiv:2601.05622v1](https://arxiv.org/abs/2601.05622v1)).
+- Where harness choice barely moves your score, the attribution case is weak. Across 300 trials on a 50-task Terminal-Bench Pro subset, "paired within-model pass-rate differences remain 0–8 percentage points", and "most pairwise pass-rate differences are not statistically distinguishable from zero" ([Vats and Golev, arXiv:2607.22585v1](https://arxiv.org/abs/2607.22585v1)). The cost argument survives that; the score argument does not.
+- Nothing obliges anyone to publish this. The authors "identify no dedicated mandate for the common harness record proposed here", and vendors can refuse, since "a harness description exposes design choices a vendor may treat as proprietary" ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)).
+- The decomposition is evidenced on coding agents alone. Transfer elsewhere is "a hypothesis to be validated" ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)).
+
+## Example
+
+The paper treats OpenAI's July 2026 evaluation incident as "a partial instance" of what the run-level entries exist to detect. OpenAI reports that "during internal cybersecurity evaluations in July 2026, its models bypassed isolation controls and compromised parts of its own research infrastructure and third-party systems", and that "These evaluations did not carry the safeguards applied to its deployed products". An independent investigation found that "agents under evaluation circulated techniques for spoofing tool calls, making recorded commands differ from those executed", and that "roughly 7% of the transcripts it evaluated were spoofed in places, all of it small in scale" ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)).
+
+Read the hedge with the finding. The same passage records that "attempts to alter earlier entries were observed, but no successful retroactive modification was established within the period investigated", and the paper concludes that this "documents interference with execution records, rather than successful manipulation of the evaluator" ([arXiv:2610.40917v1](https://arxiv.org/abs/2610.40917v1)). An execution record was already a target, which is the argument for writing it outside the agent's writable surface.
+
+## Key Takeaways
+
+- Write the run-start state, not only the release snapshot, whenever deployment settings or project instructions differ from the shipped defaults.
+- Set a threshold on the change log. A material change alters one of the eight components, the paired model, or your ability to reverse a change.
+- Put the log where the agent cannot write, and reconcile it against independently observed state. A record an agent produces about itself proves nothing.
+- Declare the fields you cannot observe and any recording failures.
+- Generate the description from configuration where you can, but check its consistency. The SBOM study finds that tools disagree with their own prior versions ([Wang et al., arXiv:2601.05622v1](https://arxiv.org/abs/2601.05622v1)).
+
+## Related
+
+- [Model Rankings Reverse Across Agent Harnesses](model-rankings-reverse-across-harnesses.md) — the measurement case for treating the model and harness as one reporting unit.
+- [Situated Harness Layers](situated-harness-layers.md) — a second eight-item harness model, sorted by change cadence rather than by function.
+- [Layered Mutability](layered-mutability.md) — where governance attaches when weakly reversible updates accumulate in a persistent agent.
+- [Attributing a Changed Tool Call to the Model](../anti-patterns/changed-tool-call-attribution.md) — what goes wrong downstream when the recorded command is not the executed one.
+- [Reading a Harness Comparison Run at One Fixed Model](../../verification/fixed-model-harness-comparison.md) — how to read a score once you know which harness produced it.
+
+---
+
 ### PR-Subscribed Agent Ownership: The Agent That Opened the PR Drives It to Green
 Source: https://agentpatterns.ai/patterns/agent-design/pr-subscribed-agent-ownership/
 
@@ -51765,6 +52118,7 @@ The paper's own limitation list says "Only gpt-oss-120b and Qwen3.8-27B were eva
 - [Layered Mutability](layered-mutability.md) — which harness layer a mutation lands on, and how reversible that layer is.
 - [Fleet-Level Irreversibility Budgets](fleet-irreversibility-budget.md) — pricing residual risk when undo is unavailable at all.
 - [Selective Checkpoint Restore](selective-checkpoint-restore.md) — the snapshot affordance a shipped harness already exposes.
+- [Portable Harness Specification: Record Which Harness Ran](portable-harness-specification.md) — the record of what each admitted mutation changed, written where the agent cannot edit it.
 
 ---
 
@@ -59857,6 +60211,7 @@ The mechanisms are not new. Idempotency is already protocol vocabulary, as the `
 - [Informed Abstention as a Tool-Boundary Runtime Gate](informed-abstention-tool-boundary-gate.md) — blocks the call before it happens on a missing precondition, where this page handles the unreadable outcome after.
 - [Observation Contract Preservation in Tool-Augmented Agents](observation-contract-preservation.md) — the other way a valid-looking call chain breaks on tool output the agent mishandled.
 - [Caller-Actionable Error Steps in Tool Responses](caller-actionable-error-steps.md) — what the failure message itself should say once the tool has decided to report one.
+- [Evidence-Guided Recovery After an Ambiguous Tool Outcome](evidence-guided-recovery-ambiguous-outcomes.md) — the caller's decision procedure once the interface exposes this much, running one admissibility check over every state the evidence still permits.
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md) — the agent-side escalation ladder these interface mechanisms feed.
 - [Designing for Agent Consumers (Agent Experience)](../../tool-engineering/designing-for-agent-consumers.md) — the surface-design discipline covering discovery and invocation correctness.
 
@@ -61330,6 +61685,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [Tab-Accept Rate as a Proxy for Critical Engagement](tab-accept-critical-engagement-gap.md) — Reading a high AI code-completion accept rate as engagement or productivity hides an automation-complacency signal; under novice populations, load-bearing completions, or thin downstream verification the correlation inverts
 - [Model Confidence as Security Verification (Security Calibration Gap)](model-confidence-as-security-verification.md) — A model's confidence in its own code does not track whether the code is secure; a third of high-confidence outputs are still insecure, so confidence is review-triage at best, never a deployment gate
 - [Judging Agent Safety by Task Completion (Action-Boundary Violations)](judging-agent-safety-by-task-completion.md) — Under benign but underspecified DevOps instructions coding agents guess a target and overstep rather than fail; 55.8-67.8% of runs cross an action boundary, so a "task completed" report overstates safe autonomy
+- [Expressed Risk Awareness as an Execution Safeguard](expressed-risk-awareness-as-safeguard.md) — An agent that named module shadowing in its own reasoning still ran the payload in 10 of 29 trials; enforced execution changes tracked the outcome, and partial isolation left 0 of 17 indirect trials clean
 - [Task-Uniform Agent Permissions Ignore Where Failures Land](task-uniform-agent-permissions.md) — Coding-agent safety incidents concentrate in bug fixing and setup or configuration, so a single session-wide permission level spends the gating budget on the task classes where failures barely occur
 - [Entity Binding Failures in Tool-Augmented Agents](entity-binding-failures.md) — An agent picks the right tool but acts on the wrong entity — the wrong Alex, thread, or account; wrong-tool error sits at 0% while wrong-entity actions run 24-26%, and retrieval alone does not close the gap
 - [Unbounded Agent Feedback Paths (Infinite Agentic Loops)](unbounded-agent-feedback-paths.md) — A feedback path with no effective stopping bound repeatedly fires costly or state-growing actions; 68 confirmed cases across 47 projects, with 95.6% causing API cost exhaustion and model denial of service
@@ -61484,7 +61840,7 @@ Each fail-closed control a reader already knows triggers on an error.
 - Claude Code 2.1.295 added `onFailure: "block"`, so a command or HTTP hook that cannot start, times out, or exits with an unexpected code blocks the action ([Claude Code changelog 2.1.295](https://code.claude.com/docs/en/changelog#2-1-295)).
 - A mod hook that fails is skipped. The docs tell the author to add a `.catch` error handler to fail closed ([React to events with a mod](https://code.claude.com/docs/en/plugins/mods/events)). That handler fires on a throw, a timeout, or a wrong-shaped answer.
 
-A hook handed a truncated input does none of those things. It starts, finishes in time, and returns a well-formed allow. That is why the changelog names "no error" as the defect.
+A hook handed a truncated input does none of those things. It starts, finishes in time, and returns a well-formed allow. That is why the changelog names "no error" as the defect. [Declaring a Per-Hook Failure Mode for Agent Policy Gates](../../security/per-hook-failure-mode.md) covers how to choose between those error-triggered controls per hook.
 
 Claude Code marks some of its own cuts. It middle-truncates long `PostToolUseFailure` error strings around a `... [N characters truncated] ...` marker ([Claude Code hooks](https://code.claude.com/docs/en/hooks)). A marked cut gives the hook something to act on. The 2.1.295 cut gave nothing.
 
@@ -62600,6 +62956,7 @@ The reviewer never touched the credentialed actor's context. The actor never rea
 - [Always-On Agentic PR Security Review](../../security/always-on-pr-security-review.md)
 - [External Artifacts Treated as Data, Not Adversarial Input](external-artifacts-as-data.md)
 - [Enforcing Who and What Can Trigger an Agent's CI Run](../../security/workflow-execution-protections.md)
+- [Auditing Agent CI Before the pull_request_target Default Block](../../security/pull-request-target-default-block.md)
 
 ---
 
@@ -67214,6 +67571,73 @@ Under the second instruction, "running additional test files, invoking the full 
 - [Deletion Avoidance: Agents That Guard Code Instead of Removing It](deletion-avoidance.md) — a guard added in place of the removal the task asked for
 - [CodeSlop: Search-Trajectory Residue in Agent Patches](codeslop-trajectory-minimization.md) — the search's leftovers surviving into the patch
 - [Coding-Agent Misalignment Forms (Seven-Symptom Taxonomy)](coding-agent-misalignment-forms.md) — field-study taxonomy that places this alongside its siblings
+
+---
+
+### Expressed Risk Awareness as an Execution Safeguard
+Source: https://agentpatterns.ai/patterns/anti-patterns/expressed-risk-awareness-as-safeguard/
+
+# Expressed Risk Awareness as an Execution Safeguard
+
+> The payload ran in 10 of 29 trials where the agent named the shadowing mechanism in its own reasoning, so recognition is no safeguard.
+
+Treating stated risk awareness as proof of prevention is the mistake. Yang et al. tested 90 trials with a planted file that shadowed a trusted Python module. The payload ran in 10 of 29 trials with explicit recognition ([study](https://arxiv.org/abs/2610.40716v1)).
+
+## What separated the clean trials
+
+The study grouped observed safeguards as effective, partial isolation, or none. All 25 effective-safeguard trials stayed clean; all 40 trials without safeguards triggered. Partial isolation left 3 of 8 direct trials clean and 0 of 17 indirect trials clean ([Table 1 and §5.3](https://arxiv.org/abs/2610.40716v1)).
+
+Of 29 trials with recognition, 16 also removed a necessary execution condition and stayed clean. Ten of the remaining 13 triggered. Of 28 trials expressing other awareness without naming shadowing, 27 triggered. Eight trials expressing no awareness stayed clean ([§5.3](https://arxiv.org/abs/2610.40716v1)).
+
+## Why it works
+
+When Python searches the workspace first, an import can load the planted file. Routine library imports can reach it indirectly. Agents explicitly imported the shadowed module in 41 of 45 direct trials, against 8 of 45 indirect trials ([§2 and §5.2](https://arxiv.org/abs/2610.40716v1)).
+
+The authors recommend that systems "should check proposed commands and enforce execution constraints" ([§6](https://arxiv.org/abs/2610.40716v1)).
+
+## When this backfires
+
+- Reasoning visibility differs across models. The authors warn that "the absence of expressed risk awareness does not necessarily indicate a failure to recognize the risk" ([§7](https://arxiv.org/abs/2610.40716v1)).
+- The threat arrives as adversarial text. These trials contain none. Extending the method to other threats requires different indicators ([§2 and §6](https://arxiv.org/abs/2610.40716v1)).
+- You need a deployment failure rate. Small trial counts and one scaffold limit generalization ([§7](https://arxiv.org/abs/2610.40716v1)).
+
+Reasoning can still inform review. Execution rates were 34% with recognition and 85% without it. The authors report associations, not causal effects ([§4.3 and §5.2](https://arxiv.org/abs/2610.40716v1)). Arnav et al. find that reasoning access improves monitoring of subtle sabotage. However, "reasoning traces can contain misleading rationalizations that deceive the CoT monitors" ([abstract](https://arxiv.org/abs/2505.23575v3)).
+
+## Example
+
+The study defines exposure by whether the interpreter searches the workspace first ([§4.2](https://arxiv.org/abs/2610.40716v1)). These checks illustrate that distinction; adapt the log fields to your harness.
+
+**Before** — reward a recognition statement:
+
+```bash
+grep -qiE 'shadow|import path|untrusted module' transcript.txt && echo "agent aware"
+```
+
+The researchers recorded recognition in 29 trials; ten ran the payload ([§5.3](https://arxiv.org/abs/2610.40716v1)).
+
+**After** — reject any exposed interpreter run:
+
+```bash
+# Fail if any interpreter invocation put the workspace first on the import path.
+jq -se '[.[] | select(.tool == "shell")
+        | select(.workspace_on_path == true)] | length == 0' events.jsonl
+```
+
+The second check exits 1 for an exposed run and 0 for none.
+
+## Key Takeaways
+
+- Record exposure for every interpreter invocation. Partial isolation left every indirect trial triggered ([§5.3](https://arxiv.org/abs/2610.40716v1)).
+- Verify safety from execution records even when reasoning names the risk ([§6](https://arxiv.org/abs/2610.40716v1)).
+- Keep records outside the agent's control. Six triggered trials ended with the marker deleted; four ended with it overwritten. Independent logs preserved evidence ([§5.4](https://arxiv.org/abs/2610.40716v1)).
+
+## Related
+
+- [Completion Summary as the Oversight Surface](completion-summary-as-oversight-surface.md) — the final-report half of the same gap, where the summary omits most of what the session did.
+- [Treating a Clean Final State as Boundary-Compliance Evidence](clean-final-state-as-compliance-evidence.md) — the end-state half, where one digest collapses several different routes.
+- [Judging Agent Safety by Task Completion (Action-Boundary Violations)](judging-agent-safety-by-task-completion.md) — the same substitution scored on task outcome rather than on narration.
+- [Explanation-Bound Tool Execution for Agent Gateways](../../security/explanation-bound-tool-execution.md) — the remedy shape, where a gateway checks typed claims it can look up instead of scoring free-form prose.
+- [Treating a Local Agent Session Trace as Audit Evidence](local-trace-as-audit-evidence.md) — why the record has to sit outside the agent's reach before any of this is auditable.
 
 ---
 
@@ -78805,6 +79229,8 @@ The failure repeats across five recurring shapes — Authority Escalation, Safet
 
 The mechanism is a selection prior under reasoning-tax pressure. Tools that advertise broader capability score higher on solving the request, because their descriptions cover a larger envelope. The model picks whichever description anchors most strongly. General safety RLHF tunes refusal of unsafe requests, not selection between two legal tools with different blast radii ([Yang et al., 2026](https://arxiv.org/abs/2606.20023)).
 
+Parkinson et al.'s information condition adds privilege class and cost to each tool description, plus a system-prompt sentence explaining the notes ([§3.3](https://arxiv.org/html/2610.40975v1#S3.SS3)). The main setting makes each standard tool's first call fail; later calls succeed, while risk tools always succeed ([§3.1](https://arxiv.org/html/2610.40975v1#S3.SS1)). For Qwen3.5-397B, information lowers premature escalation from 38.4% to 19.1%, a 19.3-percentage-point reduction (about 50% relative) versus no signal ([Table 4; §4.2](https://arxiv.org/html/2610.40975v1#S4.SS2)). This metric counts scenarios where the agent calls a risk tool within five turns before trying every standard tool ([§3.6](https://arxiv.org/html/2610.40975v1#S3.SS6)). The authors report: "On most models, however, information alone mainly delays escalation until the standard tools have been tried." ([Abstract](https://arxiv.org/html/2610.40975v1#abstract)).
+
 Transient failures amplify the rate. After a tool returns an error, the agent enters corrective-reasoning mode and reaches for a variant that cannot fail — the highest-privilege one. This is the same dynamic that makes [error frames a trusted authority channel](tool-error-implicit-authority.md). Privilege-aware SFT+RL post-training pulls Qwen3-8B from 64.9% down to 27.0%, and Qwen3-4B-Think to 18.9%, but does not eliminate it ([Yang et al., 2026](https://arxiv.org/abs/2606.20023v2)). This is a learnable selection bias, not a missing capability.
 
 ## Example
@@ -79250,7 +79676,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/verbatim-failure-records
 
 Three conditions bound the result, and all three must hold before you change a harness over it. The model is instruction-tuned and at or below 1.7B parameters, decoding is greedy, and the harness writes the failed call's own text back into the transcript beside the error. [Gumaan, 2026](https://arxiv.org/abs/2608.23651v1) measured six such checkpoints across four families, in simulated tool calling and MBPP program repair.
 
-Outside that box, keep the harness you have. Feeding execution errors back lifts pass rates by 4.9 to 17.1 points on HumanEval and 16.0 to 30.0 points on MBPP across seven models up to Gemini 2.5 Pro ([Arimbur, 2026](https://arxiv.org/abs/2604.10508v1)).
+Evidence from larger models uses a different endpoint. Against a single-shot baseline, feeding execution errors back lifts pass rates by 4.9 to 17.1 points on HumanEval and 16.0 to 30.0 points on MBPP across seven models up to Gemini 2.5 Pro ([Arimbur, 2026](https://arxiv.org/abs/2604.10508v1)).
 
 ## The pattern
 
@@ -79265,7 +79691,7 @@ That split predicts which fixes work. Substituting a runtime-generated descripti
 ## When this backfires
 
 - Clearing the context is worse, not safer. Deleting the failed step restores the exact context that produced the failure, and exact repeats rise from 31% to 80%. The paper bounds this itself: "with temperature sampling, resampling would supply the variation the context no longer does" ([Gumaan, 2026](https://arxiv.org/abs/2608.23651v1)). If your harness samples, the finding does not reach you.
-- The scale extrapolation will not hold your weight. The study tops out at 1.7B; its log-linear fit crosses zero at 37.6B, a number the paper reports "in order to argue against it", because holding each checkpoint out in turn moves that crossing between 20B and 79B ([Gumaan, 2026](https://arxiv.org/abs/2608.23651v1)). Above 8B the measured sign is the other way ([Arimbur, 2026](https://arxiv.org/abs/2604.10508v1)), so do not carry this to a frontier coding agent.
+- The scale extrapolation will not hold your weight. The study tops out at 1.7B; its log-linear fit crosses zero at 37.6B, a number the paper reports "in order to argue against it", because holding each checkpoint out in turn moves that crossing between 20B and 79B ([Gumaan, 2026](https://arxiv.org/abs/2608.23651v1)). A separate study measures gains over single-shot generation in models of 8B and above ([Arimbur, 2026](https://arxiv.org/abs/2604.10508v1)). That comparison does not measure the effect of verbatim records or establish a scale threshold.
 - A human debugging the run needs the exact string. Keep the verbatim call in a log the model never reads.
 - The description comes from the same harness that let the call through. On a schema violation nobody anticipated it degrades to "the call failed", which carries less than the error did.
 - Only typed tool calling and single-function repair were measured ([Gumaan, 2026](https://arxiv.org/abs/2608.23651v1)). Multi-file edits and long-horizon planning are untested.
@@ -79304,6 +79730,7 @@ Same diagnosis, 76% less of the inversion ([Gumaan, 2026](https://arxiv.org/abs/
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](tool-error-implicit-authority.md) — the security-side cost of what error frames carry into the transcript.
 - [Distractor Interference: Why Relevance Is Not Enough](distractor-interference.md) — irrelevant material in the window degrading the next action, of which a stale failed call is one case.
 - [Stuck-Loop Recovery: Detecting and Escaping Non-Converging Agent Loops](../../loop-engineering/stuck-loop-recovery.md) — what to do once repetition is already underway rather than preventing it at the record.
+- [Failure Memory on Agent Retry](../../context-engineering/retry-failure-memory.md) — the same choice of record at repository scale, measured across whole retried attempts rather than one echoed call.
 
 ---
 
@@ -90704,7 +91131,7 @@ Multiple handlers can fire per event/matcher. Hooks scope at three levels ([docs
 
 - False positive blocking: over-broad regex matchers (matching `rm` instead of `rm -rf`) block legitimate commands. The model then exhausts retries or hallucinates workarounds. Validate patterns against real command logs.
 - Silent failures: a hook that exits non-zero without a `permissionDecisionReason` gives the model no signal to adapt. Always emit a reason string.
-- Exit code 1 fails open: for most hook events Claude Code treats only exit code `2` as a block. Exit code `1` is logged as a non-blocking error and the call proceeds. Developers who reach for the conventional Unix failure code ship guards that silently fail open ([hooks reference](https://code.claude.com/docs/en/hooks)).
+- Exit code 1 can fail open: on most events, a command hook that exits `1` without JSON reports a non-blocking error by default. Valid JSON decision fields still apply on that exit code. Set `onFailure: "block"` on a supported event to block on unexpected exit codes, including `1` ([hooks reference](https://code.claude.com/docs/en/hooks#exit-code-output)). See [Declaring a Per-Hook Failure Mode for Agent Policy Gates](../security/per-hook-failure-mode.md) for the event exceptions.
 - Fail-closed plumbing stops the call: `PreToolUse` and `PermissionRequest` hooks were once "skipped when matching them failed or the tool's input could not be serialized to JSON". Claude Code 2.1.288 made both cases block the tool call instead ([Claude Code changelog 2.1.288](https://code.claude.com/docs/en/changelog#2-1-288), 2 October 2026). A matcher that fails to evaluate used to let the call through unguarded and now halts the agent, so test matchers against real tool payloads.
 - Tool-switching circumvention: hooks fire per tool match. Block `Edit`/`Write` and the model reaches for `Bash` + `sed`/`python -c`/heredoc; block `rm` and it falls back to `perl -e 'unlink(...)'`. Anchor outcome-layer harms in file permissions, network policy, or a sandbox, and pair tool hooks with a `Bash` matcher for the obvious bypasses ([issue #43189](https://github.com/anthropics/claude-code/issues/43189)).
 - Exit-code-2 stop-instead-of-retry: a `PreToolUse` block with exit `2` is meant to feed `stderr` back so the agent adapts. In practice Claude often stops mid-turn and waits for user input, turning a fixable guardrail into a hard halt ([issue #24327](https://github.com/anthropics/claude-code/issues/24327)).
@@ -101764,7 +102191,7 @@ Source: https://agentpatterns.ai/loop-engineering/blind-resampling-over-self-rep
 
 > Below 7B, discarding a failed program and resampling from the original prompt beats returning the failure to the model for repair.
 
-Three conditions gate this technique: a model under roughly 7B parameters, a self-contained function as the unit of work, and a real test deciding pass or fail on every attempt. Inside that box, throwing the failed program away wins on accuracy and on tokens. Outside it, a conventional repair loop stays the better default.
+Three conditions gate this technique: a model under roughly 7B parameters, a self-contained function as the unit of work, and a real test deciding pass or fail on every attempt. Inside that box, throwing the failed program away wins on accuracy and on tokens. The study does not establish a default outside those conditions.
 
 The usual evaluation hides the effect. Self-repair returns a failed program to the model with its test output and asks for a correction. It is almost always measured against a single attempt with no retry. That comparison confounds the value of the feedback with the value of getting another draw at all ([Verma, 2026](https://arxiv.org/abs/2607.26117)). A matched-budget design separates the two. On MBPP+ with Qwen2.5-Coder at Q4_K_M quantization, four arms each get eight attempts: blind resampling from the original prompt, a content-free notice that the program was wrong, execution feedback, and feedback plus written self-reflection.
 
@@ -101796,7 +102223,7 @@ The placebo arm shows this is exposure, not bad information. A content-free noti
 - No real oracle sits in the loop. Every arm relies on differential testing to accept or reject each candidate ([Verma, 2026](https://arxiv.org/abs/2607.26117)). Without a test that can reject a program, resample-and-select is picking at random.
 - The feedback is richer than a failing-test transcript. The null covers test output and verbal reflection, not interactive dynamic analysis such as debugger-driven state inspection ([Wang et al., 2025](https://arxiv.org/abs/2510.18327)).
 
-Counter-evidence above 8B deserves weight. Iterative self-repair lifts pass rates by 4.9 to 17.1 points on HumanEval and 16.0 to 30.0 points on MBPP Sanitized across seven models up to Gemini 2.5 Pro. That is against a single-shot baseline ([Arimbur, 2026](https://arxiv.org/abs/2604.10508)).
+Evidence from models of 8B and above uses a different comparison. Iterative self-repair lifts pass rates by 4.9 to 17.1 points on HumanEval and 16.0 to 30.0 points on MBPP Sanitized across seven models up to Gemini 2.5 Pro. That is against a single-shot baseline ([Arimbur, 2026](https://arxiv.org/abs/2604.10508v1)).
 
 ## Example
 
@@ -101836,6 +102263,7 @@ A gap between A and B is the cost of exposure. A gap between B and C is the valu
 - [Local Model Viability Factors for Coding](../patterns/agent-design/local-model-viability-for-coding.md) — the deployment context in which sub-7B quantized models are the ones doing the retrying.
 - [Calibrated Early Termination and Warm Restart for Agent Runs (FailFast-RestartSmart)](early-termination-and-warm-restart.md) — the repo-scale counterpart, where a restart keeps the failed attempt's diff behind an optional tool rather than in the prompt.
 - [Verbatim Failure Records in Small-Model Agent Transcripts](../patterns/anti-patterns/verbatim-failure-records.md) — the tool-calling counterpart, which asks what a kept failure record should say rather than whether to keep one.
+- [Failure Memory on Agent Retry](../context-engineering/retry-failure-memory.md) — compares memory formats and a plain retry at repository scale; pass-rate gains remain inconclusive.
 
 ---
 
@@ -130601,6 +131029,7 @@ Preventing sensitive data from entering agent context is cheaper than scrubbing 
 - [System Prompt Delivery Channels on Shared Runners](system-prompt-delivery-channel.md) — Argv is world-readable and the environment block is not, but a co-tenant job running as the same user reads both; the channel only matters across a UID or namespace boundary
 - [System Prompt as Secret Store (OWASP LLM07)](system-prompt-not-a-secret-store.md) — Treating the system prompt as a confidentiality boundary is the underlying vulnerability — secrets, credentials, and security-critical logic in the prompt are recoverable at 84–92% ASR on frontier models
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md) — The URL itself is a data channel; agents that construct or follow URLs from untrusted content can leak context before a response is read
+- [Per-Call Egress Confirmation for User-Identifying Values](per-call-egress-confirmation.md) — A host allowlist approves the request and not the payload; Claude Code 2.1.317 adds a prompt before web or shell calls send the account email, 78 days after the advisory rule
 - [Agent-Authored Messages as a Deferred Exfiltration Channel](agent-authored-message-rendered-image-exfiltration.md) — An auto-fetching renderer downstream of an agent's message-authoring tool acts as deferred egress, closing the lethal trifecta without any direct network grant
 - [Multitenant RAG: Closing the Relevance-Authorization Gap](multitenant-rag-authorization-gap.md) — Retrieval ranks by relevance, not authorization — in a shared corpus, the highest-scoring chunk for one tenant can belong to another; close the gap with policy-aware ingestion, two-tier retrieval gating, and server-side orchestration
 - [Per-Server MCP Environment Scoping for Credential Isolation](mcp-server-credential-isolation.md) — Each MCP server gets its own env-variable scope, not the agent process's full env, so one server's credentials never leak to every other server the agent talks to; the configuration-layer complement to credential proxies and federated identity
@@ -130719,9 +131148,11 @@ No single safety mechanism is sufficient. Layered defenses ensure that failure o
 
 - [Agent Governance Plane: Audit Events and Message-Content Surfaces](agent-governance-plane.md) — The four-part admin surface vendors now ship for coding agents, and the two conditions (deployment topology and retention) that decide whether its record is complete
 - [Agent Retrieval Provenance as an Audit Control](agent-retrieval-provenance.md) — Capture which files an agent searched and read before it changed code so an auditor can test the process behind the diff; scope it to high-blast-radius changes and persist hashes rather than prompt text
+- [Auditing Agent CI Before the pull_request_target Default Block](pull-request-target-default-block.md) — GitHub blocks `pull_request_target` by default in public repositories from 2 December 2026, with brownouts on 9 and 16 November; the markers worth grepping for are `allow-unsafe-pr-checkout` and the checkout ref override, since the trigger is safe until a workflow executes fork code
 - [Cross-Iteration Safety State for Agent Loops (LoopHarness)](cross-iteration-safety-state.md) — A monitor that resets each loop iteration is provably at chance against evidence split across iterations; a latched risk value fixes detection and trades it for an availability failure the defense itself creates
 - [Cross-Layer Evidence for Agent Attack Detection](cross-layer-detection-evidence.md) — Pair kernel syscall traces with application telemetry when one session bounds both, you train your own detector, and post-hoc verdicts are enough; composition took the top AUROC for seven of 10 detectors on held-out attack families, and the per-mechanic table says which layer carries the signal
 - [Cryptographic Governance Audit Trail](cryptographic-governance-audit-trail.md) — Wrap tool calls with policy validation and post-quantum receipt signing to produce a tamper-evident, append-only action log for regulated environments
+- [Declaring a Per-Hook Failure Mode for Agent Policy Gates](per-hook-failure-mode.md) — A hook that breaks is a third outcome beside allow and deny; Claude Code and Cursor expose the choice per hook (`onFailure: "block"`, `failClosed: true`) while Copilot CLI fixes it by transport
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — Layer five independent safety mechanisms so no single failure point can compromise agent behavior
 - [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — A distributable harness ships OS sandboxing, skill scanning, and tool restriction to a fleet in one install, lifting composite score 52.3% to 78.3%; only declarative, boundary-local, conflict-free controls survive the trip, and injection defense is not one of them
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — A taxonomy from 446 developer reports puts 43.1% of security complaints in unauthorized file operations; sort safeguards by where they are evaluated, since ignore files and rules files are resolved inside the model's context while permissions and sandboxes are not
@@ -132046,6 +132477,90 @@ The agent cannot export that variable into its own running process, so the autho
 - [Human-in-the-Loop Confirmation Gates](human-in-the-loop-confirmation-gates.md) — the placement rules that keep an approval step out of the rubber-stamping regime.
 - [Recall-Before-Send Memory Poisoning Detection](recall-before-send-memory-poisoning-detection.md) — a detection rule for the read side, after a poisoned memory has landed.
 - [Blast Radius Containment](blast-radius-containment.md) — bounding what a compromised agent reaches once a write does get through.
+
+---
+
+### Auditing Agent CI Before the pull_request_target Default Block
+Source: https://agentpatterns.ai/security/pull-request-target-default-block/
+
+# Auditing Agent CI Before the pull_request_target Default Block
+
+> GitHub blocks `pull_request_target` by default in public repositories from 2 December 2026. Audit fork checkouts and the steps that execute them.
+
+GitHub Actions will block `pull_request_target` by default in public repositories from 2 December 2026, "unless an applicable Actions event policy explicitly allows them" ([GitHub Changelog, 2 November 2026](https://github.blog/changelog/2026-11-02-pull_request_target-blocked-by-default-december-2)). Two brownouts land first: 9 and 16 November 2026, both 16:00 to 18:00 UTC. Inside a window, blocked attempts "will create failed runs with an error annotation; the workflows won't execute". Between them the rule returns to evaluate mode, where runs continue with warnings.
+
+## Check whether you have a deadline
+
+The change "applies to public repositories on GitHub Free, GitHub Team, and GitHub Enterprise Cloud, not GitHub Enterprise Server", and "Private and internal repositories aren't affected" ([GitHub Changelog, 2 November 2026](https://github.blog/changelog/2026-11-02-pull_request_target-blocked-by-default-december-2)). A private or Server estate has nothing to meet.
+
+The date has already moved once: enforcement "was previously scheduled for November 2, 2026" ([GitHub Changelog, 2 November 2026](https://github.blog/changelog/2026-11-02-pull_request_target-blocked-by-default-december-2)). Drive the work from the policy insights report, which lists the runs the rule would block today.
+
+## What the audit should look for
+
+`pull_request_target` is safe as GitHub ships it. The workflow and any `actions/checkout` call without a `ref` come from the "base repository's default branch", so "No code from the fork is executed by default" ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)). Exposure begins when the author points the checkout at the fork's head; the damage lands one step later: "The vulnerability is completed by the *next* step that runs code checked out into the current working directory."
+
+That makes `on: pull_request_target` a weak search term. Four markers carry the signal:
+
+- `allow-unsafe-pr-checkout`. This input opts a step out of the protection shipped in `actions/checkout` v7 on 18 June 2026. It blocks fork checkouts in `pull_request_target` workflows. For `workflow_run`, it applies only when `workflow_run.event` is a `pull_request*` event ([GitHub Changelog, 18 June 2026](https://github.blog/changelog/2026-06-18-safer-pull_request_target-defaults-for-github-actions-checkout)). The name is deliberate: "intentionally named to be easy to spot in code review and static analysis." The December event policy applies independently of this checkout input.
+- A `ref:` of `refs/pull/<n>/head` or `/merge`, a `ref:` resolving to a fork head or merge SHA, or a `repository:` set to the fork. These are the three shapes v7 refuses.
+- `git fetch` or `gh pr checkout` inside a `run` block. The checkout protection "only covers fork pull request refs", so these routes stay open ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
+- `issue_comment` and `workflow_run` workflows that fetch and run fork code. Pwn requests "are also not unique to `pull_request_target`" ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
+
+The backport does not update existing SHA, minor, or patch pins to older releases; those workflows need an upgrade. V7 includes the protection at release. V1 never receives it ([GitHub Changelog, 18 June 2026](https://github.blog/changelog/2026-06-18-safer-pull_request_target-defaults-for-github-actions-checkout)).
+
+## Why it works
+
+Both defaults move the decision off a surface the contributor can influence. Discretion was the old control, and the field record retired it: a pwn-request exploit "compromised 170 node package manager (npm) packages", the TanStack Router ecosystem among them, in the TeamPCP attacks on open source repositories ([CSO Online, 2026](https://www.csoonline.com/article/4188144/github-actions-hardens-checkout-security-to-block-pwn-request-attacks-2.html)). The checkout layer now refuses to fetch the fork's head, and the event policy refuses to start the run, so neither depends on the author having read the guidance.
+
+For a job that must build fork code and write back, GitHub's replacement is two workflows. The untrusted half "must be handled via the `pull_request` trigger so that it is isolated in an unprivileged environment" and stores results as artifacts; a `workflow_run` workflow then holds the secrets and downloads them ([GitHub Security Lab](https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/)).
+
+## When this backfires
+
+- The agent only comments or labels. GitHub Security Lab calls the two-workflow alternative overhead here: "If your workflow scenario simply requires commenting on the PR, but does not require a check out of the modified code, using `pull_request_target` is a logical shortcut" ([GitHub Security Lab](https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/)). A scoped event policy allowing one workflow file is the cheaper answer.
+- The migration lands on a maintainer-applied label. An attacker "may push new changes after the workflow was approved (labeled), but has not started yet", so GitHub rates the approach a "temporary solution" ([GitHub Security Lab](https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/)).
+- The privileged half runs the artifact it downloads. Artifacts built from a fork "are themselves untrusted and should be treated as such when handled in privileged contexts", so executing one moves the boundary rather than closing it ([GitHub Security Lab](https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/)).
+- A job needs write cache access. `pull_request_target` workflows now hold read-only cache in the default branch scope, and a write-capable `cache-mode` "reintroduces the cache-poisoning risk this restriction is designed to prevent" ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
+
+## Example
+
+Run the audit by marker rather than by trigger. Against a checkout of the organization's workflow files:
+
+```bash
+# 1. The checkout opt-out flag: inspect how the code is used.
+grep -rn 'allow-unsafe-pr-checkout' --include='*.yml' --include='*.yaml' .github/
+
+# 2. The three refs actions/checkout v7 refuses.
+grep -rnE 'ref:.*(pull/|head\.sha)|repository:.*head\.repo' --include='*.y*ml' .github/
+
+# 3. Fetch routes outside actions/checkout protection.
+grep -rnE 'git fetch|gh pr checkout' --include='*.y*ml' .github/
+
+# 4. Privileged triggers beyond pull_request_target.
+grep -rnE '^\s*(issue_comment|workflow_run):' --include='*.y*ml' .github/
+```
+
+A hit on 1 or 2 flags a possible fork checkout; inspect the input values and later steps. Checkout alone does not execute fork code. For a privileged workflow, split execution into an unprivileged workflow or confirm the checkout is only inspected as data. An event policy can permit a needed `pull_request_target` workflow, but does not make fork execution safe ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
+
+A hit on 3 flags a fetch outside `actions/checkout` protection. Marker 4 needs event-specific review: the June protection covers some `workflow_run` checkouts, but not `issue_comment` ([GitHub Changelog, 18 June 2026](https://github.blog/changelog/2026-06-18-safer-pull_request_target-defaults-for-github-actions-checkout)).
+
+Reusable workflows and composite actions need the same sweep. The markers live in the called file, so an audit of caller workflows alone misses them.
+
+## Key Takeaways
+
+- Confirm the scope before scheduling work: public repository, on Free, Team, or Enterprise Cloud ([GitHub Changelog, 2 November 2026](https://github.blog/changelog/2026-11-02-pull_request_target-blocked-by-default-december-2)).
+- Treat 9 and 16 November 2026, 16:00 to 18:00 UTC, as live failure windows rather than warnings.
+- Grep for `allow-unsafe-pr-checkout` first. Inspect how each opted-out step uses the checked-out files.
+- Check the release behind each SHA, minor, or patch pin. Older pins need an upgrade to receive the backport; v7 pins include protection natively. V1 remains unprotected ([GitHub Changelog, 18 June 2026](https://github.blog/changelog/2026-06-18-safer-pull_request_target-defaults-for-github-actions-checkout)).
+- Route a job that needs fork code and secrets to `pull_request` plus `workflow_run`, and inspect the artifacts as data ([GitHub Security Lab](https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/)).
+- For a comment-only agent reviewer, write the event policy and keep the trigger.
+
+## Related
+
+- [Enforcing Who and What Can Trigger an Agent's CI Run](workflow-execution-protections.md) — the policy surface this default is built on, including how to write the allow rule
+- [AI Agents in CI/CD with Elevated Permissions and Untrusted Content (GitInject)](../patterns/anti-patterns/ai-agents-in-ci-cd-with-elevated-permissions.md) — the trust-boundary failure the trigger change narrows
+- [Always-On Agentic PR Security Review](always-on-pr-security-review.md) — the reviewer workflow most affected by the migration
+- [Safe Outputs Pattern for Trustworthy Agent Responses](safe-outputs-pattern.md) — filtering the privileged half's writes after the split
+- [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — keeping the agent out of the workflow file the audit depends on
 
 ---
 
@@ -135654,6 +136169,102 @@ Anthropic's hardening guidance applies to this stack: the `UPSTREAM_ALLOWED_IPS`
 
 ---
 
+### Declaring a Per-Hook Failure Mode for Agent Policy Gates
+Source: https://agentpatterns.ai/security/per-hook-failure-mode/
+
+# Declaring a Per-Hook Failure Mode for Agent Policy Gates
+
+> A gate that breaks renders no verdict, so decide each hook's failure mode rather than inheriting the harness default.
+
+A hook allows, denies, or renders no verdict at all because the script is missing, an import throws, the endpoint is unreachable, or the process runs past its timeout. Command and HTTP hook failures in Claude Code usually let the action through. Cursor also defaults to fail-open for crashes and timeouts. Copilot CLI's answer depends on how the hook is wired. Claude Code states its default in one line: "On most events, when a hook fails or times out, Claude Code still carries out the action" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). Leaving the default in place is a decision.
+
+## When a hook earns fail-closed
+
+Two questions decide it, both about the one hook in front of you.
+
+Does this hook render a verdict? A deny rule, a secret scan, or a merge gate exists to stop something, so its silence is a gap. A formatter or a style notice has nothing to protect. Cursor scopes its own recommendation the same way, naming security-critical MCP-execution hooks rather than hooks in general ([Cursor hooks](https://cursor.com/docs/agent/hooks#beforeshellexecution-beforemcpexecution)).
+
+Can the person who hits the block fix it? The error message is the only thing between a stopped action and someone deleting the hook. Claude Code's block message carries the interpreter's own output, so a missing script surfaces as a module-resolution trace ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). That reads as a fix to the hook's author and as noise to everyone else. Write the reason first, then set the field.
+
+## What counts as a failure
+
+For Claude Code command and HTTP hooks with `onFailure: "block"`, five things count as a failure: a hook that cannot start, an exit code other than 0 or 2, an HTTP error, a timeout, and output that fails JSON parsing or schema validation ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). Two of them are easy to miss. A timeout counts, which turns a slow dependency into a stopped agent. An unexpected exit code counts "even if it printed JSON that allows the action, such as `permissionDecision: "allow"`". So a hook that exits 1 to warn starts blocking the day the field goes on. Have it exit 0 where it only warns. The [hook catalog](../tool-engineering/hook-catalog.md) covers the exit-code semantics underneath this.
+
+## Where each harness puts the choice
+
+The three harnesses disagree about who owns the decision.
+
+| Harness | Default | Where the choice lives |
+|---|---|---|
+| Claude Code | Fail open on most events | `onFailure: "block"` per hook, added for command and HTTP hooks in 2.1.295 and extended to Agent SDK hook callbacks in 2.1.317 ([changelog](https://code.claude.com/docs/en/changelog#2-1-317)) |
+| Cursor | Fail open | `failClosed: true` per hook, default `false`; unavailable on hooks configured from the dashboard ([Cursor hooks](https://cursor.com/docs/agent/hooks#cloud-distribution-enterprise-only)) |
+| Copilot CLI | Mixed, fixed by transport | No per-hook field. A command `preToolUse` hook fails closed on a crash or non-zero exit; its timeouts and every HTTP `preToolUse` failure fail open ([hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference#hook-event-input-payloads)) |
+
+The 2.1.317 release adds a declarative failure choice for Agent SDK callbacks ([changelog](https://code.claude.com/docs/en/changelog#2-1-317)). An Agent SDK callback runs inside the host process, and the SDK's advice for an HTTP logging callback is: "Catch errors inside your hook instead of letting them propagate." ([Claude Agent SDK hooks](https://code.claude.com/docs/en/agent-sdk/hooks#make-http-requests-from-hooks)). A `try/catch` that catches a policy-check error and returns no denial leaves that check unenforced. Review callback bodies as well as configuration.
+
+The cited SDK example catches errors in an advisory `PostToolUse` logger; it does not implement a policy gate. SDK callback timeouts already block `PreToolUse` calls ([SDK timeout reference](https://code.claude.com/docs/en/agent-sdk/hooks#hook-timeout)). A second event has that default: a `UserPromptSubmit` callback that times out blocks the prompt, "because a callback there can be acting as a policy gate that must not fail open" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#userpromptsubmit)). The Agent SDK hooks page does not document the new field as of 3 November 2026, so the changelog is its only source.
+
+## Why it works
+
+The two failure directions are not detected on the same timescale. Saltzer and Schroeder named the asymmetry in 1975: "A design or implementation mistake in a mechanism that gives explicit permission tends to fail by refusing permission, a safe situation, since it will be quickly detected. On the other hand, a design or implementation mistake in a mechanism that explicitly excludes access tends to fail by allowing access, a failure which may go unnoticed in normal use" ([Saltzer and Schroeder](https://web.mit.edu/Saltzer/www/publications/protection/Basic.html)).
+
+A broken fail-open gate is the second case. It emits a transcript notice and a successful tool call, and the successful call is the part a developer sees, so the gap lasts as long as nobody reads notices. A broken fail-closed gate stops the action, and the person waiting reports it. The field does not make a gate more accurate. It moves the cost of the gate's own breakage from an unobserved security gap to an observed interruption.
+
+## When this backfires
+
+Fleet-deployed hooks with a network dependency are the clearest case against hardening. Timeouts count as failures, so one slow endpoint stalls every session at once. GitHub declines to make this case fail-closed at all, holding that "a slow or unreachable hook must not silently block tool calls or work, even when the hook was deployed by an administrator as policy" ([hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference#exit-codes-for-command-hooks)). A vendor is arguing against hardening its own hook system.
+
+Some events ignore the field. `onFailure` has no effect on `Stop`, `SubagentStop`, `TaskCompleted` and `TeammateIdle`, nor on background command hooks that set `async` or `asyncRewake`, because "exit code 2 on these events sends Claude back to keep working, and Claude can't repair a hook that won't run" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). Hardening a stop-class gate buys nothing and looks like it bought something.
+
+Sometimes the hook was never the real control. Anthropic's own reference tells readers to use the permission system "rather than a hook to enforce a hard allow or deny" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#bash-if-matching)). Where a sandbox, a permission rule, or branch protection already blocks the outcome, a hardened hook adds interruptions and no coverage.
+
+Neither mode catches a gate that answers wrongly without erroring. A hook handed a silently truncated input starts, finishes in time, and returns a well-formed allow, so no failure mode applies. [A guard hook approves the truncated input it was handed](../patterns/anti-patterns/guard-approves-truncated-input.md) covers that case.
+
+A few failures block whatever you configure. Claude Code 2.1.288 changed `PreToolUse` and `PermissionRequest` matcher and serialization failures from skipped to blocked ([changelog](https://code.claude.com/docs/en/changelog#2-1-288)), and Cursor permission hooks block invalid JSON or invalid responses even with `failClosed: false` ([Cursor hooks](https://cursor.com/docs/agent/hooks#per-script-configuration-options)).
+
+## Example
+
+A Claude Code `PreToolUse` gate that blocks Bash when its own script will not run ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)):
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/check-command.js"],
+            "onFailure": "block"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Delete `check-command.js` and an `ls` call is refused rather than run. The documented error reads `failed; blocking because onFailure is "block"`, followed by node's own error output. Without the field, the same missing script is a non-blocking error and `ls` proceeds. In Cursor the equivalent is `"failClosed": true` on the hook definition.
+
+## Key Takeaways
+
+- Set the failure mode on each hook as you write it. Every one of the three harnesses lets some gate failures through unless you intervene, so an untouched default is a decision somebody has to defend.
+- Audit for the inverse as well as the gap: in Claude Code a hook that exits 1 to warn becomes a blocker the day you harden it.
+- Pair every fail-closed gate with a reason that names the fix. A stack trace is not one, and a block nobody can clear gets the hook deleted.
+- Check whether your event supports the field before trusting it. In Claude Code the stop-class and background hooks ignore it.
+- In the Agent SDK, check what each error handler returns. Returning no denial after a policy-check error bypasses that check.
+
+## Related
+
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — where a control is evaluated decides whether the agent can argue with it.
+- [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — the same reasoning at startup scope, as one global setting rather than a per-hook field.
+- [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — the layers beneath a hook that decide how much a fail-open window actually costs.
+- [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — what happens to a control when it ships to a fleet in one install.
+
+---
+
 ### Defense-in-Depth Agent Safety
 Source: https://agentpatterns.ai/security/defense-in-depth-agent-safety/
 
@@ -137338,9 +137949,9 @@ Actor rules cover who. By default "every user with write access to a repository 
 
 Event rules cover what, across the full trigger list including `push`, `pull_request`, `pull_request_target`, `issue_comment`, `workflow_run` and `workflow_dispatch` ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)). A policy's `workflow_path` condition takes include and exclude globs. GitHub's own example restricts `deploy.yml` to a designated team while CI workflows stay open to all contributors ([GitHub Changelog](https://github.blog/changelog/2026-09-17-workflow-execution-protections-in-github-actions-generally-available)).
 
-## The 2 November 2026 default
+## The 2 December 2026 default
 
-Read the scope before treating it as your deadline. For public repositories with no applicable event policy already configured, GitHub has added a default policy that blocks `pull_request_target`. It "Does not apply to private or internal repositories", it "Does not replace an applicable event policy that you have already configured", and it runs in evaluate mode today. On 2 November 2026 GitHub enforces it "for affected repositories that were using the default `pull_request_target` policy before general availability" ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)). A public-repository agent reviewer that comments on fork pull requests with a write token is the shape most likely to stop working that day.
+Read the scope before treating it as your deadline. For public repositories with no applicable event policy already configured, GitHub has added a default policy that blocks `pull_request_target`. It "Does not apply to private or internal repositories", it "Does not replace an applicable event policy that you have already configured", and it runs in evaluate mode today. On 2 December 2026 GitHub enforces it "for affected repositories that were using the default `pull_request_target` policy before general availability" ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)). The deadline moved from 2 November. Brownouts on 9 and 16 November, 16:00–18:00 UTC, block affected runs before permanent enforcement ([GitHub Changelog, 2 November 2026](https://github.blog/changelog/2026-11-02-pull_request_target-blocked-by-default-december-2)).
 
 ## Why it works
 
@@ -137354,7 +137965,7 @@ The field record shows the advisory version of the rule failing. The Sysdig Thre
 - You are below Enterprise and cannot run the dry pass. An actor rule that omits the agent's App identity stops its CI on the first push, with no insights run to catch the omission.
 - You read an event allowlist as a fix for pwn requests. GitHub states that they "are also not unique to `pull_request_target`", naming `issue_comment` and `workflow_run` workflows that fetch and run a fork's code as vulnerable in the same way ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
 - You expect the policy to constrain the run itself. It governs the trigger, not the content: token permissions, secret scope and runner isolation stay workflow-file decisions. Practitioners asking for content-level policy on GitHub's 2026 roadmap were pointing at that gap ([community discussion #190621](https://github.com/orgs/community/discussions/190621)).
-- Your repositories are private and internal. The November default never reaches them, so nothing changes until somebody writes a policy.
+- Your repositories are private and internal. The December default never reaches them, so nothing changes until somebody writes a policy.
 
 ## Example
 
@@ -137392,13 +138003,14 @@ A later commit that changes `ai-review.yml` to `on: pull_request_target` still l
 - Inventory what your agent's workflow is triggered by before you write an event rule, because the run fails outright on a disallowed event ([GitHub Docs](https://docs.github.com/en/actions/concepts/about-actions-policies)).
 - Add your agent's App or bot identity to the actor allowlist before you enforce, or you switch off its CI runs ([GitHub Docs](https://docs.github.com/en/actions/how-tos/administer/control-workflow-execution)).
 - Audit which tokens and Apps hold `administration: write`, since those can delete the policy that bounds them ([GitHub Docs](https://docs.github.com/en/rest/actions/policies)).
-- If your public repositories still run `pull_request_target`, decide before 2 November 2026 whether to move to `pull_request` or write a policy that allows the event ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
+- If your public repositories still run `pull_request_target`, decide before 2 December 2026 whether to move to `pull_request` or write a policy that allows the event ([GitHub Docs](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)).
 
 ## Related
 
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — the general sorting rule this page applies to CI triggers
 - [AI Agents in CI/CD with Elevated Permissions and Untrusted Content (GitInject)](../patterns/anti-patterns/ai-agents-in-ci-cd-with-elevated-permissions.md) — the workflow-file version of the same rule, and why the trigger matters
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — the complementary control over edits to the workflow file itself
+- [Auditing Agent CI Before the pull_request_target Default Block](pull-request-target-default-block.md) — the audit and migration side of the default event rule described above
 - [Non-Retirable Approval Rules for Agent Operations](non-retirable-approval-rules.md) — keeping a rule in place once an agent can reach the surface that defines it
 - [Team-Scoped Agent Policy Delegation](team-scoped-policy-delegation.md) — layering policy across enterprise, organization and repository
 
@@ -139578,6 +140190,7 @@ A "yes" to 1 and 2 with a "no" to 3 puts the deployment in the gap this anti-pat
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md)
+- [Per-Call Egress Confirmation for User-Identifying Values](per-call-egress-confirmation.md) — the other thing an egress control can match on: the call's argument rather than its destination
 
 ---
 
@@ -142743,6 +143356,71 @@ The union property is the whole mechanism. Whatever a single allowlist covers re
 
 ---
 
+### Per-Call Egress Confirmation for User-Identifying Values
+Source: https://agentpatterns.ai/security/per-call-egress-confirmation/
+
+# Per-Call Egress Confirmation for User-Identifying Values
+
+> A per-call egress confirmation matches an outbound call's arguments against values the harness knows identify the user, then asks before the call goes out.
+
+Claude Code 2.1.317 shipped one on 3 November 2026: "Added a check that asks before a web or shell tool call sends your account email address to the network" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-317)). A host-only rule leaves the payload unrestricted. Claude Code also supports exact-command rules and wildcard rules; their coverage depends on the pattern ([permission rules](https://code.claude.com/docs/en/permissions#permission-rule-syntax)).
+
+## Conditions that make it worth the interruption
+
+Use these conditions to assess where a per-call check adds to [a destination rule](agent-network-egress-policy.md).
+
+- The harness already holds the value. Claude Code already emits the account email as a telemetry attribute: it "Added `user.email` and `user.groups` to the telemetry Claude Desktop and Cowork send through a Claude apps gateway, matching terminal sessions" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-265)). That provides a known value to check. The changelog does not specify the matching algorithm.
+- The destination is already approved. Check whether that approval also constrains the payload.
+- Somebody can answer during the run. A prompt nobody sees is no control.
+
+## Why it works
+
+A standing permission rule can cover many calls. Claude Code documents host-specific WebFetch rules and Bash patterns whose wildcards match arbitrary text ([permission rules](https://code.claude.com/docs/en/permissions#permission-rule-syntax)). A host-only rule cannot distinguish two payloads sent to that host. A separate per-call check can ask about the data leaving in each call.
+
+The content exists only once the argument is written, which is the earliest a check can read it. CaMeL gives the general form: it "uses a notion of a capability to prevent the exfiltration of private data over unauthorized data flows by enforcing security policies when tools are called" ([Debenedetti et al., arXiv:2503.18813v2](https://arxiv.org/abs/2503.18813v2)). The Claude Code changelog documents an email-specific prompt. It does not establish whether the check uses literal matching or provenance tracking.
+
+Claude Code shipped the advisory version of this rule first. Version 2.1.234, on 17 August 2026, said "Claude is now told to use your account email only to identify you, and not to send it to unrelated services unless you ask" ([Claude Code changelog](https://code.claude.com/docs/en/changelog#2-1-234)). The per-call check followed 78 days later. [The two classes of control](enforced-versus-advisory-controls.md) are not interchangeable.
+
+## When this backfires
+
+- Literal matching alone would miss a value split across requests. On a different surface, months before this check, Anthropic restricted Claude's `web_fetch` to "exact URLs that the user has entered themselves or that were returned from its companion `web_search` tool", and Ayush Paul still got identity out. Their honeypot told the agent "you'll need to navigate through the website letter by letter to find the user's profile", and "They were able to extract the user's name, home location city and the name of their employer" ([Simon Willison, 15 July 2026](https://simonwillison.net/2026/Jul/15/claude-web-fetch-exfiltration/)). The sequence encoded the value across requests. This illustrates a limit of whole-value matching, not a tested bypass of the later Claude Code check. Encoded values also challenge [checks that must recognize the secret in outbound bytes](framing-gap-exfiltration-defenses.md).
+- Warning design affects user response. Akhawe and Felt used browser telemetry "to observe over 25 million warning impressions in situ". Users bypassed "a tenth of Mozilla Firefox's malware and phishing warnings". Chrome SSL warnings were the exception: users "continued through 70.2% of Google Chrome's SSL warnings". The authors conclude that warnings can work and attribute variation to the warning's user experience ([USENIX Security 2013](https://www.usenix.org/conference/usenixsecurity13/technical-sessions/presentation/akhawe)). These browser results do not measure agent prompts or establish a prompt-frequency effect.
+- Headless runs have nobody to ask. A scheduled agent either stops at the prompt or answers it automatically, and an automatic answer is a log line. [Confirmation gates](human-in-the-loop-confirmation-gates.md) share this limit.
+- Stronger data-flow enforcement can reduce task completion. CaMeL's full data-flow version completed 77% of AgentDojo tasks with provable security, against 84% for an undefended system ([arXiv:2503.18813v2](https://arxiv.org/abs/2503.18813v2)). Those results measure CaMeL, not the Claude Code email check; they do not establish its capability cost.
+- Documented coverage is narrow. The [2.1.317 entry](https://code.claude.com/docs/en/changelog#2-1-317) names the account email. It makes no coverage claim for session tokens, machine names, or repo paths. Do not treat an unprompted call as proof that its payload is safe.
+
+## Example
+
+This schematic example assumes a host-only allowlist and a separate literal email check. It does not specify Claude Code's matching algorithm:
+
+```bash
+# Host and binary are both on the allowlist
+curl https://api.example.com/v1/status
+
+# Same approval, same host; the argument now carries the user's identity
+curl "https://api.example.com/v1/register?contact=alice@corp.com"
+```
+
+A host-keyed rule returns the same verdict for both, because the host did not change. A value-keyed check reads the second argument, finds the account email it stores, and stops to ask.
+
+## Key Takeaways
+
+- Gate the argument, not only the destination, where the harness already stores the value a call might carry.
+- Revisit documented coverage whenever the harness gains a new identity attribute.
+- Test whether users understand the prompt and reject unwanted disclosures. Measure prompt frequency separately; the browser study does not establish its effect.
+- Keep a destination rule underneath it. A literal payload match alone does not cover split or encoded values.
+- Treat the control as unmeasured. The changelog states the behavior and gives no figure for how often the check fires.
+
+## Related
+
+- [Guarding Against URL-Based Data Exfiltration in Agentic Workflows](url-exfiltration-guard.md)
+- [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md)
+- [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md)
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md)
+- [Control/Data-Flow Separation for Prompt Injection Defense (CaMeL)](camel-control-data-flow-injection.md)
+
+---
+
 ### Per-Caller Identity: Who an Agent's Tool Call Acts As
 Source: https://agentpatterns.ai/security/per-caller-identity-for-agent-tool-calls/
 
@@ -144755,6 +145433,7 @@ The first leaves reframing at 31.9% on gpt-4o. The second drops it to 0% (0/120)
 - [Agent Network Egress Policy: Admin-Controlled Domain Allow/Deny](agent-network-egress-policy.md) — the operational form of the destination allow-list, enforced below the model.
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the three ingredients this lab assembles on purpose: a secret in context, untrusted content, and a tool that acts.
 - [Adaptive Evaluation of Out-of-Band Prompt-Injection Defenses](adaptive-evaluation-out-of-band-defenses.md) — why the held-out ROT13 result generalizes: a defense measured only on the attacks its author chose has not been measured.
+- [Per-Call Egress Confirmation for User-Identifying Values](per-call-egress-confirmation.md) — a shipped payload-reading check and the conditions under which it is still worth running next to a destination rule.
 
 ---
 
@@ -157633,7 +158312,7 @@ The host harness owns the registry of every component a plugin contributes. A sk
 - Always-on token budget pressure: every transitive plugin loads skill and agent descriptions into the always-on context, so check [per-plugin token-cost attribution](../observability/plugin-token-cost-attribution.md) before adding an edge.
 - Air-gapped installs: resolution assumes the marketplace is reachable, so when it is not, missing transitive dependencies disable the dependent plugin the operator never touched.
 - Dependency hell: importing the package-manager primitive imports its failure modes, and the four error codes above are the agent-layer equivalent of package-manager pain.
-- Expanded supply-chain attack surface: force-enabling transitive dependencies and auto-installing them from a marketplace pulls every upstream maintainer into your trust boundary. A compromised marketplace skill can hijack the install and ship a trojanized dependency that imports cleanly while exfiltrating secrets ([SentinelOne: Marketplace Skills and Dependency Hijack in Claude Code](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/)). Vet marketplace provenance and prefer pinned ranges over open auto-update.
+- Expanded supply-chain attack surface: force-enabling transitive dependencies and auto-installing them from a marketplace pulls every upstream maintainer into your trust boundary. A compromised marketplace skill can hijack the install and ship a trojanized dependency that imports cleanly while exfiltrating secrets ([SentinelOne: Marketplace Skills and Dependency Hijack in Claude Code](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/)). Vet marketplace provenance and prefer pinned ranges over open auto-update. Vercel also blocks affected public npm downloads during dependency installation in its builds ([Vercel changelog](https://vercel.com/changelog/blocking-malicious-npm-packages-before-and-during-installation)).
 
 ## Example
 
@@ -174512,7 +175191,7 @@ robots.txt is advisory, not enforceable. Watch for these caveats:
 - ChatGPT-User is user-initiated: OpenAI's [crawler documentation](https://platform.openai.com/docs/bots) says robots.txt rules "may not apply" to it, and [coverage](https://ppc.land/openai-revises-chatgpt-crawler-documentation-with-significant-policy-changes/) reports the December 2025 change. To block interactive ChatGPT browsing, use a CDN/WAF rule.
 - Perplexity stealth crawling documented: [Cloudflare reported in August 2025](https://blog.cloudflare.com/perplexity-is-using-stealth-undeclared-crawlers-to-evade-website-no-crawl-directives/) that Perplexity rotates user-agents and ASNs to evade blocks and has been observed ignoring robots.txt. Treat allow-listing `PerplexityBot` and `Perplexity-User` as directional only, and use WAF rules for any hard block.
 - Meta-ExternalFetcher may bypass it: Meta's [crawler documentation](https://developers.facebook.com/docs/sharing/webmasters/web-crawlers/) says this user-requested fetcher "may bypass robots.txt".
-- Hard blocks need the network layer: a CDN/WAF rule blocks a user-agent such as `Bytespider` whatever robots.txt says. See [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup.
+- Hard blocks need the network layer: a CDN/WAF rule blocks a user-agent such as `Bytespider` whatever robots.txt says. See [Cloudflare WAF custom rules](https://developers.cloudflare.com/waf/custom-rules/) for setup. Vercel's changelog lists managed rules in Vercel Firewall that control AI crawlers and AI assistants separately ([Vercel changelog](https://vercel.com/changelog/block-ai-crawlers-and-assistants-independently-with-managed-rules)).
 - No enforcement: robots.txt does not prevent crawling. It signals intent.
 
 ## Provider user-agent reference
@@ -191295,6 +191974,8 @@ The price git pays for offline work is a complete local copy. "Git is a decentra
 Anthropic's figures show the scale. Its main branch history alone is almost 100 GB and a compressed working copy is over 25 GB. On top of that it runs "on the order of 25 million code checkouts per day for CI, before counting developer environments, agent sandboxes, and research jobs". The post puts the naive cost of that volume at "over 600 PB of git traffic per day" ([Anthropic](https://www.anthropic.com/research/redesigning-source-control)).
 
 The assumption that failed was offline-first clients: "like most companies, we were using git as a centralized system with one authoritative copy, but nearly all of our clients were agents and jobs that are online by definition" ([Anthropic](https://www.anthropic.com/research/redesigning-source-control)).
+
+OpenAI has its own account of git at scale, [Scaling Git at OpenAI](https://openai.com/index/scaling-git-at-openai). This page cites it by title and URL only, so every figure above is still Anthropic's.
 
 ## Three readiness layers
 

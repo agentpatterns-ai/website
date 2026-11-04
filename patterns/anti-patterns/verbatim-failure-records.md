@@ -23,7 +23,7 @@ maturity: emerging
 
 Three conditions bound the result, and all three must hold before you change a harness over it. The model is instruction-tuned and at or below 1.7B parameters, decoding is greedy, and the harness writes the failed call's own text back into the transcript beside the error. [Gumaan, 2026](https://arxiv.org/abs/2608.23651v1) measured six such checkpoints across four families, in simulated tool calling and MBPP program repair.
 
-Outside that box, keep the harness you have. Feeding execution errors back lifts pass rates by 4.9 to 17.1 points on HumanEval and 16.0 to 30.0 points on MBPP across seven models up to Gemini 2.5 Pro ([Arimbur, 2026](https://arxiv.org/abs/2604.10508v1)).
+Evidence from larger models uses a different endpoint. Against a single-shot baseline, feeding execution errors back lifts pass rates by 4.9 to 17.1 points on HumanEval and 16.0 to 30.0 points on MBPP across seven models up to Gemini 2.5 Pro ([Arimbur, 2026](https://arxiv.org/abs/2604.10508v1)).
 
 ## The pattern
 
@@ -38,7 +38,7 @@ That split predicts which fixes work. Substituting a runtime-generated descripti
 ## When this backfires
 
 - Clearing the context is worse, not safer. Deleting the failed step restores the exact context that produced the failure, and exact repeats rise from 31% to 80%. The paper bounds this itself: "with temperature sampling, resampling would supply the variation the context no longer does" ([Gumaan, 2026](https://arxiv.org/abs/2608.23651v1)). If your harness samples, the finding does not reach you.
-- The scale extrapolation will not hold your weight. The study tops out at 1.7B; its log-linear fit crosses zero at 37.6B, a number the paper reports "in order to argue against it", because holding each checkpoint out in turn moves that crossing between 20B and 79B ([Gumaan, 2026](https://arxiv.org/abs/2608.23651v1)). Above 8B the measured sign is the other way ([Arimbur, 2026](https://arxiv.org/abs/2604.10508v1)), so do not carry this to a frontier coding agent.
+- The scale extrapolation will not hold your weight. The study tops out at 1.7B; its log-linear fit crosses zero at 37.6B, a number the paper reports "in order to argue against it", because holding each checkpoint out in turn moves that crossing between 20B and 79B ([Gumaan, 2026](https://arxiv.org/abs/2608.23651v1)). A separate study measures gains over single-shot generation in models of 8B and above ([Arimbur, 2026](https://arxiv.org/abs/2604.10508v1)). That comparison does not measure the effect of verbatim records or establish a scale threshold.
 - A human debugging the run needs the exact string. Keep the verbatim call in a log the model never reads.
 - The description comes from the same harness that let the call through. On a schema violation nobody anticipated it degrades to "the call failed", which carries less than the error did.
 - Only typed tool calling and single-function repair were measured ([Gumaan, 2026](https://arxiv.org/abs/2608.23651v1)). Multi-file edits and long-horizon planning are untested.
@@ -77,3 +77,4 @@ Same diagnosis, 76% less of the inversion ([Gumaan, 2026](https://arxiv.org/abs/
 - [Trusting Tool Error Messages as Implicit Authority (Error-Path Injection)](tool-error-implicit-authority.md) — the security-side cost of what error frames carry into the transcript.
 - [Distractor Interference: Why Relevance Is Not Enough](distractor-interference.md) — irrelevant material in the window degrading the next action, of which a stale failed call is one case.
 - [Stuck-Loop Recovery: Detecting and Escaping Non-Converging Agent Loops](../../loop-engineering/stuck-loop-recovery.md) — what to do once repetition is already underway rather than preventing it at the record.
+- [Failure Memory on Agent Retry](../../context-engineering/retry-failure-memory.md) — the same choice of record at repository scale, measured across whole retried attempts rather than one echoed call.
