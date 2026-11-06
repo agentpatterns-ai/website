@@ -46,7 +46,7 @@ AGENTS.md uses proximity-based discovery: the closest file to the edited file wi
 
 ## Content overlap and drift
 
-All three files hold the same categories — project context, conventions, constraints, workflow notes. Each tool reads only its own file, so updates to one file do not propagate. Without a convergence strategy, the files diverge on their own: one file says "use pnpm", another says "use npm", and agents follow their own source.
+All three files hold the same categories — project context, conventions, constraints, workflow notes. Each tool reads only its own file, so updates to one file do not propagate. Without a convergence strategy, the files diverge on their own: one file says "use pnpm", another says "use npm", and agents follow their own source. [Divergent Rules Across Coexisting Agent Instruction Files](cross-format-instruction-divergence.md) measures how often this happens and how to check for it.
 
 ## Convergence strategies
 

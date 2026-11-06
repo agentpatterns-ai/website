@@ -84,6 +84,7 @@ nav:
       - cross-framework-signal-semantics.md
       - llm-benchmark-auditing.md
       - oracle-integrity-checks-eval-harness.md
+      - judge-input-assurance-tests.md
       - synae-synthetic-eval-quality.md
       - task-alignment-benchmark.md
       - specification-oracle-gap-audit.md

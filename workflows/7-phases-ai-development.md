@@ -72,7 +72,7 @@ Human-led. Decompose the PRD into trackable GitHub issues. Each issue is a unit 
 
 Exit criterion: every issue has concrete [acceptance criteria](agentic-agile-rituals.md) (a test to pass, a behavior to verify, a file to change) and no issue depends on another issue to define its scope.
 
-This decomposition step is the highest-value handoff point in the model. Issue description quality is the main factor in delegation success — specific context, acceptance criteria, and file references directly affect output quality ([Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md)).
+Prepare the handoff with context, acceptance criteria, and file references. The delegation pipeline recommends these inputs before dispatch ([Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md)).
 
 ### 5. Implement
 

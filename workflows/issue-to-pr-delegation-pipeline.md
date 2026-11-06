@@ -1,203 +1,136 @@
 ---
 title: "Issue-to-PR Delegation Pipeline for AI Agent Development"
 term: "Issue-to-PR Delegation Pipeline"
-description: "Assign issues to AI coding agents and receive draft pull requests — treating delegation as an engineering pipeline with controllable levers."
+description: "Connect issue analysis, agent implementation, and PR review through explicit artifacts, bounded repair, and separate execution and merge decisions."
 tags:
   - workflows
   - agent-design
   - tool-agnostic
   - automation
-last_reviewed: 2026-07-28
-maturity: established
+  - factory-engineering
+last_reviewed: 2026-11-06
+maturity: adopted
 ---
 
-# Issue-to-PR Delegation Pipeline
+# Issue-to-PR Delegation Pipeline for AI Agent Development
 
-> Issue-to-PR delegation routes a GitHub issue to an AI coding agent that plans, executes, self-reviews, and delivers a draft pull request through a controllable pipeline.
+> Issue-to-PR delegation connects repeatable analysis, implementation, and review through explicit artifacts and handoffs, with separate execution and merge decisions.
 
-## Pipeline shape
+An issue-to-PR delegation pipeline assigns work to agents and carries their outputs into checks and review. Use explicit stage boundaries when repeated tasks need different context, mandatory checks, or a separate review decision. Stripe mixes deterministic operations with agent work; Vercel assigns dedicated agents to specific tasks. These are different implementations of staged delivery ([Stripe](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2), [Vercel](https://vercel.com/blog/building-a-software-factory-for-ai-sdk)).
 
-The issue-to-PR pipeline follows a consistent five-phase shape, whatever the tool (Copilot coding agent, Claude Code Actions, or similar):
+This workflow is tool-agnostic and belongs to [Factory Engineering](../factory-engineering/index.md). Choose boundaries around the work and its evidence; neither account establishes an optimal number of stages or agents.
 
-```mermaid
-graph TD
-    A[Issue Created] --> B[Agent Assigned]
-    B --> C[Planning Phase]
-    C --> D[Execution Phase]
-    D --> E[Self-Review Loop]
-    E -->|Issues found| D
-    E --> F[Draft PR Delivered]
-    F --> G[Human Review]
-    G -->|Feedback via comments| D
-    G --> H[Merge]
-```
+## Issue design and tool entry points
 
-Pipeline reliability depends on the harness built around each phase — issue quality, environment configuration, validation depth, and review protocols — not on model capability alone.
+Before dispatch, provide the problem, intended outcome, acceptance criteria, relevant files, and constraints. Use [agent-ready bug reports](../instructions/agent-ready-bug-reports.md) and [backlog triage](backlog-triage-skill.md) to prepare the request. This is a recommended intake contract, not evidence that issue quality is the sole cause of success.
 
-## Phase 1: Issue design
+Copilot supports issue assignment, the agents interface, IDEs, CLI, and other entry points. Some open a PR automatically; others require a later request ([GitHub session entry points](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/start-copilot-sessions)). Claude Code Actions responds to `@claude` in issue or PR comments and can run from configured GitHub events ([Claude Code Actions](https://code.claude.com/docs/en/github-actions)).
 
-Issue description quality decides whether delegation succeeds. A good issue provides:
+For Copilot sessions on GitHub Actions, `.github/workflows/copilot-setup-steps.yml` prepares tools and dependencies. These setup steps do not apply to cloud-sandbox sessions ([environment documentation](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/customize-the-agent-environment)). See [environment bootstrapping](agent-environment-bootstrapping.md) for the setup contract.
 
-- background context: what the system does, and why the change is needed
-- expected outcomes: concrete acceptance criteria the agent can verify
-- file and function references: specific locations that reduce search time
-- formatting and linting rules: so the agent produces conforming output
-- images: for visual requirements such as UI changes and layout expectations
+GitHub's coding-agent account describes draft PRs, progress commits, session logs, and review-driven iteration. It also describes restricted branch writes, no self-approval or self-merge, and approval before Actions checks run ([Coding Agent 101](https://github.blog/ai-and-ml/github-copilot/github-copilot-coding-agent-101-getting-started-with-agentic-workflows-on-github/)). These are product-specific controls. Check [governance policies](agent-governance-policies.md) and the selected runtime before applying them to another agent.
 
-Start with low-complexity tasks (tests, documentation, refactors) to calibrate trust before delegating feature work ([GitHub Blog: Coding Agent 101](https://github.blog/ai-and-ml/github-copilot/github-copilot-coding-agent-101-getting-started-with-agentic-workflows-on-github/)).
+Jira Cloud can supply the request while GitHub holds the code review. GitHub's integration account describes reading Jira descriptions and comments, opening a draft PR, and posting updates back to Jira ([Jira integration](https://github.blog/changelog/2026-03-05-github-copilot-coding-agent-for-jira-is-now-in-public-preview/)).
 
-## Phase 2: Entry point selection
+Budget for model use and the execution environment. Current Copilot pricing converts model-specific token consumption into AI credits ([pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)). GitHub's Actions-based account also identifies Actions minutes as a cost. Keep these charges separate from human review and repair in [accepted-change accounting](../factory-engineering/cost-per-accepted-change.md).
 
-The Copilot coding agent accepts work through several channels, each suited to a different context ([GitHub Blog: Assigning Issues](https://github.blog/ai-and-ml/github-copilot/assigning-and-completing-issues-with-coding-agent-in-github-copilot/)):
+## Why completion needs explicit boundaries
 
-| Entry point | When to use |
-|-------------|-------------|
-| Issue assignment on github.com / Mobile | Standard delegation — scoped work described in an issue |
-| `@copilot` mention in PR comments | Mid-review corrections — agent iterates on existing PR |
-| Agents panel (github.com/copilot/agents) | Monitoring and managing active agent sessions |
-| VS Code / CLI handoff | Switching from local exploration to cloud execution |
+A successful agent run can still leave work for a reviewer or another run. Stripe describes delivery as a PR that passes CI and is ready for human review. Its repair process has a limit, so a handoff can also carry unresolved failures ([Stripe part 1](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents), [part 2](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2)).
 
-Claude Code uses `@claude` mentions in issue and PR comments as triggers, with support for custom trigger phrases and scheduled automation ([Claude Code docs](https://code.claude.com/docs/en/github-actions)).
+Keep the worker's result separate from the issue's state. The [Symphony Draft v1 specification](https://github.com/openai/symphony/blob/be10a1b79df723d6d7612b5651c8522704dafb2e/SPEC.md) explicitly distinguishes successful worker exit from issue completion. It is a design contract, not production evidence for either implementation below.
 
-Both systems acknowledge receipt (Copilot: eye emoji reaction; Claude: comment response) and begin autonomous work.
+## Two implementation designs
 
-A triage-stage variant shifts the entry point earlier still. Linear describes an agent that catches a bug during issue triage and ships a fix before a human ever picks the issue up ([Linear: agent bug fix](https://linear.app/now/linear-agent-bug-fix)). This differs from the failing-CI-signal [one-click auto-fix](one-click-ci-auto-fix.md): the trigger is the new bug report at triage, not a downstream red pipeline.
+### 1. Stripe mixes deterministic and agent stages
 
-## Phase 3: Environment preparation
+Stripe's blueprints interleave agent loops with fixed operations. Implementation and CI repair require agent judgment; linting and pushing can run as deterministic steps. Teams can define specialized blueprints ([Stripe part 2](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2)).
 
-The agent's execution environment determines what it can build and validate.
+The following summarizes the boundaries in Stripe's account:
 
-Copilot uses [`copilot-setup-steps.yml`](agent-environment-bootstrapping.md) under `.github/workflows/` to define a setup job — dependencies, runners, services — that runs before the agent starts work. Secrets and environment variables go in the `copilot` environment in repo settings ([GitHub Docs](https://docs.github.com/en/copilot/customizing-copilot/customizing-the-development-environment-for-copilot-coding-agent)).
+| Work | Input | Output and handoff |
+|---|---|---|
+| Agent implementation | Request and repository context | Code changes for local checks |
+| Deterministic lint and push | Working changes | Lint feedback and pushed changes for CI |
+| Agent CI repair | Changes and CI failures | Repair attempt within the run's limit |
+| Delivery | PR and current check results | Human review or further work |
 
-Custom agents (`.github/agents/AGENT-NAME.md`) give the coding agent specialized instructions, tools, and MCP servers for team-specific workflows ([GitHub Blog: What's New](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/)).
+Put required mechanical operations in code. Stripe gives this guarantee as the purpose of deterministic blueprint steps. That guarantees execution of the step; it does not guarantee a passing result ([Stripe part 2](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2)).
 
-The agent runs in an ephemeral GitHub Actions environment with restricted internet access via firewall rules, and can only push to branches it creates (prefixed `copilot/*`) ([GitHub Blog: Coding Agent 101](https://github.blog/ai-and-ml/github-copilot/github-copilot-coding-agent-101-getting-started-with-agentic-workflows-on-github/)).
+### 2. Vercel assigns agents to specific tasks
 
-## Phase 4: Agent lifecycle
+Vercel describes separate classification, feature analysis, implementation, and review work. Each task agent has its own prompts, context, and evaluations. GitHub webhooks feed a task queue, and a reviewer queue presents work for human decisions ([Vercel's factory account](https://vercel.com/blog/building-a-software-factory-for-ai-sdk)).
 
-Once triggered, the agent works through a structured sequence ([GitHub Blog: Assigning Issues](https://github.blog/ai-and-ml/github-copilot/assigning-and-completing-issues-with-coding-agent-in-github-copilot/)):
+For feature work, the issue and analysis comment connect the tasks:
 
-Planning reads the issue, creates a task checklist, and opens a draft PR tagged `[WIP]`. The checklist shows the agent's plan before execution begins.
+| Task | Input | Output and handoff |
+|---|---|---|
+| Classification | Issue description | Feature classification for analysis |
+| Feature analysis | Request and current API behavior | Specification with affected files and validation requirements |
+| Implementation | Specification and repository | PR with code, tests, and supporting artifacts |
+| Automated review | PR and its evidence | Review findings for the human decision |
 
-Execution modifies code, runs any tests and linters in the repo, and pushes commits as tasks complete. Session logs show reasoning and progress in real time.
+These rows summarize Vercel's [blocked-domain feature artifacts](https://github.com/vercel/ai/issues/17898) and [resulting PR](https://github.com/vercel/ai/pull/18033). They do not prescribe mandatory roles for another system.
 
-Self-review checks its own changes with Copilot code review, acts on the feedback, and improves the patch before requesting human review ([GitHub Blog: What's New](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/)).
+## Define what crosses each boundary
 
-Security validation runs CodeQL code scanning, secret scanning, and dependency vulnerability checks automatically before the PR opens. This built-in validation needs no GitHub Advanced Security license ([GitHub Changelog](https://github.blog/changelog/2025-10-28-copilot-coding-agent-now-automatically-validates-code-security-and-quality/)).
+For your pipeline, name the input artifact, required output, next consumer, and stop condition before assigning an agent. Use [artifact-driven workflow compilation](../patterns/agent-design/artifact-driven-workflow-compilation.md) for declared inputs and outputs. Use [agent handoff protocols](../patterns/multi-agent/agent-handoff-protocols.md) for the transfer format. [Within-task skill plans](../instructions/multi-skill-stage-plans-and-artifact-handoffs.md) cover smaller steps inside one assignment.
 
-## Phase 5: Review and iteration
+Keep reviewer evidence attached to the PR. Link the analysis, exact revision, check results, and unresolved limitations. [Evidence-bundled agent PRs](../verification/evidence-bundled-agent-prs.md) owns the detailed review package and how reviewers use it.
 
-The agent delivers a draft PR with a descriptive title and description. Reviewers give feedback through standard PR comments. Mentioning `@copilot` (or `@claude` for Claude Code) in a review comment triggers another agent iteration on that feedback.
+## Triggers, authority, and terminal states
 
-This multi-round review cycle follows the same mechanics as a human PR review: the agent reads the comment, makes changes, and pushes new commits.
+Stripe describes Slack requests as an entry point; Vercel describes GitHub events feeding queued tasks. Both accounts retain human review in delivery ([Stripe part 1](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents), [Vercel](https://vercel.com/blog/building-a-software-factory-for-ai-sdk)). A trigger authorizes work under the pipeline's policy. Define merge authority separately.
 
-## Governance guardrails
+Track these distinctions when deciding whether to continue:
 
-The Copilot coding agent enforces structural constraints that prevent autonomous merging ([GitHub Blog: Coding Agent 101](https://github.blog/ai-and-ml/github-copilot/github-copilot-coding-agent-101-getting-started-with-agentic-workflows-on-github/)). For enterprise-wide policy controls (agent mode access, MCP allowlists, model availability), see [Agent Governance Policies](agent-governance-policies.md).
+- Successful execution means the assigned run completed under its own contract. Vercel records `success`, `flawed`, `blocked`, or `manual` outcomes; those are run outcomes, not PR states ([Vercel](https://vercel.com/blog/building-a-software-factory-for-ai-sdk)).
+- Ready for review means the delivery conditions have been met. Stripe describes CI-passing PRs ready for human review, while bounded repair can leave work for engineers ([Stripe part 1](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents), [part 2](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2)).
+- Merged requires a repository merge event. Vercel requires human approval; an automated review outcome alone does not establish that decision ([Vercel](https://vercel.com/blog/building-a-software-factory-for-ai-sdk)).
 
-- It cannot approve or merge its own PRs.
-- CI/CD checks in GitHub Actions need human approval before they run.
-- Existing org policies and branch protections apply automatically.
-- All commits are co-authored for traceability.
-
-## Cross-platform delegation
-
-The Copilot coding agent supports Jira Cloud integration (public preview March 2026), so you can delegate from Jira issues without migrating to GitHub Issues. The agent analyzes Jira descriptions and comments, implements changes, creates draft PRs in GitHub, and posts updates back to Jira ([GitHub Changelog](https://github.blog/changelog/2026-03-05-github-copilot-coding-agent-for-jira-is-now-in-public-preview/)).
-
-## Cost considerations
-
-Copilot delegation consumes [GitHub AI credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) plus GitHub Actions minutes. A session bills by the tokens it consumes, so cost scales with session length, and concurrent sessions each add cost. Model selection lets you trade speed and per-token rate for capability — faster models for routine tasks such as unit tests, more capable models for complex refactoring ([GitHub Blog: What's New](https://github.blog/ai-and-ml/github-copilot/whats-new-with-github-copilot-coding-agent/)).
-
-## Why it works
-
-The five-phase structure limits error propagation by inserting checkpoints between phases. Each boundary forces the agent to produce a concrete artifact — task checklist, commits, self-review feedback — that the next phase consumes. Failures surface at phase transitions rather than at final delivery. The [self-review loop](../code-review/agent-self-review-loop.md) uses the same mechanism as human code review: a second pass with a different frame catches regressions that execution mode misses. Human approval waits until after the self-check passes, so reviewers can focus on logic and intent rather than mechanical correctness.
-
-## When this backfires
-
-Delegation degrades or fails under several conditions:
-
-- Underspecified issues: vague acceptance criteria push the agent to fill gaps with assumptions. The plan phase hides these behind a plausible checklist, and the divergence only surfaces at review, after you have paid the full execution cost.
-- Missing test infrastructure: the [self-review loop](../code-review/agent-self-review-loop.md) cannot verify correctness without runnable tests. Without them, the agent ships changes that pass its own pattern-matching but fail actual behavior requirements.
-- Cross-cutting changes: tasks that need simultaneous edits to interfaces, callers, and tests across a large codebase can exceed the agent's working-context window. The agent completes one side of the change and misses others, producing a partially applied patch.
-- Novel architecture: [delegation](../patterns/agent-design/delegation-decision.md) assumes the agent can infer correct patterns from the existing codebase. Greenfield code with no established precedents produces inconsistent output that is harder to review than a human draft.
-- High-security contexts: the agent operates with the permissions of the triggering account. In repositories with broad write access or sensitive data, a misunderstood requirement can cause damage before human review happens.
-- Context-window overflow: practitioners report the Copilot Cloud Agent hitting its ~64K-token prompt limit when diffs, file snippets, and tool outputs accumulate during multi-file reasoning, crashing the task rather than degrading gracefully ([GitHub community #184952](https://github.com/orgs/community/discussions/184952), [#180198](https://github.com/orgs/community/discussions/180198)). The failure is a hard crash, not a partial patch — a retry only succeeds after you narrow or split the issue.
-- Review-burden shift: delegation removes the authoring bottleneck and creates a review bottleneck in its place. Empirical analysis of agentic PRs on GitHub finds their acceptance rate is much lower than human-authored PRs ([Liu et al., "Let's Make Every Pull Request Meaningful," arxiv 2601.18749](https://arxiv.org/html/2601.18749)), and the [AgenticFlict dataset](https://arxiv.org/html/2604.03551v1) shows agent PRs raise merge-conflict rates at scale. Throughput gains evaporate unless reviewer capacity and discipline scale alongside agent output — and reviewers tend to approve agent code more readily than the defect rate justifies, importing technical debt that surfaces later. Treat any per-week increase in delegated PRs as a forcing function for stricter review protocols, not a free productivity multiplier.
+Assign an owner to blocked work. Record the blocker. Set a repair budget and an escalation route, following Stripe's bounded-repair example. Preserve failed checks in the handoff instead of converting an exhausted retry into success.
 
 ## Example
 
-The following shows a well-structured issue delegated to the Copilot coding agent, and the environment setup that lets it run tests autonomously.
+Vercel's [issue #17898](https://github.com/vercel/ai/issues/17898) requested typed blocked-domain filters for web search. Its public artifacts show the boundaries:
 
-Issue #284, assigned to Copilot:
+1. The [classification comment](https://github.com/vercel/ai/issues/17898#issuecomment-5101009222) identifies a feature request.
+2. The [analysis comment](https://github.com/vercel/ai/issues/17898#issuecomment-5101058789) reports a TS2353 error from `issue-17898-type-probe.ts`. It specifies affected files, field mapping, tests, documentation, and Azure implications.
+3. [PR #18033](https://github.com/vercel/ai/pull/18033) adds typed `filters.blockedDomains` support for OpenAI and Azure web-search tools. The [mapper at the merged revision](https://github.com/vercel/ai/blob/96a237d3e5670980f107fec82179c289a625e2d8/packages/openai/src/responses/openai-responses-prepare-tools.ts) maps the field to `blocked_domains`.
+4. The [automated review comment](https://github.com/vercel/ai/pull/18033#issuecomment-5101303161) records approval. Separately, [the PR's merge record](https://github.com/vercel/ai/pull/18033) confirms that `lgrammel` merged revision `96a237d3e5670980f107fec82179c289a625e2d8`.
 
-```markdown
-## Problem
+The analysis reports the probe result. No probe file was linked there or independently inspected for this account. Readers can inspect the specification in that same comment.
 
-The `UserSession` model currently stores `created_at` as a Unix timestamp integer.
-All new models use ISO 8601 strings. This inconsistency breaks the shared `DateDisplay`
-component in the dashboard.
+The [committed example](https://github.com/vercel/ai/blob/96a237d3e5670980f107fec82179c289a625e2d8/examples/ai-functions/src/generate-text/openai/web-search-blocked-domains.ts) checks returned source hostnames with `result.sources.every(...)`. Research inspected this code but did not rerun it. An empty source list also passes that predicate. The assertion checks the returned source list; it cannot establish network isolation or prove that the provider never accessed a domain.
 
-## Task
+## Why it works
 
-Migrate `UserSession.created_at` to ISO 8601 string format.
+Stripe removes model discretion from required operations by putting them in deterministic blueprint steps. Vercel scopes prompts and evaluations to each task. Their artifacts let the next consumer inspect the request, implementation, and checks ([Stripe](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2), [Vercel](https://vercel.com/blog/building-a-software-factory-for-ai-sdk)). These practitioner accounts support adoption of explicit boundaries, without establishing comparative superiority over simpler workflows.
 
-## Acceptance Criteria
+## When this backfires
 
-- [ ] `UserSession.created_at` stores and returns ISO 8601 strings (e.g. `"2026-02-14T09:30:00Z"`)
-- [ ] Existing tests in `tests/models/test_user_session.py` pass
-- [ ] Migration script in `db/migrations/` updates existing rows
-- [ ] `DateDisplay` component renders without error for both old and new session records
+Extra agents add cost. Anthropic recommends simple designs and describes the latency and cost trade-offs of agentic systems ([Building effective agents](https://www.anthropic.com/research/building-effective-agents)). For a small, scoped change, consider one agent with ordinary CI and human review before adding task agents.
 
-## Relevant Files
+Two other failure conditions need explicit handling:
 
-- `app/models/user_session.py` — model definition
-- `db/migrations/` — migration scripts (follow naming convention: `YYYYMMDD_description.py`)
-- `tests/models/test_user_session.py` — existing test coverage
-- `components/DateDisplay.tsx` — consuming component
-
-## Constraints
-
-- Do not change the column name — only the stored format
-- Use the project's `isoformat()` helper from `app/utils/dates.py`, not `datetime.isoformat()` directly
-```
-
-Environment setup (`.github/workflows/copilot-setup-steps.yml`) that lets the agent run tests and linting before opening the PR:
-
-```yaml
-name: Copilot Setup Steps
-on:
-  workflow_dispatch:
-
-jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - run: pip install -e ".[dev]"
-      - run: cp .env.example .env.test
-        # agent runs pytest and ruff during execution — both must be available
-```
-
-When assigned, Copilot opens a draft PR tagged `[WIP]` with a task checklist derived from the acceptance criteria, runs the test suite after each commit, and requests human review once self-review passes. A reviewer can comment `@copilot the migration script doesn't handle NULL created_at values` to trigger another iteration without restarting the pipeline.
+- Checks cover less than the acceptance claim. Vercel's source-list assertion illustrates why returned-source filtering must not become a claim about network access. Keep the limitation beside the evidence.
+- Repair ends without resolving the failure. Stripe's bounded CI repair makes the remaining work a handoff responsibility. Preserve the failure and route it to an engineer ([Stripe part 2](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2)).
 
 ## Key Takeaways
 
-- Issue quality is the primary lever — specific context, acceptance criteria, and file references directly affect delegation success
-- The pipeline shape (plan, execute, self-review, deliver) is consistent across tools; the harness quality determines reliability
-- Start with low-risk tasks to calibrate trust before scaling delegation to feature work
-- Governance guardrails (no self-merge, co-authored commits, mandatory human review) are structural, not advisory
-- Multi-round review via `@copilot` or `@claude` comments enables iterative refinement without restarting the pipeline
+- Choose boundaries around required operations and task-specific context.
+- Keep run outcomes, review readiness, and merge records separate.
+- Carry evidence limitations into the handoff, including checks that were reported but not independently inspected.
 
 ## Related
 
-- [Copilot Coding Agent](../tools/copilot/coding-agent.md)
-- [Delegation Decision](../patterns/agent-design/delegation-decision.md)
-- [Agent Self-Review Loop](../code-review/agent-self-review-loop.md)
+- [Work Dispatch and Change Integration in Agent Pipelines](../factory-engineering/work-dispatch-and-change-integration.md)
+
+- [Factory Engineering Across Software Delivery Systems](../factory-engineering/factory-engineering.md)
+
+- [Factory Engineering](../factory-engineering/index.md)
+- [Artifact-Driven Workflow Compilation](../patterns/agent-design/artifact-driven-workflow-compilation.md)
+- [Agent Handoff Protocols](../patterns/multi-agent/agent-handoff-protocols.md)
+- [Evidence-Bundled Agent PRs](../verification/evidence-bundled-agent-prs.md)
 - [Agent Environment Bootstrapping](agent-environment-bootstrapping.md)
-- [Agent Governance Policies](agent-governance-policies.md)
-- [Issue Tracker Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — the issue-assignment entry point treated as its own dispatch surface
-- [Chat Platform Agent Delegation](chat-platform-agent-delegation.md) — Slack/Teams `@agent` mentions as a sibling entry point to the GitHub `@copilot` surface
-- [Cloud-Local Agent Handoff](cloud-local-agent-handoff.md) — extends Phase 5 by routing the draft PR back to a local agent for finishing
+- [Issue Tracker Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md)

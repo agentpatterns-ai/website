@@ -128,6 +128,7 @@ sequenceDiagram
 - [Claude Code Hooks](../tools/claude/hooks-lifecycle.md)
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](../tool-engineering/precompact-hook-compaction-veto.md) — the prevent-the-loss counterpart: block compaction at critical checkpoints rather than only restoring after
 - [Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — compaction degrades compliance; understanding the ceiling informs re-read protocol design
+- [Treating Rule Retention After Compaction as Compliance](../patterns/anti-patterns/rule-retention-as-compliance-evidence.md) — a rule still in context after compaction can still be broken, so grade the tool calls
 - [Frozen Spec File](frozen-spec-file.md) — pairs with this protocol: the frozen spec survives compaction on disk; this protocol ensures the agent re-reads it
 - [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — broader hook patterns for behavioral enforcement, including SessionStart hooks used here
 - [Per-Type Retention Policy for Agent Compaction](../context-engineering/per-type-retention-under-compaction.md) — the measured decay this protocol repairs, and pinning rules out of the summarizer's reach instead

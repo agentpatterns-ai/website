@@ -21,6 +21,8 @@ maturity: emerging
 
 A software factory is many harnessed agent loops, fed by a queue of work and drained through one human review gate into production ([Osmani, "Software Factories, Light and Dark", 2026](https://addyosmani.com/blog/software-factories/); [Substack permalink](https://addyo.substack.com/p/software-factories-light-and-dark)). It is not a bigger agent; it is an org chart made of loops. The model pays off under one condition, so lead with it: you can hand a loop as much autonomy as you can cheaply and reliably verify, and not one inch more. Industrialize the loops whose output a machine can check for near-zero cost; keep a person reading the output wherever a wrong call is expensive. Ignore that condition and the factory industrializes [comprehension debt](../patterns/anti-patterns/comprehension-debt.md) instead of software.
 
+This page describes one factory design. The broader [Factory Engineering definition](../factory-engineering/factory-engineering.md) leaves agent count and review policy as separate design choices.
+
 ## The bottleneck was never generation
 
 The constraint in a software factory is not how much code it produces. Generation, tests, static analysis, and scanning all run at near-zero marginal cost and scale effortlessly. The one expensive box that resists scaling is the review gate, where human judgment lives ([Osmani, 2026](https://addyosmani.com/blog/software-factories/)). Back pressure is the rule that follows: unbounded generation meets a narrow verification neck, so speeding up generation only deepens the pile at the neck. What a high-volume factory without trustworthy gates produces is not more good code but a surplus of bad pull requests.

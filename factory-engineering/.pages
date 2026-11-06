@@ -1,0 +1,18 @@
+title: Factory Engineering
+nav:
+  - index.md
+  - Foundations and architecture:
+      - factory-engineering.md
+      - factory-as-code.md
+      - work-dispatch-and-change-integration.md
+  - Verification and operations:
+      - acceptance-scenario-lifecycle.md
+      - release-authority-boundaries.md
+      - reconstructable-factory-runs.md
+      - run-recovery-and-product-rollback.md
+  - Measurement and improvement:
+      - cost-per-accepted-change.md
+      - controlled-factory-experiments.md
+  - Adoption and ownership:
+      - bounded-factory-rollout.md
+  - ...

@@ -73,6 +73,7 @@ This benchmark contains transcript-only constraints. Its stable task score does 
 
 - [Scoring a Compaction Policy on Latency and Billed Cost](../../context-engineering/compaction-policy-latency-and-cost.md) — threshold and retention measurements, plus latency and billed-cost comparisons.
 - [Measuring Reacquisition Cost Under Context Compaction](../../context-engineering/reacquisition-cost-measurement.md) — measures the cost of recovering state after compaction.
+- [Treating Rule Retention After Compaction as Compliance](rule-retention-as-compliance-evidence.md) — a constraint that survives the summary can still be broken, so grade the tool calls too.
 - [Scoring Constraint Loss and Tool Reach as Separate Risks](constraint-loss-and-tool-reach-scored-separately.md) — what a dropped constraint costs depends on which actions stay reachable.
 - [Treating a Detector's Benchmark Score as Deployment Evidence](detector-benchmark-score-as-deployment-evidence.md) — the same transfer gap for prompt-injection detectors.
 - [Agent-Initiated Self-Compaction](../../context-engineering/agent-initiated-self-compaction.md) — moves the compaction trigger to the agent, which changes when the summary gets written.

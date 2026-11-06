@@ -66,7 +66,7 @@ The backlog file also carries state across sessions. Each iteration marks its ta
 
 | Factor | Continuous task loop | Alternative |
 |--------|---------------------|-------------|
-| Human oversight | Low — the loop runs unattended | High — [issue-to-PR pipeline](issue-to-pr-delegation-pipeline.md) has human triggers per task |
+| Human oversight | Low — the loop runs unattended | Depends on the trigger and review policy in the [issue-to-PR pipeline](issue-to-pr-delegation-pipeline.md) |
 | Throughput | High — no inter-task idle time | Lower — each task requires a human handoff |
 | Scope | Well-defined, discrete backlogs | Exploratory or high-judgment work |
 | Error surface | Compounding across tasks if backlog is ambiguous | Isolated — one task fails, human resets |
@@ -149,7 +149,7 @@ The `--no-cache` flag gives a genuinely clean context each cycle. Non-zero exit 
 - [The Ralph Wiggum Loop](../loop-engineering/ralph-wiggum-loop.md) — the foundational fresh-context loop pattern this workflow extends
 - [Loop Strategy Spectrum](../loop-engineering/loop-strategy-spectrum.md) — when to use fresh-context vs accumulated-context vs compression strategies
 - [Agent Loop Middleware](../loop-engineering/agent-loop-middleware.md) — post-loop safety nets and pre-call injection patterns
-- [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — human-triggered per-task delegation; the supervised alternative
+- [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — per-task delegation with explicit delivery and review boundaries
 - [Parallel Agent Sessions](parallel-agent-sessions.md) — horizontal scaling via simultaneous sessions; complements this pattern's sequential execution
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — the upstream skill that produces the atomic, unambiguous tasks this loop requires
 - [The Plan-First Loop](plan-first-loop.md) — the design-before-code variant for non-trivial tasks where this pattern's mechanical execution is unsafe

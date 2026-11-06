@@ -1,7 +1,7 @@
 ---
 title: "Simulation and Replay Testing for Agent Verification"
 term: "Simulation and Replay Testing"
-description: "Validate agent prompt changes by replaying past merged tasks in an isolated worktree and diffing the result against the known-good outcome."
+description: "Check agent prompt changes for regressions by replaying recorded tasks and comparing their outputs against explicit acceptance criteria."
 tags:
   - testing-verification
   - tool-agnostic
@@ -13,37 +13,37 @@ maturity: adopted
 
 # Simulation and Replay Testing for Agent Verification
 
-> Validate agent prompt changes by replaying a past task in isolation and diffing the result against what was actually merged.
+> Replay recorded tasks to collect regression evidence; a matching past result does not establish readiness for new tasks.
 
 ## The problem
 
 When you change an agent's instructions, how do you know the change improves output? Intuition and manual testing on new tasks are unreliable. New tasks have different context, different difficulty, and different [success criteria](eval-driven-development.md). You cannot compare them cleanly to the previous agent's performance.
 
-Simulation and replay testing solves this by using the past as the test fixture.
+Simulation and replay testing uses recorded tasks as fixtures for bounded comparisons.
 
 ## Why it works
 
-Replay testing removes confounding variables. A new task varies in complexity, context, and success criteria, which makes before-and-after comparisons unreliable. A past task fixes all of these: the inputs are known, the [expected output is known (what was merged)](../verification/red-green-refactor-agents.md), and the only variable is the updated instructions.
+Replay testing can hold recorded task inputs fixed for comparison. The [merged output](../verification/red-green-refactor-agents.md) supplies a comparison artifact. Instructions are not necessarily the only variable: leftover files, caches, and resource conditions can affect trials ([Anthropic's evaluation guidance](https://www.anthropic.com/research/demystifying-evals-for-ai-agents)).
 
-Git preserves the repository state at every commit. So you can reconstruct the exact conditions of any prior run and replay them from the prompt's perspective. The task context is frozen, even if the model output varies.
+Checking out a recorded commit restores recorded repository files ([Git checkout](https://git-scm.com/docs/git-checkout)). External task state needs separate capture; a completed tracker item differs from its original state ([Warp](https://www.warp.dev/blog/build-production-software-factory)). Environment state also needs separate treatment. Identical model inputs can still produce different outputs ([Claude glossary](https://platform.claude.com/docs/en/about-claude/glossary)). Use [reconstructable factory run records](../factory-engineering/reconstructable-factory-runs.md) to declare captured boundaries, missing evidence, and replay authority.
 
 ## The technique
 
 The core loop:
 
-1. Identify a task that was previously completed and merged — a known-good outcome.
+1. Identify a task that was previously completed and merged — a recorded comparison artifact with known acceptance evidence.
 2. Roll back to the git state just before that task was completed (the "before" state).
 3. Replay the task using the updated agent instructions.
 4. Diff the agent's output against what was actually merged.
 
-If the updated agent produces the same or better output, the prompt change is validated. If it regresses, the change is rejected before it reaches production.
+A matching result supplies regression evidence for this task. Require repeated trials and broader cases before promotion, following [controlled factory experiments](../factory-engineering/controlled-factory-experiments.md). Define acceptable differences before comparing outputs.
 
 ```mermaid
 graph TD
     A[Identify past merged task] --> B[Checkout pre-merge git state]
     B --> C[Replay task with updated prompts]
     C --> D[Diff output vs merged solution]
-    D -->|Matches or better| E[Prompt change validated]
+    D -->|Matches or better| E[Collect regression evidence]
     D -->|Regression| F[Reject change / iterate]
 ```
 
@@ -59,8 +59,8 @@ git worktree add ../sim-test <pre-merge-commit-sha>
 cd ../sim-test
 # ... invoke agent with updated prompts ...
 
-# Compare output to the merged solution
-git diff <pre-merge-commit-sha> <merge-commit-sha> -- <target-files>
+# Record the replay output in its own commit before this comparison
+git diff <expected-output-commit-sha> <replay-output-commit-sha> -- <target-files>
 ```
 
 Multiple simulations can run in parallel across separate worktrees — one for each prompt variant you evaluate.
@@ -104,38 +104,15 @@ Each stage has an independently testable input/output boundary.
 
 ## Key Takeaways
 
-- Use past merged tasks as test fixtures — the merged solution is the known-good baseline
+- Use past merged tasks as test fixtures — check the merged solution against current acceptance criteria
 - Worktrees provide isolation for replay runs without affecting the main working directory
 - Define success criteria before running the simulation to avoid post-hoc rationalization
 - Parallel simulations across worktrees let you test multiple prompt variants simultaneously
 - Build a library of golden past tasks to form a regression suite for agent behavior
 
-## Example
+## Comparing recorded outputs
 
-You update a researcher agent's instructions to add a "related pages" step. Before shipping, you want to verify the change does not break existing behavior.
-
-1. Find a past merged task — say, the PR that added `docs/workflows/continuous-documentation.md` (merge commit `abc1234`, pre-merge commit `def5678`).
-
-2. Create an isolated worktree at the pre-merge state:
-
-    ```bash
-    git worktree add ../sim-test def5678
-    ```
-
-3. Replay the researcher task in the worktree using the updated instructions:
-
-    ```bash
-    cd ../sim-test
-    claude --prompt "Research and draft docs/workflows/continuous-documentation.md using the updated researcher instructions in .claude/agents/researcher.md"
-    ```
-
-4. Diff the agent's output against the merged solution:
-
-    ```bash
-    git diff def5678 abc1234 -- docs/workflows/continuous-documentation.md
-    ```
-
-5. Review the diff: if the updated agent produces equivalent content plus the new "related pages" additions, the prompt change is validated. If it drops sections the original got right, reject and iterate.
+Keep the expected-output commit and the new replay-output commit as separate identifiers. Comparing the pre-task commit with the historical merge only displays the old patch. It does not inspect the replay result. Record new files in the replay commit too; a comparison that omits them cannot assess the full output.
 
 ## Related
 

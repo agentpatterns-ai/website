@@ -111,3 +111,4 @@ The agent still reads the README, and the malicious instruction still lands in c
 - [Single-Layer Prompt Injection Defense](single-layer-injection-defence.md)
 - [Use a Public-Web Index to Gate Automatic URL Fetching](../../security/url-fetch-public-index-gate.md)
 - [Prior-Session Artifacts Treated as Trusted State](prior-session-artifacts-as-trusted-state.md) — the same failure where the artifact came from the agent's own earlier session, so none of the external-origin cues above are present
+- [Earned Web Trust as Action Authorization](earned-web-trust-as-action-authorization.md) — the same failure stretched over time: a web source passes five rounds of checks, and its next page directs a privileged action

@@ -166,6 +166,13 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 
     [Jump to section →](#tool-specific-guides)
 
+-   **Factory Engineering**
+
+    ---
+
+    Design, operation, and improvement of software delivery systems that use coding agents.
+
+    [Jump to section →](#factory-engineering)
 
 </div>
 
@@ -348,6 +355,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Contractual Skill Files: Inspectable SKILL.md for Enterprise Agents](instructions/contractual-skill-files.md)
 - [Cost-Aware Skill Rewriting: Preserve Operational Anchors, Not Skill Tokens](instructions/cost-aware-skill-rewriting.md)
 - [Diagram as the Shared Spec: One Artifact for the Picture and the Prompt](instructions/diagram-as-shared-spec.md)
+- [Divergent Rules Across Coexisting Agent Instruction Files](instructions/cross-format-instruction-divergence.md)
 - [Do Not Price the Rules in Your Agent Instruction File](instructions/enforcement-information-paradox.md)
 - [Documentation Read Counts Measure Retrievability, Not Value](instructions/documentation-read-counts.md)
 - [Empirical Baseline: Agentic AI Coding Tool Configuration](instructions/empirical-baseline-agentic-config.md)
@@ -369,6 +377,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Mermaid as Agent Output Format: When to Ask for a Diagram Instead of Prose](instructions/mermaid-as-agent-output-format.md)
 - [Method Map: Failure-Mode to Smallest-Artifact Triage](instructions/method-map-failure-mode-triage.md)
 - [Multi-Layer Specification Redundancy as a Robustness Budget](instructions/multi-layer-specification-redundancy.md)
+- [Name What an Agent May Edit Before It Starts Editing](instructions/boundary-contracts-artifact-roles.md)
 - [Natural-Language Customization Bootstrap](instructions/natural-language-customization-bootstrap.md)
 - [OpenAI Model Spec Boundaries and Overridable Defaults](instructions/vendor-policy-boundaries-and-defaults.md)
 - [Ordering Is the Weakest Process Constraint You Write](instructions/ordering-constraint-weakness.md)
@@ -583,6 +592,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Container Operational Contracts for Durable Agent State](patterns/agent-design/container-operational-contracts-agent-state.md)
 - [Approve Shell Commands on Observed Effects, Not Predicted](patterns/agent-design/consequence-aware-approval.md)
 - [Artifact-First Output: Deliverables in Files, Pointers in Chat](patterns/agent-design/artifact-first-output.md)
+- [Bottom-Up Harness Construction for a Self-Hosted Model](patterns/agent-design/bottom-up-harness-construction.md)
 - [Choosing a Scheduled Agent's Firing Interval](patterns/agent-design/scheduled-agent-firing-interval.md)
 - [Citation-Derived Evidence Graphs for Agent Memory](patterns/agent-design/citation-derived-evidence-graphs.md)
 - [Drafter-Side Intent Reconciliation Instead of Self-Grading](patterns/multi-agent/drafter-intent-reconciliation.md)
@@ -682,6 +692,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Project-Scoped Agent Workspace: Durable Context for Clean-Context Subagents](patterns/agent-design/project-scoped-agent-workspace.md)
 - [Protecting the Test Oracle From the Agent](patterns/agent-design/protect-the-oracle-from-the-agent.md)
 - [Provider-Hosted Subagent Delegation: One Model Price for the Whole Tree](patterns/agent-design/provider-hosted-subagent-delegation.md)
+- [Reading Agent Spend Back by Team Needs Dated Group Records](patterns/agent-design/cohort-spend-readback-dated-identity.md)
 - [Refilling Tool Budgets: Rationing by Rate, Not Session Cap](patterns/agent-design/refilling-tool-budgets.md)
 - [Requirement-Keyed Checkpoints for Shifting Requirements](patterns/agent-design/requirement-keyed-checkpoints.md)
 - [Retrieval Tools That Refuse: Making a Search Miss Visible](patterns/agent-design/retrieval-tool-refusal.md)
@@ -1047,6 +1058,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cognitive Poisoning: Untrusted Tool Feedback as a Trajectory Attack](security/cognitive-poisoning-tool-feedback.md)
 - [Compositional Safety Failures in Harness Evolution](security/compositional-harness-evolution-failures.md)
 - [Compositional Vulnerability Induction in Coding Agents](security/compositional-vulnerability-induction.md)
+- [Connector Scope on a Scheduled Task: Capability Nobody Asked For](security/scheduled-task-connector-scope.md)
 - [Constraint Drift: Why Safety Must Be Maintained, Not Asserted](security/constraint-drift-multi-agent-safety.md)
 - [Containment Playbook: npm-to-Signing-Channel Compromise](security/npm-signing-channel-containment-playbook.md)
 - [Context-Fractured Decomposition Attacks on Tool-Using Agents](security/context-fractured-decomposition-attacks.md)
@@ -1088,6 +1100,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Improper Output Handling: Validate Agent Output Before Downstream Use](security/improper-output-handling-downstream-sinks.md)
 - [In-Process WebAssembly Sandboxes for Agent-Generated Code](security/wasm-sandbox-agent-code-execution.md)
 - [Inline Safety Harness with Cascade Verification (FinHarness)](security/inline-lifecycle-safety-harness.md)
+- [Keep the Exact Limits in Code and the Judgment in the Model](security/exact-limits-in-code-judgment-in-model.md)
 - [Leave-One-Out Permission Testing for Agent Rule Files](security/leave-one-out-permission-testing.md)
 - [Lethal Trifecta Threat Model for AI Agent Development](security/lethal-trifecta-threat-model.md)
 - [Lifecycle-Integrated Security Architecture for Agent Harnesses](security/lifecycle-security-architecture.md)
@@ -1096,6 +1109,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Lock-State Safeguards for Desktop-Controlling Agents](security/locked-desktop-agent-safeguards.md)
 - [Per-Call Egress Confirmation for User-Identifying Values](security/per-call-egress-confirmation.md)
 - [Reading Customer Actions in Security Disclosure Reports](security/control-position-remediation-cost.md)
+- [Write Policy Gate Rules as Examples and Counterexamples](security/policy-gate-rule-examples-counterexamples.md)
 - [MCP Runtime Control Plane: Policy Evaluation Between Agent and Tool](security/mcp-runtime-control-plane.md)
 - [Memory-File Influence Disclosure: Passing Tests Do Not Clear a Malicious CLAUDE.md](security/memory-file-influence-disclosure.md)
 - [Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls](security/mid-trajectory-guardrail-selection.md)
@@ -1330,6 +1344,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Human-Review-Driven Curation of Golden Eval Datasets](verification/human-review-golden-dataset-curation.md)
 - [Incident-to-Eval Synthesis: Production Failures as Evals](verification/incident-to-eval-synthesis.md)
 - [Inferring Agent Failure from Conversation Evidence (Perceived Error)](verification/perceived-error-conversation-evidence.md)
+- [Input Assurance Tests for What an LLM Judge Actually Reads](verification/judge-input-assurance-tests.md)
 - [Interaction-Pattern Evaluation for Agentic PRs](code-review/interaction-pattern-evaluation.md)
 - [Judge a Technique Against a Budget-Matched Best-of-n Baseline](verification/budget-matched-best-of-n-baseline.md)
 - [Learned Prefix Monitors for Agent Traces](verification/learned-prefix-monitors-agent-traces.md)
@@ -1802,6 +1817,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Judgment Relocation: Where Human Decisions Land in an Agent Factory](human/judgment-relocation.md)
 - [Label Prompt Intent Before Comparing Prompt Counts](human/prompt-intent-mix.md)
 - [LLM Refactoring Adoption Patterns](human/llm-refactoring-adoption-patterns.md)
+- [Message Protocol Governance for Human-Agent Coding Teams](human/message-protocol-governance-human-agent-teams.md)
 - [Model Selection Guidelines with Budget Quotas](human/model-selection-guidelines-with-budget-quotas.md)
 - [Named Customization Metrics in the Copilot Usage Metrics API](human/named-customization-metrics-copilot.md)
 - [PM on the AI Exponential](human/pm-on-the-ai-exponential.md)
@@ -1862,6 +1878,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Assuming a CLAUDE.md Security Rule Is Enforced](patterns/anti-patterns/unenforced-claude-md-security-rules.md)
 - [A Guard Hook Approves the Truncated Input It Was Handed](patterns/anti-patterns/guard-approves-truncated-input.md)
 - [A Scoped Token as Proof the Action Was Wanted](patterns/anti-patterns/scoped-token-as-proof-of-intent.md)
+- [A Tool Update Ships Code the Model Never Sees (Update Gap)](patterns/anti-patterns/tool-update-gap.md)
 - [Accepting Generated Regression Tests That Pin Faulty Code](patterns/anti-patterns/fault-enforcing-generated-regression-tests.md)
 - [Agent Bug Findings Are Not the Maintainer Backlog](patterns/anti-patterns/agent-bug-findings-as-maintainer-backlog.md)
 - [Agent Justification as Allow-Rule Scope](patterns/anti-patterns/agent-justification-as-rule-scope.md)
@@ -1876,6 +1893,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Building on Inherited Test Failures in Agent Task Chains](patterns/anti-patterns/building-on-inherited-test-failures.md)
 - [bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)](patterns/anti-patterns/bypass-permissions-overrides-allowlist.md)
 - [Chain-of-Thought Reasoning Fallacy: Traces Are Not Truth](fallacies/chain-of-thought-reasoning-fallacy.md)
+- [Choosing an Agent Framework as an MCP Poisoning Defense](patterns/anti-patterns/framework-choice-as-mcp-poisoning-defense.md)
 - [Coding-Agent Misalignment Forms (Seven-Symptom Taxonomy)](patterns/anti-patterns/coding-agent-misalignment-forms.md)
 - [Completion Summary as the Oversight Surface](patterns/anti-patterns/completion-summary-as-oversight-surface.md)
 - [Compound Prompt Constraints Degrade More Than Their Parts Predict](patterns/anti-patterns/compound-prompt-constraints.md)
@@ -1889,10 +1907,12 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Deciding an Agent Upgrade on a Frozen Judge's Verdict](patterns/anti-patterns/frozen-judge-release-decisions.md)
 - [Declared Peer Consensus as Context for a Reviewing Agent](patterns/anti-patterns/declared-peer-consensus-agent-context.md)
 - [Demo-to-Production Gap: When Demos Hide Real Costs](patterns/anti-patterns/demo-to-production-gap.md)
+- [Destructive MCP Tool Calls Where Neither Side Confirms](patterns/anti-patterns/destructive-mcp-calls-neither-side-confirms.md)
 - [Direct Prompt Injection via Collaboration (User as Attack Vector)](patterns/anti-patterns/direct-prompt-injection-collaboration.md)
 - [Discussion Transcript as the Record of Agent Belief](patterns/anti-patterns/discussion-transcript-as-agent-state.md)
 - [Documenting Code the Agent Can Already Read](patterns/anti-patterns/documenting-code-the-agent-can-read.md)
 - [Dynamic Tool Fetching Destroys KV Cache Performance](patterns/anti-patterns/dynamic-tool-fetching-cache-break.md)
+- [Earned Web Trust as Action Authorization (Earn-Then-Exploit)](patterns/anti-patterns/earned-web-trust-as-action-authorization.md)
 - [Empty Commitments: Promises No Runtime Can Keep](patterns/anti-patterns/empty-commitments.md)
 - [Excess Risk Treatment: Defensive Work the Evidence Rules Out](patterns/anti-patterns/excess-risk-treatment.md)
 - [Expressed Risk Awareness as an Execution Safeguard](patterns/anti-patterns/expressed-risk-awareness-as-safeguard.md)
@@ -1903,6 +1923,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Happy Path Bias: How AI Agents Skip Error Handling](patterns/anti-patterns/happy-path-bias.md)
 - [Held-Out Tasks as a Harness Shortcut Defense](patterns/anti-patterns/held-out-tasks-as-shortcut-defense.md)
 - [Install-Once Plugin Trust: Vetting That Never Re-Runs on Update](patterns/anti-patterns/install-once-plugin-trust.md)
+- [Interleaving Unfinished Tasks in One Agent Session](patterns/anti-patterns/interleaved-unfinished-tasks.md)
 - [Judging a Skill's Honesty by the Validity of Its Output](patterns/anti-patterns/judging-skill-honesty-by-output-validity.md)
 - [Judging a Write by Its Spelled Path (Spelled-Path Scope)](patterns/anti-patterns/spelled-path-permission-scope.md)
 - [Knowledge Cutoff as a Documentation Boundary](patterns/anti-patterns/knowledge-cutoff-as-documentation-boundary.md)
@@ -1919,6 +1940,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Mention-Shaped Placeholders as Inert Text](patterns/anti-patterns/mention-shaped-placeholders-as-inert-text.md)
 - [Mid-Session Config Changes as Invisible Cache Invalidators](patterns/anti-patterns/mid-session-config-cache-invalidators.md)
 - [Minimality Prompts as a Patch-Size Control](patterns/anti-patterns/minimality-prompt-as-patch-size-control.md)
+- [Opening Untrusted Inputs as a Harmless Look (Step Zero)](patterns/anti-patterns/step-zero-opening-untrusted-input.md)
 - [Over-Compliant Refactoring: Agents That Keep Editing Clean Code](patterns/anti-patterns/over-compliant-refactoring-loop.md)
 - [Overwriting a File After a Partial Read](patterns/anti-patterns/partial-read-overwrite.md)
 - [Pass-Only Grading Treats Luck and Judgment the Same](patterns/anti-patterns/pass-only-grading-lucky-pass.md)
@@ -1938,6 +1960,10 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Prompt Replay as a Skill Safety Test: What It Misses](patterns/anti-patterns/prompt-replay-skill-testing.md)
 - [Prompt-Only Tool Access Control](patterns/anti-patterns/prompt-only-tool-access-control.md)
 - [Random Restart as the Baseline for Agent Early Stopping](patterns/anti-patterns/random-restart-as-the-stopping-baseline.md)
+- [Single-Request Pass Rates as Evidence for Chained Delegation](patterns/anti-patterns/single-request-pass-rate-as-chain-evidence.md)
+- [The Return Assumption: Status 0 Without the Action](patterns/anti-patterns/return-assumption-status-zero-without-action.md)
+- [Treating a Resolved Task as a Defect-Free Change](patterns/anti-patterns/resolved-task-as-defect-free.md)
+- [Treating Rule Retention After Compaction as Compliance](patterns/anti-patterns/rule-retention-as-compliance-evidence.md)
 - [Protected-Replay Success as Retry Restraint Evidence](patterns/anti-patterns/protected-replay-success-as-retry-restraint.md)
 - [Reading a Client-Version Metric Dip as Lost Adoption](patterns/anti-patterns/client-version-metric-dip-as-adoption-loss.md)
 - [Reading a Tool-Call Judge's Rejection as an Argument Defect](patterns/anti-patterns/derivation-gap-tool-call-judges.md)
@@ -2224,5 +2250,20 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agent Host Review Comments: Server-Side Feedback Transport](tools/copilot/agent-host-review-comments.md)
 - [GitHub Copilot App Slash Commands and What They Change](tools/copilot/slash-commands-copilot-app.md)
 - [Embedding the Copilot SDK in a Managed Java Runtime](tools/copilot/copilot-sdk-managed-runtime.md)
+
+## Factory Engineering
+
+> Design, operation, and improvement of software delivery systems that use coding agents.
+
+- [Acceptance Scenario Lifecycle for Software Factories](factory-engineering/acceptance-scenario-lifecycle.md)
+- [Bounded Factory Rollout with Named Owners and Limits](factory-engineering/bounded-factory-rollout.md)
+- [Factory as Code: Versioning the Agent Delivery Definition](factory-engineering/factory-as-code.md)
+- [Factory Engineering Across Software Delivery Systems](factory-engineering/factory-engineering.md)
+- [Factory Run Recovery and Compatible Product Rollback](factory-engineering/run-recovery-and-product-rollback.md)
+- [Reconstructable Factory Runs: Records and Replay Limits](factory-engineering/reconstructable-factory-runs.md)
+- [Release Authority Boundaries for Software Factories](factory-engineering/release-authority-boundaries.md)
+- [Test Factory Changes on Representative Work Before Promotion](factory-engineering/controlled-factory-experiments.md)
+- [Total Cost Accounting per Accepted Software Factory Change](factory-engineering/cost-per-accepted-change.md)
+- [Work Dispatch and Change Integration in Agent Pipelines](factory-engineering/work-dispatch-and-change-integration.md)
 
 </div>

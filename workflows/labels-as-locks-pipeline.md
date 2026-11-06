@@ -141,6 +141,6 @@ A separate sweep (cron or the same worker on idle) reclaims expired leases: find
 - [Idempotent Agent Operations: Safe to Retry](../patterns/agent-design/idempotent-agent-operations.md) — the upstream correctness property the work item must satisfy for label-based locks to be safe
 - [Continuous Autonomous Task Loop](continuous-autonomous-task-loop.md) — the single-worker version of this pattern, where label-based locking is unnecessary
 - [Issue-Tracker as Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — the broader convention of treating the issue tracker as the agent control plane
-- [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — the five-phase delegation pipeline this locking discipline lets you parallelize safely
+- [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — stage boundaries that this locking discipline coordinates
 - [Continuous Triage](continuous-triage.md) — the upstream classification workflow that produces the labeled items this pattern then dispatches
 - [Concurrent Agent Pull Requests and Merge-Conflict Cost](concurrent-agent-pr-merge-conflicts.md) — the empirical merge-conflict cost that claim-label leasing serializes away for contended work
