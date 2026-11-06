@@ -25,8 +25,8 @@ Mandating a shared file for eight coding agents cuts output tokens by about 42% 
 
 Conditions matter more than the headline:
 
-- Four agents or more. At two agents the mean sustained degree is 0.90 on both task shapes, so there is no repeated messaging to collapse. Every measured effect appears at four and eight agents ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)).
-- Cost is the binding constraint. The file-policy experiment measures output tokens. It reports nothing about whether the team's code passed more tests.
+- Four agents or more. At two agents the mean sustained degree is 0.90 on both task shapes, so the graph offers less scope to replace many peer channels with one file ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)).
+- Cost is the binding constraint. The file-policy experiment measures output tokens. The token saving alone does not establish a correctness gain.
 - Peer messaging already exists. Without it, files are the only channel and there is no policy to set.
 
 ## The fan-out test
@@ -41,7 +41,7 @@ A message reaches one recipient. A file is written once and read by any number o
 
 ## The messaging curve is an introduction phase
 
-Direct messaging grows close to quadratically between two and eight agents; on the pipeline task the exponent is 1.92. Most of that is one round of introductions. On specification work, 90% of the distinct sender-to-recipient pairs a run will ever use appear within the first 20% of run time at every team size, in one of the two collection sessions. Sustained peer traffic barely grows after that. On the sixteen-step chain, mean messages per run are 21.4, 47.0 and 46.8 at four, eight and sixteen agents, and the slope between eight and sixteen is 0.00 (95% CI [−0.34, 0.34]). Teams change channel instead of talking more: across that step named-peer messages drop to 12.2 per run from 34.6, while broadcasts climb to 34.0 from 12.3 ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)).
+Direct messaging grows close to quadratically between two and eight agents; on the pipeline task the exponent is 1.92. Most of that is one round of introductions. On specification work, 90% of the distinct sender-to-recipient pairs a run will ever use appear by about 20% of the interval from the first message to the last at every team size, in one of the two collection sessions. Sustained peer traffic barely grows after that. On the sixteen-step chain, mean messages per run are 21.4, 47.0 and 46.8 at four, eight and sixteen agents, and the slope between eight and sixteen is 0.00 (95% CI [−0.34, 0.34]). Teams change channel instead of talking more: across that step named-peer messages drop to 12.2 per run from 34.6, while broadcasts climb to 34.0 from 12.3 ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)).
 
 ## Naming a coordinator buys nothing
 
@@ -53,7 +53,7 @@ Filtering each run's message graph to the channels carrying a disproportionate s
 - The job mixes shapes. Work with both a shared spec and a sequential handoff pays the pipeline penalty on one half while collecting the specification saving on the other. The two shapes were measured only in isolation.
 - Several agents write the same file. The mechanism assumes write-once-read-many, and concurrent writers turn the channel into a contention point. That is the problem [Worktree Isolation](../../workflows/worktree-isolation.md) and [File-Based Agent Coordination](file-based-agent-coordination.md) address.
 - Your stack differs. All 1,902 graded runs use Claude Code 2.1.x with the model pinned to `claude-sonnet-4-6`, on two synthetic Python tasks graded by fixed test suites ([arXiv:2608.16801v1](https://arxiv.org/abs/2608.16801v1)).
-- The team is small. Below four agents the effect was not measured, and the mechanism predicts no gain.
+- The team is small. The headline token savings were measured at four and eight agents; do not assume the same savings for a pair.
 
 ## Example
 
@@ -80,3 +80,4 @@ The second runs a four-step pipeline: parse, validate, aggregate, format. Each s
 - [Multi-Agent Topology Taxonomy: Centralized, Decentralized, and Hybrid](multi-agent-topology-taxonomy.md) — the coarser topology choice this policy sits inside
 - [Assuming Agent Interchangeability in Long-Running Teams](../anti-patterns/assuming-agent-interchangeability.md) — the other thing that moves message volume, measured against a placebo roster change
 - [Per-User Agents on a Contested Shared Resource](../anti-patterns/per-user-agents-contested-resource.md) — what the channel cannot fix once each agent answers to a different user
+- [Message Protocol Governance for Human-Agent Coding Teams](../../human/message-protocol-governance-human-agent-teams.md) — relay rules for which peer messages start an agent's turn, once peer messaging is the channel

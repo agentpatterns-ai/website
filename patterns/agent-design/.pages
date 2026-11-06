@@ -204,6 +204,7 @@ nav:
       - gateway-hint-headers.md
       - gateway-session-affinity.md
       - client-keyed-gateway-controls.md
+      - cohort-spend-readback-dated-identity.md
       - exactly-once-enforcement-layer.md
       - evidence-guided-recovery-ambiguous-outcomes.md
       - exception-handling-recovery-patterns.md
@@ -309,6 +310,7 @@ nav:
       - portable-harness-specification.md
       - harness-selection-reliability.md
       - harness-deletion-and-cost-rules.md
+      - bottom-up-harness-construction.md
       - last-unconstrained-axis.md
       - suspect-the-harness-not-the-model.md
       - lane-based-execution-queueing.md

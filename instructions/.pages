@@ -4,6 +4,7 @@ nav:
   - "Instruction Files":
       - claude-md-convention.md
       - instruction-file-ecosystem.md
+      - cross-format-instruction-divergence.md
       - agents-md-design-patterns.md
       - agents-md-as-table-of-contents.md
       - agents-md-distributed-conventions.md
@@ -27,6 +28,7 @@ nav:
       - code-precedence-over-instruction-files.md
       - written-priority-rules-for-migrations.md
       - restraint-rules-need-external-enforcement.md
+      - boundary-contracts-artifact-roles.md
       - per-rule-enforcement-budget.md
       - stop-and-report-instruction.md
       - ordering-constraint-weakness.md

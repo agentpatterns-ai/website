@@ -23,6 +23,8 @@ maturity: established
 
 Related lesson: [Becoming a Tech Lead](https://learn.agentpatterns.ai/workflows/becoming-a-tech-lead/) — this concept features in a hands-on lesson with quizzes.
 
+This page describes one factory design. The broader [Factory Engineering definition](../factory-engineering/factory-engineering.md) leaves agent count and review policy as separate design choices.
+
 ## The two models
 
 Assistant model: one human watches one agent in a sidebar. The human is the feedback loop. They answer questions, correct drift, and approve actions in real time. The agent proceeds only as fast as the human can respond.

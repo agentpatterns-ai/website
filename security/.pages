@@ -121,6 +121,7 @@ nav:
       - centrally-provisioned-mcp-servers.md
       - constraint-substrate-scalable-oversight.md
       - explanation-bound-tool-execution.md
+      - exact-limits-in-code-judgment-in-model.md
       - fail-closed-remote-settings-enforcement.md
       - gate-agent-writes-to-executable-config.md
       - intent-governed-tool-authorization.md
@@ -131,6 +132,7 @@ nav:
       - per-caller-identity-for-agent-tool-calls.md
       - permission-gated-commands.md
       - plan-scoped-production-access.md
+      - policy-gate-rule-examples-counterexamples.md
       - pre-execution-command-risk-classification.md
       - proof-of-presence-step-up-authentication.md
       - revocable-resource-effect-capabilities.md
@@ -149,6 +151,7 @@ nav:
       - skill-shell-execution-gate.md
       - sufficiency-tightness-policy-decomposition.md
       - self-scheduled-run-authority.md
+      - scheduled-task-connector-scope.md
   - "Code Injection":
       - code-injection-multi-agent-defence.md
   - "Multi-Agent Propagation":

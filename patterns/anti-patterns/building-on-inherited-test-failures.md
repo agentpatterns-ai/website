@@ -112,3 +112,4 @@ The example is illustrative and not drawn from the paper. It shows where the gat
 - [The Agent-on-Agent Maintenance Penalty](agent-on-agent-maintenance-penalty.md)
 - [Pattern Replication Risk](pattern-replication-risk.md)
 - [Codeslop Trajectory Minimization](codeslop-trajectory-minimization.md)
+- [Single-Request Pass Rates as Evidence for Chained Delegation](single-request-pass-rate-as-chain-evidence.md)

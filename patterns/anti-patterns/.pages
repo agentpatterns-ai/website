@@ -11,6 +11,7 @@ nav:
       - dynamic-tool-fetching-cache-break.md
       - mid-session-config-cache-invalidators.md
       - session-partitioning.md
+      - interleaved-unfinished-tasks.md
       - recall-trap-retriever-tuning.md
       - verbatim-failure-records.md
       - belief-inertia-after-tool-map-drift.md
@@ -18,6 +19,7 @@ nav:
       - tool-graph-memory-as-next-tool-guidance.md
       - compliance-trap-conflicting-memory.md
       - assuming-loaded-skills-stay-enforced.md
+      - rule-retention-as-compliance-evidence.md
       - objective-drift.md
       - assumption-propagation.md
       - knowledge-cutoff-as-documentation-boundary.md
@@ -98,8 +100,10 @@ nav:
   - "Verification Gaps":
       - trust-without-verify.md
       - premature-completion.md
+      - resolved-task-as-defect-free.md
       - authority-disclaimers-read-as-skip-permission.md
       - building-on-inherited-test-failures.md
+      - single-request-pass-rate-as-chain-evidence.md
       - yes-man-agent.md
       - self-review-modernization-failure.md
       - llm-review-overcorrection.md
@@ -107,6 +111,7 @@ nav:
       - silent-adoption-of-corrupted-tool-returns.md
       - changed-tool-call-attribution.md
       - unsignalled-tool-failure-envelope.md
+      - return-assumption-status-zero-without-action.md
       - silent-failure-mechanism-taxonomy.md
       - loud-failures-quiet-failures-tool-fault-detection.md
       - destructive-failure-mechanism-attribution.md
@@ -179,13 +184,18 @@ nav:
       - sandbox-capability-opt-in-as-compatibility-setting.md
       - mcp-contract-as-filesystem-sandbox.md
       - per-action-approval-as-episode-authorization.md
+      - destructive-mcp-calls-neither-side-confirms.md
   - "Injection & Untrusted Input":
       - single-layer-injection-defence.md
       - direct-prompt-injection-collaboration.md
       - external-artifacts-as-data.md
+      - step-zero-opening-untrusted-input.md
       - prior-session-artifacts-as-trusted-state.md
       - tool-error-implicit-authority.md
+      - earned-web-trust-as-action-authorization.md
       - multi-tool-threshold-poisoning-mcp.md
+      - tool-update-gap.md
+      - framework-choice-as-mcp-poisoning-defense.md
       - llm-api-router-mitm.md
       - adversarial-only-leakage-threat-modelling.md
       - option-labels-as-trusted-config.md

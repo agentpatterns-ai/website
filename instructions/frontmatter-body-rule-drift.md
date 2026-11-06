@@ -68,3 +68,4 @@ Khelifi et al. recommend keeping the pair aligned: "Developers should use suppor
 - [Restraint Rules Need External Enforcement](restraint-rules-need-external-enforcement.md) — the rule types agents comply with, and the ones they do not
 - [Multi-Layer Specification Redundancy as a Robustness Budget](multi-layer-specification-redundancy.md) — when repeating a requirement across layers helps
 - [GitHub Agentic Workflows](../tools/copilot/github-agentic-workflows.md) — the two-file architecture and its safe-output controls
+- [Divergent Rules Across Coexisting Agent Instruction Files](cross-format-instruction-divergence.md) — the same two-copy drift across separate instruction formats in one repository

@@ -102,3 +102,4 @@ For a terminal action that legitimately changes state, compare against the indep
 - [Protecting the Test Oracle From the Agent](../patterns/agent-design/protect-the-oracle-from-the-agent.md) — the same artifact guarded against a different adversary, the agent that would rewrite it
 - [Per-Attempt Sandboxes for Agents That Change the Filesystem](per-attempt-eval-sandboxes.md) — the environment-level control that isolates attempts; grader state-integrity checks still apply within each attempt
 - [Measure the Judge Before You Freeze a Gate on It](judge-instrument-stability-check.md) — the model-graded half of the same question, where the instrument's noise floor rather than its state hygiene is what moves the verdict
+- [Input Assurance Tests for What an LLM Judge Actually Reads](judge-input-assurance-tests.md) — the input-side check for a model-graded harness, where the renderer and staging decide what the judge sees

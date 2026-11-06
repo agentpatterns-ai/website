@@ -130,7 +130,7 @@ The same ticket dispatched without the R/A/P sections — "users get logged out 
 
 ## Related
 
-- [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — the GitHub-specific five-phase pipeline this dispatch surface feeds
+- [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — stage boundaries and delivery evidence after dispatch
 - [Chat-Platform Agent Delegation](chat-platform-agent-delegation.md) — the chat dispatch surface; same contract elements, different principal
 - [Programmatic Cloud-Agent Dispatch via REST API and Webhooks](programmatic-cloud-agent-dispatch.md) — the REST / webhook / cron dispatch surface
 - [Backlog Triage as a Named Agent Skill](backlog-triage-skill.md) — the upstream skill that ensures tickets reach the dispatch surface in a WRAP-ready state

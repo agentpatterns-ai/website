@@ -1,21 +1,26 @@
 ---
 title: "Backlog Triage as a Named Agent Skill"
-description: "A single skill that converts messy inbound issues into agent-actionable tasks by encoding a state machine into labels, with a durable agent brief as the hand-off contract."
+description: "A maintainer-invoked triage skill checks issue claims, assigns readiness states, and writes durable briefs before handing work to agents."
 term: "Backlog Triage Skill"
 tags:
   - workflows
   - agent-design
   - skills
+  - factory-engineering
   - tool-agnostic
-last_reviewed: 2026-06-12
-maturity: established
+last_reviewed: 2026-11-06
+maturity: adopted
 ---
 
 # Backlog Triage as a Named Agent Skill
 
-> A skill encodes a state machine into issue labels — each item carries one category and one state, then hands off a durable agent brief.
+> A maintainer-directed triage skill checks requests, records unresolved questions, and prepares agent briefs before implementation.
 
-A named triage skill sits between human intent and AFK agent execution. It takes whatever lands on the issue tracker — half-written bug reports, customer notes, idea fragments, design-doc snippets — and decides whether the item is ready for an agent, a human, more information, or rejection. The worked example below is Matt Pocock's open-source [`/triage` skill](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md). The pattern is portable.
+A named triage skill routes issues when a maintainer can resolve product questions and review readiness decisions. Matt Pocock's [`/triage` skill](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/SKILL.md) checks existing behavior and prior rejection before refining work for an agent or human. Requests that lack enough detail retain a `needs-info` route. This tool-agnostic intake procedure connects to the broader [factory engineering process](../factory-engineering/index.md).
+
+## Why classification is insufficient
+
+A category describes a request without proving that its premise is correct. Pocock prescribes claim verification before refinement; Vercel separates classification from analysis in its [AI SDK factory](https://vercel.com/blog/building-a-software-factory-for-ai-sdk). Treat readiness as a handoff decision. Keep [authorization gates](../patterns/agent-design/trigger-level-agent-intake-gating.md) and implementation review separate; Vercel retains human approval before merge.
 
 ## State machine in labels
 
@@ -34,7 +39,7 @@ Five state roles describe lifecycle position:
 | `ready-for-human` | needs human implementation |
 | `wontfix` | will not be actioned |
 
-Every triaged issue carries exactly one category role and one state role. The skill flags conflicting states before any action ([SKILL.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md)).
+The skill prescribes one category role and one state role per triaged issue. It checks for conflicting states ([SKILL.md](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/SKILL.md)).
 
 ```mermaid
 graph TD
@@ -46,96 +51,79 @@ graph TD
     C -->|reporter replies| B
 ```
 
-The labels are the prompt. Five states collapse the open-ended question "what should happen with this issue?" into one of ten cells (state × category). Each cell has a fixed output shape — agent brief, needs-info template, out-of-scope record, polite close — so the skill cannot produce unstructured comments. This is the same constraint-as-prompt mechanism that gives [structured tool use](https://www.anthropic.com/engineering/advanced-tool-use) its reliability: the model picks a slot, not a format.
+Labels record a route. Pocock's [quick state overrides](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/SKILL.md) can skip refinement and make brief creation optional. A `ready-for-agent` label alone proves neither verification nor brief writing.
 
 ## Per-issue process
 
-For one issue, the skill runs six steps ([SKILL.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md)):
+The maintainer invokes the skill for intake. Its procedure has five steps ([triage skill](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/SKILL.md)):
 
-1. Gather context — read the body, comments, prior triage notes, ADRs in the affected area, and `.out-of-scope/*.md`. Surface any prior rejection that resembles this issue.
-2. Recommend category and state with reasoning, then wait for direction.
-3. Reproduce (bugs only) — trace the relevant code, run tests or commands, report repro / no-repro / insufficient-detail ([SKILL.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md)). A confirmed repro produces a stronger brief.
-4. Grill the issue if it needs fleshing out — run an interview-style refinement session.
-5. Apply the outcome — assign labels, post the corresponding template comment, close if `wontfix`.
-6. Disclaim provenance — every comment the skill posts begins with `> *This was generated by AI during triage.*`.
+1. Gather context. Read the issue and comments, check existing implementation, and surface relevant prior rejection records. Separate already-implemented requests from rejected enhancements.
+2. Recommend a category and state with reasons, then wait for maintainer direction.
+3. Verify the claim before refinement. Reproduce a reported bug or check whether the requested behavior is missing. Report insufficient detail explicitly.
+4. Refine unclear requirements through an interview with the maintainer.
+5. Apply the agreed outcome. Assign labels and post the relevant comment; close rejected work as appropriate.
 
-The maintainer can override transitions at any time. "Move #42 to ready-for-agent" trusts the maintainer and skips grilling, but the skill still asks whether to write an agent brief before promoting ([SKILL.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md)).
+Every comment or issue posted during triage must begin with the prescribed AI-generated disclaimer ([triage skill](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/SKILL.md)).
+
+Check apparent duplicates before writing a new brief, but distinguish overlapping wording from the same requested behavior. Pocock's [redundancy check](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/SKILL.md) checks existing implementation and prior rejection; it does not establish exhaustive duplicate-issue detection. Use [semantic issue search](semantic-issue-search-natural-language.md) to investigate related requests and retain maintainer review of matches.
 
 ## The agent brief contract
 
-`ready-for-agent` triggers an agent brief — a structured comment that becomes the authoritative spec for the downstream executor. The original issue body is context; the brief is the contract ([AGENT-BRIEF.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/AGENT-BRIEF.md)).
+Pocock's [agent brief template](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/AGENT-BRIEF.md) describes the expected behavior and the boundaries of implementation. Its rules are prescribed writing practices:
 
-Four rules govern brief writing:
+- Describe interfaces, types, and behavioral contracts. Avoid transient file paths and line references.
+- State what the system should do; leave implementation discovery to the executor.
+- Include concrete, independently testable acceptance criteria.
+- State explicit scope exclusions.
 
-- Durability over precision — describe interfaces, types, and behavioral contracts. Never reference file paths or line numbers; the issue may sit for days while the codebase moves.
-- Behavioral, not procedural — describe what the system should do, not how to implement it. The downstream executor explores the codebase fresh, reconstructing structure at run time ([issue requirements preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md)).
-- Complete acceptance criteria — every brief lists concrete, testable criteria. Each criterion is independently verifiable.
-- Explicit scope boundaries — state what is out of scope to prevent gold-plating.
+This brief supplies structured input to [issue requirements preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md). The template does not establish a measured context saving or resolution-rate improvement.
 
-This is the upstream complement to [issue requirements preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md): the brief is the structured input the executor receives, written before the executor opens its first context window. The REAgent paper measures a 17.40% lift in resolution rate when the executor reconstructs structured requirements at run time ([Kuang et al., 2026](https://arxiv.org/abs/2604.06861v1)) — a triage-skill brief moves that work upstream and out of the executor's context budget.
+## Why it works
+
+Claim verification checks the premise before the agent receives implementation instructions. The brief then records testable behavior and unresolved boundaries. Pocock [prescribes this sequence](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/SKILL.md), while Vercel documents [analysis evidence before implementation](https://vercel.com/blog/building-a-software-factory-for-ai-sdk). These sources support the procedure; neither isolates its productivity effect.
 
 ## Out-of-scope as institutional memory
 
-Rejected enhancements are written to `.out-of-scope/<concept>.md` — one file per concept, not per issue. The file captures the decision, the reasoning, and a "Prior requests" list of every issue that asked for the feature ([OUT-OF-SCOPE.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/OUT-OF-SCOPE.md)). During context gathering on every new issue, the skill reads this directory and surfaces matches by concept similarity ("night theme" matches `dark-mode.md`).
+The skill records rejected enhancements in `.out-of-scope/<concept>.md` — one file per concept, not per issue. The file records the decision and its reasoning, with links to prior requests ([OUT-OF-SCOPE.md](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/OUT-OF-SCOPE.md)). During context gathering on every new issue, the skill reads this directory and surfaces conceptually related prior decisions.
 
-The mechanism is durable institutional memory: the skill cannot re-litigate decided questions on each invocation, similar to how [agent memory patterns](../patterns/agent-design/agent-memory-patterns.md) preserve state across sessions.
+These records preserve prior decisions for maintainer review. Maintainers can reconsider them ([rejection record guidance](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/OUT-OF-SCOPE.md)). This is a use of [agent memory](../patterns/agent-design/agent-memory-patterns.md) across separate triage sessions.
 
-## When the pattern earns its cost
+## When this backfires
 
-The triage skill is human-invoked and deliberately keeps the maintainer in the loop. That makes it the right model when:
+The procedure needs a maintainer who can resolve unclear intent. Preserve the `needs-info` and `ready-for-human` routes when verification or product decisions remain unresolved ([triage skill](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/SKILL.md)). Other limits need explicit handling:
 
-- The repo has an established codebase glossary or ADR set the agent can ground in
-- Issue volume justifies bookkeeping but doesn't warrant lights-out automation
-- The downstream executor is an AFK agent that benefits from a durable, structured brief
-- The team needs explicit institutional memory for rejected requests
+- Specified work can still depend on unfinished work. Pocock describes blocked and deferred states as additions users want that have not shipped in the [current walkthrough](https://www.aihero.dev/burn-through-your-backlog-with-my-triage-skill).
+- Durable briefs still require review as behavior changes. The [brief template](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/AGENT-BRIEF.md) avoids transient references; it supplies no fixed lifetime for a specification.
+- Similar requests need maintainer judgment. Review the reason in a [rejection record](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/OUT-OF-SCOPE.md) before applying it to another issue.
+- Automated intake needs an output owner. Warp's Zach Lloyd advises named ownership and warns against starting with automatic backlog fixing ([rollout advice](https://www.warp.dev/blog/rolling-out-software-factories)).
 
-It is the wrong model — a different shape fits — when:
+For a factory, name who reviews the analysis and resolves remaining questions before dispatch. This applies Lloyd's ownership advice to intake. A readiness label does not establish authorization or successful execution. Use the [dispatch contract](issue-tracker-agent-dispatch-surface.md) to specify the handoff.
 
-- High-volume bot issues (Dependabot, security scanners) need silence or auto-close, not classification. Run a different filter such as [continuous triage](continuous-triage.md); the state machine assumes human-authored intent.
-- Lights-out triage on every event is the goal. Use [continuous triage](continuous-triage.md) on GitHub Actions with `safe-outputs: [add-label, add-comment]` ([GitHub Agentic Workflows](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)) — no maintainer in the loop.
-- Batch intake from a single source (a QA session, a customer interview transcript) needs deduplication and codebase investigation across many candidates at once. Use the [QA session to issues pipeline](qa-session-to-issues-pipeline.md).
-- Rigid issue-tracker workflow states (some Jira / ServiceNow configurations) cannot host the label-as-state-machine pattern without admin changes.
-- The issue tracker has no codebase glossary or ADRs. Step 1 of the per-issue process depends on grounding the agent. Without it, recommendations are shallow or hallucinated.
-
-## Failure modes
-
-- Hallucinated agent briefs. If the maintainer skips reproduction and lets the skill auto-promote to `ready-for-agent` based on the reporter's description alone, the brief inherits any factual errors and the downstream agent burns context on a wrong-premise task. The skill's own guidance — confirm a repro before producing a brief — exists because this is the dominant failure mode ([SKILL.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md)).
-- Brief drift. Briefs that reference file paths or line numbers go stale within days. The durability-over-precision rule is a hedge against this — interfaces and contracts survive renames; line numbers do not.
-- Out-of-scope concept matching. Matching is by [concept similarity, not keyword](semantic-issue-search-natural-language.md). Failed matches cause the skill to re-evaluate already-rejected requests; over-eager matches close legitimately distinct issues. The maintainer confirms or rejects the match each time.
-- Tight `.out-of-scope/` files for deferrals. Reasons like "we're too busy right now" are not real rejections; they are deferrals that produce out-of-scope files the maintainer later regrets. Substantive reasons reference scope, technical constraints, or strategic decisions ([OUT-OF-SCOPE.md](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/OUT-OF-SCOPE.md)).
+For unattended or high-volume intake, compare [continuous triage](continuous-triage.md) and [continuous AI](continuous-ai.md) before choosing an interactive procedure. Use [QA session intake](qa-session-to-issues-pipeline.md) for observed product failures and [vulnerability triage](ai-powered-vulnerability-triage.md) for security reports. These are routing choices, not equivalent verification guarantees.
 
 ## Example
 
-Pocock's walkthrough on the Sandcastle repo shows the skill against a real backlog ([AI Hero post](https://www.aihero.dev/burn-through-your-backlog-with-my-triage-skill)).
+Vercel's AI SDK factory uses automated classification and analysis before implementation. Pocock's skill instead asks the maintainer for direction during triage ([Vercel account](https://vercel.com/blog/building-a-software-factory-for-ai-sdk), [triage skill](https://github.com/mattpocock/skills/blob/4ae2317ddb22b046e26455e4f9c9b3aaaf62212d/skills/engineering/triage/SKILL.md)). Both check the request before producing implementation instructions, but place human decisions at different stages.
 
-```
-/triage
-Just give me all of the open issues that I haven't triaged yet.
-```
+For AI SDK [issue #17898](https://github.com/vercel/ai/issues/17898#issuecomment-5101009222), classification identified a blocked-domain feature request. The subsequent [analysis](https://github.com/vercel/ai/issues/17898#issuecomment-5101058789) reports TS2353 from `issue-17898-type-probe.ts`. The probe file was not available to inspect, so this is reported evidence of the missing feature. The analysis described SDK fit and proposed work while leaving implementation choices open.
 
-The agent finds nine untriaged issues and labels each with a category and `needs-triage`. The maintainer then narrows: "Could you start with 477 for me?" The agent reads issue #477, finds existing triage notes with a stack trace, and recommends `ready-for-agent`. The maintainer asks the agent to reproduce the bug rather than trust the reporter:
-
-```
-Could you diagnose this yourself?
-```
-
-The agent traces task-ID variables, locates the literal-vs-placeholder mismatch, writes a regression test, applies the fix, pushes to main, and closes the issue. Context use sits at 46.5k of 100k tokens — the brief is short because the codebase grounding did the work upstream of the executor.
+Vercel then produced an implementation, and Lars Grammel merged [PR #18033](https://github.com/vercel/ai/pull/18033). The [production account](https://vercel.com/blog/building-a-software-factory-for-ai-sdk) describes human review as a separate stage. This one feature probe does not prove that every requirement is complete or that every backlog item suits automation.
 
 ## Key Takeaways
 
-- A named triage skill encodes a state machine into labels — every triaged issue carries one category and one state, with no ambiguous middle ground
-- The agent brief is the hand-off contract: durable, behavioral, with testable acceptance criteria and explicit scope boundaries
-- `.out-of-scope/<concept>.md` files give the skill institutional memory; the skill checks them on every new issue and surfaces matches before triaging
-- The pattern is human-in-the-loop by design — choose [continuous triage](continuous-triage.md) for lights-out classification or the [QA session pipeline](qa-session-to-issues-pipeline.md) for batch intake
-- Reproducing bugs before producing a brief is the most reliable defense against hallucinated specs that waste downstream agent context
+- Check the premise before writing the brief; preserve `needs-info` when evidence is incomplete.
+- Inspect the brief and verification record before dispatch, especially after a quick state override.
+- Review prior rejection reasons before treating a similar request as already decided.
+- Assign an owner to automated analysis output and keep merge review separate from intake readiness.
 
 ## Related
 
-- [Continuous Triage](continuous-triage.md) — automated event-time triage on GitHub Actions; complementary lights-out variant
-- [QA Session to Issues Pipeline](qa-session-to-issues-pipeline.md) — multi-stage batch pipeline for intake from a single artifact
-- [Issue Requirements Preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md) — downstream complement: structured requirement reconstruction at executor invocation time
-- [Issue-to-PR Delegation Pipeline](issue-to-pr-delegation-pipeline.md) — what runs on issues marked `ready-for-agent`
-- [Issue-Tracker as Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — the downstream dispatch contract that the agent brief feeds into
-- [Semantic Issue Search from Chat vs Query Syntax](semantic-issue-search-natural-language.md) — paraphrase-tolerant duplicate detection that complements `.out-of-scope/` concept matching
-- [AI-Powered Vulnerability Triage](ai-powered-vulnerability-triage.md) — analogous classification pipeline in a security context
-- [Continuous AI: A Navigation Map of Always-On Agent Workflows](continuous-ai.md) — the parent map placing this in the triage family alongside the continuous-* workflows
+- [Work Dispatch and Change Integration in Agent Pipelines](../factory-engineering/work-dispatch-and-change-integration.md)
+
+- [Factory Engineering Across Software Delivery Systems](../factory-engineering/factory-engineering.md)
+
+- [Factory Engineering](../factory-engineering/index.md) — intake within the broader software delivery process
+- [Issue-Tracker as Agent Dispatch Surface](issue-tracker-agent-dispatch-surface.md) — the downstream contract that receives the brief
+- [Trigger-Level Gating for Autonomous Agent Intake](../patterns/agent-design/trigger-level-agent-intake-gating.md) — authorization at the intake boundary
+- [Issue Requirements Preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md) — requirement reconstruction by the executor
+- [Continuous Triage: Automating Issue Classification with AI Workflows](continuous-triage.md) — event-driven issue analysis

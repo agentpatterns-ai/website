@@ -21,6 +21,10 @@ The engineering disciplines that make agent systems production-ready — from to
 
 Design, implement, and optimize the tools agents use — MCP servers, CLI wrappers, [hook lifecycles](tool-engineering/hooks-lifecycle-events.md), skill authoring, and token-efficient tool interfaces.
 
+## [Factory Engineering](factory-engineering/index.md)
+
+Design and improve the software delivery system: work intake, agent pipelines, acceptance evidence, operations, and measurement.
+
 ## [Code Review](code-review/index.md)
 
 Patterns for reviewing agent-generated code — tiered review strategies, diff-based approaches, committee patterns, and [balancing PR volume against value](code-review/agent-pr-volume-vs-value.md).

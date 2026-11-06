@@ -99,5 +99,5 @@ The second report names the suspect area, proposes a fix, and supplies a runnabl
 - [WRAP Framework for Writing Agent-Ready Issue Descriptions](wrap-framework-agent-instructions.md) — a checklist for packaging the task description; this page ranks which report fields to put in it
 - [The Specification as Prompt](specification-as-prompt.md) — the high-signal-pointer principle applied to types, schemas, and tests
 - [Issue Requirements Preprocessing](../patterns/agent-design/issue-requirements-preprocessing.md) — restructure a raw issue into structured input before the agent generates code
-- [Issue-to-PR Delegation Pipeline](../workflows/issue-to-pr-delegation-pipeline.md) — the delegation pipeline whose first phase is issue design
+- [Issue-to-PR Delegation Pipeline](../workflows/issue-to-pr-delegation-pipeline.md) — the delegation pipeline that consumes the prepared issue
 - [Agent-Laundered Bug Reports](../patterns/anti-patterns/agent-laundered-bug-reports.md) — the failure mode when agent-written reports lose the reporter's real signal

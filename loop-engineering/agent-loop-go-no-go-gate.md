@@ -103,6 +103,8 @@ Task B — refactor the payment-service authorization layer
 
 Verdict: do not loop. A single prompt-driven session with a domain expert reviewing each step is strictly cheaper and safer. The loop's setup cost would be paid against N = 1, and the verifier would be vibes.
 
+Use [cost per accepted change](../factory-engineering/cost-per-accepted-change.md) for detailed cost accounting before applying this decision gate.
+
 ## Key Takeaways
 
 - A loop earns its cost only when all four conditions hold: weekly-or-better cadence, objective external verification, absorbable token budget, real tooling for the agent.
