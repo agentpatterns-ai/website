@@ -51,9 +51,11 @@ nav:
       - document-borne-prompt-injection.md
       - decoding-harness-attack-surface.md
       - subagent-return-framing.md
+      - guardrail-input-tagging.md
       - field-level-source-ownership.md
       - human-in-the-loop-confirmation-gates.md
       - monotonic-capability-attenuation.md
+      - handoff-permission-state-validation.md
       - non-human-event-provenance-markers.md
       - per-agent-capability-scoping.md
       - prompt-injection-threat-model.md
@@ -70,6 +72,7 @@ nav:
       - copilot-app-local-sandbox-credentials.md
       - dual-boundary-sandboxing.md
       - enterprise-managed-agent-sandbox.md
+      - fail-closed-sandbox-startup.md
       - network-less-container-unix-socket-egress.md
       - signed-host-mediated-agent-exits.md
       - permitted-egress-attack-surface.md
@@ -120,6 +123,7 @@ nav:
       - blast-radius-containment.md
       - centrally-provisioned-mcp-servers.md
       - constraint-substrate-scalable-oversight.md
+      - tool-intent-effect-journals.md
       - explanation-bound-tool-execution.md
       - exact-limits-in-code-judgment-in-model.md
       - fail-closed-remote-settings-enforcement.md
@@ -152,6 +156,7 @@ nav:
       - sufficiency-tightness-policy-decomposition.md
       - self-scheduled-run-authority.md
       - scheduled-task-connector-scope.md
+      - skill-tool-grant-travels-with-hooks.md
   - "Code Injection":
       - code-injection-multi-agent-defence.md
   - "Multi-Agent Propagation":

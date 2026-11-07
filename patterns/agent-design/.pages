@@ -240,6 +240,7 @@ nav:
       - routing-break-even.md
       - task-scoped-model-aliases.md
       - context-step-model-split.md
+      - atomic-task-routing-checks.md
       - task-distribution-router-fit.md
       - per-stage-model-assignment.md
       - cloud-routed-local-inference.md
@@ -249,6 +250,7 @@ nav:
       - selective-checkpoint-restore.md
       - selective-revalidation-pending-actions.md
       - specialized-slm-as-agent-tool.md
+      - cross-model-subagent-effort.md
       - subagent-effort-floor.md
       - tail-control-for-agent-workflows.md
       - task-feasibility-awareness.md
@@ -270,6 +272,7 @@ nav:
       - agent-runtime-middleware.md
       - agent-pushback-protocol.md
       - agent-turn-model.md
+      - browser-wait-tuning.md
       - browser-as-agent-action-space.md
       - computer-use-last-integration-tier.md
       - generated-programs-web-agent-action-space.md
@@ -282,8 +285,10 @@ nav:
       - action-class-permission-gates.md
       - permission-policy-enforcement-prerequisite.md
       - shell-surface-hook-matcher-coverage.md
+      - per-source-hook-registration-budgets.md
       - conversation-visibility-tool-availability.md
       - most-restrictive-wins-fusion.md
+      - layered-policy-resolution.md
       - plugin-co-installation-safety.md
       - tool-discovery-architecture-by-query-shape.md
       - natural-language-tool-selection.md

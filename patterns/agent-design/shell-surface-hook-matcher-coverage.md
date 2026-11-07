@@ -114,3 +114,4 @@ One property runs through all three disqualifying conditions and is the reason t
 - [Wait Primitive Plus Shell-Sleep Deny](wait-primitive-shell-sleep-deny.md) — the 2.1.310 release that paired Monitor with a foreground-sleep block
 - [Judging a Write by Its Spelled Path (Spelled-Path Scope)](../anti-patterns/spelled-path-permission-scope.md) — the same guard-versus-reality gap at the path layer rather than the tool-name layer
 - [Most-Restrictive-Wins Fusion for Parallel Agent Control Returns](most-restrictive-wins-fusion.md) — how the decisions that do fire get merged
+- [Per-Source Hook Registration Budgets](per-source-hook-registration-budgets.md) — Separate hook-count and matcher-character limits for each skill source, with diagnosis for missing hooks
