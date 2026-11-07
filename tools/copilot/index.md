@@ -31,6 +31,7 @@ status: current
 - [Copilot Extensions](copilot-extensions.md) — Build agents and skillsets that integrate into Copilot Chat via GitHub Marketplace (deprecated — see [migration guide](../../tool-engineering/copilot-extensions-to-mcp-migration.md))
 - [copilot-instructions.md Convention](copilot-instructions-md-convention.md) — Repository-level instruction file for persistent project context
 - [Copilot Spaces](copilot-spaces.md) — Named context collections that ground Copilot in curated reference material across repositories, files, PRs, issues, and uploads
+- [GitHub Copilot in Xcode's Built-In Coding Assistant](xcode-built-in-coding-assistant.md)
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md) — Define specialized agents, reusable skills, and installable bundles
 - [Embedding the Copilot SDK in a Managed Java Runtime](copilot-sdk-managed-runtime.md) — What embedding an agent loop costs a JVM host with its own concurrency model: the executor seam, container context propagation, and the JDK level it assumes
 - [Bounding an Embedded Copilot SDK Agent's Tool Set](copilot-sdk-tool-scoping.md) — The tool allowlist and the permission hook are independent controls, and a handoff orchestrator supplies transfer tools at invocation that the session config never named

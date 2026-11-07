@@ -69,3 +69,4 @@ What the entry does not settle is whether the agent is told the rate or the bala
 - [Dual-Budget Control for Search Agents](dual-budget-control-search-agents.md) — how an agent allocates under hard tool-call and token caps once the harness has set them
 - [Per-Call Budget Hints on Tool Invocations](per-call-budget-hints-tool-calls.md) — lifting the ceiling on one call rather than reshaping the budget it draws from
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](../../loop-engineering/loop-budgeting.md) — choosing the budget primitive for a loop, where this page chooses the ration's shape
+- [Per-Source Hook Registration Budgets](per-source-hook-registration-budgets.md) — Separate hook-count and matcher-character limits for each skill source, with diagnosis for missing hooks

@@ -416,6 +416,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Re-Auditing Context Engineering Across Model Generations](context-engineering/generation-scoped-context-engineering.md)
 - [Usage-Reinforced Memory Decay for Long-Running Agents](context-engineering/usage-reinforced-memory-decay.md)
 - [Agent-Tuned Code Search: Retrieval Built for the Loop](context-engineering/agent-tuned-code-search.md)
+- [Background Shell Handoff Before Subagent Cache Expiry](context-engineering/background-shell-cache-handoff.md)
 - [Prompt Cache Keepalive for Agent Pauses](context-engineering/prompt-cache-keepalive-agent-pauses.md)
 - [Version-Controlled Agent Context (Git Context Controller)](context-engineering/version-controlled-agent-context.md)
 - [Skill Loadout Curation for Coding Agents](context-engineering/skill-loadout-curation.md)
@@ -471,6 +472,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Capture the Assembled Request, Not the System Prompt](instructions/captured-instruction-stack.md)
 - [claudeMdExcludes: Selective Ancestor Instruction-File Exclusion](instructions/claude-md-excludes.md)
 - [Code Precedence Over Stale Instruction Files](instructions/code-precedence-over-instruction-files.md)
+- [Policy Wording Tests for Coding-Agent Instruction Files](instructions/policy-wording-compliance-tests.md)
 - [Configuration File Structure Does Not Drive Compliance](instructions/configuration-file-structure-compliance-gap.md)
 - [Constraint Degradation in AI Code Generation](instructions/constraint-degradation-code-generation.md)
 - [Constraint Encoding Does Not Fix Constraint Compliance](instructions/constraint-encoding-compliance-gap.md)
@@ -553,6 +555,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Advisory Prompts Distilled from Reasoning Traces](instructions/advisory-prompts-from-reasoning-traces.md)
 - [The No-Op Test: Prune Agent Docs by Behavior, Not Length](instructions/behavioral-no-op-test.md)
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](instructions/skill-pack-registry-distribution.md)
+- [Dependabot Version Updates for Agent Package Dependencies](instructions/apm-dependency-version-updates.md)
 - [Skill File Linting: Which Three Checks to Run First](instructions/skill-file-linting.md)
 - [Personalized vs Generic Agent Skills: Where Effort Pays](instructions/personalized-vs-generic-agent-skills.md)
 - [Public Rules-File Corpora as Evidence](instructions/rules-file-corpus-evidence.md)
@@ -608,6 +611,8 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Agentless vs Autonomous: When Simple Beats Complex](patterns/agent-design/agentless-vs-autonomous.md)
 - [Anthropic's Effective Agents Framework: A Pattern Map](patterns/agent-design/anthropic-effective-agents-framework.md)
 - [AST-Grounded Critic Loop for Documentation Maintenance](patterns/agent-design/ast-grounded-doc-critic-loop.md)
+- [Define Async Task Update and Approval Contracts](patterns/multi-agent/async-task-update-contracts.md)
+- [Host-Controlled Backgrounding for Claude Subagent Calls](patterns/multi-agent/host-controlled-subagent-backgrounding.md)
 - [Async Non-Blocking Subagent Dispatch](patterns/multi-agent/async-non-blocking-subagent-dispatch.md)
 - [Asynchronous Agent I/O and Speculative Tool Calling](patterns/agent-design/asynchronous-agent-io-and-speculative-tools.md)
 - [Attention Latch: When Agents Stay Anchored to Stale Instructions](patterns/agent-design/attention-latch.md)
@@ -774,6 +779,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Model-Neutral Agent Architecture: Model Portability Over Cloud Portability](patterns/agent-design/model-neutral-agent-architecture.md)
 - [Model-Set Parity: Reading Harness Efficiency Claims](patterns/agent-design/model-set-parity-harness-claims.md)
 - [Most-Restrictive-Wins Fusion for Parallel Agent Control Returns](patterns/agent-design/most-restrictive-wins-fusion.md)
+- [Layered Policy Resolution for Multi-Group Agent Users](patterns/agent-design/layered-policy-resolution.md)
 - [Multi-Agent SE Design Patterns: A Taxonomy Across 94 Papers](patterns/multi-agent/multi-agent-se-design-patterns.md)
 - [Multi-Agent Topology Taxonomy: Centralized, Decentralized](patterns/multi-agent/multi-agent-topology-taxonomy.md)
 - [Multi-Client Session Attachment: One Session, Many Clients](patterns/agent-design/multi-client-session-attachment.md)
@@ -795,6 +801,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Pattern Selection Map: Trade-off Matrix for This Site's Patterns](patterns/selection-map.md)
 - [Per-Call Budget Hints on Tool Invocations](patterns/agent-design/per-call-budget-hints-tool-calls.md)
 - [Per-Model Harness Tuning: Treating the Backing Model as a Harness Variable](patterns/agent-design/per-model-harness-tuning.md)
+- [Per-Source Hook Registration Budgets](patterns/agent-design/per-source-hook-registration-budgets.md)
 - [Per-Stage Model Assignment in a Generate-Repair-Refine Pipeline](patterns/agent-design/per-stage-model-assignment.md)
 - [Per-Surface Hook Matchers for Shell-Starting Tools](patterns/agent-design/shell-surface-hook-matcher-coverage.md)
 - [Per-Surface Routing Visibility in Copilot (HydraFusion)](patterns/agent-design/per-surface-routing-visibility.md)
@@ -829,9 +836,11 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Source-Linked Tool Observations: Repairing Stale Context](patterns/agent-design/source-linked-tool-observations.md)
 - [Specification Authority Boundary: Agents Propose, the Runtime Commits](patterns/agent-design/specification-authority-boundary.md)
 - [Staged Review for Expensive-to-Render Agent Deliverables](patterns/agent-design/staged-review-expensive-renders.md)
+- [Cross-Model Subagent Effort Resolution in Claude Code](patterns/agent-design/cross-model-subagent-effort.md)
 - [Subagent Effort Floors Instead of Session Inheritance](patterns/agent-design/subagent-effort-floor.md)
 - [Surface Switch or Harness Handoff: What Each Preserves](patterns/agent-design/session-surface-switch-vs-handoff.md)
 - [Task Shape Decides What a Heavier Agent Harness Buys](patterns/agent-design/task-shape-harness-payoff.md)
+- [Atomic Task Checks for Model and Thinking-Level Routing](patterns/agent-design/atomic-task-routing-checks.md)
 - [Task-Distribution Router Fit: Where the Decision Belongs](patterns/agent-design/task-distribution-router-fit.md)
 - [Task-Scoped Model Aliases: Name the Job, Not the Model](patterns/agent-design/task-scoped-model-aliases.md)
 - [The Agent Escalation Ladder Priced in Energy and Latency](patterns/agent-design/agent-escalation-ladder-energy.md)
@@ -950,6 +959,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Suspect the Harness Before the Model on a Regression](patterns/agent-design/suspect-the-harness-not-the-model.md)
 - [Cue-Anchored Working Memory (Delivery, Not Storage)](patterns/agent-design/cue-anchored-working-memory.md)
 - [Knowledge Graphs as Provenance-Carrying Agent Memory](patterns/agent-design/knowledge-graph-shared-memory.md)
+- [Trace-Guided Browser Tool Tuning and Bounded Settle Waits](patterns/agent-design/browser-wait-tuning.md)
 - [Browser as Agent Action Space](patterns/agent-design/browser-as-agent-action-space.md)
 - [Pre-Write Change Intent Admission (Claim Plane)](patterns/multi-agent/pre-write-change-intent-admission.md)
 - [Trigger-Level Gating for Autonomous Agent Intake](patterns/agent-design/trigger-level-agent-intake-gating.md)
@@ -1155,6 +1165,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Secrets Management for Agent Workflows](security/secrets-management-for-agents.md)
 - [Public-Web Index to Gate URL Fetching](security/url-fetch-public-index-gate.md)
 - [A Containment Floor for Agent Self-Configuration](security/agent-self-config-field-classes.md)
+- [A Skill's Tool Grant Travels With Its Hooks](security/skill-tool-grant-travels-with-hooks.md)
 - [Action-Audit Divergence: A Four-Mode Taxonomy for Runtime Hardening](security/action-audit-divergence-taxonomy.md)
 - [Action-Selector Pattern: LLM as Intent Decoder with Deterministic Execution](security/action-selector-pattern.md)
 - [Agent Approval Laundering: Effects Beyond the Named Command](security/approval-laundering-transitive-effects.md)
@@ -1206,7 +1217,10 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Enterprise Agent Hardening: Three Production Gates](security/enterprise-agent-hardening.md)
 - [Enterprise-Managed Plugin Governance for Agent CLIs](security/enterprise-managed-plugin-governance.md)
 - [Evidence-Based Allowlist Auto-Discovery for Agents](security/evidence-based-allowlist-auto-discovery.md)
+- [Journal Tool Intent Beside Observed Effects](security/tool-intent-effect-journals.md)
 - [Explanation-Bound Tool Execution for Agent Gateways](security/explanation-bound-tool-execution.md)
+- [Input Tags Define a Guardrail's Inspection Scope](security/guardrail-input-tagging.md)
+- [Fail Closed When the Sandbox Cannot Start](security/fail-closed-sandbox-startup.md)
 - [Fail-Closed Remote Settings Enforcement for Enterprise Agents](security/fail-closed-remote-settings-enforcement.md)
 - [Field-Level Source Ownership for Agent Capabilities](security/field-level-source-ownership.md)
 - [Five-Stage Policy Layer Typology for Generalist Agents](security/policy-as-code-layer-typology.md)
@@ -1335,6 +1349,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Cross-Repository Security Posture for Agent-Introduced Vulnerabilities](security/cross-repository-security-posture.md)
 - [Internal Hostname Disclosure in Agent-Readable Context](security/internal-hostname-disclosure-agent-context.md)
 - [Vetting Tool Definitions for Exfiltration Signatures](security/vetting-tool-definitions-before-install.md)
+- [Validate Permission State Across Agent Handoffs](security/handoff-permission-state-validation.md)
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](security/non-human-event-provenance-markers.md)
 - [Setup Documentation as an Install-Time Attack Vector](security/setup-documentation-install-time-attacks.md)
 - [Structural Monitoring for Covert Safeguard-Weakening](security/structural-safeguard-monitoring.md)
@@ -1707,6 +1722,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [Strained Coherence as a Pre-Failure Signal in Agent Trajectories](observability/strained-coherence-pre-failure-signal.md)
 - [Subagent OTel Trace Correlation via agent_id Attribute](observability/subagent-otel-trace-correlation.md)
 - [Traces Need Feedback to Power Learning](observability/traces-need-feedback-to-power-learning.md)
+- [Layered Misalignment Monitoring with Unflagged Sampling](observability/layered-misalignment-monitoring.md)
 - [Trajectory as the Monitoring Unit for Production Agents](observability/trajectory-as-monitoring-unit.md)
 - [Trajectory Logging via Progress Files and Git History](observability/trajectory-logging-progress-files.md)
 - [Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)](observability/trajectory-prefilter-failure-diagnosis.md)
@@ -2342,6 +2358,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [GitHub Agentic Workflows for Automating Dev Processes](tools/copilot/github-agentic-workflows.md)
 - [GitHub Copilot Agent Mode for AI Agent Development](tools/copilot/agent-mode.md)
 - [GitHub Copilot Coding Agent for AI Agent Development](tools/copilot/coding-agent.md)
+- [GitHub Copilot in Xcode's Built-In Coding Assistant](tools/copilot/xcode-built-in-coding-assistant.md)
 - [GitHub Copilot Custom Agents and Skills Extensibility Guide](tools/copilot/custom-agents-skills.md)
 - [GitHub Copilot Dedicated App as Agent-First Surface](tools/copilot/copilot-dedicated-app.md)
 - [GitHub Copilot Dynamic Workflows: Orchestration in Code](tools/copilot/copilot-dynamic-workflows.md)
@@ -2551,6 +2568,7 @@ Strategies for fitting more useful content into less space, and for making repea
 - [Prompt Caching: Architectural Discipline for Agents](prompt-caching-architectural-discipline.md) — Treat prompt caching as a structural constraint on prompt composition, with cross-provider economics and extended-TTL guidance folded in
 - [Batched Context Eviction for Cache Reuse](batched-context-eviction.md) — Trimming an agent's history every step leaves the whole history uncacheable; evict in large batches instead, once you have confirmed you must evict at all
 - [Static Content First for Cache Hits](static-content-first-caching.md) — Place static content at the beginning of the prompt and variable content at the end to maximize prompt cache hits and keep inference costs linear
+- [Background Shell Handoff Before Subagent Cache Expiry](background-shell-cache-handoff.md)
 - [Prompt Cache Keepalive for Agent Pauses](prompt-cache-keepalive-agent-pauses.md) — Replay a cached prefix on a timer so it survives tool runs and approval waits, and the billing, pause-length, and interval conditions that decide whether it saves money or costs 4x more
 - [Compact Before Cache Expiry, Not at Context Pressure](compact-before-cache-expiry.md) — Claude Code compacts an idle 200K+ token conversation about 54 minutes in, before the one-hour cache expires, and the five conditions and fidelity costs decide whether that saves money
 - [Attributed Cache Misses: Reading Why a Prefix Diverged](attributed-cache-miss-diagnostics.md) — Read the provider's documented cache-miss reason beside the usage counters, because the reason code says whether the request changed, not whether the cache hit
@@ -3324,6 +3342,45 @@ The middle branch is the point. Without the usage read, an expired entry and a m
 - [Prompt Cache Keepalive for Agent Pauses](prompt-cache-keepalive-agent-pauses.md) — what to do when the diagnostic is clean and the entry expired anyway
 - [Mask Tools Instead of Removing Them](mask-tools-instead-of-removing.md) — the fix OpenAI suggests for a tools-changed reason
 - [Dynamic Tool Fetching Breaks KV Cache](../patterns/anti-patterns/dynamic-tool-fetching-cache-break.md) — the harness design that produces a tools-changed reason every turn
+
+---
+
+### Background Shell Handoff Before Subagent Cache Expiry
+Source: https://agentpatterns.ai/context-engineering/background-shell-cache-handoff/
+
+# Background Shell Handoff Before Subagent Cache Expiry
+
+> Background subagents hand long shell commands back to the runtime before the default cache expires, while command completion remains pending.
+
+Claude Code 2.1.318 moves a shell command to the background after three minutes when it runs inside a background subagent. The release note applies this change across providers and gives prompt-cache preservation as its purpose ([changelog](https://code.claude.com/docs/en/changelog#2-1-318)). It describes a command handoff, not a three-minute command timeout or a rule for every foreground agent.
+
+## Keep the two clocks separate
+
+The cache timer measures inactivity between matching requests. A cache hit refreshes it. Subagents normally use a five-minute cache lifetime, even when the main subscription conversation uses an hour; explicit settings can change that lifetime ([cache lifetime](https://code.claude.com/docs/en/prompt-caching#cache-lifetime)).
+
+The command timer concerns the running process. A background subagent can leave a background shell command running beyond its turn, and Claude Code notifies it when that command ends ([background results](https://code.claude.com/docs/en/sub-agents#tools-permissions-and-results-of-background-subagents)). Returning control therefore must not be interpreted as a successful build or test.
+
+For a completion contract, require the command's exit status and relevant result artifact. Keep dependent work pending until that evidence arrives. This is a workflow implication of the separate lifecycles, not a new runtime guarantee.
+
+## Measure the affected cache
+
+Inspect `cache_read_input_tokens` and `cache_creation_input_tokens` for the worker's requests. The `/usage` prompt-cache summary explicitly describes the main conversation, so it cannot by itself establish a worker's hit rate ([cache diagnostics](https://code.claude.com/docs/en/prompt-caching#check-cache-performance)).
+
+Compare a representative long command before and after a runtime upgrade with the same model and context. Record elapsed time, completion status, and cache creation. A cache-friendly handoff does not guarantee a hit if the next request changes the prefix or arrives after expiry.
+
+Avoid splitting a job into fresh workers solely to shorten shell waits. A non-fork subagent starts its own cache; a resumed worker can reuse a still-valid prefix ([subagents and caching](https://code.claude.com/docs/en/prompt-caching#subagents-and-the-cache)). Split when task independence justifies it, then measure the added context cost.
+
+## Key Takeaways
+
+- Distinguish shell completion from the handoff at three minutes.
+- Use worker request counters when evaluating worker cache savings.
+- Compare continuation with fresh dispatch before redesigning a long job.
+
+## Related
+
+- [Prompt Cache Keepalive for Agent Pauses](prompt-cache-keepalive-agent-pauses.md) — explicit refresh requests and their cost
+- [Prompt Caching Architectural Discipline](prompt-caching-architectural-discipline.md) — prefix stability and cache lifetime
+- [Cache-Safe Routing Boundaries](../patterns/agent-design/cache-safe-routing-boundaries.md) — model changes and cache reuse
 
 ---
 
@@ -15238,6 +15295,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — Instruction compliance degrades as rule count grows; adding more rules past a threshold produces omission errors, not better behavior
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — LLM code generation accuracy drops sharply as simultaneous constraint count increases; reduce constraint load through decomposition, schemas, and mechanical enforcement
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — Restructuring how constraints are formatted in prompts does not improve model compliance; the compliance lever is constraint design, not encoding form
+- [Policy Wording Tests for Coding-Agent Instruction Files](policy-wording-compliance-tests.md)
 - [Configuration File Structure Does Not Drive Compliance](configuration-file-structure-compliance-gap.md) — A factorial study of file size, instruction position, file architecture, and contradictions found none of the four variables produced detectable compliance contrasts within realistic file sizes
 - [System Prompt Altitude: Specific Without Being Brittle](system-prompt-altitude.md) — Effective prompts sit at the altitude that produces consistent behavior across variation, neither too brittle nor too vague
 - [Match Tool Instructions to the Agent Workflow](match-tool-instructions-to-workflow.md) — Better tools do not improve an agent unless the prompt encodes how the task's workflow gathers information; GitHub's Copilot code review regressed on a tool upgrade until the instructions were rewritten to match the review workflow
@@ -15317,6 +15375,7 @@ Reviewing, versioning, and repairing instruction files over time so they remain 
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](skill-pack-registry-distribution.md) — A registry pack gives a team one addressable, updatable skill bundle; the version pin, the review gate, and the size limit stay the team's job
 - [Shipping a Shared Agent Toolkit as a Versioned Plugin](shared-toolkit-plugin-ownership.md) — Shared constraints, instructions, and tool connections belong in the package while application evidence and decisions stay in the repo; in Copilot CLI a packaged agent or skill loses to a local definition of the same identifier, and a packaged MCP server overrides the consumer's
 - [Workspace-Hosted Skills: Authorship Outside the Repo](workspace-hosted-skills.md) — A skill whose source of truth is a document workspace makes page edit permission the mutation gate and page view permission the install gate; mirror the workspace into git to keep a revision you can roll back to
+- [Dependabot Version Updates for Agent Package Dependencies](apm-dependency-version-updates.md)
 - [Skill File Linting: Which Three Checks to Run First](skill-file-linting.md) — Description shape, no name-as-H1, and externalized code cover most SKILL.md defects; the gate buys routing and review hygiene, never a safety verdict
 - [Plugin Component Co-Change: Scripts and Their Instructions Move Together](plugin-component-co-change.md) — Inside one plugin a bundled script and the markdown describing it are one interface; pair the edits where the prose carries operational detail, and `claude plugin validate` will not catch the gap
 - [Post-Compaction Re-read Protocol](post-compaction-reread-protocol.md) — Restore behavioral contracts after context compaction by triggering a targeted re-read of CLAUDE.md or AGENTS.md
@@ -18069,6 +18128,67 @@ Yes, in three ways. Repeating several rules strips the priority signal, so the m
 - [Post-Compaction Reread Protocol](post-compaction-reread-protocol.md)
 - [Layered Instruction Scopes](layered-instruction-scopes.md)
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — position and repetition move the compliance needle; encoding form does not
+
+---
+
+### Dependabot Version Updates for Agent Package Dependencies
+Source: https://agentpatterns.ai/instructions/apm-dependency-version-updates/
+
+# Dependabot Version Updates for Agent Package Dependencies
+
+> Dependabot version updates propose changes to supported APM agent-package dependencies, with explicit limits on manifest forms and lockfile handling.
+
+APM packages can carry agent skills, prompts, and instructions. Dependabot opens update pull requests for supported git dependencies in `apm.yml`. GitHub announced this support on November 3, 2026, for version updates only. It does not provide APM security updates ([GitHub announcement](https://github.blog/changelog/2026-11-03-dependabot-version-updates-support-agent-package-manager/)).
+
+## Configure the manifest directory
+
+Use `apm` as the ecosystem value and point `directory` at the folder containing `apm.yml`. This weekly root-directory configuration follows GitHub's [version-update configuration](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates) and [APM announcement](https://github.blog/changelog/2026-11-03-dependabot-version-updates-support-agent-package-manager/):
+
+```yaml
+version: 2
+updates:
+  - package-ecosystem: "apm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+```
+
+The configuration belongs in `.github/dependabot.yml`. It schedules proposals; it does not authorize merging them.
+
+## Check what the updater covers
+
+Both `dependencies.apm` and `devDependencies.apm` are supported. Ref type determines the update ([GitHub support reference](https://docs.github.com/en/code-security/reference/supply-chain-security/supported-ecosystems-and-repositories#apm)):
+
+| Pin | Update behavior |
+|---|---|
+| SemVer tag | Latest supported SemVer tag, including package-scoped tags |
+| Full commit SHA | Commit of the latest annotated, non-prerelease release tag |
+| Branch | Latest branch commit through the lockfile; manifest keeps the branch name |
+
+Dependabot regenerates an existing `apm.lock.yaml` with `apm lock`; it does not create a missing lockfile. Branch updates therefore require one. Unsupported forms include object maps, MCP entries, missing refs, local paths, Azure DevOps entries, abbreviated SHAs, and insecure clone schemes. The reference lists further YAML and default-registry restrictions ([complete exclusions](https://docs.github.com/en/code-security/reference/supply-chain-security/supported-ecosystems-and-repositories#apm)).
+
+## Review the package's behavior
+
+Treat the PR as a change to the agent's instructions. This review checklist follows from the package contents and update boundaries above:
+
+- Inspect the resolved ref and the instruction or skill diff, not only the manifest version.
+- Check whether the package adds tool use, external destinations, or new execution steps.
+- Test the changed behavior with your own representative tasks before merging.
+- Track unsupported manifest entries separately; absence of an update PR is not evidence that they are current.
+
+APM support applies across tools that consume these packages. The GitHub announcement does not make it a Copilot-only update mechanism.
+
+## Key Takeaways
+
+- Keep a lockfile when relying on branch-ref updates.
+- Separate version freshness from security review.
+- Review the package content that the resolved ref introduces.
+
+## Related
+
+- [Skill File Linting](skill-file-linting.md) — inspect the instruction artifact
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — enforce runtime constraints separately
+- [Dependency-Update Repair Routing](../workflows/dependency-update-repair-routing.md) — decide which update PRs need repair work
 
 ---
 
@@ -22976,6 +23096,56 @@ This is a well-formed string, so it commits clean and shows up in `/hooks`. It a
 - [Frontmatter and Body Rule Drift in Agentic Workflows](frontmatter-body-rule-drift.md) — the half of a config file no validator can check, because prose has no schema
 - [Auditing an Instruction File for Interference Between Its Own Rules](../verification/instruction-file-interference-audit.md) — the prose half of the same artifact, where the defect is two rules that cannot both hold rather than a malformed key
 - [Per-Surface Verification of Agent Plugin Packages](../tool-engineering/per-surface-plugin-verification.md) — a different route to the same silence, where a valid policy names a key the client does not implement
+
+---
+
+### Policy Wording Tests for Coding-Agent Instruction Files
+Source: https://agentpatterns.ai/instructions/policy-wording-compliance-tests/
+
+# Policy Wording Tests for Coding-Agent Instruction Files
+
+> Policy wording tests compare compliance on the same tasks, so teams can evaluate instruction phrasing without assuming one style works across agents.
+
+Policy wording is an experimental input when testing an agent instruction file. A study appended four versions of one marker-comment rule to repository context files. It held placement and surrounding text fixed ([Tsuchida et al., v1](https://arxiv.org/abs/2611.04367v1)).
+
+## What the experiment establishes
+
+The study selected 86 tasks from 10 repositories and ran three repetitions per style and configuration. Its rule required `# @tracked` directly below every added or modified Python function's `def` line. Compliance required every affected function in a session to carry the marker. Sessions with no affected functions were excluded ([method](https://arxiv.org/abs/2611.04367v1)).
+
+Claude Code 2.1.227 with `claude-opus-5` had 82 retained tasks: direct wording scored 78.0%, explanatory 77.2%, and conditional 64.2%. Direct and explanatory wording each beat conditional wording significantly; they did not differ significantly from each other ([results](https://arxiv.org/abs/2611.04367v1)).
+
+Other configurations changed the ranking. Direct wording led for `claude-sonnet-5`; explanatory wording led for `gpt-oss-120b` on qwen-code. Qwen3-Coder-Next showed no significant style effect. One sentence represented each style, so wording and length remain confounded with style ([results and limitations](https://arxiv.org/abs/2611.04367v1)).
+
+## Apply the result without changing policy scope
+
+Use direct wording as a candidate, then compare it with a version that explains the reason. Keep the triggering condition when it defines a real permission boundary. Removing that condition changes the policy rather than testing its phrasing.
+
+For a local evaluation:
+
+1. Choose a rule with an observable outcome.
+2. Keep the rule's meaning, file position, and tasks fixed across variants.
+3. Repeat runs on each model and harness you actually use.
+4. Report excluded sessions and the unit of compliance alongside the score.
+
+Those steps follow the study's controlled comparison. They do not imply its percentages transfer to security rules, another language, or a newer runtime.
+
+## Separate compliance from correctness
+
+Passing the marker check does not establish that the code solves its task. Score task correctness separately. If a requirement must hold on every accepted change, add a mechanical check where possible; do not treat a better wording score as enforcement.
+
+The useful outcome is a tested instruction for a named configuration, with the remaining failure rate visible.
+
+## Key Takeaways
+
+- Preserve policy meaning when comparing wording.
+- Name the harness and model beside any compliance result.
+- Keep mechanical acceptance checks separate from prompt experiments.
+
+## Related
+
+- [Configuration File Structure Compliance Gap](configuration-file-structure-compliance-gap.md) — a different set of instruction-file variables
+- [Enforcing Agent Behavior with Hooks](enforcing-agent-behavior-with-hooks.md) — move checkable requirements into execution controls
+- [Specification Portability Across Agents](specification-portability-across-agents.md) — test a shared specification across runtimes
 
 ---
 
@@ -27941,6 +28111,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Local Inference Under a Cloud Router](cloud-routed-local-inference.md) — Copilot Fusion can send a request to an on-device model, but the routing decision, the two-model eligibility list, and the model policy all stay server-side, so the session never becomes offline
 - [Per-Surface Routing Visibility in Copilot (HydraFusion)](per-surface-routing-visibility.md) — HydraFusion runs in Copilot CLI, Visual Studio Code, and the Copilot app; the docs say you can follow each step while it works, and only the CLI keeps a record you can export and grade
 - [Cache-Safe Routing Boundaries: Where a Router May Act](cache-safe-routing-boundaries.md) — A model switch only avoids paying for the conversation twice at a session's first prompt, in a fresh side lane, or at a subagent launch; anywhere else the cheaper stretch must last tens of requests to repay two cold cache writes
+- [Atomic Task Checks for Model and Thinking-Level Routing](atomic-task-routing-checks.md)
 - [Task-Distribution Router Fit: Where the Decision Belongs](task-distribution-router-fit.md) — A router's accuracy tracks how well its tier criteria match your real task mix, so measure the mix before picking tiers; LangChain's 64% median cost cut came from a frontier-only control, which tests routing rather than placement
 - [Per-Stage Model Assignment in a Generate-Repair-Refine Pipeline](per-stage-model-assignment.md) — Profile each candidate model separately at generation, repair, and refinement, because the best generator is often not the best repairer; the correctness margin narrows to six ties once the pool is current, and survives on hard tasks, low-resource languages, and performance refinement
 - [RubricRefine: Pre-Execution Rubric Refinement for Code-Mode Tool Use](rubric-refine-pre-execution-tool-use.md) — Generate a task- and registry-specific rubric, score candidate tool-use code against explicit contract checks, and repair failures before any execution — for multi-step tool sequences where contract violations run silently to completion
@@ -27949,6 +28120,7 @@ Making agents robust — backpressure, idempotency, cost awareness, error recove
 - [Selective Revalidation for Pending Agent Actions](selective-revalidation-pending-actions.md) — Record the executable conditions that justified a pending action and recheck only the ones a state change can reach, so a version conflict stops being treated as a decision conflict
 - [Model Policy Reconciliation: A Copilot Model Allow List as Code](model-policy-reconciliation.md) — Drive the Copilot model allow list from a checked-in file through the policy API; the live delegation mode decides how many scopes can deny, removals need an explicit write, and the state you read back is a policy record rather than user access
 - [Specialized Small Language Models as Agent Sub-Tools](specialized-slm-as-agent-tool.md) — Hide a small fine-tuned model behind a tool-call interface so a large orchestrator can offload high-volume narrow operations — search, exploration, terminal output filtering — without spending its own context budget
+- [Cross-Model Subagent Effort Resolution in Claude Code](cross-model-subagent-effort.md) — Resolve worker effort after changing models
 - [Subagent Effort Floors Instead of Session Inheritance](subagent-effort-floor.md) — Set the level delegated workers default to rather than letting them inherit the orchestrator's; it pays for mechanical fan-out and costs where workers plan or verify
 - [Tail Control for Agent Workflows: Engineering for the Failure Tail, Not the Average](tail-control-for-agent-workflows.md) — Engineer non-deterministic agent workflows for worst-case usability — per-step p95 timeouts, hedged re-draws, graceful degradation — because the failure tail sets the reliability behind an API, not the median run
 - [Task Feasibility Awareness: Stop Before You Start](task-feasibility-awareness.md) — An up-front check that the current tools can satisfy a task at all, halting the infeasible before the agent burns a long chain — the inverse of premature completion
@@ -27985,8 +28157,10 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Action-Class Permission Gates Leave Task Fit and Reversibility to the Human](action-class-permission-gates.md) — A permission prompt names an action and a target, so whether it fits the task and whether it can be undone are supplied by the person answering it
 - [Permission Policy Binds Only at an Enforcement Point](permission-policy-enforcement-prerequisite.md) — A declared permission policy needs a component that can intercept the call, so VS Code 1.142 requires the Copilot harness in Agent Host and moves an existing Local chat there when you open it
 - [Per-Surface Hook Matchers for Shell-Starting Tools](shell-surface-hook-matcher-coverage.md) — A hook `if` condition holds one tool name, so every tool that can start a shell needs its own rule; Claude Code took 204 days to cover the third one
+- [Per-Source Hook Registration Budgets](per-source-hook-registration-budgets.md) — Separate hook-count and matcher-character limits for each skill source, with diagnosis for missing hooks
 - [Tool Availability by Conversation Visibility](conversation-visibility-tool-availability.md) — Why a chat-hosted agent withdraws its caller-scoped tools once the room has other readers in it, and when a private reply is the better answer
 - [Most-Restrictive-Wins Fusion for Parallel Agent Control Returns](most-restrictive-wins-fusion.md) — The `deny > defer > ask > allow` merge function that fuses parallel hook decisions, classifier verdicts, and permission rules into a single agent-control answer
+- [Layered Policy Resolution for Multi-Group Agent Users](layered-policy-resolution.md) — Matching-role composition, field precedence, and broader combined permissions
 - [Designing Agent Plugins to Survive Co-Installation](plugin-co-installation-safety.md) — Ship the root manifest, keep client data in `extensions`, and prefix exported capability names, because conformance is checked on one plugin and the failure needs two
 - [Product-Operation Tool Surfaces for In-Product Agents](product-operation-tool-surface.md) — An agent living inside a product enumerates each action as its own shallow tool and withholds the SDK, then scopes the live catalog per thread so tool selection holds up
 - [Typed Tool Surfaces and Out-of-Loop Correctness Gates](typed-tool-surface-out-of-loop-gate.md) — Name the domain's operations as tools, cap the loop in code, and check the answer downstream — a trade that won multi-hop questions by 9 points and lost single-hop ones by 25
@@ -28024,6 +28198,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Natural Language Tool Selection (NLT)](natural-language-tool-selection.md) — Describe tools in prose and parse the model's plain-language choice instead of forcing JSON tool calls — a large accuracy win on weak or non-native-tool-calling models, near-zero on structured-optimized frontier ones
 - [Tools as Typed Code Stubs (Programmatic Tool Calling)](programmatic-tool-calling.md) — Expose tools as typed Python stubs the model calls from a script — it matched or beat JSON tool calling on 11 of 14 models, but only past a code-emission gate and a fan-out-shaped workload
 - [Recursive Agent Harnesses (RAH)](recursive-agent-harnesses.md) — A parent agent generates and runs a script that spawns subagent harnesses in parallel — each with its own tools and context — making the recursive unit a full harness rather than a bare model call
+- [Trace-Guided Browser Tool Tuning and Bounded Settle Waits](browser-wait-tuning.md)
 - [Browser as Agent Action Space](browser-as-agent-action-space.md) — Design an agent-driven browser tool loop with element-addressed actions, signal-triggered observation, and per-step assertions — but only when control flow genuinely depends on what the page returns
 - [Generated Programs as Web Agent Action Space](generated-programs-web-agent-action-space.md) — Let the web agent write and run a program against a disposable browser while the workspace holds the durable code and logs — worth it past three gates, and weaker than plan-then-execute on injection
 - [Scoped Browser DevTools Access for Runtime Diagnosis](scoped-devtools-access-runtime-diagnosis.md) — Give the coding agent a read-oriented Chrome DevTools Protocol attachment for diagnosing runtime, network, and console errors — but only when the agent's other tools cannot close the lethal trifecta against the imported DOM
@@ -32059,6 +32234,47 @@ Perceived response time is bounded by TTS dispatch (~200 ms), not by the flight 
 - [Cognitive Reasoning Execution Separation](cognitive-reasoning-execution-separation.md)
 - [Lane-Based Execution Queueing](lane-based-execution-queueing.md)
 - [Agent Backpressure](agent-backpressure.md)
+
+---
+
+### Atomic Task Checks for Model and Thinking-Level Routing
+Source: https://agentpatterns.ai/patterns/agent-design/atomic-task-routing-checks/
+
+# Atomic Task Checks for Model and Thinking-Level Routing
+
+> Atomic task checks route work using a specific reasoning requirement, then evaluate savings against verified task outcomes and a fixed-model baseline.
+
+An atomic routing check asks about one task property instead of requesting a broad difficulty judgment. Google's experiment replaced a simple-versus-complex classification with a check for sequential calculations, simulations, or deductions ([Google report](https://developers.googleblog.com/cost-per-task-using-cheap-classifiers-to-route-across-gemini-models-and-thinking-levels/)).
+
+## Use a competitive baseline
+
+The experiment used 50 short coding-related questions with automatic grading. A frozen keyword-and-length heuristic matched difficulty labels on 70.6% of 34 held-out questions; Jev matched all 34. Label agreement measures routing decisions, not answer correctness ([experiment](https://developers.googleblog.com/cost-per-task-using-cheap-classifiers-to-route-across-gemini-models-and-thinking-levels/)).
+
+Gemini 3.8 Flash at low thinking answered all 50 correctly without routing. The successful routed setup first tried Flash-Lite, then escalated tasks Jev classified as complex to Flash at low thinking. It also answered all 50 correctly. The study reports one run per setup and hand-assigned difficulty labels ([results and limitations](https://developers.googleblog.com/cost-per-task-using-cheap-classifiers-to-route-across-gemini-models-and-thinking-levels/)).
+
+These results support testing a narrow classifier. They do not establish that a router preserves quality on repository-scale changes.
+
+## Count the entire attempt
+
+Use total spend divided by verified successes. Include the first answer, classifier, escalation, and retries. A cheaper failed answer must remain in the numerator.
+
+Lowering `maxOutputTokens` did not reduce thinking cost in the reported easy-task comparison, and the small cap broke hard tasks. The escalation target therefore needs its own measured configuration ([configuration comparison](https://developers.googleblog.com/cost-per-task-using-cheap-classifiers-to-route-across-gemini-models-and-thinking-levels/)).
+
+For your own evaluation, freeze the routing question before the held-out test. Track unnecessary escalations separately from hard tasks sent to the cheap path. Compare both against the cheapest fixed configuration that meets your quality threshold.
+
+Do not transfer the short-task result to context-heavy turns without measuring cache effects. Model switching can require another model's cache; the source explicitly limits its routing recommendation to short, self-contained tasks ([cache discussion](https://developers.googleblog.com/cost-per-task-using-cheap-classifiers-to-route-across-gemini-models-and-thinking-levels/)).
+
+## Key Takeaways
+
+- Choose the fixed-model baseline before calculating routing savings.
+- Report answer correctness separately from classifier agreement.
+- Include the first cheap attempt when computing escalation cost.
+
+## Related
+
+- [Task-Distribution Router Fit](task-distribution-router-fit.md) — align criteria with the actual workload
+- [Cache-Safe Routing Boundaries](cache-safe-routing-boundaries.md) — account for model-specific context
+- [Cost-Driven Routing Without Quality Monitoring](../anti-patterns/cost-routing-without-quality-monitoring.md) — preserve outcome checks
 
 ---
 
@@ -36537,6 +36753,49 @@ The agent writes the relay at cycle end using the temp-file-rename pattern. The 
 - [Loop Strategy Spectrum](../../loop-engineering/loop-strategy-spectrum.md) — choosing between accumulated, compressed, and fresh context across loops
 - [Agent Memory Patterns](agent-memory-patterns.md) — scoped memory systems that persist knowledge across sessions and complement the relay
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md) — structured contracts for passing work between pipeline stages
+
+---
+
+### Cross-Model Subagent Effort Resolution in Claude Code
+Source: https://agentpatterns.ai/patterns/agent-design/cross-model-subagent-effort/
+
+# Cross-Model Subagent Effort Resolution in Claude Code
+
+> Cross-model subagents resolve their default effort from their own model, so the parent's session setting does not establish every worker's reasoning level.
+
+Cross-model effort resolution selects a worker's effort independently of the parent's session choice. Claude Code 2.1.317 changed subagents and teammates on another model to use that model's saved effort, or its default ([release notes](https://code.claude.com/docs/en/changelog#2-1-317)). The rule matters when a delegation changes models without naming effort.
+
+## Defaults and overrides
+
+The [model configuration reference](https://code.claude.com/docs/en/model-config#effort-level-of-subagents-and-teammates) distinguishes same-model inheritance from cross-model resolution. A worker without its own effort inherits the session level only on the main conversation's model.
+
+Explicit settings still matter. `CLAUDE_CODE_EFFORT_LEVEL` overrides an invocation's `effort` parameter, which overrides the agent definition's `effort` field. The invocation parameter applies to non-fork subagents and persists on resume ([subagent effort reference](https://code.claude.com/docs/en/sub-agents#choose-an-effort-level)). An effort cap can lower the selected level ([model configuration](https://code.claude.com/docs/en/model-config#set-the-effort-level)).
+
+The release note adds a model-dependent default; it does not replace this override chain. The separate `CLAUDE_CODE_SUBAGENT_EFFORT` default shipped in 2.1.316. The cited documentation does not fully place that variable against cross-model saved settings. Avoid inferring an order for their combination ([2.1.316 release notes](https://code.claude.com/docs/en/changelog#2-1-316)).
+
+## Verify a mixed-model run
+
+Use the following review procedure when changing a worker's model:
+
+1. Record explicit effort settings and caps with the model change.
+2. Inspect `/tasks` while the worker runs. Its row shows the model and any effort set for that worker ([subagent model reference](https://code.claude.com/docs/en/sub-agents#choose-a-model)).
+3. Compare the worker's verified result and cost against the previous configuration before adopting the change.
+
+Prefer an explicit agent-level effort when a repeatable worker needs a chosen level. Still check stronger overrides. A saved user preference is a poor experiment specification because the reviewed agent file does not contain it.
+
+This page establishes configuration behavior, not a measured quality or cost gain. Treat model and effort as separate experiment inputs. Keep the task set fixed when testing either input.
+
+## Key Takeaways
+
+- Include resolved effort in the evidence for a model change.
+- Check overrides before attributing a changed worker result to the new default.
+- Test combinations involving the subagent effort default rather than filling gaps in the documented precedence chain.
+
+## Related
+
+- [Subagent Effort Floors](subagent-effort-floor.md) — a separate operator-set default
+- [Administrative Effort Ceilings](administrative-effort-ceilings.md) — limits on selected effort
+- [Effort as a Verification Dial](effort-as-verification-dial.md) — evaluating the work a reasoning budget buys
 
 ---
 
@@ -46025,6 +46284,58 @@ Tool-call behavior does not revert. The agent still retrieves the accumulated me
 
 ---
 
+### Layered Policy Resolution for Multi-Group Agent Users
+Source: https://agentpatterns.ai/patterns/agent-design/layered-policy-resolution/
+
+# Layered Policy Resolution for Multi-Group Agent Users
+
+> Layered policy resolution applies every matching role policy; deny lists and hook arrays accumulate, while allow lists and blocks follow listing order.
+
+Layered resolution matters when a developer matches multiple role policies. Claude apps gateway normally selects the first match and merges it with the catch-all base. Setting `managed.policy_mode: layered` includes every matching policy through the first `match: {}` entry ([gateway configuration](https://code.claude.com/docs/en/claude-apps-gateway-config#apply-every-matching-policy)).
+
+The catch-all already supplies baseline settings in default mode. Layering changes how overlapping roles combine; it is unnecessary just to inherit an organization-wide baseline ([managed policy defaults](https://code.claude.com/docs/en/claude-apps-gateway-config#managed)).
+
+## Selection and combination are separate decisions
+
+Including more settings policies does not imply that every resulting value becomes more restrictive. Check each field.
+
+The gateway merges by field type:
+
+| Field type | Layered result |
+|---|---|
+| Deny lists and hook arrays | Combine across matching policies |
+| Allow lists, scalar values, blocks such as `sandbox` | First-listed matching policy that sets the field wins |
+| `env`, `modelOverrides`, `skillOverrides` | Merge by name, with first-listed precedence for each name |
+| `desktop` keys | Follow the base `desktop` block merge rules |
+
+Order therefore remains significant ([merge rules](https://code.claude.com/docs/en/claude-apps-gateway-config#apply-every-matching-policy)).
+
+## Test combinations, including broader results
+
+The vendor's example starts with `sandbox.enabled: true` in the catch-all. One group allows `Bash`; another disables the sandbox. A member of both receives both relaxations. The documented remedy lists the `Bash`-allowing policy first and copies the catch-all's whole `sandbox` block into it. Review effective settings for overlapping memberships, not just each role in isolation ([composition warning](https://code.claude.com/docs/en/claude-apps-gateway-config#apply-every-matching-policy)).
+
+Use the distinction between selection and combination when building regression cases. A test for a single matching group cannot establish the outcome for a user matching two. Keep an explicit expected result for each relevant group combination. Include both prohibited operations and operations that should remain available.
+
+## Deployment constraints
+
+The mode requires gateway version 2.1.316 or later. Upgrade every replica first, and remove the key before rolling back. Rejected settings include negated Read/Edit deny or ask patterns. It also rejects `disableAllHooks`, `allowedHttpHookUrls`, and `httpHookAllowedEnvVars` outside the catch-all ([gateway constraints](https://code.claude.com/docs/en/claude-apps-gateway-config#apply-every-matching-policy)).
+
+First-match resolution remains a simpler option when roles do not overlap. Layered resolution addresses overlapping policies, but requires reviewing their combined effects.
+
+## Key Takeaways
+
+- Keep baseline inheritance separate from the choice to combine role policies.
+- Test policy order where allow lists or sandbox settings differ.
+- Include overlapping memberships in rollout tests and plan configuration rollback with the server version.
+
+## Related
+
+- [Most-Restrictive-Wins Fusion](most-restrictive-wins-fusion.md) — combining per-call decisions after policies participate
+- [Team-Scoped Agent Policy Delegation](../../security/team-scoped-policy-delegation.md) — which policy settings a team can change
+- [Tenant Model Policy](tenant-model-policy.md) — model availability under centrally managed policy
+
+---
+
 ### Learning Execution Guardrails from Agent Failure Traces
 Source: https://agentpatterns.ai/patterns/agent-design/trace-learned-execution-guardrails/
 
@@ -49497,6 +49808,57 @@ On the first response — 1,200 input tokens split 300 ordinary / 400 cached / 5
 
 ---
 
+### Per-Source Hook Registration Budgets
+Source: https://agentpatterns.ai/patterns/agent-design/per-source-hook-registration-budgets/
+
+# Per-Source Hook Registration Budgets
+
+> Per-source hook registration budgets limit each source separately; Claude Code counts both skill hooks and their matcher characters within each session.
+
+A per-source budget assigns each extension source its own registration limit. Claude Code 2.1.304 introduced ceilings of 1,024 skill hooks and 16,384 matcher characters per source per session ([changelog](https://code.claude.com/docs/en/changelog#2-1-304)).
+
+The project, personal skills folder, and each plugin are separate sources. Skills within one source share its allowance. Each hook charges its matcher text separately, including hooks under the same matcher ([hook limits](https://code.claude.com/docs/en/hooks#limits-on-skill-hooks)).
+
+## What the partition controls
+
+One source's registrations do not consume another source's documented allowance. This separates registration accounting; it does not establish a total session limit or a bound on hook execution time. That distinction follows from the per-source limits ([changelog](https://code.claude.com/docs/en/changelog#2-1-304)).
+
+AWS describes per-tenant caps on concurrent inference calls as a comparable isolation design ([tenant-aware performance isolation](https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentperf07-bp02.html)). This comparison makes no claim about how Claude Code schedules hook execution.
+
+## When hooks disappear
+
+A skill past its source's limit runs without its frontmatter hooks. Check `/hooks`, then reproduce the invocation order with `claude --debug`. Search for `registers none of its hooks`. Plugin-only policy and invalid frontmatter are alternative causes to investigate ([diagnosis procedure](https://code.claude.com/docs/en/hooks#limits-on-skill-hooks)).
+
+Skill hooks normally persist across later turns. `once: true` removes a hook after its first successful run. The documentation does not promise that removal refunds registration allowance ([hook lifetime](https://code.claude.com/docs/en/hooks#hooks-in-skills-and-agents)). Keep that distinction when estimating a session's budget.
+
+A security check that never registers cannot gate a call. Verify registration before relying on a skill's hook, and reduce hooks or matcher length when the limit is reached ([hook limits](https://code.claude.com/docs/en/hooks#limits-on-skill-hooks)).
+
+## Example
+
+The documented `secure-operations` skill uses a `Bash` matcher with one command hook ([skill hook example](https://code.claude.com/docs/en/hooks#hooks-in-skills-and-agents)). Its matcher contributes 4 characters to the accounting. The two ceilings cross at an average of 16 characters per registered hook:
+
+```text
+16,384 matcher characters / 1,024 hooks = 16 characters per hook
+```
+
+This is arithmetic from the published limits, not a measured performance threshold. Longer average matchers reach the character ceiling before the hook-count ceiling ([release limits](https://code.claude.com/docs/en/changelog#2-1-304)).
+
+## Key Takeaways
+
+- Count matcher text once per hook when estimating source usage.
+- Preserve invocation order when reproducing a missing hook; the session totals build up across skills.
+- Verify that a required check registered before treating skill invocation as protected work.
+
+## Related
+
+- [Per-Surface Hook Matchers for Shell-Starting Tools](shell-surface-hook-matcher-coverage.md) — the other way a matcher string decides coverage
+- [Refilling Tool Budgets: Rationing by Rate, Not Session Cap](refilling-tool-budgets.md) — the alternative to a hard per-session ceiling, and the visibility bill a refill rate creates
+- [Designing Agent Plugins to Survive Co-Installation](plugin-co-installation-safety.md) — contention between installed plugins over a different shared resource, the exported capability name
+- [Three Skill Disclosure Decisions to Move Off the Model](skill-disclosure-controller.md) — why model-chosen skill invocation order is a design input rather than an accident
+- [Claude Code Hooks: Deterministic Lifecycle Automation](../../tools/claude/hooks-lifecycle.md) — the matcher and frontmatter syntax these budgets are charged against
+
+---
+
 ### Per-Stage Model Assignment in a Generate-Repair-Refine Pipeline
 Source: https://agentpatterns.ai/patterns/agent-design/per-stage-model-assignment/
 
@@ -49668,6 +50030,7 @@ One property runs through all three disqualifying conditions and is the reason t
 - [Wait Primitive Plus Shell-Sleep Deny](wait-primitive-shell-sleep-deny.md) — the 2.1.310 release that paired Monitor with a foreground-sleep block
 - [Judging a Write by Its Spelled Path (Spelled-Path Scope)](../anti-patterns/spelled-path-permission-scope.md) — the same guard-versus-reality gap at the path layer rather than the tool-name layer
 - [Most-Restrictive-Wins Fusion for Parallel Agent Control Returns](most-restrictive-wins-fusion.md) — how the decisions that do fire get merged
+- [Per-Source Hook Registration Budgets](per-source-hook-registration-budgets.md) — Separate hook-count and matcher-character limits for each skill source, with diagnosis for missing hooks
 
 ---
 
@@ -52688,6 +53051,7 @@ What the entry does not settle is whether the agent is told the rate or the bala
 - [Dual-Budget Control for Search Agents](dual-budget-control-search-agents.md) — how an agent allocates under hard tool-call and token caps once the harness has set them
 - [Per-Call Budget Hints on Tool Invocations](per-call-budget-hints-tool-calls.md) — lifting the ceiling on one call rather than reshaping the budget it draws from
 - [Loop Budgeting: Allocating Iteration and Token Budget Across Turns](../../loop-engineering/loop-budgeting.md) — choosing the budget primitive for a loop, where this page chooses the ration's shape
+- [Per-Source Hook Registration Budgets](per-source-hook-registration-budgets.md) — Separate hook-count and matcher-character limits for each skill source, with diagnosis for missing hooks
 
 ---
 
@@ -60742,6 +61106,56 @@ Only the contents of `over` reach the context window. Anthropic describes the sa
 - [Code Interpreter as a Primary Agent Tool](../../tool-engineering/code-interpreter-as-agent-tool.md) — when to give the agent an interpreter in the first place
 - [Advanced Tool Use: Scaling Agent Tool Libraries](../../tool-engineering/advanced-tool-use.md) — programmatic calling alongside deferred tool loading and tool search
 - [Generated Programs as Web Agent Action Space](generated-programs-web-agent-action-space.md) — the same code-as-action bet taken across a whole web task rather than inside one turn
+
+---
+
+### Trace-Guided Browser Tool Tuning and Bounded Settle Waits
+Source: https://agentpatterns.ai/patterns/agent-design/browser-wait-tuning/
+
+# Trace-Guided Browser Tool Tuning and Bounded Settle Waits
+
+> Browser tool tuning uses traces to identify wasted context and waiting, then checks each harness change against task outcomes.
+
+Browser tool tuning changes what the model receives and how the runtime executes its requests. LangChain compared seven toolsets before tuning Stagehand through traces and evaluations. Its tools separate compact accessibility snapshots, batched or coded actions, and screenshots ([LangChain report](https://www.langchain.com/blog/how-we-optimized-browser-use-for-deep-agents)).
+
+## Separate tool selection from wait tuning
+
+On 100 WebVoyager tasks with Claude Sonnet 5.5, Stagehand passed 90% at $1.98 total; Playwright MCP passed 78% at $26.71. Those are whole-toolset results. They do not isolate snapshot size, action batching, or waiting as the cause ([reported comparison](https://www.langchain.com/blog/how-we-optimized-browser-use-for-deep-agents)).
+
+A later trace inspection found fixed sleeps. LangChain changed waits to return after 500 ms of page quiet, bounded by the requested duration. Together with structured answers and a model-call timeout, this reduced HardBench median time from 182 to 124 seconds, with accuracy within noise. Attribute that result to the combined changes ([optimization report](https://www.langchain.com/blog/how-we-optimized-browser-use-for-deep-agents)).
+
+## Preserve the meaning of a wait
+
+The linked Stagehand change specifies 400 ms of DOM quiet and makes the behavior opt-in. Waits of 400 ms or less sleep in full. Longer waits can return early only when `waitForFunction` is available. The observer misses mutations inside shadow roots and iframes, so those regions can still be changing when the page appears quiet ([Stagehand change](https://github.com/browserbase/stagehand/pull/3282)).
+
+That threshold differs from the blog's 500 ms description. Treat it as implementation-specific. Do not assume that ordinary Playwright `waitForTimeout` has these semantics. Playwright discourages fixed timeouts in production and recommends waiting on signals such as selectors or network events ([API reference](https://playwright.dev/docs/api/class-page#page-wait-for-timeout)).
+
+Apply this distinction in your own harness review:
+
+- Separate an explicit duration requirement from a request to wait for page readiness.
+- Prefer the specific readiness signal when the task provides one.
+- Keep an upper bound on a fallback settle wait.
+- Verify the expected page state after waiting; returning from the wait is not task acceptance.
+
+These are implementation checks inferred from the distinction between time and readiness. They are not a claim that quiet pages have completed their business operation.
+
+## Evaluate one change at a time
+
+Keep the model, tasks, and output grading fixed. Record observation volume and idle time separately. Compare success before adopting a faster configuration. Preserve failed trajectories so reviewers can distinguish early reads from unrelated website failures.
+
+The published combined result supports a new experiment, not a promised latency reduction for another site's workload.
+
+## Key Takeaways
+
+- Attribute a combined optimization result to the complete change set.
+- Document changed wait semantics at the tool boundary.
+- Keep completion assertions when reducing idle time.
+
+## Related
+
+- [Browser as Agent Action Space](browser-as-agent-action-space.md) — element actions and observations
+- [Generated Programs as a Web Agent Action Space](generated-programs-web-agent-action-space.md) — the code-execution alternative
+- [Per-Model Harness Tuning](per-model-harness-tuning.md) — validate the chosen configuration
 
 ---
 
@@ -81078,6 +81492,8 @@ Strategies for splitting work across parallel agents — and controlling the bla
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md) — Process large agent workloads without hitting API rate limits by dispatching work in sequential batches of fixed size
 - [Staggered Agent Launch](staggered-agent-launch.md) — Launch parallel agents 30 seconds apart to break the thundering-herd dynamic so each agent claims work before the next reads the queue
 - [Cache-Prefix Staggering for Sibling Agent Fan-Out](cache-prefix-staggering.md) — Delay each sibling until the first response begins so later siblings read the shared prompt prefix from cache instead of each writing their own entry
+- [Define Async Task Update and Approval Contracts](async-task-update-contracts.md)
+- [Host-Controlled Backgrounding for Claude Subagent Calls](host-controlled-subagent-backgrounding.md) — Host and depth determine the dispatch contract
 - [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — Decouple the orchestrator's processing loop from subagent lifecycle so it continues planning and processing partial results while delegates execute concurrently
 - [LLM Map-Reduce Pattern](llm-map-reduce.md) — Split a large input into context-window-sized chunks, process each chunk independently, then combine chunk-level results into a coherent output
 - [Source-Grounded Directory Contracts: Chunked Scouts with Symbol Citations](source-grounded-directory-contracts.md) — Scouts read source files in chunks cut at definition boundaries, cite a file and symbol per entry, and parents roll up leaf contracts
@@ -82926,6 +83342,57 @@ Running the compiler against this file emits platform-specific configs for each 
 
 ---
 
+### Define Async Task Update and Approval Contracts
+Source: https://agentpatterns.ai/patterns/multi-agent/async-task-update-contracts/
+
+# Define Async Task Update and Approval Contracts
+
+> Give every background task an explicit update, cancellation, and approval contract before accepting its result.
+
+LangChain's [async-agent design discussion](https://www.langchain.com/blog/agents-are-going-async) describes work that continues while the user is elsewhere. This changes the handoff problem: the application must deliver later results and requests for input. A task identifier alone does not tell a reviewer which instructions produced an artifact.
+
+## Distinguish a task from its runs
+
+Deep Agents exposes start, check, update, cancel, and list tools. Updating a task creates a new run on the same thread; its task ID stays unchanged. The default interrupts the previous run. With `update_strategy="enqueue"`, the follow-up waits behind it. This option requires `deepagents>=0.7.30` and is beta ([lifecycle documentation](https://docs.langchain.com/oss/python/deepagents/async-subagents#understand-the-lifecycle)).
+
+Record both task and run identifiers in review evidence. As a proposed application contract, attach the requested scope, input revision, output location, and verification result to each run. Bind verification evidence to the current requested scope and input revision before accepting the result.
+
+## Preserve approval ownership
+
+A waiting Deep Agents task has pending input or approval requests. The supervisor cannot approve for the user; the application resumes the child's own thread with the answer. Updating a waiting task drops its pending request. Even an enqueued follow-up starts if the earlier run pauses for approval, dropping that request ([waiting behavior](https://docs.langchain.com/oss/python/deepagents/async-subagents#handle-subagents-waiting-for-input)).
+
+Treat these as explicit transitions in the application's interface. Before sending a follow-up, show whether it replaces an unresolved request. Keep cancellation separate from approval: stopping a task supplies no permission for a replacement run. Require each consequential action to resolve against the applicable authorization record.
+
+## Deliver and verify late results
+
+Deep Agents stores task metadata outside compacted messages. Its notifications carry task and run IDs plus status in structured metadata, although the message class is `HumanMessage` ([state and notifications](https://docs.langchain.com/oss/python/deepagents/async-subagents)). Use that metadata to distinguish completion events from human replies.
+
+Test the following application behavior before unattended use:
+
+| Event | Proposed acceptance check |
+|---|---|
+| Updated run completes | Review opens the artifact and checks from that run |
+| Worker errors or times out | Failure reaches the task owner with recoverable evidence |
+| Worker waits for approval | Request reaches the user and remains visibly unresolved |
+| User cancels | Interface shows cancellation without claiming rollback |
+| Old run reports after an update | Its result cannot silently replace the current artifact |
+
+These are recommended checks, not guarantees provided by the cited framework. Assign an owner for unhandled failures and expired requests; a background job should not disappear because nobody is watching its chat.
+
+## Key Takeaways
+
+- Review the run that produced the result, not merely its stable task ID.
+- Check update semantics at approval boundaries, including queued updates.
+- Deliver errors and pending requests with the same care as successful results.
+
+## Related
+
+- [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — launch and continue useful work
+- [Agent Handoff Protocols](agent-handoff-protocols.md) — structure delegated work and results
+- [Background–Foreground Handoff](../../workflows/background-foreground-handoff.md) — return background work to interactive review
+
+---
+
 ### Distributed Computing Parallels in Agent Architecture
 Source: https://agentpatterns.ai/patterns/multi-agent/distributed-computing-parallels/
 
@@ -83991,6 +84458,50 @@ Both delegations happen in the same session. The fork-vs-fresh choice is per-tas
 - [The Subagent Inheritance Contract: What Crosses Down](subagent-inheritance-contract.md) — what a fresh spawn still carries, and how Codex and Claude Code invert their defaults.
 - [Role-Declared Context Mode](role-declared-context-mode.md) — harnesses that fix this choice in the subagent definition rather than at each spawn.
 - [Subagent vs In-Context Skill Execution](../agent-design/subagent-vs-in-context-skill-execution.md) — whether to spawn at all for a skill package, decided by the contract the package declares.
+
+---
+
+### Host-Controlled Backgrounding for Claude Subagent Calls
+Source: https://agentpatterns.ai/patterns/multi-agent/host-controlled-subagent-backgrounding/
+
+# Host-Controlled Backgrounding for Claude Subagent Calls
+
+> Host-controlled backgrounding sets how Claude subagent calls return, with different rules for interactive sessions and nested headless work.
+
+Host-controlled backgrounding makes dispatch mode part of the runtime configuration. Claude Code 2.1.302 made desktop and VS Code main-conversation subagents run in the background, matching the terminal. Nested calls in those hosts, `claude -p`, and the Agent SDK defaulted to foreground execution ([release notes](https://code.claude.com/docs/en/changelog#2-1-302)).
+
+## Check the host and depth
+
+The current [subagent reference](https://code.claude.com/docs/en/sub-agents#which-subagents-run-in-the-background) distinguishes these cases:
+
+| Call site | Behavior |
+|---|---|
+| Main conversation in terminal, VS Code, or desktop | Background by default; fork mode prevents waiting |
+| Main conversation in `claude -p` or Agent SDK | Background default, but Claude can choose to wait |
+| Nested headless call with fork mode enabled | Spawning subagent waits |
+| Nested headless call with fork mode disabled | Background; a child that outlasts its parent reports to the main conversation |
+
+The nested rules come from the [nesting reference](https://code.claude.com/docs/en/sub-agents#let-subagents-spawn-their-own-subagents). A skill with `context: fork` follows separate skill rules. Fork mode controls availability of the fork type; it does not make every worker inherit the conversation.
+
+## Choose a completion contract
+
+Treat these rules as inputs to orchestration design. Record the host and fork setting beside the task contract. Identify which caller must receive each result before dependent work starts. A fixed dispatch mode does not establish a fixed completion time.
+
+For interactive waiting, the documented procedure disables fork mode, starts a new session, and asks Claude to wait. `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1` also forces waiting, but disables background shell commands too ([waiting configuration](https://code.claude.com/docs/en/sub-agents#let-claude-wait-for-a-subagent)).
+
+Separate dispatch configuration from throughput claims. Anthropic's research system used synchronous execution because asynchronous execution complicates result coordination, state consistency, and error propagation ([engineering report](https://www.anthropic.com/engineering/multi-agent-research-system)). Choose background work when the caller has useful independent work; define a join before consuming its output.
+
+## Key Takeaways
+
+- Record host and fork settings in a reproducible orchestration test.
+- Test the nested headless case separately from the main-conversation case.
+- Require completed results before dependent work, even when dispatch returns immediately.
+
+## Related
+
+- [Async Non-Blocking Subagent Dispatch](async-non-blocking-subagent-dispatch.md) — work the orchestrator can do while results are pending
+- [Forked vs Fresh Subagents](forked-vs-fresh-subagents.md) — the separate context-inheritance choice
+- [Agent Handoff Protocols](agent-handoff-protocols.md) — define the returned artifact
 
 ---
 
@@ -133004,6 +133515,7 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 - [Close the Attack-to-Fix Loop](close-attack-to-fix-loop.md) — Use new attack traces to adversarially train hardened model checkpoints immediately after discovery
 - [Covert Success Rate for Indirect Prompt Injection](covert-success-rate-injection.md) — Split attack success rate by whether the final response discloses the injection; two runs at comparable ASR ranged from 2.63% to 34.67% covert, and Task Shield left 11.59 of 12.33 surviving points hidden
 - [Designing Agents to Resist Prompt Injection](prompt-injection-resistant-agent-design.md) — Architectural patterns and defense-in-depth strategies for building coding agents that stay resilient when untrusted input lands in context
+- [Input Tags Define a Guardrail's Inspection Scope](guardrail-input-tagging.md) — Bedrock filter scope, gateway message selection, and tool-result exclusions
 - [Reframed Exfiltration Defeats Wording-Based Defenses (Framing Gap)](framing-gap-exfiltration-defenses.md) — An injected leak worded as an integrity signature or config field drives gpt-4o from 0% to 100% while ten overt injection classes stay at 0%; only a destination allow-list or a planner/reader split reached zero, and both charge utility
 - [Destyling Untrusted Input as a Prompt Injection Defense](destyling-untrusted-input.md) — Normalize the surface style of untrusted input before the model encodes who is speaking; cuts CoT-forgery attack success from 61% to 10% on a static benchmark by interrupting role perception at the representational layer
 - [Discovering Indirect Injection Vulnerabilities in Your Agent](indirect-injection-discovery.md) — Map retrieval paths, audit against the Lethal Trifecta, and test with synthetic payloads to find the vulnerabilities standard testing misses
@@ -133013,6 +133525,7 @@ Prompt injection is the primary attack vector for agents that consume untrusted 
 - [Field-Level Source Ownership for Agent Capabilities](field-level-source-ownership.md) — Give every field of a capability exactly one context source allowed to fill it; collapsing the four sources into one trusted context turned 3,593 of 3,823 deniable replayed events into accepts
 - [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](human-in-the-loop-confirmation-gates.md) — Mandatory checkpoints before irreversible actions let humans catch injection-driven misbehavior before it causes harm
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — Tag every value with a sink-specific capability budget and intersect budgets through tool composition; closes permission laundering only with expert-crafted manifests and explicit-flow attacks
+- [Validate Permission State Across Agent Handoffs](handoff-permission-state-validation.md)
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](non-human-event-provenance-markers.md) — Stamp every system- and harness-injected event as non-human input so an autonomous agent cannot act on a fabricated in-transcript approval; pair the marker with a consent gate that traces to genuine human input
 - [Per-Agent Capability Stores Beat One Task-Wide Allowlist](per-agent-capability-scoping.md) — One task-scoped policy must grant the union of every subtask's needs and hands it to whichever sub-agent read the poisoned file; a separate attenuated store per principal cut executed injections from 33/75 to 3/75 at equal task success, costing 316 s against 194 s
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — External content consumed by agents is an attack surface; malicious instructions can override agent instructions at the model level
@@ -133031,6 +133544,7 @@ Isolation limits what a compromised or misbehaving agent can affect.
 - [Local Sandboxing in the Copilot App: The Credential Axis](copilot-app-local-sandbox-credentials.md) — The Copilot app's local sandbox restricts files, network, and credentials as separate settings; only the filesystem axis is restrictive by default, so an enabled sandbox still pushes branches under your identity
 - [Dual-Boundary Sandboxing](dual-boundary-sandboxing.md) — Enforce both filesystem and network isolation simultaneously; neither boundary alone prevents exfiltration
 - [Working Inside an Enterprise-Managed Agent Sandbox Policy](enterprise-managed-agent-sandbox.md) — When the org sets the sandbox centrally, the policy composes as a floor your settings can only tighten, so the effective-policy report is the only statement of the boundary and an administrator is the only route to widening it
+- [Fail Closed When the Sandbox Cannot Start](fail-closed-sandbox-startup.md) — Startup failure, later command refusal, and the excluded commands that remain outside isolation
 - [Network-less Container + Unix-Socket Egress Proxy for Agent Sandboxes](network-less-container-unix-socket-egress.md) — `--network none` plus a mounted Unix socket makes the egress proxy the only path off the container, turning policy into topology
 - [Signed Host-Mediated Exits for Isolated Coding Agents](signed-host-mediated-agent-exits.md) — A separate signer approves boundary crossings and patch files; the v0 prototype leaves process coverage and deployment assurance limited
 - [Permitted Egress Routes as Agent Sandbox Attack Surface](permitted-egress-attack-surface.md) — An allowlisted destination grants transitive reach to whatever that service can reach; the July 2026 OpenAI and Hugging Face incident escaped a sanctioned package registry cache proxy, and credential scope, not the escape, set the impact
@@ -133084,6 +133598,7 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — Limit agent access to only what the current task requires; excess permissions directly amplify injection impact
 - [Centrally Provisioned MCP Servers: Remote Transports Only](centrally-provisioned-mcp-servers.md) — `managedMcpServers` pushes HTTP and SSE servers to every user and rejects any entry naming a `command`, `args`, `env`, or `headersHelper`, so a settings document can never start a local process; the drop notice reaches the user, not the administrator
 - [Constraints as a Substrate for Scalable Agent Oversight](constraint-substrate-scalable-oversight.md) — Manage coding agents with the controls used for human teams — access control, network policy, tooling-enforced conventions — so a small, cheap reviewer scales oversight; substrate plus a ~200-line tool lifted a small reviewer's backdoor recall from 54.5% to 90.9%
+- [Journal Tool Intent Beside Observed Effects](tool-intent-effect-journals.md)
 - [Explanation-Bound Tool Execution for Agent Gateways](explanation-bound-tool-execution.md) — Convert the agent's stated reason into typed claims and check each against a fact the server already holds; a free-form justification requirement allowed 60 of 96 authored hard contradictions, server-checked claims allowed none
 - [Keep the Exact Limits in Code and the Judgment in the Model](exact-limits-in-code-judgment-in-model.md) — Let the model propose and a code guard decide every exact limit; models alone breached in up to 151 of 340 purchasing episodes, the guard in none, and a model flagger that may only narrow covers the judgment the guard cannot see
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — Block agent startup until remote managed settings are freshly validated; exit rather than run with stale or missing policy
@@ -133110,6 +133625,7 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md) — Mine session transcripts for repeated read-only tool calls and propose a prioritized allowlist — narrower than bypass, tighter than manual curation
 - [Whose Permissions a Self-Scheduled Agent Run Carries](self-scheduled-run-authority.md) — A schedule the agent writes mid-conversation pins a principal and spends it later unattended; inherit the requester where the answer depends on who asked, and declare a service identity everywhere else
 - [Connector Scope on a Scheduled Task: Capability Nobody Asked For](scheduled-task-connector-scope.md) — A cloud scheduled task gets every connected connector by default, which can exceed what its prompt needs; check the list at creation and after edits
+- [A Skill's Tool Grant Travels With Its Hooks](skill-tool-grant-travels-with-hooks.md) — Main-conversation pre-approval withdrawal under the plugins-only hooks policy, its exceptions, and separate permission controls
 
 ## Code Injection
 
@@ -133322,6 +133838,55 @@ The `shell` line is the straddle case. Enabling a shell reads as a capability, s
 - [Gate Agent Writes to Executable Config Files as Privileged Actions](gate-agent-writes-to-executable-config.md) — the write-site gate applied to project build config that grants code execution.
 - [Scope Demotion for Repository-Committed Settings](repo-committed-settings-scope-demotion.md) — the same field split decided by which scope a key arrives from rather than by who writes it.
 - [One-Way Settings: Keys With a Fixed Write Direction](one-way-settings.md) — the ordered-value case, where a write is refused only in one direction
+
+---
+
+### A Skill's Tool Grant Travels With Its Hooks
+Source: https://agentpatterns.ai/security/skill-tool-grant-travels-with-hooks/
+
+# A Skill's Tool Grant Travels With Its Hooks
+
+> Claude Code's plugins-only hooks policy withdraws main-conversation tool pre-approval from personal and project skills that declare hooks, with exceptions for forked skills.
+
+Grant-guard coupling means withdrawing a permission when its required check cannot run. Claude Code 2.1.304 introduced a narrower, declaration-based rule for skills in the main conversation. The release removes their `allowed-tools` grant when a plugins-only policy excludes their hooks ([changelog](https://code.claude.com/docs/en/changelog#2-1-304)).
+
+The managed setting `strictPluginOnlyCustomization: ["hooks"]` blocks hooks from user, project, and local settings, plus frontmatter hooks from restricted sources. Those include skills, commands, and agents from sources that a skills or agents lock would block. Skills still load if policy permits their source. A personal or project skill declaring hooks loses its pre-approval in the main conversation. Skills using `context: fork` and skills declaring no hooks keep it ([settings reference](https://code.claude.com/docs/en/settings-reference#strictpluginonlycustomization-hooks)).
+
+## What the grant controls
+
+`allowed-tools` pre-approves listed tools for the invoking turn; it does not limit the available tool set. Permission settings still govern other tools ([skills reference](https://code.claude.com/docs/en/skills#pre-approve-tools-for-a-skill)). Withdrawal removes this approval route. Check the remaining rules before assuming the tool will prompt or be denied.
+
+The design test is whether the missing hook actually restricts the granted operation. A declaration alone does not establish that dependency. Claude Code checks for declared hooks; the documented rule does not distinguish a permission gate from a logging hook ([settings reference](https://code.claude.com/docs/en/settings-reference#strictpluginonlycustomization-hooks)).
+
+Coupling a permission to a required check applies Saltzer and Schroeder's fail-safe-default principle to policy filtering. Their principle bases access on explicit permission and favors denial when the policy is incomplete. This is a design inference, not evidence that every skill hook enforces access control ([basic protection principles](https://web.mit.edu/Saltzer/www/publications/protection/Basic.html)).
+
+## Costs and exceptions
+
+Restoring prompts has a cost. Anthropic warns that repeated approvals can reduce attention to individual decisions ([sandboxing article](https://www.anthropic.com/research/claude-code-sandboxing)).
+
+Test skills that inject shell output ([injected commands](https://code.claude.com/docs/en/skills#inject-dynamic-context)). Outside auto mode, an injected command aborts invocation without prompting unless its permission check returns allow. Losing an `allowed-tools` grant can therefore abort the skill ([injected-command checks](https://code.claude.com/docs/en/skills#permission-checks-on-injected-commands)).
+
+Removing a hook declaration restores the grant under this hooks policy alone. The vendor also documents moving the skill into a marketplace-installed plugin to retain its hooks ([managed hooks guidance](https://code.claude.com/docs/en/skills#when-managed-settings-lock-hooks-to-plugins)). These alternatives show why the rule cannot guarantee that permission always depends on an active check.
+
+## Separate hook policy from permission policy
+
+For organizations that also want to reject personal and project skill pre-approvals, `allowManagedPermissionRulesOnly: true` provides a separate control. From version 2.1.282, it ignores their `allowed-tools` regardless of hook declarations ([skills reference](https://code.claude.com/docs/en/skills#when-only-managed-permission-rules-apply)).
+
+This setting also ignores permission rules from user, project, local, and `--settings` files. Review those rules before rollout: the change drops their allow, ask, and deny rules. Command-line `--disallowedTools` and current-session deny rules still apply. Managed and bundled skills retain their grants ([managed permission setting](https://code.claude.com/docs/en/settings-reference#allowmanagedpermissionrulesonly)).
+
+## Key Takeaways
+
+- Review the hook's actual check before treating its presence as a reason to trust a tool grant.
+- Test main-conversation and forked invocations separately; the hooks policy gives them different pre-approval behavior.
+- Inventory permission rules before enabling managed-only permissions, including restrictions that the setting stops reading.
+
+## Related
+
+- [Declaring a Per-Hook Failure Mode for Agent Policy Gates](per-hook-failure-mode.md) — what to do when a hook renders no verdict, the state a policy filter creates on purpose
+- [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — the general form of authority that may only shrink
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — which safeguards the runtime evaluates and which resolve inside the model's context
+- [Skill disallowed-tools Frontmatter: Skill-Layer Tool Denial](../tools/claude/skill-disallowed-tools.md) — the deny-side field a skill can declare beside its grant
+- [Restraint Rules Need External Enforcement](../instructions/restraint-rules-need-external-enforcement.md) — why a rule that asks an agent to stop belongs outside the agent
 
 ---
 
@@ -138367,6 +138932,7 @@ Delete `check-command.js` and an `ls` call is refused rather than run. The docum
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — the same reasoning at startup scope, as one global setting rather than a per-hook field.
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — the layers beneath a hook that decide how much a fail-open window actually costs.
 - [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — what happens to a control when it ships to a fleet in one install.
+- [A Skill's Tool Grant Travels With Its Hooks](skill-tool-grant-travels-with-hooks.md) — what a policy should do to a tool grant when it stops that component's hooks from running at all.
 
 ---
 
@@ -140767,6 +141333,67 @@ The verifier reads no word of `intentSummary` or `toolReasonCode`, which are "op
 
 ---
 
+### Fail Closed When the Sandbox Cannot Start
+Source: https://agentpatterns.ai/security/fail-closed-sandbox-startup/
+
+# Fail Closed When the Sandbox Cannot Start
+
+> Fail-closed sandbox startup exits Claude Code when its sandbox cannot start; later initialization failures refuse sandboxed commands.
+
+An enabled sandbox can still fail to start. With `sandbox.enabled: true`, Claude Code defaults to unsandboxed commands if the platform or dependency check prevents startup. Set `sandbox.failIfUnavailable: true` when the deployment requires that boundary ([settings reference](https://code.claude.com/docs/en/settings-reference#sandbox-failifunavailable)).
+
+The failure mode matches the concern in MITRE's CWE-455: failed security initialization can leave a product less secure than its administrator intends. The operational test is therefore whether the boundary actually starts, not whether configuration requests it ([CWE-455](https://cwe.mitre.org/data/definitions/455.html)).
+
+## Refusal depends on failure timing
+
+With `failIfUnavailable` enabled, a failed startup check exits Claude Code. A later initialization failure leaves the session alive but refuses sandboxed commands ([settings reference](https://code.claude.com/docs/en/settings-reference#sandbox-failifunavailable)).
+
+After startup, the documented errors distinguish failed initialization from a dependency that disappears on Linux or WSL2. Both begin with `Sandbox is required`. The command cannot retry with `dangerouslyDisableSandbox` while that refusal applies ([sandbox troubleshooting](https://code.claude.com/docs/en/sandboxing#commands-refused-with-sandbox-is-required)).
+
+## Commands that remain outside the boundary
+
+Excluded commands keep running outside the sandbox. Writes to `filesystem.allowWrite` paths outside the working directory use regular permission checks. Typed `!` commands also remain outside, except background sessions refuse them. On Linux with `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB`, the refusal includes excluded and typed commands ([documented exceptions](https://code.claude.com/docs/en/sandboxing#commands-refused-with-sandbox-is-required)).
+
+Version 2.1.309 changed excluded-command writes while the enabled sandbox cannot run. Its release note describes permission checks for write-list paths and refusal of the unsandboxed fallback. It does not establish an unconditional guarantee for every command or configuration ([changelog](https://code.claude.com/docs/en/changelog#2-1-309)).
+
+## Availability cost
+
+Failing closed turns an unavailable boundary into unavailable work. Unsupported platforms cannot start Claude Code with the required sandbox enabled ([settings reference](https://code.claude.com/docs/en/settings-reference#sandbox-failifunavailable)). Validate deployment images before requiring it across a fleet.
+
+MITRE's CWE-636 describes the opposing pressure: teams preserve functionality to reduce support costs when security controls fail. The trade depends on whether continued work without that control is acceptable. ([CWE-636](https://cwe.mitre.org/data/definitions/636.html)).
+
+## Example
+
+Enable the required sandbox in settings ([configuration reference](https://code.claude.com/docs/en/settings-reference#sandbox-failifunavailable)):
+
+```json
+{"sandbox": {"enabled": true, "failIfUnavailable": true}}
+```
+
+Ask Claude to run the vendor's probe; typing it through `!` usually tests an unsandboxed path:
+
+```bash
+touch ~/sandbox-probe
+```
+
+The test expects a denied write when the home directory is outside the sandbox's writable paths. Decline an unsandboxed retry. If the write succeeds and your home directory is not a sandbox write path, delete `~/sandbox-probe`. Then run `/sandbox` to check that the sandbox is on and its dependencies are installed ([sandbox verification](https://code.claude.com/docs/en/sandboxing#confirm-commands-run-inside-the-sandbox)).
+
+## Key Takeaways
+
+- Check both startup failure and refusal after startup before depending on the boundary.
+- Review excluded and typed commands separately from commands the required sandbox refuses.
+- Check the probe path's permissions before interpreting its result.
+
+## Related
+
+- [Declaring a Per-Hook Failure Mode for Agent Policy Gates](per-hook-failure-mode.md) — the same third-outcome question asked of a hook, where the harness default is also to let the action through
+- [Fail-Closed Remote Settings Enforcement for Enterprise Agents](fail-closed-remote-settings-enforcement.md) — the startup-window version for managed policy that is stale or missing
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — why a runtime-evaluated control is the one worth checking the failure mode of
+- [Dual-Boundary Sandboxing: Filesystem and Network Isolation](dual-boundary-sandboxing.md) — what the boundary covers while it is running
+- [Sandbox Capability Opt-In as a Compatibility Setting](../patterns/anti-patterns/sandbox-capability-opt-in-as-compatibility-setting.md) — the adjacent case where a compatibility key weakens a sandbox that does start
+
+---
+
 ### Fail-Closed Remote Settings Enforcement
 Source: https://agentpatterns.ai/security/fail-closed-remote-settings-enforcement/
 
@@ -142900,6 +143527,60 @@ For most deployments below a high-stakes-regulated bar, a simpler stack — dete
 
 ---
 
+### Input Tags Define a Guardrail's Inspection Scope
+Source: https://agentpatterns.ai/security/guardrail-input-tagging/
+
+# Input Tags Define a Guardrail's Inspection Scope
+
+> Input tags select text for Bedrock guardrail inspection; the prompt-attack filter requires them on InvokeModel requests and does not evaluate tool results.
+
+Input tagging tells a guardrail which prompt regions to inspect. Bedrock requires tags for prompt-attack filtering through `InvokeModel` and `InvokeModelWithResponseStream`. Without them, that filter skips those requests ([AWS prompt-attack documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html)).
+
+Legitimate instructions can resemble attacks. AWS recommends marking user input while leaving the developer's system prompt outside evaluation. The tag selects inspection scope; it does not establish that the content is safe ([AWS guidance](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html)).
+
+## Tagging changes other filters too
+
+Once input tags are present, guardrails skip content outside them. Without tags, other filters process the complete prompt, while prompt-attack filtering remains the exception. Enabling tags can therefore narrow existing inspection while enabling attack detection ([AWS tagging rules](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-tagging.html)).
+
+XML input tags apply to the two InvokeModel APIs. The Converse API uses content-block configuration instead ([AWS API scope](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-tagging.html)). For XML tags, AWS recommends a fresh random suffix per request to reduce attacks that close a predictable tag. Nesting tags is unsupported ([AWS tag syntax](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-tagging.html)).
+
+## Choose the gateway's message scope
+
+Claude apps gateway supports `guardrail.input_tagging` from version 2.1.316. The default adds no tags, so filters that require tagged input do not run on gateway traffic. Every Bedrock upstream must use the same value ([gateway configuration](https://code.claude.com/docs/en/claude-apps-gateway-config#add-guardrail-input-tags)).
+
+The modes select different text:
+
+| Mode | Tagged region |
+|---|---|
+| `last_message` | User messages since Claude's last reply (a tool call counts as a reply); if empty, mid-conversation system messages since that reply |
+| `user_messages` | User messages |
+| `all_messages` | User and assistant messages |
+| `all_messages_and_system` | System prompt and every message, including mid-conversation system messages |
+
+These modes select messages. The gateway warns of system-prompt false positives under `all_messages_and_system` and system-reminder false positives under `user_messages` ([mode definitions](https://code.claude.com/docs/en/claude-apps-gateway-config#add-guardrail-input-tags)).
+
+With `last_message`, the next prompt can pass, and Claude then receives the blocked prompt as part of the conversation. The other modes can keep blocking until the developer removes that prompt. Test both outcomes before deployment ([gateway behavior](https://code.claude.com/docs/en/claude-apps-gateway-config#add-guardrail-input-tags)).
+
+## Tool results remain outside prompt-attack inspection
+
+AWS explicitly excludes tool results and tool definitions from prompt-attack evaluation ([filter limits](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html)). For a coding agent, this leaves fetched files and web pages outside that filter's coverage when they return as tool results.
+
+Anthropic also reports that its word-filter test skipped tool results with and without tags. No tagging mode covers every request field ([gateway exclusions](https://code.claude.com/docs/en/claude-apps-gateway-config#what-input-tags-dont-cover)). Keep permission and egress controls for the actions that untrusted tool content could induce.
+
+## Key Takeaways
+
+- Test ordinary prompts as well as attacks before changing which text existing filters inspect.
+- Include a follow-up turn in blocked-prompt tests; message scope changes how history affects later requests.
+- Evaluate tool-result attacks separately. A passing prompt-filter test does not cover that input channel.
+
+## Related
+
+- [Subagent Return Framing](subagent-return-framing.md) — provenance markers on a different input channel
+- [Per-Agent Capability Scoping](per-agent-capability-scoping.md) — restrict the actions available after content reaches an agent
+- [Single-Layer Prompt Injection Defense Anti-Pattern](../patterns/anti-patterns/single-layer-injection-defence.md) — limits of relying on one filtering layer
+
+---
+
 ### Intent-Governed Tool Authorization for AI Agents (IGAC)
 Source: https://agentpatterns.ai/security/intent-governed-tool-authorization/
 
@@ -143063,6 +143744,55 @@ Not every internal-looking name is sensitive. Some teams intentionally publish a
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — the environment-injection pattern this page reuses for hostnames
 - [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md) — mechanical enforcement for keeping sensitive paths out of agent reads
 - [OWASP LLM Top 10 (2025): Agent Security Crosswalk](owasp-llm-top-10-2025-agent-crosswalk.md) — LLM02:2025 Sensitive Information Disclosure, the framework category this risk sits under
+
+---
+
+### Journal Tool Intent Beside Observed Effects
+Source: https://agentpatterns.ai/security/tool-intent-effect-journals/
+
+# Journal Tool Intent Beside Observed Effects
+
+> Journal tool intent as a claim, then store independently observed effects beside it for review.
+
+EPISTEME requires a shell-call type and reason before execution. Its harness records workspace changes, output, and findings outside the agent's writable workspace. File tools require a reason but receive fixed types. The prototype confines effects with a workspace sandbox and disables networking ([paper, v1](https://arxiv.org/html/2611.06563v1)).
+
+## Interpret exposure separately from detection
+
+On 206 ImpossibleBench tasks per model, Qwen3-235B-A22B and Mistral Large 3 completed 400 of 412 runs; 12 stopped for errors or timeouts. Among 49 runs classified as reward hacking, journals exposed 44. Human raters found disclosure in all 44; mechanical contradictions appeared in only three, overlapping that group. Five remained hidden. Excluding four potentially legitimate test repairs gives 40/45 exposed ([results](https://arxiv.org/html/2611.06563v1)).
+
+The experiment used monitor mode. It does not show that reasons prevent cheating. Post-execution contradictions cannot prevent the effects they describe. Guardrail mode adds a pre-execution command-text check, but that was not the tested mode. Fixed file-tool types also left implementation exploits without type contradictions ([design and evaluation](https://arxiv.org/html/2611.06563v1)).
+
+## Design an auditable record
+
+The following application contract is a recommendation, not an evaluated EPISTEME extension. Give each journal entry three separate fields:
+
+| Field | Producer | Review question |
+|---|---|---|
+| Declared purpose | Agent | What did it say this action would accomplish? |
+| Observed effects | Harness | Which files, references, or external resources changed? |
+| Findings | Checker or reviewer | Which rule or task requirement does the evidence violate? |
+
+The paper reports a reason that explicitly proposed a hardcoded lookup table to pass unit tests. It also reports shell edits whose effects contradicted read-only declarations ([observed cases](https://arxiv.org/html/2611.06563v1)). These require different review: compare the first patch with the task specification; compare the second declaration with the recorded diff.
+
+Protect the observation store from the agent. Extend collection to every enabled write surface before claiming complete coverage: workspace hashes alone cannot establish what happened to a remote service. Record collection failures explicitly so missing evidence cannot look like an unchanged workspace.
+
+## Evaluate the journal's limits
+
+Use controlled tasks with known acceptable changes and known forbidden effects. Score human disclosure review separately from automated findings. Include legitimate test repairs to measure false alarms, and direct file edits to test coverage beyond shell commands.
+
+Keep authorization checks before execution. Use the journal afterward to decide whether to accept, investigate, or revert the result. If measuring whether declarations reduce misconduct, compare against a matched harness without them; an exposure rate among observed failures answers a different question.
+
+## Key Takeaways
+
+- Self-reported intent is a reviewable claim, not proof of honesty.
+- The reported 44/49 exposure includes human interpretation of reasons.
+- Bound effect coverage to the surfaces the harness actually observes.
+
+## Related
+
+- [Explanation-Bound Tool Execution](explanation-bound-tool-execution.md) — validate claims before dispatch
+- [Pre-Execution Command Risk Classification](pre-execution-command-risk-classification.md) — classify proposed commands
+- [Trajectory as Monitoring Unit](../observability/trajectory-as-monitoring-unit.md) — inspect behavior across calls
 
 ---
 
@@ -153753,6 +154483,52 @@ A URL like `https://docs.python.org/3/library/os.html` is in the Common Crawl in
 
 ---
 
+### Validate Permission State Across Agent Handoffs
+Source: https://agentpatterns.ai/security/handoff-permission-state-validation/
+
+# Validate Permission State Across Agent Handoffs
+
+> Validate permission state before a successor acts on a handoff approval claim. Resolve it against the actual authorization record.
+
+A self-written summary can misstate what an agent may do. *When Do Summaries Become Instructions?* studies this in synthetic tool tasks with a ground-truth permission ledger. The successor receives the summary and system prompt, without the original user request repeated ([paper, v1](https://arxiv.org/html/2611.06545v1)). This is a compaction failure, distinct from an attacker planting a fabricated approval.
+
+## Read the replay evidence narrowly
+
+The held-out models were Qwen3-8B and gpt-oss-20b. Two AI readers reviewed rule-flagged summaries; unknown rule-labeler recall limits the prevalence estimates. In a post hoc pooled replay, neutralizing false approvals reduced unauthorized actions from 24/120 to 7/120 runs. A later set moved from 17/48 to 11/48. The pre-specified restriction test was null; a subsequent fragile result was not a replication ([study results](https://arxiv.org/html/2611.06545v1#S5)).
+
+These results support investigating permission loss at handoff. They do not establish a production error rate or show that deleting suspicious sentences reliably repairs a summary. The study's true-permission rewrites used an oracle and were not a validated deployable safeguard ([discussion](https://arxiv.org/html/2611.06545v1#S6)).
+
+## Keep permission records outside narrative summaries
+
+Use the following design recommendation to address that failure mode. Store authorization state in a harness-controlled record and let the summary reference it. For each consequential action, retain:
+
+- The authorized action and exact target.
+- The source of authority and a resolvable record identifier.
+- Conditions that still apply, such as a time window or environment.
+- Current state: allowed, pending, denied, withdrawn, or superseded.
+
+In the paper's held-out example, Ben Mehta approved a rename and then withdrew approval. The summary retained an approval with a maintenance-window condition. The successor renamed in two of four original-summary runs and none after neutralization ([Table 3](https://arxiv.org/html/2611.06545v1#S5.T3)). A permission resolver should preserve the withdrawal even when the summary omits it.
+
+## Verify both excess permission and excess caution
+
+Create handoff tests from your own authorization rules. Include a withdrawn approval, a pending request, a different target, and a statement from someone without approval authority. Also include work already authorized by a standing policy. A checker that asks for confirmation on every task can avoid some unauthorized actions while still failing the intended workflow.
+
+Measure unauthorized actions and unnecessary approval requests separately. Keep the checker and permission record outside the model's write authority. If a record cannot be resolved, report that specific gap before executing the dependent action; do not convert uncertainty into either blanket approval or a permanent new restriction.
+
+## Key Takeaways
+
+- A summary is evidence to inspect, not an independent grant of authority.
+- Preserve scope, conditions, and withdrawals with the permission record.
+- Test unnecessary approval requests alongside unauthorized actions.
+
+## Related
+
+- [Non-Human Event Provenance Markers](non-human-event-provenance-markers.md) — distinguish task events from user authorization
+- [Trusting Claimed Prior Approval](../patterns/anti-patterns/trusting-claimed-prior-approval.md) — externally supplied approval claims
+- [Evidence-Anchored Handoff](../patterns/agent-design/evidence-anchored-handoff.md) — attach evidence to escalation decisions
+
+---
+
 ### Verification Staging for Security Audit Skills
 Source: https://agentpatterns.ai/security/verification-staging-security-audit-skills/
 
@@ -154727,6 +155503,7 @@ Source: https://agentpatterns.ai/observability/
 - [Strained Coherence as a Pre-Failure Signal in Agent Trajectories](strained-coherence-pre-failure-signal.md) — A trajectory judge flags spans where the agent acknowledges a conflict then proceeds anyway; a late-stage triage signal that works only on verbose backbones and erodes under direct optimization pressure against the judge
 - [Subagent OTel Trace Correlation via agent_id Attribute](subagent-otel-trace-correlation.md) — Propagate a stable agent identifier as both an HTTP header on outgoing API requests and an OTEL span attribute so multi-agent traces become queryable by agent identity, independent of span lineage
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md) — Capture a full, replayable audit trail of agent decisions across sessions using only a progress file, git commits, and a bootstrap script
+- [Layered Misalignment Monitoring with Unflagged Sampling](layered-misalignment-monitoring.md)
 - [Trajectory as the Monitoring Unit for Production Agents](trajectory-as-monitoring-unit.md) — Which inherited MLOps signals stay valid when agents reach production, which go blind, and why the monitored unit moves from the prediction to the run
 - [Trajectory Projection: A Flattened View of Agent Traces](trajectory-projection.md) — Flattens a multi-agent trace into one ordered message list for SME review and behavioral scoring, and why root-cause attribution still needs the trace
 - [Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)](trajectory-prefilter-failure-diagnosis.md) — Wrap the failure-investigator LLM with a pattern-matching noise filter and a test-report-seeded preliminary diagnosis so long-context attention concentrates on failure-relevant trajectory spans
@@ -156584,6 +157361,61 @@ The same pattern applies to finding the first occurrence of a test failure (`/FA
 
 ---
 
+### Layered Misalignment Monitoring with Unflagged Sampling
+Source: https://agentpatterns.ai/observability/layered-misalignment-monitoring/
+
+# Layered Misalignment Monitoring with Unflagged Sampling
+
+> Layered misalignment monitoring spends more review effort on suspicious agent activity while sampling unflagged traffic for missed cases.
+
+Layered monitoring separates cheap screening from detailed investigation and human response. OpenAI describes four internal layers, with different routes for different workloads ([October 29 report](https://openai.com/index/how-we-detect-frontier-model-misalignment/)).
+
+## Escalation has workload-specific routes
+
+The reported architecture uses these stages ([system description](https://openai.com/index/how-we-detect-frontier-model-misalignment/)):
+
+| Layer | Evidence and role |
+|---|---|
+| L0 | High-recall activation probes; randomly sample 5% of unflagged traffic for L1 |
+| L1 | Review recent conversation, reasoning, and tool use within the agent's context window |
+| L2 | Investigate earlier context windows where available; examine evidence with isolated code execution |
+| L3 | Compare transcripts with network logs, telemetry, and prior cases |
+
+Frontier reinforcement learning and internal Codex traffic skip L0. Both receive L1 checks after turns and compaction; a maximum 30-minute interval is being introduced. Separate security and alignment investigators review each flagged case where both are deployed. Some workloads skip L3 ([coverage and cadence](https://openai.com/index/how-we-detect-frontier-model-misalignment/)).
+
+Paging is a separate decision. Highest-priority alerts typically reach responders within 15 minutes of the initial alert when paging is enabled. Internal Codex paging is disabled; some critical alerts can pause workloads automatically ([human response](https://openai.com/index/how-we-detect-frontier-model-misalignment/)). This is not an end-to-end detection deadline.
+
+## Translate the design into a local contract
+
+The following checks are design inferences from those distinctions:
+
+- Name the evidence each stage can read. Mark missing history instead of treating a compacted view as complete.
+- Record which workloads bypass screening and which bypass deeper investigation.
+- Keep a sample path independent of the first classifier's verdict.
+- Assign an owner to alerts and define what happens outside that owner's response hours.
+
+Activation probes require internal model activations. A team with only transcripts needs a different first-stage detector and must evaluate its coverage independently.
+
+## Test the response as well as detection
+
+Use historical incidents and harmless simulated failures to test escalation. Measure missed cases separately from false alarms. Check whether a pause or alert reaches the right workload and operator.
+
+A monitor that emits a finding still needs a response policy. Treat permission enforcement and containment as separate controls; the reported system positions monitoring alongside them ([defense-in-depth scope](https://openai.com/index/how-we-detect-frontier-model-misalignment/)).
+
+## Key Takeaways
+
+- Test a negative-sampling route independently of normal escalation.
+- Record detection latency and responder latency as separate intervals.
+- Make missing evidence and inactive paging visible in the coverage record.
+
+## Related
+
+- [Trajectory as the Monitoring Unit](trajectory-as-monitoring-unit.md) — select evidence beyond individual calls
+- [Agent Observability with OpenTelemetry](agent-observability-otel.md) — collect run telemetry
+- [Inline Safety Harness with Cascade Verification](../security/inline-lifecycle-safety-harness.md) — prospective per-call checks
+
+---
+
 ### Loop Detection for AI Agents: Stopping Micro-Loops
 Source: https://agentpatterns.ai/observability/loop-detection/
 
@@ -157845,96 +158677,69 @@ Source: https://agentpatterns.ai/observability/traces-need-feedback-to-power-lea
 
 # Traces Need Feedback to Power Learning
 
-> A trace shows what an agent did; feedback shows whether it was right. Couple them and the trace store becomes a learning corpus.
+> A trace records behavior. Attach feedback with its source and explanation to make that behavior useful for evaluation and learning.
 
-## The gap a trace alone cannot close
+## Connect behavior to a verdict
 
-Tracing-as-debugging works for one bug at a time. It does not scale into a learning loop, because the trace alone does not say whether the trajectory was good. As Harrison Chase puts it: "Traces alone do not create that loop. You also need feedback: signals that tell you whether the agent's behavior was useful, accepted, rejected, inefficient, risky, or wrong" ([LangChain, May 5 2026](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
+Harrison Chase describes feedback as the missing input between observing an agent and improving its model, harness, or context. His platform contract has three parts: store traces, attach feedback to the relevant run or thread, and generate feedback through evaluators, rules, or review ([LangChain, May 5](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
 
-The same trace can describe a 40-step success or a 40-step failure. Without a verdict you cannot filter failures worth turning into evals, compare good and bad trajectories on one task, feed [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md) from production volume, or detect drift across the three improvement layers — model weights, harness scaffolding, retrieved context.
+Braintrust likewise advocates keeping traces and evaluations together so a suspicious run can become a dataset entry without repeated exports ([trace and eval workflow](https://www.braintrust.dev/blog/traces-and-evals-same-place)). Separate systems can still work when stable identifiers preserve the join. Make retrieving the judged trajectory an acceptance check for any integration.
 
-Once traces carry verdicts, LangChain frames the shift as a data-mining problem over production traces — mining trajectories for the failures worth fixing rather than hand-authoring test cases ([LangChain — Improving agents is a data-mining problem](https://blog.langchain.com/blog/improving-agents-is-a-data-mining-problem)).
+## Keep the four feedback sources distinct
 
-Verdicts also unlock attribution. Once a run is labeled a failure, [trajectory attribution for context repair](../context-engineering/trajectory-attribution-context-repair.md) traces it back to the specific skill file, knowledge-base entry, or tool description that caused it.
+Chase identifies direct user feedback, indirect behavior, model judges, and deterministic rules. He also discusses reported regex-based frustration detection as a possible signal; that report does not establish the current behavior of every coding assistant ([feedback sources](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
 
-The fix is structural: every trace gets a verdict attached to the run, not stored in a parallel analytics system whose join keys never line up with the trace ID.
+Use the following review contract to avoid treating every signal as an equivalent verdict:
 
-## The four sources of feedback
+| Source | Example | Recommended interpretation |
+|---|---|---|
+| Direct user | Rating or written correction | Preserve the explanation and task context |
+| Indirect user | Reverted diff or reopened ticket | Investigate cause before labeling agent failure |
+| LLM judge | Policy-compliance score | Compare with expert judgments on representative cases |
+| Deterministic rule | Schema failure or frustration-word match | Name exactly what matched; do not infer correctness from vocabulary |
 
-The article names four feedback sources. Each has a different cost, latency, and noise profile, and a production system usually wires several together ([LangChain](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
+A frustration match can select a trace for review without proving the agent was wrong. Keep a signal's origin visible when promoting it into a training or regression label.
 
-| Source | Example | Strength | Failure mode |
-|--------|---------|----------|--------------|
-| Direct user | Thumbs up/down, star rating, written correction | Cleanest verdict | Sparse — most users never rate |
-| Indirect user | Lines of code accepted, diffs reverted, ticket reopened, answer copied, same question re-asked | High volume | Misattribution — a reverted diff might not be the agent's fault |
-| LLM-as-judge | Online evaluator scoring helpfulness or policy compliance | Runs at scale | [Bias and ungrounding](https://arxiv.org/html/2503.05061v1) — judges drift from human verdicts when never recalibrated |
-| Deterministic rule | Regex, schema check, citation validator | Cheap, exact, no model call | Only catches what you knew to look for |
+## Review the conversation, then reuse the judgment
 
-The article's deterministic example: Claude Code's leaked `userPromptKeywords.ts` regex scans prompts for frustration words like "wtf", "horrible", "awful" and emits the hit as a feedback signal ([PCWorld](https://www.pcworld.com/article/3104748/claude-code-is-scanning-your-messages-for-curse-words.html), [Blake Crosley analysis](https://blakecrosley.com/blog/claude-code-source-leak)). When a cheap rule captures the signal, no model call is needed to label the trace.
+LangChain's November 3 guidance adds a concrete human-review path. Annotation queues can contain one run or an entire thread. Reviewers inspect earlier messages and tool calls, then record a score and their reason. Those judgments can calibrate LLM judges, improve online evaluators, and seed golden datasets ([human insight and trace review](https://www.langchain.com/blog/human-insight-strategic-advantage-agents)).
 
-## What the platform has to do
+For a multi-turn failure, select the thread when earlier decisions explain the final answer. As a local review policy, retain the rubric version and the evidence behind each score. Review disagreements before converting them into expected outputs. A scalar score without its rationale gives the next reviewer little basis for correcting a bad label.
 
-Chase reduces the platform contract to three behaviors: store traces (trajectory, tool calls, metadata, timing, errors), store feedback attached to the run/trace/thread, and generate feedback (rules, online evaluators, sampling, annotation queues) ([LangChain](https://www.langchain.com/blog/agent-observability-needs-feedback-to-power-learning)).
+## Carry evaluation results through OpenTelemetry
 
-The middle requirement is load-bearing. Feedback that lives in a different system than the trace breaks the join — you can describe how often users gave thumbs-down, but you cannot pull the trajectories that earned them for replay, eval seeding, or ablation.
+The current GenAI convention defines the event name `gen_ai.evaluation.result`. It remains in development, and language support varies. Where possible, parent the event to the evaluated GenAI operation span; otherwise, use `gen_ai.response.id` when the span ID is unavailable ([GenAI event specification](https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-events.md)).
 
-Braintrust makes the same case from the eval side: traces and eval data belong on one surface because unifying them closes the iteration loop, rather than splitting feedback and evals into a separate analytics tool ([Braintrust — Why your traces and evals belong in the same place](https://www.braintrust.dev/blog/traces-and-evals-same-place)).
+The specification defines these fields:
 
-## Tool-agnostic channel: OTel `gen_ai.evaluation.result`
+| Attribute | Requirement |
+|---|---|
+| `gen_ai.evaluation.name` | Required evaluation name |
+| `gen_ai.evaluation.score.label` | Required when applicable |
+| `gen_ai.evaluation.score.value` | Required when applicable |
+| `gen_ai.evaluation.explanation` | Recommended explanation |
 
-OpenTelemetry has codified the channel. The GenAI semantic conventions define a `gen_ai.evaluation.result` event for attaching evaluator output to a run, parallel to the inference span ([OpenTelemetry GenAI events spec](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-events/)). Emit one event per verdict source — human thumbs-down, judge score, regex hit — each carrying the trace ID; downstream queries join on it.
+Emit through your instrumentation's supported event/log API. Verify correlation and display in the chosen backend; accepting OTLP does not by itself establish a particular evaluation UI. Keep a frustration signal distinguishable from a reviewed correctness judgment when mapping feedback into these fields. The field contract above comes from the specification; no SDK implementation is tested here.
 
-This is the tool-agnostic equivalent of LangSmith's per-run feedback API or Phoenix's annotation primitives, ingestible by any backend that speaks the spec.
+## Turn reviewed traces into regression cases
 
-## When this backfires
+LangChain frames trace mining as a way to find improvement signals and curate data for model, harness, and memory changes ([data-mining discussion](https://www.langchain.com/blog/improving-agents-is-a-data-mining-problem)). Feed reviewed failures into [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md). Use [trajectory attribution for context repair](../context-engineering/trajectory-attribution-context-repair.md) to investigate contributing instructions or retrieved material; a failure label alone does not establish cause.
 
-- Ungrounded LLM-as-judge — Judges never recalibrated against human verdicts encode their own biases — verbosity, position, self-preference — into the eval corpus. Frontier judges exceeded 50% error rates on bias benchmarks ([Justice or Prejudice, arxiv 2410.02736](https://arxiv.org/html/2410.02736v1)). Treat judge output as a triage signal, not a ground-truth label.
-- Indirect-signal misattribution — A reverted diff might be a stylistic preference; a reopened ticket might be a follow-up question. Treating either as a binary failure label without causal validation poisons the corpus with false negatives.
-- Trace volume outpacing labeling capacity — High-traffic agents accumulate traces faster than humans or judges can label them; without sampling rules the [trace store](agent-trace-data-layer.md) becomes a graveyard.
-- Feedback decoupled from the trace — Thumbs-up/down in product analytics while traces sit in an APM tool means the trace ID never appears in the analytics fact table. The loop never closes.
-
-## Example
-
-Capturing a regex-driven frustration signal as an OTel evaluation event, attached to the same span as the agent's response:
-
-```python
-from opentelemetry import trace
-
-FRUSTRATION = re.compile(
-    r"\b(wtf|horrible|awful|this sucks)\b",
-    re.IGNORECASE,
-)
-
-def emit_frustration_feedback(span: trace.Span, user_message: str) -> None:
-    """Attach a deterministic verdict to the current run span."""
-    if not FRUSTRATION.search(user_message):
-        return
-    span.add_event(
-        name="gen_ai.evaluation.result",
-        attributes={
-            "gen_ai.evaluation.name": "user_frustration_regex",
-            "gen_ai.evaluation.score.label": "negative",
-            "gen_ai.evaluation.explanation": "matched frustration regex",
-        },
-    )
-```
-
-The event sits on the same trace as the agent run, joined by trace ID. Backends that speak the OTel GenAI spec — LangSmith, Phoenix, Datadog LLM Observability, any OTLP-compatible store — surface it next to the trajectory rather than in a separate analytics tool ([Datadog OTel GenAI support](https://www.datadoghq.com/blog/llm-otel-semantic-convention/)).
+Keep sampling within review capacity and retain unreviewed status explicitly. Recheck automated judgments against expert labels: *Justice or Prejudice?* documents task-dependent biases across its judge evaluations, rather than a universal error rate for all judges ([paper, v2](https://arxiv.org/html/2410.02736v2)).
 
 ## Key Takeaways
 
-- Traces tell you what happened; feedback tells you what it meant — only the pair powers learning.
-- Wire four feedback sources by cost: deterministic rules first, indirect user signals next, LLM-as-judge for scale, direct user verdicts where available.
-- Store feedback on the run, not in a parallel analytics tool — the join key is the trace ID.
-- Use the OTel `gen_ai.evaluation.result` event as the tool-agnostic channel; backends decode it natively.
-- Recalibrate LLM-as-judge against human verdicts on a schedule — ungrounded judges drift.
+- Attach the feedback source, explanation, and relevant run or thread.
+- Use conversation context to turn a flag into a defensible judgment.
+- Reuse reviewed cases for judge calibration and regression tests.
+- Verify telemetry correlation and backend support end to end.
 
 ## Related
 
-- [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — the instrumentation layer this pattern attaches feedback to
-- [Observability Feedback Loop](observability-feedback-loop.md) — the seven-step debug runbook that consumes verdict-labeled traces one bug at a time
-- [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — the offline-corpus consumer that feedback-labeled traces feed
-- [Harness Bug Detection Patterns](harness-bug-postmortem-patterns.md) — three structural eval gaps that feedback-labeled traces help expose
+- [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — the instrumentation layer
+- [Observability Feedback Loop](observability-feedback-loop.md) — the debug runbook that consumes reviewed traces
+- [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — turn incidents into regression cases
+- [Harness Bug Detection Patterns](harness-bug-postmortem-patterns.md) — identify gaps in evaluation coverage
 
 ---
 
@@ -183650,6 +184455,7 @@ Source: https://agentpatterns.ai/tools/copilot/
 - [Copilot Extensions](copilot-extensions.md) — Build agents and skillsets that integrate into Copilot Chat via GitHub Marketplace (deprecated — see [migration guide](../../tool-engineering/copilot-extensions-to-mcp-migration.md))
 - [copilot-instructions.md Convention](copilot-instructions-md-convention.md) — Repository-level instruction file for persistent project context
 - [Copilot Spaces](copilot-spaces.md) — Named context collections that ground Copilot in curated reference material across repositories, files, PRs, issues, and uploads
+- [GitHub Copilot in Xcode's Built-In Coding Assistant](xcode-built-in-coding-assistant.md)
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md) — Define specialized agents, reusable skills, and installable bundles
 - [Embedding the Copilot SDK in a Managed Java Runtime](copilot-sdk-managed-runtime.md) — What embedding an agent loop costs a JVM host with its own concurrency model: the executor seam, container context propagation, and the JDK level it assumes
 - [Bounding an Embedded Copilot SDK Agent's Tool Set](copilot-sdk-tool-scoping.md) — The tool allowlist and the permission hook are independent controls, and a handoff orchestrator supplies transfer tools at invocation that the session config never named
@@ -186392,6 +187198,52 @@ For historical context on failure conditions:
 - [Custom Agents, Skills & Plugins](custom-agents-skills.md)
 - [MCP Integration](mcp-integration.md)
 - [Copilot Extensions to MCP Migration](../../tool-engineering/copilot-extensions-to-mcp-migration.md)
+
+---
+
+### GitHub Copilot in Xcode's Built-In Coding Assistant
+Source: https://agentpatterns.ai/tools/copilot/xcode-built-in-coding-assistant/
+
+# GitHub Copilot in Xcode's Built-In Coding Assistant
+
+> Copilot runs in Xcode's built-in coding assistant through a public preview, alongside the existing separate Copilot extension option.
+
+GitHub Copilot's built-in Xcode integration is a public preview starting with Xcode 27.3 beta. It supports all Copilot plans. The existing GitHub Copilot for Xcode extension remains a separate integration ([GitHub announcement](https://github.blog/changelog/2026-11-04-github-copilot-is-now-available-in-xcodes-coding-assistant/)).
+
+## Setup and sign-in
+
+Use a Mac running macOS Tahoe 26.6 or later. Apple lists that requirement in its [Xcode 27.3 beta release notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-27_3-release-notes).
+
+Open Xcode > Settings > Intelligence to set up Copilot. Apple's general agent setup uses Get, then Install, followed by the Account row's More button for sign-in. Complete the account flow shown by Xcode and the browser ([coding intelligence setup](https://developer.apple.com/documentation/xcode/setting-up-coding-intelligence)).
+
+Enabled agents can use Xcode capabilities such as building and testing. The setup documentation also explains that an agent may access project files and other information while processing a request ([Apple setup reference](https://developer.apple.com/documentation/xcode/setting-up-coding-intelligence)). Review the integration's access in the actual project before delegating a change.
+
+## Keep editor-specific configuration explicit
+
+Apple documents command and tool permissions under Intelligence settings. Its customization guide also supports agent-specific configuration files and plug-ins, with configuration scoped to agents launched in Xcode ([agent customization](https://developer.apple.com/documentation/xcode/extending-and-customizing-agents)).
+
+That general capability does not establish Copilot-specific support for every repository-instruction format or custom-agent field. The cited launch announcement and Apple pages do not provide a Copilot support matrix. Do not infer VS Code or CLI parity from the shared Copilot name.
+
+For a mixed-editor team, record the integration used in review evidence. Check these questions in a disposable project:
+
+- Did the expected repository instruction affect the task?
+- Does the intended custom agent appear and use its declared tools?
+- Can the coding assistant build and test the target scheme?
+- Which permission requests reach the user?
+
+Treat these as acceptance checks, not as features established by this page. A passing check on the separate extension does not verify the built-in assistant.
+
+## Key Takeaways
+
+- Name the built-in assistant or extension when reporting Xcode behavior.
+- Keep the beta and macOS requirements beside setup instructions.
+- Verify repository instructions and custom agents on this integration before relying on cross-editor behavior.
+
+## Related
+
+- [Copilot Repository Instructions](copilot-instructions-md-convention.md) — the repository-level convention to verify
+- [Copilot Custom Agents and Skills](custom-agents-skills.md) — customization concepts across Copilot hosts
+- [Copilot Agent Mode](agent-mode.md) — compare the editor execution loop
 
 ---
 

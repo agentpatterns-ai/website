@@ -105,3 +105,4 @@ Delete `check-command.js` and an `ls` call is refused rather than run. The docum
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — the same reasoning at startup scope, as one global setting rather than a per-hook field.
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — the layers beneath a hook that decide how much a fail-open window actually costs.
 - [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — what happens to a control when it ships to a fleet in one install.
+- [A Skill's Tool Grant Travels With Its Hooks](skill-tool-grant-travels-with-hooks.md) — what a policy should do to a tool grant when it stops that component's hooks from running at all.

@@ -55,6 +55,7 @@ nav:
       - prompt-caching-architectural-discipline.md
       - batched-context-eviction.md
       - static-content-first-caching.md
+      - background-shell-cache-handoff.md
       - prompt-cache-keepalive-agent-pauses.md
       - compact-before-cache-expiry.md
       - attributed-cache-miss-diagnostics.md

@@ -46,6 +46,7 @@ nav:
       - instruction-compliance-ceiling.md
       - constraint-degradation-code-generation.md
       - constraint-encoding-compliance-gap.md
+      - policy-wording-compliance-tests.md
       - configuration-file-structure-compliance-gap.md
       - system-prompt-altitude.md
       - match-tool-instructions-to-workflow.md
@@ -114,6 +115,7 @@ nav:
       - skill-pack-registry-distribution.md
       - shared-toolkit-plugin-ownership.md
       - workspace-hosted-skills.md
+      - apm-dependency-version-updates.md
       - skill-file-linting.md
       - plugin-component-co-change.md
       - post-compaction-reread-protocol.md
