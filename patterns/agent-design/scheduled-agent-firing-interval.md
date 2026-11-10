@@ -86,6 +86,7 @@ In this static schedule, the cron is the entire cadence decision and the prompt 
 - [Loop Trigger Selection: Pairing the Start with the Stop](../../loop-engineering/loop-trigger-selection.md) — the upstream choice of trigger shape and its stopping rule, which has to pass before an interval is worth setting
 - [Unattended Run Reporting: What the One Message Must Say](../../workflows/unattended-run-reporting-contract.md) — what a fire does with a finding once it has one, and the states its message has to separate
 - [Verdict-Driven Inspection Cadence for Agent Monitors (Cadence)](verdict-driven-inspection-cadence.md) — the same adaptive-interval idea applied inside a single run, keyed on a monitor's own last verdict
+- [Self-Paced /loop Ends When a Turn Does Not Reschedule](../../tools/claude/self-paced-loop-reschedule.md) — what happens to Claude Code's adaptive-interval loop when one iteration picks no next interval at all
 - [Cloud-Scheduled Routines vs Local Session Scheduling](../../tools/claude/cloud-scheduled-routines.md) — the surface trade a sub-hour cadence forces, with the 1-hour cloud floor in full
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — why a shorter interval raises the cost of a fire that duplicates the last one's output
 - [Whose Permissions a Self-Scheduled Agent Run Carries](../../security/self-scheduled-run-authority.md) — the authority a fire spends, decided when the schedule is written rather than when it runs

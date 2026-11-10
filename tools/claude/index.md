@@ -29,6 +29,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [/batch & Worktrees](batch-worktrees.md) — Parallel execution with worktree isolation
 - [Feature Flags & Environment Variables](feature-flags.md) — Curated reference for the most impactful configuration knobs
 - [Session Scheduling](session-scheduling.md) — /loop and cron tools for recurring prompts within a session
+- [Self-Paced /loop Ends When a Turn Does Not Reschedule](self-paced-loop-reschedule.md) — From v2.1.319 a self-paced loop stops on any turn that skips `ScheduleWakeup`; end each turn on a decision or set `CLAUDE_CODE_LOOP_KEEPALIVE=1`
 - [Cloud-Scheduled Routines vs Local Session Scheduling](cloud-scheduled-routines.md) — When to move schedule out of the local box; cloud Routines trade working-tree fidelity for uptime continuity
 - [Claude Code Cloud Sessions](cloud-sessions.md) — What crosses the VM boundary: repo state, config, credentials, network allowlist bypass paths, and pause and reclaim
 - [Skill Eval Loop](skill-eval-loop.md) — Test, benchmark, A/B-compare, and optimize agent skills with the skill-creator eval framework

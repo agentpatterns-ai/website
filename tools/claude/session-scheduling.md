@@ -105,6 +105,7 @@ CronCreate with expression "*/5 * * * *", prompt "check gh run status and cancel
 
 ## Related
 
+- [Self-Paced /loop Ends When a Turn Does Not Reschedule](self-paced-loop-reschedule.md) — the v2.1.319 end rule for loops without an interval, and when to set `CLAUDE_CODE_LOOP_KEEPALIVE=1`
 - [Cloud-Scheduled Routines vs Local Session Scheduling](cloud-scheduled-routines.md) — the cloud counterpart when the schedule must survive a closed laptop or env drift
 - [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md)
 - [/batch & Worktrees](batch-worktrees.md)
