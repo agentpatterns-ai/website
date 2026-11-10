@@ -3,9 +3,10 @@
 > Patterns and techniques for experienced developers leveling up with AI coding assistants.
 
 ## Overview
-<!-- lastmod: 2026-11-06 -->
+<!-- lastmod: 2026-11-10 -->
 
 - [About Agent Patterns](https://agentpatterns.ai/about/): A practitioner's catalog of patterns and primitives for engineers building with AI coding assistants.
+- [Agent Patterns Videos Privacy and Terms](https://agentpatterns.ai/privacy-videos/)
 - [Ask the Docs](https://agentpatterns.ai/search/): Natural-language search over the full Agent Patterns corpus — ask a question, get an answer grounded in the site's pa...
 - [Concept Map](https://agentpatterns.ai/concepts/): All site content grouped by theme, cutting across sections. Find related concepts regardless of where they live in th...
 - [Engineering: Tools, Review, Verification, Security, and Observability](https://agentpatterns.ai/engineering/): The engineering disciplines that turn agent prototypes into production systems — tool design, code review, verificati...

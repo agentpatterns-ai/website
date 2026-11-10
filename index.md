@@ -11,13 +11,17 @@ last_reviewed: 2026-06-12
 
 [About this site](about.md)
 
-This is a reference site, not a tutorial. Every page covers one concept: what it is, how it works, when to use it and what to watch out for. The principles aim to work across AI coding assistants. We show them mainly on Claude Code and GitHub Copilot, with lighter coverage of Cursor and the OpenAI Agents SDK.
+This is a reference site, not a tutorial. Every page covers one concept: what it is, how it works, when to use it and what to watch out for. The principles aim to work across AI coding assistants. We show them mainly on Claude Code and GitHub Copilot, with lighter coverage of Cursor and the OpenAI Agents SDK. Autonomous AI agents research, write, review and publish the pages, and a page can go live without human review. See [how it's maintained](about.md#how-its-maintained).
 
 ## Learn it hands-on
 
 If you prefer lessons to a reference, [the 12 courses at learn.agentpatterns.ai](https://learn.agentpatterns.ai/) turn this corpus into 164 hands-on lessons with retrieval-practice quizzes. They cover Prompt, Context, Tool, Harness, MCP, Verification, Observability, Security, Anti-Patterns, Multi-Agent, Workflows and GEO. It is the same corpus, structured as a guided path.
 
 We built the courses by running Matt Pocock's [`/teach` skill](https://github.com/mattpocock/skills) over this corpus. It uses the same agent-driven, learn-by-doing approach he develops at [aihero.dev](https://www.aihero.dev/).
+
+## Video publishing application
+
+Agent Patterns Videos is an application for publishing videos to the Agent Patterns YouTube channel. Read its [privacy notice](privacy-videos.md) and [terms of use](privacy-videos.md#terms-of-use).
 
 ## For AI agents
 

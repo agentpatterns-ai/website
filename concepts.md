@@ -13,6 +13,8 @@ This map cuts across the directory tree to reflect the practitioner-resource spi
 
 Prefer a section-by-section entry point instead? [Foundations](foundations.md) lands you in context engineering and instructions, [Patterns](patterns/index.md) in agent design, multi-agent, and anti-patterns, and [Reference](reference.md) in standards, human factors, emerging, and fallacies.
 
+For application policies, see [Agent Patterns Videos privacy and terms](privacy-videos.md).
+
 <div class="grid cards" markdown>
 
 -   **Context Engineering**
