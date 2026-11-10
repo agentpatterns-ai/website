@@ -1553,6 +1553,7 @@
   "tools/claude/posttooluse-auto-formatting.md": "2026-03-28T09:17:05+00:00",
   "tools/claude/powershell-tool.md": "2026-04-12T20:37:02+00:00",
   "tools/claude/reload-skills-mid-session.md": "2026-05-28T20:01:36+00:00",
+  "tools/claude/self-paced-loop-reschedule.md": "2026-11-09T21:23:41+00:00",
   "tools/claude/session-scheduling.md": "2026-03-28T09:17:05+00:00",
   "tools/claude/skill-disallowed-tools.md": "2026-05-28T19:56:17+00:00",
   "tools/claude/skill-eval-loop.md": "2026-04-10T02:45:57+00:00",

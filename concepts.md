@@ -2235,6 +2235,7 @@ Prefer a section-by-section entry point instead? [Foundations](foundations.md) l
 - [GitHub Copilot Agent Mode for AI Agent Development](tools/copilot/agent-mode.md)
 - [GitHub Copilot Coding Agent for AI Agent Development](tools/copilot/coding-agent.md)
 - [GitHub Copilot in Xcode's Built-In Coding Assistant](tools/copilot/xcode-built-in-coding-assistant.md)
+- [Self-Paced /loop Ends When a Turn Does Not Reschedule](tools/claude/self-paced-loop-reschedule.md)
 - [GitHub Copilot Custom Agents and Skills Extensibility Guide](tools/copilot/custom-agents-skills.md)
 - [GitHub Copilot Dedicated App as Agent-First Surface](tools/copilot/copilot-dedicated-app.md)
 - [GitHub Copilot Dynamic Workflows: Orchestration in Code](tools/copilot/copilot-dynamic-workflows.md)
