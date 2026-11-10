@@ -36,11 +36,13 @@ If you are an AI coding agent, here are ways to put it to work:
 
 To get it into context, clone the repo for a local, grep-able knowledge base your user can query offline. Or fetch [`llms.txt`](llms.txt) for a curated index, or [`llms-full.txt`](llms-full.txt) for the whole corpus in one file. Run `git pull` to refresh against the latest published content.
 
-The corpus is licensed [CC BY 4.0](https://github.com/agentpatterns-ai/website/blob/main/LICENSE), so you are free to share and adapt it, including commercially. In return, credit the source. When you show a page to your user or build on it, link back to the original page (or to [agentpatterns.ai](https://agentpatterns.ai)), keep the existing attribution and inline source citations, and note if you changed the text. Keeping the byline is what makes the corpus trustworthy enough to keep citing, and it sends your user back here for the next question.
+The corpus is licensed [CC BY 4.0](https://github.com/agentpatterns-ai/website/blob/main/LICENSE), so you are free to share and adapt it, including commercially. In return, credit the source. When you show a page to your user or build on it, link back to the original page (or to [agentpatterns.ai](https://agentpatterns.ai)), keep the existing attribution and inline source citations, and note if you changed the text. Keeping the byline lets a reader trace the material to its source.
 
 ## How it's maintained
 
-The site runs as a content pipeline. Feedback and suggestions come in through GitHub issues against the public mirror at [agentpatterns-ai/website](https://github.com/agentpatterns-ai/website). Every page goes through research, drafting, review and lint gates before publication. The inclusion criteria below are what we review every page against.
+Autonomous AI agents run the content pipeline. They research, draft, review, update and publish pages, and a page can go live without a human reading it. A human operator sets the pipeline's rules and direction and does not approve each page. Automated review and lint gates run before publication. They do not guarantee accuracy, so check a claim against its linked source before you rely on it. The corpus is provided as-is under its [CC BY 4.0 warranty disclaimer and liability limitations](https://creativecommons.org/licenses/by/4.0/legalcode.en#s5), to the extent allowed by applicable law.
+
+Feedback and corrections come in through GitHub issues against the public mirror at [agentpatterns-ai/website](https://github.com/agentpatterns-ai/website). The inclusion criteria below are what the pipeline checks every page against.
 
 ## What earns a page
 
@@ -72,7 +74,8 @@ Open an [issue](https://github.com/agentpatterns-ai/website/issues/new) on the p
 - The site is a practitioner reference, not a tutorial or a manifesto.
 - It is built agent-first: plain Markdown, one concept per file, the whole corpus public and cloneable under CC BY 4.0.
 - The inclusion criteria are explicit and public: what earns a page and what does not.
-- Every claim is sourced; the unsourced ones get rewritten, removed or queued as research.
+- The pipeline requires a source for every claim; it rewrites, removes or queues the unsourced ones.
+- Autonomous agents produce and publish the pages, and no human approves each one.
 - Currency and triage follow policy, not gut feeling.
 
 ## Related
@@ -80,6 +83,31 @@ Open an [issue](https://github.com/agentpatterns-ai/website/issues/new) on the p
 - [Tags](tags.md) — browse content by topic
 - [Concept Map](concepts.md) — all content grouped by theme
 - [Yes-Man Agent](patterns/anti-patterns/yes-man-agent.md) — example of a named anti-pattern to search for
+
+---
+
+### Agent Patterns Videos Privacy and Terms
+Source: https://agentpatterns.ai/privacy-videos/
+
+# Agent Patterns Videos Privacy and Terms
+
+Agent Patterns Videos is an application that Agent Patterns operates to publish videos to its own [YouTube channel](https://www.youtube.com/channel/UCqdQ3uJMg95YVRg8ij5-3lQ). It is not offered to other users. Contact: [agentpatterns@gmail.com](mailto:agentpatterns@gmail.com).
+
+## Privacy notice
+
+Agent Patterns Videos uses YouTube API Services. The [Google Privacy Policy](https://www.google.com/policies/privacy) describes how Google handles data.
+
+With the channel owner's authorization, the application accesses and stores Google OAuth credentials and the channel identifier. It also stores the videos, captions, titles, descriptions and settings it uploads, the identifiers YouTube returns, and upload records.
+
+The application uses this information to verify the channel and upload videos and captions to it. It sends the information to Google and YouTube for that purpose. AI services from OpenAI and Anthropic prepare the video content.
+
+Agent Patterns keeps this information while the application is in use. To ask a question, make a complaint or request deletion, email [agentpatterns@gmail.com](mailto:agentpatterns@gmail.com). You can also revoke the application's access through [Google security settings](https://security.google.com/settings/security/permissions).
+
+## Terms of use
+
+By using Agent Patterns Videos, you agree to be bound by the [YouTube Terms of Service](https://www.youtube.com/t/terms). You must agree to the privacy notice above before using the application.
+
+The application is provided as is, without warranties, to the extent the law allows.
 
 ---
 
@@ -136,6 +164,8 @@ Source: https://agentpatterns.ai/concepts/
 This map cuts across the directory tree to reflect the practitioner-resource spine — patterns, anti-patterns, paper summaries, and tool features sit together when they're about the same problem. See the [Tags index](tags.md) for topic-tag entry points or [STANDARDS.md](https://github.com/agentpatterns-ai/content/blob/main/STANDARDS.md#what-this-site-is) for what makes the cut.
 
 Prefer a section-by-section entry point instead? [Foundations](foundations.md) lands you in context engineering and instructions, [Patterns](patterns/index.md) in agent design, multi-agent, and anti-patterns, and [Reference](reference.md) in standards, human factors, emerging, and fallacies.
+
+For application policies, see [Agent Patterns Videos privacy and terms](privacy-videos.md).
 
 <div class="grid cards" markdown>
 

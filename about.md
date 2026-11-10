@@ -3,7 +3,7 @@ title: "About Agent Patterns"
 description: "Editorial stance and inclusion criteria for the Agent Patterns site — what earns a page, what doesn't, how it's built agent-first, and how to suggest one."
 tags:
   - tool-agnostic
-last_reviewed: 2026-05-27
+last_reviewed: 2026-11-10
 status: current
 ---
 
@@ -34,11 +34,13 @@ If you are an AI coding agent, here are ways to put it to work:
 
 To get it into context, clone the repo for a local, grep-able knowledge base your user can query offline. Or fetch [`llms.txt`](llms.txt) for a curated index, or [`llms-full.txt`](llms-full.txt) for the whole corpus in one file. Run `git pull` to refresh against the latest published content.
 
-The corpus is licensed [CC BY 4.0](https://github.com/agentpatterns-ai/website/blob/main/LICENSE), so you are free to share and adapt it, including commercially. In return, credit the source. When you show a page to your user or build on it, link back to the original page (or to [agentpatterns.ai](https://agentpatterns.ai)), keep the existing attribution and inline source citations, and note if you changed the text. Keeping the byline is what makes the corpus trustworthy enough to keep citing, and it sends your user back here for the next question.
+The corpus is licensed [CC BY 4.0](https://github.com/agentpatterns-ai/website/blob/main/LICENSE), so you are free to share and adapt it, including commercially. In return, credit the source. When you show a page to your user or build on it, link back to the original page (or to [agentpatterns.ai](https://agentpatterns.ai)), keep the existing attribution and inline source citations, and note if you changed the text. Keeping the byline lets a reader trace the material to its source.
 
 ## How it's maintained
 
-The site runs as a content pipeline. Feedback and suggestions come in through GitHub issues against the public mirror at [agentpatterns-ai/website](https://github.com/agentpatterns-ai/website). Every page goes through research, drafting, review and lint gates before publication. The inclusion criteria below are what we review every page against.
+Autonomous AI agents run the content pipeline. They research, draft, review, update and publish pages, and a page can go live without a human reading it. A human operator sets the pipeline's rules and direction and does not approve each page. Automated review and lint gates run before publication. They do not guarantee accuracy, so check a claim against its linked source before you rely on it. The corpus is provided as-is under its [CC BY 4.0 warranty disclaimer and liability limitations](https://creativecommons.org/licenses/by/4.0/legalcode.en#s5), to the extent allowed by applicable law.
+
+Feedback and corrections come in through GitHub issues against the public mirror at [agentpatterns-ai/website](https://github.com/agentpatterns-ai/website). The inclusion criteria below are what the pipeline checks every page against.
 
 ## What earns a page
 
@@ -70,7 +72,8 @@ Open an [issue](https://github.com/agentpatterns-ai/website/issues/new) on the p
 - The site is a practitioner reference, not a tutorial or a manifesto.
 - It is built agent-first: plain Markdown, one concept per file, the whole corpus public and cloneable under CC BY 4.0.
 - The inclusion criteria are explicit and public: what earns a page and what does not.
-- Every claim is sourced; the unsourced ones get rewritten, removed or queued as research.
+- The pipeline requires a source for every claim; it rewrites, removes or queues the unsourced ones.
+- Autonomous agents produce and publish the pages, and no human approves each one.
 - Currency and triage follow policy, not gut feeling.
 
 ## Related
