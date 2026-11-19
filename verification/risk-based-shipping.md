@@ -141,6 +141,7 @@ The classifier returns the most severe tier across all changed files. CI auto-me
 - [Human-in-the-Loop Placement](../workflows/human-in-the-loop.md)
 - [Risk-Based Task Sizing](risk-based-task-sizing.md)
 - [Diff-Based Review](../code-review/diff-based-review.md)
+- [Review Expectations for an AI Pull-Request Approval Bot](../workflows/ai-pr-approval-bot-review-expectations.md)
 - [Deterministic Guardrails](deterministic-guardrails.md)
 - [Circuit Breakers](../observability/circuit-breakers.md)
 - [Blast Radius Containment](../security/blast-radius-containment.md)

@@ -113,7 +113,7 @@ Path-based grading structurally narrows the solution space because the same corr
 
 Outcome-only grading breaks down in three categories:
 
-- Side-effecting tasks: An agent that makes irreversible API calls, sends emails, or modifies production data on the way to a correct final state passes an outcome grader despite causing unintended damage. For tasks with destructive side effects, intermediate-step constraints or [pre-flight checks](incremental-verification.md) are necessary.
+- Side-effecting tasks: An agent that makes irreversible API calls, sends emails, or modifies production data on the way to a correct final state passes an outcome grader despite causing unintended damage. For tasks with destructive side effects, intermediate-step constraints or [pre-flight checks](incremental-verification.md) are necessary. Even a grader that checks end state can pass an unrequested extra write: all 42 confirmed false positives in one mutation audit of two benchmark verifiers were unrequested changes ([Abrich, 2026](https://arxiv.org/abs/2610.09142v3), [details](side-effect-aware-agent-evaluation.md#audit-the-verifier-you-already-have)).
 - Compliance-critical paths: Some domains (finance, healthcare, security) require specific procedural steps regardless of the outcome. An agent that achieves the correct result while skipping a required audit step or approval gate is non-compliant even if the final state is correct.
 - Trace-as-deliverable tasks: When the execution trace itself is the output — step-by-step reasoning chains, audit logs, explainability reports — [path quality](trajectory-decomposition-diagnosis.md) is the correctness criterion and outcome grading cannot evaluate it.
 

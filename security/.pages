@@ -234,6 +234,7 @@ nav:
       - usability-pressure-security-regression.md
       - llm-cryptographic-code-verification.md
       - policy-as-code-layer-typology.md
+      - team-scoped-containment-agent-teams.md
   - "Economics":
       - security-budget-token-economics.md
   - "Deployment Models":

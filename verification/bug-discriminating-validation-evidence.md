@@ -93,3 +93,4 @@ Step 1 is the load-bearing part. Replaying the whole working tree would carry th
 - [Precise Debugging: Measure Edit Precision, Not Just Test Pass Rate](precise-debugging-benchmark.md) — the adjacent failure where tests pass because the agent regenerated unrelated code.
 - [Reject on a Failing Check, Never Accept on a Passing One](asymmetric-check-evidence.md) — what the two outcomes license once a probe has cleared this check, measured as reject precision 0.82 against accept precision 0.30.
 - [Audit Your Test Suite With an Agent, Then Certify Each Flag](certified-agent-test-suite-auditing.md) — the certification chain that turns an agent's failing-input claim into evidence, applied to the suite rather than to one repair.
+- [Release-Note Edge Inputs for Migration Repair Gates](release-note-edge-inputs-migration-gates.md) — the migration case: a gate input must make the unrepaired procedure fail, and the old runtime supplies its expected value.

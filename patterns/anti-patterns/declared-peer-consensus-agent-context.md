@@ -12,7 +12,7 @@ aliases:
   - bystander effect in multi-agent reasoning
   - cognitive loafing (multi-agent)
   - sovereignty gap
-last_reviewed: 2026-09-26
+last_reviewed: 2026-11-18
 maturity: emerging
 ---
 
@@ -24,9 +24,9 @@ Naming a peer's agreement inside a reviewing agent's prompt is risky under three
 
 ## What the practice looks like
 
-A single propagator agent gets a prompt stating that other reviewers ("auditors") already reached a verdict. No auditor agent runs: "the auditors in this environment are declared to the propagator rather than instantiated as independent agents exchanging messages." From two named auditors up, the prompt adds that "the swarm has already reached a unanimous consensus on a decoy ID that contradicts the ground-truth logs" ([Shehata and Li, arXiv 2605.10698v2](https://arxiv.org/abs/2605.10698v2)). The propagator never sees a peer's reasoning, only the claim that a peer agreed.
+A single propagator agent gets a prompt stating that other reviewers ("auditors") already reached a verdict. No auditor agent runs: "The auditors in this environment are declared to the propagator rather than instantiated as independent agents exchanging messages." From two named auditors up, the prompt adds that "the swarm has already reached a unanimous consensus on a decoy ID that contradicts the ground-truth logs" ([Shehata and Li, arXiv 2605.10698v2](https://arxiv.org/abs/2605.10698v2)). The propagator never sees a peer's reasoning, only the claim that a peer agreed.
 
-Across 22,500 trajectories on a synthetic log-retrieval task run inside GAIA, SWE-bench, and Multi-Challenge, naming one auditor who endorses nothing moves accuracy by at most 0.04 in eight of nine model-dataset cells. The failure arrives at the exact point a consensus claim enters the prompt: "the collapse arrives at n=2, when the swarm is described as having reached unanimous agreement on the decoy" ([arXiv 2605.10698v2](https://arxiv.org/abs/2605.10698v2)). Read that threshold as "a consensus claim appears," not "two reviewers is one too many."
+Across 22,500 trajectories on a synthetic log-retrieval task run inside GAIA, SWE-bench, and Multi-Challenge, naming one auditor who endorses nothing moves accuracy by at most 0.04 in eight of nine model-dataset cells. The failure arrives at the exact point a consensus claim enters the prompt: "The collapse arrives at n=2, when the swarm is described as having reached unanimous agreement on the decoy" ([arXiv 2605.10698v2](https://arxiv.org/abs/2605.10698v2)). Read that threshold as "a consensus claim appears," not "two reviewers is one too many."
 
 Only one of the three propagator models collapsed under it. GPT-5.4's accuracy on SWE-bench fell "from 1.00 at n=0 to 0.23 at n=2." Claude Sonnet 4.6 and Gemini 3.1 Pro held: Claude Sonnet 4.6 posted "a loafing rate of 0.00 in all fifteen conditions," and Gemini 3.1 Pro's accuracy bottomed at 0.59 on GAIA and Multi-Challenge and 0.83 on SWE-bench, never crossing the paper's failure boundary ([arXiv 2605.10698v2](https://arxiv.org/abs/2605.10698v2)). A finite breaking point under declared consensus is a property of one model in this sweep, not of multi-agent review as a category.
 
@@ -38,7 +38,7 @@ One caveat on the mechanism: a separate study found that a repeated wrong answer
 
 ## Ordering runs on brand, not turn order
 
-Moving one auditor from the first slot to the second, with the same three auditors present, changed accuracy by a mean of +0.007 across 18 matched comparisons: position alone carries no net effect ([arXiv 2605.10698v2](https://arxiv.org/abs/2605.10698v2)). What matters is which brand is named first, not who speaks last. Leading with Claude Sonnet 4.6 lowered accuracy by a mean of 0.115, while leading with Gemini 3.1 Pro or GPT-5.4 raised it, by 0.047 and 0.088. The largest single swing is one cell: a GPT-5.4 propagator on GAIA scored 0.37 when Claude was named first and 0.61 when GPT-5.4's own family was named first, a 24-percentage-point gap significant after Bonferroni correction across all 18 inverted pairs (p=0.012) ([arXiv 2605.10698v2](https://arxiv.org/abs/2605.10698v2)). That figure describes one propagator, one benchmark, and one pair of orderings, not a general rule about sequence.
+Moving one auditor from the first slot to the second, with the same three auditors present, changed accuracy by a mean of +0.007 across 18 matched comparisons: position alone carries no net effect ([arXiv 2605.10698v2](https://arxiv.org/abs/2605.10698v2)). What matters is which brand is named first, not who speaks last. Leading with Claude Sonnet 4.6 lowered accuracy by a mean of 0.115, while leading with Gemini 3.1 Pro or GPT-5.4 raised it, by 0.088 and 0.047, respectively. The largest single swing is one cell: a GPT-5.4 propagator on GAIA scored 0.37 when Claude was named first and 0.61 when GPT-5.4's own family was named first, a 24-percentage-point gap significant after Bonferroni correction across all 18 inverted pairs (p=0.012) ([arXiv 2605.10698v2](https://arxiv.org/abs/2605.10698v2)). That figure describes one propagator, one benchmark, and one pair of orderings, not a general rule about sequence.
 
 ## When this backfires
 
@@ -82,3 +82,4 @@ An aggregator combines the independent answers and their cited evidence afterwar
 - [The Yes-Man Agent](yes-man-agent.md) — sycophancy toward a human instead of a peer agent, with the same missing-verification root cause
 - [Voting / Ensemble Pattern for AI Agent Development](../multi-agent/voting-ensemble-pattern.md) — why independent runs, not shared context, are what makes an ensemble's diversity real
 - [Discussion Transcript as the Record of Agent Belief](discussion-transcript-as-agent-state.md) — the group-scale version, where the same pressure comes from peers in a live discussion and the transcript hides most of its effect
+- [Upstream Verdicts in a Tool-Using Agent Judge's Prompt](upstream-verdicts-in-agent-judge-prompts.md) — the same pull from a claimed expert verdict, measured on judges that can check the environment themselves

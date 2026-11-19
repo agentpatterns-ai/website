@@ -64,3 +64,4 @@ Even with memory in place, agents still did not adopt the deductive recovery (12
 - [Usage-Reinforced Memory Decay for Long-Running Agents](../../context-engineering/usage-reinforced-memory-decay.md) — a retention policy for the store this page recommends, scoring what survives on recall rather than recency.
 - [Episodic Memory Retrieval](../agent-design/episodic-memory-retrieval.md) — storing the attempt-and-outcome arc, the transient half that a drift event should leave alone.
 - [Tool Graph Memory as Next-Tool Guidance](tool-graph-memory-as-next-tool-guidance.md) — the structure side of the same question: what form stored tool experience should take before it is retrieved at all.
+- [Experience Rot After Silent Tool Changes in AI Agents](experience-rot-silent-tool-changes.md) — the sibling case where the tool accepts a stale argument silently and the agent reports success, instead of re-calling an invalidated tool.

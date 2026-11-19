@@ -63,7 +63,7 @@ Comments explaining why a decision was made prevent agents from reverting it. Wi
 
 ### TODO and FIXME markers
 
-Placing a `TODO` or `FIXME` at the exact location ensures the agent encounters it when editing nearby code, though whether agents treat these as actionable items varies by tool.
+Placing a `TODO` or `FIXME` at the exact location ensures the agent encounters it when editing nearby code, though whether agents treat these as actionable items varies by tool. A marker that outlives its ticket can still pull the agent into an unprompted detour after the work is done. [Stale bug-reference TODOs](../patterns/anti-patterns/stale-bug-reference-todos.md) covers the measured cost.
 
 ### Type annotations
 

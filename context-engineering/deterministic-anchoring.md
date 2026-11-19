@@ -114,4 +114,5 @@ The build regenerates the comment header. You do not hand-maintain it. Stale anc
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md) — places anchoring inside the broader lexical → semantic → graph → hybrid retrieval hierarchy.
 - [Seeding Agent Context](seeding-agent-context.md) — comment-level breadcrumbs the agent discovers during exploration; anchoring is a machine-generated, regenerated subset.
 - [Semantic Context Loading](semantic-context-loading.md) — LSP-driven structural lookup as an on-demand alternative when stability is less important than freshness.
+- [Matching the Code View to the Task Bottleneck](bottleneck-matched-code-views.md) — measures on-demand AST, call-graph, dependency, and doc maps per task family; tokens fall when localization is the bottleneck.
 - [PEEK: Orientation Cache for Recurring-Context Agents](peek-orientation-cache.md) — caches a different class of stable facts (what is in a recurring context) for the same reproducibility motive.

@@ -87,6 +87,7 @@ nav:
       - reproducibility-artifacts-as-agent-context.md
       - repository-map-pattern.md
       - deterministic-anchoring.md
+      - bottleneck-matched-code-views.md
       - context-compiler.md
       - semantic-context-loading.md
       - symbol-ranked-file-picker.md
@@ -130,9 +131,11 @@ nav:
       - organizational-context-layer.md
       - generated-questionnaires.md
       - contract-context-over-example-retrieval.md
+      - safeguard-aware-context-construction.md
   - "Error Handling & Drift Prevention":
       - context-injected-error-recovery.md
       - error-preservation-in-context.md
+      - truthful-error-notes-under-compaction.md
       - retry-failure-memory.md
       - goal-recitation.md
       - pending-task-registry.md

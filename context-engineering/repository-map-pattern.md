@@ -180,6 +180,7 @@ The map consumed 87 tokens instead of the ~12,000 tokens that reading all source
 ## Related
 
 - [Semantic Context Loading](semantic-context-loading.md)
+- [Matching the Code View to the Task Bottleneck](bottleneck-matched-code-views.md)
 - [Context Compiler](context-compiler.md)
 - [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Pre-Execution Codebase Exploration](../workflows/pre-execution-codebase-exploration.md)

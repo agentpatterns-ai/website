@@ -1,6 +1,6 @@
 ---
 title: "PR Scope Creep as a Human Review Bottleneck"
-description: "When a stalled PR blocks dependent work, you add that work to the same PR — making it larger, slower to review, and harder to merge, compounding the bottleneck"
+description: "When a stalled PR blocks dependent work, you add that work to the same PR — making it larger, slower to review, and harder to merge, compounding the bottleneck."
 term: "PR Scope Creep as a Human Review Bottleneck"
 aliases:
   - review bottleneck
@@ -11,70 +11,50 @@ tags:
   - code-review
   - tool-agnostic
   - anti-pattern
-last_reviewed: 2026-05-27
+last_reviewed: 2026-11-09
 maturity: established
 ---
 
 # PR Scope Creep as a Human Review Bottleneck
 
-> When a stalled PR blocks dependent work, you add that work to the same PR — making it larger, slower to review, and harder to merge, compounding the bottleneck AI already created.
+> Adding dependent work to a stalled PR enlarges its review scope. A stack can keep those review decisions separate.
 
 ## The pattern
 
-AI coding assistants shift the delivery constraint from writing code to reviewing it. [Faros AI telemetry (10,000+ developers)](https://www.faros.ai/blog/ai-software-engineering) shows high-adoption teams merge 98% more PRs but experience 91% longer review times and 154% larger PRs — pushing changesets past the threshold for effective review.
+A blocked dependency does not have to become a larger review unit. Adding its dependent work to the same PR combines changes that reviewers could otherwise inspect separately. GitHub's [stacked pull requests](https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available/) provide one way to separate those review units while keeping their merge relationship explicit.
 
-When a PR sits unreviewed, adding dependent work to it is the rational local response. [SmartBear's 10-month, 2,500-review study](https://smartbear.com/resources/ebooks/best-kept-secrets-of-code-review/) sets the threshold: defect detection peaks at 200–400 lines and drops sharply beyond.
+The review-capacity concern has measured examples. [Faros' 2025 telemetry](https://www.faros.ai/blog/ai-software-engineering), covering more than 10,000 developers across 1,255 teams, reports 98% more merged PRs and 91% longer review time on high-AI-adoption teams, alongside a 154% increase in average PR size. These are reported associations, not a measured effect of adding dependent work to a stalled PR.
 
-## The feedback loop
+The later [Faros 2026 report](https://www.faros.ai/blog/ai-acceleration-whiplash-takeaways) uses a different comparison: each organization's periods of lowest and highest AI adoption. Its telemetry covers 22,000 developers and more than 4,000 teams; median time in review rises 441.5%. Keep that within-organization baseline separate from the earlier report rather than presenting the percentages as directly comparable estimates.
 
-```mermaid
-graph TD
-    A[AI generates code fast] --> B[PR queue outpaces review]
-    B --> C[PR stalls in queue]
-    C --> D[Work added to stalled PR]
-    D --> E[PR exceeds 400 lines]
-    E --> F[Slower review, fewer defects caught]
-    F --> B
-```
+## What to do instead
 
-The loop is self-reinforcing. [Pullflow's analysis](https://pullflow.com/blog/when-code-reviews-go-too-far/) describes the mechanism: excessive review scope pushes developers to batch changes, inflating PR size and compounding delay. [arXiv:2602.19441](https://arxiv.org/abs/2602.19441v1) finds larger changes reduce merge likelihood in agent-authored PRs, and [CodeRabbit's 2026 report](https://www.coderabbit.ai/blog/2025-was-the-year-of-ai-speed-2026-will-be-the-year-of-ai-quality) finds AI-generated code contains 1.7x more issues than human-written code — making each added line more expensive to review.
+Use a separate PR for each change that needs its own review decision. When one depends on another, consider a stack: GitHub documents smaller, focused PRs that can be reviewed independently and merged together ([GitHub](https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available/)).
 
-## Mitigations
+Before adopting that workflow, distinguish two questions:
 
-[Stacked PRs](https://graphite.com/blog/stacked-prs) let you branch on top of an unmerged PR. You run development and review in parallel, without adding to the stalled changeset.
+1. Can the reviewer understand and approve each change separately?
+2. Must the changes land together, and can the repository's merge path validate that group?
 
-Atomic PR discipline keeps one logical change per PR, under 400 lines. Enforce it with CI diff-size checks.
-
-AI pre-review triages issues and flags high-risk areas before human review. This cuts the cognitive load on each PR. See [Agentic Code Review Architecture](../../code-review/agentic-code-review-architecture.md).
-
-Distribute the review load. When review concentrates on a small senior group, it amplifies the bottleneck. Rotate reviewers and assign by risk.
+These are workflow checks, not a universal line-count rule. Neither the Faros associations nor GitHub's feature announcement establishes that every PR above a particular size has the same review cost.
 
 ## When this backfires
 
-Stacked PRs and strict atomic discipline create overhead that outweighs the benefit in some contexts:
+Stacking separates review units; it does not remove merge requirements. GitHub's general-availability announcement says a stack enters the merge queue as one merge group. Its announced auto-merge behavior waits until all selected PRs meet merge requirements. A stack therefore does not make an unready dependency ready ([GitHub](https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available/)).
 
-- Small or solo teams: one person reviews everything in sequence anyway, so stacking adds branching complexity without shortening the queue.
-- Fast-merge workflows: teams that merge to trunk many times a day may find stacked chains slower to maintain than batching and merging once.
-- Tooling gaps: a stack needs explicit support to hold the chain, and without it rebasing is error-prone and a force-push breaks dependents. GitHub closed that gap for same-repo chains on github.com when [native stacked pull requests](https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available) reached general availability on 2026-10-06, which moved the cost to CI and the merge path rather than removing it — see [Native Pull Request Stacks in an Agent Pipeline](../../workflows/native-pr-stacks-agent-pipeline.md).
+Check the supported host too: the October 2026 announcement makes stacks available on github.com plans and describes GitHub Enterprise Server support as forthcoming. Do not infer availability on a particular server installation from that announcement.
 
-The 400-line threshold is a heuristic — a 600-line rename diff may be trivial while a 200-line cryptographic change is not. Apply limits to complexity, not character count.
+## Example: separate review, grouped merge
 
-## Example
+GitHub documents independent PR review followed by a grouped merge. With the merge-commit method, each PR gets its own merge commit ([GitHub](https://github.blog/changelog/2026-10-06-stacked-pull-requests-generally-available/)).
 
-A team runs three AI coding agents in parallel on a feature sprint. Agent A finishes a 350-line authentication refactor and opens PR #101. Two days pass with no reviewer action — the senior engineer is already reviewing two other large PRs from the same sprint.
-
-Agent B finishes the dependent session-management update. Rather than open a new PR that will also sit in the queue, the developer adds the 280-line change onto PR #101, now at 630 lines — exceeding the cognitive review threshold.
-
-When the reviewer opens PR #101, the combined diff takes 90 minutes rather than 30. The reviewer flags two issues and approves the rest. Defect detection drops sharply above 400 lines, so the authentication logic carries higher undetected-bug risk.
-
-The structural fix: Agent B opens PR #102 targeting PR #101's branch using stacked PRs. Both PRs stay under 400 lines, and the reviewer can read each one on its own. This preserves merge order without letting blocking pressure build up.
+Use that distinction when planning dependent work: keep its review decision visible instead of enlarging an existing PR solely because its dependency has not merged. See [Native Pull Request Stacks in an Agent Pipeline](../../workflows/native-pr-stacks-agent-pipeline.md) for the pipeline integration.
 
 ## Key Takeaways
 
-- AI moves the bottleneck from code generation to human review; reviewer capacity does not scale with generation velocity
-- Scope creep is individually rational but collectively destructive — the natural response to a blocked PR makes the bottleneck worse
-- PRs beyond 400 lines have lower defect detection rates and lower merge probability
-- Structural mitigations (stacked PRs, atomic discipline) outperform process mitigations because they remove blocking pressure
+- Faros reports increased review time alongside increased AI adoption; preserve each report's comparison baseline.
+- A stack can separate review decisions while preserving a dependency's merge relationship.
+- Grouped merging still requires ready PRs; it is not a substitute for verification or reviewer capacity.
 
 ## Related
 
@@ -82,9 +62,7 @@ The structural fix: Agent B opens PR #102 targeting PR #101's branch using stack
 - [Law of Triviality in AI PRs](law-of-triviality-ai-prs.md) — reviewer psychology behind rubber-stamping large diffs
 - [LLM Code Review Overcorrection](llm-review-overcorrection.md) — how AI reviewers misclassify correct code at scale
 - [Shadow Tech Debt](shadow-tech-debt.md) — how AI-accelerated delivery creates invisible debt accumulation
-- [Vibe Coding](vibe-coding.md)
 - [Diff-Based Review Over Output Review](../../code-review/diff-based-review.md)
-- [Human-in-the-Loop Placement](../../workflows/human-in-the-loop.md)
 - [Agentic Code Review Architecture](../../code-review/agentic-code-review-architecture.md)
 - [Agent-Authored PR Integration: Collaboration Signals](../../code-review/agent-authored-pr-integration.md)
 - [Cognitive Load, AI Fatigue, and Sustainable Agent Use](../../human/cognitive-load-ai-fatigue.md) — managing the cognitive costs of sustained AI-augmented work, including review fatigue

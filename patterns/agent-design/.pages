@@ -87,6 +87,7 @@ nav:
       - tiered-memory-architecture.md
       - wiki-memory-agent-maintained-knowledge-base.md
       - self-correcting-memory-evidence-backed-claims.md
+      - salience-steered-memory-with-dreaming.md
       - citation-derived-evidence-graphs.md
       - auto-merged-documentation-updates.md
       - typed-memory-provenance-assertion-gating.md
@@ -286,6 +287,7 @@ nav:
       - permission-policy-enforcement-prerequisite.md
       - shell-surface-hook-matcher-coverage.md
       - per-source-hook-registration-budgets.md
+      - posttooluse-hooks-after-interrupt.md
       - conversation-visibility-tool-availability.md
       - most-restrictive-wins-fusion.md
       - layered-policy-resolution.md

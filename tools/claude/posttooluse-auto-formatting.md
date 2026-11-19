@@ -174,3 +174,4 @@ Auto-formatting on every write is not universally correct. Prefer manual invocat
 - [Hooks for Enforcement vs Prompts for Guidance](../../instructions/hooks-vs-prompts.md)
 - [Architecting a Central Repo for Shared Agent Standards](../../workflows/central-repo-shared-agent-standards.md)
 - [Hooks and Lifecycle Events](../../tool-engineering/hooks-lifecycle-events.md) — the canonical home for the lifecycle model and `PostToolUse` event this pattern uses
+- [PostToolUse Hooks After an Interrupted Turn in Claude Code](../../patterns/agent-design/posttooluse-hooks-after-interrupt.md) — a formatter hook that runs after a `Ctrl+Enter` interrupt is killed if still running at 10 seconds

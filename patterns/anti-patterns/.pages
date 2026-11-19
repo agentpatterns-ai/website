@@ -7,6 +7,7 @@ nav:
       - distractor-interference.md
       - context-poisoning.md
       - documenting-code-the-agent-can-read.md
+      - stale-bug-reference-todos.md
       - converted-text-as-the-document.md
       - dynamic-tool-fetching-cache-break.md
       - mid-session-config-cache-invalidators.md
@@ -15,6 +16,7 @@ nav:
       - recall-trap-retriever-tuning.md
       - verbatim-failure-records.md
       - belief-inertia-after-tool-map-drift.md
+      - experience-rot-silent-tool-changes.md
       - memory-induced-tool-drift.md
       - tool-graph-memory-as-next-tool-guidance.md
       - compliance-trap-conflicting-memory.md
@@ -151,6 +153,7 @@ nav:
       - homogeneous-debate-panel-groundedness.md
       - frozen-judge-release-decisions.md
       - derivation-gap-tool-call-judges.md
+      - upstream-verdicts-in-agent-judge-prompts.md
       - density-normalized-quality-metric.md
       - trigger-conditioned-skill-comparisons.md
       - pass-only-grading-lucky-pass.md
