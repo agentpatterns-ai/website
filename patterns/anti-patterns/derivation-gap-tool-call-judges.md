@@ -38,7 +38,7 @@ Information in view is not a reference. On the uncut benchmark the default is pr
 ## What to do instead
 
 1. Record the derivation path beside each verdict, so a rejection on a cut tool return reads differently from one on a value the judge could see.
-2. Check a schema default in code, with a string comparison. It needs no judge, and it carries the largest gap where nothing is truncated.
+2. Establish why a schema default applies to this request before treating it as the expected value. The paper distinguishes restating a default from deriving its applicability; matching the default string alone does not establish that applicability ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
 3. Derive the reference before the candidate is seen. In DeRef a separate model reads the uncut history and writes the expected value and its source into the judge input: "DeRef raises argument AUROC over Plain in all 12 pairs, by between 1.44 and 22.14 points, and every gain is significant" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
 4. Do not reach for the full history first. It recovered three of four judges on the relocation test, but on the CFB values matching no span of the history "it raises AUROC for none of the three judges, and it lowers it for Jev by 2.83 points and for Qwen3-8B by 13.83 points" ([Ma et al., 2026](https://arxiv.org/abs/2610.18497v1)).
 
@@ -64,7 +64,7 @@ Two properties do the work. The deriver never sees the candidate, so the referen
 ## Key Takeaways
 
 - Ask what the judge could see before asking whether the argument was wrong. The rejection is evidence about the input.
-- Schema defaults are the one case you can take away from the judge entirely, and they carry the largest gap where nothing is cut.
+- A schema default still needs a derivation establishing that it applies to the request; its presence in the schema does not close the gap.
 - A truncated judge does not become uncertain. It ranks the visible wrong value above the correct one it cannot source.
 - Supplying a derived reference moves the single point of failure onto the deriver, which reads every tool return uncut.
 - Price the deriver before you plan on it: a second full-history pass, 2.44 to 7.27 seconds per reference, shared by 1.33 to 1.83 candidates.
@@ -76,3 +76,4 @@ Two properties do the work. The deriver never sees the candidate, so the referen
 - [Deciding an Agent Upgrade on a Frozen Judge's Verdict](frozen-judge-release-decisions.md) — what a path-dependent judge error does to a version comparison
 - [Inference-Time Tool-Call Reviewer](../agent-design/inference-time-tool-call-reviewer.md) — the pre-execution review slot this gap sits in
 - [Silent Adoption of Corrupted Tool Returns](silent-adoption-of-corrupted-tool-returns.md) — the upstream problem that makes an attacker-written tool return worth worrying about
+- [Upstream Verdicts in a Tool-Using Agent Judge's Prompt](upstream-verdicts-in-agent-judge-prompts.md) — the opposite input defect, where the judge's input holds a false verdict and the judge defers to it

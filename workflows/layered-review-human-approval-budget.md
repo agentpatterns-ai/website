@@ -146,3 +146,4 @@ Convergence does the second, and here the post reports figures. In the team's bl
 - [Human-AI Review Synergy in Agentic Code Review](../code-review/human-ai-review-synergy.md) — the measured difference in what agents and people comment on
 - [Reviewer Habituation Decay](../code-review/reviewer-habituation-decay.md) — what sustained agent-PR volume does to an individual reviewer
 - [Explain-the-Change Review Gates for Agent Code](explain-the-change-review-gate.md) — a different answer to the question of where human attention buys the most
+- [Review Expectations for an AI Pull-Request Approval Bot](ai-pr-approval-bot-review-expectations.md) — routes each change to Ship, Show, or Ask using author familiarity

@@ -60,6 +60,18 @@ The authors tested a prompt-level confirmation policy on 115 tasks: the 45 ambig
 
 The paper reports a 52 to 71% cut in CD at a cost of 13 to 17 goal points, and 5 to 12% CD remains. Both halves matter. A goal-only eval sees a 13 to 17 point loss and rejects the policy. A CD-only eval sees the cut and accepts it. Only the pair lets you decide.
 
+## Audit the verifier you already have
+
+A grader that checks the requested state can pass a run that also changed something else. Abrich mutation-tested the AppWorld and WorkArena verifiers with hand-written edits to correct runs and confirmed each false positive against an independent end-state check ([Abrich, 2026](https://arxiv.org/abs/2610.09142v3), §1, §3). Edits that omitted work or changed a value were rejected in 252 of 261 graded runs. All 42 confirmed false positives came from unrequested changes: 6 in AppWorld and 36 in WorkArena (§4.6, Table 2).
+
+AppWorld's tests matched each new payment request to an expected share by receiver and counted none, so a duplicate collapsed into the original (§1). WorkArena's form verifier ran once after submission, and its flag lived in the page, which submitting the form reloads (§1). The author thinks the reload cleared the flag (§4.5). Run after every field, it still passed all 8 runs that filled a text or reference field last (abstract).
+
+Scope the counts. The 6 AppWorld cases are 2 of the 16 audited templates. The 36 WorkArena runs are 12 candidate fields over 3 seeds, in 2 of 4 form templates (§4.4, §7). Every edit was written after reading the verifier source, and the paper gives no prevalence. No policy was trained: the reward formulas read only test verdicts, so a passing duplicate earns the same reward as a correct run (§5, §7). The author's company develops tools that check an automated action's effect (Disclosure).
+
+Two repairs worked on patched copies. A count assertion rejected all 6 edited AppWorld runs and passed all 6 correct ones. Storing the flag outside the page rejected 12 of 12 edited WorkArena runs and accepted 12 of 12 correct ones (§4.3, §4.5).
+
+To audit your own grader, take a reference patch and add one unrequested change, such as a duplicated migration file or an edit outside the task's path scope. If the grader passes it, assert on the full changed-file set or record count, and confirm the reference still passes. Persist any grader signal held in process memory before grading reads it. Whole-state checks cost fields that legitimately vary, such as timestamps (§8).
+
 ## Where it transfers
 
 The authors limit their claim: "The reported CD rates and model rankings are specific to this setting and should not be extrapolated to other domains". They also name what transfers: "the reusable part is the evaluation design, which checks goal satisfaction and authorization compliance separately over realized writes" ([Huang et al., §9](https://arxiv.org/abs/2610.34167v1)). Use the design, not the percentages.
@@ -78,10 +90,12 @@ Two limits apply:
 - Seed tasks with ambiguity, linked state, and external recipients. Those strata held most of the CD, and the safe action in an ambiguous task is a question.
 - Do not extrapolate the percentages. They come from office workflows run once per model, with no coding tasks.
 - Test every mitigation on both axes. Confirmation cut CD by 52 to 71% and cost 13 to 17 goal points.
+- Mutate a reference run with one unrequested change before you trust a grader. In one audit, every confirmed false positive was an unrequested change.
 
 ## Related
 
 - [Overeager-Behavior Elicitation](overeager-behavior-elicitation-scope-trap-fragments.md) — Scores out-of-scope tool calls in coding agents with a filesystem-delta oracle; the closest sibling.
+- [Mutation Testing as a Quality Gate for AI-Generated Test Suites](mutation-testing-quality-gate.md) — Program mutation for test-suite adequacy; the audit above mutates the run instead.
 - [Valid Completion Rate as a Second Scoring Axis](valid-completion-rate-second-axis.md) — Another second axis, for run validity instead of authorization.
 - [Recovery as a Separate Eval Axis](recovery-as-separate-eval-axis.md) — A third axis, scored over faulted runs.
 - [Request Rate and Commit Rate Are Different Safety Numbers](request-vs-commit-safety-readouts.md) — Splits what the model asks for from what the tool commits.

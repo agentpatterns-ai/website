@@ -31,6 +31,7 @@ nav:
       - prefix-executability-agent-evaluation.md
       - repository-perturbation-context-reasoning-diagnosis.md
       - static-difficulty-estimation-issue-triage.md
+      - failure-cause-tests-for-run-alarms.md
       - pre-generation-complexity-scoring.md
       - canary-tools-tool-selection-diagnosis.md
       - precise-debugging-benchmark.md
@@ -75,6 +76,7 @@ nav:
       - request-vs-commit-safety-readouts.md
       - injection-failure-composition.md
       - judge-instrument-stability-check.md
+      - judge-agreement-is-not-correctness.md
       - capability-ladder-eval-probe.md
       - specification-path-testing.md
       - severity-stratified-security-prompt-evaluation.md
@@ -85,6 +87,7 @@ nav:
       - llm-benchmark-auditing.md
       - oracle-integrity-checks-eval-harness.md
       - judge-input-assurance-tests.md
+      - verification-transport.md
       - synae-synthetic-eval-quality.md
       - task-alignment-benchmark.md
       - specification-oracle-gap-audit.md
@@ -117,11 +120,14 @@ nav:
       - golden-query-pairs-regression.md
       - human-review-golden-dataset-curation.md
       - pre-change-impact-analysis.md
+      - dependency-upgrade-repair-completeness.md
       - minimum-cost-evidence-selection.md
       - baseline-aware-test-evaluation-issue-resolution.md
       - bug-discriminating-validation-evidence.md
+      - release-note-edge-inputs-migration-gates.md
       - test-suite-after-refinement-turn.md
       - cut-point-replay-agent-regression-tests.md
+      - anytime-stop-rule-evaluation.md
       - trajectory-aware-benchmark-subset-selection.md
       - per-change-deploy-monitors.md
       - harness-change-belief-check.md
@@ -177,6 +183,7 @@ nav:
       - demand-driven-repo-auditing.md
       - llm-static-verification-natural-language-requirements.md
       - risk-based-shipping.md
+      - version-labels-steer-upgrade-checks.md
       - risk-based-task-sizing.md
       - predictive-claim-gate.md
       - cross-model-review-independence.md

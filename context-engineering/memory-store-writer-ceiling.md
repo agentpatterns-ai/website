@@ -71,3 +71,4 @@ For this comparison, the store's writer is the variable to record before judging
 - [Fact Supersession Memory for Code Assistants](fact-supersession-memory.md) — what to do about stale rows once a store exists
 - [Usage-Reinforced Memory Decay for Long-Running Agents](usage-reinforced-memory-decay.md) — retention scoring for items the store already holds
 - [Organizing Filesystem Agent Memory for Retrieval Cost](../patterns/agent-design/filesystem-memory-organization.md) — the read-side cost of how a store is laid out
+- [Steering Agent Memory: Judge Salience, Then Correct with Dreaming](../patterns/agent-design/salience-steered-memory-with-dreaming.md) — how the writing model's generation changes what it saves, and an offline pass that corrects notes against transcripts

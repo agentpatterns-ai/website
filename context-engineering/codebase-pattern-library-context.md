@@ -52,7 +52,7 @@ The MCP server returns the team's actual pagination helper and its call sites. T
 ## Trade-offs
 
 - Staleness: the index reflects the codebase at extraction time. A library that is not re-built [drifts from the current code](repository-level-retrieval-code-generation.md) and can surface deprecated patterns.
-- Pattern lock-in: retrieving an existing implementation propagates whatever is already there, including suboptimal patterns. The library amplifies the codebase's habits, good and bad.
+- Pattern lock-in: retrieving an existing implementation propagates whatever is already there, including suboptimal patterns. The library amplifies the codebase's habits, good and bad. In security-sensitive code, inserting one existing implementation that lacks the project's guard raised correct-but-exploitable output by 6.3 pp, even with the guard also in context ([A.S.E 2.0](https://arxiv.org/abs/2611.06294v1)). See [retrieving project safeguards](safeguard-aware-context-construction.md).
 - Maintenance cost: extraction, classification, and re-indexing are recurring work. The library earns its keep only when reuse is frequent enough to offset that cost.
 
 ## Key Takeaways

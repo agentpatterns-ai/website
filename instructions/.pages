@@ -44,6 +44,7 @@ nav:
       - hints-over-code-samples.md
       - critical-instruction-repetition.md
       - instruction-compliance-ceiling.md
+      - per-instruction-compliance-is-bimodal.md
       - constraint-degradation-code-generation.md
       - constraint-encoding-compliance-gap.md
       - policy-wording-compliance-tests.md
@@ -78,6 +79,7 @@ nav:
       - trace-contrast-prompt-repair.md
   - "Specifications & Standards":
       - specification-as-prompt.md
+      - behavioral-obligations-in-specs.md
       - frozen-spec-file.md
       - feature-list-files.md
       - standards-as-agent-instructions.md
@@ -107,6 +109,7 @@ nav:
       - irreducibility-triage.md
       - encoded-rule-failure-diagnosis.md
       - agent-context-file-evolution.md
+      - correct-stale-instruction-lines.md
       - prompt-governance-via-pr.md
       - agent-config-as-managed-supply-chain.md
       - frontmatter-body-rule-drift.md
