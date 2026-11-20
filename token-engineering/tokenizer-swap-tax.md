@@ -6,6 +6,7 @@ tags:
   - token-engineering
   - cost-performance
   - tool-agnostic
+  - migration
 aliases:
   - tokenizer migration cost
   - tokenizer inflation tax

@@ -7,6 +7,7 @@ tags:
   - workflows
   - cost-performance
   - tool-agnostic
+  - model-routing
 aliases:
   - per-task coding agent selection
   - routing tasks between coding harnesses

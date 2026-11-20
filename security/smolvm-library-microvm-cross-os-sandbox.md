@@ -6,7 +6,6 @@ tags:
   - security
   - agent-design
   - tool-agnostic
-  - sandboxing
 aliases:
   - smolmachines sandbox
   - smolvm microvm

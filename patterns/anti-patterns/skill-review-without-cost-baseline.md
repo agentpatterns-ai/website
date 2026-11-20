@@ -8,6 +8,7 @@ tags:
   - security
   - tool-agnostic
   - arxiv
+  - skills
 aliases:
   - token amplification via skill injection
   - skill cost baseline

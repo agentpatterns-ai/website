@@ -5,7 +5,7 @@ tags:
   - workflows
   - agent-design
   - copilot
-  - code-review
+  - mcp
 aliases:
   - Copilot CLI
   - GitHub Copilot CLI

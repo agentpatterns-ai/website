@@ -5,6 +5,7 @@ tags:
   - training
   - cost-performance
   - copilot
+  - model-routing
 last_reviewed: 2026-09-29
 ---
 

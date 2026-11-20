@@ -11,7 +11,7 @@ aliases:
   - fail-closed hook callbacks
   - hook failure mode declaration
   - onFailure block for hooks
-last_reviewed: 2026-11-03
+last_reviewed: 2026-11-20
 maturity: emerging
 ---
 
@@ -19,7 +19,7 @@ maturity: emerging
 
 > A gate that breaks renders no verdict, so decide each hook's failure mode rather than inheriting the harness default.
 
-A hook allows, denies, or renders no verdict at all because the script is missing, an import throws, the endpoint is unreachable, or the process runs past its timeout. Command and HTTP hook failures in Claude Code usually let the action through. Cursor also defaults to fail-open for crashes and timeouts. Copilot CLI's answer depends on how the hook is wired. Claude Code states its default in one line: "On most events, when a hook fails or times out, Claude Code still carries out the action" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). Leaving the default in place is a decision.
+A hook allows, denies, or renders no verdict at all because the script is missing, an import throws, the endpoint is unreachable, or the process runs past its timeout. Command, HTTP, and `mcp_tool` hook failures in Claude Code usually let the action through. Cursor also defaults to fail-open for crashes and timeouts. Copilot CLI's answer depends on how the hook is wired. Claude Code states its default in one line: "On most events, when a hook fails or times out, Claude Code still carries out the action" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). Leaving the default in place is a decision.
 
 ## When a hook earns fail-closed
 
@@ -31,7 +31,7 @@ Can the person who hits the block fix it? The error message is the only thing be
 
 ## What counts as a failure
 
-For Claude Code command and HTTP hooks with `onFailure: "block"`, five things count as a failure: a hook that cannot start, an exit code other than 0 or 2, an HTTP error, a timeout, and output that fails JSON parsing or schema validation ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). Two of them are easy to miss. A timeout counts, which turns a slow dependency into a stopped agent. An unexpected exit code counts "even if it printed JSON that allows the action, such as `permissionDecision: "allow"`". So a hook that exits 1 to warn starts blocking the day the field goes on. Have it exit 0 where it only warns. The [hook catalog](../tool-engineering/hook-catalog.md) covers the exit-code semantics underneath this.
+For Claude Code command, HTTP, and `mcp_tool` hooks with `onFailure: "block"`, six things count as a failure: a hook that cannot start, an exit code other than 0 or 2, an HTTP error, an MCP failure, a timeout, and output that fails JSON parsing or schema validation ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). An MCP failure is an `mcp_tool` hook whose "server isn't connected, or its tool returns an error". Three of them are easy to miss. A timeout counts, which turns a slow dependency into a stopped agent. An unexpected exit code counts "even if it printed JSON that allows the action, such as `permissionDecision: "allow"`". So a hook that exits 1 to warn starts blocking the day the field goes on. Have it exit 0 where it only warns. On an `mcp_tool` hook, with `"block"` set on an event such as `PreToolUse` or `UserPromptSubmit`, "a non-empty answer also counts unless it's `{}` or JSON that sets a hook output field other than `reason`", so a server that answers in plain text blocks every call. The [hook catalog](../tool-engineering/hook-catalog.md) covers the exit-code semantics underneath this.
 
 ## Where each harness puts the choice
 
@@ -39,7 +39,7 @@ The three harnesses disagree about who owns the decision.
 
 | Harness | Default | Where the choice lives |
 |---|---|---|
-| Claude Code | Fail open on most events | `onFailure: "block"` per hook, added for command and HTTP hooks in 2.1.295 and extended to Agent SDK hook callbacks in 2.1.317 ([changelog](https://code.claude.com/docs/en/changelog#2-1-317)) |
+| Claude Code | Fail open on most events | `onFailure: "block"` per hook, added for command and HTTP hooks in 2.1.295, extended to Agent SDK hook callbacks in 2.1.317 ([changelog](https://code.claude.com/docs/en/changelog#2-1-317)), and to `mcp_tool` hooks in 2.1.328 ([changelog](https://code.claude.com/docs/en/changelog#2-1-328)) |
 | Cursor | Fail open | `failClosed: true` per hook, default `false`; unavailable on hooks configured from the dashboard ([Cursor hooks](https://cursor.com/docs/agent/hooks#cloud-distribution-enterprise-only)) |
 | Copilot CLI | Mixed, fixed by transport | No per-hook field. A command `preToolUse` hook fails closed on a crash or non-zero exit; its timeouts and every HTTP `preToolUse` failure fail open ([hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference#hook-event-input-payloads)) |
 
@@ -94,7 +94,7 @@ Delete `check-command.js` and an `ls` call is refused rather than run. The docum
 ## Key Takeaways
 
 - Set the failure mode on each hook as you write it. Every one of the three harnesses lets some gate failures through unless you intervene, so an untouched default is a decision somebody has to defend.
-- Audit for the inverse as well as the gap: in Claude Code a hook that exits 1 to warn becomes a blocker the day you harden it.
+- Audit for the inverse as well as the gap: in Claude Code a hook that exits 1 to warn becomes a blocker the day you harden it, and so does an `mcp_tool` hook on an event such as `PreToolUse` or `UserPromptSubmit` whose server answers in plain text.
 - Pair every fail-closed gate with a reason that names the fix. A stack trace is not one, and a block nobody can clear gets the hook deleted.
 - Check whether your event supports the field before trusting it. In Claude Code the stop-class and background hooks ignore it.
 - In the Agent SDK, check what each error handler returns. Returning no denial after a policy-check error bypasses that check.
@@ -106,3 +106,4 @@ Delete `check-command.js` and an `ls` call is refused rather than run. The docum
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — the layers beneath a hook that decide how much a fail-open window actually costs.
 - [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — what happens to a control when it ships to a fleet in one install.
 - [A Skill's Tool Grant Travels With Its Hooks](skill-tool-grant-travels-with-hooks.md) — what a policy should do to a tool grant when it stops that component's hooks from running at all.
+- [Fall Back to the No-Hook Decision When a Permission Check Errors](hook-allow-failed-permission-check.md) — the opposite case, where the hook allows and the permission check breaks.

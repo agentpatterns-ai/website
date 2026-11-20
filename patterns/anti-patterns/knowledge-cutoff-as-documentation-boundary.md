@@ -4,9 +4,9 @@ term: "Cutoff-Derived Documentation Boundary"
 description: "A model's published cutoff date does not mark where its knowledge of your product ends. Across 336 graded Dev Proxy tasks the passes and failures scatter on both sides of it."
 tags:
   - anti-pattern
-  - testing-verification
   - tool-agnostic
   - arxiv
+  - context-engineering
 aliases:
   - cutoff-derived documentation boundary
   - cutoff date as a capability proxy

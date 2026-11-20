@@ -8,6 +8,7 @@ tags:
   - security
   - tool-agnostic
   - arxiv
+  - skills
 aliases:
   - semantic fuzzing for agent skills
   - skill guardrail violation discovery

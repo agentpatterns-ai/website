@@ -6,6 +6,7 @@ tags:
   - token-engineering
   - cost-performance
   - tool-agnostic
+  - automation
 last_reviewed: 2026-06-12
 maturity: established
 ---

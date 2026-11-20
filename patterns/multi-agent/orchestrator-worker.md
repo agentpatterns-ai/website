@@ -21,7 +21,7 @@ maturity: established
 Learn it hands-on with the [Orchestrator-Worker guided lesson and quizzes](https://learn.agentpatterns.ai/harness-engineering/orchestrator-worker/).
 
 !!! note "Also known as"
-    Orchestrator-Worker, Parallel Dispatch, Scatter-Gather. The delegation variant is described here. For the broader pattern survey, see [Agent Composition Patterns](../agent-design/agent-composition-patterns.md). For the synthesis variant, see [Fan-Out Synthesis](fan-out-synthesis.md). For implementation guidance, see [Sub-Agents Fan-Out](sub-agents-fan-out.md).
+    Orchestrator-Worker, Parallel Dispatch, Scatter-Gather. The delegation variant is described here. For the broader pattern survey, see [Agent Composition Patterns](agent-composition-patterns.md). For the synthesis variant, see [Fan-Out Synthesis](fan-out-synthesis.md). For implementation guidance, see [Sub-Agents Fan-Out](sub-agents-fan-out.md).
 
 ## Structure
 
@@ -147,7 +147,7 @@ Because the orchestrator makes every decomposition decision, a misclassified dec
 
 ## Related
 
-- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
+- [Agent Composition Patterns](agent-composition-patterns.md)
 - [Heuristic-Based Effort Scaling in Agent Prompts](../agent-design/heuristic-effort-scaling.md)
 - [Prompt Chaining](../../context-engineering/prompt-chaining.md)
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md)

@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - evals
   - tool-agnostic
+  - skills
 aliases:
   - evaluating agent skills
   - skill quality evaluation

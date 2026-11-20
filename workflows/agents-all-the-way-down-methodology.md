@@ -139,6 +139,6 @@ The harvested CLI is the unit other agents call; the scenario-driving agent is t
 - [Single-CLI Agent Platform](single-cli-agent-platform.md) — adjacent CLI-as-interface idea at the lifecycle level, not the agent-behavior level.
 - [Agent Development Lifecycle](../patterns/agent-design/agent-development-lifecycle.md) — the four-phase product loop this methodology slots inside.
 - [Claude Agent SDK](../tools/claude/agent-sdk.md) — SDK-specific contrast: one vendor's substrate carrier.
-- [Agent Composition Patterns](../patterns/agent-design/agent-composition-patterns.md) — composition vocabulary the Turtle pattern reduces to CLI composition.
+- [Agent Composition Patterns](../patterns/multi-agent/agent-composition-patterns.md) — composition vocabulary the Turtle pattern reduces to CLI composition.
 
 The workflows-pages contract asks for at least one outbound link to a `docs/patterns/` or `docs/techniques/` page. The named building blocks in P2 (function calling, MCP, the agent loop, hooks, scaffolding) do not yet have dedicated patterns/techniques pages on this site; the rule directs surfacing the gap rather than inventing a destination — recorded here as a follow-up for the next coverage pass.

@@ -38,6 +38,18 @@ Not every part of an agent system needs behavioral testing. A capability matrix 
 
 Mock tools to test agent reasoning without external dependencies. Tool output quality — concise, filtered, well-formatted — also needs evaluation: tool responses shape the context the agent reasons over downstream.
 
+## Tiers by LLM call count: a vendor proposal
+
+[Vercel's post](https://vercel.com/blog/agent-evals) (Fahmy and Selivanov, 16 November 2026) sorts tests for agent-facing software by the LLM calls they "typically need": deterministic tests (0), one-turn evals (1) and E2E evals (2+ across a whole task). It calls the count "a great proxy for the effort to build them, the time they take to run, and the cost of running them", and says the cheap tests "should make up the bulk of your test suite", after the practical test pyramid.
+
+This is the vendor's proposal. It measures neither claim, its result tables are hypothetical (one says "numbers are illustrative"), and no independent measurement of call-count tiers was found. The count covers the agent's calls. The post does not say how to count a judge, so keep [grader cost](../training/eval-driven-development/grading-strategies.md) separate.
+
+The selection rule is to "start with the problem you want to catch and pick the lowest tier that can catch it". For the post's Success stage, whether the agent completes the task correctly, that is the top tier, because each step "can look reasonable on its own, and the agent can still get the wrong outcome". A one-turn eval that pins the first command is a path check, so see [Grade Agent Outcomes](grade-agent-outcomes.md).
+
+One observed result: Codex passed an impossible-request task almost every time, yet "9 out of 10 passes were the agent giving up without looking". No trial count is stated. A tighter E2E verifier fixed it.
+
+To use the tiers, replay a failing transcript up to the bad step and test the single next call ([cut-point replay](cut-point-replay-agent-regression-tests.md)). If it reproduces, keep it as a one-turn eval and keep the E2E task for the outcome. For the metric, see [pass@k Metrics](pass-at-k-metrics.md).
+
 ## Three grading methods
 
 Use the lightest method that covers each case:
@@ -172,6 +184,7 @@ On constrained function-calling agents, where structured JSON against a fixed sc
 - Start with ~20 representative queries — small samples catch large effect sizes
 - Define pass rate thresholds as a product decision, not an engineering target
 - Evaluate end-state and decision quality, not execution paths
+- Vercel's call-count tiers are an unmeasured vendor heuristic. For whether the task is done right, they point to E2E evals.
 - In multi-agent systems, monitor cross-agent interaction patterns
 
 ## Related

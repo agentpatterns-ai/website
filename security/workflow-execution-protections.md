@@ -10,6 +10,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - github-actions
 last_reviewed: 2026-09-20
 maturity: emerging
 status: current

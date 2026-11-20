@@ -11,6 +11,7 @@ tags:
   - agent-design
   - token-engineering
   - arxiv
+  - cost-performance
 last_reviewed: 2026-09-23
 maturity: emerging
 ---

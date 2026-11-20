@@ -27,7 +27,7 @@ This mirrors how effective teams work: a project manager defines the process and
 
 ## Why it matters
 
-When orchestration and expertise live in the same file, every change touches both. Adding a pipeline step means editing the expert's definition. Improving an agent's quality bar means editing the pipeline. The two change at different rates and for different reasons, so separating them is the [composition](agent-composition-patterns.md) win.
+When orchestration and expertise live in the same file, every change touches both. Adding a pipeline step means editing the expert's definition. Improving an agent's quality bar means editing the pipeline. The two change at different rates and for different reasons, so separating them is the [composition](../multi-agent/agent-composition-patterns.md) win.
 
 Once separated, they become composable. The same `content-writer` agent can serve a `draft-content` command and an `implement-issue` command. The same `research-topic` command can delegate to a different specialist depending on the domain. Neither change means touching the other file.
 
@@ -114,7 +114,7 @@ The principle comes from [separation of concerns](https://en.wikipedia.org/wiki/
 
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
 - [Task-Specific Agents vs Role-Based Agents](task-specific-vs-role-based-agents.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
+- [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md)
 - [Delegation Decision](delegation-decision.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)
 - [Persona-as-Code: Defining Agent Roles as Structured Docs](persona-as-code.md)

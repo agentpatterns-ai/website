@@ -5,6 +5,8 @@ description: "Record a failed or silent reviewer as not run, retry it once, and 
 tags:
   - multi-agent
   - tool-agnostic
+  - code-review
+  - reliability
 aliases:
   - failed reviewer recorded as not run
   - per-reviewer status in fan-out review

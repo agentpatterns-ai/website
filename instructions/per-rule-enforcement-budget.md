@@ -4,9 +4,9 @@ term: "Per-Rule Enforcement Budget"
 description: "In one evaluation, anchoring rules and demanding per-step proof lifted process-rule following from 0.35 to 0.87 and code-visible rules only from 0.59 to 0.75. Budget enforcement per rule, not per file."
 tags:
   - instructions
-  - human-factors
   - tool-agnostic
   - arxiv
+  - testing-verification
 aliases:
   - per-rule enforcement budget
   - process rules versus coding rules

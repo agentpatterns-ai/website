@@ -6,8 +6,8 @@ tags:
   - anti-pattern
   - tool-agnostic
   - memory
-  - context-engineering
   - arxiv
+  - tool-engineering
 aliases:
   - tool transition graph memory
   - next-tool suggestion memory

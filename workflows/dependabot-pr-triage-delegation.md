@@ -10,6 +10,7 @@ tags:
   - workflows
   - agent-design
   - security
+  - automation
 applies_to: "copilot@1.x"
 last_reviewed: 2026-08-28
 status: current

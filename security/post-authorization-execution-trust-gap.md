@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - mcp
 aliases:
   - post-authorization execution trust gap
   - attested capability leases

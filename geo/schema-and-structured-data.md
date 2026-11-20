@@ -4,7 +4,6 @@ term: "Schema and Structured Data"
 description: "FAQPage JSON-LD yields measurable citation lifts in AI responses (2.7x–3.2x across studies). Implementation guide for FAQPage, HowTo, and DefinedTerm schema in MkDocs Material."
 tags:
   - geo
-  - workflows
   - tool-agnostic
   - technique
 aliases:

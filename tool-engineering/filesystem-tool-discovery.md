@@ -9,6 +9,7 @@ tags:
   - claude
   - source:opendev-paper
   - tool-engineering
+  - mcp
 aliases:
   - "lazy tool loading"
   - "on-demand tool loading"

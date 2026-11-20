@@ -6,6 +6,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - automation
 aliases:
   - scheduled run principal
   - deferred agent run identity

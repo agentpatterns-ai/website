@@ -25,7 +25,6 @@ nav:
       - continual-learning-layers.md
       - delegation-decision.md
       - delegation-threshold-calibration.md
-      - selective-dynamic-concurrency.md
       - eval-strategy-by-agent-generation.md
       - execution-first-delegation.md
       - execution-lineage-dag.md
@@ -183,9 +182,7 @@ nav:
       - cache-safe-routing-boundaries.md
       - calibrated-deciders-in-loop-decisions.md
       - comparison-only-advisor.md
-      - copilot-auto-tier-selection.md
       - cross-vendor-competitive-routing.md
-      - decision-fork-replay.md
       - decoupled-search-grounding.md
       - deterministic-fast-paths.md
       - field-change-intent-over-generated-diffs.md
@@ -262,9 +259,9 @@ nav:
       - wink-agent-misbehavior-correction.md
       - wip-1-littles-law-agent-throughput.md
   - "Harness & Tools":
-      - agent-composition-patterns.md
       - embedded-harness-integration-layer.md
       - harness-adapter-layer.md
+      - metadata-index-for-agent-file-search.md
       - interface-realization-repair.md
       - agent-sdk-hosting-topology.md
       - cloud-agent-state-layer-decoupling.md
@@ -341,7 +338,6 @@ nav:
       - session-harness-sandbox-separation.md
       - temporary-compensatory-mechanisms.md
       - think-tool.md
-      - vscode-agents-parallel-tasks.md
   - adaptive-generate-rank-verify.md
   - agent-event-streaming-model.md
   - agent-jit-compilation.md

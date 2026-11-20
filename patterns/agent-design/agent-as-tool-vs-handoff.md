@@ -88,6 +88,6 @@ The orchestrator reads the returned translation and writes the reply. Wired as a
 
 - [Forked vs Fresh Subagents: When to Inherit the Parent Conversation](../multi-agent/forked-vs-fresh-subagents.md) — the context-inheritance axis this page holds fixed
 - [Agent Handoff Protocols: Passing Work Between Agents](../multi-agent/agent-handoff-protocols.md) — the contract to write once control does transfer
-- [Agent Composition Patterns for Multi-Agent Workflows](agent-composition-patterns.md) — the structural shapes these delegations compose into
+- [Agent Composition Patterns for Multi-Agent Workflows](../multi-agent/agent-composition-patterns.md) — the structural shapes these delegations compose into
 - [The Delegation Decision: When to Use an Agent vs Do It Yourself](delegation-decision.md) — whether to delegate at all, before choosing a form
 - [Typed Schemas at Agent Boundaries for Multi-Agent Systems](../multi-agent/typed-schemas-at-agent-boundaries.md) — typing the input and result the tool form passes

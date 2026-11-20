@@ -7,6 +7,7 @@ tags:
   - agent-design
   - security
   - copilot
+  - automation
 aliases:
   - comment as agent trigger
   - comment-triggered automation

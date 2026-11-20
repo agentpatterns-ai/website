@@ -5,7 +5,6 @@ description: "Encoding merge-conflict resolution as a named agent skill: trace e
 tags:
   - tool-engineering
   - skills
-  - code-review
   - tool-agnostic
 aliases:
   - resolving-merge-conflicts skill

@@ -139,7 +139,7 @@ When the task is simple and linear. Spawning multiple filtered subagents adds or
 - [Blast Radius Containment: Least Privilege for AI Agents](../../security/blast-radius-containment.md)
 - [Defense-in-Depth Agent Safety](../../security/defense-in-depth-agent-safety.md)
 - [Specialized Agent Roles](../agent-design/specialized-agent-roles.md)
-- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
+- [Agent Composition Patterns](agent-composition-patterns.md)
 - [Declarative Multi-Agent Composition](declarative-multi-agent-composition.md)
 - [Typed Schemas at Agent Boundaries](typed-schemas-at-agent-boundaries.md)
 - [Tool Calling Schema Standards](../../standards/tool-calling-schema-standards.md)

@@ -6,7 +6,6 @@ tags:
   - security
   - agent-design
   - tool-agnostic
-  - sandboxing
 aliases:
   - sandbox runtime comparison
   - agent sandbox runtime selection

@@ -11,6 +11,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - multi-agent
 last_reviewed: 2026-09-09
 maturity: emerging
 ---

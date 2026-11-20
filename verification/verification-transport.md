@@ -79,3 +79,4 @@ Reflection does not replace evidence. The deliberative second audit repaired 8.7
 - [Trajectory Projection: A Flattened View of Agent Traces](../observability/trajectory-projection.md)
 - [Per-Type Retention Policy for Agent Compaction](../context-engineering/per-type-retention-under-compaction.md)
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md)
+- [Judge Agreement Is Not Correctness in AI Agent Evals](judge-agreement-is-not-correctness.md)

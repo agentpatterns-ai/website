@@ -3,7 +3,6 @@ title: "Reading a Coding-Agent Vendor's Security Certificate"
 term: "Vendor Certificate Scope Reading"
 description: "An agent-security certificate attests organizational controls, product behavior, or both. Read the scope statement to learn which verification work it removes."
 tags:
-  - testing-verification
   - security
   - human-factors
   - tool-agnostic
@@ -63,8 +62,8 @@ The behavioral half carries a ceiling of its own. Seth and Sankarapu call the di
 
 ## Related
 
-- [Enforced Versus Advisory Controls in LLM-Native IDEs](../security/enforced-versus-advisory-controls.md) — sort the safeguards a certificate names by where they get evaluated
+- [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — sort the safeguards a certificate names by where they get evaluated
 - [Task Completion as Tool Certification (Silent Tool Rot)](../patterns/anti-patterns/task-completion-as-tool-certification.md) — the same inference error one level down, at the tool a session builds
-- [Benchmark-Driven Tool Selection for Code Generation](benchmark-driven-tool-selection.md) — what to measure yourself once the certificate is read
-- [Policy-Graded Evaluation of Coding Agents](policy-graded-agent-evaluation.md) — score an agent at each enforced security tier instead of once
-- [Lethal Trifecta Threat Model](../security/lethal-trifecta-threat-model.md) — the exposure a coding agent brings before any vendor control applies
+- [Benchmark-Driven Tool Selection for Code Generation](../verification/benchmark-driven-tool-selection.md) — what to measure yourself once the certificate is read
+- [Policy-Graded Evaluation of Coding Agents](../verification/policy-graded-agent-evaluation.md) — score an agent at each enforced security tier instead of once
+- [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the exposure a coding agent brings before any vendor control applies

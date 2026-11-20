@@ -4,6 +4,7 @@ description: "Move scheduled agent work to Anthropic-managed cloud infrastructur
 tags:
   - claude
   - workflows
+  - automation
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-06-03
 status: current

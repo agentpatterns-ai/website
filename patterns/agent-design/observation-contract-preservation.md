@@ -5,7 +5,6 @@ description: "Tool outputs like presigned URLs and session tokens are contract-b
 tags:
   - agent-design
   - tool-agnostic
-  - testing-verification
   - arxiv
   - reliability
 aliases:

@@ -11,6 +11,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - skills
 last_reviewed: 2026-10-16
 maturity: emerging
 ---

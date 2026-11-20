@@ -84,6 +84,7 @@ nav:
       - abstraction-bloat.md
       - copy-paste-agent.md
       - pattern-replication-risk.md
+      - vulnerability-propagation-from-existing-code.md
       - training-data-gravity.md
       - boring-technology-bias.md
       - cross-session-reimplementation.md
@@ -188,6 +189,7 @@ nav:
       - mcp-contract-as-filesystem-sandbox.md
       - per-action-approval-as-episode-authorization.md
       - destructive-mcp-calls-neither-side-confirms.md
+      - risky-fallback-crosses-action-boundary.md
   - "Injection & Untrusted Input":
       - single-layer-injection-defence.md
       - direct-prompt-injection-collaboration.md
@@ -247,6 +249,7 @@ nav:
       - agent-laundered-bug-reports.md
       - proactive-team-agent-tool-rollout.md
       - agent-headcount-vanity-metric.md
+      - token-spend-as-productivity-metric.md
       - client-version-metric-dip-as-adoption-loss.md
       - mention-shaped-placeholders-as-inert-text.md
   - ...

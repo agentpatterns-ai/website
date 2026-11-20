@@ -7,6 +7,7 @@ tags:
   - instructions
   - tool-agnostic
   - arxiv
+  - skills
 aliases:
   - Skill Programs
   - Program Functions for Agents

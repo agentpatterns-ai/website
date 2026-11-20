@@ -7,6 +7,7 @@ tags:
   - memory
   - context-engineering
   - tool-agnostic
+  - automation
 aliases:
   - unreviewed documentation merges
   - automated doc PR merge

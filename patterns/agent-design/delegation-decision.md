@@ -126,6 +126,6 @@ Often not. A task looks verifiable because a criterion exists, but the suite may
 - [Execution-First Delegation](execution-first-delegation.md)
 - [The Yes-Man Agent](../anti-patterns/yes-man-agent.md)
 - [Agent Backpressure](agent-backpressure.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
+- [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md)
 - [Agents vs Commands](agents-vs-commands.md)
 - [Delegated-Autonomy Boundary Artifacts (AJR and ADP)](delegated-autonomy-boundary-artifacts.md) — the artifact that records this delegation decision, including the rationale when an agent is rejected

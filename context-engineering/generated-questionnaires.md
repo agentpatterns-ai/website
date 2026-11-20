@@ -4,7 +4,8 @@ term: "Generated Questionnaire"
 description: "When a decision is blocked on knowledge in another person's head, have the agent draft a questionnaire for them rather than guess at the gap itself."
 tags:
   - context-engineering
-  - claude
+  - skills
+  - tool-agnostic
 aliases:
   - to-questionnaire
   - discovery questionnaire

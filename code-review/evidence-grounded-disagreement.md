@@ -8,6 +8,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - multi-agent
 aliases:
   - adversarial review protocol
   - evidence-grounded disagreement

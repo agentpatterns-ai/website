@@ -5,7 +5,6 @@ description: "Pooled-evidence factuality verifiers cannot see when an MCP agent 
 tags:
   - anti-pattern
   - testing-verification
-  - security
   - tool-agnostic
   - arxiv
   - mcp

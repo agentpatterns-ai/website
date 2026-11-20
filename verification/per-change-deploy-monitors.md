@@ -7,6 +7,7 @@ tags:
   - workflows
   - cursor
   - arxiv
+  - observability
 aliases:
   - per-PR deploy monitor
   - change health monitoring

@@ -7,6 +7,7 @@ tags:
   - evals
   - tool-agnostic
   - arxiv
+  - harness-engineering
 aliases:
   - fixed-model harness comparison
   - frozen harness comparison

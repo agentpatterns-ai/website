@@ -9,6 +9,7 @@ tags:
   - context-engineering
   - tool-agnostic
   - arxiv
+  - instructions
 last_reviewed: 2026-09-11
 maturity: emerging
 ---

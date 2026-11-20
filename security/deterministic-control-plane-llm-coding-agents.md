@@ -7,6 +7,7 @@ tags:
   - instructions
   - tool-agnostic
   - arxiv
+  - supply-chain
 aliases:
   - Deterministic Control Plane for LLM Coding Agents
   - Lockfile for Agent Rules

@@ -104,6 +104,7 @@ The GitHub server sees only `GITHUB_PERSONAL_ACCESS_TOKEN`. The Postgres server 
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — env-var injection into the agent process itself, the parent layer this pattern bounds
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md) — the structural alternative when broad-scope credentials must never reach the agent process
 - [Workload Identity Federation for Agent Runtimes](workload-identity-federation-for-agents.md) — removes long-lived API keys entirely, so even per-server env scoping has nothing high-blast-radius to protect
+- [Credential-Free Subprocesses: Strip Tokens From Agent Tools](credential-free-agent-subprocesses.md) — the same scoping applied to the harness's own ripgrep and git calls and to your tool wrappers
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — env scoping is one tool for removing the private-data leg from an MCP server's execution path
 - [Credential Hygiene for Agent Skill Authorship](credential-hygiene-agent-skills.md) — the authoring-time analogue: keep credentials out of skill files, the way per-server scoping keeps them out of server env blocks
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — the broader principle this pattern instantiates at the MCP config layer

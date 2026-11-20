@@ -134,7 +134,7 @@ Agent effectiveness depends on matching coordination structure to task structure
 
 - [Specialized Agent Roles](specialized-agent-roles.md) — parallel counterpart: assigning distinct specializations to concurrent agents
 - [Agent Definition Formats: How Tools Define Agent Behavior](../../standards/agent-definition-formats.md)
-- [VS Code Agents App: Agent-Native Parallel Task Execution](vscode-agents-parallel-tasks.md) — running multiple task-specific agents simultaneously in a dedicated execution surface
+- [VS Code Agents App: Agent-Native Parallel Task Execution](../../tools/copilot/vscode-agents-parallel-tasks.md) — running multiple task-specific agents simultaneously in a dedicated execution surface
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
 - [Progressive Disclosure for Agent Definitions](progressive-disclosure-agents.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)

@@ -12,6 +12,7 @@ tags:
   - arxiv
   - reliability
   - cost-performance
+  - observability
 last_reviewed: 2026-10-11
 maturity: emerging
 status: current

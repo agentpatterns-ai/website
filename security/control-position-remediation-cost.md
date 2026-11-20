@@ -8,7 +8,6 @@ aliases:
   - shared responsibility for agent runtime patching
 tags:
   - security
-  - agent-design
   - tool-agnostic
 last_reviewed: 2026-11-02
 maturity: emerging

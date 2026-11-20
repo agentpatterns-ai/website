@@ -8,6 +8,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - cost-performance
 aliases:
   - repair agent latency budget
   - staleness-bounded program repair

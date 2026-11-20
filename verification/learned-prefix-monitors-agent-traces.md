@@ -103,5 +103,5 @@ Post-hoc DFA extraction converts the trained monitor into a finite-state represe
 - [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md) — the labeled-outcome corpus the monitor trains against can also seed regression evals.
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — stage-level diagnostic that pairs with distribution-level monitoring.
 - [Trajectory-Opaque Evaluation Gap](eval-blind-spots.md) — why outcome-only grading misses safety failures the prefix view catches.
-- [Corpus-Level Trace Diagnostics](corpus-level-trace-diagnostics.md) — offline cross-trace analysis that complements online prefix scoring.
+- [Corpus-Level Trace Diagnostics](../observability/corpus-level-trace-diagnostics.md) — offline cross-trace analysis that complements online prefix scoring.
 - [Decomposed Red-Teaming Agent Monitors](decomposed-red-teaming-agent-monitors.md) — adversarial monitor evaluation that exposes the same false-positive-rate calibration problem.

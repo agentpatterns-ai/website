@@ -6,6 +6,8 @@ tags:
   - workflows
   - agent-design
   - claude
+  - automation
+  - observability
 aliases:
   - unattended agent reporting
   - failing well when nobody is watching

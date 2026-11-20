@@ -7,6 +7,7 @@ tags:
   - workflows
   - tool-agnostic
   - reliability
+  - automation
 aliases:
   - self-healing agent loop
   - regression autofix pipeline

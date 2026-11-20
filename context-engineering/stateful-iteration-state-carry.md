@@ -11,6 +11,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - loop-engineering
 last_reviewed: 2026-06-16
 maturity: emerging
 ---

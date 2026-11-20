@@ -6,7 +6,6 @@ aliases:
   - Golden Query Pairs
   - Eval Regression Tests
 tags:
-  - agent-design
   - testing-verification
   - evals
   - tool-agnostic

@@ -6,6 +6,7 @@ tags:
   - security
   - agent-design
   - tool-agnostic
+  - observability
 aliases:
   - agent provenance record
   - retrieval trail as audit evidence

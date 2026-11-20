@@ -171,7 +171,7 @@ Practitioners have flagged a further constraint at scale. Because A2A uses direc
 
 - [Agent Cards: Capability Discovery Standard](agent-cards.md)
 - [MCP: The Plumbing Behind Agent Tool Access](mcp-protocol.md)
-- [Agent Composition Patterns](../patterns/agent-design/agent-composition-patterns.md)
+- [Agent Composition Patterns](../patterns/multi-agent/agent-composition-patterns.md)
 - [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)
 - [Governance Layer for Agent Interoperability Protocols](protocol-governance-layer.md)
 - [Treating Agent Delegation as Routing, Not Authorization](../patterns/anti-patterns/agent-delegation-as-routing.md)

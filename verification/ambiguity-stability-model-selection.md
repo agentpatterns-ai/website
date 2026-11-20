@@ -10,6 +10,7 @@ tags:
   - evals
   - tool-agnostic
   - arxiv
+  - benchmarks
 last_reviewed: 2026-09-20
 maturity: emerging
 ---

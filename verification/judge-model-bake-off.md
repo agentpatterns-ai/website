@@ -7,6 +7,7 @@ tags:
   - evals
   - tool-agnostic
   - arxiv
+  - model-routing
 aliases:
   - judge model selection
   - evaluator bake-off

@@ -6,6 +6,7 @@ tags:
   - instructions
   - cost-performance
   - tool-agnostic
+  - model-routing
 aliases:
   - codified effort and escalation policy
   - default-cheap effort policy

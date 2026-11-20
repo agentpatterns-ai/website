@@ -2,7 +2,6 @@
 title: "Claude Code Review"
 description: "Anthropic's managed multi-agent service that reviews every GitHub PR and posts inline findings — no subagent configuration required."
 tags:
-  - testing-verification
   - workflows
   - code-review
   - claude

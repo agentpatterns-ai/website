@@ -111,6 +111,6 @@ The script uses `--cwd "$PWD"` rather than parsing the JSON to filter, because t
 
 - [Subagent OTel Trace Correlation via `agent_id` Attribute](subagent-otel-trace-correlation.md)
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
-- [In-Session Transcript Search](transcript-search.md)
+- [In-Session Transcript Search](../tools/claude/transcript-search.md)
 - [Plugin Background Monitors](../tools/claude/plugin-background-monitors.md)
 - [Monitor Tool: Event Streaming from Background Scripts](../tools/claude/monitor-tool.md)

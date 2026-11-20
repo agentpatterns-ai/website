@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - multi-agent
   - tool-agnostic
+  - code-review
 aliases:
   - paraphrase-first comprehension review
   - zero-context reader paraphrase

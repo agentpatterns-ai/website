@@ -8,6 +8,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - security
 aliases:
   - compositional authorization failure
   - per-action authorization does not compose

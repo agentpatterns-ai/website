@@ -101,6 +101,6 @@ The [nibzard catalog entry](https://github.com/nibzard/awesome-agentic-patterns/
 - [Petri Net of Thoughts: Formal Process Models as Prompting Scaffolds](petri-net-of-thoughts.md) — Formal graph-based reasoning with Petri net structure and state-aware prompts
 - [Three Reasoning Spaces: Plan, Bead, and Code](three-reasoning-spaces.md) — Explicit phase gates that separate planning topology from execution
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate reasoning compute by phase rather than uniformly
-- [Agent Composition Patterns](agent-composition-patterns.md) — Multi-agent structural patterns including chains, fan-out, pipelines, and supervisors
+- [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md) — Multi-agent structural patterns including chains, fan-out, pipelines, and supervisors
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — Two-role loop where generator and evaluator iterate to a quality threshold
 - [Self-Discover Reasoning: LLM-Composed Reasoning Structures](self-discover-reasoning.md) — Model selects and composes reasoning modules per task, an alternative to fixed CoT or GoT topologies

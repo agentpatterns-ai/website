@@ -102,3 +102,4 @@ The audit logger contributes a side effect every time it fires, which is safe on
 - [Permission Framework Over Model](../../security/permission-framework-over-model.md) — Why the framework owns the merge function rather than the model.
 - [Agent Runtime Middleware: Per-Call Interception Pipeline](agent-runtime-middleware.md) — Composing cross-cutting concerns around model and tool calls — the middleware layer parallel-hook authors plug into.
 - [Team-Scoped Agent Policy Delegation](../../security/team-scoped-policy-delegation.md) — A managed-settings layer that merges across a user's teams least-restrictive, inverting this ladder.
+- [Fall Back to the No-Hook Decision When a Permission Check Errors](../../security/hook-allow-failed-permission-check.md) — What happens to a hook's `allow` when the permission check it sits on fails with an error instead of answering.

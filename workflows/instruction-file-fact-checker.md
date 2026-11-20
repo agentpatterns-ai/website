@@ -7,6 +7,8 @@ tags:
   - instructions
   - tool-agnostic
   - agent-design
+  - automation
+  - github-actions
 aliases:
   - CLAUDE.md fact-checker
   - instruction drift detection

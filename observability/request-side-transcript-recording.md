@@ -5,7 +5,6 @@ description: "Claude Code 2.1.300 adds each API request's system prompt, tools, 
 tags:
   - observability
   - claude
-  - workflows
 aliases:
   - request-recording transcript
   - replayable agent transcript
@@ -49,7 +48,7 @@ A reader holding only the messages must infer the system prompt, tools, and para
 ## Related
 
 - [Agent Chat History as a First-Class Artifact](agent-history-as-artifact.md) — treating the stored session record as queryable trace data rather than a chat archive
-- [In-Session Transcript Search](transcript-search.md) — navigating the same transcript while the session is still open
+- [In-Session Transcript Search](../tools/claude/transcript-search.md) — navigating the same transcript while the session is still open
 - [Offline Trajectory Replay for Multi-Agent Workflow Debugging](offline-trajectory-replay-multi-agent-debugging.md) — scoring a replayed trajectory per node to find which call introduced the failure
 - [Cut-Point Replay: Test a Fix Against a Recorded Agent Run](../verification/cut-point-replay-agent-regression-tests.md) — promoting one recorded run into a regression test
 - [Public-Channel Agent Work as Lehrwerkstatt](../workflows/public-channel-agent-work.md) — the organizational form of the same disclosure question

@@ -102,6 +102,6 @@ Each row is a separate agent session, grouped by what attention it needs. The de
 
 - [Cursor 3 Agents Window](../../tools/cursor/agents-window.md) — the Cursor-specific instance of the Manager Surface; the cross-tool comparison anchors much of this page
 - [Agent Mission Control for Orchestrating Agent Tasks](../../tools/copilot/agent-mission-control.md) — GitHub Copilot's Manager Surface for parallel agent tasks
-- [VS Code Agents App: Agent-Native Parallel Task Execution](vscode-agents-parallel-tasks.md) — companion analysis of VS Code's headless agent panel; the same pattern applied to a different host editor
+- [VS Code Agents App: Agent-Native Parallel Task Execution](../../tools/copilot/vscode-agents-parallel-tasks.md) — companion analysis of VS Code's headless agent panel; the same pattern applied to a different host editor
 - [Developer Attention Management with Parallel Agents](../../human/attention-management-parallel-agents.md) — the human-factors side: why the Manager Surface absorbs scheduling cost that a chat panel cannot
 - [Background TODO Agent](background-todo-agent.md) — pattern for asynchronous tasks that the Manager Surface is built to host

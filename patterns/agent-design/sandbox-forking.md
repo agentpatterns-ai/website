@@ -5,6 +5,7 @@ description: "Prepare an agent environment once, snapshot it, then fork a copy p
 tags:
   - agent-design
   - tool-agnostic
+  - security
 aliases:
   - fork from snapshot
   - snapshot-forked agent environments

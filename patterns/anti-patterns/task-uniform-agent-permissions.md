@@ -8,6 +8,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - security
 aliases:
   - task-aware execution control
   - uniform agent permission level

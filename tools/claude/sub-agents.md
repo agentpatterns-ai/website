@@ -137,5 +137,5 @@ Only `name` and `description`. The `tools` field restricts which tools are avail
 - [Extension Points](extension-points.md) — where sub-agents sit among Claude Code's extension surfaces
 - [Code Review](code-review.md) — common sub-agent use case for scoped review tasks
 - [Hooks Lifecycle](hooks-lifecycle.md) — how sub-agent invocations interact with PreToolUse / PostToolUse / SessionStart events
-- [Agent Composition Patterns](../../patterns/agent-design/agent-composition-patterns.md)
+- [Agent Composition Patterns](../../patterns/multi-agent/agent-composition-patterns.md)
 - [Orchestrator-Worker](../../patterns/multi-agent/orchestrator-worker.md)

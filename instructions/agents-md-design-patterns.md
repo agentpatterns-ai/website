@@ -5,7 +5,7 @@ description: "Four patterns from 2,500+ repo analysis: executable commands, code
 tags:
   - instructions
   - technique
-  - copilot
+  - tool-agnostic
 aliases:
   - "AGENTS.md best practices"
   - "AGENTS.md writing patterns"

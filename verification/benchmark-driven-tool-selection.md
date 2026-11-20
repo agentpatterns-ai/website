@@ -123,5 +123,5 @@ Result: The team selects Model B despite its lower aggregate ranking — the tas
 - [Eval-Driven Development](../workflows/eval-driven-development.md) — Define correctness criteria before comparing tools
 - [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — Build your own small suite when no public benchmark matches your workload
 - [Head-to-Head Evaluation of Competing MCP Servers](head-to-head-mcp-server-evaluation.md) — Apply the same selection discipline when the unit under test is a tool server rather than a model
-- [Reading a Coding-Agent Vendor's Security Certificate](vendor-security-certification-scope.md) — Read the vendor's security attestation for scope before it substitutes for your own measurement
+- [Reading a Coding-Agent Vendor's Security Certificate](../security/vendor-security-certification-scope.md) — Read the vendor's security attestation for scope before it substitutes for your own measurement
 - [Calibrate a Benchmark's Interaction Layer to Your Users](task-flow-calibration.md) — Once the suite is chosen, check whether its one-prompt-per-task protocol matches how your users actually talk to the agent

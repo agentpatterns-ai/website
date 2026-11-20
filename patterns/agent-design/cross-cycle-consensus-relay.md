@@ -6,6 +6,7 @@ tags:
   - agent-design
   - memory
   - tool-agnostic
+  - loop-engineering
 aliases:
   - consensus relay document
   - cross-session relay pattern

@@ -4,8 +4,8 @@ term: "MCP LLM Sampling"
 description: "How MCP servers use sampling/createMessage to request host LLM inference mid-execution, creating hybrid tools that combine deterministic logic with embedded AI reasoning."
 tags:
   - tool-engineering
-  - copilot
   - mcp
+  - tool-agnostic
 last_reviewed: 2026-06-13
 maturity: adopted
 ---

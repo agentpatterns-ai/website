@@ -6,6 +6,7 @@ tags:
   - context-engineering
   - cost-performance
   - tool-agnostic
+  - rag
 aliases:
   - long context versus retrieval
   - million-token window instead of RAG

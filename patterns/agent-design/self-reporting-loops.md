@@ -7,6 +7,7 @@ tags:
   - workflows
   - observability
   - tool-agnostic
+  - automation
 aliases:
   - autonomous routine backlog filing
   - self-filing agent observations

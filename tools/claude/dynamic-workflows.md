@@ -10,6 +10,7 @@ tags:
   - cost-performance
   - claude
   - multi-agent
+  - workflows
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-06-03
 status: current

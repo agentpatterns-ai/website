@@ -7,6 +7,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+  - automation
 last_reviewed: 2026-06-12
 maturity: established
 ---

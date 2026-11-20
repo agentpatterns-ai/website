@@ -6,6 +6,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+  - observability
 last_reviewed: 2026-07-02
 maturity: established
 ---

@@ -6,6 +6,7 @@ tags:
   - loop-engineering
   - agent-design
   - tool-agnostic
+  - human-factors
 aliases:
   - human checkpoints as loop control
   - HITL interrupts as loop control

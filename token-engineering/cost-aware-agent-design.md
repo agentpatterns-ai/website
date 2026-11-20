@@ -8,6 +8,7 @@ tags:
   - source:opendev-paper
   - long-form
   - tool-agnostic
+  - model-routing
 last_reviewed: 2026-08-12
 maturity: established
 ---

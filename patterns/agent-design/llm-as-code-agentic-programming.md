@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - harness-engineering
 aliases:
   - agentic programming paradigm
   - LLM-as-Code paradigm

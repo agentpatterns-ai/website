@@ -7,6 +7,7 @@ tags:
   - workflows
   - tool-agnostic
   - reliability
+  - memory
 aliases:
   - long-horizon agent operations
   - long-running agent pattern

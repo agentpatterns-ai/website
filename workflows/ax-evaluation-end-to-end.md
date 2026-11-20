@@ -6,10 +6,11 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+  - evals
 aliases:
   - AX evaluation end to end
   - agent experience evaluation workflow
-last_reviewed: 2026-11-13
+last_reviewed: 2026-11-19
 maturity: emerging
 ---
 
@@ -59,7 +60,7 @@ The readout lists which criterion failed. The playbook puts the split this way: 
 
 The surface column says where to look first. In the playbook's words: "The pattern tells you where to investigate first. It doesn't prove the fix, but it narrows the search." [Source: chapter 10]
 
-Microsoft reports that in five Dev Proxy agent runs, four tried a guessed docs URL that returned a 404 before reading any docs ([Microsoft Developer Blog](https://developer.microsoft.com/blog/your-best-ax-fixes-are-hiding-in-agent-trajectories/)). Dev Proxy has no command that lists its plugins, so all five runs read the plugin DLL as raw bytes and searched it for class names. The post describes seven trajectory patterns, each paired with a product-side fix. Four of them are URL guessing, probing past an unhelpful error, repeated workarounds, and filling gaps from memory.
+Microsoft reports that in five Dev Proxy agent runs, four tried a guessed docs URL that returned a 404 before reading any docs ([Microsoft Developer Blog](https://developer.microsoft.com/blog/your-best-ax-fixes-are-hiding-in-agent-trajectories/)). Dev Proxy has no command that lists its plugins, so all five runs read the plugin DLL as raw bytes and searched it for class names. Those five runs, from GitHub Copilot Chat with Claude Sonnet 5.5 and no extensions, all produced working scripts, yet the trajectories showed 15 problems, and each run took 29 to 39 requests and up to 1.2 million tokens. The post describes seven trajectory patterns, each paired with a product-side fix. Four of them are URL guessing, probing past an unhelpful error, repeated workarounds, and filling gaps from memory.
 
 Aim first at results that split across runs, such as the 2/5 case the playbook describes. "Contradictory behavior tells you the agent's decision is weakly motivated," and "a small content change can tip a 2/5 result to 5/5 because the agent was already close to the right decision." [Source: chapter 9]
 

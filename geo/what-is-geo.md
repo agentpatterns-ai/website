@@ -4,7 +4,6 @@ description: "Defines GEO and AEO, explains the shift from keyword ranking to a 
 term: "Generative Engine Optimization"
 tags:
   - geo
-  - workflows
   - tool-agnostic
   - arxiv
 aliases:

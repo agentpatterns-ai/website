@@ -7,6 +7,7 @@ tags:
   - workflows
   - cost-performance
   - tool-agnostic
+  - migration
 aliases:
   - deterministic agent orchestration
   - workflow-controlled modernization

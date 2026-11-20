@@ -5,9 +5,9 @@ description: "Quantify how much two models share non-mandatory tool-use behavior
 tags:
   - testing-verification
   - evals
-  - agent-design
   - tool-agnostic
   - arxiv
+  - model-routing
 aliases:
   - response pattern similarity
   - action graph similarity

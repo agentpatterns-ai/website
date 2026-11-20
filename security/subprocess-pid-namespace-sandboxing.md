@@ -3,7 +3,6 @@ title: "Subprocess PID Namespace Sandboxing in Claude Code"
 tags:
   - security
   - claude
-  - sandboxing
 description: "Add PID namespace isolation and env var scrubbing to Bash subprocesses in Claude Code, preventing daemon persistence and secret leakage beyond the session."
 term: "Subprocess PID Namespace Sandboxing"
 last_reviewed: 2026-10-21
@@ -112,5 +111,6 @@ It silently forces bubblewrap, overriding `sandbox.enabled: false`: setting `CLA
 - [Scope Sandbox Rules to Harness-Owned Tools, Not Third-Party](sandbox-rules-harness-tools.md)
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md)
 - [Secrets Management for Agent Workflows](secrets-management-for-agents.md)
+- [Credential-Free Subprocesses: Strip Tokens From Agent Tools](credential-free-agent-subprocesses.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)

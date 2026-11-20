@@ -6,7 +6,6 @@ aliases:
   - flywheel effect
   - positive feedback loop
 tags:
-  - context-engineering
   - tool-agnostic
   - human-factors
 last_reviewed: 2026-06-13

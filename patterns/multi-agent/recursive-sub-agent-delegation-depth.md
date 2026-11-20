@@ -10,6 +10,7 @@ tags:
   - multi-agent
   - agent-design
   - tool-agnostic
+  - cost-performance
 last_reviewed: 2026-06-16
 maturity: emerging
 ---
@@ -107,6 +108,6 @@ If the same refactor used flat fan-out, the root would directly own ~40 leaf wor
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
 - [Recursive Best-of-N Delegation](recursive-best-of-n-delegation.md)
-- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
+- [Agent Composition Patterns](agent-composition-patterns.md)
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md)
 - [Emergent Behavior Sensitivity](emergent-behavior-sensitivity.md)

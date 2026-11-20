@@ -9,6 +9,8 @@ tags:
   - instructions
   - tool-agnostic
   - arxiv
+  - security
+  - supply-chain
 last_reviewed: 2026-08-08
 maturity: emerging
 ---

@@ -5,6 +5,7 @@ tags:
   - copilot
   - workflows
   - security
+  - supply-chain
 applies_to: "copilot@1.x"
 last_reviewed: 2026-07-28
 status: current

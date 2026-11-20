@@ -139,6 +139,6 @@ Each component maps onto the reference architecture: the LLM in the cognitive la
 - [Typed Schemas at Agent Boundaries](../multi-agent/typed-schemas-at-agent-boundaries.md)
 - [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../multi-agent/agent-composition-patterns.md)
 - [Trajectory Logging and Progress Files](../../observability/trajectory-logging-progress-files.md)
 - [Blast Radius Containment: Least Privilege for AI Agents](../../security/blast-radius-containment.md)

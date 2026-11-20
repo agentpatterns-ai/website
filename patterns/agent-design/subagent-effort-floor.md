@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - claude
+  - multi-agent
 aliases:
   - subagent effort default
   - default effort level for subagents

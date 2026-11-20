@@ -160,7 +160,7 @@ Persona-as-code adds coordination surface area. Three conditions make it worse t
 - [Task-Specific vs Role-Based Agents](task-specific-vs-role-based-agents.md)
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
 - [Cognitive Reasoning and Execution Separation](cognitive-reasoning-execution-separation.md)
-- [Agent Composition: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
+- [Agent Composition: Chains, Fan-Out, Pipelines, Supervisors](../multi-agent/agent-composition-patterns.md)
 - [Agents vs Commands](agents-vs-commands.md)
 - [Agent-First Software Design for AI Agent Development](agent-first-software-design.md)
 - [Sprint Contracts](sprint-contracts.md)

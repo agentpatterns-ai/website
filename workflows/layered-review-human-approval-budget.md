@@ -34,7 +34,7 @@ Three of these the published account states as its own setup; the fourth is the 
 
 1. Undo costs minutes. The post says flags, reverts, and staged releases undo most mistakes in minutes, and every dropped approval is priced against that. A change those tools cannot undo in minutes loses the backstop, and the approval you removed was carrying that risk alone.
 2. You have a labeled incident set. The reviewer improves by being scored daily against past incident-causing pull requests whose bugs engineers confirmed by hand. Without that corpus, a change to the reviewer's prompts or model is unmeasured, and recall can fall with nothing to show it.
-3. Most authors are trusted insiders. Only authors on a repository's trusted list get the lighter approval paths, mostly the team that owns the code. In open-source repositories, where the study does not report one, agent-only review measures a markedly lower merge rate than human review ([arXiv:2604.03196v1](https://arxiv.org/abs/2604.03196v1)).
+3. Most authors are trusted insiders. Only authors on a repository's trusted list get the lighter approval paths, mostly the team that owns the code. In open-source repositories, where the study does not report one, agent-only review measures a markedly lower merge rate than human review ([Chowdhury et al., 2026](https://arxiv.org/abs/2604.03196v1)).
 4. Volume justifies the machinery. A risk classifier, a verifier committee, a daily eval, a merge queue, and rounds-to-pass tracking are a standing engineering cost. At low pull request volume, reading them may cost less than building the apparatus that avoids reading them. The post gives no threshold.
 
 ## Seven layers, no single gate
@@ -80,6 +80,23 @@ The merge queue re-runs every check against main with the change applied, so two
 
 Flags turn off without a deploy, a weekly on-call watches, and incident reviews ask which layer should have caught the escape. The team names the control it lacks: "We don't yet have circuit breakers that tighten approval when those numbers move; engineers here want them before more code moves to zero-human merges" ([claude.dev](https://claude.dev/blog/solving-code-review-at-anthropic/)).
 
+## Verification before review: the team's own procedures
+
+A second post, by [Osmani (2026)](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/), describes how the Claude Code team verifies work around review. It reports procedures and no outcome data for any of them. Its two figures, "~90%" of code written and reviewed by Claude and "up to 10 points" from a separate grader, come with no method, N or baseline. The second sentence appeared first in an April 2026 [Managed Agents post](https://claude.com/resources/articles/claude-managed-agents), crediting that product.
+
+The procedures:
+
+- A project `verify` skill boots and drives the app. The post says running it end to end "matters more than tests". See [golden journeys](../verification/golden-journeys.md).
+- A check still failing after three rounds stops the agent and brings in a human. The reviewer's three-round cap above is a different rule.
+- A 39-item reliability checklist gives each item a diff-readable trigger, and the agent checks the items that match, "usually 3 to 10".
+- Each commit is stamped with how it was verified, including "none".
+- A commit gate has off, observe and enforce modes. Observe mode logs what it would block. Once two commits in a session are blocked, the following one goes through "so Claude doesn't get stuck".
+- A new rule needs two PRs and a diff-readable trigger. Three agents try to disprove it, and a human approves it in a PR.
+
+Code Review reads REVIEW.md from the base or default branch, "never from the pull request's own changes". The docs add that you should protect the default branch, and on an unprotected one an `@` include line stays plain text ([Code Review docs](https://code.claude.com/docs/en/code-review-customize)). This is the [oracle-protection](../patterns/agent-design/protect-the-oracle-from-the-agent.md) principle.
+
+Run a new gate in observe mode first. [Rule replay](../verification/behavioral-preflight-rule-replay.md) scores a rule before you enforce it.
+
 ## Making the review loop converge
 
 An agent author and an agent reviewer will keep each other busy. One of this team's pull requests went through more than fifty rounds of review and fixes overnight before its author intervened. Blame-annotating what the reviewer kept flagging showed "about 59% of it was code that had been there since the reviewer's first pass" ([claude.dev](https://claude.dev/blog/solving-code-review-at-anthropic/)).
@@ -122,12 +139,12 @@ Two mechanisms carry this, and they come apart cleanly.
 
 Defense in depth under cheap reversal does the first job. Dropping the human approval on a low-risk change removes one filter from a stack of seven, and the recovery layer bounds what an escape costs. Remove minutes-scale rollback and the argument collapses, which is why it heads the conditions above.
 
-Convergence does the second, and here the post reports figures. In the team's blame analysis, about 59% of what the reviewer kept flagging predated its first pass. The post says extra rounds can pay off on a risky change but not on every pull request. The four convergence changes together cut the review rounds per internal pull request. The post gives no recall result for them, so track recall alongside rounds-to-pass, as the team says it does. The division of labor has independent support: across 278,790 review conversations in 300 open-source GitHub projects, over 95% of agent comments fall under defect detection and code improvement, while human comments spread across understanding questions, knowledge transfer, and testing feedback ([arXiv:2603.15911v2](https://arxiv.org/abs/2603.15911v2)). The study describes what agents and humans comment on. It does not test reassigning review.
+Convergence does the second, and here the post reports figures. In the team's blame analysis, about 59% of what the reviewer kept flagging predated its first pass. The post says extra rounds can pay off on a risky change but not on every pull request. The four convergence changes together cut the review rounds per internal pull request. The post gives no recall result for them, so track recall alongside rounds-to-pass, as the team says it does. The division of labor has independent support: across 278,790 review conversations in 300 open-source GitHub projects, over 95% of agent comments fall under defect detection and code improvement, while human comments spread across understanding questions, knowledge transfer, and testing feedback ([Zhong et al., 2026](https://arxiv.org/abs/2603.15911v2)). The study describes what agents and humans comment on. It does not test reassigning review.
 
 ## When this backfires
 
-- Agent findings go unacted on. The same study measures that "code suggestions made by AI agents are adopted into the codebase at a significantly lower rate than suggestions proposed by human reviewers (16.6% vs. 56.5%)", and that in a sample of 383 unadopted agent suggestions, 28.7% were incorrect and 24.0% were fixed another way ([arXiv:2603.15911v2](https://arxiv.org/abs/2603.15911v2)). A layer whose output is ignored is not a layer.
-- The population is open-source. Across 3,109 pull requests drawn from the AIDev dataset, "CRA-only PRs achieve a 45.20% merge rate, 23.17 percentage points lower than human-only PRs (68.37%), with significantly higher abandonment" ([arXiv:2604.03196v1](https://arxiv.org/abs/2604.03196v1)). The study does not say whether those projects keep trusted-author lists or incident-derived evals, so the two results may differ for that reason or for others.
+- Agent findings go unacted on. The same study measures that "code suggestions made by AI agents are adopted into the codebase at a significantly lower rate than suggestions proposed by human reviewers (16.6% vs. 56.5%)", and that in a sample of 383 unadopted agent suggestions, 28.7% were incorrect and 24.0% were fixed another way ([Zhong et al., 2026](https://arxiv.org/abs/2603.15911v2)). A layer whose output is ignored is not a layer.
+- The population is open-source. Across 3,109 pull requests drawn from the AIDev dataset, "CRA-only PRs achieve a 45.20% merge rate, 23.17 percentage points lower than human-only PRs (68.37%), with significantly higher abandonment" ([Chowdhury et al., 2026](https://arxiv.org/abs/2604.03196v1)). The study does not say whether those projects keep trusted-author lists or incident-derived evals, so the two results may differ for that reason or for others.
 - The reviewer shares a model family with the author. Several agents voting filters noise, and it does not break a shared training distribution. See [human-AI review synergy](../code-review/human-ai-review-synergy.md) for the correlated-failure case.
 - Reviewers habituate. Routing more volume past fewer people runs toward the curve in [reviewer habituation decay](../code-review/reviewer-habituation-decay.md), where approval rates rise while comment counts fall.
 - No control group. The headline result is "From June to September, merged pull requests to Claude Code's codebase more than doubled while the share that had to be reverted fell by more than 40 percent" ([claude.dev](https://claude.dev/blog/solving-code-review-at-anthropic/)). Over four months with no comparison arm, a team improving at everything at once produces the same chart.
@@ -137,6 +154,7 @@ Convergence does the second, and here the post reports figures. In the team's bl
 - Instrument first: human approvals per pull request at median and p95, plus the revert rate. Without the second number you cannot tell a saving from a transfer, and the first alone will look like progress either way.
 - Cap review rounds at three, after which the reviewer asks the author to reconsider the approach, and re-review only the new diff after the first few passes. The Claude Code team's blame analysis of what its reviewer kept flagging found about 59% predated the reviewer's first pass.
 - Write the always-human path list before you relax any tier, and check it is enforced by CODEOWNERS or branch protection rather than by the classifier you are about to trust.
+- Stamp every commit with how it was verified, including "none", and run a new commit gate in observe mode before it enforces. The source post describes both and reports no result for either.
 - Treat every figure in a vendor's account of its own process as a hypothesis about your repository. The independent open-source measurements report lower agent-suggestion adoption (16.6% vs. 56.5%) and a lower agent-only merge rate (45.20% vs. 68.37%). Whether the preconditions above explain the gap is not measured.
 
 ## Related
@@ -147,3 +165,5 @@ Convergence does the second, and here the post reports figures. In the team's bl
 - [Reviewer Habituation Decay](../code-review/reviewer-habituation-decay.md) — what sustained agent-PR volume does to an individual reviewer
 - [Explain-the-Change Review Gates for Agent Code](explain-the-change-review-gate.md) — a different answer to the question of where human attention buys the most
 - [Review Expectations for an AI Pull-Request Approval Bot](ai-pr-approval-bot-review-expectations.md) — routes each change to Ship, Show, or Ask using author familiarity
+- [Review Feedback to Rule Loop](../code-review/review-feedback-to-rule-loop.md) — turning review misses into standing rules
+- [Incident-to-Eval Synthesis: Production Failures as Evals](../verification/incident-to-eval-synthesis.md) — scoring a reviewer against past incidents

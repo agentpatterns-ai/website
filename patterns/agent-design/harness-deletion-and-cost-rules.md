@@ -7,6 +7,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - harness-engineering
 aliases:
   - harness pruning rule
   - regularized harness evolution

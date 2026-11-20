@@ -11,6 +11,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - cost-performance
 last_reviewed: 2026-09-18
 maturity: emerging
 ---

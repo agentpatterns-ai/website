@@ -7,6 +7,7 @@ tags:
   - security
   - tool-agnostic
   - arxiv
+  - supply-chain
 aliases:
   - tool clone detection
   - mcp marketplace deduplication

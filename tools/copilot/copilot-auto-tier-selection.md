@@ -11,6 +11,7 @@ aliases:
   - copilot auto tier
   - efficiency balance intelligence tier
   - auto model selection cost quality setting
+applies_to: "copilot@1.x"
 last_reviewed: 2026-09-15
 maturity: emerging
 ---
@@ -57,8 +58,8 @@ The decision also fires where it is cheap. GitHub reports that "Routing occurs a
 
 - Mixed surfaces. A tier set in VS Code does not travel to a cloud-agent session, to Chat on github.com, or to JetBrains, so a team spanning those clients has a standard covering part of its work.
 - No enforcement. Nothing records that a developer switched back, so the setting holds only while each one remembers it.
-- Reproducibility. Eval-gated CI and compliance attestation need the same model twice, and a preference cannot supply that. Pin instead, as [Auto Model Selection](auto-model-selection.md) sets out, then budget for the pin going stale: "Available models may change over time" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/models/auto-model-selection)).
-- Moving the dial with no per-model quality signal. That is the [Cost-Driven Model Routing Without Quality Monitoring](../anti-patterns/cost-routing-without-quality-monitoring.md) failure arriving through a vendor setting rather than a router you built.
+- Reproducibility. Eval-gated CI and compliance attestation need the same model twice, and a preference cannot supply that. Pin instead, as [Auto Model Selection](../../patterns/agent-design/auto-model-selection.md) sets out, then budget for the pin going stale: "Available models may change over time" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/models/auto-model-selection)).
+- Moving the dial with no per-model quality signal. That is the [Cost-Driven Model Routing Without Quality Monitoring](../../patterns/anti-patterns/cost-routing-without-quality-monitoring.md) failure arriving through a vendor setting rather than a router you built.
 
 ## Example
 
@@ -73,8 +74,8 @@ A team on Copilot CLI wants the cheaper end for a backlog of dependency bumps an
 
 ## Related
 
-- [Auto Model Selection: Harness-Driven Routing per Task](auto-model-selection.md) — the routing policy the tiers configure, including the pool, the billing history, and when to pin instead.
-- [Dispatch-Time Reasoning Level for Delegated Agents](dispatch-time-reasoning-level.md) — the cloud agent's own effort control, on a surface the tiers do not reach.
-- [Cost-Driven Model Routing Without Quality Monitoring](../anti-patterns/cost-routing-without-quality-monitoring.md) — what an unmeasured move to the cheap end costs, and the per-tier observability that prevents it.
-- [Routing Break-Even: When a Cheaper Model Actually Pays](routing-break-even.md) — the arithmetic for a router you control, useful for sizing whether the mix shift is worth chasing.
+- [Auto Model Selection: Harness-Driven Routing per Task](../../patterns/agent-design/auto-model-selection.md) — the routing policy the tiers configure, including the pool, the billing history, and when to pin instead.
+- [Dispatch-Time Reasoning Level for Delegated Agents](../../patterns/agent-design/dispatch-time-reasoning-level.md) — the cloud agent's own effort control, on a surface the tiers do not reach.
+- [Cost-Driven Model Routing Without Quality Monitoring](../../patterns/anti-patterns/cost-routing-without-quality-monitoring.md) — what an unmeasured move to the cheap end costs, and the per-tier observability that prevents it.
+- [Routing Break-Even: When a Cheaper Model Actually Pays](../../patterns/agent-design/routing-break-even.md) — the arithmetic for a router you control, useful for sizing whether the mix shift is worth chasing.
 - [Routing Decision Framework](../../token-engineering/routing-decision-framework.md) — the tool-agnostic map of routing patterns this vendor control sits inside.

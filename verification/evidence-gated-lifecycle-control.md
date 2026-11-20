@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - agent-design
 aliases:
   - "evidence-gated lifecycle control"
   - "agent-as-claim lifecycle gating"

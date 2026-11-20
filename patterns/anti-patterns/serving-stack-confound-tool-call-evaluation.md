@@ -7,6 +7,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - evals
 aliases:
   - serving stack as evaluation confound
   - tool-call rate as a model property

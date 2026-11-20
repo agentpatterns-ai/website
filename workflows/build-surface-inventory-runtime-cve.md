@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - security
+  - supply-chain
 aliases:
   - runtime CVE build-surface inventory
   - interpreter CVE inventory workflow

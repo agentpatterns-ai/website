@@ -254,7 +254,7 @@ Training
 Patterns
 
 - [Copilot vs Claude Billing Semantics](../../human/copilot-vs-claude-billing-semantics.md) — GitHub AI credit and token costs when running multiple agents
-- [Agent Composition Patterns](../../patterns/agent-design/agent-composition-patterns.md) — chain, fan-out, pipeline, supervisor
+- [Agent Composition Patterns](../../patterns/multi-agent/agent-composition-patterns.md) — chain, fan-out, pipeline, supervisor
 - [Specialized Agent Roles](../../patterns/agent-design/specialized-agent-roles.md) — complementary coverage through specialization
 - [Loop Strategy Spectrum](../../loop-engineering/loop-strategy-spectrum.md) — accumulated vs fresh context for long-running work
 - [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md) — human-as-tech-lead pattern

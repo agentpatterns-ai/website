@@ -7,6 +7,8 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - skills
+  - evals
 aliases:
   - triggered-subset skill evaluation
   - post-treatment selection in skill evals

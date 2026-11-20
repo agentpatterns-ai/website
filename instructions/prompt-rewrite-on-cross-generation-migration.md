@@ -6,6 +6,7 @@ tags:
   - instructions
   - workflows
   - tool-agnostic
+  - migration
 aliases:
   - cross-generation prompt rewrite
   - fresh-baseline prompt migration

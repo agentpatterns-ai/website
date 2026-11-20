@@ -7,11 +7,12 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - tool-engineering
 aliases:
   - programmatic tool calling
   - tools as code stubs
   - code-mode tool calling
-last_reviewed: 2026-10-11
+last_reviewed: 2026-11-19
 maturity: emerging
 ---
 
@@ -20,6 +21,8 @@ maturity: emerging
 > Expose tools as typed Python stubs the model calls from a script, so chaining and fan-out become ordinary control flow.
 
 Programmatic tool calling compiles your tool schemas into typed Python stubs and lets the model write a sandboxed script that imports and calls them, with execution and results inside one agent turn. Across 14 models on 309 BFCL v4 entries it matched or exceeded native JSON tool calling on 11 ([Patel et al., 2026](https://arxiv.org/abs/2608.06370v1)). That headline does not make it a default. It pays off past two gates, and below them it costs more and buys nothing.
+
+Claude Code 2.1.323 (November 12, 2026) added Code Mode, "an experimental opt-in in which Claude writes JavaScript to call its tools" ([Claude Code changelog 2.1.323](https://code.claude.com/docs/en/changelog#2-1-323)). The entry links to a page on turning it on, or off for an organization, and reports no measurements.
 
 ## Two gates before you switch
 

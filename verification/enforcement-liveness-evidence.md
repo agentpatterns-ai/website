@@ -10,6 +10,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - hooks
 last_reviewed: 2026-09-22
 maturity: emerging
 ---

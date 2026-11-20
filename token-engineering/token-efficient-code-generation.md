@@ -10,6 +10,7 @@ tags:
   - cost-performance
   - arxiv
   - tool-agnostic
+  - code-generation
 last_reviewed: 2026-06-18
 maturity: emerging
 ---

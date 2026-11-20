@@ -7,6 +7,7 @@ tags:
   - human-factors
   - tool-agnostic
   - arxiv
+  - context-engineering
 aliases:
   - NES context contamination
   - next edit suggestion security

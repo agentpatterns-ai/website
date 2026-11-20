@@ -6,6 +6,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+  - observability
 aliases:
   - measurement-first agent optimization
   - agent-run performance sprint

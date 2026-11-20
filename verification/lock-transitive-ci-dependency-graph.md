@@ -10,6 +10,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - automation
+  - github-actions
 last_reviewed: 2026-10-17
 maturity: emerging
 ---

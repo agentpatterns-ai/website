@@ -6,6 +6,7 @@ tags:
   - agent-design
   - workflows
   - tool-agnostic
+  - multi-agent
 last_reviewed: 2026-06-12
 maturity: adopted
 ---

@@ -7,6 +7,7 @@ tags:
   - claude
   - human-factors
   - arxiv
+  - security
 aliases:
   - allow once permission answer
   - non-persisting permission grant

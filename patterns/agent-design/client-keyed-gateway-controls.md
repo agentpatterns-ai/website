@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - security
 aliases:
   - header-keyed spend cap
   - per-customer gateway policy
