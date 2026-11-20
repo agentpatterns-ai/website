@@ -5,6 +5,7 @@ description: "Composing on an open agent framework buys an upgrade path only whe
 tags:
   - agent-design
   - tool-agnostic
+  - harness-engineering
 aliases:
   - compose vs fork agent harness
   - forking an agent framework

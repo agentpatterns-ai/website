@@ -6,6 +6,7 @@ tags:
   - anti-pattern
   - tool-agnostic
   - arxiv
+  - testing-verification
 aliases:
   - inherited failures
   - building on a red suite

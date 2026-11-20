@@ -8,6 +8,7 @@ tags:
   - security
   - tool-agnostic
   - arxiv
+  - benchmarks
 aliases:
   - ASR comparability audit
   - attack success rate measurement axes

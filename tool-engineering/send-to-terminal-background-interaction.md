@@ -6,7 +6,7 @@ tags:
   - tool-engineering
   - agent-design
   - workflows
-  - tool-agnostic
+  - copilot
 aliases:
   - send_to_terminal pattern
   - background terminal notifications for agents

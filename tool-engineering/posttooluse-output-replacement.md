@@ -150,3 +150,4 @@ Replacement is the sharpest mode of `PostToolUse` and the easiest to misuse. Fou
 - [MCP Tool Result Persistence via _meta Annotation](mcp-result-persistence-annotation.md)
 - [Conditional Hook Execution: Filter Hooks by Tool Pattern](conditional-hook-execution.md)
 - [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md)
+- [Managed PostToolUse Hooks Skip Refused Tool Calls](../tools/claude/managed-posttooluse-skips-refused-calls.md)

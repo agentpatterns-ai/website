@@ -7,6 +7,7 @@ tags:
   - agent-design
   - cost-performance
   - copilot
+  - model-routing
 aliases:
   - runtime orchestration shape selection
   - per-request workflow routing

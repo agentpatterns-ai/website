@@ -133,7 +133,7 @@ When several distinct evaluation dimensions must all pass. The evaluator-optimiz
 - [Convergence Detection](../../loop-engineering/convergence-detection.md)
 - [Agent Self-Review Loop](../../code-review/agent-self-review-loop.md)
 - [Loop Strategy Spectrum](../../loop-engineering/loop-strategy-spectrum.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
+- [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md)
 - [Controlling Agent Output](../../instructions/controlling-agent-output.md)
 - [DSPy: Programmatic Prompt Optimization](dspy-programmatic-prompt-optimization.md)
 - [Knowledge Graphs as Provenance-Carrying Agent Memory](knowledge-graph-shared-memory.md) — a substrate that gives the evaluator citable criteria instead of judgments

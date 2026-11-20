@@ -55,7 +55,7 @@ Persist it on disk, keyed by an MD5 hash of server file paths and the mtimes of 
 
 ### 3. Dependency-aware parallel step execution
 
-LLM-generated plans often contain steps whose only inter-dependency is narrative ordering, not data flow. A planner that emits explicit input/output dataclasses per step lets a topological scheduler fan out independent leaves instead of running them serially. GAP trains the planner to emit the dependency graph directly for adaptive parallel-and-serial execution ([arxiv:2510.25320](https://arxiv.org/abs/2510.25320v1)). This is distinct from [Agent Composition Patterns](agent-composition-patterns.md) fan-out: composition parallelizes across agents; this parallelizes steps within one plan.
+LLM-generated plans often contain steps whose only inter-dependency is narrative ordering, not data flow. A planner that emits explicit input/output dataclasses per step lets a topological scheduler fan out independent leaves instead of running them serially. GAP trains the planner to emit the dependency graph directly for adaptive parallel-and-serial execution ([arxiv:2510.25320](https://arxiv.org/abs/2510.25320v1)). This is distinct from [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md) fan-out: composition parallelizes across agents; this parallelizes steps within one plan.
 
 The distinction is one the literature draws too, and against this pattern. M1-Parallel takes the other side: it runs redundant teams concurrently and stops at the first to finish, reporting "up to 2.2x speedup while preserving accuracy", and rules out the approach on this page outright — "parallelization within a single plan is impractical for multi-agent systems that dynamically devise plans and take actions at execution time" ([arxiv:2507.08944v1](https://arxiv.org/abs/2507.08944v1)). Its objection is to *dynamically* devised plans. This pattern applies where the planner emits the dependency graph up front, which is the condition M1-Parallel's argument excludes.
 
@@ -119,6 +119,6 @@ A topological scheduler reads this graph and runs `fetch_readings` and `fetch_wo
 
 - [Semantic Caching for Multi-Agent Code Systems](../multi-agent/semantic-caching-multi-agent.md) — embedding-similarity caching with dual thresholds; this page extends the lookup-axis question with parameter keying
 - [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](../../tool-engineering/mcp-eager-vs-jit-loading.md) — the host-level alternative to disk-backed tool discovery
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md) — fan-out at the agent level, complementing the step-level parallelism described here
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../multi-agent/agent-composition-patterns.md) — fan-out at the agent level, complementing the step-level parallelism described here
 - [Plan Compliance in Agents](plan-compliance-in-agents.md) — dependency-aware parallel execution presupposes plans the agent actually executes
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md) — separating the layer that emits the dependency graph from the layer that schedules it

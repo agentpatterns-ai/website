@@ -106,6 +106,6 @@ This pattern operates at the platform level, choosing which vendor agent handles
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md) — selecting between candidate outputs
 - [Event-Driven Agent Routing](event-driven-agent-routing.md)
 - [Per-Task Agent Routing Across Coding Harnesses](per-task-agent-routing.md) — choosing one route per task instead of running rivals in parallel
-- [Agent Composition Patterns](agent-composition-patterns.md) — fan-out as a composition primitive
+- [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md) — fan-out as a composition primitive
 - [Delegation Decision](delegation-decision.md)
 - [Specialized Agent Roles](specialized-agent-roles.md)

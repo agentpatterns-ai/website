@@ -10,7 +10,6 @@ tags:
   - security
   - agent-design
   - tool-agnostic
-  - anti-pattern
   - arxiv
 last_reviewed: 2026-06-03
 maturity: emerging

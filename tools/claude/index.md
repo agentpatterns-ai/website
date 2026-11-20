@@ -25,6 +25,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Bare Mode](bare-mode.md) — Deterministic headless CI mode — skip all local config discovery with `--bare`
 - [Extension Points](extension-points.md) — Decision framework for choosing between CLAUDE.md, rules, skills, hooks, subagents, MCP, and plugins
 - [Hooks & Lifecycle](hooks-lifecycle.md) — Deterministic automation at 12+ lifecycle events
+- [Managed PostToolUse Hooks Skip Refused Tool Calls](managed-posttooluse-skips-refused-calls.md) — From 2.1.328, a managed PostToolUse log lists completed calls only; log refusals at PreToolUse and PermissionDenied
 - [Agent SDK](agent-sdk.md) — The Claude Code runtime as a library for custom applications
 - [/batch & Worktrees](batch-worktrees.md) — Parallel execution with worktree isolation
 - [Feature Flags & Environment Variables](feature-flags.md) — Curated reference for the most impactful configuration knobs
@@ -43,3 +44,4 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Skill disallowed-tools Frontmatter](skill-disallowed-tools.md) — Skill-layer tool denial: remove tools from the model while a skill is active, the deny-side complement to allowed-tools
 - [Local Plugin Scaffolding (`claude plugin init`)](local-plugin-scaffolding.md) — Auto-load plugins from `.claude/skills/<name>/.claude-plugin/plugin.json` and scaffold the layout in one command — when the manifest earns its keep over a loose skill, and when it does not
 - [Mods](mods.md) — Plugin code that runs inside Claude Code's process: it can draw panes, rewrite events, and approve a call a `PreToolUse` hook blocked, which decides when to pick one over a settings hook
+- [In-Session Transcript Search](transcript-search.md) — Claude Code's Ctrl+O transcript mode plus `/`, `n`, `N` turns a long session transcript into a navigable index — the in-session counterpart to offline transcript analysis

@@ -83,7 +83,7 @@ Evaluation then completes within 12 hours of eligibility ([LangChain, 2026](http
 ## Related
 
 - [Multi-Turn Conversation Evaluation](multi-turn-conversation-evaluation.md) — scores a conversation against a rubric once you have decided to look at it, where perceived error decides which ones to look at.
-- [Corpus-Level Trace Diagnostics for LLM Agents](corpus-level-trace-diagnostics.md) — the scout-investigator pipeline that turns a pile of flagged traces into named recurring failure modes.
+- [Corpus-Level Trace Diagnostics for LLM Agents](../observability/corpus-level-trace-diagnostics.md) — the scout-investigator pipeline that turns a pile of flagged traces into named recurring failure modes.
 - [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md) — the population-level layer above per-trace grading, including the judge-cost economics this page leaves alone.
 - [Using the Agent to Analyze Its Own Evaluation Transcripts](agent-transcript-analysis.md) — the same read-the-transcript move applied to eval runs rather than production threads.
 - [Detecting Self-Preference in a Single LLM Judge](judge-self-preference-detection.md) — a judge bias that survives a strong benchmark score, and the reason to stratify verdicts before trusting an aggregate.

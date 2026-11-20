@@ -7,6 +7,7 @@ tags:
   - code-review
   - arxiv
   - tool-agnostic
+  - supply-chain
 aliases:
   - agent PR supply-chain debt
   - agent-authored PR security smells

@@ -5,6 +5,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+  - automation
 term: "Continuous Documentation"
 last_reviewed: 2026-07-17
 maturity: established

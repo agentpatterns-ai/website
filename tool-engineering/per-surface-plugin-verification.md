@@ -3,8 +3,8 @@ title: "Per-Surface Verification of Agent Plugin Packages"
 description: "Agent Plugins 1.0 standardizes skills and MCP configuration. Verify client-specific components, install trust, and update behavior in each client."
 tags:
   - tool-engineering
-  - copilot
   - plugins
+  - tool-agnostic
 term: "Per-Surface Plugin Verification"
 aliases:
   - per-surface plugin testing

@@ -54,6 +54,7 @@ nav:
       - guardrail-input-tagging.md
       - field-level-source-ownership.md
       - human-in-the-loop-confirmation-gates.md
+      - intent-graph-tool-call-audit.md
       - monotonic-capability-attenuation.md
       - handoff-permission-state-validation.md
       - non-human-event-provenance-markers.md
@@ -88,8 +89,10 @@ nav:
       - sandbox-runtime-comparison.md
       - windows-sandbox-primitives-coding-agents.md
       - sandbox-approvals-auto-review-triad.md
+      - host-environment-sandbox-residual-risks.md
   - "Data Protection":
       - credential-hygiene-agent-skills.md
+      - credential-free-agent-subprocesses.md
       - browser-credential-handoff.md
       - internal-hostname-disclosure-agent-context.md
       - pii-tokenization-in-agent-context.md
@@ -157,6 +160,8 @@ nav:
       - self-scheduled-run-authority.md
       - scheduled-task-connector-scope.md
       - skill-tool-grant-travels-with-hooks.md
+      - hook-allow-failed-permission-check.md
+      - permissionrequest-rewrite-sandbox-exit.md
   - "Code Injection":
       - code-injection-multi-agent-defence.md
   - "Multi-Agent Propagation":
@@ -220,6 +225,7 @@ nav:
       - per-hook-failure-mode.md
       - harness-distributed-security-controls.md
       - enforced-versus-advisory-controls.md
+      - vendor-security-certification-scope.md
       - control-position-remediation-cost.md
       - workflow-execution-protections.md
       - pull-request-target-default-block.md

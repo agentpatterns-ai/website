@@ -12,6 +12,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - benchmarks
 last_reviewed: 2026-09-17
 maturity: emerging
 status: current

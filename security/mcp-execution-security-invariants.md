@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - mcp
 aliases:
   - eight MCP security invariants
   - Handle-Capability Protocol

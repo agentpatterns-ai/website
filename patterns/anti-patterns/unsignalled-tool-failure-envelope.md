@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - anti-pattern
   - arxiv
+  - reliability
 aliases:
   - unsignalled failure envelope
   - fabrication after tool failure

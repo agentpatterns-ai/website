@@ -4,9 +4,9 @@ title: "Plan Mode: Read-Only Exploration Before Implementation"
 description: "Use Plan Mode to restrict agents to read-only operations, surface their understanding of a task, and correct the approach before any code is written."
 tags:
   - context-engineering
-  - cost-performance
   - claude
   - human-factors
+  - workflows
 last_reviewed: 2026-05-27
 ---
 

@@ -85,7 +85,7 @@ Agent mode degrades when the feedback loop is weak or the task exceeds its conte
 
 - [Coding Agent](coding-agent.md)
 - [Custom Agents & Skills](custom-agents-skills.md)
-- [Agent Composition Patterns](../../patterns/agent-design/agent-composition-patterns.md)
+- [Agent Composition Patterns](../../patterns/multi-agent/agent-composition-patterns.md)
 - [MCP Integration](mcp-integration.md)
 - [Copilot CLI Agentic Workflows](copilot-cli-agentic-workflows.md)
 - [Copilot Instructions Convention](copilot-instructions-md-convention.md)

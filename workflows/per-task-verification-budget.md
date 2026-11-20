@@ -7,6 +7,7 @@ tags:
   - agent-design
   - human-factors
   - tool-agnostic
+  - testing-verification
 aliases:
   - verification time budget
   - fixed per-task review budget

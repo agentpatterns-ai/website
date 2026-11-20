@@ -12,7 +12,7 @@ aliases:
   - permission prompts none
   - unattended permission fallback
 applies_to: "claude-code@2.x"
-last_reviewed: 2026-10-26
+last_reviewed: 2026-11-19
 maturity: emerging
 status: current
 ---
@@ -40,6 +40,8 @@ Upstream decisions are untouched: "Permission rules, `PermissionRequest` hooks, 
 Two behaviors change beyond the denial. "With `--permission-prompts none`, Claude Code removes the tools that need an answer from a person, such as `AskUserQuestion`, so Claude can't call them. Any MCP elicitation request that no `Elicitation` hook answers is cancelled." ([headless guide](https://code.claude.com/docs/en/headless))
 
 Claude Code 2.1.310 (October 23, 2026) also changes an MCP timeout error. This applies in non-interactive sessions when the server's elicitation is unanswered: "it now tells Claude that no answer came and not to repeat the call" ([Claude Code changelog 2.1.310](https://code.claude.com/docs/en/changelog#2-1-310)).
+
+Claude Code 2.1.319 (November 6, 2026) added a `permissions.denyInsteadOfPrompting` setting: "a tool call that would wait on a permission prompt is denied and the turn continues, in terminal sessions, subagents and teammates" ([Claude Code changelog 2.1.319](https://code.claude.com/docs/en/changelog#2-1-319)). The entry does not say how the setting combines with `--permission-prompts none`.
 
 The third change is the one most often read backwards. The denial does not stop the job. Claude "is told that nobody can approve the request and not to retry it, and the run continues" ([headless guide](https://code.claude.com/docs/en/headless)). Anthropic reports the same outcome for auto mode's own repeated-block threshold in a non-interactive run: "the action doesn't run and Claude keeps working" ([Choose a permission mode](https://code.claude.com/docs/en/permission-modes)). The action fails closed. The run does not.
 

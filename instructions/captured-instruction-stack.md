@@ -7,6 +7,7 @@ tags:
   - context-engineering
   - tool-agnostic
   - arxiv
+  - observability
 aliases:
   - instruction stack capture
   - assembled request capture

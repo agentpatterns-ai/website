@@ -5,7 +5,6 @@ term: "Prebuilt Agent Monitoring Dashboard"
 tags:
   - observability
   - tool-agnostic
-  - workflows
   - testing-verification
 aliases:
   - shipped agent dashboard

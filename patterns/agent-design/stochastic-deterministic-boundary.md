@@ -98,5 +98,5 @@ The same contract shape appears twice; the verifier differs because the failure 
 - [Critic Agent Pattern](critic-agent-plan-review.md)
 - [Evaluator-Optimizer Pattern](evaluator-optimizer.md)
 - [Inference-Time Tool-Call Reviewer](inference-time-tool-call-reviewer.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
+- [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md)
 - [Cognitive Reasoning vs Execution](cognitive-reasoning-execution-separation.md)

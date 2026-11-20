@@ -77,6 +77,16 @@ Agents use metrics to verify a change had the intended effect:
 
 The same MCP servers that expose logs also expose metrics. [Arize Phoenix MCP](https://github.com/Arize-ai/phoenix/tree/main/js/packages/phoenix-mcp) adds span retrieval and annotation.
 
+## Production database state: transient evidence
+
+[Pinto, 2026](https://arxiv.org/abs/2611.17304v1) is one author's retrospective observation of one Claude Code agent across eight database incidents in one production message-dispatch engine (27 sessions, about 3,000 tool calls). About 79% of model calls went to an open-weights model (DeepSeek) and about 17% to Claude Opus (§3). All five incidents that depended on runtime concurrency had an access gap, such as no live lock view or a truncated deadlock report. In four the gap combined with a reasoning error. By the author's coding, none was limited by reasoning alone (§5). The other three incidents needed nothing the agent lacked.
+
+The paper cannot show causation: "without a controlled comparison we cannot show that the former caused the latter", and "A frontier model might have avoided some of the reasoning errors in the mixed incidents" (§7). In four incidents the information that refuted the wrong hypothesis was within the agent's reach (§4.10).
+
+Studies that supply telemetry point the other way. In an OpenRCA audit of 70 cases, 28 (40.0%) were reasoning gaps and 1 (1.4%) was data ambiguity, a lower bound because the label was given ([Gopal and Krishnan, 2026](https://arxiv.org/abs/2607.13548v2), Table 12). Across 1,675 runs of five models, hallucinated data interpretation appeared in 1,193 (71.2%), and the framework provides metrics, logs and traces for every incident ([Kim et al., 2026](https://cloudintelligenceworkshop.org/papers/aiops26-Kim.pdf), Table 3). Access looks necessary for this bug class, not sufficient.
+
+The paper proposes a read-only, audited surface over `pg_locks`, `pg_stat_activity` and query plans, and lists building it as future work (§6.2, §9). `pg_locks` shows locks held by active processes ([PostgreSQL docs](https://www.postgresql.org/docs/current/view-pg-locks.html)), and `log_lock_waits` is off by default ([PostgreSQL docs](https://www.postgresql.org/docs/current/runtime-config-logging.html)). See [scoped runtime access](../patterns/agent-design/scoped-devtools-access-runtime-diagnosis.md) for the exposure risks.
+
 ## Context management: JIT loading
 
 Observability data is high-volume. Two patterns keep context lean:
@@ -147,10 +157,10 @@ Wiring observability into agent context adds complexity that can degrade reliabi
 - Treat observability data as JIT references: store query strings and time ranges, then load payloads on demand so context windows stay lean.
 - Climb the verification ladder from cheapest signal up — `python -c` and `curl` before browser drivers, browser drivers before vision screenshots.
 - Plan for the failure modes: MCP outages turn agents blind, stale metrics mislead post-deploy verification, and untrimmed log queries shred the context window.
+- For database incidents that depend on concurrency, one observation found access gaps in every case, but full-telemetry studies still find reasoning failures, so treat access as necessary and not sufficient.
 
 ## Related
 
-- [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) -- humans observing agent behavior (the inverse)
 - [OpenTelemetry for AI Agent Observability and Tracing](../standards/opentelemetry-agent-observability.md) -- OTel semantic conventions for agent spans and instrumentation
 - [Agent Debugging](agent-debugging.md) -- diagnosing agent failures using logs, traces, and tool call inspection
 - [Browser Automation for Research](../tool-engineering/browser-automation-for-research.md) -- using Playwright to fetch web content, distinct from debugging applications

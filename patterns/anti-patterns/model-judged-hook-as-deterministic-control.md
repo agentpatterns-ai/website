@@ -9,6 +9,7 @@ tags:
   - anti-pattern
   - claude
   - arxiv
+  - hooks
 last_reviewed: 2026-10-09
 maturity: emerging
 ---

@@ -19,7 +19,7 @@ maturity: established
 
 > A trace corpus past a few hundred runs needs population-level analysis: a scout-investigator pipeline proposes recurring failure hypotheses, then verifies each against corpus evidence.
 
-Corpus-level trace diagnostics runs a structured multi-agent pipeline over a large set of agent execution traces to surface systematic failure patterns (recurring tool misuse, silent [reward hacking](anti-reward-hacking.md), drift after long context) that are invisible when a human inspects one failing trace at a time. It sits above per-trace error analysis, not in place of it. For the statistical route to the same corpus-level question, clustering judge-labeled traces instead of agent-proposed hypotheses, see [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md).
+Corpus-level trace diagnostics runs a structured multi-agent pipeline over a large set of agent execution traces to surface systematic failure patterns (recurring tool misuse, silent [reward hacking](../verification/anti-reward-hacking.md), drift after long context) that are invisible when a human inspects one failing trace at a time. It sits above per-trace error analysis, not in place of it. For the statistical route to the same corpus-level question, clustering judge-labeled traces instead of agent-proposed hypotheses, see [Macro Evals for Agentic Systems](../verification/macro-evals-agentic-systems.md).
 
 ## When it applies
 
@@ -49,7 +49,7 @@ The split echoes the division of labor in [Anthropic's multi-agent research syst
 
 ## Why it works
 
-Agent failures are governed by a few recurring causal patterns (tool misuse, context drift, [reward hacking](anti-reward-hacking.md), missing capability), but each surfaces with high per-trace variance. Aggregating across many traces averages out task-specific noise so the signal becomes detectable.
+Agent failures are governed by a few recurring causal patterns (tool misuse, context drift, [reward hacking](../verification/anti-reward-hacking.md), missing capability), but each surfaces with high per-trace variance. Aggregating across many traces averages out task-specific noise so the signal becomes detectable.
 
 The scout-investigator split keeps this safe at scale: scout pattern recognition is cheap but error-prone; investigator verification is expensive but precise. Composed, they mirror clinical diagnostic reasoning — broad differential, then targeted confirmation. Reported payoff: 30.4 percentage points scaffold improvement over baseline across HLE, SWeBench Pro, TerminalBench, and FeatureBench. [Source: [Manglik et al., Insights Generator (arxiv 2605.21347)](https://arxiv.org/abs/2605.21347v3)]
 
@@ -79,7 +79,7 @@ The layers compose; they do not replace each other.
 3. Run the scout pass. A cheap model emits capped candidate hypotheses (`tool X precedes tool Y in failed runs`) — long lists dilute investigator effort.
 4. Run the investigator pass. For each hypothesis, fetch supporting and counter-evidence traces. Discard any hypothesis with strong counter-examples or no corroboration.
 5. Sample-review findings. A domain expert reads 10-20% of cited traces per finding before any insight becomes ground truth. This step is not optional.
-6. Convert findings into eval cases. Each confirmed pattern becomes a regression eval — see [incident-to-eval synthesis](incident-to-eval-synthesis.md).
+6. Convert findings into eval cases. Each confirmed pattern becomes a regression eval — see [incident-to-eval synthesis](../verification/incident-to-eval-synthesis.md).
 
 ## Key Takeaways
 
@@ -90,9 +90,9 @@ The layers compose; they do not replace each other.
 
 ## Related
 
-- [Using the Agent to Analyze Its Own Evaluation Transcripts](agent-transcript-analysis.md) — agent-as-analyst on a smaller transcript batch, focused on tool design changes
-- [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — per-trace stage decomposition; the layer below corpus-level diagnostics
-- [Incident-to-Eval Synthesis](incident-to-eval-synthesis.md) — convert each confirmed failure pattern into a regression eval case
-- [LLM Agent Bug Fix Taxonomy](agent-bug-fix-taxonomy.md) — empirical failure-mode taxonomy from 930 real agent bugs
-- [Learned Prefix Monitors for Agent Traces](learned-prefix-monitors-agent-traces.md) — online failure detection at the trace level; complements offline corpus-level analysis
-- [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md) — the statistical route to the same population-level question: clustering judge-labeled traces (UMAP/HDBSCAN at ~1,000+ traces) where this page runs hypothesis-driven agents from ~100 traces up
+- [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md) — agent-as-analyst on a smaller transcript batch, focused on tool design changes
+- [Trajectory Decomposition: Diagnose Where Coding Agents Fail](../verification/trajectory-decomposition-diagnosis.md) — per-trace stage decomposition; the layer below corpus-level diagnostics
+- [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — convert each confirmed failure pattern into a regression eval case
+- [LLM Agent Bug Fix Taxonomy](../verification/agent-bug-fix-taxonomy.md) — empirical failure-mode taxonomy from 930 real agent bugs
+- [Learned Prefix Monitors for Agent Traces](../verification/learned-prefix-monitors-agent-traces.md) — online failure detection at the trace level; complements offline corpus-level analysis
+- [Macro Evals for Agentic Systems](../verification/macro-evals-agentic-systems.md) — the statistical route to the same population-level question: clustering judge-labeled traces (UMAP/HDBSCAN at ~1,000+ traces) where this page runs hypothesis-driven agents from ~100 traces up

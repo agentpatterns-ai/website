@@ -7,6 +7,7 @@ tags:
   - context-engineering
   - tool-agnostic
   - arxiv
+  - memory
 aliases:
   - investigative-state ledger for agents
   - confirmed-facts hypotheses questions memory

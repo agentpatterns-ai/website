@@ -6,6 +6,7 @@ tags:
   - token-engineering
   - cost-performance
   - tool-agnostic
+  - model-routing
 aliases:
   - model routing decision matrix
   - model tier selection map
@@ -73,7 +74,7 @@ Four documented failure modes. Each one is the reason the matrix is a *picker*, 
 - [Cost-Aware Agent Design](cost-aware-agent-design.md) — the complexity-routing row's canonical page
 - [Gateway Model Routing](../patterns/agent-design/gateway-model-routing.md) — the infrastructure-portability row's canonical page
 - [Auto Model Selection](../patterns/agent-design/auto-model-selection.md) — the vendor-capacity row's canonical page
-- [Copilot Auto Tiers: Weighting Cost Against Quality](../patterns/agent-design/copilot-auto-tier-selection.md) — the one vendor control that exposes the cost-versus-quality weighting directly, and what it does not bound
+- [Copilot Auto Tiers: Weighting Cost Against Quality](../tools/copilot/copilot-auto-tier-selection.md) — the one vendor control that exposes the cost-versus-quality weighting directly, and what it does not bound
 - [Cross-Vendor Competitive Routing](../patterns/agent-design/cross-vendor-competitive-routing.md) — the capability-uncertainty row's canonical page
 - [Parsimonious Agent Routing](../patterns/multi-agent/parsimonious-agent-routing.md) — the joint-decomposition-and-budget row's canonical page
 - [Pattern Selection Map](../patterns/selection-map.md) — the model this page applies to routing specifically

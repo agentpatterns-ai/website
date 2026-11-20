@@ -6,6 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
   - anti-pattern
+  - skills
 aliases:
   - clone and own
   - fork and forget

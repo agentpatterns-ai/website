@@ -124,7 +124,7 @@ Cognition argues that pushing parallelization or orchestrator-workers into auton
 
 ## Related
 
-- [Agent Composition Patterns](agent-composition-patterns.md) — the same workflow shapes treated as composition primitives
+- [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md) — the same workflow shapes treated as composition primitives
 - [Prompt Chaining](../../context-engineering/prompt-chaining.md) — Anthropic's first workflow pattern in detail
 - [Evaluator-Optimizer](evaluator-optimizer.md) — Anthropic's fifth workflow pattern in detail
 - [Multi-Agent Topology Taxonomy](../multi-agent/multi-agent-topology-taxonomy.md) — taxonomy that subsumes orchestrator-workers and parallelization

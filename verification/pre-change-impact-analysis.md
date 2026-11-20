@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - agent-design
   - tool-agnostic
+  - skills
 aliases:
   - TDAD
   - dependency maps

@@ -11,6 +11,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - harness-engineering
 last_reviewed: 2026-09-30
 maturity: emerging
 ---

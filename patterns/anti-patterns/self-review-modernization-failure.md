@@ -7,6 +7,7 @@ tags:
   - anti-pattern
   - tool-agnostic
   - arxiv
+  - migration
 aliases:
   - self-review code modernization
   - articulate but wrong self review

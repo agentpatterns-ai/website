@@ -26,6 +26,7 @@ nav:
       - size-agent-comparisons-by-run-variance.md
       - compliance-gated-best-of-k-selection.md
       - trajectory-decomposition-diagnosis.md
+      - decision-fork-replay.md
       - valid-completion-rate-second-axis.md
       - action-class-decomposition-tool-calling-evals.md
       - prefix-executability-agent-evaluation.md
@@ -48,7 +49,6 @@ nav:
       - frozen-base-task-mining.md
       - policy-graded-agent-evaluation.md
       - head-to-head-mcp-server-evaluation.md
-      - vendor-security-certification-scope.md
       - completion-failure-taxonomy.md
       - agent-bug-fix-taxonomy.md
       - symptom-first-agent-bug-triage.md
@@ -81,7 +81,6 @@ nav:
       - specification-path-testing.md
       - severity-stratified-security-prompt-evaluation.md
       - agent-transcript-analysis.md
-      - corpus-level-trace-diagnostics.md
       - behavioral-trace-retrieval.md
       - cross-framework-signal-semantics.md
       - llm-benchmark-auditing.md
@@ -192,6 +191,7 @@ nav:
       - plan-stage-checkpoint-repair.md
       - oversight-stage-attribution.md
       - separate-critic-over-self-recheck.md
+      - requirement-deviation-elicitation.md
       - paraphrase-first-review.md
   - "Rubric Design":
       - anti-reward-hacking.md

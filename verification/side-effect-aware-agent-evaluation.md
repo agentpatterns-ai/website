@@ -8,6 +8,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - security
 aliases:
   - collateral damage evaluation
   - authorization compliance axis

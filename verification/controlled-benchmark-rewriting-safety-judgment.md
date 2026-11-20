@@ -6,7 +6,6 @@ tags:
   - testing-verification
   - evals
   - security
-  - agent-design
   - tool-agnostic
   - arxiv
   - benchmarks

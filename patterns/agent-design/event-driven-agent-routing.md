@@ -116,7 +116,7 @@ Prompts live in [`.github/copilot-instructions.md`](../../tools/copilot/copilot-
 ## Related
 
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../multi-agent/agent-composition-patterns.md)
 - [Human-in-the-Loop Placement](../../workflows/human-in-the-loop.md)
 - [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
 - [Bounded Batch Dispatch](../multi-agent/bounded-batch-dispatch.md)

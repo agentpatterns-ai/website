@@ -82,7 +82,7 @@ The fields are the call, the wrong value, the verified value, and the standing c
 - [Context-Injected Error Recovery](context-injected-error-recovery.md)
 - [The Handoff Tax: What a Receiving Model Should Inherit](handoff-tax-model-switch-context.md)
 - [Per-Type Retention Policy for Agent Compaction](per-type-retention-under-compaction.md)
-- [Selective Rewind Summarization](selective-rewind-summarization.md)
 - [Probing an Agent's Completion Claim in a Disposable Fork](../verification/completion-claim-probe.md)
 - [Recovery as a Separate Eval Axis](../verification/recovery-as-separate-eval-axis.md)
 - [Verbatim Failure Records in Small-Model Agent Transcripts](../patterns/anti-patterns/verbatim-failure-records.md)
+- [Experience Rot After Silent Tool Changes in AI Agents](../patterns/anti-patterns/experience-rot-silent-tool-changes.md)

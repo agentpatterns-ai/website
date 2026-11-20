@@ -23,7 +23,7 @@ maturity: established
 Related lesson: [Sub-Agents and Orchestration](https://learn.agentpatterns.ai/harness-engineering/sub-agents-and-orchestration/), a hands-on lesson with quizzes.
 
 !!! note "Also known as"
-    Parallel Dispatch, Scatter-Gather, Orchestrator-Worker, Sub-Agents Fan-Out. For specific variants, see [Fan-Out Synthesis](../multi-agent/fan-out-synthesis.md), [Orchestrator-Worker](../multi-agent/orchestrator-worker.md), and [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md).
+    Parallel Dispatch, Scatter-Gather, Orchestrator-Worker, Sub-Agents Fan-Out. For specific variants, see [Fan-Out Synthesis](fan-out-synthesis.md), [Orchestrator-Worker](orchestrator-worker.md), and [Sub-Agents Fan-Out](sub-agents-fan-out.md).
 
 ## Why composition
 
@@ -44,7 +44,7 @@ When to use: strict dependencies, where B cannot start until A completes.
 
 Trade-off: no parallelism, so latency accumulates across steps.
 
-Example: a content pipeline (research → draft → review → publish), or the [evaluator-optimizer](evaluator-optimizer.md) loop as a two-stage chain.
+Example: a content pipeline (research → draft → review → publish), or the [evaluator-optimizer](../agent-design/evaluator-optimizer.md) loop as a two-stage chain.
 
 ### Multi-phase chain tactics
 
@@ -76,9 +76,9 @@ graph TD
 
 When to use: N independent tasks, such as reviewing N files, fetching N URLs, or analyzing N data sources.
 
-Trade-off: fast, because the work runs in parallel. The orchestrator must then synthesize the results (see [Fan-Out Synthesis](../multi-agent/fan-out-synthesis.md)).
+Trade-off: fast, because the work runs in parallel. The orchestrator must then synthesize the results (see [Fan-Out Synthesis](fan-out-synthesis.md)).
 
-Example: parallel reviewers for code quality, type safety, and test coverage, each with its own context window. See [Sub-Agents for Fan-Out](../multi-agent/sub-agents-fan-out.md) and [Specialized Agent Roles](specialized-agent-roles.md).
+Example: parallel reviewers for code quality, type safety, and test coverage, each with its own context window. See [Sub-Agents for Fan-Out](sub-agents-fan-out.md) and [Specialized Agent Roles](../agent-design/specialized-agent-roles.md).
 
 ## Pipeline
 
@@ -92,7 +92,7 @@ graph LR
     S2 -->|fail| S1
 ```
 
-When to use: repeatable processes where each stage's output quality gates progress, like the [command](agents-vs-commands.md) layer.
+When to use: repeatable processes where each stage's output quality gates progress, like the [command](../agent-design/agents-vs-commands.md) layer.
 
 Trade-off: explicit pass or fail at each boundary, with feedback loops on failure.
 
@@ -104,7 +104,7 @@ A coordinator agent decides what to delegate, to whom, and when.
 
 When to use: tasks where the sequence and delegation targets are not known upfront.
 
-Trade-off: more flexible but harder to debug. The supervisor needs enough context to delegate well (see [Delegation Decision](delegation-decision.md)).
+Trade-off: more flexible but harder to debug. The supervisor needs enough context to delegate well (see [Delegation Decision](../agent-design/delegation-decision.md)).
 
 Example: an agent receives "make this codebase production-ready" and decomposes it into security review, test coverage, and documentation.
 
@@ -127,7 +127,7 @@ Use tool discovery (Glob, Grep) instead of hardcoded paths, so agents adapt to a
 
 ## Weak-model specialization
 
-Route narrow tasks to cheaper models (Haiku) and keep capable models (Sonnet) for complex work ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); see [Anthropic's Effective Agents Framework](anthropic-effective-agents-framework.md) for the full map). Claude Code's Explore subagent defaults to Haiku for read-only search ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)):
+Route narrow tasks to cheaper models (Haiku) and keep capable models (Sonnet) for complex work ([Anthropic: Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents); see [Anthropic's Effective Agents Framework](../agent-design/anthropic-effective-agents-framework.md) for the full map). Claude Code's Explore subagent defaults to Haiku for read-only search ([Sub-Agents docs](https://code.claude.com/docs/en/sub-agents)):
 
 ```yaml
 ---
@@ -226,12 +226,12 @@ Route narrow, well-defined subtasks to cheaper models like Haiku and reserve cap
 
 ## Related
 
-- [Fan-Out Synthesis Pattern](../multi-agent/fan-out-synthesis.md)
-- [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
-- [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
-- [Specialized Agent Roles](specialized-agent-roles.md)
-- [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
-- [Agent Handoff Protocols](../multi-agent/agent-handoff-protocols.md)
-- [Delegation Decision](delegation-decision.md)
-- [The Orchestrator's Attention Budget](orchestrator-attention-budget.md) — the attention-dilution counterpart to the overflow failure above
-- [Evaluator-Optimizer](evaluator-optimizer.md)
+- [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
+- [Orchestrator-Worker Pattern](orchestrator-worker.md)
+- [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md)
+- [Specialized Agent Roles](../agent-design/specialized-agent-roles.md)
+- [Agents vs Commands: Separation of Role and Workflow](../agent-design/agents-vs-commands.md)
+- [Agent Handoff Protocols](agent-handoff-protocols.md)
+- [Delegation Decision](../agent-design/delegation-decision.md)
+- [The Orchestrator's Attention Budget](../agent-design/orchestrator-attention-budget.md) — the attention-dilution counterpart to the overflow failure above
+- [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md)

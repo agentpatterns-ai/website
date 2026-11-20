@@ -10,6 +10,7 @@ tags:
   - copilot
   - human-factors
   - observability
+applies_to: "copilot@1.x"
 last_reviewed: 2026-10-25
 maturity: emerging
 status: current
@@ -82,6 +83,6 @@ Check the report day, configured name, integration type, and applicable version 
 ## Related
 
 - [Anonymized Customization Metrics in the Copilot CLI](anonymized-customization-metrics-copilot-cli.md) — the September behavior this change supersedes, and the distinct-count reads that survive it
-- [Per-Agent-App Attribution in the Copilot Usage Metrics API](per-agent-app-attribution-copilot-metrics.md) — the same API's other named breakdown, read under the four limits GitHub states for it
-- [Reading a Client-Version Metric Dip as Lost Adoption](../patterns/anti-patterns/client-version-metric-dip-as-adoption-loss.md) — the version-floor condition as a standalone misreading, from an earlier release
-- [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — which decisions a first-party panel over this data can settle
+- [Per-Agent-App Attribution in the Copilot Usage Metrics API](../../human/per-agent-app-attribution-copilot-metrics.md) — the same API's other named breakdown, read under the four limits GitHub states for it
+- [Reading a Client-Version Metric Dip as Lost Adoption](../../patterns/anti-patterns/client-version-metric-dip-as-adoption-loss.md) — the version-floor condition as a standalone misreading, from an earlier release
+- [Reading a Vendor-Computed AI Coding ROI Dashboard](../../human/vendor-computed-roi-copilot-impact-dashboard.md) — which decisions a first-party panel over this data can settle

@@ -4,9 +4,9 @@ term: "Tool Definition Vetting"
 description: "A tool description or inputSchema that asks for the system prompt, conversation history, secrets, or API keys is a leak signature — refuse the tool at install, do not reword it."
 tags:
   - security
-  - agent-design
   - tool-agnostic
   - mcp
+  - tool-engineering
 aliases:
   - ToolLeak
   - malicious MCP tool definition

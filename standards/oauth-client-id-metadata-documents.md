@@ -2,7 +2,6 @@
 title: "OAuth Client ID Metadata Documents (CIMD) for MCP Servers"
 description: "CIMD replaces static OAuth client pre-registration with a URL that dereferences to a JSON metadata document — the registration mechanism MCP recommends for cloud-hosted servers."
 tags:
-  - agent-design
   - security
   - tool-agnostic
   - standards

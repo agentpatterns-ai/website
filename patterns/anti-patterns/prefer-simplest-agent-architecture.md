@@ -11,7 +11,7 @@ aliases:
   - over-orchestration
   - premature multi-agent
   - agent topology over-engineering
-last_reviewed: 2026-06-28
+last_reviewed: 2026-11-19
 maturity: adopted
 ---
 
@@ -42,6 +42,8 @@ The architecture is often shaped by org structure rather than task structure. As
 Multi-agent fails on most tasks because every handoff loses the context the receiving agent did not see. The receiver has to reconstruct it (expensive and lossy) or act on a degraded picture (incorrect). Cognition's "Don't Build Multi-Agents" post names the mechanism: in naive multi-agent setups *"sub-agents have no context of each other's work"*, and *"failure generally boils down to missing context within the system"* ([Cognition, *Don't Build Multi-Agents*, June 2025](https://cognition.com/blog/dont-build-multi-agents)).
 
 Compute-equalized benchmarks confirm the mechanism. With reasoning-token budget held constant, single-agent systems "consistently match or outperform" multi-agent ones on multi-hop reasoning across the Qwen3, DeepSeek-R1, and Gemini 2.5 families; the earlier multi-agent gains reflect "unaccounted computation and context effects rather than inherent architectural benefits" ([Tran & Kiela, 2026, *arxiv:2604.02460*](https://arxiv.org/abs/2604.02460v2)). Shopify's ICML 2025 Sidekick lessons reach the same conclusion from production: *"avoid multi-agent architectures early — simple single-agent systems can handle more complexity than you might expect"* ([Shopify Engineering, 2025](https://shopify.engineering/building-production-ready-agentic-systems)).
+
+A synthesis of nine studies reached the same direction at a larger count. Against baselines matched on sample count or budget, the multi-agent system's accuracy equals or falls below its baseline's in 352 of 474 contrasts (74%) from eight studies, with a mean accuracy difference of −0.042 ([Mohammadabadi, 2026, *arxiv:2611.17610*](https://arxiv.org/abs/2611.17610v1), §5.3). The author notes the five initial studies were chosen without a search protocol, which permits selection bias, and the contrasts cover LLM reasoning and agent tasks only (§5.7, §6.5).
 
 ## Signals of Over-Engineering
 

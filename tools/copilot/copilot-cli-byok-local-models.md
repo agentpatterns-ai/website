@@ -5,6 +5,7 @@ tags:
   - copilot
   - cost-performance
   - workflows
+  - model-routing
 aliases:
   - Copilot CLI bring your own key
   - Copilot CLI local models

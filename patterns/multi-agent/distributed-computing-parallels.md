@@ -39,7 +39,7 @@ Coding agent systems solve the same coordination problems that distributed syste
 | Lazy Evaluation | JIT context loading — load at runtime, not upfront | [Semantic Context Loading](../../context-engineering/semantic-context-loading.md) |
 | Data Sharding | Context partitioning across sub-agent windows | [Context Budget Allocation](../../context-engineering/context-budget-allocation.md) |
 | Write-Ahead Logging | Progress files and git commits as recovery checkpoints | [Agent Harness](../agent-design/agent-harness.md), [Feature List Files](../../instructions/feature-list-files.md) |
-| Service Mesh / API Gateway | Coordinator dispatching to sub-agents by capability | [Agent Composition Patterns](../agent-design/agent-composition-patterns.md) |
+| Service Mesh / API Gateway | Coordinator dispatching to sub-agents by capability | [Agent Composition Patterns](agent-composition-patterns.md) |
 | Consensus Protocols | Generator-critic loops, voting, quorum review | [Evaluator-Optimizer](../agent-design/evaluator-optimizer.md), [Committee Review](../../code-review/committee-review-pattern.md), [Voting / Ensemble Pattern](voting-ensemble-pattern.md) |
 | Load Balancing | Reasoning budget allocation across planning, execution, verification | [Reasoning Budget Allocation](../agent-design/reasoning-budget-allocation.md) |
 
@@ -88,7 +88,7 @@ Teams that do not recognize these as known patterns reinvent each mechanism ad h
 
 ## Related
 
-- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
+- [Agent Composition Patterns](agent-composition-patterns.md)
 - [Orchestrator-Worker](orchestrator-worker.md)
 - [Fan-Out Synthesis](fan-out-synthesis.md)
 - [Circuit Breakers](../../observability/circuit-breakers.md)

@@ -11,6 +11,7 @@ tags:
   - cost-performance
   - arxiv
   - tool-agnostic
+  - observability
 last_reviewed: 2026-09-22
 maturity: emerging
 ---

@@ -116,7 +116,7 @@ If the same developer tried to run 6 panes, the layout would degrade — each ti
 - [Parallel Agent Sessions Shift the Bottleneck from Writing Code to Making Decisions](parallel-agent-sessions.md)
 - [Async Non-Blocking Subagent Dispatch](../patterns/multi-agent/async-non-blocking-subagent-dispatch.md)
 - [Cursor 3 Agents Window](../tools/cursor/agents-window.md)
-- [VS Code Agents App: Agent-Native Parallel Task Execution](../patterns/agent-design/vscode-agents-parallel-tasks.md)
+- [VS Code Agents App: Agent-Native Parallel Task Execution](../tools/copilot/vscode-agents-parallel-tasks.md)
 - [Developer Attention Management with Parallel Agents](../human/attention-management-parallel-agents.md)
 - [Worktree Isolation](worktree-isolation.md)
 - [Staggered Agent Launch](../patterns/multi-agent/staggered-agent-launch.md)

@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - model-routing
 aliases:
   - handoff tax
   - non-native trajectory continuation

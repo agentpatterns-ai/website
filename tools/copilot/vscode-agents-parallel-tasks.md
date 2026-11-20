@@ -8,6 +8,7 @@ tags:
 aliases:
   - VS Code Agents App
   - Agent-Native Parallel Execution
+applies_to: "vscode@1.x"
 last_reviewed: 2026-06-12
 maturity: adopted
 ---
@@ -27,7 +28,7 @@ The [VS Code Agents app](https://code.visualstudio.com/updates/v1_115) (introduc
 Each session in the Agents app is an independent agent context:
 
 - Workspace config inheritance: custom instructions and MCP server configuration carry over automatically from workspace settings. You do not configure each session separately. Every session runs under the same behavioral constraints as the main editor.
-- Project isolation: sessions can target different projects at the same time. A refactor in one repo, a documentation pass in another, and a test-writing run in a third can all run at once. This is the [fan-out shape](agent-composition-patterns.md) applied across projects.
+- Project isolation: sessions can target different projects at the same time. A refactor in one repo, a documentation pass in another, and a test-writing run in a third can all run at once. This is the [fan-out shape](../../patterns/multi-agent/agent-composition-patterns.md) applied across projects.
 - Headless execution: sessions run without the editor's foreground. You watch status in the Agents panel, and the main editor stays unblocked.
 
 ## The send_to_terminal tool
@@ -55,7 +56,7 @@ This differs from three Claude Code processes in three terminals. The Agents app
 
 ## Cursor comparison
 
-Cursor's [Agents Window](../../tools/cursor/agents-window.md) introduced the same concept: a dedicated sidebar for concurrent agent tasks. The VS Code Agents app follows that model, and workspace-settings integration is what sets it apart. Sessions inherit custom instructions and MCP servers automatically, which cuts per-session setup cost. Cursor passes custom instructions through project-level Rules files (`.cursor/rules/*.mdc`) and user-level settings, but background agent sessions do not inherit MCP server configuration the same way. Each session needs explicit tool configuration.
+Cursor's [Agents Window](../cursor/agents-window.md) introduced the same concept: a dedicated sidebar for concurrent agent tasks. The VS Code Agents app follows that model, and workspace-settings integration is what sets it apart. Sessions inherit custom instructions and MCP servers automatically, which cuts per-session setup cost. Cursor passes custom instructions through project-level Rules files (`.cursor/rules/*.mdc`) and user-level settings, but background agent sessions do not inherit MCP server configuration the same way. Each session needs explicit tool configuration.
 
 ## Why it works
 
@@ -78,9 +79,9 @@ The `send_to_terminal` integration closes a second bottleneck. Background agents
 
 ## Related
 
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md) — structural patterns for distributing work across agents
-- [Specialized Agent Roles](specialized-agent-roles.md) — assigning distinct responsibilities to parallel sessions to avoid redundant output
-- [Delegation Decision: When to Use an Agent vs Do It Yourself](delegation-decision.md) — criteria for deciding which subtasks warrant agent delegation
-- [Steering Running Agents: Mid-Run Redirection and Follow-Ups](steering-running-agents.md) — how to redirect a session mid-execution without discarding accumulated context
-- [Harness Engineering](harness-engineering.md) — runtime infrastructure design for agent execution environments
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../../patterns/multi-agent/agent-composition-patterns.md) — structural patterns for distributing work across agents
+- [Specialized Agent Roles](../../patterns/agent-design/specialized-agent-roles.md) — assigning distinct responsibilities to parallel sessions to avoid redundant output
+- [Delegation Decision: When to Use an Agent vs Do It Yourself](../../patterns/agent-design/delegation-decision.md) — criteria for deciding which subtasks warrant agent delegation
+- [Steering Running Agents: Mid-Run Redirection and Follow-Ups](../../patterns/agent-design/steering-running-agents.md) — how to redirect a session mid-execution without discarding accumulated context
+- [Harness Engineering](../../patterns/agent-design/harness-engineering.md) — runtime infrastructure design for agent execution environments
 - [MCP: The Open Protocol Connecting Agents to External Tools](../../standards/mcp-protocol.md) — the protocol behind MCP server configuration that sessions inherit automatically

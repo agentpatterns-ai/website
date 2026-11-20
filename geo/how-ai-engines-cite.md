@@ -6,7 +6,6 @@ tags:
   - geo
   - technique
   - tool-agnostic
-  - workflows
 aliases:
   - "AI citation behavior"
   - "how LLMs cite sources"

@@ -5,6 +5,7 @@ description: "Treat agent harness scaffolding as code with a finite shelf life. 
 tags:
   - agent-design
   - tool-agnostic
+  - harness-engineering
 aliases:
   - build-to-delete agent harness
   - architect for model impermanence

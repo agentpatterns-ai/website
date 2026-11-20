@@ -6,6 +6,7 @@ tags:
   - agent-design
   - claude
   - security
+  - hooks
 aliases:
   - deferred hook permission
   - headless session pause-resume

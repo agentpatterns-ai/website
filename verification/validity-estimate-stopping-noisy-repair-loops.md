@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - tool-agnostic
   - arxiv
+  - loop-engineering
 aliases:
   - "validity-aware repair stopping"
   - "belief-filtered repair stopping"

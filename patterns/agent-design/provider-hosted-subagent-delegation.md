@@ -6,6 +6,7 @@ tags:
   - agent-design
   - cost-performance
   - tool-agnostic
+  - multi-agent
 aliases:
   - hosted multi-agent
   - API-side subagent orchestration

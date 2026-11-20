@@ -8,6 +8,7 @@ tags:
   - human-factors
   - tool-agnostic
   - arxiv
+  - security
 aliases:
   - standing permission policy
   - consequence-category permission rules

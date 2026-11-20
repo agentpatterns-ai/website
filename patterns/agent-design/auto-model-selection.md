@@ -223,7 +223,7 @@ Code-health routing decides before the small model runs; syntax-aware routing de
 
 ## Related
 
-- [Copilot Auto Tiers: Weighting Cost Against Quality](copilot-auto-tier-selection.md) — the per-user efficiency/balance/intelligence setting that reweights this broker's preference without changing its model pool or its billing.
+- [Copilot Auto Tiers: Weighting Cost Against Quality](../../tools/copilot/copilot-auto-tier-selection.md) — the per-user efficiency/balance/intelligence setting that reweights this broker's preference without changing its model pool or its billing.
 - [Gateway Model Routing](gateway-model-routing.md) — infrastructure layer that exposes many models behind one endpoint; Auto routing is the policy layer that picks among them.
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md) — within-harness tier selection by task complexity; Auto is the vendor-side counterpart.
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md) — fan-out across vendors at the agent level, complementary to within-vendor pool routing.

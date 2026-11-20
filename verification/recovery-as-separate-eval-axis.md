@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - evals
 aliases:
   - conditional recovery success rate
   - paired fault-injection evaluation

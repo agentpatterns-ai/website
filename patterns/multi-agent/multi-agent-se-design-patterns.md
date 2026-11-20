@@ -132,7 +132,7 @@ During the design review, the team notes they are optimizing for Functional Suit
 ## Related
 
 - [Multi-Agent Topology Taxonomy](multi-agent-topology-taxonomy.md) — direct sibling: topology vocabulary for the same multi-agent design space
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../agent-design/agent-composition-patterns.md) — engineering-level composition patterns these design patterns instantiate
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md) — engineering-level composition patterns these design patterns instantiate
 - [Orchestrator-Worker Pattern](orchestrator-worker.md) — concrete instantiation of Hierarchical Coordination
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md) — concrete instantiation of Parallel Execution + Consensus Voting
 - [Specialized Agent Roles](../agent-design/specialized-agent-roles.md) — the role design discipline behind Role-Based Cooperation

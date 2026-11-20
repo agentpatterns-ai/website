@@ -8,6 +8,7 @@ aliases:
 tags:
   - agent-design
   - tool-agnostic
+  - skills
 last_reviewed: 2026-08-18
 maturity: adopted
 ---
@@ -175,7 +176,7 @@ When the task genuinely needs every skill at once: each load is another read ope
 - [Separation of Knowledge and Execution](separation-of-knowledge-and-execution.md)
 - [Agents vs Commands: Separation of Role and Workflow](agents-vs-commands.md)
 - [Agent Definition Formats: How Tools Define Agent Behavior](../../standards/agent-definition-formats.md)
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../multi-agent/agent-composition-patterns.md)
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md)

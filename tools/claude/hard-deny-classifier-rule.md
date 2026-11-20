@@ -155,3 +155,4 @@ Failures appear in `/permissions` under Recently denied. To react programmatical
 - [Managed Settings Drop-In Directory](managed-settings-drop-in.md) — Deploying `autoMode` policy across an org
 - [Confirmation Gates](../../security/human-in-the-loop-confirmation-gates.md) — Human-in-the-loop checks for consequential actions
 - [Parameter-Level Permission Rules](tool-param-value-permission-rules.md) — Deterministic `Tool(param:value)` rules outside the classifier layer
+- [Managed PostToolUse Hooks Skip Refused Tool Calls](managed-posttooluse-skips-refused-calls.md) — Refusals that managed PostToolUse hooks do not see

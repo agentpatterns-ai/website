@@ -9,6 +9,7 @@ tags:
 aliases:
   - transcript mode search
   - Ctrl+O search
+applies_to: "claude-code@2.x"
 last_reviewed: 2026-05-27
 maturity: adopted
 ---
@@ -47,14 +48,14 @@ Search is cheapest when you know what string to type. Useful anchors in a Claude
 - Plan revision boundaries — `/plan`, the title of the plan file, or the phrase you used to request a new plan
 - File first touched — the filename; the first hit is where the agent first read or edited it
 - Prompt boundaries — a phrase from your own input; jump backward from the current turn to find where a topic started
-- Scheduled-task timestamps — v2.1.84 added timestamp markers whenever [`/loop` or `CronCreate`](../tools/claude/session-scheduling.md) fires, which become natural section markers in long sessions ([changelog](https://code.claude.com/docs/en/changelog))
+- Scheduled-task timestamps — v2.1.84 added timestamp markers whenever [`/loop` or `CronCreate`](session-scheduling.md) fires, which become natural section markers in long sessions ([changelog](https://code.claude.com/docs/en/changelog))
 
 ## When search is the wrong tool
 
 Transcript search is session-scoped, substring-only, and lives in the fullscreen alternate screen buffer. It is not a replacement for:
 
-- Cross-session investigation. Matching a symptom across multiple saved sessions means grepping transcripts on disk or reading structured telemetry — see [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md).
-- Post-mortem analysis. Once a session exits, the in-memory buffer is gone. Retrospective review of what the agent did and why belongs to [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md).
+- Cross-session investigation. Matching a symptom across multiple saved sessions means grepping transcripts on disk or reading structured telemetry — see [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](../../observability/agent-observability-otel.md).
+- Post-mortem analysis. Once a session exits, the in-memory buffer is gone. Retrospective review of what the agent did and why belongs to [Using the Agent to Analyze Its Own Evaluation Transcripts](../../verification/agent-transcript-analysis.md).
 - Legacy (non-fullscreen) rendering. Fullscreen mode is opt-in via `/tui fullscreen` or `CLAUDE_CODE_NO_FLICKER=1`. In the default renderer the conversation sits in the terminal's native scrollback, so `Cmd+F` and tmux copy mode already work. Transcript-mode search does not apply ([fullscreen reference](https://code.claude.com/docs/en/fullscreen)).
 - Noisy sessions. Substring search with no event-type filter surfaces every occurrence of generic tokens like `error` or `test`. For verbose builds or read-heavy sessions, use `[` to dump the conversation to the terminal's scrollback and grep it, or redirect the analysis to an offline transcript pass.
 
@@ -84,10 +85,10 @@ The same pattern applies to finding the first occurrence of a test failure (`/FA
 
 ## Related
 
-- [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md)
-- [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md)
-- [Agent Debug Log Panel: Chronological Event Inspection for Session Debugging](agent-debug-log-panel.md)
-- [Agent Debugging](agent-debugging.md)
-- [Agent Chat History as a First-Class Artifact](agent-history-as-artifact.md)
-- [Monitor Tool: Event Streaming from Background Scripts](../tools/claude/monitor-tool.md)
-- [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md)
+- [Using the Agent to Analyze Its Own Evaluation Transcripts](../../verification/agent-transcript-analysis.md)
+- [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](../../observability/agent-observability-otel.md)
+- [Agent Debug Log Panel: Chronological Event Inspection for Session Debugging](../../observability/agent-debug-log-panel.md)
+- [Agent Debugging](../../observability/agent-debugging.md)
+- [Agent Chat History as a First-Class Artifact](../../observability/agent-history-as-artifact.md)
+- [Monitor Tool: Event Streaming from Background Scripts](monitor-tool.md)
+- [Trajectory Logging via Progress Files and Git History](../../observability/trajectory-logging-progress-files.md)

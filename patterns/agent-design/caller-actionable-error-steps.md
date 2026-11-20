@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - reliability
   - arxiv
+  - tool-engineering
 aliases:
   - agent-readable error steps
   - tool-surface error text

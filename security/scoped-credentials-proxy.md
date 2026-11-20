@@ -4,7 +4,6 @@ description: "Keep broad credentials entirely outside the agent's sandbox and us
 term: "Scoped Credentials Proxy"
 tags:
   - agent-design
-  - instructions
   - security
   - tool-agnostic
 aliases:

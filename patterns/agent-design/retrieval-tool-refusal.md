@@ -7,6 +7,7 @@ tags:
   - tool-agnostic
   - arxiv
   - cost-performance
+  - rag
 aliases:
   - tool-side refusal
   - null observation for retrieval

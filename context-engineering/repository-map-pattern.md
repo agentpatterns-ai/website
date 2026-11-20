@@ -194,3 +194,4 @@ The map consumed 87 tokens instead of the ~12,000 tokens that reading all source
 - [Repository-Level Retrieval for Code Generation](repository-level-retrieval-code-generation.md)
 - [Context Compression Strategies](context-compression-strategies.md)
 - [Prompt Compression](prompt-compression.md)
+- [Metadata Index for Agent File Search: Where It Cuts Cost](../patterns/agent-design/metadata-index-for-agent-file-search.md)

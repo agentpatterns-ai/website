@@ -4,6 +4,7 @@ term: "Decision-Fork Replay"
 description: "Grade an agent's mid-run choices by replaying the branch points in recorded runs, with everything after the fork hidden from the evaluated model."
 tags:
   - agent-design
+  - testing-verification
   - tool-agnostic
   - evals
   - arxiv
@@ -67,8 +68,8 @@ Read the scope before copying it. Those notes are headed "Task-specific pitfall 
 
 ## Related
 
-- [Dispatch-Time Reasoning Level for Delegated Agents](dispatch-time-reasoning-level.md) — choosing effort at hand-off, the control this benchmark found unresponsive.
-- [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — where extra thinking does buy something.
-- [Agent Failure Trajectories and the Recovery Window](failure-trajectory-recovery-window.md) — the detour shape, seen from the recovery side.
-- [Trajectory Decomposition: Diagnose Where Coding Agents Fail](../../verification/trajectory-decomposition-diagnosis.md) — stage-level precision and recall over the same kind of recorded run.
-- [Cut-Point Replay: Test a Fix Against a Recorded Agent Run](../../verification/cut-point-replay-agent-regression-tests.md) — replaying a record for a regression test rather than for a judgment score.
+- [Dispatch-Time Reasoning Level for Delegated Agents](../patterns/agent-design/dispatch-time-reasoning-level.md) — choosing effort at hand-off, the control this benchmark found unresponsive.
+- [Reasoning Budget Allocation: The Reasoning Sandwich](../patterns/agent-design/reasoning-budget-allocation.md) — where extra thinking does buy something.
+- [Agent Failure Trajectories and the Recovery Window](../patterns/agent-design/failure-trajectory-recovery-window.md) — the detour shape, seen from the recovery side.
+- [Trajectory Decomposition: Diagnose Where Coding Agents Fail](trajectory-decomposition-diagnosis.md) — stage-level precision and recall over the same kind of recorded run.
+- [Cut-Point Replay: Test a Fix Against a Recorded Agent Run](cut-point-replay-agent-regression-tests.md) — replaying a record for a regression test rather than for a judgment score.

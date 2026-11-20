@@ -6,6 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - memory
 aliases:
   - Weakness Maximization for Agent Memory
   - Weakest Consistent Hypothesis

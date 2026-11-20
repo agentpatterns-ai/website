@@ -7,6 +7,7 @@ tags:
   - instructions
   - tool-agnostic
   - tool-engineering
+  - automation
 last_reviewed: 2026-06-13
 maturity: adopted
 ---
@@ -147,5 +148,5 @@ For these cases, prefer [`disallowedTools`](https://docs.anthropic.com/en/docs/c
 - [MCP Elicitation](mcp-elicitation.md)
 - [Sub-Agents for Fan-Out Research and Context Isolation](../patterns/multi-agent/sub-agents-fan-out.md)
 - [Instruction Polarity](../instructions/instruction-polarity.md)
-- [Agent Composition Patterns](../patterns/agent-design/agent-composition-patterns.md)
+- [Agent Composition Patterns](../patterns/multi-agent/agent-composition-patterns.md)
 - [Orchestrator-Worker Pattern](../patterns/multi-agent/orchestrator-worker.md)

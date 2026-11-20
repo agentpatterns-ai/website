@@ -8,6 +8,7 @@ tags:
   - instructions
   - tool-agnostic
   - arxiv
+  - skills
 aliases:
   - trigger compliance boundary decomposition
   - skill trigger versus compliance

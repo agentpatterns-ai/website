@@ -23,7 +23,7 @@ maturity: adopted
 Learn it hands-on with the [Fan-Out and Synthesis guided lesson](https://learn.agentpatterns.ai/multi-agent/fan-out-and-synthesis/), which includes quizzes.
 
 !!! note "Also known as"
-    Fan-Out Pattern, Parallel Dispatch, Scatter-Gather. The fan-out-then-synthesize variant adds a dedicated merge step after parallel execution. See [Agent Composition Patterns](../agent-design/agent-composition-patterns.md), [Orchestrator-Worker](orchestrator-worker.md), and [Sub-Agents Fan-Out](sub-agents-fan-out.md).
+    Fan-Out Pattern, Parallel Dispatch, Scatter-Gather. The fan-out-then-synthesize variant adds a dedicated merge step after parallel execution. See [Agent Composition Patterns](agent-composition-patterns.md), [Orchestrator-Worker](orchestrator-worker.md), and [Sub-Agents Fan-Out](sub-agents-fan-out.md).
 
 ## Structure
 
@@ -142,5 +142,5 @@ Then there is nothing for synthesis to exploit — the pattern depends on genuin
 - [Multi-Model Plan Synthesis](multi-model-plan-synthesis.md)
 - [Recursive Best-of-N Delegation](recursive-best-of-n-delegation.md)
 - [Committee Review Pattern](../../code-review/committee-review-pattern.md)
-- [Agent Composition Patterns](../agent-design/agent-composition-patterns.md)
+- [Agent Composition Patterns](agent-composition-patterns.md)
 - [Bounded Batch Dispatch](bounded-batch-dispatch.md)

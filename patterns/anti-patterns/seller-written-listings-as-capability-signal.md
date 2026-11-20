@@ -9,9 +9,9 @@ aliases:
 tags:
   - anti-pattern
   - agent-design
-  - cost-performance
   - tool-agnostic
   - arxiv
+  - tool-engineering
 last_reviewed: 2026-10-26
 maturity: emerging
 ---

@@ -6,6 +6,7 @@ tags:
   - anti-pattern
   - tool-agnostic
   - arxiv
+  - observability
 aliases:
   - intent-execution correspondence
   - changed tool call attribution

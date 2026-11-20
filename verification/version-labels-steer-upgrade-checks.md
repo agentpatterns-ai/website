@@ -60,9 +60,9 @@ In an npm study, about 14% of dependent releases were hit by a breaking change i
 
 - [Delegating Dependabot Pull Request Triage to an Agent](../workflows/dependabot-pr-triage-delegation.md)
 - [Routing Dependency Updates to Repair Agents by Budget](../workflows/dependency-update-repair-routing.md)
-- [Dependabot Agent Assignment for AI-Driven Vulnerability Remediation](../tools/copilot/dependabot-agent-assignment.md)
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](../security/enforced-versus-advisory-controls.md)
 - [Verification-Gated Agent Autonomy via Automated Review](../patterns/agent-design/verification-gated-agent-autonomy.md)
-- [Agent Approval Authority in Code Review](../code-review/agent-approval-authority.md)
-- [The Task Framing Irrelevance Fallacy in Agent Prompting](../fallacies/task-framing-irrelevance-fallacy.md)
 - [Eval Blind Spots: Structural Gaps in Measurement Methodology](eval-blind-spots.md)
+- [Pressuring a Coding Agent Degrades the Code It Writes](../patterns/anti-patterns/pressured-prompt-framing.md)
+- [Risk-Based Shipping: Review by Risk Matrix, Not by Default](risk-based-shipping.md)
+- [Why Coding Agents Leave Dependency Upgrades Half Migrated](dependency-upgrade-repair-completeness.md)

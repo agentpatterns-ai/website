@@ -6,6 +6,7 @@ tags:
   - loop-engineering
   - cost-performance
   - tool-agnostic
+  - model-routing
 aliases:
   - within-task model escalation
   - escalation-gated model cascade

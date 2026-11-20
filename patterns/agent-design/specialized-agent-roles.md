@@ -167,7 +167,7 @@ On a small codebase that fits entirely in one context window, a single agent cov
 
 ## Related
 
-- [Agent Composition Patterns](agent-composition-patterns.md)
+- [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md)
 - [File-Based Agent Coordination](../multi-agent/file-based-agent-coordination.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
 - [Task-Specific vs Role-Based Agents](task-specific-vs-role-based-agents.md)

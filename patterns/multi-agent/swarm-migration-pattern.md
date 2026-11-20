@@ -6,6 +6,7 @@ tags:
   - multi-agent
   - workflows
   - tool-agnostic
+  - migration
 aliases:
   - swarm code migration
   - parallel file migration

@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - loop-engineering
 aliases:
   - non-decaying loop state
   - cross-iteration risk cumulant

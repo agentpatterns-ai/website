@@ -11,6 +11,7 @@ tags:
   - testing-verification
   - human-factors
   - copilot
+  - security
 last_reviewed: 2026-09-02
 maturity: emerging
 ---

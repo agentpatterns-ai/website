@@ -6,6 +6,7 @@ tags:
   - testing-verification
   - agent-design
   - tool-agnostic
+  - cost-performance
 aliases:
   - "evidence-driven guardrails for APR"
   - "cost-ascending verification gates"

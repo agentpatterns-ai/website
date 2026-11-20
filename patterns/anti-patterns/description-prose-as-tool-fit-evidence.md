@@ -7,6 +7,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - tool-engineering
 aliases:
   - description-framing bias in tool selection
   - sales text in tool listings

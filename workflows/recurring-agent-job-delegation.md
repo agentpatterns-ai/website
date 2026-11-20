@@ -6,6 +6,7 @@ tags:
  - workflows
  - agent-design
  - tool-agnostic
+ - automation
 aliases:
  - delegating recurring work to an agent
  - scheduled agent job operating practice

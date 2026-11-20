@@ -7,6 +7,7 @@ tags:
   - evals
   - cost-performance
   - tool-agnostic
+  - mcp
 aliases:
   - MCP server selection eval
   - comparing MCP servers head to head

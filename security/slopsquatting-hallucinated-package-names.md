@@ -5,7 +5,6 @@ description: "Coding LLMs hallucinate package names at 5.2% (commercial) to 21.7
 tags:
   - security
   - tool-agnostic
-  - anti-pattern
   - supply-chain
 aliases:
   - hallucinated package supply chain attack

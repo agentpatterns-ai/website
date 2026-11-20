@@ -8,9 +8,9 @@ aliases:
   - complete enumeration retrieval
 tags:
   - context-engineering
-  - workflows
   - technique
   - tool-agnostic
+  - rag
 last_reviewed: 2026-08-12
 maturity: emerging
 ---

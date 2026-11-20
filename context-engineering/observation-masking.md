@@ -81,6 +81,8 @@ Models use extended reasoning. Benchmarks show that masking reduces solve rate b
 
 Domain differs from software engineering. The efficiency advantage of masking assumes observation tokens dominate context, about 84% in SE benchmarks. In domains where observations are brief and reasoning turns are long, the gain is smaller and the risk of over-masking is higher.
 
+Prefix caching can reverse the saving. Rolling masking of all but the latest ten observations raised cost by 116% at a tenth-price cache and cut it by 19% with no discount, for one model and scaffold ([Yang et al., 2026](https://arxiv.org/abs/2611.22238v1)); see [Pricing a Context Change Across the Cache-Read Range](../token-engineering/cache-price-range-context-evaluation.md) for the conditions.
+
 ## Example
 
 An agent is asked to refactor `src/auth/session.ts`. It reads the file, makes the edit, then runs the test suite. Without masking, all three tool outputs stay in the conversation history.
@@ -139,7 +141,6 @@ The token saving from masking `read_file` and `edit_file` in this example is rou
 - [Context Engineering: The Practice of Shaping Agent Context](context-engineering.md)
 - [Context Compression Strategies: Offloading and Summarization](context-compression-strategies.md)
 - [Error Preservation in Context for AI Agent Development](error-preservation-in-context.md)
-- [Retrieval-Augmented Agent Workflows](retrieval-augmented-agent-workflows.md)
 - [Manual Compaction as Dumb Zone Mitigation](manual-compaction-dumb-zone-mitigation.md)
 - [Filter, Aggregate, and Execution Environment](filter-aggregate-execution-env.md)
 - [Context Budget Allocation: Every Token Has a Cost](context-budget-allocation.md)

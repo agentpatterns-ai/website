@@ -5,8 +5,8 @@ description: "pass@k, pass^k, and the reliability decay curve are projections of
 tags:
   - testing-verification
   - evals
-  - observability
   - tool-agnostic
+  - reliability
 aliases:
   - "TraceToChain"
   - "absorbing DTMC reliability"

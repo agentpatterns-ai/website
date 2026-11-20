@@ -8,6 +8,7 @@ tags:
   - agent-design
   - observability
   - tool-agnostic
+  - model-routing
 aliases:
   - unmeasured cost-driven routing
   - silent routing quality regression

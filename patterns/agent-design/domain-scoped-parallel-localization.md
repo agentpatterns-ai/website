@@ -6,6 +6,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - multi-agent
 aliases:
   - domain-scoped exploration
   - parallel file localization for multi-file changes

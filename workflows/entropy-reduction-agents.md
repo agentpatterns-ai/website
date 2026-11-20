@@ -6,6 +6,7 @@ tags:
   - workflows
   - agent-design
   - tool-agnostic
+  - automation
 aliases:
   - garbage collection of technical debt
   - codebase hygiene agents

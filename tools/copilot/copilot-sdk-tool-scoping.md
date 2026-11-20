@@ -4,6 +4,7 @@ description: "Two independent controls decide what an embedded Copilot agent can
 tags:
   - agent-design
   - copilot
+  - tool-engineering
 applies_to: "copilot@1.x"
 last_reviewed: 2026-09-16
 status: current

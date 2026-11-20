@@ -7,6 +7,7 @@ tags:
   - multi-agent
   - arxiv
   - tool-agnostic
+  - context-engineering
 aliases:
   - "context builder for review agents"
   - "dimension-scoped review context"

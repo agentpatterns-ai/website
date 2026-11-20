@@ -88,6 +88,6 @@ Defining a Petri net costs effort: you specify places, transitions, and firing r
 - [Reasoning Budget Allocation: The Reasoning Sandwich](reasoning-budget-allocation.md) — Allocate reasoning compute by phase rather than uniformly
 - [Chain-of-Thought Reasoning Fallacy](../../fallacies/chain-of-thought-reasoning-fallacy.md) — Why coherent reasoning traces are not proof of correct decisions
 - [Indiscriminate Structured Reasoning](../anti-patterns/reasoning-overuse.md) — When structured reasoning adds cost without benefit
-- [Agent Composition Patterns](agent-composition-patterns.md) — Multi-agent structural patterns including chains, fan-out, pipelines
+- [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md) — Multi-agent structural patterns including chains, fan-out, pipelines
 - [Three Reasoning Spaces: Plan, Bead, and Code](three-reasoning-spaces.md) — Explicit gates between planning, task decomposition, and implementation
 - [The Think Tool](think-tool.md) — Mid-stream reasoning checkpoints between tool calls

@@ -6,6 +6,7 @@ tags:
   - agent-design
   - context-engineering
   - tool-agnostic
+  - security
 aliases:
   - capability model
   - declared preconditions for agent actions

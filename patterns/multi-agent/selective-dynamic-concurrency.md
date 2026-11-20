@@ -88,8 +88,8 @@ The opposing view has merit: the study used July 2026 scaffolds, and many failur
 
 ## Related
 
-- [Delegation Threshold Calibration for Orchestrator Agents](delegation-threshold-calibration.md)
-- [The Delegation Decision: When to Use an Agent vs Do It Yourself](delegation-decision.md)
-- [Sub-Agents Fan-Out](../multi-agent/sub-agents-fan-out.md)
-- [Model Economics of Agent Swarms](../multi-agent/model-economics-agent-swarms.md)
-- [Pre-Write Change Intent Admission](../multi-agent/pre-write-change-intent-admission.md)
+- [Delegation Threshold Calibration for Orchestrator Agents](../agent-design/delegation-threshold-calibration.md)
+- [The Delegation Decision: When to Use an Agent vs Do It Yourself](../agent-design/delegation-decision.md)
+- [Sub-Agents Fan-Out](sub-agents-fan-out.md)
+- [Model Economics of Agent Swarms](model-economics-agent-swarms.md)
+- [Pre-Write Change Intent Admission](pre-write-change-intent-admission.md)

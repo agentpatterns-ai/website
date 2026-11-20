@@ -73,10 +73,9 @@ In the out-of-date arm the agent gained its experience on the other version, so 
 
 - [Belief Inertia After Tool-Map Drift in AI Agents](belief-inertia-after-tool-map-drift.md)
 - [Repository Skill Release Drift](repository-skill-release-drift.md)
-- [The Compliance Trap: Consuming Conflicting Agent Memory](compliance-trap-conflicting-memory.md)
 - [Tool-Call Success as Workflow Effect Evidence](tool-call-success-as-workflow-evidence.md)
 - [Budgeted Verification of Inherited Agent Constraints](../../context-engineering/budgeted-constraint-verification.md)
 - [Fact Supersession Memory for Code Assistants](../../context-engineering/fact-supersession-memory.md)
 - [Claim-Scoped Invalidation for Agent Memory](../../context-engineering/claim-scoped-invalidation.md)
-- [MCP Client Design: Building Robust Host-Side Logic](../../tool-engineering/mcp-client-design.md)
 - [Tool Description Quality](../../tool-engineering/tool-description-quality.md)
+- [Truthful Error Notes for Compacted AI Agent Histories](../../context-engineering/truthful-error-notes-under-compaction.md)

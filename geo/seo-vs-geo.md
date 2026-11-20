@@ -4,7 +4,6 @@ description: "Side-by-side comparison of traditional SEO signals versus GEO sign
 term: "SEO vs GEO"
 tags:
   - geo
-  - workflows
   - tool-agnostic
 aliases:
   - SEO versus GEO

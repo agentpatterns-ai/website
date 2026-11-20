@@ -8,6 +8,7 @@ tags:
   - human-factors
   - tool-agnostic
   - arxiv
+  - multi-agent
 last_reviewed: 2026-07-07
 maturity: emerging
 ---

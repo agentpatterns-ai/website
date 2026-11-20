@@ -8,6 +8,7 @@ tags:
   - arxiv
   - rag
   - reliability
+  - mcp
 aliases:
   - DSG vendor-agnostic grounding boundary
   - search-induced verbosity boundary

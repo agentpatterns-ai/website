@@ -4,7 +4,6 @@ description: "Cleaner code does not change a coding agent's pass rate but cuts t
 tags:
   - token-engineering
   - cost-performance
-  - code-review
   - arxiv
   - tool-agnostic
 last_reviewed: 2026-10-18

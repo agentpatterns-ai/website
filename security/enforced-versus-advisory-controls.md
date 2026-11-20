@@ -108,7 +108,7 @@ Nothing here depends on the agent honoring a rule; the file is not in the reposi
 - [Four-Layer Taxonomy of Agent Security Risks](four-layer-agent-security-taxonomy.md) — design-side taxonomy to place these field-reported categories against
 - [Delegating Dependabot Pull Request Triage to an Agent](../workflows/dependabot-pr-triage-delegation.md) — a vendor stating that its own approval panel is advisory, not enforced
 - [Permission Gates That Deny the Agent's Own Cleanup (Denied Remediation Path)](../patterns/anti-patterns/denied-remediation-path.md) — a best-effort gate that stays advisory in one direction and enforcing in the other
-- [Reading a Coding-Agent Vendor's Security Certificate](../verification/vendor-security-certification-scope.md) — how to check which of a vendor's named safeguards an outside auditor actually exercised
+- [Reading a Coding-Agent Vendor's Security Certificate](vendor-security-certification-scope.md) — how to check which of a vendor's named safeguards an outside auditor actually exercised
 - [Runtime Guard as an Installed Skill (Defense-as-Skill)](runtime-guard-as-installed-skill.md) — a measured difference inside the advisory bucket: the same guard policy performs better loaded as skill files than as system-prompt text
 - [Enforcing Who and What Can Trigger an Agent's CI Run](workflow-execution-protections.md) — the same sorting rule applied to GitHub Actions triggers, where the enforced half is an Actions policy
 - [Delivery-Bound Tool Authorization: When Progressive Discovery Becomes Access Control](delivery-bound-tool-authorization.md) — the sorting rule applied to deferred tool loading, which sits in the advisory bucket until the delivering server refuses the call

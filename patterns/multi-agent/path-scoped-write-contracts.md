@@ -11,6 +11,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - security
 last_reviewed: 2026-09-25
 maturity: emerging
 ---

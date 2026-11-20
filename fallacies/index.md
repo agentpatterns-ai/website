@@ -5,6 +5,7 @@ tags:
   - human-factors
   - workflows
   - index
+  - fallacies
 last_reviewed: 2026-05-27
 ---
 

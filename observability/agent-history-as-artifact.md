@@ -21,7 +21,7 @@ maturity: adopted
 
 | Surface | Consumer | Scope | Question it answers |
 |---------|----------|-------|---------------------|
-| [In-session transcript search](transcript-search.md) | Practitioner, mid-session | One session | "Where did the plan change?" |
+| [In-session transcript search](../tools/claude/transcript-search.md) | Practitioner, mid-session | One session | "Where did the plan change?" |
 | [Trajectory logging via progress files](trajectory-logging-progress-files.md) | Agent, next session | Cross-session, agent-shaped | "What was decided last time?" |
 | History-as-artifact | Practitioner, after the fact | Cross-session, practitioner-shaped | "What did I do this week?" |
 
@@ -57,7 +57,7 @@ The shapes differ in window length, output format, and risk profile, and each fa
 
 - Standup — 24h window grouped by feature or branch. Value is recall, not narrative.
 - Tips — 7d analysis of prompting and tool-usage patterns. The riskiest shape: it reads a causal model ("you do better when you X") off correlation in a sample of one. Treat as a prompt for reflection, not a recommendation.
-- Ad-hoc — free-form NL query ("did I touch auth/login.py this week?"). Closest to [in-session log search](transcript-search.md) and most defensible: the value is audit, not coaching.
+- Ad-hoc — free-form NL query ("did I touch auth/login.py this week?"). Closest to [in-session log search](../tools/claude/transcript-search.md) and most defensible: the value is audit, not coaching.
 
 ## Mechanism: why chat history is cheap to query
 
@@ -118,7 +118,7 @@ The audit shape answers a yes/no question with timestamps and turn types — use
 
 ## Related
 
-- [In-Session Transcript Search](transcript-search.md) — single-session navigation, the in-session counterpart
+- [In-Session Transcript Search](../tools/claude/transcript-search.md) — single-session navigation, the in-session counterpart
 - [Trajectory Logging via Progress Files and Git History](trajectory-logging-progress-files.md) — agent-facing trajectory log, sibling pattern with a different consumer
 - [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — structured telemetry that can feed the same query shapes at infrastructure level
 - [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md) — the harness-developer angle on the same trace data

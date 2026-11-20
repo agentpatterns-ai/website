@@ -10,6 +10,7 @@ tags:
   - instructions
   - tool-agnostic
   - arxiv
+  - skills
 last_reviewed: 2026-10-05
 maturity: emerging
 ---

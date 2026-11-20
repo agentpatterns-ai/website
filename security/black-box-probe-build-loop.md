@@ -5,6 +5,7 @@ description: "An outside-in probe of a running agent-built app finds controls th
 tags:
   - security
   - tool-agnostic
+  - testing-verification
 aliases:
   - outside-in security probe
   - black-box scan in the build loop

@@ -10,7 +10,6 @@ tags:
   - tool-engineering
   - cost-performance
   - tool-agnostic
-  - agent-design
   - security
   - mcp
 last_reviewed: 2026-06-24

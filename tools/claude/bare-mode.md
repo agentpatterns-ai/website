@@ -9,6 +9,7 @@ tags:
   - claude
   - workflows
   - github-actions
+  - automation
 applies_to: "claude-code@2.x"
 last_reviewed: 2026-05-27
 status: current

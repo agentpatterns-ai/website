@@ -125,3 +125,4 @@ The Claude API issues parallel tool calls inside one assistant turn, and the SDK
 - [PostToolUse continueOnBlock: Refusal With a Load-Bearing Reason](posttooluse-continue-on-block.md)
 - [PreCompact Hook: Vetoing Compaction at Lifecycle Boundaries](precompact-hook-compaction-veto.md)
 - [MessageDisplay Hook: Transforming Assistant Text at the Display Boundary](messagedisplay-hook-assistant-text-transform.md)
+- [Managed PostToolUse Hooks Skip Refused Tool Calls](../tools/claude/managed-posttooluse-skips-refused-calls.md)

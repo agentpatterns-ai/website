@@ -6,6 +6,7 @@ tags:
   - instructions
   - tool-agnostic
   - anti-pattern
+  - cost-performance
 last_reviewed: 2026-06-13
 maturity: established
 ---

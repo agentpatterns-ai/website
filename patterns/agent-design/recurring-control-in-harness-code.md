@@ -7,6 +7,7 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - harness-engineering
 aliases:
   - harness growth
   - code-first agent control

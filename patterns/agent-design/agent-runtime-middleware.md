@@ -6,6 +6,7 @@ tags:
   - agent-design
   - security
   - tool-agnostic
+  - observability
 aliases:
   - agent middleware pipeline
   - per-call agent interceptor

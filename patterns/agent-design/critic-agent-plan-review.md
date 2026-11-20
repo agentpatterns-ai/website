@@ -106,5 +106,5 @@ The error is caught before a single query runs.
 - [Rollback-First Design](rollback-first-design.md)
 - [Copilot CLI Agentic Workflows](../../tools/copilot/copilot-cli-agentic-workflows.md)
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
-- [Agent Composition Patterns](agent-composition-patterns.md)
+- [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md)
 - [Convergence Detection in Iterative Refinement](../../loop-engineering/convergence-detection.md)

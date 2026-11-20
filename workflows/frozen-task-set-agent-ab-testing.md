@@ -13,6 +13,8 @@ tags:
   - cost-performance
   - tool-agnostic
   - arxiv
+  - evals
+  - benchmarks
 last_reviewed: 2026-09-18
 maturity: emerging
 ---

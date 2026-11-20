@@ -7,6 +7,7 @@ tags:
   - agent-design
   - testing-verification
   - claude
+  - hooks
 aliases:
   - guard approves truncated input
   - silent input truncation in a guard

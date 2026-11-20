@@ -5,6 +5,7 @@ tags:
   - copilot
   - agent-design
   - workflows
+  - multi-agent
 term: "Copilot Projects"
 aliases:
   - Copilot Projects

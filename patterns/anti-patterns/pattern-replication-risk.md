@@ -115,3 +115,4 @@ After two sprints of agent-assisted work, the codebase has 23 usages of `fetchWi
 - [Abstraction Bloat](abstraction-bloat.md) -- Over-engineering and unnecessary hierarchies from agent output
 - [Comprehension Debt](comprehension-debt.md) -- The growing gap between agent-produced code and developer understanding
 - [Shadow Tech Debt](shadow-tech-debt.md) -- Cumulative codebase drift from autonomous agent commits
+- [Vulnerability Propagation](vulnerability-propagation-from-existing-code.md) -- The security case, measured: agents' secure output averaged 35.4 points lower beside insecure analogous code than beside secure code

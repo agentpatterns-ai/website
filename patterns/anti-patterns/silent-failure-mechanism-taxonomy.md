@@ -8,6 +8,7 @@ tags:
   - agent-design
   - tool-agnostic
   - arxiv
+  - reliability
 aliases:
   - silent failure taxonomy
   - five-class silent failure

@@ -6,6 +6,7 @@ tags:
   - multi-agent
   - memory
   - tool-agnostic
+  - rag
 aliases:
   - context graph layer
   - graph-based shared memory

@@ -77,3 +77,4 @@ Two shapes of work fall outside the model entirely. Below a provider's minimum c
 - [Harness-Controlled Token Economics (The Harness Effect)](harness-token-economics.md) — the same bill read across orchestration layers rather than within one session
 - [The Token Price Index Fallacy in Agent Cost Planning](../fallacies/token-price-index-fallacy.md) — why a published price-per-token figure answers a different question
 - [GitHub's Copilot Cost Levers at Constant Task Quality](copilot-cost-levers-fixed-quality.md) — four harness levers measured against task quality, not tokens per call
+- [Metadata Index for Agent File Search: Where It Cuts Cost](../patterns/agent-design/metadata-index-for-agent-file-search.md) — cutting the turn term by replacing a chain of search calls with one query

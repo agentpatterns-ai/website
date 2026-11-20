@@ -8,6 +8,7 @@ tags:
   - agent-design
   - tool-agnostic
   - observability
+  - reliability
 last_reviewed: 2026-10-30
 maturity: adopted
 ---

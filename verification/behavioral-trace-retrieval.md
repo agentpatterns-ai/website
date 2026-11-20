@@ -68,7 +68,7 @@ Its 8K-token budget prioritizes user messages and agent replies. That favors que
 
 ## Related
 
-- [Corpus-Level Trace Diagnostics for LLM Agents](corpus-level-trace-diagnostics.md) — discovers recurring failure hypotheses from a corpus, where this page retrieves the runs matching a question you already have
+- [Corpus-Level Trace Diagnostics for LLM Agents](../observability/corpus-level-trace-diagnostics.md) — discovers recurring failure hypotheses from a corpus, where this page retrieves the runs matching a question you already have
 - [Macro Evals for Agentic Systems](macro-evals-agentic-systems.md) — the clustering route to population-level behavior, run over judge labels rather than per-query reads
 - [Corpus Shape as a Retrieval Design Constraint](../context-engineering/corpus-shape-retrieval-architecture.md) — the same dimension bound applied to document corpora, with the LIMIT recall figures
 - [Trajectory Pre-Filter for Failure Diagnosis (TrajAudit)](../observability/trajectory-prefilter-failure-diagnosis.md) — compresses one already-failed trajectory for an investigator, after selection has happened

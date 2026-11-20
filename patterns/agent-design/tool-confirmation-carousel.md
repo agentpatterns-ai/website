@@ -112,4 +112,4 @@ A chat turn that emits multiple pending tool calls renders a carousel card. The 
 - [Blast Radius Containment](../../security/blast-radius-containment.md)
 - [Context Ceiling](../../human/context-ceiling.md)
 - [Law of Triviality in AI PRs](../anti-patterns/law-of-triviality-ai-prs.md)
-- [VS Code Agents App: Agent-Native Parallel Task Execution](vscode-agents-parallel-tasks.md)
+- [VS Code Agents App: Agent-Native Parallel Task Execution](../../tools/copilot/vscode-agents-parallel-tasks.md)

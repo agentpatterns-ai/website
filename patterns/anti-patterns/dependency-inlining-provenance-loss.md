@@ -4,8 +4,9 @@ term: "Dependency Inlining"
 description: "When an agent reimplements a library inline, SBOM, license, and CVE tooling lose the manifest entry they key on, turning tracked functionality into an invisible blind spot."
 tags:
   - anti-pattern
-  - testing-verification
   - tool-agnostic
+  - security
+  - supply-chain
 aliases:
   - inlined dependency blind spot
   - dependency inlining provenance loss

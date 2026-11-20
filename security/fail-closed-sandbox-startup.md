@@ -8,7 +8,6 @@ aliases:
   - unsandboxed fallback refusal
 tags:
   - security
-  - sandboxing
   - agent-design
   - claude
 applies_to: "claude-code@2.x"
@@ -72,3 +71,4 @@ The test expects a denied write when the home directory is outside the sandbox's
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — why a runtime-evaluated control is the one worth checking the failure mode of
 - [Dual-Boundary Sandboxing: Filesystem and Network Isolation](dual-boundary-sandboxing.md) — what the boundary covers while it is running
 - [Sandbox Capability Opt-In as a Compatibility Setting](../patterns/anti-patterns/sandbox-capability-opt-in-as-compatibility-setting.md) — the adjacent case where a compatibility key weakens a sandbox that does start
+- [A PermissionRequest Rewrite Can Move a Command Outside the Sandbox](permissionrequest-rewrite-sandbox-exit.md) — how a hook rewrite reaches an excluded command

@@ -99,6 +99,7 @@ nav:
       - agent-tool-interface-selection.md
       - web-search-agent-loop.md
       - lexical-first-retrieval-for-agentic-search.md
+      - fair-lexical-baseline-code-search.md
       - pooled-tool-usage-retrieval.md
       - code-interpreter-as-agent-tool.md
       - one-shot-record-deterministic-replay.md

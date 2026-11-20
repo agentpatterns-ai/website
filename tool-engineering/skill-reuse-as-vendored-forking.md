@@ -12,6 +12,7 @@ tags:
   - tool-agnostic
   - skills
   - arxiv
+  - supply-chain
 last_reviewed: 2026-07-03
 maturity: emerging
 ---

@@ -22,7 +22,7 @@ maturity: adopted
 Learn it hands-on with [Breaking the Stack](https://learn.agentpatterns.ai/context-engineering/breaking-the-stack/), a guided lesson with quizzes.
 
 !!! note "Also known as"
-    Sub-Agents Fan-Out, Parallel Dispatch, Scatter-Gather. For the broader pattern survey, see [Agent Composition Patterns](../agent-design/agent-composition-patterns.md). For the synthesis variant, see [Fan-Out Synthesis](fan-out-synthesis.md). For the delegation variant, see [Orchestrator-Worker](orchestrator-worker.md).
+    Sub-Agents Fan-Out, Parallel Dispatch, Scatter-Gather. For the broader pattern survey, see [Agent Composition Patterns](agent-composition-patterns.md). For the synthesis variant, see [Fan-Out Synthesis](fan-out-synthesis.md). For the delegation variant, see [Orchestrator-Worker](orchestrator-worker.md).
 
 ## The problem
 
@@ -157,7 +157,7 @@ When each sub-task is small. Spawning three sub-agents to read three 100-token f
 
 ## Related
 
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../agent-design/agent-composition-patterns.md)
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
 - [Fan-Out Synthesis Pattern](fan-out-synthesis.md)
 - [Orchestrator-Worker Pattern](orchestrator-worker.md)
 - [The Orchestrator's Attention Budget](../agent-design/orchestrator-attention-budget.md) — why the isolation matters, and how the main thread undoes it

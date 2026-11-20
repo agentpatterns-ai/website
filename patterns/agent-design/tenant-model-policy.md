@@ -8,6 +8,7 @@ tags:
   - copilot
   - reliability
   - long-form
+  - model-routing
 aliases:
   - organization-scoped model rules
   - org-admin model governance

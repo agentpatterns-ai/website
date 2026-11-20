@@ -33,7 +33,7 @@ Otherwise a single-threaded agent with compaction is safer. Cognition argues the
 
 Garg puts the asymmetry as "Tokens are spent once. Context shapes every decision that follows" ([The Orchestrator's Tax, 16 July 2026](https://martinfowler.com/articles/orchestrator-tax.html)). Anything left in the window is re-read every subsequent turn, whether or not it still matters.
 
-Dilution is therefore a different failure from overflow. Overflow is a capacity problem — [the window fills before the orchestrator can reason over what its workers returned](agent-composition-patterns.md) — which compaction or reference pointers fix. Dilution needs no shortage of room: it starts at the first irrelevant token, and a larger window only gives the noise more space ([Garg](https://martinfowler.com/articles/orchestrator-tax.html)).
+Dilution is therefore a different failure from overflow. Overflow is a capacity problem — [the window fills before the orchestrator can reason over what its workers returned](../multi-agent/agent-composition-patterns.md) — which compaction or reference pointers fix. Dilution needs no shortage of room: it starts at the first irrelevant token, and a larger window only gives the noise more space ([Garg](https://martinfowler.com/articles/orchestrator-tax.html)).
 
 ## The orchestrator undoes its own isolation
 
@@ -93,7 +93,7 @@ Garg calibrated the two-to-four threshold against Claude Sonnet 5 and one worklo
 ## Related
 
 - [Sub-Agents for Fan-Out Research and Context Isolation](../multi-agent/sub-agents-fan-out.md)
-- [Agent Composition Patterns for Multi-Agent Workflows](agent-composition-patterns.md)
+- [Agent Composition Patterns for Multi-Agent Workflows](../multi-agent/agent-composition-patterns.md)
 - [Context Budget Allocation: Spending Every Token Wisely](../../context-engineering/context-budget-allocation.md)
 - [Cohesion-Aware Task Partitioning for Multi-Agent Coding](../multi-agent/cohesion-aware-task-partitioning.md)
 - [The Delegation Decision: When to Use an Agent vs Do It Yourself](delegation-decision.md)

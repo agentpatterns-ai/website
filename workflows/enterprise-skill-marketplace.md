@@ -8,6 +8,7 @@ tags:
   - skills
   - tool-agnostic
   - agent-design
+  - plugins
 last_reviewed: 2026-08-08
 maturity: adopted
 ---

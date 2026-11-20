@@ -10,6 +10,7 @@ tags:
   - copilot
   - human-factors
   - observability
+applies_to: "copilot@1.x"
 last_reviewed: 2026-10-25
 maturity: emerging
 status: current
@@ -50,7 +51,7 @@ GitHub says administrators can "identify which Copilot CLI customizations are ga
 
 ## Why it works
 
-The metric fails the retirement decision because its resolution is coarser than the decision's unit, and it is coarser on purpose. GitHub gave privacy as the reason for withholding the names ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-agentic-cli-customizations-now-in-the-usage-metrics-api)). A release five weeks later reported the names anyway, without restating that reason, so the trade was revisable after all ([GitHub Changelog, 2026-10-22](https://github.blog/changelog/2026-10-22-custom-skills-agents-and-mcp-servers-in-usage-metrics-api)). A distinct count never needed identity, so it stays answerable when every item is called `other`. Compare [per-agent-app attribution](per-agent-app-attribution-copilot-metrics.md), where the reporting unit and the administrator's install-or-remove action are the same object, so the metric joins to the decision.
+The metric fails the retirement decision because its resolution is coarser than the decision's unit, and it is coarser on purpose. GitHub gave privacy as the reason for withholding the names ([GitHub Changelog, 2026-09-17](https://github.blog/changelog/2026-09-17-agentic-cli-customizations-now-in-the-usage-metrics-api)). A release five weeks later reported the names anyway, without restating that reason, so the trade was revisable after all ([GitHub Changelog, 2026-10-22](https://github.blog/changelog/2026-10-22-custom-skills-agents-and-mcp-servers-in-usage-metrics-api)). A distinct count never needed identity, so it stays answerable when every item is called `other`. Compare [per-agent-app attribution](../../human/per-agent-app-attribution-copilot-metrics.md), where the reporting unit and the administrator's install-or-remove action are the same object, so the metric joins to the decision.
 
 ## When this backfires
 
@@ -94,7 +95,7 @@ The second form keeps the real breadth trend and sends the per-file question to 
 ## Related
 
 - [Named Customization Metrics in the Copilot Usage Metrics API](named-customization-metrics-copilot.md) — the October 2026 change that reports the names, and the four conditions that decide whether one appears
-- [Per-Agent-App Attribution in the Copilot Usage Metrics API](per-agent-app-attribution-copilot-metrics.md) — the contrast case, where the reporting unit matches the decision's unit
-- [Cohort Segmentation in the Copilot Usage Metrics API](cohort-segmentation-copilot-usage-metrics.md) — recovering a segmented shape from the same API
-- [Reading a Vendor-Computed AI Coding ROI Dashboard](vendor-computed-roi-copilot-impact-dashboard.md) — which decisions a first-party panel can settle
-- [The Agent Headcount Vanity Metric](../patterns/anti-patterns/agent-headcount-vanity-metric.md) — what an activity count becomes when nothing joins it to an outcome
+- [Per-Agent-App Attribution in the Copilot Usage Metrics API](../../human/per-agent-app-attribution-copilot-metrics.md) — the contrast case, where the reporting unit matches the decision's unit
+- [Cohort Segmentation in the Copilot Usage Metrics API](../../human/cohort-segmentation-copilot-usage-metrics.md) — recovering a segmented shape from the same API
+- [Reading a Vendor-Computed AI Coding ROI Dashboard](../../human/vendor-computed-roi-copilot-impact-dashboard.md) — which decisions a first-party panel can settle
+- [The Agent Headcount Vanity Metric](../../patterns/anti-patterns/agent-headcount-vanity-metric.md) — what an activity count becomes when nothing joins it to an outcome

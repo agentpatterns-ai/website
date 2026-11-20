@@ -90,6 +90,6 @@ The measured outcome on the A/B was ["a 23% reduction in tool failures per sessi
 - [The Delegation Decision: When to Use an Agent vs Do It Yourself](delegation-decision.md)
 - [Async Non-Blocking Sub-Agent Dispatch](../multi-agent/async-non-blocking-subagent-dispatch.md)
 - [Orchestrator-Worker Pattern](../multi-agent/orchestrator-worker.md)
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../multi-agent/agent-composition-patterns.md)
 - [Recursive Sub-Agent Delegation Depth](../multi-agent/recursive-sub-agent-delegation-depth.md)
 - [Subagent vs In-Context Skill Execution](subagent-vs-in-context-skill-execution.md)

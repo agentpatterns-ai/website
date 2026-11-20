@@ -5,8 +5,8 @@ description: "Chain-of-thought is not a universal win for code generation. Its e
 tags:
   - testing-verification
   - evals
-  - agent-design
   - tool-agnostic
+  - code-generation
 aliases:
   - chain of thought code generation robustness
   - CoT fragility code LLM

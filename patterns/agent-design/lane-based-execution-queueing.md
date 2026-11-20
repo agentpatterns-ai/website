@@ -113,9 +113,9 @@ Worktree isolation works at the process and filesystem level. Each agent gets it
 
 ## Related
 
-- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](agent-composition-patterns.md)
+- [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../multi-agent/agent-composition-patterns.md)
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md)
 - [Agent Loop Middleware](../../loop-engineering/agent-loop-middleware.md)
 - [Worktree Isolation](../../workflows/worktree-isolation.md)
-- [VS Code Agents App: Agent-Native Parallel Task Execution](vscode-agents-parallel-tasks.md)
+- [VS Code Agents App: Agent-Native Parallel Task Execution](../../tools/copilot/vscode-agents-parallel-tasks.md)
 - [Exception Handling and Recovery Patterns](exception-handling-recovery-patterns.md)
