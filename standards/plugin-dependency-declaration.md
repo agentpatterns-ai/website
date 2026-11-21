@@ -37,6 +37,17 @@ Dependencies live in the `dependencies` array of `.claude-plugin/plugin.json`. E
 
 Version constraints resolve against git tags named `{plugin-name}--v{version}`. The command `claude plugin tag --push` derives and pushes the tag from the manifest ([Constrain plugin dependency versions](https://code.claude.com/docs/en/plugin-dependencies)). Cross-marketplace dependencies are blocked unless the root marketplace lists the target in `allowCrossMarketplaceDependenciesOn`. Trust does not chain through intermediate marketplaces.
 
+## Declaring the host version range
+
+A plugin can also depend on Claude Code itself. Claude Code v2.1.323 (2026-11-12) added `engines["claude-code"]` to `plugin.json`. A plugin outside its stated Claude Code version range is not installed, updated, or loaded, and install and update pick the newest version that fits ([Claude Code changelog v2.1.323](https://code.claude.com/docs/en/changelog)). The value is a semver range, and the reference gives `"engines": { "claude-code": ">=2.1.400" }` as its example ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). A marketplace entry accepts the same `engines` field ([Marketplace reference](https://code.claude.com/docs/en/plugins/marketplace-reference)).
+
+Take the lower bound from the changelog entry that added the hook or API the plugin calls.
+
+Two catches, both from the reference:
+
+- Older hosts reject the field. To keep a plugin working on v2.0.15 through v2.1.75, omit `engines`: those versions reject the manifest with an `Unrecognized key` error. In a marketplace, those versions reject the whole `marketplace.json` when any entry has the field, so one entry with `engines` breaks the catalog for them ([Plugins reference](https://code.claude.com/docs/en/plugins-reference), [Marketplace reference](https://code.claude.com/docs/en/plugins/marketplace-reference)).
+- A malformed range gets a validator error. `claude plugin validate` reports `Must be a version range such as ">=2.1.0"; got "<value>". It will be ignored at load time.` Run the validator before you publish ([Troubleshooting](https://code.claude.com/docs/en/plugins/troubleshooting)).
+
 ## The disable-chain hint
 
 The operator sees a refusal, not a warning. When `claude plugin disable A` would orphan an enabled `B` that depends on `A`, Claude Code refuses and prints a copy-pasteable chain hint ([Claude Code changelog v2.1.143](https://code.claude.com/docs/en/changelog)). The matching verb is force-enable: `claude plugin enable B` walks the graph and enables `A`.
@@ -75,6 +86,7 @@ The host harness owns the registry of every component a plugin contributes. A sk
 - Federated marketplaces without governance: `allowCrossMarketplaceDependenciesOn` needs the root maintainer to allowlist each target, so without a coordinator every cross-marketplace edge becomes a manual install.
 - Always-on token budget pressure: every transitive plugin loads skill and agent descriptions into the always-on context, so check [per-plugin token-cost attribution](../observability/plugin-token-cost-attribution.md) before adding an edge.
 - Air-gapped installs: resolution assumes the marketplace is reachable, so when it is not, missing transitive dependencies disable the dependent plugin the operator never touched.
+- Narrow host range: a plugin outside its `engines` range is not installed, updated, or loaded, so engineers on a Claude Code version outside it do not get the plugin ([Claude Code changelog v2.1.323](https://code.claude.com/docs/en/changelog)).
 - Dependency hell: importing the package-manager primitive imports its failure modes, and the four error codes above are the agent-layer equivalent of package-manager pain.
 - Expanded supply-chain attack surface: force-enabling transitive dependencies and auto-installing them from a marketplace pulls every upstream maintainer into your trust boundary. A compromised marketplace skill can hijack the install and ship a trojanized dependency that imports cleanly while exfiltrating secrets ([SentinelOne: Marketplace Skills and Dependency Hijack in Claude Code](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/)). Vet marketplace provenance and prefer pinned ranges over open auto-update. Vercel also blocks affected public npm downloads during dependency installation in its builds ([Vercel changelog](https://vercel.com/changelog/blocking-malicious-npm-packages-before-and-during-installation)).
 
@@ -116,6 +128,7 @@ When `deploy-kit` is later uninstalled, `claude plugin uninstall deploy-kit --pr
 
 - Plugin dependency declaration is a `dependencies` array in `plugin.json` with optional semver ranges and cross-marketplace fields
 - Host enforcement: `disable` refuses with a copy-pasteable chain hint, `enable` force-enables transitive deps, `prune` removes orphaned auto-installs
+- `engines["claude-code"]` in `plugin.json` (Claude Code v2.1.323) keeps a plugin out of Claude Code versions outside its semver range; v2.0.15 through v2.1.75 reject a manifest that carries the field
 - The primitive works because the host harness owns the registry of every component a plugin contributes — refusal and prune use the same lookup that drives invocation
 - Earned only when the plugin set is large enough, upstream follows semver, and marketplaces are reachable — small flat sets pay the error-surface cost without the deduplication benefit
 - Cross-link with per-plugin token-cost attribution before adding edges — transitive plugins compound always-on cost

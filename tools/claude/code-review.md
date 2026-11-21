@@ -132,6 +132,7 @@ The developer fixes all three and pushes. Code Review re-runs and auto-resolves 
 
 - [Agent-Assisted Code Review](../../code-review/agent-assisted-code-review.md)
 - [Claude Code Sub-Agents](sub-agents.md)
+- [/code-review Default Scope](code-review-local-scope.md)
 - [Claude Code Hooks](hooks-lifecycle.md)
 - [Claude Code Extension Points](extension-points.md)
 - [Memory and CLAUDE.md](https://code.claude.com/docs/en/memory)

@@ -76,6 +76,31 @@ git worktree remove ../agent-task-1
 
 The [Claude Code sub-agent configuration](https://code.claude.com/docs/en/sub-agents) supports `isolation: worktree`, which handles this automatically for agents it spawns. The [`--worktree` flag](https://code.claude.com/docs/en/common-workflows#run-parallel-claude-code-sessions-with-git-worktrees) creates an isolated worktree for a top-level session. Claude Code removes the worktree on exit if you made no changes.
 
+## Claude Code sandbox rules for worktrees
+
+Since Claude Code 2.1.323 (November 12, 2026), the sandbox on macOS and Linux makes `git worktree add`, `move` and `remove` fail read-only. Commits fail the same way "in a worktree the session wasn't started in or given, even one inside the project" ([changelog 2.1.323](https://code.claude.com/docs/en/changelog#2-1-323)). The entry gives no mechanism and names no workaround. The rest of this section reads it against the sandboxing and worktrees reference pages.
+
+### What still works
+
+When the working directory is a linked git worktree, the sandbox also allows writes to the main repository's shared `.git` directory, so `git commit` can update refs and the index. Writes to `hooks/` and `config` inside that directory stay denied ([Claude Code sandboxing](https://code.claude.com/docs/en/sandboxing#filesystem-isolation)).
+
+Start the session at the worktree's root. `--worktree` starts a session there, and `git commit` works in it with the sandbox on. By default, git commands fail with an `index.lock` error if you run `claude` in a subdirectory of the worktree ([Claude Code worktrees](https://code.claude.com/docs/en/worktrees#what-worktrees-share-with-the-main-checkout)).
+
+### Effect on parallel-agent setups
+
+- A session started in one worktree cannot commit in a sibling worktree unless it was "given" that worktree. The changelog entry does not define "given".
+- An orchestrator that runs `git worktree add` or `git worktree remove` through a session's sandboxed Bash tool hits the read-only failure. The [Example](#example) below does that if you run it that way. The sandbox restricts the Bash tool ([Claude Code sandboxing](https://code.claude.com/docs/en/sandboxing#filesystem-isolation)), and the entry says nothing about commands you run in your own terminal.
+
+### Keeping the isolation boundary
+
+The changelog entry does not say which of these lift the restriction. Each route is documented for something else, so test it before you rely on it.
+
+- Let Claude Code create the worktree. The worktrees reference lists `--worktree` worktrees, subagent worktrees and desktop-app parallel sessions as worktrees Claude Code creates with git ([Claude Code worktrees](https://code.claude.com/docs/en/worktrees)).
+- Run the git command yourself in another terminal. The sandboxing page gives that advice for `git merge` and `git checkout` failures with `Read-only file system` ([Claude Code sandboxing](https://code.claude.com/docs/en/sandboxing)).
+- Take the command out of the sandbox with the unsandboxed retry or an `excludedCommands` entry. Both trade the filesystem restrictions for that call, which weakens the boundary the worktree setup was meant to keep. `excludedCommands` matches the text of the call, so a script that runs git internally does not match ([Claude Code sandboxing](https://code.claude.com/docs/en/sandboxing#run-commands-outside-the-sandbox-with-excludedcommands)).
+
+A worktree places edits and the sandbox limits reach. See [Treating a Worktree as a Safety Boundary](../patterns/anti-patterns/worktree-as-safety-boundary.md) for why the two are separate controls, and [Dual-Boundary Sandboxing](../security/dual-boundary-sandboxing.md) for the reach control a worktree does not supply.
+
 ## When this backfires
 
 Worktrees are not always the right tool:
@@ -138,6 +163,7 @@ When per-worktree initialization costs more than the parallelism returns. Each w
 - Worktrees share git objects — creation is fast, disk overhead is minimal.
 - Failed agent outputs cost nothing to discard; successful outputs become branches ready for review.
 - The [batch pattern](../tools/claude/batch-worktrees.md) (N agents, N worktrees, N PRs) enables natural parallelism across independent tasks.
+- Since Claude Code 2.1.323, the macOS and Linux sandbox makes `git worktree add`, `move` and `remove` fail read-only. Commits fail the same way in a worktree the session wasn't started in or given.
 
 [Flag Cleanup Grounded in Deployed State](deployed-state-flag-cleanup.md) describes a deployed pipeline that encountered corrupted diffs before adopting worktree isolation.
 

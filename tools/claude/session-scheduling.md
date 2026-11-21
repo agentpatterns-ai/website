@@ -16,7 +16,7 @@ status: current
 
 > Run prompts on a recurring interval or at a specific time using `/loop` and the cron tools — session-scoped, no external infrastructure required.
 
-Session scheduling re-runs a prompt automatically within an active session. Use it to poll a deployment, babysit a PR, check a long build, or set a one-time reminder. Tasks live in the current conversation. `claude --resume` or `claude --continue` restores unexpired ones — recurring tasks within 7 days, and one-shots whose fire time has not passed. This needs Claude Code v2.1.72 or later. [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
+Session scheduling re-runs a prompt automatically within an active session. Use it to poll a deployment, babysit a PR, check a long build, or set a one-time reminder. Tasks live in the current conversation. `claude --resume` or `claude --continue` restores unexpired ones — recurring tasks within 7 days, and one-shots whose fire time has not passed. Exiting between turns with `Exit and stop tasks` skips that restore ([details](#inspect-and-stop-scheduled-work-in-tasks)). This needs Claude Code v2.1.72 or later. [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
 
 ## /loop — interactive recurring prompts
 
@@ -71,9 +71,21 @@ in 45 minutes, check whether integration tests passed
 
 [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
 
+## Inspect and stop scheduled work in /tasks
+
+Claude Code v2.1.329 added this session's scheduled tasks, `/loop` wakeups, the goal, and the conversation's forks to `/tasks`. Press `x` on a row and Claude Code asks before it stops that item ([changelog 2.1.329](https://code.claude.com/docs/en/changelog#2-1-329)).
+
+- One count. The `/tasks` header and the footer's background count show a single number that covers shells, monitors, MCP calls, agents, workflows, and scheduled tasks ([changelog 2.1.329](https://code.claude.com/docs/en/changelog#2-1-329))
+- No wait. Claude Code runs `/tasks` immediately, without interrupting a response in progress, so you can open the list mid-turn ([commands reference](https://code.claude.com/docs/en/commands))
+- Not the checklist. `Ctrl+T` toggles Claude's to-do checklist, which is a different view from `/tasks` ([interactive mode](https://code.claude.com/docs/en/interactive-mode))
+
+Choosing `Exit and stop tasks` now ends this session's scheduled tasks, so they do not run again after `--resume`. The exception is an exit while Claude is responding ([changelog 2.1.329](https://code.claude.com/docs/en/changelog#2-1-329)). The scheduled-tasks page describes the same rule as an exit "between turns" ([Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks#limitations)). If you must quit mid-response, the exit option will not end the tasks. Stopping them from `/tasks` first is an inference from that exception: no source states that a task stopped with `x` stays stopped on resume.
+
+As of 2026-11-21 the scheduled-tasks page does not mention `/tasks`. It still says `Esc` and `Ctrl+C` do not stop a fixed-interval loop and tells you to ask Claude to cancel it ([stop a loop](https://code.claude.com/docs/en/scheduled-tasks#stop-a-loop)). For the self-paced case, see [Self-Paced /loop Ends When a Turn Does Not Reschedule](self-paced-loop-reschedule.md).
+
 ## Limitations
 
-- Session-scoped only — closing the terminal or restarting Claude Code cancels everything
+- Tasks fire only while Claude Code is running and idle. Closing the terminal or exiting stops them firing, but `claude --resume` or `claude --continue` restores unexpired `CronCreate` tasks. You lose a task if you exit between turns with `Exit and stop tasks`, and a self-paced `/loop` is not restored
 - One-minute granularity — second-level precision is not available
 - On Bedrock, Vertex AI, and Microsoft Foundry, a prompt with no interval runs on a fixed 10-minute schedule instead of a Claude-chosen dynamic interval, and bare `/loop` prints the usage message instead of starting the maintenance loop
 - Set `CLAUDE_CODE_DISABLE_CRON=1` to disable the scheduler entirely
@@ -102,6 +114,7 @@ CronCreate with expression "*/5 * * * *", prompt "check gh run status and cancel
 - Tasks are session-scoped; recurring tasks expire 7 days after creation — they are not persistent infrastructure
 - For durable scheduling across restarts, reach for [Routines](https://code.claude.com/docs/en/routines) (cloud) or Desktop scheduled tasks, or a GitHub Actions `schedule` trigger
 - Use one-time reminders via natural language for deferred checks without recurring overhead
+- From v2.1.329, `/tasks` lists scheduled tasks, loop wakeups, the goal, and forks, and `x` stops one after asking. `Exit and stop tasks` also ends scheduled tasks unless you exit while Claude is responding
 
 ## Related
 

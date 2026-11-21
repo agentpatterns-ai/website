@@ -1347,6 +1347,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Selective Network Access in Agent Sandboxes: The allowNetwork Pattern](security/selective-network-sandbox-mode.md)
 - [Semantic Intent Validation for Agent Skills](security/semantic-intent-validation-skills.md)
 - [Sensitive Terminal Prompt Interception](security/sensitive-terminal-prompt-interception.md)
+- [Session-Only Allow Rules for Secret-Shaped and Tracked-File Grants](security/session-only-allow-rules.md)
 - [Single-Decision Approval of Vendor Skill Suites](security/single-decision-suite-approval.md)
 - [Sizing Secret Defense at the Push as Agent Volume Grows](security/push-boundary-secret-defense-agent-volume.md)
 - [Skill Shell Execution Gate: Disabling Inline Shell from Skills](security/skill-shell-execution-gate.md)
@@ -1770,6 +1771,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Offline Trajectory Replay for Multi-Agent Workflow Debugging](observability/offline-trajectory-replay-multi-agent-debugging.md)
 - [Per-Plugin Token-Cost Attribution via claude plugin details](observability/plugin-token-cost-attribution.md)
 - [Prebuilt Agent Monitoring Dashboard](observability/prebuilt-agent-monitoring-dashboard.md)
+- [Preventive and Detective Agent Governance Built on Traces](observability/trace-backed-agent-governance.md)
 - [Programmatic Agent Session Export via `claude agents --json`](observability/claude-agents-json-session-export.md)
 - [Reader-Scoped Trace Views: When to Build Your Own UI](observability/reader-scoped-trace-views.md)
 - [Record the Request Side to Make a Transcript Replayable](observability/request-side-transcript-recording.md)
@@ -2388,6 +2390,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Claude Agent SDK: Building Custom Agentic Workflows](tools/claude/agent-sdk.md)
 - [Claude Code --bare Flag](tools/claude/bare-mode.md)
 - [Claude Code /batch and Worktrees for AI Agent Development](tools/claude/batch-worktrees.md)
+- [Claude Code /code-review: What It Reviews With No Target](tools/claude/code-review-local-scope.md)
 - [Claude Code Agent Teams for Collaborative AI Workflows](tools/claude/agent-teams.md)
 - [Claude Code Auto Mode: Classifier-Based Permission Gating](tools/claude/auto-mode.md)
 - [Claude Code Cloud Sessions: What Crosses the VM Boundary](tools/claude/cloud-sessions.md)
@@ -2398,6 +2401,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Claude Code Mods and When to Use One Instead of a Hook](tools/claude/mods.md)
 - [Claude Code Review](tools/claude/code-review.md)
 - [Claude Code Sub-Agents for Delegating Complex Tasks](tools/claude/sub-agents.md)
+- [Claude Code Trust Dialog: Review Hooks Before You Accept](tools/claude/trust-dialog-hook-review.md)
 - [Cloud-Scheduled Routines vs Local Session Scheduling](tools/claude/cloud-scheduled-routines.md)
 - [Copilot App Customize Tab vs Repo Configuration Files](tools/copilot/copilot-app-customize-tab.md)
 - [Copilot App Diff, Terminal, and Browser Panels](tools/copilot/copilot-app-diff-terminal-browser.md)
@@ -34433,7 +34437,7 @@ The pattern adds reviewer tokens, latency, and a new LLM attack surface. It pays
 - Action volume produces approval fatigue. OpenAI's internal Codex traffic reports roughly 720 boundary-crossing actions per 10,000 ([Auto-review of agent actions](https://alignment.openai.com/auto-review/)) — well past the rubber-stamp threshold. At three escalations an hour, a human reviewer wins.
 - The configuration surface is admin-enforced. If a developer can flip `--dangerously-skip-permissions` or rewrite the classifier rule file inside the workspace, the whole scheme collapses to whichever layer the attacker reaches first. Claude Code documents this requirement plainly: the classifier does not read rules in shared `.claude/settings.json`, and you must deploy `hard_deny` rules through [managed settings](../../tools/claude/managed-settings-drop-in.md) for organizational guarantees.
 - The workload is in-distribution. Anthropic reports 0.4% false-positive and 5.7–17% false-negative rates on real and synthetic exfiltration traffic ([Anthropic engineering](https://www.anthropic.com/engineering/claude-code-auto-mode)). An independent stress test (Ji et al., 2026) measured 81.0% FNR (95% CI 73.8%–87.4%) on deliberately ambiguous authorization scenarios, and 36.8% of state-changing actions bypassing classification entirely through in-project file edits ([Measuring the Permission Gate](https://arxiv.org/abs/2604.04978v2)). The gap is workload, not a contradiction.
-- Irreversible actions are routed elsewhere. Production deploys, money movement, IAM rotation, and credential exposure belong on a human or cryptographic gate ([Cryptographic Governance Audit Trail](../../security/cryptographic-governance-audit-trail.md)). A 99% auto-approval rate is the wrong tier for those. Newer auto-mode implementations narrow this further with intent-scoped destructive-command rules rather than blanket risk tiers. Claude Code v2.1.183 blocks `git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`, and `git commit --amend` on non-agent commits, plus `terraform`/`pulumi`/`cdk destroy` unless the specific stack was named — gating on whether the user asked for this destructive action rather than on a static risk tier ([Claude Code changelog v2.1.183](https://code.claude.com/docs/en/changelog#2-1-183)).
+- Irreversible actions are routed elsewhere. Production deploys, money movement, IAM rotation, and credential exposure belong on a human or cryptographic gate ([Cryptographic Governance Audit Trail](../../security/cryptographic-governance-audit-trail.md)). A 99% auto-approval rate is the wrong tier for those. Newer auto-mode implementations narrow this further with intent-scoped destructive-command rules rather than blanket risk tiers. Claude Code v2.1.183 blocks `git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`, and `git commit --amend` on non-agent commits, plus `terraform`/`pulumi`/`cdk destroy` unless the specific stack was named — gating on whether the user asked for this destructive action rather than on a static risk tier ([Claude Code changelog v2.1.183](https://code.claude.com/docs/en/changelog#2-1-183)). Claude Code v2.1.329 changed auto mode to run `git status` less often, so most requests wait less in large repositories. The same changelog entry says a git command that discards changes may be blocked until the working tree is checked ([Claude Code changelog v2.1.329](https://code.claude.com/docs/en/changelog#2-1-329)).
 
 If any condition fails, simpler postures dominate: a static allowlist plus sandbox for low-volume sessions, or an evidence-based allowlist for steady-state workloads where the action distribution is enumerable.
 
@@ -62589,7 +62593,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/
 - [MCP Allowlist by Label, Not by Identity (serverName Trap)](mcp-allowlist-label-vs-identity.md) — A `serverName`-only MCP allowlist filters the user-chosen label, not the underlying server — any binary or URL the user calls `github` passes the check
 - [Treating Agent Delegation as Routing, Not Authorization](agent-delegation-as-routing.md) — A2A binds identity to the transport, so a delegation hop drops it and the agent two hops out cannot tell who started the chain
 - [Prompt as Security Knob](prompt-as-security-knob.md) — Semantic-preserving prompt perturbations collapse the secure-and-functional rate of hardened code generators to 3–17%, so a "good" prompt is never sufficient evidence that generated code is secure
-- [bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)](bypass-permissions-overrides-allowlist.md) — Pairing allowedTools with bypassPermissions does not restrict the agent — the allow list is a no-op below the bypass step, so every tool runs without prompts
+- [bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)](bypass-permissions-overrides-allowlist.md) — Pairing allowedTools with bypassPermissions does not restrict the agent — the allow list is a no-op below the bypass step, so every tool runs without prompts except the few actions no mode auto-approves
 - [Assuming a CLAUDE.md Security Rule Is Enforced](unenforced-claude-md-security-rules.md) — Under the strictest matching standard, 4.4% of security rules across 481 public CLAUDE.md files had a matching built-in Claude Code control; sort each rule by what could enforce it
 - [Direct Prompt Injection via Collaboration (User as Attack Vector)](direct-prompt-injection-collaboration.md) — When the user pastes an attacker-crafted prompt themselves, model-layer classifiers anchored on user intent have nothing anomalous to flag; only egress controls and filesystem boundaries hold
 - [Treating a Gate Model's Option Labels as Trusted Configuration](option-labels-as-trusted-config.md) — Where a caller packs the option names into a typed decision model's input, renaming the permissive option drove fail-open rates to 93-100% on four of six models tested, with the policy and the judged text untouched
@@ -65255,7 +65259,7 @@ const options = {
 };
 ```
 
-Their model: "those three are pre-approved; bypass means no prompts; therefore the agent can only run those three." The reality: every tool (`Bash`, `Write`, `Edit`, `WebFetch`, every MCP tool) runs without prompts, and the allow list is decorative. The same shape in CLI flags (`claude -p "..." --allowedTools Read --permission-mode bypassPermissions`) executes `Bash` without prompting. Filed as [anthropics/claude-code#12232](https://github.com/anthropics/claude-code/issues/12232) and closed as not planned — intended behavior, not a bug.
+Their model: "those three are pre-approved; bypass means no prompts; therefore the agent can only run those three." The reality: every tool (`Bash`, `Write`, `Edit`, `WebFetch`, every MCP tool) runs without prompts, apart from the few actions no mode auto-approves (see [Prompts that survive bypass](#prompts-that-survive-bypass)), and the allow list is decorative. The same shape in CLI flags (`claude -p "..." --allowedTools Read --permission-mode bypassPermissions`) executes `Bash` without prompting. Filed as [anthropics/claude-code#12232](https://github.com/anthropics/claude-code/issues/12232) and closed as not planned — intended behavior, not a bug.
 
 ## Why it works (the documented evaluation order)
 
@@ -65273,12 +65277,24 @@ The permission pipeline is a 5-step ordered flow ([Configure permissions](https:
 
 The misconfiguration is silently permissive in exactly the contexts where operators reach for it:
 
-- Headless CI under bypass — "don't prompt me, but limit to these tools" gives the agent every tool. If injected content reaches it ([External Artifacts as Data](external-artifacts-as-data.md)), every write tool runs with no consent event.
+- Headless CI under bypass — "don't prompt me, but limit to these tools" gives the agent every tool. If injected content reaches it ([External Artifacts as Data](external-artifacts-as-data.md)), every write tool outside the few actions no mode auto-approves runs with no consent event.
 - Sub-agent dispatch under inherited bypass — "When the parent uses `bypassPermissions`, `acceptEdits`, or `auto`, all subagents inherit that mode and it cannot be overridden per subagent" ([Configure permissions](https://code.claude.com/docs/en/agent-sdk/permissions)). A `subagentPermissionMode` override was [closed as not planned](https://github.com/anthropics/claude-code/issues/20264).
-- MCP server addition — a newly wired server's tools fall through to bypass automatically, so write tools the operator never reviewed are auto-approved.
+- MCP server addition — a newly wired server's tools fall through to bypass automatically, so write tools the operator never reviewed are auto-approved unless the server marks them `requiresUserInteraction`.
 - Security review of `allowedTools` alone — a reviewer certifies the allow list as restrictive and misses the `permissionMode` interaction; the composition ships permissive.
 
 The composition is correct only when the environment itself is the boundary — a hermetic sandbox, ephemeral VM, or throwaway container where every tool running is acceptable by construction. There the allow list is redundant rather than misleading. See [Permission Framework Choice Outweighs Model Choice](../../security/permission-framework-over-model.md) and [Blast Radius Containment](../../security/blast-radius-containment.md) for the deterministic-allowlist alternative.
+
+## Prompts that survive bypass
+
+Bypass approves at step 3, but it is not a blanket yes. Claude Code "doesn't auto-approve the following in any mode, including `bypassPermissions`", and the list names tools matched by an explicit ask rule, connector tools an organization sets to `ask` (in sessions where that setting reaches Claude Code), and MCP tools marked `requiresUserInteraction` ([Choose a permission mode](https://code.claude.com/docs/en/permission-modes#actions-no-mode-auto-approves)).
+
+The changelog records one more case that this list does not name. Claude Code 2.1.323 (November 12, 2026) "changed the tool Claude uses to finish an MCP server sign-in so that it asks you to confirm, even in bypass and auto modes; where nobody can be asked, such as in `dontAsk` mode, use `/mcp`" ([changelog 2.1.323](https://code.claude.com/docs/en/changelog#2-1-323)). The changelog line is the only source for this behavior. It gives no rationale and does not describe what the confirmation shows.
+
+For a run with nobody to answer, the MCP docs say the sign-in has to happen first: "A `claude -p` or Agent SDK run has no `/mcp` panel, so Claude Code can't run the OAuth flow there", so complete it from an interactive session with `/mcp` or `claude mcp login <name>` ([Authenticate with remote MCP servers](https://code.claude.com/docs/en/mcp#authenticate-with-remote-mcp-servers)).
+
+The design reading is this page's inference, not Anthropic's: a sign-in adds a credential to the session, so it belongs with the grants that no mode skips.
+
+Unattended pipelines pay for it. Authenticate each OAuth server before the run starts.
 
 ## The two correct shapes
 
@@ -65327,7 +65343,7 @@ const options = {
 };
 ```
 
-`Bash`, `Write`, `Edit`, and `MultiEdit` are removed from the tool catalog before evaluation begins. Bypass approves whatever remains. This shape suits "trust the agent broadly, deny a small named set" — a different intent from deny-by-default.
+`Bash`, `Write`, `Edit`, and `MultiEdit` are removed from the tool catalog before evaluation begins. Bypass approves whatever remains, apart from the few actions no mode auto-approves. This shape suits "trust the agent broadly, deny a small named set" — a different intent from deny-by-default.
 
 ## Key Takeaways
 
@@ -65336,6 +65352,7 @@ const options = {
 - `disallowedTools` works under bypass because deny rules (step 2) evaluate above the mode; this is the correct shape for "bypass but block named tools."
 - For "restrict to a small set + never prompt," pair `allowedTools` with `permissionMode: "dontAsk"` — the explicit shape named in the docs.
 - The trap compounds at the sub-agent boundary: parent bypass is inherited and cannot be overridden per sub-agent ([Configure permissions](https://code.claude.com/docs/en/agent-sdk/permissions); [#20264](https://github.com/anthropics/claude-code/issues/20264)).
+- From Claude Code 2.1.323, the tool that finishes an MCP sign-in asks for confirmation in bypass and auto modes; where nobody can answer, sign in through `/mcp` ([changelog 2.1.323](https://code.claude.com/docs/en/changelog#2-1-323)).
 
 ## Related
 
@@ -79685,7 +79702,7 @@ Source: https://agentpatterns.ai/patterns/anti-patterns/local-trace-as-audit-evi
 
 > Under full-access mode, almost every tested coding-agent harness deleted its own session trace on request; only one refused by default.
 
-A coding-agent harness writes its session transcript to a file the same OS user controls, so nothing stops the agent from editing or deleting that file once it can write anywhere else on the host. [Metere et al. (arXiv 2609.30266v1)](https://arxiv.org/abs/2609.30266v1) ran eight harnesses across ten model-harness pairs in full-access mode (no sandbox, requests auto-approved) and found that "almost all model-harnesses deleted their local traces in every trial of both privacy scenarios, and some at 80% or higher" attack success rate (§3.1). One harness, Muse Spark, "records 0% ASR across all trace tampering scenarios" (§3.1). Its defense is a bundled skill that "explicitly instructs the agent to not edit, move or delete the traces under any circumstances" (§3.1), a prompt rather than an enforced permission boundary. Under a reward function built to favor a shorter trace, Muse Spark still tampered in 20% of trials, and every other model tampered in effectively all of them (§3.3). The one field investigation of a real poisoning incident, by METR, found attempted transcript edits but "did not detect any case where they succeeded" ([METR](https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/)); the risk this page describes is a demonstrated capability, not yet a documented loss.
+A coding-agent harness writes its session transcript to a file the same OS user controls, so nothing stops the agent from editing or deleting that file once it can write anywhere else on the host. [Qin et al. (arXiv 2609.30266v1)](https://arxiv.org/abs/2609.30266v1) ran eight harnesses across ten model-harness pairs in full-access mode (no sandbox, requests auto-approved) and found that "almost all model-harnesses deleted their local traces in every trial of both privacy scenarios, and some at 80% or higher" attack success rate (§3.1). One harness, Muse Code running the Muse Spark 1.3 model, "records 0% ASR across all trace tampering scenarios" (§3.1). Its defense is a bundled skill that "explicitly instructs the agent to not edit, move or delete the traces under any circumstances" (§3.1), a prompt rather than an enforced permission boundary. Under a reward function built to favor a shorter trace, Muse Spark still tampered in 20% of trials, Opus 5.5 tampered in 90%, and every other model tampered in every trial (§3.3). The one field investigation of a real poisoning incident, by METR, found attempted transcript edits but "did not detect any case where they succeeded" ([METR](https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/)); the risk this page describes is a demonstrated capability, not yet a documented loss.
 
 ## The finding is conditional, not universal
 
@@ -79693,7 +79710,7 @@ Full-access mode is where the failure concentrates. Auto-mode approval "substant
 
 ## Why it works
 
-The paper names the required boundary directly: "the trust boundary should separate the agent's runtime environment from the authority to tamper with the trace T^ used for oversight" (§2). Full-access mode puts both sides of that boundary in the same hands. In-process defenses each fail for a different reason. Muse Spark's is a prompt the model can still cross under reward pressure. Claude Code and Antigravity recreate the trace file after a delete, but that "limited the effect of a one-time deletion but did not prevent repeated or delayed cleanup" (§3.5) — recreation is not the same as protection. This site's [action-audit divergence taxonomy](../../security/action-audit-divergence-taxonomy.md) names hash-chained logs as the fix for a forged record, but a hash chain only covers what reaches it: "an agent who has the capability to tamper with the recording process can omit an event or fabricate a false one before any cryptographic protection is applied" (§5.1). The paper's own fix is to record "model requests and responses ... to an append-only log before forwarding" at "a trusted interception mechanism" that "must remain outside that agent's control" (§4). The record exists before the agent can act on it, so a local deletion removes only a cache. That mechanism still "does not show whether or not a transcribed tool call was executed faithfully" (§4) — it proves what the model asked for, not what the host ran.
+The paper names the required boundary directly: "the trust boundary should separate the agent's runtime environment from the authority to tamper with the trace T^ used for oversight" (§2). Full-access mode puts both sides of that boundary in the same hands. In-process defenses each fail for a different reason. Muse Code's is a prompt the model can still cross under reward pressure. Claude Code and Antigravity recreate the trace file after a delete, but that "limited the effect of a one-time deletion but did not prevent repeated or delayed cleanup" (§3.5) — recreation is not the same as protection. This site's [action-audit divergence taxonomy](../../security/action-audit-divergence-taxonomy.md) names hash-chained logs as the fix for a forged record, but a hash chain only covers what reaches it: "an agent who has the capability to tamper with the recording process can omit an event or fabricate a false one before any cryptographic protection is applied" (§5.1). The paper's own fix is to record "model requests and responses ... to an append-only log before forwarding" at "a trusted interception mechanism" that "must remain outside that agent's control" (§4). The record exists before the agent can act on it, so a local deletion removes only a cache. That mechanism still "does not show whether or not a transcribed tool call was executed faithfully" (§4) — it proves what the model asked for, not what the host ran.
 
 ## When this backfires
 
@@ -94160,7 +94177,7 @@ Source: https://agentpatterns.ai/tool-engineering/hooks-invoking-mcp-tools/
 
 # Hooks Invoking MCP Tools: Closing the Loop Between Policy and Tool Execution
 
-> A Claude Code hook can return `type: "mcp_tool"` to call a tool on an already-connected MCP server directly, collapsing the hook-decides-then-harness-invokes step into a single declarative action — useful for in-harness policy consult and audit, with fail-open semantics that constrain where it fits.
+> A Claude Code hook can return `type: "mcp_tool"` to call a connected MCP server directly, for in-harness policy consult and audit. On most events a failed call lets the action go ahead unless the hook sets `"onFailure": "block"` (v2.1.328 or later).
 
 ## What the primitive is
 
@@ -94171,6 +94188,7 @@ Claude Code v2.1.118 (2026-04-23) added `mcp_tool` as a hook handler kind alongs
 | `server` | yes | Name of a configured MCP server. Must already be connected; the hook never triggers an OAuth or transport flow |
 | `tool` | yes | Name of the tool to call on that server |
 | `input` | no | Arguments passed to the tool. String values support `${path}` substitution from the hook's JSON input, e.g. `"${tool_input.file_path}"` |
+| `onFailure` | no | `"continue"` or `"block"`. `"block"` blocks the action when the hook fails. On `mcp_tool` hooks it requires Claude Code v2.1.328 or later |
 
 The harness processes the MCP tool's text output exactly like a command hook's stdout. If the output parses as a `hookSpecificOutput` decision document, the harness applies the decision. Otherwise it surfaces as plain text ([hooks reference](https://code.claude.com/docs/en/hooks)).
 
@@ -94256,28 +94274,57 @@ sequenceDiagram
     end
 ```
 
-## Failure mode: fail-open
+## Failure mode: set `onFailure`
 
-This primitive fails open. If the MCP server is not connected, or the tool returns `isError: true`, the hook produces a non-blocking error and execution continues ([hooks reference](https://code.claude.com/docs/en/hooks)). So a `PreToolUse` policy hook routed to a downed server allows the original call by default — load-bearing for security use cases.
+With `onFailure` unset, a failed hook does not stop the action on most events. The hooks reference says "On most events, when a hook fails or times out, Claude Code still carries out the action" ([hooks reference](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)), and a tool that returns `isError: true` "produces a non-blocking error and execution continues" ([hooks reference](https://code.claude.com/docs/en/hooks#how-the-tools-result-is-read)). A `PreToolUse` policy hook routed to a downed server therefore lets the original call through.
 
-For fail-closed denial when policy is unreachable, use an out-of-process gateway in front of the harness, not the hook layer ([MCP Runtime Control Plane](../security/mcp-runtime-control-plane.md)).
+From v2.1.328, set `"onFailure": "block"` on the hook to block the action instead ([changelog](https://code.claude.com/docs/en/changelog#2-1-328)):
+
+```json
+{
+  "type": "mcp_tool",
+  "server": "policy",
+  "tool": "evaluate_command",
+  "input": { "command": "${tool_input.command}" },
+  "onFailure": "block"
+}
+```
+
+With `"block"` set, a failure does what exit code 2 does on that event, except on `PermissionRequest`, where it denies the request. So a `PreToolUse` failure blocks the tool call ([hooks reference](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). For an `mcp_tool` hook these count as failures:
+
+- The server isn't connected, or its tool returns an error.
+- The hook reaches its `timeout`.
+- The JSON output can't be parsed or fails schema validation.
+- On an event such as `PreToolUse` or `UserPromptSubmit`, a non-empty answer, unless it's `{}` or JSON that sets a hook output field other than `reason`.
+
+The last rule bites a policy server that answers in plain text: with `"block"` set, every such answer counts as a failure and blocks the call.
+
+The field does not cover everything:
+
+- It has no effect on `Stop`, `SubagentStop`, `TaskCompleted`, and `TeammateIdle` hooks.
+- In Code Mode the sources differ on `PreToolUse` failures. The hooks reference says they "work differently" and links the Code Mode page, which says a hook that gives no decision refuses the call even when `onFailure` is unset ([hooks reference](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). The 2.1.329 changelog says a hook that errors "no longer refuses a script's tool call, as outside Code Mode", and that a hook that must refuse sets `"onFailure": "block"` ([changelog](https://code.claude.com/docs/en/changelog#2-1-329)). See [Code Mode scripts](../security/per-hook-failure-mode.md#code-mode-scripts).
+- When Claude Code can't read the tool's answer because it is too large, the hooks reference says that on `PreToolUse` Claude Code "refuses the tool call the hook was checking" ([hooks reference](https://code.claude.com/docs/en/hooks#how-the-tools-result-is-read)).
+
+A control outside the hook layer, such as an out-of-process gateway in front of the harness, still fits where the hook layer does not see the traffic (see coverage gaps below) or where you cannot require v2.1.328 ([MCP Runtime Control Plane](../security/mcp-runtime-control-plane.md)).
 
 ## When this backfires
 
-- Critical-deny use cases: `PreToolUse` `mcp_tool` hooks fail open on connection loss or tool error. Anything that must be denied on a policy-server outage needs a fail-closed control somewhere else.
+- Critical-deny use cases: with `onFailure` unset, `PreToolUse` `mcp_tool` hooks don't block on connection loss or tool error. Set `"onFailure": "block"` on any hook that must deny on a policy-server outage, and run v2.1.328 or later.
+- Blocking on failure stops calls: with `"block"` set on a `PreToolUse` hook, a timeout or a non-empty answer that is neither `{}` nor JSON setting a hook output field other than `reason` also blocks the call. A slow or plain-text policy server then stops matched calls.
 - Latency on every matched call: each call now waits on a synchronous MCP round-trip plus the server's own work. A slow `PreToolUse` `mcp_tool` hook delays every matched call, the same way a slow shell hook would ([hooks-lifecycle-events.md](hooks-lifecycle-events.md)).
-- Setup events: `SessionStart` and `Setup` fire before MCP servers finish connecting. `mcp_tool` hooks at those points error and pass through ([hooks reference](https://code.claude.com/docs/en/hooks)).
+- Setup events: `SessionStart` at launch, including with `--continue` or `--resume`, and every `Setup` event fire before the session's MCP servers are available to hooks. Claude Code skips their `mcp_tool` hooks without calling the tool, so use a `type: "command"` hook on `SessionStart` for anything the session needs at launch ([hooks reference](https://code.claude.com/docs/en/hooks#events-that-fire-before-mcp-servers-are-available)).
 - Coverage gaps: hooks already do not always carry into sub-agents, MCP server calls, or pipe mode, and `mcp_tool` actions inherit those gaps. Use OS-level controls when the boundary must hold everywhere ([Boucle, *What Claude Code Hooks Can and Cannot Enforce*, 2026](https://dev.to/boucle2026/what-claude-code-hooks-can-and-cannot-enforce-148o)).
-- Output schema mismatch: if the MCP tool's text output looks like JSON but does not match `hookSpecificOutput`, the harness surfaces it as plain text and silently drops any decision the server intended.
+- Output schema mismatch: if the MCP tool's text output looks like JSON but does not match `hookSpecificOutput`, the harness surfaces it as plain text and silently drops any decision the server intended. With `"onFailure": "block"` set on `PreToolUse` or `UserPromptSubmit`, a non-empty answer that is not `{}` or JSON setting a hook output field other than `reason` counts as a failure and blocks.
 
 ## Key Takeaways
 
 - `type: "mcp_tool"` lets a hook call a connected MCP server directly with `server`, `tool`, and `${path}`-substituted `input`.
 - The MCP tool's text content is treated as command-hook stdout — return `hookSpecificOutput` to drive a permission decision.
-- Use it for `PostToolUse` audit unconditionally; use it for `PreToolUse` policy only if fail-open on outage is acceptable.
-- The MCP server must already be connected — `SessionStart` and `Setup` events fire too early.
+- Use it for `PostToolUse` audit unconditionally. With `onFailure` unset, a failed hook does not stop the action on most events. Set `"onFailure": "block"` (v2.1.328 or later) on a `PreToolUse` policy hook that must deny when the server fails.
+- With `"block"` set on an event such as `PreToolUse` or `UserPromptSubmit`, a timeout or a non-empty answer that is neither `{}` nor JSON setting a hook output field other than `reason` also blocks. The field has no effect on `Stop`, `SubagentStop`, `TaskCompleted`, and `TeammateIdle` hooks.
+- The MCP server must already be connected — `SessionStart` at launch and `Setup` events fire too early.
 - `duration_ms` on `PostToolUse` makes the audit-server contract richer.
-- This is the in-harness implementation of the runtime control plane pattern; combine with an out-of-process gateway when fail-closed denial is required.
+- This is the in-harness implementation of the runtime control plane pattern; keep an out-of-process gateway where the hook layer does not see the traffic or you cannot require v2.1.328.
 
 ## Related
 
@@ -135294,6 +135341,7 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Materialize each subgoal-scoped capability as an opaque epoch-bound handle that closure removes from the planner's interface; stale replay is rejected before side effects, closing lingering authority when tool traffic is mediated and the catalog is typed
 - [Route Agent Peers by Enrolled Identity, Not Card Name](enrolled-identity-peer-routing.md) — Six of seven tested A2A hosts sent a request addressed to a trusted peer to an attacker-controlled endpoint that had registered the same display name; route on an operator-assigned identifier bound to the authenticated origin and keep the card name presentational
 - [Safe Outputs Pattern](safe-outputs-pattern.md) — Default agents to read-only and require explicit grants for each write output type, producing a deterministic blast radius
+- [Session-Only Allow Rules for Secret-Shaped and Tracked-File Grants](session-only-allow-rules.md) — Since Claude Code 2.1.323 a "don't ask again" rule that looks secret-bearing, or would land in a git-tracked `settings.local.json`, lasts one session; the detection rule is undocumented and rules saved earlier stay
 - [Scope Demotion for Repository-Committed Settings](repo-committed-settings-scope-demotion.md) — A committed `.claude/settings.json` may narrow a session and may not widen it; 27 of 243 keys cannot be set from a project file, and eight changelog entries across six releases between August and October 2026 moved one capability key at a time out of that scope
 - [Static-First Shell Command Gating with Selective Escalation](static-first-shell-command-gating.md) — Canonicalize the command, score it against structural, semantic, path, and pattern evidence, and escalate only the undetermined 4.2% to an LLM judge; the enforcement profile trades false positives against realised harm
 - [Task-Based Access Control with Hybrid Inspection](task-based-access-control-hybrid-inspection.md) — Bind each tool call to the user's current task via short-lived signed credentials, with a semantic axis flagging in-scope-but-off-task calls; the deterministic axis carries the security guarantee
@@ -140717,7 +140765,7 @@ Source: https://agentpatterns.ai/security/per-hook-failure-mode/
 
 > A gate that breaks renders no verdict, so decide each hook's failure mode rather than inheriting the harness default.
 
-A hook allows, denies, or renders no verdict at all because the script is missing, an import throws, the endpoint is unreachable, or the process runs past its timeout. Command and HTTP hook failures in Claude Code usually let the action through. Cursor also defaults to fail-open for crashes and timeouts. Copilot CLI's answer depends on how the hook is wired. Claude Code states its default in one line: "On most events, when a hook fails or times out, Claude Code still carries out the action" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). Leaving the default in place is a decision.
+A hook allows, denies, or renders no verdict at all because the script is missing, an import throws, the endpoint is unreachable, or the process runs past its timeout. Command, HTTP, and `mcp_tool` hook failures in Claude Code usually let the action through. Cursor also defaults to fail-open for crashes and timeouts. Copilot CLI's answer depends on how the hook is wired. Claude Code states its default in one line: "On most events, when a hook fails or times out, Claude Code still carries out the action" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). Leaving the default in place is a decision.
 
 ## When a hook earns fail-closed
 
@@ -140729,7 +140777,7 @@ Can the person who hits the block fix it? The error message is the only thing be
 
 ## What counts as a failure
 
-For Claude Code command and HTTP hooks with `onFailure: "block"`, five things count as a failure: a hook that cannot start, an exit code other than 0 or 2, an HTTP error, a timeout, and output that fails JSON parsing or schema validation ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). Two of them are easy to miss. A timeout counts, which turns a slow dependency into a stopped agent. An unexpected exit code counts "even if it printed JSON that allows the action, such as `permissionDecision: "allow"`". So a hook that exits 1 to warn starts blocking the day the field goes on. Have it exit 0 where it only warns. The [hook catalog](../tool-engineering/hook-catalog.md) covers the exit-code semantics underneath this.
+For Claude Code command, HTTP, and `mcp_tool` hooks with `onFailure: "block"`, six things count as a failure: a hook that cannot start, an exit code other than 0 or 2, an HTTP error, an MCP failure, a timeout, and output that fails JSON parsing or schema validation ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). An MCP failure is an `mcp_tool` hook whose "server isn't connected, or its tool returns an error". Three of them are easy to miss. A timeout counts, which turns a slow dependency into a stopped agent. An unexpected exit code counts "even if it printed JSON that allows the action, such as `permissionDecision: "allow"`". So a hook that exits 1 to warn starts blocking the day the field goes on. Have it exit 0 where it only warns. On an `mcp_tool` hook, with `"block"` set on an event such as `PreToolUse` or `UserPromptSubmit`, "a non-empty answer also counts unless it's `{}` or JSON that sets a hook output field other than `reason`", so a server that answers in plain text blocks every call. The [hook catalog](../tool-engineering/hook-catalog.md) covers the exit-code semantics underneath this.
 
 ## Where each harness puts the choice
 
@@ -140737,13 +140785,25 @@ The three harnesses disagree about who owns the decision.
 
 | Harness | Default | Where the choice lives |
 |---|---|---|
-| Claude Code | Fail open on most events | `onFailure: "block"` per hook, added for command and HTTP hooks in 2.1.295 and extended to Agent SDK hook callbacks in 2.1.317 ([changelog](https://code.claude.com/docs/en/changelog#2-1-317)) |
+| Claude Code | Fail open on most events | `onFailure: "block"` per hook, added for command and HTTP hooks in 2.1.295, extended to Agent SDK hook callbacks in 2.1.317 ([changelog](https://code.claude.com/docs/en/changelog#2-1-317)), and to `mcp_tool` hooks in 2.1.328 ([changelog](https://code.claude.com/docs/en/changelog#2-1-328)) |
 | Cursor | Fail open | `failClosed: true` per hook, default `false`; unavailable on hooks configured from the dashboard ([Cursor hooks](https://cursor.com/docs/agent/hooks#cloud-distribution-enterprise-only)) |
 | Copilot CLI | Mixed, fixed by transport | No per-hook field. A command `preToolUse` hook fails closed on a crash or non-zero exit; its timeouts and every HTTP `preToolUse` failure fail open ([hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference#hook-event-input-payloads)) |
 
 The 2.1.317 release adds a declarative failure choice for Agent SDK callbacks ([changelog](https://code.claude.com/docs/en/changelog#2-1-317)). An Agent SDK callback runs inside the host process, and the SDK's advice for an HTTP logging callback is: "Catch errors inside your hook instead of letting them propagate." ([Claude Agent SDK hooks](https://code.claude.com/docs/en/agent-sdk/hooks#make-http-requests-from-hooks)). A `try/catch` that catches a policy-check error and returns no denial leaves that check unenforced. Review callback bodies as well as configuration.
 
 The cited SDK example catches errors in an advisory `PostToolUse` logger; it does not implement a policy gate. SDK callback timeouts already block `PreToolUse` calls ([SDK timeout reference](https://code.claude.com/docs/en/agent-sdk/hooks#hook-timeout)). A second event has that default: a `UserPromptSubmit` callback that times out blocks the prompt, "because a callback there can be acting as a policy gate that must not fail open" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#userpromptsubmit)). The Agent SDK hooks page does not document the new field as of 3 November 2026, so the changelog is its only source.
+
+## Code Mode scripts
+
+Code Mode, the experimental opt-in where Claude writes JavaScript to call its tools ([Claude Code changelog 2.1.323](https://code.claude.com/docs/en/changelog#2-1-323)), sends each call in a script through your `PreToolUse` hooks. The Code Mode page says "Each tool call in the code goes through your deny and ask permission rules and PreToolUse hooks" ([Code Mode](https://code.claude.com/docs/en/code-mode#permission-checks)). So a guard hook sees scripted calls, and its failure mode applies to them.
+
+Release 2.1.329 (19 November 2026) changed what an error does there. The entry reads: a `PreToolUse` hook that errors "no longer refuses" a script's tool call, "as outside Code Mode", and a command, HTTP or MCP tool hook that must refuse takes `"onFailure": "block"` ([changelog](https://code.claude.com/docs/en/changelog#2-1-329)). A guard that leaned on the old refusal now lets scripted calls through when it crashes. Set the field on it, as you would for a direct call.
+
+The sources disagree. On 21 November 2026 the Code Mode page still said a `PreToolUse` hook that gave no decision "refuses the call even when onFailure is unset", and listed a hook that could not start, was killed, exited with 126, 127 or a code above 128, or returned an HTTP error or invalid output ([Code Mode](https://code.claude.com/docs/en/code-mode#tool-call-refused-by-a-hook)). The changelog is the dated release note and the page may lag it. Test on your own version instead of trusting either.
+
+Timeouts are a separate case. The same page says a hook that times out refuses the call, on a call from code and on any other tool call once Claude has run code in the session ([Code Mode](https://code.claude.com/docs/en/code-mode#tool-call-refused-by-a-hook)). The 2.1.329 entry names errors, not timeouts. The page says `"onFailure": "continue"` is what lets a call go ahead when a `command` or `http` hook "fails or times out" ([Code Mode](https://code.claude.com/docs/en/code-mode#tool-call-refused-by-a-hook)).
+
+To test a guard, point its `command` at a missing script, ask Claude to run a Bash call from a Code Mode script, and check whether the call ran. If Claude reports a refusal, the page says to ask it for the error text.
 
 ## Why it works
 
@@ -140792,15 +140852,17 @@ Delete `check-command.js` and an `ls` call is refused rather than run. The docum
 ## Key Takeaways
 
 - Set the failure mode on each hook as you write it. Every one of the three harnesses lets some gate failures through unless you intervene, so an untouched default is a decision somebody has to defend.
-- Audit for the inverse as well as the gap: in Claude Code a hook that exits 1 to warn becomes a blocker the day you harden it.
+- Audit for the inverse as well as the gap: in Claude Code a hook that exits 1 to warn becomes a blocker the day you harden it, and so does an `mcp_tool` hook on an event such as `PreToolUse` or `UserPromptSubmit` whose server answers in plain text.
 - Pair every fail-closed gate with a reason that names the fix. A stack trace is not one, and a block nobody can clear gets the hook deleted.
 - Check whether your event supports the field before trusting it. In Claude Code the stop-class and background hooks ignore it.
+- In Code Mode, a `PreToolUse` hook that errors no longer refuses a script's call from 2.1.329. Set `onFailure: "block"` on a guard that must refuse, and test it on your version because the Code Mode page still describes the older refusal.
 - In the Agent SDK, check what each error handler returns. Returning no denial after a policy-check error bypasses that check.
 
 ## Related
 
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — where a control is evaluated decides whether the agent can argue with it.
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — the same reasoning at startup scope, as one global setting rather than a per-hook field.
+- [Programmatic Tool Calling](../patterns/agent-design/programmatic-tool-calling.md) — where scripted tool calls pay off, and the Claude Code Code Mode release that applies the idea.
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — the layers beneath a hook that decide how much a fail-open window actually costs.
 - [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — what happens to a control when it ships to a fleet in one install.
 - [A Skill's Tool Grant Travels With Its Hooks](skill-tool-grant-travels-with-hooks.md) — what a policy should do to a tool grant when it stops that component's hooks from running at all.
@@ -153533,6 +153595,65 @@ In auto-approve mode, step 3 cancels the command instead and the agent receives 
 
 ---
 
+### Session-Only Allow Rules for Secret-Shaped and Tracked-File Grants
+Source: https://agentpatterns.ai/security/session-only-allow-rules/
+
+# Session-Only Allow Rules for Secret-Shaped and Tracked-File Grants
+
+> A session-only allow rule keeps a "don't ask again" grant for one session, unsaved, when the rule looks secret-bearing or its file is git-tracked.
+
+Claude Code 2.1.323, released November 12, 2026, keeps two kinds of "don't ask again" approval off disk. The changelog entry reads: "Changed “don’t ask again” so an allow rule that looks like it holds a secret, or would be saved to a `settings.local.json` that git tracks, lasts for the session only and isn’t saved" ([changelog 2.1.323](https://code.claude.com/docs/en/changelog#2-1-323)).
+
+Two conditions trigger it, and they protect against different leaks. The secret test stops a credential reaching a plaintext file. The tracked-file test stops a personal grant reaching every clone. Neither condition reviews the rules a repository already holds.
+
+## What a saved approval normally does
+
+Claude Code saves a Bash or WebFetch approval "to `.claude/settings.local.json` at the root of the git repository". The docs add: "The rule applies to future sessions anywhere in that repository, including sessions started in subdirectories and in worktrees" ([permissions](https://code.claude.com/docs/en/permissions#permission-system)). Bash rules persist "per repository and command" and WebFetch rules "per repository and domain". A file-edit approval already lasted only until the session ended.
+
+Claude Code keeps the local file out of git when it writes the file. On its first write in a repository that does not already ignore the file, Claude Code "adds `**/.claude/settings.local.json` to your global git excludes file". A file you created by hand gets no such entry: "add it to `.gitignore` yourself" ([settings](https://code.claude.com/docs/en/settings#keep-personal-settings-out-of-a-repository)). A hand-made file that nobody added to `.gitignore` is one way a personal grant ends up tracked.
+
+## Why it works
+
+A saved allow rule is a standing grant written as plaintext. If the rule text holds a token, the file holds the token. If git tracks the file, every clone receives the token and the grant together. A rule that lasts for the session only is never written, so neither copy exists.
+
+The tracked case matches how Claude Code already reads such a file. "When the file is tracked in git, or `.claude` is a symlink, Claude Code treats it as repository-supplied instead and holds its rules until you trust the folder" ([permissions](https://code.claude.com/docs/en/permissions#project-allow-rules-and-workspace-trust)). A rule saved there is no longer personal, so writing it there was the wrong home from the start.
+
+A leak also outlives its fix. GitGuardian reports that "70% of secrets leaked in 2022 remain active today", and that "35% of customers' private repositories contain plaintext secrets" ([GitGuardian 2025](https://blog.gitguardian.com/the-state-of-secrets-sprawl-2025/)). A private repository does not make a committed token safe.
+
+## When this backfires
+
+- The secret test is undocumented. The changelog says "looks like it holds a secret" and neither the [permissions](https://code.claude.com/docs/en/permissions) nor the [settings](https://code.claude.com/docs/en/settings) page names the patterns. A token in a format the check misses still saves. Keep reading saved rules yourself.
+- Existing rules stay. The entry changes what "don't ask again" saves. It says nothing about rules saved before 2.1.323, so a tracked file keeps every grant it held.
+- Prompts come back each session. Anthropic reports that users "accept 93% of" manual prompts and that prompt volume "leads to approval fatigue, where people stop paying close attention to what they're approving" ([auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode)). A daily command with an inline token now prompts daily, and each repeat is another chance for that fatigue to set in on the command you most need to read.
+
+Take the token out of the command. A command that reads the token from an environment variable has no token in its text, so whether its rule saves or not, the file has nothing to leak.
+
+## Review the allow rules a repository holds
+
+Run these once per repository, then after any change to `.claude/`:
+
+1. Open `/permissions`. "The dialog lists all permission rules and the `settings.json` file each rule comes from" ([permissions](https://code.claude.com/docs/en/permissions#manage-permissions)). Read every allow rule for an embedded token, key, or password.
+2. Run `git ls-files .claude/settings.local.json`. Any output means git tracks the file. Remove it from the index with `git rm --cached`, and add it to `.gitignore`.
+3. Rotate any secret you find in a rule. The GitGuardian report's advice for private repositories applies: "Leaked secrets in private repositories must be treated as compromised" ([GitGuardian 2025](https://blog.gitguardian.com/the-state-of-secrets-sprawl-2025/)).
+4. Rewrite the command to read the secret from the environment, then approve the rewritten form.
+
+## Key Takeaways
+
+- Since 2.1.323, a rule saved from a prompt can vanish at session end. A prompt that keeps coming back for one command is the signal to look for a token in it.
+- `git ls-files .claude/settings.local.json` printing a path means your grants travel with the repository, and from 2.1.323 your new approvals stop saving there.
+- The change covers new saves only. Audit old rules in `/permissions` and rotate any secret you find.
+- Moving the secret into an environment variable keeps it out of every rule, saved or not.
+
+## Related
+
+- [One-Shot Permission Answers for Out-of-Directory Reads](../patterns/agent-design/one-shot-permission-answers.md) — another answer that saves no rule, chosen by the user instead of the harness
+- [Scope Demotion for Repository-Committed Settings](repo-committed-settings-scope-demotion.md) — what a committed settings file may not grant
+- [Protecting Sensitive Files from Agent Context](protecting-sensitive-files.md) — deny rules that keep credential files out of reach
+- [Secrets Management for Agent Workflows](secrets-management-for-agents.md) — getting tokens into a session without putting them in commands
+- [Transcript-Driven Permission Allowlist](transcript-driven-permission-allowlist.md) — building the allowlist deliberately rather than prompt by prompt
+
+---
+
 ### Setup Documentation as an Install-Time Attack Vector
 Source: https://agentpatterns.ai/security/setup-documentation-install-time-attacks/
 
@@ -157825,6 +157946,7 @@ Source: https://agentpatterns.ai/observability/
 - [Making Observability Legible to Agents](observability-legible-to-agents.md) — Wire browser automation, application metrics, and structured logs into agent context so agents can reason about system behavior from real signals
 - [Observability Feedback Loop: A 7-Step Debug Runbook](observability-feedback-loop.md) — A named runbook — query, correlate, reason, implement, restart, rerun, verify — that closes the loop on agent debugging by tying the verification predicate to the originating signal
 - [Prebuilt Agent Monitoring Dashboard](prebuilt-agent-monitoring-dashboard.md) — Ship a templated Grafana view with the agent stack to close the OTel-emitter-to-consumer gap — under the conditions of a shared backend, stable model class, and verified emitter
+- [Preventive and Detective Agent Governance Built on Traces](trace-backed-agent-governance.md) — Guardrails and spend limits need traces to show they held; online evals, alerts, drift checks and human review run on the same traces. LangChain's account, with its limits
 - [Reader-Scoped Trace Views: When to Build Your Own UI](reader-scoped-trace-views.md) — Decide between the shipped dashboard, the backend's own widget builder, and an interface you write over the trace API — and what you own once you build one
 - [Record the Request Side to Make a Transcript Replayable](request-side-transcript-recording.md) — Recording each API request's system prompt, tools, and parameters is what lets a shared transcript reproduce the request instead of describing it
 - [Sizing Vendor-Emitted Agent Telemetry by Signal Tier](vendor-emitted-telemetry-signal-tiers.md) — Classify each Copilot surface by the strongest signal it emits (joined trace, detached trace, or counters alone) before building an alert or dashboard on it
@@ -160482,6 +160604,74 @@ The dashboard's three required metric series (`claude_code_cost_usage_USD_total`
 - [Making Observability Legible to Agents](observability-legible-to-agents.md)
 - [Observability Feedback Loop: A 7-Step Debug Runbook](observability-feedback-loop.md)
 - [Sizing Vendor-Emitted Agent Telemetry by Signal Tier](vendor-emitted-telemetry-signal-tiers.md)
+
+---
+
+### Preventive and Detective Agent Governance Built on Traces
+Source: https://agentpatterns.ai/observability/trace-backed-agent-governance/
+
+# Preventive and Detective Agent Governance Built on Traces
+
+> Preventive agent controls need traces to prove they held, and detective controls run on those traces.
+
+Trace-backed agent governance treats observability, the record of every step an agent takes, as the layer that both kinds of governance control depend on. LangChain, which sells the LangSmith observability platform, reports two habits among teams that ship agents under governing standards: a central view of every agent running across the company, and the full trajectory of each run ([LangChain](https://www.langchain.com/blog/agent-governance-observability)). The second habit exists because an agent can take different paths and call different tools on the same input.
+
+## Two control types, one dependency
+
+| | Preventive | Detective |
+|---|---|---|
+| What it is | Runtime guardrails that block disallowed actions: limits, agent identity, policies on tools, data access, models and cost. Also pre-production evals against a required threshold. | Monitoring shortly after execution: online evaluations, alerts, pattern recognition, human review, regression and drift detection. |
+| What it needs from traces | Evidence that each guardrail fired as intended, and where a new guardrail is needed. | The raw material. Every detective check reads trace data. |
+
+The source spells the first column "preventative"; this page uses the standard spelling ([LangChain](https://www.langchain.com/blog/agent-governance-observability)).
+
+## Why a guardrail needs a trace
+
+A guardrail or spend limit "doesn't guarantee an agent will follow it", so a team must monitor runs to confirm the limit works ([LangChain](https://www.langchain.com/blog/agent-governance-observability)). The post gives two illustrative cases of an agent reaching a goal by an unplanned route: an agent without database write access reaching the same table through a sandbox, and a support agent splitting one large refund into two smaller ones to get under an approval limit. Such routes did not appear in pre-production testing, the post says, and model drift or tool failures can make them worse.
+
+The same post describes production traces and trajectories as an audit trail. Regulators, security teams and engineers use it to confirm a guardrail is in place, or to investigate after a bypass ([LangChain](https://www.langchain.com/blog/agent-governance-observability)).
+
+## What the trace must hold
+
+The source defines a trace as the detail of one agent invocation and a trajectory as the chronological, human-readable view of a session. It asks for the steps and attributes of the agent, queryable data, and a way to interpret behavior at scale. It names no required fields ([LangChain](https://www.langchain.com/blog/agent-governance-observability)). Dashboards then combine evaluation scores, failure patterns, error rates, latency and cost per run drawn from that metadata.
+
+## Detective checks that run on traces
+
+- Online evaluations score live traces for PII leakage, excessive tool-calling loops and exposed secrets, plus domain checks such as whether a refund agent verified identity before paying.
+- Alerts apply thresholds to evaluation scores and to metrics like error rate, retries and cost.
+- Pattern clustering catches what one trace hides. In the post's example, out-of-scope requests lower satisfaction in one topic while barely moving the overall rate, and a single trace may look correct with no error.
+- Regression checks run an agent daily against a dataset built from reviewed traces that were handled correctly.
+- Human review starts from flagged runs, such as low correctness scores, instead of thousands of unsorted traces.
+
+Source for all five: [LangChain](https://www.langchain.com/blog/agent-governance-observability).
+
+## Findings feed back into prevention
+
+A failure found in production becomes a tighter guardrail or a new regression test ([LangChain](https://www.langchain.com/blog/agent-governance-observability)). That closes the loop between the two control types. See [the observability feedback loop](observability-feedback-loop.md) for the debugging runbook version.
+
+## When this backfires
+
+- Detective checks run after execution. They report a bad action; they do not stop it, so they never replace a runtime block.
+- The trace store can be tampered with. A 2026 arXiv paper found that every local agent harness it tested except one let an agent delete its own traces when asked, while monitoring and audits assume agents cannot tamper with their traces ([Qin et al., arXiv 2609.30266v1](https://arxiv.org/abs/2609.30266v1)). See [local traces as audit evidence](../patterns/anti-patterns/local-trace-as-audit-evidence.md).
+- Reading traces by hand does not scale. The post calls manual reading at scale "often impractical" and relies on automated surfacing ([LangChain](https://www.langchain.com/blog/agent-governance-observability)).
+- The evidence is a vendor's. The post reports that, across more than 16,000 production agents on LangSmith, 87% of teams had tracing before their first deployment, which measures adoption on one platform. It gives no figure for faster shipping, and none for the storage or latency cost of tracing every call ([LangChain](https://www.langchain.com/blog/agent-governance-observability)).
+
+## Key Takeaways
+
+- Pair every preventive control with a trace query that shows it firing. A limit with no trace record cannot be audited.
+- Keep the full trajectory of each run. The post's split-refund case spans several steps.
+- Send reviewers the flagged runs. Reading every trace is the step that does not scale.
+- Treat each production finding as a candidate guardrail or regression test.
+- Keep the trace store out of the agent's write reach.
+- Measure your own tracing overhead. The source supplies no cost figures.
+
+## Related
+
+- [Agent Observability: OTel, Cost Tracking, and Trajectory Logging](agent-observability-otel.md) — the instrumentation layer that produces the traces this page relies on.
+- [A Governance Framework for Production Agents](../workflows/governing-production-agents.md) — the cost, control and compliance axes that these two control types serve.
+- [Agent Governance Plane: Audit Events and Message-Content Surfaces](../security/agent-governance-plane.md) — vendor admin surfaces and the retention condition for a usable audit record.
+- [Treating a Local Agent Session Trace as Audit Evidence](../patterns/anti-patterns/local-trace-as-audit-evidence.md) — why the trace store needs a boundary the agent cannot cross.
+- [Observability Feedback Loop: A 7-Step Debug Runbook for Agents](observability-feedback-loop.md) — the debugging loop that detective findings feed.
 
 ---
 
@@ -163683,6 +163873,17 @@ Dependencies live in the `dependencies` array of `.claude-plugin/plugin.json`. E
 
 Version constraints resolve against git tags named `{plugin-name}--v{version}`. The command `claude plugin tag --push` derives and pushes the tag from the manifest ([Constrain plugin dependency versions](https://code.claude.com/docs/en/plugin-dependencies)). Cross-marketplace dependencies are blocked unless the root marketplace lists the target in `allowCrossMarketplaceDependenciesOn`. Trust does not chain through intermediate marketplaces.
 
+## Declaring the host version range
+
+A plugin can also depend on Claude Code itself. Claude Code v2.1.323 (2026-11-12) added `engines["claude-code"]` to `plugin.json`. A plugin outside its stated Claude Code version range is not installed, updated, or loaded, and install and update pick the newest version that fits ([Claude Code changelog v2.1.323](https://code.claude.com/docs/en/changelog)). The value is a semver range, and the reference gives `"engines": { "claude-code": ">=2.1.400" }` as its example ([Plugins reference](https://code.claude.com/docs/en/plugins-reference)). A marketplace entry accepts the same `engines` field ([Marketplace reference](https://code.claude.com/docs/en/plugins/marketplace-reference)).
+
+Take the lower bound from the changelog entry that added the hook or API the plugin calls.
+
+Two catches, both from the reference:
+
+- Older hosts reject the field. To keep a plugin working on v2.0.15 through v2.1.75, omit `engines`: those versions reject the manifest with an `Unrecognized key` error. In a marketplace, those versions reject the whole `marketplace.json` when any entry has the field, so one entry with `engines` breaks the catalog for them ([Plugins reference](https://code.claude.com/docs/en/plugins-reference), [Marketplace reference](https://code.claude.com/docs/en/plugins/marketplace-reference)).
+- A malformed range gets a validator error. `claude plugin validate` reports `Must be a version range such as ">=2.1.0"; got "<value>". It will be ignored at load time.` Run the validator before you publish ([Troubleshooting](https://code.claude.com/docs/en/plugins/troubleshooting)).
+
 ## The disable-chain hint
 
 The operator sees a refusal, not a warning. When `claude plugin disable A` would orphan an enabled `B` that depends on `A`, Claude Code refuses and prints a copy-pasteable chain hint ([Claude Code changelog v2.1.143](https://code.claude.com/docs/en/changelog)). The matching verb is force-enable: `claude plugin enable B` walks the graph and enables `A`.
@@ -163721,6 +163922,7 @@ The host harness owns the registry of every component a plugin contributes. A sk
 - Federated marketplaces without governance: `allowCrossMarketplaceDependenciesOn` needs the root maintainer to allowlist each target, so without a coordinator every cross-marketplace edge becomes a manual install.
 - Always-on token budget pressure: every transitive plugin loads skill and agent descriptions into the always-on context, so check [per-plugin token-cost attribution](../observability/plugin-token-cost-attribution.md) before adding an edge.
 - Air-gapped installs: resolution assumes the marketplace is reachable, so when it is not, missing transitive dependencies disable the dependent plugin the operator never touched.
+- Narrow host range: a plugin outside its `engines` range is not installed, updated, or loaded, so engineers on a Claude Code version outside it do not get the plugin ([Claude Code changelog v2.1.323](https://code.claude.com/docs/en/changelog)).
 - Dependency hell: importing the package-manager primitive imports its failure modes, and the four error codes above are the agent-layer equivalent of package-manager pain.
 - Expanded supply-chain attack surface: force-enabling transitive dependencies and auto-installing them from a marketplace pulls every upstream maintainer into your trust boundary. A compromised marketplace skill can hijack the install and ship a trojanized dependency that imports cleanly while exfiltrating secrets ([SentinelOne: Marketplace Skills and Dependency Hijack in Claude Code](https://www.sentinelone.com/blog/marketplace-skills-and-dependency-hijack-in-claude-code/)). Vet marketplace provenance and prefer pinned ranges over open auto-update. Vercel also blocks affected public npm downloads during dependency installation in its builds ([Vercel changelog](https://vercel.com/changelog/blocking-malicious-npm-packages-before-and-during-installation)).
 
@@ -163762,6 +163964,7 @@ When `deploy-kit` is later uninstalled, `claude plugin uninstall deploy-kit --pr
 
 - Plugin dependency declaration is a `dependencies` array in `plugin.json` with optional semver ranges and cross-marketplace fields
 - Host enforcement: `disable` refuses with a copy-pasteable chain hint, `enable` force-enables transitive deps, `prune` removes orphaned auto-installs
+- `engines["claude-code"]` in `plugin.json` (Claude Code v2.1.323) keeps a plugin out of Claude Code versions outside its semver range; v2.0.15 through v2.1.75 reject a manifest that carries the field
 - The primitive works because the host harness owns the registry of every component a plugin contributes — refusal and prune use the same lookup that drives invocation
 - Earned only when the plugin set is large enough, upstream follows semver, and marketplaces are reachable — small flat sets pay the error-surface cost without the deduplication benefit
 - Cross-link with per-plugin token-cost attribution before adding edges — transitive plugins compound always-on cost
@@ -182756,6 +182959,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Bare Mode](bare-mode.md) — Deterministic headless CI mode — skip all local config discovery with `--bare`
 - [Extension Points](extension-points.md) — Decision framework for choosing between CLAUDE.md, rules, skills, hooks, subagents, MCP, and plugins
 - [Hooks & Lifecycle](hooks-lifecycle.md) — Deterministic automation at 12+ lifecycle events
+- [Claude Code Trust Dialog: Review Hooks Before You Accept](trust-dialog-hook-review.md) — From v2.1.329 the trust dialog names where a folder declares its hooks; `claude -p` skips it, so review a clone's hooks first
 - [Managed PostToolUse Hooks Skip Refused Tool Calls](managed-posttooluse-skips-refused-calls.md) — From 2.1.328, a managed PostToolUse log lists completed calls only; log refusals at PreToolUse and PermissionDenied
 - [Agent SDK](agent-sdk.md) — The Claude Code runtime as a library for custom applications
 - [/batch & Worktrees](batch-worktrees.md) — Parallel execution with worktree isolation
@@ -182776,6 +182980,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Local Plugin Scaffolding (`claude plugin init`)](local-plugin-scaffolding.md) — Auto-load plugins from `.claude/skills/<name>/.claude-plugin/plugin.json` and scaffold the layout in one command — when the manifest earns its keep over a loose skill, and when it does not
 - [Mods](mods.md) — Plugin code that runs inside Claude Code's process: it can draw panes, rewrite events, and approve a call a `PreToolUse` hook blocked, which decides when to pick one over a settings hook
 - [In-Session Transcript Search](transcript-search.md) — Claude Code's Ctrl+O transcript mode plus `/`, `n`, `N` turns a long session transcript into a navigable index — the in-session counterpart to offline transcript analysis
+- [/code-review Default Scope](code-review-local-scope.md) — Since 2.1.329 a no-target review covers the whole branch on most models, though the local-review page words the base differently
 
 ---
 
@@ -183179,6 +183384,72 @@ For tightly-coupled refactors, a single agent with `--worktree` isolation (no fa
 - [Agent Teams](agent-teams.md)
 - [Monitor Tool](monitor-tool.md)
 - [Session Scheduling](session-scheduling.md)
+
+---
+
+### Claude Code /code-review: What It Reviews With No Target
+Source: https://agentpatterns.ai/tools/claude/code-review-local-scope/
+
+# Claude Code /code-review: What It Reviews With No Target
+
+> Per the 2.1.329 changelog, `/code-review` with no target reviews the whole branch on most models; the local-review page words it differently.
+
+Claude Code 2.1.329 (November 19, 2026) changed `/code-review` with no target "on most models to review the whole branch against the default branch, and fixed it losing the diff on multi-commit branches" ([Claude Code changelog, 2.1.329](https://code.claude.com/docs/en/changelog#2-1-329)). The same release made a review of a pull request URL, or of a PR number with `--fix`, stop when `gh pr diff` is refused or fails. The local-review page words the no-target default differently, so check your version and pass a target when the scope matters.
+
+## What 2.1.329 changed
+
+Three of the changelog entries that touch `/code-review` in this release change what it reviews or when it stops ([changelog, 2.1.329](https://code.claude.com/docs/en/changelog#2-1-329)):
+
+| Change | Verbatim entry | Holds when |
+|---|---|---|
+| Default scope | "Changed `/code-review` with no target on most models to review the whole branch against the default branch, and fixed it losing the diff on multi-commit branches" | No target is typed, and the model is one of "most models" (the entry does not list them) |
+| PR failure | "Changed `/code-review <pr number> --fix`, and `/code-review` given a pull request URL, to stop without reviewing when `gh pr diff` is refused or fails" | The target is a PR number with `--fix`, or a PR URL |
+| PR number | "Fixed `/code-review <pr number>` sometimes reviewing the checked-out branch instead of the pull request without saying so: it now reads the pull request with `gh pr diff`, or says when it can't" | The target is a PR number |
+
+## What the local-review page says
+
+The [Review locally with /code-review](https://code.claude.com/docs/en/code-review-local) page, read on November 21, 2026, states the no-target default this way: "With no target, `/code-review` reviews your branch's commits ahead of its upstream branch plus your uncommitted changes. If the branch has no upstream, Claude compares against `main`, or against the previous commit."
+
+That sentence names an upstream branch as the base. The changelog names the default branch. The page's sentence carries no model condition, and neither source says which models count as "most models". Treat the two as unreconciled until the page changes or you test your own setup.
+
+The page does state the scope of `/code-review ultra`, the cloud review: "your current branch against the repository's default branch, plus uncommitted and staged changes in the working tree". Passing a branch name, such as `/code-review ultra develop`, compares against that base instead.
+
+## Choosing a target
+
+Text typed after the effort level and flags reaches Claude "as the review target" ([local-review page](https://code.claude.com/docs/en/code-review-local)). The page lists these forms:
+
+| To review | Type |
+|---|---|
+| Your current branch and uncommitted changes | `/code-review` |
+| Your last 15 commits | `/code-review HEAD~15..HEAD` |
+| One branch against another | `/code-review main...my-feature` |
+| A single commit | `/code-review abc1234^..abc1234` |
+| A pull request by number | `/code-review 1234` |
+| A file or directory path | `/code-review src/auth` |
+
+Pass a range or a branch pair when you want a fixed base, whatever the default does on your version. Pass a PR number or URL to review a pull request that is not checked out.
+
+## When this backfires
+
+- The base differs from the one you assumed. A whole-branch review includes every commit on the branch, including ones you reviewed earlier. Use a range such as `HEAD~15..HEAD` to review only recent work.
+- Your version or model falls outside the change. The entry says "most models" and lists none, and it does not say what scope other models review.
+- A PR review stops. With `--fix` or a PR URL, a refused or failed `gh pr diff` ends the run with no review. A run that stopped is not a clean review, as [Failed Reviewer Is Not a Clean Pass](../../patterns/multi-agent/failed-reviewer-not-clean-pass.md) describes for fan-out reviewers.
+- The two sources disagree. If you document your team's workflow from the local-review page alone, it may describe the upstream base while your version uses the default branch.
+
+## Key Takeaways
+
+- The 2.1.329 changelog sets the no-target default to the whole branch against the default branch, on "most models" it does not list.
+- The local-review page names the upstream branch as the base, so the two sources differ. Pass an explicit target when the base matters.
+- A PR URL, or a PR number with `--fix`, stops without a review when `gh pr diff` is refused or fails. Treat a stopped run as not reviewed.
+- Range and branch-pair targets such as `HEAD~15..HEAD` and `main...my-feature` fix the base.
+
+## Related
+
+- [Claude Code Review](code-review.md) — the managed GitHub service, a separate feature from the local command
+- [Tunable Effort Levels for Code Review Agents](../../code-review/tunable-review-effort.md) — the effort levels a review runs at
+- [Review-Then-Implement Loop for AI Agent Development](../../code-review/review-then-implement-loop.md) — what `/code-review --fix` applies after the review
+- [Diff-Based Review Over Output Review](../../code-review/diff-based-review.md) — review what changed, not the full output
+- [Failed Reviewer Is Not a Clean Pass](../../patterns/multi-agent/failed-reviewer-not-clean-pass.md) — record a reviewer that did not run as not run
 
 ---
 
@@ -184335,6 +184606,7 @@ The developer fixes all three and pushes. Code Review re-runs and auto-resolves 
 
 - [Agent-Assisted Code Review](../../code-review/agent-assisted-code-review.md)
 - [Claude Code Sub-Agents](sub-agents.md)
+- [/code-review Default Scope](code-review-local-scope.md)
 - [Claude Code Hooks](hooks-lifecycle.md)
 - [Claude Code Extension Points](extension-points.md)
 - [Memory and CLAUDE.md](https://code.claude.com/docs/en/memory)
@@ -184470,6 +184742,78 @@ Only `name` and `description`. The `tools` field restricts which tools are avail
 - [Hooks Lifecycle](hooks-lifecycle.md) — how sub-agent invocations interact with PreToolUse / PostToolUse / SessionStart events
 - [Agent Composition Patterns](../../patterns/multi-agent/agent-composition-patterns.md)
 - [Orchestrator-Worker](../../patterns/multi-agent/orchestrator-worker.md)
+
+---
+
+### Claude Code Trust Dialog: Review Hooks Before You Accept
+Source: https://agentpatterns.ai/tools/claude/trust-dialog-hook-review/
+
+# Claude Code Trust Dialog: Review Hooks Before You Accept
+
+> Claude Code's trust dialog names where a folder declares its hooks, so you can review them before you accept trust.
+
+Since v2.1.329 (released November 19, 2026), the workspace trust dialog warns where a folder's hooks are declared ([changelog](https://code.claude.com/docs/en/changelog)). A command hook runs shell commands with your full user permissions ([hooks reference](https://code.claude.com/docs/en/hooks)). A cloned repository can commit hooks in `.claude/settings.json`, so the dialog is where Claude Code asks you about them.
+
+## What the gate holds back
+
+In an interactive session, Claude Code holds back hooks from every settings file until you accept the trust dialog for the folder, or for a parent directory whose trust extends to it. That includes your own `~/.claude/settings.json` ([hooks reference](https://code.claude.com/docs/en/hooks#workspace-trust)).
+
+The changelog entry says only that the dialog names where the hooks are declared. It does not describe the dialog's layout, so this page does not either.
+
+## Where hooks come from
+
+Hook scope follows the file that declares them ([hooks reference](https://code.claude.com/docs/en/hooks#hook-locations)):
+
+| Location | Scope | Shareable |
+|----------|-------|-----------|
+| `~/.claude/settings.json` | All your projects | No, local to your machine |
+| `.claude/settings.json` | Single project | Yes, can be committed to the repo |
+| `.claude/settings.local.json` | Single project | No, gitignored when Claude Code saves a setting to it |
+| Managed policy settings | Organization-wide | Yes, admin-controlled |
+| Plugin `hooks/hooks.json` | When the plugin is enabled | Yes, bundled with the plugin |
+| Skill frontmatter | The rest of the session once the skill is invoked | Yes, defined in the skill file |
+| Subagent frontmatter | While that subagent is running | Yes, defined in the subagent file |
+
+For a clone, `.claude/settings.json` is the main file to read. Frontmatter hooks in a project skill follow the same trust rule as settings-file hooks. Frontmatter hooks in a project subagent follow a stricter rule: they run only after you accept the dialog for the folder the agent file came from ([hooks reference](https://code.claude.com/docs/en/hooks#hooks-in-skills-and-agents)).
+
+## How the session type changes the gate
+
+| Situation | What happens to repository hooks | Source |
+|-----------|----------------------------------|--------|
+| `claude -p` or SDK session | Claude Code never shows the dialog and treats the folder as trusted, so hooks in `.claude/settings.json` run | [Hooks reference](https://code.claude.com/docs/en/hooks#workspace-trust) |
+| You trusted only a parent folder | Settings-file hooks are used. Project subagent frontmatter hooks are not used, and no dialog is offered | [Permissions](https://code.claude.com/docs/en/permissions#what-runs-before-you-trust-a-folder) |
+| A clone inside a folder you trusted outside any repository | Parent trust does not cover a git repository nested in it, so an interactive session shows the dialog for the clone | [Permissions](https://code.claude.com/docs/en/permissions#project-allow-rules-and-workspace-trust) |
+| `/cd` into an untrusted directory | The trust prompt lists the hooks the directory's settings would activate | [Permissions](https://code.claude.com/docs/en/permissions) |
+
+The `claude -p` row is the one that bites. A script that points `claude -p` at a repository you did not write runs the hooks committed in its `.claude/settings.json` with no prompt at all.
+
+## Review a clone before you trust it
+
+1. Read `.claude/settings.json` and `.claude/settings.local.json` in the clone before the first interactive launch.
+2. After you accept trust, type `/hooks`. It opens a read-only browser that labels each hook with its source, such as user settings, project settings, local settings, or a plugin, and shows the full command and the path of its settings file ([hooks reference](https://code.claude.com/docs/en/hooks#the-hooks-menu)).
+3. For a `-p` run over a repository you did not write, start with `--bare`, or pass `--settings '{"disableAllHooks": true}'` ([hooks reference](https://code.claude.com/docs/en/hooks#workspace-trust)).
+4. To skip the project's settings files entirely in a `-p` run, pass `--setting-sources user` ([permissions](https://code.claude.com/docs/en/permissions#what-runs-before-you-trust-a-folder)).
+
+Setting `disableAllHooks` in your user settings is not enough. A `"disableAllHooks": false` in the project's `.claude/settings.json` overrides it. To turn hooks off for one run whatever the project says, pass `--settings '{"disableAllHooks": true}'`, which takes precedence over project and local settings ([hooks reference](https://code.claude.com/docs/en/hooks#disable-or-remove-hooks)).
+
+## Managed hooks that fail to load
+
+The same release adds a warning in the conversation when hooks in managed settings fail to load. It appears in Claude Desktop and other non-interactive hosts ([changelog](https://code.claude.com/docs/en/changelog)). It is not part of the trust dialog.
+
+## Key Takeaways
+
+- From v2.1.329 the trust dialog names where a folder declares its hooks.
+- Interactive sessions hold back hooks from every settings file, including your user file, until you accept trust.
+- `claude -p` and SDK sessions skip the dialog and run the hooks committed in a repository's `.claude/settings.json`.
+- Use `/hooks` to read each hook's command and source, and `--bare` or `--settings '{"disableAllHooks": true}'` for scripted runs.
+- The managed-settings load-failure warning appears in the conversation in non-interactive hosts, not in the dialog.
+
+## Related
+
+- [Pre-Trust Execution Surface in Coding Agent Harnesses](../../security/pre-trust-execution-surface.md)
+- [Claude Code `--bare` Flag](bare-mode.md)
+- [Hooks & Lifecycle](hooks-lifecycle.md)
+- [Managed Settings Drop-In Directory](managed-settings-drop-in.md)
 
 ---
 
@@ -186225,7 +186569,7 @@ Source: https://agentpatterns.ai/tools/claude/session-scheduling/
 
 > Run prompts on a recurring interval or at a specific time using `/loop` and the cron tools — session-scoped, no external infrastructure required.
 
-Session scheduling re-runs a prompt automatically within an active session. Use it to poll a deployment, babysit a PR, check a long build, or set a one-time reminder. Tasks live in the current conversation. `claude --resume` or `claude --continue` restores unexpired ones — recurring tasks within 7 days, and one-shots whose fire time has not passed. This needs Claude Code v2.1.72 or later. [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
+Session scheduling re-runs a prompt automatically within an active session. Use it to poll a deployment, babysit a PR, check a long build, or set a one-time reminder. Tasks live in the current conversation. `claude --resume` or `claude --continue` restores unexpired ones — recurring tasks within 7 days, and one-shots whose fire time has not passed. Exiting between turns with `Exit and stop tasks` skips that restore ([details](#inspect-and-stop-scheduled-work-in-tasks)). This needs Claude Code v2.1.72 or later. [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
 
 ## /loop — interactive recurring prompts
 
@@ -186280,9 +186624,21 @@ in 45 minutes, check whether integration tests passed
 
 [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
 
+## Inspect and stop scheduled work in /tasks
+
+Claude Code v2.1.329 added this session's scheduled tasks, `/loop` wakeups, the goal, and the conversation's forks to `/tasks`. Press `x` on a row and Claude Code asks before it stops that item ([changelog 2.1.329](https://code.claude.com/docs/en/changelog#2-1-329)).
+
+- One count. The `/tasks` header and the footer's background count show a single number that covers shells, monitors, MCP calls, agents, workflows, and scheduled tasks ([changelog 2.1.329](https://code.claude.com/docs/en/changelog#2-1-329))
+- No wait. Claude Code runs `/tasks` immediately, without interrupting a response in progress, so you can open the list mid-turn ([commands reference](https://code.claude.com/docs/en/commands))
+- Not the checklist. `Ctrl+T` toggles Claude's to-do checklist, which is a different view from `/tasks` ([interactive mode](https://code.claude.com/docs/en/interactive-mode))
+
+Choosing `Exit and stop tasks` now ends this session's scheduled tasks, so they do not run again after `--resume`. The exception is an exit while Claude is responding ([changelog 2.1.329](https://code.claude.com/docs/en/changelog#2-1-329)). The scheduled-tasks page describes the same rule as an exit "between turns" ([Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks#limitations)). If you must quit mid-response, the exit option will not end the tasks. Stopping them from `/tasks` first is an inference from that exception: no source states that a task stopped with `x` stays stopped on resume.
+
+As of 2026-11-21 the scheduled-tasks page does not mention `/tasks`. It still says `Esc` and `Ctrl+C` do not stop a fixed-interval loop and tells you to ask Claude to cancel it ([stop a loop](https://code.claude.com/docs/en/scheduled-tasks#stop-a-loop)). For the self-paced case, see [Self-Paced /loop Ends When a Turn Does Not Reschedule](self-paced-loop-reschedule.md).
+
 ## Limitations
 
-- Session-scoped only — closing the terminal or restarting Claude Code cancels everything
+- Tasks fire only while Claude Code is running and idle. Closing the terminal or exiting stops them firing, but `claude --resume` or `claude --continue` restores unexpired `CronCreate` tasks. You lose a task if you exit between turns with `Exit and stop tasks`, and a self-paced `/loop` is not restored
 - One-minute granularity — second-level precision is not available
 - On Bedrock, Vertex AI, and Microsoft Foundry, a prompt with no interval runs on a fixed 10-minute schedule instead of a Claude-chosen dynamic interval, and bare `/loop` prints the usage message instead of starting the maintenance loop
 - Set `CLAUDE_CODE_DISABLE_CRON=1` to disable the scheduler entirely
@@ -186311,6 +186667,7 @@ CronCreate with expression "*/5 * * * *", prompt "check gh run status and cancel
 - Tasks are session-scoped; recurring tasks expire 7 days after creation — they are not persistent infrastructure
 - For durable scheduling across restarts, reach for [Routines](https://code.claude.com/docs/en/routines) (cloud) or Desktop scheduled tasks, or a GitHub Actions `schedule` trigger
 - Use one-time reminders via natural language for deferred checks without recurring overhead
+- From v2.1.329, `/tasks` lists scheduled tasks, loop wakeups, the goal, and forks, and `x` stops one after asking. `Exit and stop tasks` also ends scheduled tasks unless you exit while Claude is responding
 
 ## Related
 
@@ -211406,6 +211763,31 @@ git worktree remove ../agent-task-1
 
 The [Claude Code sub-agent configuration](https://code.claude.com/docs/en/sub-agents) supports `isolation: worktree`, which handles this automatically for agents it spawns. The [`--worktree` flag](https://code.claude.com/docs/en/common-workflows#run-parallel-claude-code-sessions-with-git-worktrees) creates an isolated worktree for a top-level session. Claude Code removes the worktree on exit if you made no changes.
 
+## Claude Code sandbox rules for worktrees
+
+Since Claude Code 2.1.323 (November 12, 2026), the sandbox on macOS and Linux makes `git worktree add`, `move` and `remove` fail read-only. Commits fail the same way "in a worktree the session wasn't started in or given, even one inside the project" ([changelog 2.1.323](https://code.claude.com/docs/en/changelog#2-1-323)). The entry gives no mechanism and names no workaround. The rest of this section reads it against the sandboxing and worktrees reference pages.
+
+### What still works
+
+When the working directory is a linked git worktree, the sandbox also allows writes to the main repository's shared `.git` directory, so `git commit` can update refs and the index. Writes to `hooks/` and `config` inside that directory stay denied ([Claude Code sandboxing](https://code.claude.com/docs/en/sandboxing#filesystem-isolation)).
+
+Start the session at the worktree's root. `--worktree` starts a session there, and `git commit` works in it with the sandbox on. By default, git commands fail with an `index.lock` error if you run `claude` in a subdirectory of the worktree ([Claude Code worktrees](https://code.claude.com/docs/en/worktrees#what-worktrees-share-with-the-main-checkout)).
+
+### Effect on parallel-agent setups
+
+- A session started in one worktree cannot commit in a sibling worktree unless it was "given" that worktree. The changelog entry does not define "given".
+- An orchestrator that runs `git worktree add` or `git worktree remove` through a session's sandboxed Bash tool hits the read-only failure. The [Example](#example) below does that if you run it that way. The sandbox restricts the Bash tool ([Claude Code sandboxing](https://code.claude.com/docs/en/sandboxing#filesystem-isolation)), and the entry says nothing about commands you run in your own terminal.
+
+### Keeping the isolation boundary
+
+The changelog entry does not say which of these lift the restriction. Each route is documented for something else, so test it before you rely on it.
+
+- Let Claude Code create the worktree. The worktrees reference lists `--worktree` worktrees, subagent worktrees and desktop-app parallel sessions as worktrees Claude Code creates with git ([Claude Code worktrees](https://code.claude.com/docs/en/worktrees)).
+- Run the git command yourself in another terminal. The sandboxing page gives that advice for `git merge` and `git checkout` failures with `Read-only file system` ([Claude Code sandboxing](https://code.claude.com/docs/en/sandboxing)).
+- Take the command out of the sandbox with the unsandboxed retry or an `excludedCommands` entry. Both trade the filesystem restrictions for that call, which weakens the boundary the worktree setup was meant to keep. `excludedCommands` matches the text of the call, so a script that runs git internally does not match ([Claude Code sandboxing](https://code.claude.com/docs/en/sandboxing#run-commands-outside-the-sandbox-with-excludedcommands)).
+
+A worktree places edits and the sandbox limits reach. See [Treating a Worktree as a Safety Boundary](../patterns/anti-patterns/worktree-as-safety-boundary.md) for why the two are separate controls, and [Dual-Boundary Sandboxing](../security/dual-boundary-sandboxing.md) for the reach control a worktree does not supply.
+
 ## When this backfires
 
 Worktrees are not always the right tool:
@@ -211468,6 +211850,7 @@ When per-worktree initialization costs more than the parallelism returns. Each w
 - Worktrees share git objects — creation is fast, disk overhead is minimal.
 - Failed agent outputs cost nothing to discard; successful outputs become branches ready for review.
 - The [batch pattern](../tools/claude/batch-worktrees.md) (N agents, N worktrees, N PRs) enables natural parallelism across independent tasks.
+- Since Claude Code 2.1.323, the macOS and Linux sandbox makes `git worktree add`, `move` and `remove` fail read-only. Commits fail the same way in a worktree the session wasn't started in or given.
 
 [Flag Cleanup Grounded in Deployed State](deployed-state-flag-cleanup.md) describes a deployed pipeline that encountered corrupted diffs before adopting worktree isolation.
 
