@@ -25,6 +25,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Bare Mode](bare-mode.md) — Deterministic headless CI mode — skip all local config discovery with `--bare`
 - [Extension Points](extension-points.md) — Decision framework for choosing between CLAUDE.md, rules, skills, hooks, subagents, MCP, and plugins
 - [Hooks & Lifecycle](hooks-lifecycle.md) — Deterministic automation at 12+ lifecycle events
+- [Claude Code Trust Dialog: Review Hooks Before You Accept](trust-dialog-hook-review.md) — From v2.1.329 the trust dialog names where a folder declares its hooks; `claude -p` skips it, so review a clone's hooks first
 - [Managed PostToolUse Hooks Skip Refused Tool Calls](managed-posttooluse-skips-refused-calls.md) — From 2.1.328, a managed PostToolUse log lists completed calls only; log refusals at PreToolUse and PermissionDenied
 - [Agent SDK](agent-sdk.md) — The Claude Code runtime as a library for custom applications
 - [/batch & Worktrees](batch-worktrees.md) — Parallel execution with worktree isolation
@@ -45,3 +46,4 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Local Plugin Scaffolding (`claude plugin init`)](local-plugin-scaffolding.md) — Auto-load plugins from `.claude/skills/<name>/.claude-plugin/plugin.json` and scaffold the layout in one command — when the manifest earns its keep over a loose skill, and when it does not
 - [Mods](mods.md) — Plugin code that runs inside Claude Code's process: it can draw panes, rewrite events, and approve a call a `PreToolUse` hook blocked, which decides when to pick one over a settings hook
 - [In-Session Transcript Search](transcript-search.md) — Claude Code's Ctrl+O transcript mode plus `/`, `n`, `N` turns a long session transcript into a navigable index — the in-session counterpart to offline transcript analysis
+- [/code-review Default Scope](code-review-local-scope.md) — Since 2.1.329 a no-target review covers the whole branch on most models, though the local-review page words the base differently

@@ -147,6 +147,7 @@ nav:
       - safe-outputs-pattern.md
       - repo-committed-settings-scope-demotion.md
       - one-way-settings.md
+      - session-only-allow-rules.md
       - static-first-shell-command-gating.md
       - task-based-access-control-hybrid-inspection.md
       - team-scoped-policy-delegation.md

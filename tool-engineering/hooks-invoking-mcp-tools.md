@@ -142,7 +142,7 @@ The last rule bites a policy server that answers in plain text: with `"block"` s
 The field does not cover everything:
 
 - It has no effect on `Stop`, `SubagentStop`, `TaskCompleted`, and `TeammateIdle` hooks.
-- If you use Code Mode, failures on `PreToolUse` work differently.
+- In Code Mode the sources differ on `PreToolUse` failures. The hooks reference says they "work differently" and links the Code Mode page, which says a hook that gives no decision refuses the call even when `onFailure` is unset ([hooks reference](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). The 2.1.329 changelog says a hook that errors "no longer refuses a script's tool call, as outside Code Mode", and that a hook that must refuse sets `"onFailure": "block"` ([changelog](https://code.claude.com/docs/en/changelog#2-1-329)). See [Code Mode scripts](../security/per-hook-failure-mode.md#code-mode-scripts).
 - When Claude Code can't read the tool's answer because it is too large, the hooks reference says that on `PreToolUse` Claude Code "refuses the tool call the hook was checking" ([hooks reference](https://code.claude.com/docs/en/hooks#how-the-tools-result-is-read)).
 
 A control outside the hook layer, such as an out-of-process gateway in front of the harness, still fits where the hook layer does not see the traffic (see coverage gaps below) or where you cannot require v2.1.328 ([MCP Runtime Control Plane](../security/mcp-runtime-control-plane.md)).

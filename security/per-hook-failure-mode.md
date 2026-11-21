@@ -11,7 +11,7 @@ aliases:
   - fail-closed hook callbacks
   - hook failure mode declaration
   - onFailure block for hooks
-last_reviewed: 2026-11-20
+last_reviewed: 2026-11-21
 maturity: emerging
 ---
 
@@ -46,6 +46,18 @@ The three harnesses disagree about who owns the decision.
 The 2.1.317 release adds a declarative failure choice for Agent SDK callbacks ([changelog](https://code.claude.com/docs/en/changelog#2-1-317)). An Agent SDK callback runs inside the host process, and the SDK's advice for an HTTP logging callback is: "Catch errors inside your hook instead of letting them propagate." ([Claude Agent SDK hooks](https://code.claude.com/docs/en/agent-sdk/hooks#make-http-requests-from-hooks)). A `try/catch` that catches a policy-check error and returns no denial leaves that check unenforced. Review callback bodies as well as configuration.
 
 The cited SDK example catches errors in an advisory `PostToolUse` logger; it does not implement a policy gate. SDK callback timeouts already block `PreToolUse` calls ([SDK timeout reference](https://code.claude.com/docs/en/agent-sdk/hooks#hook-timeout)). A second event has that default: a `UserPromptSubmit` callback that times out blocks the prompt, "because a callback there can be acting as a policy gate that must not fail open" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#userpromptsubmit)). The Agent SDK hooks page does not document the new field as of 3 November 2026, so the changelog is its only source.
+
+## Code Mode scripts
+
+Code Mode, the experimental opt-in where Claude writes JavaScript to call its tools ([Claude Code changelog 2.1.323](https://code.claude.com/docs/en/changelog#2-1-323)), sends each call in a script through your `PreToolUse` hooks. The Code Mode page says "Each tool call in the code goes through your deny and ask permission rules and PreToolUse hooks" ([Code Mode](https://code.claude.com/docs/en/code-mode#permission-checks)). So a guard hook sees scripted calls, and its failure mode applies to them.
+
+Release 2.1.329 (19 November 2026) changed what an error does there. The entry reads: a `PreToolUse` hook that errors "no longer refuses" a script's tool call, "as outside Code Mode", and a command, HTTP or MCP tool hook that must refuse takes `"onFailure": "block"` ([changelog](https://code.claude.com/docs/en/changelog#2-1-329)). A guard that leaned on the old refusal now lets scripted calls through when it crashes. Set the field on it, as you would for a direct call.
+
+The sources disagree. On 21 November 2026 the Code Mode page still said a `PreToolUse` hook that gave no decision "refuses the call even when onFailure is unset", and listed a hook that could not start, was killed, exited with 126, 127 or a code above 128, or returned an HTTP error or invalid output ([Code Mode](https://code.claude.com/docs/en/code-mode#tool-call-refused-by-a-hook)). The changelog is the dated release note and the page may lag it. Test on your own version instead of trusting either.
+
+Timeouts are a separate case. The same page says a hook that times out refuses the call, on a call from code and on any other tool call once Claude has run code in the session ([Code Mode](https://code.claude.com/docs/en/code-mode#tool-call-refused-by-a-hook)). The 2.1.329 entry names errors, not timeouts. The page says `"onFailure": "continue"` is what lets a call go ahead when a `command` or `http` hook "fails or times out" ([Code Mode](https://code.claude.com/docs/en/code-mode#tool-call-refused-by-a-hook)).
+
+To test a guard, point its `command` at a missing script, ask Claude to run a Bash call from a Code Mode script, and check whether the call ran. If Claude reports a refusal, the page says to ask it for the error text.
 
 ## Why it works
 
@@ -97,12 +109,14 @@ Delete `check-command.js` and an `ls` call is refused rather than run. The docum
 - Audit for the inverse as well as the gap: in Claude Code a hook that exits 1 to warn becomes a blocker the day you harden it, and so does an `mcp_tool` hook on an event such as `PreToolUse` or `UserPromptSubmit` whose server answers in plain text.
 - Pair every fail-closed gate with a reason that names the fix. A stack trace is not one, and a block nobody can clear gets the hook deleted.
 - Check whether your event supports the field before trusting it. In Claude Code the stop-class and background hooks ignore it.
+- In Code Mode, a `PreToolUse` hook that errors no longer refuses a script's call from 2.1.329. Set `onFailure: "block"` on a guard that must refuse, and test it on your version because the Code Mode page still describes the older refusal.
 - In the Agent SDK, check what each error handler returns. Returning no denial after a policy-check error bypasses that check.
 
 ## Related
 
 - [Enforced Versus Advisory Controls in LLM-Native IDEs](enforced-versus-advisory-controls.md) — where a control is evaluated decides whether the agent can argue with it.
 - [Fail-Closed Remote Settings Enforcement](fail-closed-remote-settings-enforcement.md) — the same reasoning at startup scope, as one global setting rather than a per-hook field.
+- [Programmatic Tool Calling](../patterns/agent-design/programmatic-tool-calling.md) — where scripted tool calls pay off, and the Claude Code Code Mode release that applies the idea.
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md) — the layers beneath a hook that decide how much a fail-open window actually costs.
 - [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — what happens to a control when it ships to a fleet in one install.
 - [A Skill's Tool Grant Travels With Its Hooks](skill-tool-grant-travels-with-hooks.md) — what a policy should do to a tool grant when it stops that component's hooks from running at all.

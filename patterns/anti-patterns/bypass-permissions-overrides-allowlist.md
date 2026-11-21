@@ -1,7 +1,7 @@
 ---
 title: "bypassPermissions Silently Overrides allowedTools (The Restricted-Bypass Trap)"
 term: "Restricted-Bypass Trap"
-description: "Pairing allowedTools with permissionMode bypassPermissions does not restrict the agent — the allow list is a no-op below the bypass step, so every tool runs without prompts."
+description: "Pairing allowedTools with permissionMode bypassPermissions does not restrict the agent — the allow list is a no-op below the bypass step, so every tool runs without prompts except the few actions no mode auto-approves."
 tags:
   - anti-pattern
   - security
@@ -31,7 +31,7 @@ const options = {
 };
 ```
 
-Their model: "those three are pre-approved; bypass means no prompts; therefore the agent can only run those three." The reality: every tool (`Bash`, `Write`, `Edit`, `WebFetch`, every MCP tool) runs without prompts, and the allow list is decorative. The same shape in CLI flags (`claude -p "..." --allowedTools Read --permission-mode bypassPermissions`) executes `Bash` without prompting. Filed as [anthropics/claude-code#12232](https://github.com/anthropics/claude-code/issues/12232) and closed as not planned — intended behavior, not a bug.
+Their model: "those three are pre-approved; bypass means no prompts; therefore the agent can only run those three." The reality: every tool (`Bash`, `Write`, `Edit`, `WebFetch`, every MCP tool) runs without prompts, apart from the few actions no mode auto-approves (see [Prompts that survive bypass](#prompts-that-survive-bypass)), and the allow list is decorative. The same shape in CLI flags (`claude -p "..." --allowedTools Read --permission-mode bypassPermissions`) executes `Bash` without prompting. Filed as [anthropics/claude-code#12232](https://github.com/anthropics/claude-code/issues/12232) and closed as not planned — intended behavior, not a bug.
 
 ## Why it works (the documented evaluation order)
 
@@ -49,12 +49,24 @@ The permission pipeline is a 5-step ordered flow ([Configure permissions](https:
 
 The misconfiguration is silently permissive in exactly the contexts where operators reach for it:
 
-- Headless CI under bypass — "don't prompt me, but limit to these tools" gives the agent every tool. If injected content reaches it ([External Artifacts as Data](external-artifacts-as-data.md)), every write tool runs with no consent event.
+- Headless CI under bypass — "don't prompt me, but limit to these tools" gives the agent every tool. If injected content reaches it ([External Artifacts as Data](external-artifacts-as-data.md)), every write tool outside the few actions no mode auto-approves runs with no consent event.
 - Sub-agent dispatch under inherited bypass — "When the parent uses `bypassPermissions`, `acceptEdits`, or `auto`, all subagents inherit that mode and it cannot be overridden per subagent" ([Configure permissions](https://code.claude.com/docs/en/agent-sdk/permissions)). A `subagentPermissionMode` override was [closed as not planned](https://github.com/anthropics/claude-code/issues/20264).
-- MCP server addition — a newly wired server's tools fall through to bypass automatically, so write tools the operator never reviewed are auto-approved.
+- MCP server addition — a newly wired server's tools fall through to bypass automatically, so write tools the operator never reviewed are auto-approved unless the server marks them `requiresUserInteraction`.
 - Security review of `allowedTools` alone — a reviewer certifies the allow list as restrictive and misses the `permissionMode` interaction; the composition ships permissive.
 
 The composition is correct only when the environment itself is the boundary — a hermetic sandbox, ephemeral VM, or throwaway container where every tool running is acceptable by construction. There the allow list is redundant rather than misleading. See [Permission Framework Choice Outweighs Model Choice](../../security/permission-framework-over-model.md) and [Blast Radius Containment](../../security/blast-radius-containment.md) for the deterministic-allowlist alternative.
+
+## Prompts that survive bypass
+
+Bypass approves at step 3, but it is not a blanket yes. Claude Code "doesn't auto-approve the following in any mode, including `bypassPermissions`", and the list names tools matched by an explicit ask rule, connector tools an organization sets to `ask` (in sessions where that setting reaches Claude Code), and MCP tools marked `requiresUserInteraction` ([Choose a permission mode](https://code.claude.com/docs/en/permission-modes#actions-no-mode-auto-approves)).
+
+The changelog records one more case that this list does not name. Claude Code 2.1.323 (November 12, 2026) "changed the tool Claude uses to finish an MCP server sign-in so that it asks you to confirm, even in bypass and auto modes; where nobody can be asked, such as in `dontAsk` mode, use `/mcp`" ([changelog 2.1.323](https://code.claude.com/docs/en/changelog#2-1-323)). The changelog line is the only source for this behavior. It gives no rationale and does not describe what the confirmation shows.
+
+For a run with nobody to answer, the MCP docs say the sign-in has to happen first: "A `claude -p` or Agent SDK run has no `/mcp` panel, so Claude Code can't run the OAuth flow there", so complete it from an interactive session with `/mcp` or `claude mcp login <name>` ([Authenticate with remote MCP servers](https://code.claude.com/docs/en/mcp#authenticate-with-remote-mcp-servers)).
+
+The design reading is this page's inference, not Anthropic's: a sign-in adds a credential to the session, so it belongs with the grants that no mode skips.
+
+Unattended pipelines pay for it. Authenticate each OAuth server before the run starts.
 
 ## The two correct shapes
 
@@ -103,7 +115,7 @@ const options = {
 };
 ```
 
-`Bash`, `Write`, `Edit`, and `MultiEdit` are removed from the tool catalog before evaluation begins. Bypass approves whatever remains. This shape suits "trust the agent broadly, deny a small named set" — a different intent from deny-by-default.
+`Bash`, `Write`, `Edit`, and `MultiEdit` are removed from the tool catalog before evaluation begins. Bypass approves whatever remains, apart from the few actions no mode auto-approves. This shape suits "trust the agent broadly, deny a small named set" — a different intent from deny-by-default.
 
 ## Key Takeaways
 
@@ -112,6 +124,7 @@ const options = {
 - `disallowedTools` works under bypass because deny rules (step 2) evaluate above the mode; this is the correct shape for "bypass but block named tools."
 - For "restrict to a small set + never prompt," pair `allowedTools` with `permissionMode: "dontAsk"` — the explicit shape named in the docs.
 - The trap compounds at the sub-agent boundary: parent bypass is inherited and cannot be overridden per sub-agent ([Configure permissions](https://code.claude.com/docs/en/agent-sdk/permissions); [#20264](https://github.com/anthropics/claude-code/issues/20264)).
+- From Claude Code 2.1.323, the tool that finishes an MCP sign-in asks for confirmation in bypass and auto modes; where nobody can answer, sign in through `/mcp` ([changelog 2.1.323](https://code.claude.com/docs/en/changelog#2-1-323)).
 
 ## Related
 
