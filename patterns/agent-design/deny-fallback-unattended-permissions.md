@@ -102,3 +102,4 @@ Here nothing outside the allowlist and the read-only set runs at all ([Choose a 
 - [Headless Claude Code in CI](../../workflows/headless-claude-ci.md) — the surrounding non-interactive run this flag configures
 - [Whose Permissions a Self-Scheduled Agent Run Carries](../../security/self-scheduled-run-authority.md) — which principal that unattended run is denying or allowing on behalf of
 - [Bounding an Unattended Run's Wait on a Usage-Limit Reset](usage-limit-wait-ceiling.md) — the quota sibling of this posture, where the run stalls rather than being denied
+- [Allowing One Skill to Run in Scheduled Tasks and /loop](unattended-skill-allow-rule.md) — the allow rule that keeps a scheduled skill from reaching a prompt at all

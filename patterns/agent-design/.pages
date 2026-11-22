@@ -156,6 +156,7 @@ nav:
       - approval-gate-granularity.md
       - one-shot-permission-answers.md
       - write-boundary-as-setting.md
+      - worktree-subagent-shared-branch-guard.md
       - interaction-effect-obligations.md
       - fleet-irreversibility-budget.md
       - agent-native-filesystem-mediation.md
@@ -279,12 +280,14 @@ nav:
       - dual-write-append-mirror-transcript.md
       - deferred-permission-pattern.md
       - deny-fallback-unattended-permissions.md
+      - unattended-skill-allow-rule.md
       - approver-named-permission-answers.md
       - action-class-permission-gates.md
       - permission-policy-enforcement-prerequisite.md
       - shell-surface-hook-matcher-coverage.md
       - per-source-hook-registration-budgets.md
       - posttooluse-hooks-after-interrupt.md
+      - unconditional-hook-block-decisions.md
       - conversation-visibility-tool-availability.md
       - most-restrictive-wins-fusion.md
       - layered-policy-resolution.md

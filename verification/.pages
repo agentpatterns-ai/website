@@ -71,9 +71,11 @@ nav:
       - agent-test-suite-profiling.md
       - seed-variance-reporting.md
       - multi-run-shuffled-order-evaluation.md
+      - coverage-ceiling-generated-eval-suites.md
       - benchmark-noise-floor-audit.md
       - asr-comparability-audit.md
       - request-vs-commit-safety-readouts.md
+      - claim-matched-eval-design.md
       - injection-failure-composition.md
       - judge-instrument-stability-check.md
       - judge-agreement-is-not-correctness.md

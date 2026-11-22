@@ -84,3 +84,4 @@ The skill's docs-search worked example shows how such a corpus avoids leaking. F
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md) — rubric-side defenses against the shortcuts the verifier trajectory exposes.
 - [Purpose-Built Eval Suites for Model and Harness Swaps](purpose-built-eval-suites.md) — sizing a small suite to the decision it has to support.
 - [Eval Environment Containment for Cyber-Capable Agents](eval-environment-containment.md) — when the containerized environment itself needs a verified boundary.
+- [Coverage Ceilings: Score Generated Eval Suites Per Cell](coverage-ceiling-generated-eval-suites.md) — how to score a generated suite so a change that reaches few scenarios still shows up.

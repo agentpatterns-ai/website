@@ -93,3 +93,4 @@ Skip or replace the framework when:
 - [Benchmark Contamination as Eval Risk](benchmark-contamination-eval-risk.md)
 - [Data Fidelity Guardrails](data-fidelity-guardrails.md)
 - [Anti-Reward-Hacking: Rubrics That Resist Gaming](anti-reward-hacking.md)
+- [Coverage Ceilings: Score Generated Eval Suites Per Cell](coverage-ceiling-generated-eval-suites.md)

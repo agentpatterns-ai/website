@@ -59,6 +59,7 @@ How you phrase, frame, and structure individual rules determines whether agents 
 - [Critical Instruction Repetition: Exploiting Primacy and Recency Bias](critical-instruction-repetition.md) — Repeating a critical instruction at both the start and end of a prompt exploits primacy and recency bias for higher compliance
 - [The Instruction Compliance Ceiling](instruction-compliance-ceiling.md) — Instruction compliance degrades as rule count grows; adding more rules past a threshold produces omission errors, not better behavior
 - [Per-Instruction Compliance in Agent Context Files Is Bimodal](per-instruction-compliance-is-bimodal.md) — In a mined-commit study of three agents, 54.4% of checked rules were always followed and 37.3% never; verify each rule per agent instead of sampling
+- [Corroborated Compliance Checks for Agent Context Files](corroborated-compliance-checks-from-context-files.md) — One generated check per rule, accepted when a second script agrees on fixtures (62.9% of observable rules in one study), run only on commits it can inspect
 - [Constraint Degradation in AI Code Generation](constraint-degradation-code-generation.md) — LLM code generation accuracy drops sharply as simultaneous constraint count increases; reduce constraint load through decomposition, schemas, and mechanical enforcement
 - [Constraint Encoding Does Not Fix Constraint Compliance](constraint-encoding-compliance-gap.md) — Restructuring how constraints are formatted in prompts does not improve model compliance; the compliance lever is constraint design, not encoding form
 - [Policy Wording Tests for Coding-Agent Instruction Files](policy-wording-compliance-tests.md)
@@ -86,6 +87,7 @@ Structuring instructions across scopes, layers, and files so the right context r
 - [Production System Prompt Architecture](production-system-prompt-architecture.md) — Structural patterns from a 102K-char production system prompt: XML-sectioned concern isolation, skills registries, and deferred tool loading
 - [Prompt Transpilation: Instructions as Build Artifacts](prompt-transpilation.md) — Compile modular skill files into one validated prompt at build time, with static dependency checks and a golden-file CI gate, so a broken instruction set fails the build not a run
 - [Capture the Assembled Request, Not the System Prompt](captured-instruction-stack.md) — In the study's latest captured Claude Code request, tool definitions were 77.4% and the system prompt 13%, so record what the agent sent rather than inferring it
+- [HUMANS.md: A Personal Collaboration Profile for Agents](humans-md-personal-collaboration-profile.md) — A draft per-person file of reading, deciding and interrupting preferences that grants no permissions; the project's tests show it loads, not that models follow it
 
 ## System Prompts
 

@@ -45,6 +45,7 @@ nav:
       - critical-instruction-repetition.md
       - instruction-compliance-ceiling.md
       - per-instruction-compliance-is-bimodal.md
+      - corroborated-compliance-checks-from-context-files.md
       - constraint-degradation-code-generation.md
       - constraint-encoding-compliance-gap.md
       - policy-wording-compliance-tests.md
@@ -72,6 +73,7 @@ nav:
       - captured-instruction-stack.md
       - hooks-vs-prompts.md
       - shared-context-bundle-registry.md
+      - humans-md-personal-collaboration-profile.md
   - "System Prompts":
       - domain-specific-system-prompts.md
       - system-prompt-replacement.md

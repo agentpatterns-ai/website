@@ -58,6 +58,8 @@ The guide's Stop example states a condition and spells out the response mapping:
 3. Set the `model` field. By default the judge uses "the model Claude Code uses for background functionality" ([Hooks reference](https://code.claude.com/docs/en/hooks#prompt-hook-configuration)), and a hook that names a blocked model [runs on the session model](../agent-design/tenant-model-policy.md).
 4. Test the hook on the event you attach it to, with inputs that should be blocked.
 
+Since 2.1.330, a prompt hook's `model` field accepts an alias such as `haiku` or `sonnet` ([Changelog](https://code.claude.com/docs/en/changelog#2-1-330)). An alias follows the provider. `haiku` resolves to Haiku 5.5 on the Anthropic API and to Haiku 4.5 on Amazon Bedrock, and Anthropic says aliases "point to the recommended version for your provider and update over time" ([Model configuration](https://code.claude.com/docs/en/model-config#model-aliases)). A hook that names `haiku` can therefore change its judge model with no edit to the hook. Anthropic's way to pin a version is the full model name, or an `ANTHROPIC_DEFAULT_HAIKU_MODEL` override of what the alias resolves to. The hooks reference does not say whether the hook `model` field takes a full ID, so test that before you rely on it.
+
 ## When this backfires
 
 Judgement is the right tool for some guards and the wrong one for others.
@@ -74,7 +76,8 @@ Command hooks are not perfectly deterministic either. The `if` filter is best-ef
 - A `prompt` or `agent` hook is judged by a model; only command, HTTP, and MCP tool hooks decide by exit code or JSON output.
 - `ok: false` has no effect on `PermissionRequest` or `PermissionDenied`, and Stop hooks invert the polarity.
 - 2.1.294 fixed instruction-phrased judging, which shows judged hooks depend on harness version.
-- Write the guard as a yes/no condition with an explicit JSON mapping and a pinned `model`.
+- Write the guard as a yes/no condition with an explicit JSON mapping and an explicit `model`.
+- A prompt hook accepts an alias such as `haiku` since 2.1.330, and the alias follows the version recommended for the provider, so it can change the judge with no hook edit.
 - Keep hard denies in permission rules or command hooks.
 
 ## Related

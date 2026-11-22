@@ -16,7 +16,7 @@ status: current
 
 > Run prompts on a recurring interval or at a specific time using `/loop` and the cron tools — session-scoped, no external infrastructure required.
 
-Session scheduling re-runs a prompt automatically within an active session. Use it to poll a deployment, babysit a PR, check a long build, or set a one-time reminder. Tasks live in the current conversation. `claude --resume` or `claude --continue` restores unexpired ones — recurring tasks within 7 days, and one-shots whose fire time has not passed. Exiting between turns with `Exit and stop tasks` skips that restore ([details](#inspect-and-stop-scheduled-work-in-tasks)). This needs Claude Code v2.1.72 or later. [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
+Session scheduling re-runs a prompt automatically within an active session. Use it to poll a deployment, babysit a PR, check a long build, or set a one-time reminder. Tasks live in the current conversation. `claude --resume` or `claude --continue` restores unexpired ones — recurring tasks that have not expired, and one-shots whose fire time has not passed. Exiting between turns with `Exit and stop tasks` skips that restore ([details](#inspect-and-stop-scheduled-work-in-tasks)). This needs Claude Code v2.1.72 or later. [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
 
 ## /loop — interactive recurring prompts
 
@@ -66,10 +66,22 @@ in 45 minutes, check whether integration tests passed
 - Fires between turns — the scheduler checks every second and enqueues at low priority. If Claude is mid-response, the task waits for the turn to end
 - Local timezone — `0 9 * * *` means 9am wherever Claude Code runs, not UTC
 - Jitter — recurring tasks fire up to 30 minutes after their scheduled time, or half the interval for sub-hourly tasks. One-shots scheduled for `:00` or `:30` fire up to 90s early. The offset is derived from the task ID, so it is deterministic. Use a minute like `3 9 * * *` to skip the one-shot offset
-- Expiry after 7 days — recurring tasks fire one final time, then auto-delete 7 days after creation
+- Expiry — recurring tasks end on their own. The limit is 7 days before v2.1.330 and up to 30 days from it ([lifetime details](#task-lifetime-and-the-v21330-change))
 - No catch-up — a fire missed while Claude is busy runs once when idle, not once per missed interval
 
 [Source: [Scheduled Tasks — Claude Code docs](https://code.claude.com/docs/en/scheduled-tasks)]
+
+## Task lifetime and the v2.1.330 change
+
+Claude Code v2.1.330 (2026-11-20) changed recurring scheduled tasks and `/loop` "to run up to 30 days instead of 7 while their session keeps running, and say when they end". Tasks made before that release "still end at 7 days" ([changelog 2.1.330](https://code.claude.com/docs/en/changelog#2-1-330)).
+
+The two sources disagree for now. As of 2026-11-22 the scheduled-tasks page still has a "Seven-day expiry" section. It says recurring tasks "expire 7 days after creation" and that the task "fires one final time, then deletes itself". It does not mention 30 days ([Seven-day expiry](https://code.claude.com/docs/en/scheduled-tasks#seven-day-expiry)). The changelog does not say whether a 30-day task still fires once more at the end. It says only that Claude Code reports when tasks end.
+
+What to change in a long-running loop design:
+
+- Treat 30 days as a ceiling, not a guarantee. The changelog gives the limit only "while their session keeps running", and tasks still fire only while Claude Code is running and idle ([Limitations](#limitations)).
+- Recreate a loop you made before upgrading. The changelog says only that tasks made before the release keep the 7-day end. That a task recreated after the upgrade gets the 30-day limit is an inference from that wording, not a stated rule.
+- Keep the recreate-or-go-durable rule. The scheduled-tasks page advises canceling and recreating a recurring task before it expires, or using cloud or Desktop scheduled tasks for durable scheduling ([Seven-day expiry](https://code.claude.com/docs/en/scheduled-tasks#seven-day-expiry)). The page words that advice for the 7-day limit.
 
 ## Inspect and stop scheduled work in /tasks
 
@@ -111,7 +123,7 @@ CronCreate with expression "*/5 * * * *", prompt "check gh run status and cancel
 ## Key Takeaways
 
 - `/loop` provides quick interactive scheduling; cron tools provide programmatic control for agents and skills
-- Tasks are session-scoped; recurring tasks expire 7 days after creation — they are not persistent infrastructure
+- Tasks are session-scoped and recurring tasks expire: after 7 days before v2.1.330, and up to 30 days from v2.1.330 while the session keeps running. They are not persistent infrastructure
 - For durable scheduling across restarts, reach for [Routines](https://code.claude.com/docs/en/routines) (cloud) or Desktop scheduled tasks, or a GitHub Actions `schedule` trigger
 - Use one-time reminders via natural language for deferred checks without recurring overhead
 - From v2.1.329, `/tasks` lists scheduled tasks, loop wakeups, the goal, and forks, and `x` stops one after asking. `Exit and stop tasks` also ends scheduled tasks unless you exit while Claude is responding
@@ -120,6 +132,7 @@ CronCreate with expression "*/5 * * * *", prompt "check gh run status and cancel
 
 - [Self-Paced /loop Ends When a Turn Does Not Reschedule](self-paced-loop-reschedule.md) — the v2.1.319 end rule for loops without an interval, and when to set `CLAUDE_CODE_LOOP_KEEPALIVE=1`
 - [Cloud-Scheduled Routines vs Local Session Scheduling](cloud-scheduled-routines.md) — the cloud counterpart when the schedule must survive a closed laptop or env drift
+- [Allowing One Skill to Run in Scheduled Tasks and /loop](../../patterns/agent-design/unattended-skill-allow-rule.md) — the v2.1.325 prompt before a fire runs a skill with `allowed-tools` or hooks, and the `Skill(name)` rule that clears it
 - [Parallel Agent Sessions](../../workflows/parallel-agent-sessions.md)
 - [/batch & Worktrees](batch-worktrees.md)
 - [Monitor Tool](monitor-tool.md)
