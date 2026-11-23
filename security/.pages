@@ -110,6 +110,7 @@ nav:
       - agent-authored-message-rendered-image-exfiltration.md
       - multitenant-rag-authorization-gap.md
       - mcp-server-credential-isolation.md
+      - mcp-add-json-stdin-token-handling.md
       - multi-tenant-isolation-knobs-agent-sdk.md
       - embedding-inversion-vector-store-disclosure.md
       - heartbeat-bound-hierarchical-credentials.md

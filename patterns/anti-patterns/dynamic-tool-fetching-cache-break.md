@@ -150,3 +150,4 @@ CORE_TOOLS = [stable_tool_schema(t) for t in load_core_tools()]
 - [Disable Attribution Headers to Preserve KV Cache in Local Inference](../../context-engineering/kv-cache-invalidation-local-inference.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../../standards/mcp-protocol.md)
 - [Filesystem-Based Tool Discovery](../../tool-engineering/filesystem-tool-discovery.md)
+- [Mid-Session Config Changes as Invisible Cache Invalidators](mid-session-config-cache-invalidators.md) — the other prompt-cache break: switching model, effort, or MCP servers mid-session

@@ -105,3 +105,5 @@ The patterns compose: the control plane gates on identity, capability budgets ga
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Subgoal-scoped revocation through a reference monitor; same envelope of mediated tools + typed catalog
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — The same non-amplification property applied to a change of subject rather than a chain of values
 - [Field-Level Source Ownership for Agent Capabilities](field-level-source-ownership.md) — the same never-widen rule applied to which source may fill each field of a capability, rather than which sinks a value may reach.
+- [Per-Agent Capability Stores Beat One Task-Wide Allowlist](per-agent-capability-scoping.md) — split the allowlist ceiling into one capability store per agent
+- [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — a server-issued intent certificate that only narrows the static tool manifest

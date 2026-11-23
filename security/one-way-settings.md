@@ -102,3 +102,4 @@ The subagent can move the window one way only, toward earlier compaction. The `a
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — authority that only shrinks, enforced per value through tool composition
 - [Administrative Effort Ceilings for Reasoning Budget](../patterns/agent-design/administrative-effort-ceilings.md) — a numeric cap where the lowest scope wins
 - [Claude Code Mods and When to Use One Instead of a Hook](../tools/claude/mods.md) — the writer that `$.env.set` belongs to
+- [Write Boundaries Ship as a Setting, Read Boundaries as a Prompt](../patterns/agent-design/write-boundary-as-setting.md) — the settings key that fences file-tool writes outside the working directories

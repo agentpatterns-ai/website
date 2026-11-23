@@ -76,3 +76,4 @@ The same paper's deployment on ScienceAgentBench produced 12 author-confirmed is
 - [Answer-Reachable Eval Environments](../patterns/anti-patterns/answer-reachable-eval-environments.md) — the defect an artifact audit misses, where the leak is in the container the agent runs in
 - [State-Integrity Checks for an Eval Oracle](oracle-integrity-checks-eval-harness.md) — the deterministic counterpart, which asserts what the grading function does to the state it grades rather than reading the artifacts
 - [Specification-Oracle Gap Audits for Test-Graded Evals](specification-oracle-gap-audit.md) — the same artifacts audited statically and without model calls, for names the tests need and the task text never states
+- [Audit the Noise Floor Before Trusting a Benchmark Gap](benchmark-noise-floor-audit.md) — measure the rewording and rerun noise floors under a benchmark score

@@ -129,6 +129,7 @@ nav:
       - path-only-file-mentions.md
       - per-object-context-allocation.md
       - organizational-context-layer.md
+      - curator-agent-knowledge-maintenance.md
       - generated-questionnaires.md
       - contract-context-over-example-retrieval.md
       - safeguard-aware-context-construction.md

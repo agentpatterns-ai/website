@@ -184,7 +184,7 @@ If `$ARGUMENTS` is not present in the skill body, arguments are appended as `ARG
 
 Setting both `user-invocable: false` and `disable-model-invocation: true` leaves the skill unreachable. The skill is then hidden from `/` and from Claude's automatic loading. Use one or the other.
 
-`model` overrides are skill-scoped. The session model resumes after the skill completes.
+A `model` override lasts for the rest of the current turn and is not saved to settings. The session model resumes when you send your next prompt ([skills reference](https://code.claude.com/docs/en/skills.md#frontmatter-reference)). From v2.1.330, when Claude runs the skill, the override leaves subagents, forks, compaction and `/recap` on the session model, except for `context: fork` skills. See [Claude Code Skill Model Override: What Stays on Session](../tools/claude/skill-model-override-scope.md).
 
 ## Key Takeaways
 

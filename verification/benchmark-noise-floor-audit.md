@@ -88,3 +88,4 @@ The audit carries one confound of its own: its Gemini endpoint differs from the 
 - [Frozen Task Sets for Affordable Agent A/B Testing](../workflows/frozen-task-set-agent-ab-testing.md) — selecting the few tasks whose single run still tracks the full score, and what that instrument cannot resolve.
 - [Action-Class Decomposition for Tool-Calling Evals](action-class-decomposition-tool-calling-evals.md) — the per-class gap these floors have to clear before it counts as a finding.
 - [Cross-Day Config Comparisons Under an Injected Date](../patterns/anti-patterns/cross-day-config-comparisons.md) — a third arm neither floor samples, because rerunning on the same day cannot move it.
+- [LLM-Driven Benchmark Auditing](llm-benchmark-auditing.md) — have an LLM audit a benchmark's specs, fixtures, and grading scripts before you trust its scores

@@ -61,3 +61,4 @@ Two designs remove a violation rather than catch it: "putting evaluation labels 
 - [Protecting the Test Oracle From the Agent](../patterns/agent-design/protect-the-oracle-from-the-agent.md) — the permission-level version: deny the agent write access to what decides correctness.
 - [Reliability of an Automatically Selected Agent Harness](../patterns/agent-design/harness-selection-reliability.md) — what a pick from a noisy search is worth in the unlucky case.
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — what repeated attempts measure when the outcome is pass or fail.
+- [Judge a Technique Against a Budget-Matched Best-of-n Baseline](budget-matched-best-of-n-baseline.md) — score a technique against best-of-n at the same call budget

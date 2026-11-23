@@ -100,3 +100,4 @@ Eligibility started with Copilot Business and Copilot Enterprise subscribers ([G
 - [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) — the autonomous variant of the same loop, with circuit-breaker design for unfixable regressions
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — convert accepted fixes into regression eval cases that gate future deploys
 - [Agent-Authored PR Integration and Merge Predictors](../code-review/agent-authored-pr-integration.md) — empirical baselines on reviewer engagement, force pushes, and comment-volume effects that the one-click loop must respect
+- [Closed-Loop CI Failure Remediation with Cloud Coding Agents](closed-loop-ci-failure-remediation.md) — the general pattern: five dispatcher controls across three trigger shapes

@@ -142,3 +142,4 @@ Behavior that varies session to session usually means instruction files loaded i
 - [Escape Hatches: Unsticking Stuck Agents](../workflows/escape-hatches.md)
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)
 - [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md)
+- [Five-Failure-Layers Diagnostic: Attribute Before Swapping the Model](../patterns/agent-design/five-failure-layers-diagnostic.md) — attribute each failure to a harness layer before swapping models

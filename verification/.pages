@@ -104,6 +104,7 @@ nav:
       - planted-bug-observability-calibration.md
       - llm-api-fault-injection-http-layer.md
       - handoff-boundary-fault-injection.md
+      - agent-driven-chaos-loop.md
       - recovery-as-separate-eval-axis.md
       - behavior-partitioned-security-tests.md
       - route-parity-safeguard-auditing.md
@@ -171,6 +172,7 @@ nav:
       - evidence-chain-run-logs.md
       - evidence-bundled-agent-prs.md
       - claim-to-evidence-trace-graphs.md
+      - check-agent-work-reports-against-records.md
       - post-merge-fix-signals-agent-merges.md
       - named-check-over-evaluation-confidence.md
       - asymmetric-check-evidence.md
@@ -211,6 +213,7 @@ nav:
       - verification-capacity-quality-ceiling.md
       - verification-capacity-saturation.md
       - diff-coverage-gate-agent-prs.md
+      - metrics-in-the-loop-complexity-feedback.md
       - deterministic-guardrails.md
       - fine-tuned-classifier-over-llm-filter-stage.md
       - tool-provided-verification.md

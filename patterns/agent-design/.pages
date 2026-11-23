@@ -281,6 +281,7 @@ nav:
       - deferred-permission-pattern.md
       - deny-fallback-unattended-permissions.md
       - unattended-skill-allow-rule.md
+      - exitworktree-removal-confirmation.md
       - approver-named-permission-answers.md
       - action-class-permission-gates.md
       - permission-policy-enforcement-prerequisite.md
@@ -302,6 +303,7 @@ nav:
       - harness-design-dimensions.md
       - per-task-agent-routing.md
       - fleet-harness-attribution.md
+      - shared-runtime-default-harness-eval-gates.md
       - harness-engineering.md
       - dsl-constraining-harness.md
       - harness-hill-climbing.md

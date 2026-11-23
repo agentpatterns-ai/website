@@ -18,6 +18,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 
 - [Sub-Agents](sub-agents.md) — Ephemeral, isolated agents for focused task execution
 - [Claude Code Subagent Model Fallback: What Carries Down](subagent-fallback-carry-over.md) — From v2.1.330, agents with no model and forks started by a subagent on a fallback run on it; how to check each agent's model
+- [Claude Code /status Diagnostics for Broken and Ignored Config](status-config-diagnostics.md) — From 2.1.327, `/status` lists broken agent, skill, command and output style files, keybinding errors, an unavailable sandbox, ignored permission settings and dead hook matchers
 - [Agent Teams](agent-teams.md) — Coordinated multi-agent sessions with shared task lists
 - [Agent View](agent-view.md) — Dispatch-attach-monitor surface for parallel background sessions, with blocked-on-input as a first-class state
 - [Auto Mode](auto-mode.md) — Classifier-based permission gating for unattended execution
@@ -48,4 +49,6 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Mods](mods.md) — Plugin code that runs inside Claude Code's process: it can draw panes, rewrite events, and approve a call a `PreToolUse` hook blocked, which decides when to pick one over a settings hook
 - [In-Session Transcript Search](transcript-search.md) — Claude Code's Ctrl+O transcript mode plus `/`, `n`, `N` turns a long session transcript into a navigable index — the in-session counterpart to offline transcript analysis
 - [/code-review Default Scope](code-review-local-scope.md) — Since 2.1.329 a no-target review covers the whole branch on most models, though the local-review page words the base differently
+- [Claude Code Subagent Progress Summaries: What They Cost](subagent-progress-summary-cost.md) — From v2.1.327 to v2.1.330, terminal-session summaries are written from short notes per route; the changelog gives no saving, and one variable turns them off
 - [Critical-Path rm Check](critical-path-rm-check.md) — Claude Code asks before an `rm` or `rmdir` aims at root, home or the working folder, and denies it where no one can answer; it misses some commands
+- [Claude Code Skill Model Override: What Stays on Session](skill-model-override-scope.md) — From v2.1.330 a skill Claude runs with a `model` setting leaves subagents, forks, compaction and `/recap` on the session model; `context: fork` skills are the exception

@@ -108,3 +108,4 @@ The error is caught before a single query runs.
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
 - [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md)
 - [Convergence Detection in Iterative Refinement](../../loop-engineering/convergence-detection.md)
+- [A Separate Critic Over Completion-Time Self-Checking](../../verification/separate-critic-over-self-recheck.md) — a separate critic that also reads the execution trajectory beat a completion gate on Terminal-Bench

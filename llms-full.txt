@@ -381,6 +381,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Corpus Shape as a Retrieval Design Constraint](context-engineering/corpus-shape-retrieval-architecture.md)
 - [Coverage-Aware Skill Selection Under a Token Budget](context-engineering/coverage-aware-skill-selection.md)
 - [Exact-File Selection Over Compression at a Fixed Budget](context-engineering/exact-file-selection-over-compression.md)
+- [Curator Agent and Missing-Knowledge Flag for Agent Knowledge](context-engineering/curator-agent-knowledge-maintenance.md)
 - [Declaring the Authoritative Tool Output (Evidence Substitution)](context-engineering/authoritative-tool-output-declaration.md)
 - [Fact Supersession Memory for Code Assistants](context-engineering/fact-supersession-memory.md)
 - [Failure Memory on Agent Retry](context-engineering/retry-failure-memory.md)
@@ -701,6 +702,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Component-Isolated Memory Stress Testing for LLM Agents](verification/component-isolated-memory-stress-testing.md)
 - [Compose vs Fork vs Build: Adopting an Agent Harness](patterns/agent-design/open-framework-compose-or-fork.md)
 - [Computer Use as the Last Integration Tier](patterns/agent-design/computer-use-last-integration-tier.md)
+- [Confirming Before an Agent Removes a Worktree With Unsaved Work](patterns/agent-design/exitworktree-removal-confirmation.md)
 - [Contextual Capability Calibration for Multi-Agent Delegation](patterns/multi-agent/contextual-capability-calibration.md)
 - [Continual Learning for AI Agents: Three Layers of Knowledge Accumulation](patterns/agent-design/continual-learning-layers.md)
 - [Continuation Authority in Agent Migration](patterns/agent-design/continuation-authority-agent-migration.md)
@@ -756,6 +758,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Feedback as Capability Equalizer: Iterative Feedback Outweighs Model Scale](patterns/agent-design/feedback-capability-equalizer.md)
 - [Field-Change Intent Instead of Model-Written Diffs](patterns/agent-design/field-change-intent-over-generated-diffs.md)
 - [Five-Failure-Layers Diagnostic: Attribute Before Swapping the Model](patterns/agent-design/five-failure-layers-diagnostic.md)
+- [Gate a Default Harness Switch With Online and Offline Evals](patterns/agent-design/shared-runtime-default-harness-eval-gates.md)
 - [Hook Block Decisions Hold in More Cases Since Claude Code 2.1.326](patterns/agent-design/unconditional-hook-block-decisions.md)
 - [Interface Realization Repair: Evidence and Limits](patterns/agent-design/interface-realization-repair.md)
 - [Metadata Index for Agent File Search: Where It Cuts Cost](patterns/agent-design/metadata-index-for-agent-file-search.md)
@@ -1308,6 +1311,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Fall Back to the No-Hook Decision When a Permission Check Errors](security/hook-allow-failed-permission-check.md)
 - [Host-Environment Agent Sandboxes: What the Codex Defaults Leave Open](security/host-environment-sandbox-residual-risks.md)
 - [Intent-Graph Audits for Least-Privilege Agent Tool Calls](security/intent-graph-tool-call-audit.md)
+- [Keep MCP Server Tokens Off the Command Line With Stdin JSON](security/mcp-add-json-stdin-token-handling.md)
 - [Next Edit Suggestions Carry Context You Never Curated](security/next-edit-suggestion-uncurated-context.md)
 - [Non-Retirable Approval Rules for Agent Operations](security/non-retirable-approval-rules.md)
 - [One-Way Settings: Keys With a Fixed Write Direction](security/one-way-settings.md)
@@ -1510,6 +1514,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Calibrate a Benchmark's Interaction Layer to Your Users](verification/task-flow-calibration.md)
 - [Capability-Ladder Probe: Calibrate an Eval Before You Trust Its Score](verification/capability-ladder-eval-probe.md)
 - [Capturing Dismissal Reasons for Agent Review Findings](code-review/dismissal-reason-capture.md)
+- [Check Coding Agent Work Reports Against the Work Record](verification/check-agent-work-reports-against-records.md)
 - [Choose Agent Gate Layers by Mechanism Class, Then Measure](verification/mechanism-class-gate-stacking.md)
 - [Choosing the Judge Model That Grades Your Agent Evals](verification/judge-model-bake-off.md)
 - [Circular CI Verification in Dual-Scope Agent PRs](verification/circular-ci-verification-agent-prs.md)
@@ -1517,6 +1522,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Classification Before Repair in an Analyzer Backlog](verification/classification-before-repair-analyzer-backlog.md)
 - [Configuring the Code Review Request Surface](code-review/review-request-surface.md)
 - [Contract-Domain Tracing for Rubric Credit](verification/contract-domain-tracing-rubric-credit.md)
+- [Copilot Adaptive Review Effort and Secret Detection](code-review/copilot-adaptive-review-effort-secret-detection.md)
 - [Count Evidence Sources, Not Approving Votes](verification/source-counted-approval-gates.md)
 - [Coverage Ceilings: Score Generated Eval Suites Per Cell](verification/coverage-ceiling-generated-eval-suites.md)
 - [Cut-Point Replay: Test a Fix Against a Recorded Agent Run](verification/cut-point-replay-agent-regression-tests.md)
@@ -1558,6 +1564,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Measure Agent Experience Against a Bare Baseline](verification/ax-bare-baseline-lift-drag.md)
 - [Measure the Judge Before You Freeze a Gate on It](verification/judge-instrument-stability-check.md)
 - [Measuring Synthetic Eval Data Quality (SynAE)](verification/synae-synthetic-eval-quality.md)
+- [Metrics-in-the-Loop: Complexity Feedback for Coding Agents](verification/metrics-in-the-loop-complexity-feedback.md)
 - [Minimum-Cost Evidence Selection for Agent Changes (Assurance Envelopes)](verification/minimum-cost-evidence-selection.md)
 - [Mock-Boundary Validation for Agent-Built Systems](verification/mock-boundary-validation-agent-built-systems.md)
 - [Multi-Agent RAG for Spec-to-Test Automation](verification/multi-agent-rag-spec-to-test.md)
@@ -1644,6 +1651,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Test a Tool-Call Guard in the Surface Form Your Agent Emits](verification/surface-form-guard-testing.md)
 - [Test Adequacy of LLM-Dependent Harness Code](verification/llm-dependent-harness-test-adequacy.md)
 - [Test-Driven Intent Clarification: Tests as Intermediate Alignment Artifacts](verification/test-driven-intent-clarification.md)
+- [The Chaos Loop: Hardening a Launch With Injected Faults](verification/agent-driven-chaos-loop.md)
 - [The Security Review Gap in AI-Authored PRs](code-review/security-review-gap-in-ai-prs.md)
 - [Tiered Code Review: AI-First with Human Escalation](code-review/tiered-code-review.md)
 - [Timeout Oracles for Agent-Written Code](verification/timeout-oracles-agent-written-code.md)
@@ -1899,6 +1907,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Failure-Driven Iteration for Improving Agent Workflows](workflows/failure-driven-iteration.md)
 - [Flag Cleanup Grounded in Deployed State](workflows/deployed-state-flag-cleanup.md)
 - [Four-Phase Agent Delegation with Curated Artifacts](workflows/four-phase-agent-delegation.md)
+- [From Task Agents to Goal Agents: Harness Additions](workflows/task-to-goal-agent-harness-additions.md)
 - [Frozen Task Sets for Affordable Agent A/B Testing](workflows/frozen-task-set-agent-ab-testing.md)
 - [Gated Contribution Intake Under Agent Load](workflows/gated-contribution-intake.md)
 - [Humans and Agents in Software Engineering Loops](workflows/humans-agents-development-loops.md)
@@ -2400,6 +2409,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Claude Code --bare Flag](tools/claude/bare-mode.md)
 - [Claude Code /batch and Worktrees for AI Agent Development](tools/claude/batch-worktrees.md)
 - [Claude Code /code-review: What It Reviews With No Target](tools/claude/code-review-local-scope.md)
+- [Claude Code /status Diagnostics for Broken and Ignored Config](tools/claude/status-config-diagnostics.md)
 - [Claude Code Agent Teams for Collaborative AI Workflows](tools/claude/agent-teams.md)
 - [Claude Code Auto Mode: Classifier-Based Permission Gating](tools/claude/auto-mode.md)
 - [Claude Code Cloud Sessions: What Crosses the VM Boundary](tools/claude/cloud-sessions.md)
@@ -2410,8 +2420,10 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Claude Code Hooks: Deterministic Lifecycle Automation](tools/claude/hooks-lifecycle.md)
 - [Claude Code Mods and When to Use One Instead of a Hook](tools/claude/mods.md)
 - [Claude Code Review](tools/claude/code-review.md)
+- [Claude Code Skill Model Override: What Stays on Session](tools/claude/skill-model-override-scope.md)
 - [Claude Code Sub-Agents for Delegating Complex Tasks](tools/claude/sub-agents.md)
 - [Claude Code Subagent Model Fallback: What Carries Down](tools/claude/subagent-fallback-carry-over.md)
+- [Claude Code Subagent Progress Summaries: What They Cost](tools/claude/subagent-progress-summary-cost.md)
 - [Claude Code Trust Dialog: Review Hooks Before You Accept](tools/claude/trust-dialog-hook-review.md)
 - [Cloud-Scheduled Routines vs Local Session Scheduling](tools/claude/cloud-scheduled-routines.md)
 - [Copilot App Customize Tab vs Repo Configuration Files](tools/copilot/copilot-app-customize-tab.md)
@@ -2420,6 +2432,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Copilot CLI BYOK and Local Model Support](tools/copilot/copilot-cli-byok-local-models.md)
 - [Copilot Cloud Agent Organization Controls](tools/copilot/cloud-agent-org-controls.md)
 - [Copilot Cloud Agent Three-Phase Execution Model](tools/copilot/cloud-agent-research-plan-code.md)
+- [Copilot Evals: What a First-Party Eval Harness Measures](tools/copilot/copilot-evals-first-party-harness.md)
 - [Copilot Memory and Cross-Agent Persistence](tools/copilot/copilot-memory.md)
 - [Copilot Projects: Harness-Sized Fan-Out Across Repositories](tools/copilot/copilot-projects-harness-sized-fan-out.md)
 - [Copilot Server-to-Server Authentication: What the Workload Identity Covers](tools/copilot/copilot-server-to-server-authentication.md)
@@ -2733,6 +2746,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Path-Only File Mentions: Deferring @ Expansion](path-only-file-mentions.md) — Claude Code 2.1.299 can hand over the paths of `@` file mentions instead of the files' contents; the gain is window occupancy rather than billing, and a read the agent skips reports nothing
 - [Per-Object Context Allocation](per-object-context-allocation.md) — Group retrieved fragments by canonical code object and cap each object's token share, so repeated views of one function stop displacing independent dependencies before the model sees them
 - [Organizational Context Layer for Agents](organizational-context-layer.md) — A shared context layer maps many source systems into one governed store that many agents query; deterministic identity and rebuildable index projections transfer well below that scale
+- [Curator Agent and Missing-Knowledge Flag for Agent Knowledge](curator-agent-knowledge-maintenance.md) — Working agents flag missing or wrong knowledge with a report tool and a background curator agent applies the fixes; the evidence is one vendor post with no reported metrics
 - [Generated Questionnaires: Eliciting Someone Else's Context](generated-questionnaires.md) — Have the agent draft a questionnaire for the one person who holds the missing knowledge, instead of guessing the gap; the technique holds only where that knowledge is statable rather than tacit
 
 ## Error Handling & Drift Prevention
@@ -6174,6 +6188,90 @@ The orchestrator normalizes `Table 3 row (E)` to the key `(table, 3)`, joins it 
 - [Schema-Guided Graph Retrieval](schema-guided-graph-retrieval.md) — encodes reference structure as typed graph edges at index time rather than resolving pointers at query time
 - [Semantic Context Loading: Language Server Plugins for Agents](semantic-context-loading.md) — the resolver the code analogue depends on
 - [Epistemic Working Memory for Multi-Hop Reasoning (SLEUTH)](../patterns/agent-design/epistemic-working-memory-multi-hop-reasoning.md) — tracks open questions across hops when the bridge is implicit and no pointer names the target
+
+---
+
+### Curator Agent and Missing-Knowledge Flag for Agent Knowledge
+Source: https://agentpatterns.ai/context-engineering/curator-agent-knowledge-maintenance/
+
+# Curator Agent and Missing-Knowledge Flag for Agent Knowledge
+
+> A curator agent maintains company knowledge in the background while working agents flag what is missing or wrong.
+
+A curator loop keeps the knowledge your agents read current by splitting the work in two. Working agents report gaps and errors as they hit them. A separate curator agent, running on a schedule, reads those reports and edits the knowledge. Harrison Chase of LangChain describes this as part of a "knowledge factory" ([LangChain blog, 2026-11-21](https://www.langchain.com/blog/knowledge-factory)). The post reports it in use for LangChain's internal GTM and content studio agents, and gives no measurements.
+
+## Knowledge is not context
+
+Chase separates two terms. "Context is what an agent has available when doing a task." Knowledge is "the reusable understanding we maintain so it can do that task correctly: what a metric means, which source to trust, or how we handle a particular situation." Knowledge is one input to context, and "often not (and shouldn't be) the only context the agent gets" ([source](https://www.langchain.com/blog/knowledge-factory)). Other data you already store reliably can go to the agent directly.
+
+The post names three kinds of knowledge to maintain:
+
+| Kind | Source's definition | Staleness note in the source |
+|---|---|---|
+| Skills | "Procedures, instructions, and scripts for accomplishing tasks the way your company expects" | Often never written down; passed "coworker to coworker" |
+| Domain knowledge | "Definitions, policies, and facts about your products, customers, competitors, and organization" | "Does not go stale frequently", but usually incomplete or incorrect |
+| Data access guidance | "Which sources to use, what data lives where, and how to query it" | Keep guidance, not a copy, when the data source is already complete and current |
+
+## The three parts of the loop
+
+```mermaid
+graph LR
+    A[Working agent] -->|flag: missing or wrong| B[Flag store]
+    A -->|traces| C[Trace store]
+    B --> D[Curator agent<br>runs on a cadence]
+    C --> D
+    E[Raw sources<br>wiki, chat] --> D
+    D -->|updates| F[Knowledge store]
+    F -->|loaded as context| A
+```
+
+### A flag tool
+
+The post says to have agents flag knowledge problems as they work: they cannot find information, or they find information they discover is wrong. The tool should "at a minimum report what is wrong, and optionally suggest the correct update."
+
+### A curator agent
+
+It runs in the background on some cadence. The post says it should read the raw sources where knowledge is scattered (Notion and Slack are the examples), the working agents' traces, and the flags. Traces let it codify how people use the agents into skills.
+
+### Storage
+
+The post says storage is "in some ways" the "least important thing" and "in other ways" the "least explored area". Its examples are skill files in GitHub, a single Notion file, an OKF-format store in LangSmith Context Hub, and a Neo4j knowledge graph. It says the curator should handle all of them and that "no standard has yet emerged" for semantic memory.
+
+## Why the working agent mainly flags
+
+The post gives two reasons for the split. Working agents "are great at flagging what's wrong or missing, but fixing it requires deep understanding of the underlying knowledge and other sources of data." Agents "mainly trying to accomplish their own goals" would, in Chase's words, make the knowledge "unruly and full of contradictions." That is an argument from the author, not a measured result. The post also rules out manual upkeep as "too much work."
+
+The post does not compare the loop to a per-agent memory store. One reading, not a claim from the source: the post says knowledge should not be kept current "solely by the agents that use it", so the working agents mainly report, and the curator decides how the shared knowledge changes. For a related split between a writer model and a reader model, see [Memory Store Writer Ceiling](memory-store-writer-ceiling.md).
+
+## Example from the source
+
+An agent prepares a revenue report. Raw numbers sit in BigQuery and Salesforce. Skills for report style live in GitHub, the ARR definition in a company wiki, and data-access skills in LangSmith Context Hub.
+
+1. The agent finds a renamed BigQuery column, works out the new name, and uses its tool to flag the issue and suggest the name.
+2. The finance lead, working with the agent in the same session, tells it to use a new header on all LangChain documents.
+3. That night the curator reads the flag and the trace of the exchange with the finance lead. It updates the skills to use the new column and the new header.
+
+## Limits
+
+- One source, written by a vendor. LangChain sells the tooling the post mentions and invites readers to ask for help. The post reports no error rates, cost, or before-and-after comparison.
+- The source recommends starting small: "Start with one recurring workflow, inspect where agents struggle, and close that loop."
+- The curator reads raw sources, traces, and agent-written flags, then edits the instructions other agents follow. The post does not discuss the risk. A reasonable inference, not a claim from the source: treat flags and scraped documents as untrusted input to the curator, and have a person review its edits to skills before they go live.
+
+## Key Takeaways
+
+- Knowledge is the maintained, reusable understanding behind a task. Context is whatever the agent holds for one run.
+- The post lists three kinds to maintain: skills, domain knowledge, and data access guidance.
+- Give working agents a tool to report what is missing or wrong, with an optional suggested fix.
+- A background curator applies the fixes, and the working agents mainly report. The post's two reasons are the author's argument, with no measurement behind them.
+- The evidence is one vendor post with a single worked example and no metrics. Pilot it on one recurring workflow.
+
+## Related
+
+- [Evolving Playbooks](evolving-playbooks.md)
+- [Organizational Context Layer for Agents](organizational-context-layer.md)
+- [Discoverable vs Non-Discoverable Context](discoverable-vs-nondiscoverable-context.md)
+- [Memory Store Writer Ceiling](memory-store-writer-ceiling.md)
+- [Context Hub](context-hub.md)
 
 ---
 
@@ -28846,6 +28944,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Deferred Permission Pattern](deferred-permission-pattern.md) — Use PreToolUse hook defer decisions to pause headless Claude Code sessions at tool calls and resume them after out-of-band human approval
 - [Deny-Fallback Permissions for Unattended Agent Runs](deny-fallback-unattended-permissions.md) — Resolve the unanswerable permission prompt to deny on a host with no human, keeping the permission mode and rules deciding every other call
 - [Allowing One Skill to Run in Scheduled Tasks and /loop](unattended-skill-allow-rule.md) — Since Claude Code 2.1.325 a scheduled fire asks before running a skill that declares `allowed-tools` or hooks; one `Skill(name)` allow rule clears it for that skill
+- [Confirming Before an Agent Removes a Worktree With Unsaved Work](exitworktree-removal-confirmation.md) — Since Claude Code 2.1.327 `ExitWorktree` asks before removing a worktree that may hold unsaved work and is refused where nobody can answer unless an allow rule, auto or bypass permissions mode allows it; check `git status --porcelain` before your own scripts remove one
 - [Approver-Named Permission Answers](approver-named-permission-answers.md) — A `tool.check` answer that names who may approve the call instead of the verdict, so one declaration prompts a person on a laptop and refuses where nobody can be asked
 - [Action-Class Permission Gates Leave Task Fit and Reversibility to the Human](action-class-permission-gates.md) — A permission prompt names an action and a target, so whether it fits the task and whether it can be undone are supplied by the person answering it
 - [Permission Policy Binds Only at an Enforcement Point](permission-policy-enforcement-prerequisite.md) — A declared permission policy needs a component that can intercept the call, so VS Code 1.142 requires the Copilot harness in Agent Host and moves an existing Local chat there when you open it
@@ -28869,6 +28968,7 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Harness Impermanence](harness-impermanence.md) — Author agent scaffolding as depreciating capital — design for low cost of removal so native model capability can replace it cleanly
 - [Situated Harness Layers: Fix at the Layer That Owns It](situated-harness-layers.md) — An eight-layer model of what a harness manages, ordered by change cadence, so a fix lands on the layer that owns the problem rather than a faster one that cannot hold it
 - [Fleet Harness Attribution](fleet-harness-attribution.md) — Pin model and task, swap whole harnesses, and measure pass rate alongside input-token consumption across a model fleet to attribute outcomes to the harness layer rather than the model
+- [Gate a Default Harness Switch With Online and Offline Evals](shared-runtime-default-harness-eval-gates.md) — VS Code compared its Copilot harness with the Local harness online and offline, and the guide lists what a switch leaves behind
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — Pin the model, remove one harness subsystem at a time, measure the score drop — the resulting per-subsystem table ranks investment priorities
 - [Task Shape Decides What a Heavier Agent Harness Buys](task-shape-harness-payoff.md) — Harness gain shrinks with model strength on fixed-workflow issue repair and grows with it on open-ended repository work, with a measured per-component ledger
 - [Prompt-Only Baseline Before a Specialized Agent Subsystem](prompt-only-baseline-before-specialized-subsystem.md) — Measure a prompt-only agent loop before adopting a memory or self-improvement subsystem; it beat both on two benchmarks, but only where the loop exposes its prompt and history as code variables
@@ -36606,6 +36706,101 @@ The prompt shape GitHub prescribes mirrors the tier's weakness. Computer use "wo
 
 ---
 
+### Confirming Before an Agent Removes a Worktree With Unsaved Work
+Source: https://agentpatterns.ai/patterns/agent-design/exitworktree-removal-confirmation/
+
+# Confirming Before an Agent Removes a Worktree With Unsaved Work
+
+> Since Claude Code 2.1.327, `ExitWorktree` asks before it removes a worktree that may hold unsaved work. In don't-ask mode or with nobody to answer, the removal is refused unless an allow rule, auto mode or bypass permissions mode allows it.
+
+Claude Code 2.1.327 (November 17, 2026) "Changed `ExitWorktree` to ask before removing a worktree that may hold unsaved work; refused in don't-ask mode or with nobody to answer, unless an allow rule, auto or bypass permissions mode allows it" ([changelog 2.1.327](https://code.claude.com/docs/en/changelog#2-1-327)). The stakes are in the worktrees page: removing a worktree "deletes the worktree directory and its branch, along with all the work in them" ([worktrees](https://code.claude.com/docs/en/worktrees#clean-up-worktrees)).
+
+## The three outcomes
+
+The entry names three cases. The third row is my reading of the entry, not a quote.
+
+| Case | Outcome | Source |
+|---|---|---|
+| A person can answer | `ExitWorktree` asks first | "ask before removing a worktree that may hold unsaved work" |
+| Don't-ask mode, or nobody to answer | The removal is refused | "refused in don't-ask mode or with nobody to answer" |
+| An allow rule, auto mode or bypass permissions mode applies | The removal goes ahead (inference) | "unless an allow rule, auto or bypass permissions mode allows it" |
+
+The entry does not say whether auto mode's classifier still reviews the call, or whether an allow rule also skips the question when a person is present. The permissions reference says "Rules are evaluated in order: deny, then ask, then allow" ([permissions](https://code.claude.com/docs/en/permissions)), which fits the reading but does not name `ExitWorktree`.
+
+Don't-ask mode shows why the second row refuses and does not guess. In that mode Claude Code "auto-denies every tool call that would otherwise prompt you", though "a mod you installed can still approve some of those calls" ([permission modes](https://code.claude.com/docs/en/permission-modes)). A removal that needs an answer is refused, and I expect the worktree to stay on disk (inference). [Deny-fallback permissions](deny-fallback-unattended-permissions.md) covers the same trade for every tool.
+
+## What counts as unsaved work
+
+The 2.1.327 entry says "may hold unsaved work" and does not define it. The worktrees page describes what Claude checks when you exit an interactive worktree session: "changed or untracked files, uncommitted work inside checked-out submodules, and new commits" ([worktrees](https://code.claude.com/docs/en/worktrees#clean-up-worktrees)). When Claude Code "can't count the worktree's changes or can't inspect its submodule checkouts", the same page says it prompts instead of removing the worktree automatically.
+
+That section describes the exit dialog, not the tool. I expect the tool to apply the same checks (inference). The worktrees page as fetched on 2026-11-23 does not mention the `ExitWorktree` prompt.
+
+The tools reference disagrees on the surface. As fetched on 2026-11-23, its table lists `ExitWorktree` with "No" in the "Permission required" column ([tools reference](https://code.claude.com/docs/en/tools-reference)). Neither source says which is current, so test the prompt on your version before you rely on it.
+
+Two other entries show removal has more guards. 2.1.326 changed `ExitWorktree` to "refuse removing a worktree while a background subagent or shell command may still be running in it, unless Claude passes `discard_changes`" ([changelog 2.1.326](https://code.claude.com/docs/en/changelog#2-1-326)). 2.1.330 fixed `ExitWorktree` "deleting a worktree that another running Claude Code session was working in" ([changelog 2.1.330](https://code.claude.com/docs/en/changelog#2-1-330)).
+
+## Unattended runs
+
+A non-interactive run has nobody to answer. The worktrees page says `-p` runs "have no exit prompt, so Claude doesn't clean up their worktrees", and to remove one you run `git worktree remove` ([worktrees](https://code.claude.com/docs/en/worktrees#clean-up-worktrees)). For a worktree that a sweep kept, it adds `--force` "if the worktree has uncommitted changes or untracked files" ([worktrees](https://code.claude.com/docs/en/worktrees#worktree-locks-and-manual-removal)). Cleanup in those runs falls to your script, so the script needs its own check.
+
+Subagent worktrees follow a different rule. Claude Code removes one "automatically when the subagent finishes without changes", and a worktree with changes "stays on disk until the periodic sweep" can remove it "without losing work" ([worktrees](https://code.claude.com/docs/en/worktrees#isolate-subagents-with-worktrees)).
+
+Suppose you add an allow rule for `ExitWorktree` so an unattended run can clean up. The entry says an allow rule lets the removal through. I read that as a rule for the whole tool, because the entry does not say you can limit a rule to clean worktrees (inference). Pair the rule with a check that runs first.
+
+## Check before you remove
+
+Git already refuses the unsafe case. `git worktree remove` removes only "clean worktrees (no untracked files and no modification in tracked files)", and it "refuses to remove an unclean worktree unless --force is used" ([git-worktree](https://git-scm.com/docs/git-worktree)). The rule for your script is to never pass `--force`.
+
+Add a check so the script says why it stopped. `git status --porcelain` gives "an easy-to-parse format for scripts" that "will remain stable across Git versions" ([git-status](https://git-scm.com/docs/git-status)). By default `git status` shows untracked files, so empty output means nothing to report. The example below is mine, not Claude Code's check:
+
+```sh
+wt=../agent-task-1
+base=origin/main
+
+if [ -n "$(git -C "$wt" status --porcelain)" ]; then
+  echo "unsaved changes in $wt, keeping it" >&2
+  exit 1
+fi
+
+ahead=$(git -C "$wt" rev-list --count "$base"..HEAD)
+if [ "$ahead" -gt 0 ]; then
+  echo "$ahead commits in $wt not on $base, keeping it" >&2
+  exit 1
+fi
+
+git worktree remove "$wt"
+```
+
+`git rev-list --count` prints "a number stating how many commits would have been listed" ([git-rev-list](https://git-scm.com/docs/git-rev-list)). Pick the base that matches where you push. A branch that is pushed but not merged still counts against `origin/main`, so the script keeps its worktree. That errs on the safe side.
+
+`git status` lists ignored files only with `--ignored` ([git-status](https://git-scm.com/docs/git-status)). A local `.env` is usually ignored, and removal deletes the whole directory (inference from the worktrees page quote above). The changelog entry does not say whether Claude Code counts ignored files as unsaved work.
+
+Since 2.1.323, the macOS and Linux sandbox makes "`git worktree add`, `move` and `remove` now fail read-only" ([changelog 2.1.323](https://code.claude.com/docs/en/changelog#2-1-323)). If your agent runs this script through its sandboxed Bash tool, run it from the orchestrator instead (inference). [Worktree isolation](../../workflows/worktree-isolation.md) has the setup.
+
+## When this backfires
+
+- The prompt trains people to approve. If agents exit worktrees often, a person answers the same question many times. [Ask-everything policies](../anti-patterns/ask-everything-permission-policies.md) describe that failure. Keep the question for removals that fail your own check.
+- A broad allow rule or bypass mode removes the guard. The entry lists both as ways past the refusal. [Bypass permissions overriding an allowlist](../anti-patterns/bypass-permissions-overrides-allowlist.md) covers the wider risk.
+- Refusals leave worktrees behind. I expect a refused removal to keep the directory and its branch (inference), so unattended runs pile up worktrees until a person clears them.
+- The check misses unsaved work that git does not report as changes in the worktree, such as ignored files. The script above does not cover them.
+
+## Key Takeaways
+
+- `ExitWorktree` asks before removing a worktree that may hold unsaved work (2.1.327). In don't-ask mode, or with nobody to answer, the removal is refused.
+- An allow rule, auto mode or bypass permissions mode lets it through, on my reading of the entry. It does not say whether auto mode still reviews the call.
+- In `-p` runs Claude does not clean up worktrees, so your script owns removal. Check `git status --porcelain` and the commit count first, and never pass `--force`.
+- Test the prompt on your version. The tools reference, as fetched on 2026-11-23, lists `ExitWorktree` with "No" in its "Permission required" column.
+
+## Related
+
+- [Deny-Fallback Permissions for Unattended Agent Runs](deny-fallback-unattended-permissions.md) — what an unattended run does with a prompt nobody can answer
+- [Allowing One Skill to Run in Scheduled Tasks and /loop](unattended-skill-allow-rule.md) — the same ask-then-allow-rule shape for skills
+- [Worktree-Isolated Subagents and the Shared-Branch Guard](worktree-subagent-shared-branch-guard.md) — the 2.1.326 git refusal in isolated worktrees
+- [Worktree Isolation](../../workflows/worktree-isolation.md) — creating and removing worktrees for parallel agents
+- [Claude Code /batch and Worktrees](../../tools/claude/batch-worktrees.md) — the `EnterWorktree` and `ExitWorktree` tools
+
+---
+
 ### Container Operational Contracts for Durable Agent State
 Source: https://agentpatterns.ai/patterns/agent-design/container-operational-contracts-agent-state/
 
@@ -37058,6 +37253,7 @@ The error is caught before a single query runs.
 - [Cross-Vendor Competitive Routing](cross-vendor-competitive-routing.md)
 - [Agent Composition Patterns](../multi-agent/agent-composition-patterns.md)
 - [Convergence Detection in Iterative Refinement](../../loop-engineering/convergence-detection.md)
+- [A Separate Critic Over Completion-Time Self-Checking](../../verification/separate-critic-over-self-recheck.md) — a separate critic that also reads the execution trajectory beat a completion gate on Terminal-Bench
 
 ---
 
@@ -42884,6 +43080,81 @@ Snapshots solve the easier of two problems: "Snapshotting solves the state-resto
 - [Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State](delta-channels-checkpoint-storage.md) — the storage cost of keeping checkpoints once you are taking them.
 - [Rollback-First Design](rollback-first-design.md) — why a reliable undo path can delay diagnosis of the bug that caused the failure.
 - [Out-of-Workspace Writes as the Agent Backup Trigger](out-of-workspace-backup-trigger.md) — the same out-of-repository boundary, used to decide when to preserve state rather than when to branch.
+
+---
+
+### Gate a Default Harness Switch With Online and Offline Evals
+Source: https://agentpatterns.ai/patterns/agent-design/shared-runtime-default-harness-eval-gates/
+
+# Gate a Default Harness Switch With Online and Offline Evals
+
+> Gate a default-harness switch on a matched offline comparison and an online rollout comparison, and count token savings only beside completion.
+
+A default-harness switch replaces the runtime that every new agent session starts on. In November 2026 VS Code reported that the Copilot harness, built on the Copilot SDK, is now the default for new agent sessions, replacing its editor-specific Local harness. Copilot CLI, the GitHub Copilot app, and other Microsoft products share that runtime, so a fix to it benefits each client ([VS Code blog](https://code.visualstudio.com/blogs/2026/11/18/copilot-harness)). VS Code measured the switch online and offline. Its figures describe one vendor's migration, not a general rate for harness switches.
+
+## What the two comparisons measured
+
+Online: Copilot Business and Enterprise users on VS Code Stable in October. New chats defaulted to the Copilot harness in one group and the Local harness in the other. The Copilot-default group used 14.2% fewer tokens, 7.7% fewer model requests, and 9.6% lower estimated processing cost per active device. The post calls the cost reduction statistically significant ([VS Code blog](https://code.visualstudio.com/blogs/2026/11/18/copilot-harness)).
+
+Offline: task, model, and reasoning effort matched in each comparison, and repeated runs over multiple days produced 12,845 comparisons across the suites. The post tabulates one evaluation, 112 long DeepSWE tasks run across seven models, as overall results across the models:
+
+| Result | Local harness | Copilot harness |
+|---|---|---|
+| Runs ending in an error | 5.3% | 1.9% |
+| Runs that hung or crashed | 3.1% | 0.2% |
+| Task completion, counting errors as incomplete | 54.8% | 61.2% |
+
+Source: the [VS Code blog](https://code.visualstudio.com/blogs/2026/11/18/copilot-harness).
+
+## Why both comparisons
+
+The online numbers "describe resource use across varied day-to-day work, not repeated runs of the same task or how much work was completed" ([VS Code blog](https://code.visualstudio.com/blogs/2026/11/18/copilot-harness)). They show what real use costs and say nothing about completion. The offline runs hold task, model, and reasoning effort fixed, so a gap in errors or completion compares the two harnesses on the same work.
+
+A separate published evaluation of the shared runtime, Copilot CLI against model-provider harnesses on the same models and tasks, found fewer tokens in most tested configurations and broadly comparable task completion. The post adds that "lower token consumption is useful only when the agent still gets the work done" ([VS Code blog](https://code.visualstudio.com/blogs/2026/11/18/copilot-harness)). The method behind that comparison is in [Fleet Harness Attribution](fleet-harness-attribution.md).
+
+## How the rollout ran
+
+VS Code widened the default in steps: internally first, then across Copilot plans, VS Code Insiders and Stable, and editor and Agents-window workflows. At each step the team reviewed key metrics alongside user feedback. Tracked signals included successful turn completion, errors, cancellations, and latency, broken down by categories such as first request versus follow-up request. Sampled first requests "have shown room to improve latency", and the post lists that wait as continuing work after the switch ([VS Code blog](https://code.visualstudio.com/blogs/2026/11/18/copilot-harness)).
+
+## What the comparisons do not cover
+
+"Switching harnesses doesn't automatically migrate every customization" ([VS Code blog](https://code.visualstudio.com/blogs/2026/11/18/copilot-harness)). The [transition guide](https://code.visualstudio.com/docs/agents/run/move-to-copilot) lists what to check:
+
+| Check | What the guide says to verify |
+|---|---|
+| Prompt files | Convert recurring prompts to skills. Recheck agent, model, and tool choices the conversion does not keep. |
+| Hooks | Review supported events, script inputs and outputs, and failure behavior. Hooks have no automatic conversion. |
+| MCP servers | Verify configuration, authorization, tools, and sandbox behavior. Input prompts and stored editor secrets do not transfer automatically. |
+| Tool sets and chat participants | Replace Local-specific aliases and participant workflows with supported tools, agents, skills, or publisher integrations. |
+
+The guide also gives a before-and-after drill. Before the switch, pick a small task that already works in the Local harness and record its expected result, tools, customizations, and approvals. After it, run that task and check the actual edits, command results, and tests "rather than only the agent's summary" ([transition guide](https://code.visualstudio.com/docs/agents/run/move-to-copilot)).
+
+## Deadline and fallback
+
+The Local harness is deprecated, stays available during a three-month transition, and is removed in February 2027, unless your organization restricts its use ([VS Code blog](https://code.visualstudio.com/blogs/2026/11/18/copilot-harness)). Administrators can set `vscode.temporaryDefaultToLocalHarness` to keep it available. The Local harness cannot enforce Copilot runtime-only permission and sandbox controls, so the guide says an administrator must review and accept that gap before permitting fallback ([transition guide](https://code.visualstudio.com/docs/agents/run/move-to-copilot)).
+
+## When this backfires
+
+- The numbers are one vendor's. The online result covers one rollout comparison between two groups of Business and Enterprise users on Stable in October. The offline table covers one benchmark. Neither predicts another team's switch.
+- The cost figure is an estimate. The team computed it from token usage at the same model-specific rates for both groups, not from billing records, and it does not report AI credits charged ([VS Code blog](https://code.visualstudio.com/blogs/2026/11/18/copilot-harness)).
+- The post publishes no thresholds. It does not say what result would have paused the rollout, so the "gate" here is the pairing of evidence, not a published pass line.
+- The completion row counts errors as incomplete, so it is not independent of the error row. The post does not say how hung or crashed runs were scored.
+
+## Key Takeaways
+
+- Run an online group comparison and an offline matched comparison. The online run shows cost under real use, and the offline run shows errors and completion on fixed work.
+- Count a token or cost drop only beside task completion. VS Code's online figures say nothing about completion.
+- Match task, model, and reasoning effort in the offline comparison, as VS Code did, so a gap compares the harnesses on the same work.
+- Budget for customizations. Prompt files, hooks, MCP secrets, and chat participants do not convert on their own.
+- Set the deadline and the fallback policy before the old harness is removed. Fallback drops Copilot runtime-only controls.
+
+## Related
+
+- [Fleet Harness Attribution: Pinning the Model to Compare Whole Harnesses](fleet-harness-attribution.md) — the method behind the shared-runtime comparison against model-provider harnesses.
+- [Permission Policy Binds Only at an Enforcement Point](permission-policy-enforcement-prerequisite.md) — why a managed policy moves sessions to the Copilot harness, and what the Local opt-out does to it.
+- [Surface Switch or Harness Handoff: What Each Preserves](session-surface-switch-vs-handoff.md) — what a session keeps when it moves interface or harness.
+- [Client Version Metric Dip as Adoption Loss](../anti-patterns/client-version-metric-dip-as-adoption-loss.md) — a client release moved Copilot agent sessions to the Copilot SDK and changed what the usage metrics reported.
+- [Frozen Task Set Agent A/B Testing](../../workflows/frozen-task-set-agent-ab-testing.md) — freeze a small task set so the offline half of a harness comparison stays repeatable.
 
 ---
 
@@ -62925,6 +63196,7 @@ The first refuses Write, Edit and NotebookEdit past the boundary in every mode. 
 - [Judging a Write by Its Spelled Path (Spelled-Path Scope)](../anti-patterns/spelled-path-permission-scope.md) — why a path-string check and the filesystem can disagree about where a write lands
 - [Dual-Boundary Sandboxing: Filesystem and Network Isolation](../../security/dual-boundary-sandboxing.md) — the OS-level enforcement this key defers to for subprocess writes
 - [Deny-Fallback Permissions for Unattended Agent Runs](deny-fallback-unattended-permissions.md) — what decides a call on a host where no prompt can be answered
+- [One-Way Settings: Keys With a Fixed Write Direction](../../security/one-way-settings.md) — the sibling Claude Code settings pattern: a key that accepts writes in one direction only
 
 ---
 
@@ -69021,6 +69293,7 @@ CORE_TOOLS = [stable_tool_schema(t) for t in load_core_tools()]
 - [Disable Attribution Headers to Preserve KV Cache in Local Inference](../../context-engineering/kv-cache-invalidation-local-inference.md)
 - [MCP: The Open Protocol Connecting Agents to External Tools](../../standards/mcp-protocol.md)
 - [Filesystem-Based Tool Discovery](../../tool-engineering/filesystem-tool-discovery.md)
+- [Mid-Session Config Changes as Invisible Cache Invalidators](mid-session-config-cache-invalidators.md) — the other prompt-cache break: switching model, effort, or MCP servers mid-session
 
 ---
 
@@ -100733,7 +101006,7 @@ If `$ARGUMENTS` is not present in the skill body, arguments are appended as `ARG
 
 Setting both `user-invocable: false` and `disable-model-invocation: true` leaves the skill unreachable. The skill is then hidden from `/` and from Claude's automatic loading. Use one or the other.
 
-`model` overrides are skill-scoped. The session model resumes after the skill completes.
+A `model` override lasts for the rest of the current turn and is not saved to settings. The session model resumes when you send your next prompt ([skills reference](https://code.claude.com/docs/en/skills.md#frontmatter-reference)). From v2.1.330, when Claude runs the skill, the override leaves subagents, forks, compaction and `/recap` on the session model, except for `context: fork` skills. See [Claude Code Skill Model Override: What Stays on Session](../tools/claude/skill-model-override-scope.md).
 
 ## Key Takeaways
 
@@ -107929,6 +108202,7 @@ As agents author more pull requests, review tooling is moving toward the surface
 - [Agent Approval Authority in Code Review](agent-approval-authority.md) — Once an admin enables it, an AI reviewer's approval satisfies the required-approvals rule; the two conditions that decide where the human gate belongs
 - [Agent-Resolved Review Threads](agent-resolved-review-threads.md) — A reviewing agent that closes its own threads costs you nothing unless you gated merge on conversation resolution or measured precision from resolve clicks
 - [Configuring the Code Review Request Surface](review-request-surface.md) — Whether an agent review runs is a branch ruleset, how deeply it reads is a per-scope dropdown, and whether it can approve is a policy with a file-glob list; three knobs that scope by different things
+- [Copilot Adaptive Review Effort and Secret Detection](copilot-adaptive-review-effort-secret-detection.md) — Copilot picks Lite, Balanced, or Max per pull request within a maximum, and flags secrets in review comments; both are in preview
 
 ---
 
@@ -110052,6 +110326,100 @@ What is left is the Reviewers menu, where the person opening the pull request pi
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — silence as a valid review output, the same volume argument at the comment level
 - [Agent Approval Authority in Code Review](agent-approval-authority.md) — the third knob in the table, covered on its own terms
 - [Team-Scoped Agent Policy Delegation](../security/team-scoped-policy-delegation.md) — the neighboring governance object: which Copilot managed-settings keys a team may override
+
+---
+
+### Copilot Adaptive Review Effort and Secret Detection
+Source: https://agentpatterns.ai/code-review/copilot-adaptive-review-effort-secret-detection/
+
+# Copilot Adaptive Review Effort and Secret Detection
+
+> Copilot code review can pick its own effort level for each pull request and flag exposed secrets in review comments, both in public preview.
+
+Adaptive is a Copilot code review effort setting. Copilot reads each pull request's complexity and risk, then reviews it at Lite, Balanced, or Max. Secret detection is a separate review feature that flags exposed credentials in review comments. GitHub announced both on 2026-11-17, and the changelog lists them for Copilot Pro, Pro+, Max, Business, and Enterprise plans ([GitHub Changelog, 2026-11-17](https://github.blog/changelog/2026-11-17-copilot-code-review-adaptive-effort-secret-detection-and-more/)).
+
+Adaptive sets how hard the reviewer reads. Secret detection adds one more thing it looks for. Neither replaces a check you run yourself.
+
+## How Adaptive picks a level
+
+Before Adaptive, someone chose the level in settings or when requesting the review. The changelog gives two examples: a documentation update may need only Lite, and a change to authentication logic benefits from Max. Adaptive makes that choice, and each review shows which level it picked ([GitHub Changelog](https://github.blog/changelog/2026-11-17-copilot-code-review-adaptive-effort-secret-detection-and-more/)).
+
+| Level | What GitHub says it does | Typical range per review | Approximate average |
+|-------|--------------------------|--------------------------|---------------------|
+| Lite | Standard review, fast and targeted | $0.05 to $1 | $0.25 |
+| Balanced | Higher-reasoning model for complex logic, security-sensitive code, and cross-service changes | $0.25 to $5 | $1.50 |
+| Max | Multiple high-reasoning models, for the pull requests that need the most scrutiny | $1.50 to $25 | $10 |
+
+Source: [GitHub Docs: GitHub Copilot code review](https://docs.github.com/en/copilot/concepts/agents/code-review). The figures are GitHub's estimates in USD, and they exclude GitHub Actions minutes.
+
+You pick Adaptive for one pull request from the Reviewers bar, or set it as the default in personal, repository, organization, or enterprise settings. Balanced remains the default ([GitHub Changelog](https://github.blog/changelog/2026-11-17-copilot-code-review-adaptive-effort-secret-detection-and-more/)). The docs say the same: "the review effort level defaults to Balanced, not Adaptive" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/code-review)). The pull request overview comment shows the level used for each review run (same page).
+
+## The maximum caps Adaptive
+
+Adaptive "never picks a level above the maximum review effort level set for your enterprise, organization, or repository" ([GitHub Changelog](https://github.blog/changelog/2026-11-17-copilot-code-review-adaptive-effort-secret-detection-and-more/)). The "Maximum review effort" setting takes No limit, Lite, Balanced, or Max. At organization and enterprise scope, lower scopes cannot exceed it ([GitHub Docs: Configuring code review](https://docs.github.com/en/copilot/how-tos/copilot-on-github/set-up-copilot/configure-code-review)).
+
+Two consequences follow, and both are inference from those statements. The maximum is also the most expensive tier an Adaptive default can bill at. A maximum of Lite makes Adaptive behave as Lite on every pull request.
+
+## What GitHub leaves unstated about Adaptive
+
+The changelog and the two Docs pages cited here name "complexity and risk" as the inputs. They give no signals, thresholds, or per-level bug-discovery rates. They show which level ran, not why. Both Adaptive and Max are marked "in public preview and subject to change" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/code-review)).
+
+You therefore cannot predict a level from a diff. You can audit after the fact by reading the overview comments. [Tunable Effort Levels for Code Review Agents](tunable-review-effort.md) covers why a level without a published curve is a weak basis for routing.
+
+## Secret detection in reviews
+
+Copilot code review "points out exposed credentials in review comments, so you can remove them before you merge" ([GitHub Changelog](https://github.blog/changelog/2026-11-17-copilot-code-review-adaptive-effort-secret-detection-and-more/)). GitHub describes two detection types:
+
+- Known formats. 500+ secret types, built with 150+ partners in the secret scanning partnership program, found by deterministic methods such as regex.
+- AI/ML-detected secrets. Secrets with no recognizable format, found with LLMs and GitHub's purpose-built secret model.
+
+To turn it on, open repository or organization settings, then Copilot, then Code review (same changelog).
+
+### Where it sits next to push protection
+
+Push protection acts before the push, and a person must handle everything after it ([Push-Boundary Secret Defense](../security/push-boundary-secret-defense-agent-volume.md)). A review comment arrives later, on a pull request that already holds the commit. That ordering is an inference: the changelog does not say when in the flow the check runs.
+
+The inference changes what the finding means. GitHub's secret scanning docs say to rotate an exposed credential immediately, and that removing it from Git history is time-intensive and often unnecessary once it is revoked ([GitHub Docs: Secret scanning](https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning)). Treat a review finding as an exposure to rotate. Deleting the line does not undo it.
+
+### What the changelog does not say
+
+- It gives no precision or recall figures, for either detection type.
+- It does not say whether a finding creates a secret scanning alert, notifies the provider, or blocks a merge. Copilot's reviews "do not count toward required approvals" by default ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/code-review)), and nothing cited here makes a flagged secret a merge gate.
+- It calls part of the approach "non-deterministic". An inference follows: the same diff may not yield the same finding on every run, so a clean review does not clear a pull request.
+- It lists Copilot plans and does not mention GitHub Secret Protection. The secret scanning docs say private and internal organization repositories get secret scanning with Secret Protection enabled ([GitHub Docs: Secret scanning](https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning)). Check which applies to your plan.
+
+## What your own checks still cover
+
+- A deterministic secret scan before commit or in CI. [Deterministic Guardrails](../verification/deterministic-guardrails.md) lists secret detection as a pre-commit check.
+- Push protection, which acts before the push.
+- Path-based human escalation for high-risk code. Adaptive's idea of risk is undocumented, so [tiered code review](tiered-code-review.md) rules on auth and payment paths stay yours.
+- A rotation runbook for the finding that does land in a review comment.
+
+## Example
+
+An organization owner sets "Default review effort level" to Adaptive and "Maximum review effort" to Balanced, both settings named in GitHub's configuration docs. Copilot now chooses between Lite and Balanced for each pull request and never picks Max. If Adaptive picks Lite for a documentation fix, its cost falls in the $0.05 to $1 range. The cap has a cost: the changelog's own example says an authentication change benefits from Max, and under this cap it gets Balanced at most. The owner raises the maximum, or adds a human reviewer on the auth paths.
+
+## When this backfires
+
+- The cap sits below what the risky code needs. The example above shows it.
+- The preview moves. Both features are "subject to change", so a policy written around today's behavior can break silently.
+- Cost becomes variable. A fixed Balanced default has one cost range. An Adaptive default spreads across up to three.
+- A quiet secret check reads as clearance. Without published recall, silence in a review proves nothing about the diff.
+
+## Key Takeaways
+
+- Set the maximum review effort before turning on Adaptive. It caps the level Adaptive can pick, and by inference the cost tier it can bill at.
+- Adaptive shows which level ran and gives no reason, so audit by sampling overview comments.
+- Treat a secret finding in a review as an exposure to rotate. The finding most likely arrives after the commit is on the pull request branch, though the changelog does not say when the check runs.
+- Keep a pre-commit scan and push protection. The changelog publishes no recall figure for review-time detection.
+
+## Related
+
+- [Tunable Effort Levels for Code Review Agents](tunable-review-effort.md) — the per-PR dial, Cursor's and Copilot's earlier effort levels
+- [Configuring the Code Review Request Surface](review-request-surface.md) — where the effort level is set and who pays for it
+- [Tiered Code Review](tiered-code-review.md) — risk-based escalation to human review
+- [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — why a quiet reviewer can mislead
+- [Push-Boundary Secret Defense](../security/push-boundary-secret-defense-agent-volume.md) — the push-time block and rotation queue
 
 ---
 
@@ -113062,6 +113430,7 @@ Source: https://agentpatterns.ai/verification/
 - [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — Plant deterministic bugs and check that captured signals lead an agent to the responsible layer — if they don't, the gap is in the instrumentation, not the bug
 - [LLM API Fault Injection at the HTTP Layer (AgentChaos)](llm-api-fault-injection-http-layer.md) — Corrupt named LLM response fields at the HTTP client to score agent robustness; the ranking tracks architecture across all four backbones, and truncation is the fault diagnosis misses at 4.3% accuracy
 - [Handoff-Boundary Fault Injection (llmmas-otel)](handoff-boundary-fault-injection.md) — Delay a message between two agents and diff the faulted trace against a structurally aligned baseline; the amplification it reports is heavy-tailed runtime, reading 59.2 mean against 6.6 median on ChatDev
+- [The Chaos Loop: Hardening a Launch With Injected Faults](agent-driven-chaos-loop.md) — An agent breaks a staging service on purpose, reads the telemetry, and ships fixes; one team reported 60 server errors in 2 billion launch requests, with no launch without the loop to compare
 - [Recovery as a Separate Eval Axis (UndoBench)](recovery-as-separate-eval-axis.md) — Pair every faulted run with an identical-seed control and report recovery only over pairs whose control passed; nominal success read 83.54% against 46.72% conditional recovery, and one fixed method moved 56.96 pp across fault boundaries
 - [Behavior-Partitioned Security Tests as Executable Specs](behavior-partitioned-security-tests.md) — Split security cases by attack mechanism, show one set to the model as its spec, and hold the rest out; showing tests upfront lifts joint success 19.3 pp but raises the visible-pass-but-hidden-fail rate from 5.6% to 18.8%
 - [Route-Parity Auditing of Agent Safeguards](route-parity-safeguard-auditing.md) — Audit safeguards by protected asset rather than by interface, then test that each route's check fails when its control is removed; route inconsistency was coded in 152 of 157 surveyed agent projects
@@ -113128,6 +113497,7 @@ Source: https://agentpatterns.ai/verification/
 - [Evidence-Chain Run Logs: Bracket the Reported Symptom](evidence-chain-run-logs.md) — Pair every agent tool call with its actual result and bracket the change with one machine-readable measurement of the reported symptom, taken identically before and after — a gate, never a signal the agent iterates against
 - [Evidence-Bundled Agent PRs: Sizing the Reviewer's Effort](evidence-bundled-agent-prs.md) — Attach the reproduction, failing probe, and executed test the agent already ran so a reviewer picks a depth per change; the artifacts carry the value, and the agent's own risk grade carries none
 - [Claim-to-Evidence Trace Graphs for Auditing Agent Runs](claim-to-evidence-trace-graphs.md) — Rebuild a finished session as a layered graph with typed edges so a reviewer traverses backward from a claim to its artifacts and checks; the record layer is deterministic, the graph above it is inferred
+- [Check Coding Agent Work Reports Against the Work Record](check-agent-work-reports-against-records.md) — 162 of 435 sampled coding-agent reports (37.24%) held an unfaithful claim; four claim types, one acceptance question each, and a taxonomy-guided detector scored against the authors' own annotations
 - [Post-Merge Fix Signals for Agent Merges](post-merge-fix-signals-agent-merges.md) — Agent merges draw a verified follow-up fix at 1.62 times the odds of human merges in the same repositories; watch the first week and rank by the commits it took to land, because review duration carries no within-repository effect
 - [Name the Check That Passed Before Accepting AI Code](named-check-over-evaluation-confidence.md) — Across 506 coded accounts of AI use in research code, evaluation confidence tracked trust in the tool (r=.33) rather than the checks actually run (r=.05), so gate acceptance on a recorded check instead
 - [Reject on a Failing Check, Never Accept on a Passing One](asymmetric-check-evidence.md) — After a fail-on-base check, a generated test still failing on an agent's patch rejected it at 0.82 precision in the test stage of a 121-trace held-out Python run, while the same test passing accepted at only 0.30, so give the reject arm a mechanical decision and the accept arm none
@@ -113167,6 +113537,7 @@ Source: https://agentpatterns.ai/verification/
 - [Verification Capacity as the Agent Quality Ceiling](verification-capacity-quality-ceiling.md) — Agent generation scales with compute and verification throughput does not; measure the two rates and pick deliberately between scaling verification, throttling generation, and lowering the bar
 - [Verification Capacity Saturation: Three Levers, One Default](verification-capacity-saturation.md) — When changes arrive faster than a gate clears them, a genuinely saturated station admits only three responses, and a gate that degrades rather than blocks picks the third on its own
 - [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — Gate an agent's PR on the coverage of its changed lines, not the whole-repo percentage, because agents test under half of code-touching PRs and existing suites cover a minority of what they change
+- [Metrics-in-the-Loop: Complexity Feedback for Coding Agents](metrics-in-the-loop-complexity-feedback.md) — Inject a changed-function complexity report after each code-changing turn; in one four-model study it lowered erosion with no detectable per-model correctness change
 - [Deterministic Guardrails Around Probabilistic Agents](deterministic-guardrails.md) — Wrap agent output in hard, deterministic checks — linting, schema validation, CI gates — that enforce correctness regardless of what the agent produces
 - [Replacing the LLM Filter Stage With a Fine-Tuned Classifier](fine-tuned-classifier-over-llm-filter-stage.md) — GitHub's new secret scanner pairs regex candidate generation with a fine-tuned ModernBERT classifier; every figure it publishes is relative to its own previous LLM pipeline, and none is absolute
 - [Verification as a Tool, Not an Instruction](tool-provided-verification.md) — Prompting an agent to verify its answer moved reference-based checking from 19% to 22%; a callable scoring tool roughly tripled that share at every prompt level, and improved score and calibration with it
@@ -113281,6 +113652,7 @@ The context result splits by benchmark. On Terminal-Bench the two trajectory des
 - [Incremental Verification: Check at Each Step, Not at the End](incremental-verification.md) — the mid-run layer this comparison measures as a modest, model-dependent gain
 - [Evaluator-Optimizer Pattern for AI Agent Development](../patterns/agent-design/evaluator-optimizer.md) — the generator-and-critic loop as a general structure
 - [Judge a Technique Against a Budget-Matched Best-of-n Baseline](budget-matched-best-of-n-baseline.md) — A reviewer agent did not beat best-of-n on code-quality measures at matched calls in one study; the control to run on your own tasks.
+- [Critic Agent Pattern: Dual-Model Plan Review](../patterns/agent-design/critic-agent-plan-review.md) — a second model reviews the plan before execution begins
 
 ---
 
@@ -114323,6 +114695,7 @@ The audit carries one confound of its own: its Gemini endpoint differs from the 
 - [Frozen Task Sets for Affordable Agent A/B Testing](../workflows/frozen-task-set-agent-ab-testing.md) — selecting the few tasks whose single run still tracks the full score, and what that instrument cannot resolve.
 - [Action-Class Decomposition for Tool-Calling Evals](action-class-decomposition-tool-calling-evals.md) — the per-class gap these floors have to clear before it counts as a finding.
 - [Cross-Day Config Comparisons Under an Injected Date](../patterns/anti-patterns/cross-day-config-comparisons.md) — a third arm neither floor samples, because rerunning on the same day cannot move it.
+- [LLM-Driven Benchmark Auditing](llm-benchmark-auditing.md) — have an LLM audit a benchmark's specs, fixtures, and grading scripts before you trust its scores
 
 ---
 
@@ -116363,6 +116736,112 @@ The same draft contains an `import polars as pl` line. Do not route this through
 - [Pre-Completion Checklists](pre-completion-checklists.md) — Stop-gate that can host factored verification as one of its steps.
 - [Incremental Verification](incremental-verification.md) — External-oracle pattern (run tests after each change) that displaces CoVe for behavior claims.
 - [Verification as a Tool, Not an Instruction](tool-provided-verification.md) — Why a callable checker shifts verification behavior where a prompt instruction barely does.
+
+---
+
+### Check Coding Agent Work Reports Against the Work Record
+Source: https://agentpatterns.ai/verification/check-agent-work-reports-against-records/
+
+# Check Coding Agent Work Reports Against the Work Record
+
+> 162 of 435 sampled coding-agent work reports (37.24%) held at least one unfaithful claim, so check the report against the record.
+
+An unfaithful work report contains a false or unsupported claim about the agent's own actions and results. Yang et al. studied real developer-agent sessions from SWE-chat, a corpus of public-repository sessions that developers chose to log with the Entire CLI ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)). In their cases, genuine edits, checks, and pushes could coexist with an inaccurate claim. Evidence that the work happened did not establish what the report said about it.
+
+## How common
+
+The authors sampled 500 sessions, kept one complete report per session where available, and retained 435 after scope review. One author annotated each report against its pre-report trajectory and another verified the annotation. 162 reports (37.24%) contained at least one unfaithful claim: 62 had one, 43 had two, and 57 had three or more ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)).
+
+The authors call this "a description of the sampled reports based on our annotations, not a corpus-wide prevalence estimate". SWE-chat draws on early-adopter developers in public repositories, and the paper leaves enterprise settings untested ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)).
+
+## Four kinds of unfaithful claim
+
+The taxonomy comes from 339 claims that a user challenged and the agent then admitted were inaccurate or unsupported. A claim counts once per applicable subtype and category, so the shares sum to more than 100% ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)).
+
+| Category | Claims | Subtypes (claims) | Case from the paper |
+|---|---|---|---|
+| Overstated task success | 235 (69.3%) | completeness (110), condition handling (71), intermediate results as functional proof (56) | The agent passed 225 provider tests, pushed a branch, and reported "Done". The push went to a different branch than the one the pull request tracked. |
+| Misreported observations | 45 (13.3%) | wrong quantity, falsely reported action, unwarranted verdict | A command filtered Biome output to "Checked 236 files in 144ms. No fixes applied." and the report said "All clean". |
+| Faulty technical explanations | 42 (12.4%) | unsupported cause (25), incorrect rule (17) | A report asserted that a media-stream API "doesn't carry audio data"; the observations did not isolate that component as the cause of silence. |
+| Misattributed evidence | 28 (8.3%) | source (3), object (13), artifact state (12) | The report said production was "deployed and healthy"; the healthy promotion result named an older commit. |
+
+Frequencies describe analyzable problem claims. Another 56 of the 395 collected claims stayed unresolved because the records did not establish the work state, and challenged-and-admitted cases favor discrepancies someone noticed ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)).
+
+## What a challenge costs
+
+Across the traced cases, handling a challenged claim averaged 4.29 further user turns (median 3, 90th percentile 9) and 12.71 minutes of recorded response and execution time (median 5.57, 90th percentile 32.31). 40.28% of 849 sampled user messages from these cases (342) were labeled dissatisfied, against 17.90% of 849 messages (152) sampled from other SWE-chat sessions. Excluding first challenges, 30.71% still were ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)).
+
+Recorded time includes waits and does not measure human labor. An LLM generated the first emotion labels and the authors reviewed them. The paper states that its records do not isolate the effect of reporting problems on task completion ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)).
+
+## Acceptance questions
+
+The authors list these as proposed checks, one question per category ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)).
+
+| Claim type | Ask | Inspect |
+|---|---|---|
+| Overstated task success | Which required outcome and operating conditions have been established? | The required work, the conditions exercised, the verification still open |
+| Misreported observations | What action, quantity, or verdict does the record show? | The full inventory or check result, including diagnostics |
+| Misattributed evidence | Does this evidence belong to the named source, artifact, and revision? | Source location, commit and delivery destination, pull request head or deployed revision |
+| Faulty explanations | What supports this rule or cause? | The applicable code or output, and checks that separate candidate causes |
+
+They advise matching depth to the decision: concentrate on claims that determine what is accepted, merged, deployed, or built upon ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)).
+
+## Make the report carry its evidence
+
+The authors propose that a completion or functional claim name the artifact or revision it concerns, the conditions under which it was checked, the record that supports it, and what remains unverified. For work that changes hands, progress records should store established outcomes with their evidence and list pending checks separately. The paper calls these design proposals whose effect on recipients' decisions "remains to be tested" ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)).
+
+**Before** — report claims more than the check covered:
+
+```text
+Standalone initialization test with a mock client passed in 19 ms.
+Report: the plugin "should start normally."
+Outcome: the user's immediate retry still hung.
+```
+
+**After** — the authors' suggested rewrite for the same case:
+
+```text
+Standalone initialization with a mock client completed in 19 ms.
+Startup in OpenCode remains to be checked.
+```
+
+## Detecting unfaithful claims automatically
+
+FaithDetector uses the taxonomy to guide its checks. It receives a complete report and its pre-report trajectory, extracts checkable claims, compares them with the records, and returns Faithful or Unfaithful judgments with excerpts, evidence, and reasons. The baseline used the same model with the single request "Can you find any unfaithful claims in the report?" and no taxonomy ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)).
+
+On 2,356 determinate claims from 409 naturally sampled reports (419 entered the comparison before exclusions), scored per claim against the authors' own annotations ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)):
+
+| Method | Macro-F1 | Unfaithful-claim precision | Unfaithful-claim recall |
+|---|---|---|---|
+| FaithDetector | 93.06% | 90.93% | 86.98% |
+| Baseline | 80.42% | 78.75% | 59.71% |
+
+The macro-F1 gap is 12.64 points (95% confidence interval 9.71 to 15.49). Limits the authors state:
+
+- Annotations and output matching "may share errors with the detector", and the comparison does not isolate the effect of the taxonomy.
+- FaithDetector flagged a report that `npm install` generated `package-lock.json` because no later check confirmed the file. The annotation accepted that claim as a normal side effect.
+- Optimizing against an imperfect detector "may teach agents to evade it".
+- The detector is decision support. Reviewers keep authority over deployment, security sign-off, and operational readiness.
+
+## Scoring reports apart from outcomes
+
+For evaluation design, the authors suggest scoring task credit and reporting faithfulness separately. Their proposed design holds the work records fixed and compares an overstated, a faithful, and an over-hedged report: task credit stays identical, and only the reporting score separates them. The over-hedged condition matters because rewarding only the absence of false claims favors omission. A faithful correction keeps the supported work and flags the rest. The paper proposes this design without evaluating it, and states that whether claim-level feedback improves faithfulness without reducing task progress "remains to be tested" ([Yang et al., arXiv:2611.25760v1](https://arxiv.org/abs/2611.25760v1)).
+
+## Key Takeaways
+
+- Passing tests, a real push, and a healthy service coexisted with unfaithful claims in the paper's cases, so a green signal does not vouch for the report that cites it.
+- Open the record before the report on any claim that gates a merge, deploy, or handoff, and ask the category's question first.
+- Check the target of the evidence: the named artifact, branch, commit, and conditions, not only whether a check ran.
+- Give a detector the pre-report trajectory, expect false alarms where your annotation rules accept an inference, and keep a human on deployment and security calls.
+- Treat the 37.24% figure as a sample from early-adopter public repositories. Measure your own reports before you size the review budget.
+
+## Related
+
+- [Completion Summary as the Oversight Surface](../patterns/anti-patterns/completion-summary-as-oversight-surface.md) — how little of a run the summary references, on the same SWE-chat corpus
+- [Post-Failure Evidence Contracts for Tool-Using Agents](post-failure-evidence-contract.md) — a four-field report contract tested against false success after a visible tool failure
+- [Claim-to-Evidence Trace Graphs for Auditing Agent Runs](claim-to-evidence-trace-graphs.md) — a review layer that walks from a claim back to its evidence
+- [Coding-Agent Misalignment Forms (Seven-Symptom Taxonomy)](../patterns/anti-patterns/coding-agent-misalignment-forms.md) — inaccurate self-reporting as one of seven forms of developer pushback
+- [Agent-Generated Verification Reports: A Structured Round-Trip for Human Review](agent-generated-verification-report.md) — a report format that routes the reader to the executed check
 
 ---
 
@@ -121758,6 +122237,7 @@ Two designs remove a violation rather than catch it: "putting evaluation labels 
 - [Protecting the Test Oracle From the Agent](../patterns/agent-design/protect-the-oracle-from-the-agent.md) — the permission-level version: deny the agent write access to what decides correctness.
 - [Reliability of an Automatically Selected Agent Harness](../patterns/agent-design/harness-selection-reliability.md) — what a pick from a noisy search is worth in the unlucky case.
 - [Use pass@k and pass^k to Separate Agent Capability from Consistency](pass-at-k-metrics.md) — what repeated attempts measure when the outcome is pass or fail.
+- [Judge a Technique Against a Budget-Matched Best-of-n Baseline](budget-matched-best-of-n-baseline.md) — score a technique against best-of-n at the same call budget
 
 ---
 
@@ -124027,6 +124507,7 @@ The same paper's deployment on ScienceAgentBench produced 12 author-confirmed is
 - [Answer-Reachable Eval Environments](../patterns/anti-patterns/answer-reachable-eval-environments.md) — the defect an artifact audit misses, where the leak is in the container the agent runs in
 - [State-Integrity Checks for an Eval Oracle](oracle-integrity-checks-eval-harness.md) — the deterministic counterpart, which asserts what the grading function does to the state it grades rather than reading the artifacts
 - [Specification-Oracle Gap Audits for Test-Graded Evals](specification-oracle-gap-audit.md) — the same artifacts audited statically and without model calls, for names the tests need and the task text never states
+- [Audit the Noise Floor Before Trusting a Benchmark Gap](benchmark-noise-floor-audit.md) — measure the rewording and rerun noise floors under a benchmark score
 
 ---
 
@@ -124628,6 +125109,7 @@ The three conditions above invert cleanly: an aggregate readout, or separations 
 - [Recover the Six Measurement Choices Behind an Attack Success Rate](asr-comparability-audit.md) — the oracle choice as one of six axes that make two published security numbers incomparable
 - [Typed Judge Scorers and the Cost of Each Extra Label](typed-judge-scorers.md) — the return shape to replay, where the label count sets both the alignment and the coverage cost
 - [Cross-Day Config Comparisons Under an Injected Date](../patterns/anti-patterns/cross-day-config-comparisons.md) — a candidate explanation for a next-day replay drifting, if the judge's surface injects the date
+- [Deciding an Agent Upgrade on a Frozen Judge's Verdict](../patterns/anti-patterns/frozen-judge-release-decisions.md) — a frozen judge's verdicts also shift with the agent version that wrote the trajectory
 
 ---
 
@@ -124782,6 +125264,108 @@ There is also a floor case the measurement itself reveals: if the best judge you
 - [Behavior Specs: Grading the Trajectory, Not the Result](behavior-specs.md) — a written standard a judge grades trajectories against, which only pays off once that judge has been meta-evaluated.
 - [Mutation Testing for LLM Judges: Scoring an Evaluator on Injected Defects](mutation-testing-llm-judges.md) — the label-free screening proxy to reach for when the human labels this page depends on are the cost you cannot pay.
 - [Contract-Domain Tracing for Rubric Credit](contract-domain-tracing-rubric-credit.md) — the complement that executes the requirement behind a criterion, catching defects every judge in a panel scores as passing.
+
+---
+
+### Metrics-in-the-Loop: Complexity Feedback for Coding Agents
+Source: https://agentpatterns.ai/verification/metrics-in-the-loop-complexity-feedback/
+
+# Metrics-in-the-Loop: Complexity Feedback for Coding Agents
+
+> A short complexity report after each code-changing turn lowered erosion in agent-written code, and the study found no detectable change in held-out correctness.
+
+Metrics-in-the-loop (MITL) measures the code an agent has just changed and puts a short report into the agent's context before its next turn. The complexity report names changed functions whose cyclomatic complexity exceeds a limit. The coverage report names changed lines that the agent's own tests skip. The agent can then refactor or add tests before it builds on the weak code. The method needs no training, no reference solution and no access to held-out tests ([arXiv:2611.23817v1](https://arxiv.org/abs/2611.23817v1)).
+
+## How the loop works
+
+After each turn that changes a file, the study's harness saves a snapshot, measures the changed functions, and appends one message before the next model call ([arXiv:2611.23817v1](https://arxiv.org/abs/2611.23817v1)).
+
+- The complexity report lists changed functions with cyclomatic complexity above 6, highest first, and asks the agent to bring them under the limit.
+- The coverage report comes from rerunning the agent's own tests. It lists changed functions with added or edited lines that no test executes. The target is zero uncovered changed lines.
+- Complexity comes from [lizard](https://github.com/terryyin/lizard) and is cached by file content, so a turn re-parses only the files it changed.
+
+Every arm that received a message got the same feedback instructions: simplify nested control flow, extract named helpers, and keep the tests passing. A reminder arm (R) got those instructions with no measurements. That control separates the effect of the numbers from the effect of being told to tidy up ([arXiv:2611.23817v1](https://arxiv.org/abs/2611.23817v1)).
+
+## What the study found
+
+Four models (DeepSeek V4.1 Flash, GLM-5.3 Flash, Claude Haiku 5.5, GPT-6 Luna) ran three long-horizon Python benchmarks: Commit0, SlopCodeBench and SWE-EVO. The headline metric is erosion, the share of complexity mass in functions with cyclomatic complexity above 10 ([arXiv:2611.23817v1](https://arxiv.org/abs/2611.23817v1)).
+
+Complexity feedback, alone (C) or with coverage feedback (CT), lowered final erosion against the reminder arm for all four models on Commit0 and SlopCodeBench, with every interval excluding zero. On SWE-EVO every estimate was lower, but only two of four models' intervals excluded zero under project clustering. Values below are erosion under the reminder arm and the paired change for CT.
+
+| Model | Commit0: reminder | Commit0: CT minus R | SlopCodeBench: reminder | SlopCodeBench: CT minus R |
+|---|---|---|---|---|
+| DeepSeek | 0.251 | -0.070 | 0.430 | -0.433 |
+| GLM | 0.231 | -0.096 | 0.530 | -0.504 |
+| Haiku | 0.122 | -0.054 | 0.046 | -0.045 |
+| Luna | 0.311 | -0.261 | 0.696 | -0.687 |
+
+The paper notes that absolute effects on SlopCodeBench differ fifteenfold across models, yet every model "removes nearly all erosion present under the reminder arm" ([arXiv:2611.23817v1](https://arxiv.org/abs/2611.23817v1)). Its pooled estimates are post hoc.
+
+Correctness showed no detectable change. Every per-model interval for CT minus R on held-out correctness includes zero. On Commit0 the change runs from -2.3 points (Haiku) to +4.7 (GLM), and the pooled change is +3.1 [-0.1, +6.3]. On SlopCodeBench it runs from -5.8 (Haiku) to 0.0 (GLM), and the pooled change is -1.7 [-3.6, +0.1].
+
+A joint mixed model gives an odds ratio of 0.82 [0.70, 0.96] on SlopCodeBench, so "a small cost of the combined arm on SlopCodeBench cannot be ruled out." Each benchmark also has per-model intervals compatible with losses of 6 percentage points or more ([arXiv:2611.23817v1](https://arxiv.org/abs/2611.23817v1)).
+
+Agents act on the report. Under complexity feedback they re-edited 54 to 88% of flagged functions on Commit0 and 87 to 94% on SlopCodeBench, and by the end of the run 46 to 94% and 94 to 97% met the limit. Under the reminder, agents edited 20 to 60% of over-limit functions, and only 1 to 18% ended under the limit. Agents saw at least 98.2% of offered messages ([arXiv:2611.23817v1](https://arxiv.org/abs/2611.23817v1)).
+
+## Read the effect with its confounds
+
+- The reminder does part of the work. For Haiku on SlopCodeBench, the reminder alone cut erosion by 0.383 against no message, and complexity feedback cut a further 0.045 ([arXiv:2611.23817v1](https://arxiv.org/abs/2611.23817v1)).
+- Coverage feedback alone did not lower erosion. On SlopCodeBench it raised erosion for DeepSeek (+0.067 [+0.030, +0.104]), GLM and Luna against the reminder arm.
+- Splitting functions explains part of the drop. After inlining every eligible single-use function in both arms, 3 to 46% of the erosion difference remained on Commit0 and 8 to 18% on SlopCodeBench (DeepSeek, GLM and Luna). The authors say this does not isolate extraction's causal effect. Total branching fell 14 to 21% on SlopCodeBench for those three models, but changed by under 4% for DeepSeek and GLM on Commit0.
+- The report bundles several changes. It combines limits and measurements, so target, content and timing effects are confounded. The estimated effects also include a changed message header and a task-prompt paragraph defining each metric.
+
+## What it costs
+
+The paper measured overhead on its DeepSeek and GLM runs ([arXiv:2611.23817v1](https://arxiv.org/abs/2611.23817v1)).
+
+- Median message size ran from 1.2 kB (reminder) to 2.1 kB (both reports). Injected feedback was a median 0.4 to 1.1% of processed tokens per cell.
+- Coverage needs a full rerun of the agent's test suite after each measured turn. On Commit0 that took a median 0.4 to 0.5 s per turn (0.5 to 0.7% of model time per cell). On SlopCodeBench it took 9.6 to 16.9 s per measured turn, a median 33 to 44% of model time per cell.
+- Snapshotting and complexity measurement were not timed.
+
+## When this backfires
+
+- Slow test suites make the coverage half expensive. Agent-written suites can be slow enough that coverage measurement costs a median 33 to 44% of model time, as on SlopCodeBench.
+- A correctness cost is not ruled out. The SlopCodeBench mixed-model result above is the evidence.
+- The long-term benefit is unproven. The authors expect simpler code to pay off over longer maintenance, but their benchmarks cannot show it. Pass rates are near saturation on SlopCodeBench, and both it and Commit0 are public and subject to contamination.
+- The conditions are narrow. The study covers Python, one harness (Oh-My-Pi), four models and one budget per benchmark, with a single complexity limit.
+
+## Applying it
+
+The mechanism needs three parts: a trigger after a code-changing turn, a measurement scoped to changed functions, and a short message appended to the agent's context. The study ran only in the Oh-My-Pi harness, not in Claude Code, so treat the mapping below as untested.
+
+In Claude Code, a `PostToolUse` hook can return `additionalContext`, which is added to the context alongside the tool result. A `PostToolBatch` hook injects its context once before the next model call ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)). The study sent one message per code-changing turn, which is closer to the batch event than to a per-edit hook. [PostToolUse hooks for formatting and linting](../tools/claude/posttooluse-auto-formatting.md) covers the per-edit form.
+
+If you add reminder text alongside the numbers, keep a reminder-only baseline. Without one you cannot tell whether the measurements or the instruction moved the code.
+
+## Example
+
+The complexity message the paper reproduces from a Commit0 run, with its closing feedback instructions omitted ([arXiv:2611.23817v1](https://arxiv.org/abs/2611.23817v1), Appendix A.1):
+
+```text
+[Measurement, turn 1] Cyclomatic complexity estimates how many independent
+execution paths a function contains. Higher complexity usually means the
+function is harder to understand, test, and modify safely. The target is 6
+or lower for every function.
+Functions above the limit, highest first:
+src/attr/_make.py:60 attrib cyclomatic complexity 18 (limit 6); new this turn
+At or under the limit: 0 functions.
+```
+
+## Key Takeaways
+
+- Report only the functions the last turn changed, and name each one with its score and the limit.
+- In the study, complexity feedback lowered erosion for all four models on Commit0 and SlopCodeBench, and for two of four on SWE-EVO under project clustering.
+- Held-out correctness showed no detectable per-model change, but a small cost on SlopCodeBench is not ruled out.
+- Part of the effect comes from the reminder text and from splitting functions, so run a reminder-only control.
+- Coverage feedback alone did not lower erosion. Its cost depends on how long the agent's own test suite takes to run.
+
+## Related
+
+- [Diff-Coverage Gating for Agent-Authored Pull Requests](diff-coverage-gate-agent-prs.md) — the merge-time version of the changed-line coverage measure.
+- [Over-Compliant Refactoring: Agents That Keep Editing Clean Code](../patterns/anti-patterns/over-compliant-refactoring-loop.md) — why a refactoring request needs a stopping criterion such as a complexity limit.
+- [In-Loop Interception](../loop-engineering/in-loop-interception.md) — where custom logic can run between model call and tool call.
+- [Pre-Generation Complexity Scoring](pre-generation-complexity-scoring.md) — complexity scored from the prompt instead of the output.
+- [PostToolUse Hooks: Automatic Formatting and Linting After Every File Edit](../tools/claude/posttooluse-auto-formatting.md) — the per-edit hook that feedback delivery builds on.
 
 ---
 
@@ -130074,6 +130658,7 @@ The classifier returns the most severe tier across all changed files. CI auto-me
 - [Circuit Breakers](../observability/circuit-breakers.md)
 - [Blast Radius Containment](../security/blast-radius-containment.md)
 - [Verification Capacity as the Agent Quality Ceiling](verification-capacity-quality-ceiling.md)
+- [Tiered Code Review: AI-First with Human Escalation](../code-review/tiered-code-review.md) — route review effort by risk: AI-only review for non-critical code, human review for critical code
 
 ---
 
@@ -133707,6 +134292,87 @@ The developer reviews each test in seconds — the validation path that scored 8
 
 ---
 
+### The Chaos Loop: Hardening a Launch With Injected Faults
+Source: https://agentpatterns.ai/verification/agent-driven-chaos-loop/
+
+# The Chaos Loop: Hardening a Launch With Injected Faults
+
+> An agent breaks a staging service on purpose, reads the telemetry, and ships fixes; one launch reported 60 server errors in 2 billion requests.
+
+A chaos loop is a long-running agent session that repeats one cycle against a staging copy of a service: pick a failure scenario, run a load harness that causes it, read the telemetry, and ship a fix. This page draws on one product's launch, written up by the engineer who ran the loop ([Nair, 2026](https://claude.dev/blog/chaos-loop-claude-docs-launch/)). Every figure below comes from that post unless marked as my own reading.
+
+## What the Claude Docs run did
+
+About two weeks before launch, the author had Claude drive a staging cluster that mirrored production at over a million synthetic docs a day, and break core components on purpose. The loop was a Claude Code session that acted as coordinator and handed most work to sub-agents: usually about 11 at a time in the busiest week, and 30 at the peak ([Nair, 2026](https://claude.dev/blog/chaos-loop-claude-docs-launch/)).
+
+The author picked scenarios they thought were paranoid:
+
+- 10 million new docs created in a single day
+- 22,000 live connections reconnecting at once
+- One hot doc with hundreds of viewers, a server killed while loading a doc, and a stalled database
+
+## One iteration
+
+The harness picked a feature, such as document creation, and pushed it to saturation. Claude read telemetry through the Datadog MCP server, then returned a short menu of options with a recommendation ([Nair, 2026](https://claude.dev/blog/chaos-loop-claude-docs-launch/)).
+
+What happened next depended on whether the fix could be undone:
+
+- For an easy-to-undo change, Claude wrote it, deployed it to staging, and reran the test.
+- For a hard-to-undo change, such as a database schema, a key layout, or how a doc is stored, Claude stopped and asked. The author named these categories before the loop started.
+
+The author also gave Claude two invariants to hold: docs open almost instantly, even with a long history, and once the server acknowledges an edit, tests must show the edit is still there ([Nair, 2026](https://claude.dev/blog/chaos-loop-claude-docs-launch/)).
+
+## Telemetry decides what the loop can fix
+
+The service reported on every operation. Each database query carried its name and the rows it scanned against the rows it returned, so Claude could spot a bad query and rewrite it. Claude also added telemetry it found missing ([Nair, 2026](https://claude.dev/blog/chaos-loop-claude-docs-launch/)).
+
+The memory case shows the cycle. One large doc used about 3 GB on its pod. Claude first shrank a server cache, then dropped that change when the next run showed the memory sat in a cache inside a dependency. Finer profiling found that each keystroke copied the doc into several data structures, and Claude made them copy-on-write. After about three days the doc topped out near 180 MB, and the launch estimate fell from over 500 memory-optimized pods to about 50 ([Nair, 2026](https://claude.dev/blog/chaos-loop-claude-docs-launch/)).
+
+The team also chose Rust and few dependencies, and vendored the few it kept. The author expected a garbage collector to add noise, because memory and latency shift on its schedule. The team did not benchmark Rust against Go, so this is one team's experience rather than a measured comparison ([Nair, 2026](https://claude.dev/blog/chaos-loop-claude-docs-launch/)).
+
+## What the 60 errors show
+
+Claude Docs launched on September 16, 2026. By September 22 people had created over 4.6 million docs. Across 2 billion requests the team saw 60 server errors and never rolled back. About 50 memory-optimized pods ran the service, and the team rolled production 629 times in September. Seven of the ten scenarios rehearsed on staging happened in production. Claude had shipped fixes behind runtime flags, so the team usually flipped a flag ([Nair, 2026](https://claude.dev/blog/chaos-loop-claude-docs-launch/)).
+
+By division (my arithmetic), 60 errors in 2 billion requests is 3 in 100 million. Read it as a launch outcome, not a measurement of the loop. The author credits two decisions, the loop and a legible stack, and the post reports no comparison launch without them. It does not say how it defines a server error.
+
+## Trying it at smaller scale
+
+The author's steps assume one engineer with Claude Code, a staging environment, and an observability provider ([Nair, 2026](https://claude.dev/blog/chaos-loop-claude-docs-launch/)):
+
+1. Give Claude your telemetry, using your provider's MCP server.
+2. Have Claude write a load script that sends ten times your real traffic to staging and breaks things on purpose: kill an instance, stall the database, deploy in the middle of a spike.
+3. Write down your most important technical invariants and give them to Claude.
+4. For anything hard to undo, have Claude stop and give you a few options with a recommendation.
+
+The author spent roughly $125,000 of inference at Claude Fable 5.2 list price from the end of August to launch day. They put a two-week push on a small stack at $3,000 to $10,000 and say they have not run it. If sub-agents burn too many tokens per hour, they say a single agent should also work well ([Nair, 2026](https://claude.dev/blog/chaos-loop-claude-docs-launch/)).
+
+## When this backfires
+
+- Model dependence. The author used an internal research model roughly comparable to Claude Fable 5.2. They say older models forgot the goal ten or twenty iterations in, and that the newer one held their invariants across many compactions ([Nair, 2026](https://claude.dev/blog/chaos-loop-claude-docs-launch/)).
+- No staging copy. The author's steps assume one. Without a production-like environment that tolerates destructive tests, there is nothing to run the loop against (my inference).
+- Unwritten invariants. The loop checked the two properties the author wrote down. A property nobody stated is not checked (my inference).
+- Cost. The $125,000 figure includes tokens spent while the author worked out the process, and they say they could have spent about half as much.
+
+## Key Takeaways
+
+- A chaos loop is one agent session cycling scenario, harness, telemetry, and fix against a staging copy.
+- The Claude Docs report is 60 server errors in 2 billion requests with no rollback, from one team and one product.
+- The post gives no launch without the loop for comparison, so the loop's share of the result is unmeasured.
+- The author named the hard-to-undo change categories before the loop started, and Claude stopped and asked on those.
+- The author gave Claude two invariants: fast doc opens, and an acknowledged edit stays.
+- Per-query telemetry (name, rows scanned, rows returned) let Claude find and rewrite bad queries.
+
+## Related
+
+- [LLM API Fault Injection at the HTTP Layer (AgentChaos)](llm-api-fault-injection-http-layer.md) — injects faults into an agent's model calls to score the agent, where the chaos loop uses an agent to fault a conventional service
+- [Handoff-Boundary Fault Injection (llmmas-otel)](handoff-boundary-fault-injection.md) — delays a message between agents and diffs the faulted trace against a baseline
+- [Recovery as a Separate Eval Axis (UndoBench)](recovery-as-separate-eval-axis.md) — scores recovery from a fault against an identical-seed control
+- [Planted-Bug Methodology: Deliberate Bugs as Observability Calibration](planted-bug-observability-calibration.md) — checks that captured signals lead an agent to the right layer
+- [Instrument First, Then Let the Agent Hill-Climb](../workflows/instrument-first-agent-performance-sprint.md) — a second Anthropic account of an agent loop that depends on trusted measurements
+
+---
+
 ### Timeout Oracles for Agent-Written Code
 Source: https://agentpatterns.ai/verification/timeout-oracles-agent-written-code/
 
@@ -135866,6 +136532,7 @@ Preventing sensitive data from entering agent context is cheaper than scrubbing 
 - [Agent-Authored Messages as a Deferred Exfiltration Channel](agent-authored-message-rendered-image-exfiltration.md) — An auto-fetching renderer downstream of an agent's message-authoring tool acts as deferred egress, closing the lethal trifecta without any direct network grant
 - [Multitenant RAG: Closing the Relevance-Authorization Gap](multitenant-rag-authorization-gap.md) — Retrieval ranks by relevance, not authorization — in a shared corpus, the highest-scoring chunk for one tenant can belong to another; close the gap with policy-aware ingestion, two-tier retrieval gating, and server-side orchestration
 - [Per-Server MCP Environment Scoping for Credential Isolation](mcp-server-credential-isolation.md) — Each MCP server gets its own env-variable scope, not the agent process's full env, so one server's credentials never leak to every other server the agent talks to; the configuration-layer complement to credential proxies and federated identity
+- [Keep MCP Server Tokens Off the Command Line With Stdin JSON](mcp-add-json-stdin-token-handling.md) — Claude Code 2.1.327 reads a server's JSON from stdin with `claude mcp add-json <name> -`, so a token need not be a command argument; it runs outside a session, and the token still lands in the scope's config file
 - [Multi-Tenant Isolation Knobs for Shared-Container Agent SDK Hosting](multi-tenant-isolation-knobs-agent-sdk.md) — Four Claude Agent SDK options plus a per-tenant proxy-egress rule that sever each default settings-and-state input (filesystem settings, `~/.claude.json`, auto memory, inherited `cwd`) when one container serves multiple tenants
 - [Embedding Inversion: Vector Stores as a Source-Text Disclosure Surface](embedding-inversion-vector-store-disclosure.md) — Stored embeddings can be partially inverted to reconstruct source text — the LLM08:2025 confidentiality slice that access-control and poisoning defenses do not address; treat the vector index as a copy of the corpus
 
@@ -146565,6 +147232,80 @@ Keep authorization checks before execution. Use the journal afterward to decide 
 
 ---
 
+### Keep MCP Server Tokens Off the Command Line With Stdin JSON
+Source: https://agentpatterns.ai/security/mcp-add-json-stdin-token-handling/
+
+# Keep MCP Server Tokens Off the Command Line With Stdin JSON
+
+> Claude Code reads an MCP server's JSON from stdin, so a token can stay off the command line.
+
+`claude mcp add-json <name> -` reads the MCP server's JSON from standard input instead of from the command line. Claude Code 2.1.327 added it "so tokens can stay off the command line", and the command is "not available inside a Claude Code session" ([changelog 2.1.327](https://code.claude.com/docs/en/changelog#2-1-327)).
+
+## What the argument form exposes
+
+The documented `add-json` examples put the credential in the command itself. One sets `"headers":{"Authorization":"Bearer token"}`, and a stdio example sets `"args":["--api-key","abc123"]` ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp)). Those strings are arguments of the `claude` process.
+
+On Linux, `/proc/pid/cmdline` "holds the complete command line for the process" ([proc_pid_cmdline(5)](https://man7.org/linux/man-pages/man5/proc_pid_cmdline.5.html)). That page does not say who may read the file, and it does not cover shell history. Neither the 2.1.327 changelog entry nor the MCP docs page, as fetched on 2026-11-23, names history or the process list as a leak path. This page claims neither. Check how your own shell and host expose a command line before you rely on the stdin route.
+
+## The stdin form
+
+The MCP docs give the form: "To pipe the JSON in, pass `-` in its place: `cat server.json | claude mcp add-json <name> -`. Run the command outside a Claude Code session. Requires Claude Code v2.1.327 or later" ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp)).
+
+With `-`, the `claude` process has no token in its arguments. That follows from the sources above and is my inference, not a statement in either.
+
+The command feeding the pipe can be anything that prints the JSON. A secret-store command that emits the whole server entry fits (inference; the docs show only `cat server.json`):
+
+```bash
+secret-store-cli get mcp/weather-api | claude mcp add-json weather-api -
+```
+
+`secret-store-cli` is a placeholder. The documented `cat server.json` form leaves the token in `server.json`, a file you then manage.
+
+## Limits
+
+- Run it in a terminal outside Claude Code. The pages as fetched on 2026-11-23 do not say why.
+- The docs say it requires v2.1.327 or later.
+- The token still lands in a config file. The docs list where each scope stores its configuration, and `add-json` writes the entry to the scope you pick (inference from the scope table below), so the token moves from the command into that file.
+
+## Choose the scope
+
+The MCP docs define three scopes ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp)):
+
+| Scope | Stored in | Shared with team |
+|-------|-----------|------------------|
+| Local (default) | `~/.claude.json` | No |
+| Project | `.mcp.json` in the project root | Yes, via version control |
+| User | `~/.claude.json` | No |
+
+The docs recommend local scope for "servers with credentials you don't want in version control". A literal token with `--scope project` would land in a file the docs say you check in (inference from the two statements). For a shared `.mcp.json`, the docs support `${VAR}` references in `command`, `args`, `env`, `url`, and `headers`, so each person supplies the token from their own environment.
+
+## Example
+
+A developer keeps the token in a secret store and adds a local-scope server with no token in any argument:
+
+```bash
+secret-store-cli get mcp/weather-api | claude mcp add-json weather-api -
+claude mcp get weather-api
+```
+
+The first line runs in a terminal, not in a Claude Code session. `claude mcp get <name>` is the verify step the docs give after `add-json`.
+
+## Key Takeaways
+
+- `claude mcp add-json <name> -` reads the server JSON from stdin. It needs Claude Code 2.1.327 or later and runs outside a session.
+- The changelog entry states the goal as keeping tokens off the command line. It names no specific leak path.
+- Stdin moves the token out of the command and into the scope's config file. It does not remove the token from disk.
+- Use local scope for a personal token, and `${VAR}` references in a project `.mcp.json` that the team shares.
+
+## Related
+
+- [Per-Server MCP Environment Scoping for Credential Isolation](mcp-server-credential-isolation.md) — which environment variables each MCP server receives
+- [Secrets Management for AI Agents](secrets-management-for-agents.md) — injecting credentials so the agent never reads them as text
+- [Credential-Free Subprocesses](credential-free-agent-subprocesses.md) — what Claude Code strips from tool environments
+- [Scoped MCP Server Discovery](../tool-engineering/scoped-mcp-server-discovery.md) — how the three scopes resolve
+
+---
+
 ### Keep the Exact Limits in Code and the Judgment in the Model
 Source: https://agentpatterns.ai/security/exact-limits-in-code-judgment-in-model/
 
@@ -147950,6 +148691,8 @@ The patterns compose: the control plane gates on identity, capability budgets ga
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Subgoal-scoped revocation through a reference monitor; same envelope of mediated tools + typed catalog
 - [Authorization Continuity Across Agent Mutation](authorization-continuity-across-agent-mutation.md) — The same non-amplification property applied to a change of subject rather than a chain of values
 - [Field-Level Source Ownership for Agent Capabilities](field-level-source-ownership.md) — the same never-widen rule applied to which source may fill each field of a capability, rather than which sinks a value may reach.
+- [Per-Agent Capability Stores Beat One Task-Wide Allowlist](per-agent-capability-scoping.md) — split the allowlist ceiling into one capability store per agent
+- [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — a server-issued intent certificate that only narrows the static tool manifest
 
 ---
 
@@ -148581,6 +149324,7 @@ The subagent can move the window one way only, toward earlier compaction. The `a
 - [Monotonic Capability Attenuation for Composition-Safe Tool Use](monotonic-capability-attenuation.md) — authority that only shrinks, enforced per value through tool composition
 - [Administrative Effort Ceilings for Reasoning Budget](../patterns/agent-design/administrative-effort-ceilings.md) — a numeric cap where the lowest scope wins
 - [Claude Code Mods and When to Use One Instead of a Hook](../tools/claude/mods.md) — the writer that `$.env.set` belongs to
+- [Write Boundaries Ship as a Setting, Read Boundaries as a Prompt](../patterns/agent-design/write-boundary-as-setting.md) — the settings key that fences file-tool writes outside the working directories
 
 ---
 
@@ -159028,6 +159772,7 @@ Behavior that varies session to session usually means instruction files loaded i
 - [Escape Hatches: Unsticking Stuck Agents](../workflows/escape-hatches.md)
 - [Continuous Agent Improvement](../workflows/continuous-agent-improvement.md)
 - [Using the Agent to Analyze Its Own Evaluation Transcripts](../verification/agent-transcript-analysis.md)
+- [Five-Failure-Layers Diagnostic: Attribute Before Swapping the Model](../patterns/agent-design/five-failure-layers-diagnostic.md) — attribute each failure to a harness layer before swapping models
 
 ---
 
@@ -178079,6 +178824,7 @@ Source Pages
 
 - [Convergence Detection](../../loop-engineering/convergence-detection.md) — three-signal model for knowing when to stop iterating
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — verification gates before task completion
+- [Loop Engineering: Designing Agent Loops That Converge](../../loop-engineering/index.md) — the reference section for loop termination, control, and budgeting
 
 ---
 
@@ -183674,6 +184420,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 
 - [Sub-Agents](sub-agents.md) — Ephemeral, isolated agents for focused task execution
 - [Claude Code Subagent Model Fallback: What Carries Down](subagent-fallback-carry-over.md) — From v2.1.330, agents with no model and forks started by a subagent on a fallback run on it; how to check each agent's model
+- [Claude Code /status Diagnostics for Broken and Ignored Config](status-config-diagnostics.md) — From 2.1.327, `/status` lists broken agent, skill, command and output style files, keybinding errors, an unavailable sandbox, ignored permission settings and dead hook matchers
 - [Agent Teams](agent-teams.md) — Coordinated multi-agent sessions with shared task lists
 - [Agent View](agent-view.md) — Dispatch-attach-monitor surface for parallel background sessions, with blocked-on-input as a first-class state
 - [Auto Mode](auto-mode.md) — Classifier-based permission gating for unattended execution
@@ -183704,7 +184451,9 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Mods](mods.md) — Plugin code that runs inside Claude Code's process: it can draw panes, rewrite events, and approve a call a `PreToolUse` hook blocked, which decides when to pick one over a settings hook
 - [In-Session Transcript Search](transcript-search.md) — Claude Code's Ctrl+O transcript mode plus `/`, `n`, `N` turns a long session transcript into a navigable index — the in-session counterpart to offline transcript analysis
 - [/code-review Default Scope](code-review-local-scope.md) — Since 2.1.329 a no-target review covers the whole branch on most models, though the local-review page words the base differently
+- [Claude Code Subagent Progress Summaries: What They Cost](subagent-progress-summary-cost.md) — From v2.1.327 to v2.1.330, terminal-session summaries are written from short notes per route; the changelog gives no saving, and one variable turns them off
 - [Critical-Path rm Check](critical-path-rm-check.md) — Claude Code asks before an `rm` or `rmdir` aims at root, home or the working folder, and denies it where no one can answer; it misses some commands
+- [Claude Code Skill Model Override: What Stays on Session](skill-model-override-scope.md) — From v2.1.330 a skill Claude runs with a `model` setting leaves subagents, forks, compaction and `/recap` on the session model; `context: fork` skills are the exception
 
 ---
 
@@ -184174,6 +184923,96 @@ Pass a range or a branch pair when you want a fixed base, whatever the default d
 - [Review-Then-Implement Loop for AI Agent Development](../../code-review/review-then-implement-loop.md) — what `/code-review --fix` applies after the review
 - [Diff-Based Review Over Output Review](../../code-review/diff-based-review.md) — review what changed, not the full output
 - [Failed Reviewer Is Not a Clean Pass](../../patterns/multi-agent/failed-reviewer-not-clean-pass.md) — record a reviewer that did not run as not run
+
+---
+
+### Claude Code /status Diagnostics for Broken and Ignored Config
+Source: https://agentpatterns.ai/tools/claude/status-config-diagnostics/
+
+# Claude Code /status Diagnostics for Broken and Ignored Config
+
+> From Claude Code 2.1.327, `/status` lists broken agent, skill, command and output style files, keybinding errors, an unavailable sandbox, ignored permission settings and hook matchers that never match.
+
+Claude Code 2.1.327 (November 17, 2026) "added a list in `/status` of broken agent, skill, command and output style files, keybinding errors, an unavailable sandbox, ignored permission settings and hook matchers that never match" ([changelog](https://code.claude.com/docs/en/changelog)). The docs describe two of these faults as silent and two as a warning in the debug log. The commands page, as fetched on November 23, 2026, describes `/status` as showing "version, model, account, and connectivity" and does not mention the list ([commands](https://code.claude.com/docs/en/commands.md)). The changelog line is the only source for the list itself.
+
+## What the list covers
+
+The changelog names eight kinds of fault. The table pairs each with the way the official docs say it fails when nothing reports it.
+
+| Fault in the entry | How the docs describe the failure | Source |
+|---|---|---|
+| Broken skill file | If the frontmatter YAML does not parse, the skill loads with empty metadata. `/skill-name` still works, but Claude cannot match the skill's description. | [Skills](https://code.claude.com/docs/en/skills.md#skill-not-triggering) |
+| Broken output style file | "A misspelled field is ignored without an error." If the YAML does not parse, the style loads under its file name with no fields set. | [Output styles](https://code.claude.com/docs/en/output-styles.md) |
+| Keybinding error | A misspelled modifier such as `ctl+k` makes Claude Code ignore the whole binding. Validation writes a warning to the debug log. | [Keybindings](https://code.claude.com/docs/en/keybindings.md#validation) |
+| Unavailable sandbox | By default, when the platform does not support the sandbox or the startup dependency check fails, "Claude Code runs commands without sandboxing". Setting `sandbox.failIfUnavailable` to `true` makes it exit at startup instead. | [Sandboxing](https://code.claude.com/docs/en/sandboxing.md) |
+| Hook matcher that never matches | "A misspelled tool name produces a matcher that matches nothing, so the hook fails silently." Matching is case-sensitive, and tool names are capitalized, so `"bash"` does not match `Bash`. Before v2.1.191 a comma-separated matcher such as `"Edit,Write"` matched nothing. | [Debug your configuration](https://code.claude.com/docs/en/debug-your-config.md#check-hooks) |
+| Broken agent file | The sources I fetched name one case. If two files in the same `.claude/agents/` directory share a name, Claude Code loads only one of them. The docs name `/doctor` for that case, not `/status`. | [Sub-agents](https://code.claude.com/docs/en/sub-agents.md) |
+| Broken command file, ignored permission setting | This page cites no source for how a broken command file fails. The entry does not say which permission settings count as ignored. | [Changelog](https://code.claude.com/docs/en/changelog) |
+
+The permission row stays open, but the docs name two cases that fit the wording. With `allowManagedPermissionRulesOnly` set (v2.1.282 or later), `/status` lists each skill whose `allowed-tools` Claude Code has ignored in the session ([Skills](https://code.claude.com/docs/en/skills.md#when-only-managed-permission-rules-apply)). A `mcp__` permission rule written with parentheses is skipped on load, and Claude Code lists it in the invalid-settings dialog and in `claude doctor` ([Permissions](https://code.claude.com/docs/en/permissions.md)). The changelog does not say whether either case is in the 2.1.327 list.
+
+## Matcher faults and the /hooks view
+
+`/hooks` lists every hook registered for the session. A hook missing from that list was not loaded. A hook that appears there but does not fire usually has a matcher problem ([Debug your configuration](https://code.claude.com/docs/en/debug-your-config.md#check-hooks)). The second case fits the entry's phrase "hook matchers that never match". That reading is my inference. The entry does not say which matcher faults it detects, so test a deliberately misspelled matcher before you rely on the list to catch yours.
+
+One matcher fault is silent by design. A `matcher` field on an event that does not support matchers "is silently ignored" ([Hooks reference](https://code.claude.com/docs/en/hooks.md)). The entry does not say whether `/status` reports it.
+
+## Earlier moves from startup warnings to /doctor and /status
+
+The change continues a move from startup warnings to on-demand views.
+
+- 2.1.183 (June 19, 2026) removed the startup "setup issues" line under the logo. The entry says to run `/doctor` to see configuration issues, or to use `--debug` ([changelog](https://code.claude.com/docs/en/changelog)).
+- 2.1.203 (July 7, 2026) removed the startup "claude command missing or broken" warnings. They "now appear in `/doctor` and `/status` instead" ([changelog](https://code.claude.com/docs/en/changelog)).
+- 2.1.327 added the list to `/status`.
+
+The changelog does not say the new list also appears at startup. Treat it as a view you open, not an alert that finds you.
+
+## Which command answers which question
+
+| Question | Command | Source |
+|---|---|---|
+| Is a file loaded, and from where? | `/context`, `/skills`, `/hooks`, `/permissions` | [Debug your configuration](https://code.claude.com/docs/en/debug-your-config.md#see-what-loaded-into-context) |
+| Which settings sources are active? | `/status` | [Debug your configuration](https://code.claude.com/docs/en/debug-your-config.md#see-what-loaded-into-context) |
+| What is broken in the setup, with proposed fixes? | `/doctor` in a session. It reports findings first and asks before it changes anything. | [Skills](https://code.claude.com/docs/en/skills.md) |
+| Which settings files are invalid, without starting a session? | `claude doctor` in the shell. It prints read-only diagnostics. | [Debug your configuration](https://code.claude.com/docs/en/debug-your-config.md#check-resolved-settings) |
+| Why did a keybinding or a frontmatter field not apply? | `claude --debug`, then read the log. | [Keybindings](https://code.claude.com/docs/en/keybindings.md#validation) |
+| Which `SKILL.md` files have frontmatter that does not parse? | `claude plugin validate .claude/skills` (v2.1.233 or later). | [Skills](https://code.claude.com/docs/en/skills.md#skill-not-triggering) |
+
+`/status` runs at once even while Claude is responding, so you can open it mid-turn without queuing it ([commands](https://code.claude.com/docs/en/commands.md)).
+
+## Build the same check for your own harness
+
+This section is inference from the sources above, not a documented Claude Code workflow.
+
+The built-in list covers the file classes the entry names. A team's harness has faults it cannot know about: a skill that must carry a team field, a hook matcher that must name a tool your harness has, a convention for agent names. Two layers fit.
+
+1. Run `claude plugin validate .claude/skills` in CI. It finds `SKILL.md` files whose frontmatter does not parse, which is the fault that otherwise loads with empty metadata.
+2. Add a script for the faults specific to your repo. Read each hook's `matcher` from `settings.json` and compare it to the tool names your harness exposes. Fail the build when a name matches nothing. A matcher that matches nothing is the silent failure the docs describe.
+
+Keep the CI check separate from `/status`. `/status` reports on one machine's loaded session. A CI check reports on what a commit would load, and it runs before anyone starts a session.
+
+## When this backfires
+
+- A clean list is not a clean bill. The list covers the classes the entry names. A skill with a vague description, a conflicting instruction, or a hook that fires but does the wrong thing does not appear on it (inference from the entry's scope).
+- The list shows one machine and one version. A teammate on a release before 2.1.327 has no list, and a repo-committed fault shows only on a machine where someone runs `/status` (inference).
+- The entry does not say which sessions show the list. It does not mention headless `claude -p` runs. Nobody is there to open `/status` in one (inference). Unattended runs need the shell command `claude doctor` or a CI check instead.
+- The sandbox entry reports a fault but does not stop it. By default a session with an unavailable sandbox keeps running commands without one. Only `sandbox.failIfUnavailable` set to `true` stops the session ([Sandboxing](https://code.claude.com/docs/en/sandboxing.md)).
+
+## Key Takeaways
+
+- From 2.1.327, `/status` lists broken agent, skill, command, and output style files, keybinding errors, an unavailable sandbox, ignored permission settings, and hook matchers that never match.
+- The changelog is the only source for the list. The commands page, as fetched on November 23, 2026, does not mention it.
+- The entry does not say which matcher faults or which permission settings it detects. Test a deliberate fault before you rely on it.
+- The list is on demand. The startup "setup issues" line moved to `/doctor` in 2.1.183, and the "claude command missing or broken" warnings moved to `/doctor` and `/status` in 2.1.203. The changelog does not say the new list also appears at startup.
+- For unattended runs and for faults specific to your repo, add a CI check such as `claude plugin validate .claude/skills`. That pairing is inference, not documented workflow.
+
+## Related
+
+- [Harness Preflight Doctor Command for Agent Diagnostics](../../observability/harness-preflight-doctor-command.md)
+- [Policy File Validation](../../instructions/policy-file-validation.md)
+- [Agent Debugging](../../observability/agent-debugging.md)
+- [Claude Code Hooks Lifecycle](hooks-lifecycle.md)
+- [Claude Code Sub-Agents for Delegating Complex Tasks](sub-agents.md)
 
 ---
 
@@ -185416,6 +186255,104 @@ The developer fixes all three and pushes. Code Review re-runs and auto-resolves 
 
 ---
 
+### Claude Code Skill Model Override: What Stays on Session
+Source: https://agentpatterns.ai/tools/claude/skill-model-override-scope/
+
+# Claude Code Skill Model Override: What Stays on Session
+
+> From v2.1.330, when Claude runs a skill with a `model` setting, the skill leaves subagents, forks, compaction and `/recap` on the session's model. `context: fork` skills are the exception.
+
+A skill's `model` frontmatter field sets the model for the skill's own work. From v2.1.330, when Claude runs the skill, it does not set the model that subagents, forks, compaction and `/recap` use. The entry does not say whether the same holds when you invoke the skill yourself with `/name`. The v2.1.330 changelog (November 20, 2026) records the change: "Changed skills that Claude runs with a `model` setting, other than `context: fork` skills, to leave subagents, forks, compaction and `/recap` on the session's model" ([changelog](https://code.claude.com/docs/en/changelog)). The `model` row of the skills reference does not state this scope as of November 23, 2026.
+
+## What the field sets
+
+The skills reference describes `model` as the model "to use when this skill is active". The override "applies for the rest of the current turn and isn't saved to settings", and "the session model resumes when you send your next prompt" ([skills reference](https://code.claude.com/docs/en/skills.md#frontmatter-reference)). The field accepts the same values as `/model`, or `inherit` to keep the active model.
+
+## What the entry leaves on the session model
+
+The entry names four kinds of work. Where another page describes the same work, the table adds it.
+
+| Work | What the entry says | What the docs add |
+|------|---------------------|-------------------|
+| Subagents | Stay on the session's model | A subagent you define runs on the model of the conversation that starts it, unless its `model` field or another source in the [model order](https://code.claude.com/docs/en/sub-agents.md#choose-a-model) sets one |
+| Forks | Stay on the session's model | A fork sees the same model as its parent conversation ([sub-agents](https://code.claude.com/docs/en/sub-agents.md#fork-the-current-conversation)) |
+| Compaction | Stays on the session's model | Only the changelog entry is cited here |
+| `/recap` | Stays on the session's model | `/recap` generates a one-line summary of the current session on demand ([commands](https://code.claude.com/docs/en/commands.md)) |
+
+The entry does not describe the earlier behavior. It says "Changed ... to leave", which implies that these kinds of work could follow a skill's model before v2.1.330. The entry does not say which of them did.
+
+The entry does not say what happens to a subagent whose definition sets its own `model` field. The sub-agents page ranks that field above the parent's model, and the entry does not say whether the change touches that order. Test a pinned subagent that a skill with `model` set starts.
+
+## When Claude Code skips the override
+
+Claude Code skips a skill's model value in two cases, and the session keeps its current model ([skills reference](https://code.claude.com/docs/en/skills.md#frontmatter-reference)):
+
+- Your organization's `availableModels` allowlist excludes the value.
+- You are in auto mode, or in plan mode while the classifier reviews commands, and the model is one that auto mode does not support.
+
+The model configuration page covers the allowlist case for a blocked family alias too. Claude Code ignores the override, and the skill runs on the session model ([model configuration](https://code.claude.com/docs/en/model-config.md#restrict-model-selection)).
+
+## The context: fork exception
+
+The entry excludes `context: fork` skills. For these skills, the `model` value "sets the forked subagent's model instead". An excluded value follows the same rules as a subagent model override ([skills reference](https://code.claude.com/docs/en/skills.md#frontmatter-reference)). For a subagent override, Claude Code runs the subagent on a fallback model rather than failing the request ([model configuration](https://code.claude.com/docs/en/model-config.md#restrict-model-selection)).
+
+The entry lists "forks" and `context: fork` skills as separate items. The skills reference says a `context: fork` skill does not run in a fork of your current conversation. It starts a new subagent that does not see your conversation history ([skills reference](https://code.claude.com/docs/en/skills.md#run-skills-in-a-subagent)).
+
+The entry does not say what agents started by a forked skill's subagent run on. The sub-agents page says a nested subagent you define runs on its parent's model, and lists a subagent with no `model` field among those that follow it ([sub-agents](https://code.claude.com/docs/en/sub-agents.md#which-model-a-nested-subagent-runs-on)). Read together, an agent with no `model` field that a forked skill's subagent starts runs on that subagent's model. The entry excludes forked skills from the change and does not confirm this reading, so check it with `/tasks`.
+
+## Example
+
+A skill that sets a cheaper model for a lookup, in a session on a larger model:
+
+```yaml
+---
+name: quick-lookup
+description: Fast keyword search across the codebase
+model: haiku
+---
+```
+
+When Claude runs this skill inline on v2.1.330 or later, the skill's turn uses Haiku, unless your `availableModels` allowlist or the auto mode case above skips it. Per the entry, subagents, forks, compaction and `/recap` stay on the session model. The session model resumes at your next prompt.
+
+To put delegated work on a different model, run the skill as a forked subagent, or set `model` in a subagent definition:
+
+```yaml
+---
+name: repo-survey
+description: Survey the repository layout and report the main modules
+context: fork
+agent: Explore
+model: haiku
+---
+```
+
+With `context: fork`, the `model` value sets the forked subagent's model.
+
+## Check which model ran
+
+- Run `/tasks` while a subagent runs. Claude Code names the model on the subagent's row. This needs v2.1.242 or later ([sub-agents](https://code.claude.com/docs/en/sub-agents.md#check-a-subagents-model)).
+- The status line and `/status` show the model you are on ([model configuration](https://code.claude.com/docs/en/model-config.md#checking-your-current-model)).
+
+These two checks cover a subagent that a skill starts and the session's own model. For compaction and `/recap`, the changelog entry is the only source cited here.
+
+## Key Takeaways
+
+- From v2.1.330, when Claude runs a skill with a `model` setting, it leaves subagents, forks, compaction and `/recap` on the session's model, except for `context: fork` skills.
+- The override lasts for the rest of the current turn and ends when you send your next prompt.
+- Claude Code skips the value when the `availableModels` allowlist excludes it, and in the auto mode and plan mode case the skills reference names.
+- With `context: fork`, the `model` value sets the forked subagent's model. The entry does not say what that subagent's own agents run on.
+- Check a subagent's model with `/tasks` (v2.1.242 or later) and the session's model with `/status`.
+
+## Related
+
+- [Skill Frontmatter Reference](../../tool-engineering/skill-frontmatter-reference.md)
+- [Claude Code Subagent Model Fallback: What Carries Down](subagent-fallback-carry-over.md)
+- [Claude Code Sub-Agents for Delegating Complex Tasks](sub-agents.md)
+- [Forked vs Fresh Subagents](../../patterns/multi-agent/forked-vs-fresh-subagents.md)
+- [Skill disallowed-tools Frontmatter](skill-disallowed-tools.md)
+
+---
+
 ### Claude Code Sub-Agents
 Source: https://agentpatterns.ai/tools/claude/sub-agents/
 
@@ -185620,6 +186557,75 @@ If the carry-over covers the fallback chain, one chain entry can set the model o
 - [Recursive Sub-Agent Delegation Depth](../../patterns/multi-agent/recursive-sub-agent-delegation-depth.md)
 - [Model Switch Lifecycle Hooks](../../tool-engineering/model-switch-lifecycle-hooks.md)
 - [Exception Handling and Recovery Patterns](../../patterns/agent-design/exception-handling-recovery-patterns.md)
+
+---
+
+### Claude Code Subagent Progress Summaries: What They Cost
+Source: https://agentpatterns.ai/tools/claude/subagent-progress-summary-cost/
+
+# Claude Code Subagent Progress Summaries: What They Cost
+
+> In terminal sessions, Claude Code now writes subagent progress summaries from short notes, not the whole conversation, and one environment variable turns them off.
+
+Three changelog entries between v2.1.327 and v2.1.330 say that, in terminal sessions, subagent progress summaries are written from short notes and use "far fewer tokens" ([changelog](https://code.claude.com/docs/en/changelog)). Each entry covers a different route to the model. The entries give no figure for the saving, and the costs page does not list progress summaries under background token usage as of November 23, 2026 ([costs](https://code.claude.com/docs/en/costs.md#background-token-usage)).
+
+## Which releases cover which route
+
+| Release | Date | Route the entry names | What the entry says |
+|---------|------|-----------------------|---------------------|
+| v2.1.327 | November 17, 2026 | Amazon Bedrock, Google Vertex AI and Microsoft Foundry | Written "from short notes, not the whole conversation, using far fewer tokens" |
+| v2.1.328 | November 19, 2026 | The Anthropic API | Written "by the default small fast model from short notes, also with telemetry off, using far fewer tokens" |
+| v2.1.330 | November 20, 2026 | A Claude apps gateway | Written "from short notes instead of the whole conversation, using far fewer tokens" |
+
+Source for all three rows: [changelog](https://code.claude.com/docs/en/changelog). Each entry is limited to "terminal sessions". The entries do not mention other surfaces.
+
+## What the entries leave open
+
+- Only the v2.1.328 entry names the model that writes the summary. The other two entries do not say which model writes it on their routes.
+- The "short notes" have no stated contents or length.
+- The entries give neither a token count nor a percentage.
+- Where a summary shows up for you is unstated, so check what you lose before you turn them off.
+
+The environment variables reference describes a Haiku-class model for background tasks ([environment variables](https://code.claude.com/docs/en/env-vars.md)). The v2.1.328 entry does not say that "the default small fast model" is that model.
+
+## The summaries are separate requests
+
+The v2.1.323 entry for the off switch speaks of "subagent progress summaries and the requests that write them" ([changelog](https://code.claude.com/docs/en/changelog)). The summary is its own request. Session recap, idle compaction and prompt suggestions are the background uses the costs page lists, and the page does not name progress summaries ([costs](https://code.claude.com/docs/en/costs.md#background-token-usage)).
+
+Earlier entries also changed how these requests run. The v2.1.128 entry fixed summaries "missing the prompt cache (~3× `cache_creation` reduction)". The v2.1.318 entry changed summaries on Bedrock, Vertex, Foundry or with telemetry off, so that "on a cold prompt cache, one can now wait up to 5 minutes for the subagent's pending response" ([changelog](https://code.claude.com/docs/en/changelog)).
+
+## Turn them off
+
+Set `CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES` to `1`:
+
+```bash
+export CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES=1
+```
+
+The v2.1.323 entry says this turns off "subagent progress summaries and the requests that write them", and that the variable is "available since 2.1.318" ([changelog](https://code.claude.com/docs/en/changelog)). The environment variables reference does not list it as of November 23, 2026 ([environment variables](https://code.claude.com/docs/en/env-vars.md)). Only `1` is named as a value, and other values go unmentioned.
+
+## Upgrade past the v2.1.327 effort regression
+
+v2.1.328 fixed a regression from v2.1.327. Effort could be turned off for a subagent's model for the rest of the session if "Bedrock, Google Cloud's Agent Platform or Foundry refused its progress summary's effort setting" ([changelog](https://code.claude.com/docs/en/changelog)). The entry's wording shows that the summary request carries its own effort setting. Run `claude --version` to check your release.
+
+## Measure on your own setup
+
+Measure the saving yourself, because the changelog gives none. Run the same subagent-heavy task with the variable set and unset, and compare token totals. The [costs page](https://code.claude.com/docs/en/costs.md) covers cost tracking.
+
+## Key Takeaways
+
+- The change landed per route: v2.1.327 for Bedrock, Vertex and Foundry, v2.1.328 for the Anthropic API, v2.1.330 for a Claude apps gateway. Each entry names terminal sessions and no other surface.
+- The entries state no saving and name the writing model only for the Anthropic API. Measure before you count on a figure.
+- Summaries are separate requests that the costs page does not list as background usage.
+- `CLAUDE_CODE_DISABLE_AGENT_PROGRESS_SUMMARIES=1` stops the summaries and their requests, and the env-vars reference does not list it.
+- On Bedrock, Vertex or Foundry, v2.1.327 could turn off a subagent model's effort for the session when the provider refused the summary's effort setting. v2.1.328 fixes it.
+
+## Related
+
+- [Claude Code Sub-Agents for Delegating Complex Tasks](sub-agents.md)
+- [Claude Code Subagent Model Fallback: What Carries Down](subagent-fallback-carry-over.md)
+- [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md)
+- [Harness Token Economics](../../token-engineering/harness-token-economics.md)
 
 ---
 
@@ -188179,6 +189185,7 @@ Source: https://agentpatterns.ai/tools/copilot/
 - [Named Customization Metrics in the Copilot Usage Metrics API](named-customization-metrics-copilot.md) — The October 2026 change prints the names your organization gave its customizations, under four conditions that decide whether a given name appears, three of which are documented to leave the activity under `other` instead
 - [Copilot Auto Tiers: Weighting Cost Against Quality](copilot-auto-tier-selection.md) — The efficiency, balance, and intelligence tiers reweight which model auto prefers per prompt; they set no price, no quality floor, and no org policy
 - [VS Code Agents App: Agent-Native Parallel Task Execution](vscode-agents-parallel-tasks.md) — Run multiple agent sessions simultaneously across projects — each session inherits workspace custom instructions and MCP servers, enabling practical fan-out task execution
+- [Copilot Evals: What a First-Party Eval Harness Measures](copilot-evals-first-party-harness.md) — Public-preview harness that tests a skill, custom agent, or MCP tool by saved run; one trial is one sample, and the documented CI gate is the Vally CLI's `--require-pass`
 
 ---
 
@@ -189365,6 +190372,100 @@ Copilot returns a plan. Review it — check that it identified the right middlew
 - [Research-Plan-Implement Pattern](../../workflows/research-plan-implement.md) — Tool-agnostic version of this pattern with mechanism and cost-asymmetry analysis
 - [GitHub Agentic Workflows](github-agentic-workflows.md) — Event-driven repository automation with the same cloud agent infrastructure
 - [Agent Mission Control](agent-mission-control.md) — Centralized dashboard for assigning and monitoring cloud agent tasks
+
+---
+
+### Copilot Evals: What a First-Party Eval Harness Measures
+Source: https://agentpatterns.ai/tools/copilot/copilot-evals-first-party-harness/
+
+# Copilot Evals: What a First-Party Eval Harness Measures
+
+> Copilot Evals tests a skill, custom agent, or MCP tool with repeatable tasks and saved runs you compare after each change.
+
+GitHub Copilot Evals turns a task into a saved test for one customization in your Copilot setup, then lets you rerun it after you change that customization. It entered public preview on 17 November 2026 for Copilot Individual, Business, and Enterprise plans, and it uses Vally, "an extensible local eval tool", as its evaluation engine ([GitHub Changelog](https://github.blog/changelog/2026-11-17-github-copilot-evals-is-now-in-public-preview/)). It lowers the cost of a first eval. Choosing what to measure stays with you.
+
+## What it measures
+
+An eval gives an agent a realistic task, describes what a good result looks like, and "check[s] both the result and how the agent got there" ([GitHub Changelog](https://github.blog/changelog/2026-11-17-github-copilot-evals-is-now-in-public-preview/)). Its targets are the skills, custom agents, and MCP tools in your project ([Copilot Evals README](https://github.com/github/evals)).
+
+Vally records the "how" as a trajectory: tool calls, token usage, turns, skill activations, and errors. Each grader scores that record and returns a pass or fail, a score between 0 and 1, and a plain-text evidence string ([Vally: How it works](https://microsoft.github.io/vally/concepts/how-it-works/)). Four grader kinds from Vally's documentation show the range:
+
+- Static checks on the result, such as `file-exists` and `output-contains`. The same input gives the same result.
+- A command run in the workspace, such as `npm test` through `run-command`. Also deterministic, and heavier.
+- A path check, such as `tool-calls` with a `required` list, which tests whether the agent called a given tool ([Vally: Writing eval specs](https://microsoft.github.io/vally/guides/writing-eval-specs/)).
+- An LLM judge, the `prompt` grader, that scores against a rubric. Vally labels this class non-deterministic and says it "requires multiple trials for confidence" ([Vally: Grader taxonomy](https://microsoft.github.io/vally/concepts/grader-taxonomy/)).
+
+By default a trial passes only when every grader passed. The aggregate score is a mean kept for diagnosis ([Vally: Scoring](https://microsoft.github.io/vally/concepts/scoring/)). The Copilot Evals pages I read do not list which of these graders its create skill proposes, so check the proposed checks before you save an eval.
+
+## What it leaves out
+
+- One run is one sample. In Vally, `runs` defaults to 1, so each stimulus has "exactly one" trial unless you ask for more ([Vally: Scoring](https://microsoft.github.io/vally/concepts/scoring/)). GitHub's own caution is that "A passing check doesn't guarantee the AI will get it right every time" ([Copilot Evals README](https://github.com/github/evals)). Set `defaults.runs` above 1 and Vally flags a stimulus whose trials disagree as flaky.
+- An eval with no graders passes. Vally leaves a stimulus with no graders out of the score, and an eval whose stimuli run successfully without any graders "passes vacuously". A grader type missing from a `weights` map drops out of the score ([Vally: Scoring](https://microsoft.github.io/vally/concepts/scoring/)).
+- A check proves only what it checks. Inference: a green eval says nothing about tasks you did not write, and the sources describe no production-traffic measurement. For a comparison on live usage, see [Gate a Default Harness Switch With Online and Offline Evals](../../patterns/agent-design/shared-runtime-default-harness-eval-gates.md). To judge whether a metric fits the claim you make, see [Match Eval Design and Construct to the Claim You Make](../../verification/claim-matched-eval-design.md).
+
+## Pick the first cases
+
+Start with the failure you already know about. That is my recommendation, not GitHub's. The README's worked example is a release-notes skill tested on "one completed issue and one open issue", with three checks: only completed work appears, issue IDs survive, and the input files stay unchanged ([Copilot Evals README](https://github.com/github/evals)). Each check can pass or fail on its own, so a failure points at one behavior.
+
+The product site shows a `pr-description` skill with three suggested scenarios (shipped versus deferred work, missing verification, instructions hidden in change notes) and starts with the first. GitHub labels that walkthrough "an illustrative workflow" ([Copilot Evals site](https://github.github.io/evals/)). Vally specs carry a `type` of `capability` or `regression` ([Vally: Writing eval specs](https://microsoft.github.io/vally/guides/writing-eval-specs/)). Once a case catches a real failure, keep it as a regression case.
+
+## Feed a review gate
+
+Two layers exist, and the documentation for the second sits with the engine rather than the plugin.
+
+Inside Copilot Evals, you approve each run before it starts, and `/eval compare` compares two saved runs or the same task with and without a skill ([Copilot Evals README](https://github.com/github/evals)). Validating files and reading or comparing saved results "make no model calls". For what the with-and-without delta can and cannot prove, see [Skill Lift](../../verification/skill-lift.md). The site describes the plugin's `setup` skill as "Choose eval folders, suites and CI checks." ([Copilot Evals site](https://github.github.io/evals/)), and it ships three automation blueprints (`eval-health-review`, `eval-smoke-run`, `eval-skill-compare`) for VS Code Agents ([Copilot Evals README](https://github.com/github/evals)). The pages I read give no step-by-step CI recipe for those.
+
+The one documented CI recipe belongs to the Vally CLI. Its quickstart runs `vally lint` on every pull request, a static check with no agent. It runs `vally eval` with `--require-pass` on trusted changes, and that flag makes the step exit 1 when a valid verdict fails. Without the flag, only grader, execution, configuration, or tooling errors fail the step ([Vally: Add to CI](https://microsoft.github.io/vally/get-started/add-to-ci/)). The same page splits suites by priority:
+
+```text
+vally eval --suite ci-gate --require-pass
+vally eval --suite nightly
+```
+
+The `ci-gate` suite filters to priorities p0 and p1, and the nightly suite adds p2 and omits `--require-pass`. Vally's taxonomy guide advises static and complex-static graders in CI and LLM judges in the outer loop ([Vally: Grader taxonomy](https://microsoft.github.io/vally/concepts/grader-taxonomy/)).
+
+Two CI conditions can stop a gate. The recommended workflow needs `copilot-requests: write`, and the quickstart tells an organization owner to enable "Allow use of Copilot CLI billed to the organization". Fork pull requests cannot receive that permission, so the quickstart skips their pre-merge eval and runs it after merge on `main` ([Vally: Add to CI](https://microsoft.github.io/vally/get-started/add-to-ci/)).
+
+That quickstart targets Vally's own CLI and spec files. The pages I read do not say whether the eval files Copilot Evals saves run unchanged under that workflow, so test one before you rely on it.
+
+## Limits of a preview you depend on
+
+- Plans. Public preview covers Copilot Individual, Business, and Enterprise ([GitHub Changelog](https://github.blog/changelog/2026-11-17-github-copilot-evals-is-now-in-public-preview/)).
+- Host requirements. The `/eval` commands and Evals Canvas "currently require Copilot CLI experimental mode", though the six skills work without it. Minimums are Node.js 24.0.0 for the CLI plugin (22.15.0 for VS Code), `@microsoft/vally-cli` 0.21.0, Copilot CLI 1.0.85, and Git 2.28.0 ([Copilot Evals README](https://github.com/github/evals)). VS Code needs 1.138.0 or later and a trusted local project ([Copilot Evals: Get started](https://github.github.io/evals/getting-started/)).
+- Cost. "Evals does not enforce a total token or credit cap", although each run needs one approval of its costs, tools, and execution effects ([Copilot Evals: Get started](https://github.github.io/evals/getting-started/)).
+- Execution. Setup scripts, tools, custom graders, and AI judges "can execute code and incur charges under your normal local permissions" ([Copilot Evals README](https://github.com/github/evals)).
+- Telemetry. Released standalone plugin versions send telemetry by default. `COPILOT_EVALS_TELEMETRY=off`, `DO_NOT_TRACK=1`, or `OTEL_SDK_DISABLED=true` turns it off ([Copilot Evals README](https://github.com/github/evals)).
+- License. The project is "source available", "not open-source software" ([Copilot Evals README](https://github.com/github/evals)).
+- Engine version. The documented minimum Vally version is 0.21.0, a pre-1.0 number. Inference: pin the version in CI and read the release notes before you upgrade, because a pre-1.0 engine may change behavior between releases.
+
+## Example
+
+The README's release-notes case shows the full loop. You enter `/eval create` and describe the pass condition:
+
+```text
+Create an eval for this skill using one completed issue and one open issue.
+Check that the release notes include only completed work, preserve the
+issue IDs, and leave the input files unchanged.
+```
+
+You review the proposed cases, fixtures, and checks, save, then run `/eval run` and approve the cost summary. `/eval review` shows passing checks, outputs, and the conversation trace. After you edit the skill, `/eval run` again and `/eval compare` the new run with the saved one ([Copilot Evals README](https://github.com/github/evals)).
+
+## Key Takeaways
+
+- Copilot Evals targets skills, custom agents, and MCP tools, and checks the result plus the path the agent took.
+- One trial is one sample. Raise `runs` before you trust a pass, and read flaky flags as signal.
+- An eval with no graders passes, and an ungraded stimulus counts toward no score, so confirm every case carries at least one check.
+- `/eval compare` compares saved runs before and after a change. The documented CI gate is the Vally CLI with `--require-pass`.
+- Fork pull requests skip pre-merge evals in Vally's CI recipe, and the preview sets no cost cap.
+- Treat it as a preview: pin versions, set a spend limit of your own, and review saved results before sharing.
+
+## Related
+
+- [Skill Evals: Measuring Skill Quality as a Dataset-Graded Unit](../../verification/skill-evals.md) — the tool-agnostic method behind this kind of harness
+- [Skill Eval Loop](../claude/skill-eval-loop.md) — the same loop with Claude's skill-creator
+- [Skill Lift: Measuring What a Skill Adds at Runtime](../../verification/skill-lift.md) — what a with-versus-without comparison proves
+- [Gate a Default Harness Switch With Online and Offline Evals](../../patterns/agent-design/shared-runtime-default-harness-eval-gates.md) — online and offline gating for a harness change
+- [GitHub Copilot Custom Agents and Skills Extensibility Guide](custom-agents-skills.md) — the customizations you would test
 
 ---
 
@@ -193069,6 +194170,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Running an Agent Experience Evaluation From Gates to Fixes](ax-evaluation-end-to-end.md) — Stack gates, read trajectories, attribute each failure, and fix the source before writing a skill, with the playbook's five-run limit and Microsoft's self-reported results stated up front
 - [Flag Cleanup Grounded in Deployed State](deployed-state-flag-cleanup.md) — Remove a stale feature flag by reading the surviving value from the flag platform's deployed state, confirming intent with the owner, then gating the diff on CI
 - [Per-Job Runner Placement in Agentic Workflows](per-job-runner-placement.md) — A compiled agentic workflow emits several job classes, and `runs-on` moves only the agent job; framework, safe-output, detection, and maintenance jobs read separate fields
+- [From Task Agents to Goal Agents: Harness Additions](task-to-goal-agent-harness-additions.md) — A goal agent picks its own work and runs in the background; one practitioner lists six harness additions that follow, each mapped to existing pages
 
 ---
 
@@ -201525,6 +202627,100 @@ Tool-agnostic. The report specifies artifact shapes and session boundaries, not 
 
 ---
 
+### From Task Agents to Goal Agents: Harness Additions
+Source: https://agentpatterns.ai/workflows/task-to-goal-agent-harness-additions/
+
+# From Task Agents to Goal Agents: Harness Additions
+
+> Harrison Chase argues that giving an agent a goal instead of a task adds six harness requirements: task visibility, tool limits, an inbox, feedback, triggers, and memory.
+
+A goal agent receives an outcome such as "Maintain a blog" and chooses its own work. A task agent receives a bounded assignment such as "Draft this blog". Harrison Chase, writing on LangChain's blog, argues that this shift changes what the harness around the agent must provide, and Chase's post covers six additions ([LangChain, 16 Nov 2026](https://www.langchain.com/blog/from-tasks-to-goals)). The post is one practitioner's opinion and carries no measurements, so use the list as a review checklist for your own system. It has no outcome data behind it.
+
+## What changes between a task and a goal
+
+Chase describes two practical shifts: "From specifying an action to specifying an outcome" and "From a bounded assignment to an ongoing responsibility" ([LangChain](https://www.langchain.com/blog/from-tasks-to-goals)). Chase's post supports each cell below.
+
+| | Task agent | Goal agent |
+|---|---|---|
+| Who picks the work | You specify the tasks | The agent breaks the goal into tasks, does some, and updates the task list |
+| Tool calls | You largely know which tools it will call | You may not know which tools it needs |
+| Questions | You are in the loop and the agent can ask in chat | It may run in the background and needs another route to a person |
+| Run length | It runs until the task completes | It wakes at times to do some work |
+| Context | You supply the relevant context each time | The agent carries decisions and feedback forward |
+
+Chase's conclusion: "You're delegating decisions about what work to do and when to do it" ([LangChain](https://www.langchain.com/blog/from-tasks-to-goals)).
+
+## Six harness additions
+
+The post states each requirement and gives a few examples, but it does not prescribe an implementation. The pages linked under each heading are this site's mapping onto the requirement, which is my inference.
+
+### 1. A visible task list
+
+When the agent chooses the tasks, it has to brainstorm and select well. Chase says it must be somewhat creative and varied, because suggesting the same tasks over and over is "not great". Chase's practical advice is a way to see what the agent is doing, such as a to-do list, plus prompting that pushes it toward varied tasks ([LangChain](https://www.langchain.com/blog/from-tasks-to-goals)).
+
+- [Background Todo Agent](../patterns/agent-design/background-todo-agent.md) routes to-do list maintenance to a small background model.
+- [Goal Recitation](../context-engineering/goal-recitation.md) rewrites objectives and to-do lists at the tail of context to counter drift.
+
+### 2. Tighter control over callable tools
+
+Chase's example: asking for an email (a task) implies a Gmail tool and maybe a calendar tool. Asking to "reduce my coordination burden while keeping important commitments on track" (a goal) could need email, text, search, a browser, or other tools. Chase's advice is more control over which tools the agent can and cannot call ([LangChain](https://www.langchain.com/blog/from-tasks-to-goals)).
+
+- [Deny-Fallback Permissions for Unattended Agent Runs](../patterns/agent-design/deny-fallback-unattended-permissions.md) denies any call that would have reached a permission prompt when no human is present.
+- [Classifier-Gated Auto-Permission](../patterns/agent-design/classifier-gated-auto-permission.md) has a separate classifier inspect each tool call and re-prompt on escalations.
+
+### 3. An inbox for clarifying questions
+
+On a task, a missing detail becomes a follow-up question in chat. A background goal agent may have no chat open, so Chase says it needs a route to a person, "whether through Slack or a dedicated UI" ([LangChain](https://www.langchain.com/blog/from-tasks-to-goals)).
+
+- [Deferred Permission Pattern](../patterns/agent-design/deferred-permission-pattern.md) pauses a headless Claude Code session at a tool call and resumes it after the caller collects human input through its own UI. Its example handles an `AskUserQuestion` call.
+- [Define Async Task Update and Approval Contracts](../patterns/multi-agent/async-task-update-contracts.md) specifies how background task updates and approval requests interact.
+
+### 4. A feedback signal
+
+Chase says the agent needs to know how it is doing, either from a metric or from explicit human feedback. A metric is easy to track automatically, but it is "never wise to blindly optimize a metric". Chase's advice is to use both: define how the agent assesses progress, and "give people a way to correct its interpretation of success" ([LangChain](https://www.langchain.com/blog/from-tasks-to-goals)).
+
+- [Goal Contract](../patterns/agent-design/goal-contract-completion-evaluator.md) covers the completion-check half, where a separate evaluator model decides when a stated condition holds.
+- [Goal Monitoring and Progress Tracking](../patterns/agent-design/goal-monitoring-progress-tracking.md) covers progress tracking and drift detection.
+
+### 5. Triggers with stopping rules
+
+Chase lists four ways a goal agent wakes up: heartbeats every X minutes, recurring cron, one-off cron (a reminder), and listening to an event stream. It also needs a way to stop, pause or ignore them. A heartbeat every thirty minutes that repeats the same question is, in Chase's words, "a terrible UX". Chase adds that "Sometimes doing nothing is the right action" ([LangChain](https://www.langchain.com/blog/from-tasks-to-goals)).
+
+- [Loop Trigger Selection](../loop-engineering/loop-trigger-selection.md) pairs each trigger type with its stopping rule, including a clean no-op as a terminal state for a scheduled firing.
+- [Session Scheduling with Loop and Cron in Claude Code](../tools/claude/session-scheduling.md) shows one tool's scheduled shape.
+- [Whose Permissions a Self-Scheduled Agent Run Carries](../security/self-scheduled-run-authority.md) covers the authority a detached trigger spends later.
+
+### 6. Memory that carries decisions across runs
+
+Chase says memory has not been needed much in a task-based world unless you repeat the same task, because you can supply the context each time. With an ongoing responsibility, more of that burden moves to the agent. Chase's example: rejecting a blog topic should shape later topic choices, "not just the current draft" ([LangChain](https://www.langchain.com/blog/from-tasks-to-goals)).
+
+- [Agent Memory Patterns](../patterns/agent-design/agent-memory-patterns.md) covers persisting knowledge across conversations in scoped memory.
+- [Memory-Induced Tool Drift](../patterns/anti-patterns/memory-induced-tool-drift.md) is the cost to weigh: biases held in long-term memory can steer tool-call parameters in unrelated contexts.
+
+## Where the checklist stops
+
+- One source. The post gives no data on which addition matters most, which to build first, or whether six is the complete set.
+- Two meanings of goal. [Goal-Driven Autonomous Loop with Budget Cap](../loop-engineering/goal-driven-autonomous-loop.md) describes a goal as a stored objective with a completion audit, so the loop ends when the goal is met. Chase's examples ("Maintain a blog", "Make this product successful") read as responsibilities without a finish line, which fits the author's section on triggers and stopping rules. That reading is my inference. Check which meaning your harness implements before borrowing either page's controls.
+- The harness mappings above rest on the linked pages' own sources, not on the LangChain post.
+
+## Key Takeaways
+
+- Review a task-agent harness against six gaps before you give the agent an open goal: task visibility, tool limits, a question route, feedback, triggers, and cross-run memory.
+- Pair any metric with a human route to correct it, and treat doing nothing as a valid result of a trigger firing.
+- Memory lets a goal agent carry feedback forward, and the linked tool-drift page documents the bias it can add.
+- Check whether "goal" in your harness means a stored objective with an end, or an ongoing responsibility. The controls differ.
+- The six-item list is one author's argument. Test it against your own failure logs before treating it as complete.
+
+## Related
+
+- [Loop Trigger Selection](../loop-engineering/loop-trigger-selection.md) — pairing a loop's start with its stop
+- [Goal-Driven Autonomous Loop with Budget Cap](../loop-engineering/goal-driven-autonomous-loop.md) — the stored-objective meaning of goal
+- [Recurring Agent Job Delegation](recurring-agent-job-delegation.md) — widening a recurring job's remit on per-run evidence
+- [Background-to-Foreground Handoff](background-foreground-handoff.md) — handing background work to a person
+- [Goal Monitoring and Progress Tracking](../patterns/agent-design/goal-monitoring-progress-tracking.md) — durable progress signals for long-running agents
+
+---
+
 ### Frozen Task Sets for Affordable Agent A/B Testing
 Source: https://agentpatterns.ai/workflows/frozen-task-set-agent-ab-testing/
 
@@ -205854,6 +207050,7 @@ Eligibility started with Copilot Business and Copilot Enterprise subscribers ([G
 - [Self-Healing Production Agent](../patterns/agent-design/self-healing-production-agent.md) — the autonomous variant of the same loop, with circuit-breaker design for unfixable regressions
 - [Incident-to-Eval Synthesis](../verification/incident-to-eval-synthesis.md) — convert accepted fixes into regression eval cases that gate future deploys
 - [Agent-Authored PR Integration and Merge Predictors](../code-review/agent-authored-pr-integration.md) — empirical baselines on reviewer engagement, force pushes, and comment-volume effects that the one-click loop must respect
+- [Closed-Loop CI Failure Remediation with Cloud Coding Agents](closed-loop-ci-failure-remediation.md) — the general pattern: five dispatcher controls across three trigger shapes
 
 ---
 

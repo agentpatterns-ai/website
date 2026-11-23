@@ -215,3 +215,4 @@ Source Pages
 
 - [Convergence Detection](../../loop-engineering/convergence-detection.md) — three-signal model for knowing when to stop iterating
 - [Pre-Completion Checklists](../../verification/pre-completion-checklists.md) — verification gates before task completion
+- [Loop Engineering: Designing Agent Loops That Converge](../../loop-engineering/index.md) — the reference section for loop termination, control, and budgeting

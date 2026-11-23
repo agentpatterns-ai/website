@@ -161,6 +161,7 @@ Techniques for getting the right context into an agent on demand, whether from c
 - [Path-Only File Mentions: Deferring @ Expansion](path-only-file-mentions.md) — Claude Code 2.1.299 can hand over the paths of `@` file mentions instead of the files' contents; the gain is window occupancy rather than billing, and a read the agent skips reports nothing
 - [Per-Object Context Allocation](per-object-context-allocation.md) — Group retrieved fragments by canonical code object and cap each object's token share, so repeated views of one function stop displacing independent dependencies before the model sees them
 - [Organizational Context Layer for Agents](organizational-context-layer.md) — A shared context layer maps many source systems into one governed store that many agents query; deterministic identity and rebuildable index projections transfer well below that scale
+- [Curator Agent and Missing-Knowledge Flag for Agent Knowledge](curator-agent-knowledge-maintenance.md) — Working agents flag missing or wrong knowledge with a report tool and a background curator agent applies the fixes; the evidence is one vendor post with no reported metrics
 - [Generated Questionnaires: Eliciting Someone Else's Context](generated-questionnaires.md) — Have the agent draft a questionnaire for the one person who holds the missing knowledge, instead of guessing the gap; the technique holds only where that knowledge is statable rather than tacit
 
 ## Error Handling & Drift Prevention

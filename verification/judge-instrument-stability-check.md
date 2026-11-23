@@ -84,3 +84,4 @@ The three conditions above invert cleanly: an aggregate readout, or separations 
 - [Recover the Six Measurement Choices Behind an Attack Success Rate](asr-comparability-audit.md) — the oracle choice as one of six axes that make two published security numbers incomparable
 - [Typed Judge Scorers and the Cost of Each Extra Label](typed-judge-scorers.md) — the return shape to replay, where the label count sets both the alignment and the coverage cost
 - [Cross-Day Config Comparisons Under an Injected Date](../patterns/anti-patterns/cross-day-config-comparisons.md) — a candidate explanation for a next-day replay drifting, if the judge's surface injects the date
+- [Deciding an Agent Upgrade on a Frozen Judge's Verdict](../patterns/anti-patterns/frozen-judge-release-decisions.md) — a frozen judge's verdicts also shift with the agent version that wrote the trajectory

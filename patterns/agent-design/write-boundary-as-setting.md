@@ -88,3 +88,4 @@ The first refuses Write, Edit and NotebookEdit past the boundary in every mode. 
 - [Judging a Write by Its Spelled Path (Spelled-Path Scope)](../anti-patterns/spelled-path-permission-scope.md) — why a path-string check and the filesystem can disagree about where a write lands
 - [Dual-Boundary Sandboxing: Filesystem and Network Isolation](../../security/dual-boundary-sandboxing.md) — the OS-level enforcement this key defers to for subprocess writes
 - [Deny-Fallback Permissions for Unattended Agent Runs](deny-fallback-unattended-permissions.md) — what decides a call on a host where no prompt can be answered
+- [One-Way Settings: Keys With a Fixed Write Direction](../../security/one-way-settings.md) — the sibling Claude Code settings pattern: a key that accepts writes in one direction only
