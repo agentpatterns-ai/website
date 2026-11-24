@@ -159,4 +159,5 @@ Gateways and proxies can break elicitation without warning. Many MCP gateways re
 - [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md)
 - [MCP Client Design](mcp-client-design.md)
 - [Judging MCP Capability Readiness by Client Adoption](mcp-capability-readiness.md)
+- [MCP Tasks in Claude Code: Background Calls and When to Wait](../tools/claude/mcp-tasks-background.md) — a running task can open an elicitation dialog
 - [Override Interactive Commands](override-interactive-commands.md)

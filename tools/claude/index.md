@@ -39,6 +39,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Skill Eval Loop](skill-eval-loop.md) — Test, benchmark, A/B-compare, and optimize agent skills with the skill-creator eval framework
 - [Reloading Skills Mid-Session](reload-skills-mid-session.md) — Re-scan skill directories with /reload-skills or a SessionStart hook, picking up edits without losing context
 - [Monitor Tool](monitor-tool.md) — Stream stdout from background scripts to Claude line-by-line, eliminating polling loops
+- [MCP Tasks in Claude Code: Background Calls and When to Wait](mcp-tasks-background.md) — A server-run MCP task backgrounds at once and a long main-conversation call after two minutes; two environment variables change when Claude waits
 - [Plugin Background Monitors](plugin-background-monitors.md) — Declarative supervision auto-armed at session start via the `monitors` manifest key
 - [Plugin-Activated Main-Agent Override and Bin/ PATH Injection](plugin-main-agent-override-and-path-injection.md) — Plugin `settings.json` swaps the main thread agent; `bin/` injects executables onto the Bash tool's PATH for the plugin's enabled lifetime
 - [Channels Permission Relay](channels-permission-relay.md) — Forward tool-use approval prompts to your phone for unattended agent runs

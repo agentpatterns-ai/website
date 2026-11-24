@@ -115,6 +115,7 @@ Claude starts `docker compose up --build`, monitors its stdout, and interjects o
 - [Plugin Background Monitors](plugin-background-monitors.md)
 - [Wait Primitive Plus Shell-Sleep Deny](../../patterns/agent-design/wait-primitive-shell-sleep-deny.md) — why the 2.1.310 release paired Monitor with a sleep block
 - [Session Scheduling](session-scheduling.md)
+- [MCP Tasks in Claude Code: Background Calls and When to Wait](mcp-tasks-background.md) — the other way a long job runs in the background
 - [Hooks & Lifecycle](hooks-lifecycle.md)
 - [/batch & Worktrees](batch-worktrees.md)
 - [Observability](../../observability/index.md)

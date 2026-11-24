@@ -121,3 +121,4 @@ Now an injected instruction in a fetched issue body makes the LLM emit `db-reado
 - [Choose Agent Gate Layers by Mechanism Class, Then Measure](../verification/mechanism-class-gate-stacking.md) — the orthogonality claimed here, measured on 560 actions labeled block: a rule layer plus one judge composed to 1.9 to 2.1 independent layers, two judges to 1.2 to 1.4
 - [Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls](mid-trajectory-guardrail-selection.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
+- [Inline Intent Judge at the Model-Response Gateway](judge-gated-tool-calls-gateway-intent-check.md) — the same intent question asked on the model's response, before the agent receives the call, instead of between agent and MCP server

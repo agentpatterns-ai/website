@@ -72,3 +72,4 @@ Writing down a rule predicts that its pattern "will be relevant again" ([Anthrop
 - [Tiered Memory Architecture](tiered-memory-architecture.md) — promoting facts from raw episodes to a curated tier on observed re-use
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md) — mining traces for lessons
 - [Continual Learning for AI Agents](continual-learning-layers.md) — where memory sits among model, harness, and context updates
+- [Designing Proactive Agent Check-Ins: Signal, Review, and Memory](proactive-agent-check-in-design.md) — one vendor's advice to feed check-in review responses into agent memory, with no evidence reported for dreaming

@@ -180,6 +180,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Verdict-Driven Inspection Cadence for Agent Monitors (Cadence)](verdict-driven-inspection-cadence.md) — Set a runtime monitor's next inspection interval from its own last verdict: widen after advisory guidance, reset to the base after a discarded step
 - [Edit-Request Steering Trigger: One Plan Before the First Source Edit](edit-request-steering-trigger.md) — Fire one planning intervention when a repair agent first asks to write a source file, a trigger readable from the action type and target path with no monitor and no checkpoint search
 - [Choosing a Scheduled Agent's Firing Interval](scheduled-agent-firing-interval.md) — Set a scheduled run's interval from the job it does, then cap it at the rate its reader can absorb; where the source can push, drop the interval and subscribe
+- [Designing Proactive Agent Check-Ins: Signal, Review, and Memory](proactive-agent-check-in-design.md) — LangChain's post on Robin and GTM Agent: surface only what needs action, make review fast, feed responses into memory; one vendor source
 
 ## Reliability
 

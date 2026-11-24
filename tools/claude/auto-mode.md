@@ -67,6 +67,20 @@ The classifier trusts your working directory and the remotes configured when the
 
 A blocked action returns a reason and Claude tries an alternative. Three consecutive blocks or 20 in a session pause the agent and restore prompting, and headless runs (`-p`) abort instead; neither threshold is configurable. The classifier also checks [subagent](sub-agents.md) work at spawn, at runtime, and on return, ignoring any `permissionMode` in its frontmatter ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
 
+## When the server can't check
+
+The server-side default arrived in steps: v2.1.278 (September 19, 2026) for Claude API and Enterprise users and for Bedrock, Vertex, Foundry and gateways ([changelog 2.1.278](https://code.claude.com/docs/en/changelog#2-1-278)), then v2.1.282 (September 24, 2026) for a direct Anthropic API connection with telemetry off ([changelog 2.1.282](https://code.claude.com/docs/en/changelog#2-1-282)).
+
+v2.1.319 (November 6, 2026) changed the failure case. With telemetry or feature flags off, including behind LLM gateways, "calls the server can't check are asked about or denied, with no fallback to the built-in classifier". Bedrock, Vertex and Foundry are unchanged ([changelog 2.1.319](https://code.claude.com/docs/en/changelog#2-1-319)). The entry does not say which calls are asked and which are denied. My reading, not the docs' statement: [`permissions.denyInsteadOfPrompting`](https://code.claude.com/docs/en/settings-reference#permissions-denyinsteadofprompting) makes it a deny on [unattended runs](../../patterns/agent-design/deny-fallback-unattended-permissions.md).
+
+The permission-modes page does not mention the v2.1.319 change. It still says Claude Code "falls back to its own classifier requests" when the server does not review a session ([Claude Code docs](https://code.claude.com/docs/en/permission-modes#server-side-classifier-review)). The v2.1.327 notice says "an upcoming release removes the fallback" ([changelog 2.1.327](https://code.claude.com/docs/en/changelog#2-1-327)). Test your own session.
+
+`CLAUDE_CODE_AUTO_MODE_SERVER=0`, set before the session, keeps the local classifier. Its requests are billed as before, the sources give no cost or latency number, and the docs call the variable "temporary" ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-classifier-billing)).
+
+Gateways must forward the `anthropic-beta` header and `safeguards` body field unchanged (on the Bedrock InvokeModel format, the `anthropic_beta` body field in place of the header) and keep `safeguard_results` ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-classifier-billing)). Behind a gateway, `CLAUDE_CODE_AUTO_MODE_SERVER=1` enables the check even with `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` set, and [managed settings](managed-settings-drop-in.md) that set the latter must set the `1` too ([changelog 2.1.319](https://code.claude.com/docs/en/changelog#2-1-319)).
+
+Check with `/status`: the `Auto mode server` row reads `Enabled`, or `Disabled` after a fallback ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-classifier-billing)). With no verdict, "Claude Code denies the action rather than run it unreviewed" ([Claude Code docs](https://code.claude.com/docs/en/permission-modes#server-side-classifier-review)). Ten no-verdict responses in a row stop the turn on v2.1.280 or later ([Claude Code docs](https://code.claude.com/docs/en/errors#the-server-returned-no-safety-verdict)).
+
 ## Turning it off or fencing it in
 
 Four mechanisms, ordered by how firmly they hold ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-config)):
@@ -87,7 +101,7 @@ To switch one session back, cycle with `Shift+Tab` or start with `claude --permi
 - Consent-scope misjudgment on a population that never opted in. That 17% overeager rate now applies to developers who inherited the mode.
 - Narrow allow rules the classifier never sees. Broad rules like `Bash(*)` are suspended on entry, but a narrow rule such as `Bash(npm test)` carries over and can pass a destructive argument. Setting `autoMode.classifyAllShell` closes that, at one classifier call per command.
 - Workflows built on default-branch pushes being blocked. From v2.1.211 those pushes are allowed by default and the protected-branch setting was removed ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-config)).
-- Metered accounts. On Enterprise plans and on Claude API, Bedrock, Agent Platform, and Foundry accounts, every classifier check counts toward token usage ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)). The server-side path became the default in v2.1.278 for Claude API and Enterprise users, and on Bedrock, Vertex, Foundry, and gateways. It "does not charge for classifier overhead" ([Claude Code changelog 2.1.278](https://code.claude.com/docs/en/changelog#2-1-278)).
+- Metered accounts. On Enterprise plans and on Claude API, Bedrock, Agent Platform, and Foundry accounts, every classifier check counts toward token usage ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)). The server-side path, the default since v2.1.278, "does not charge for classifier overhead" ([Claude Code changelog 2.1.278](https://code.claude.com/docs/en/changelog#2-1-278)). That holds only where the server's checks reach the session. A gateway that drops the `safeguards` field can send Claude Code back to its own billed classifier requests ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-classifier-billing)); see [When the server can't check](#when-the-server-cant-check).
 
 ## Example
 

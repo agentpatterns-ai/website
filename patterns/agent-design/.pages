@@ -165,6 +165,7 @@ nav:
       - verdict-driven-inspection-cadence.md
       - edit-request-steering-trigger.md
       - scheduled-agent-firing-interval.md
+      - proactive-agent-check-in-design.md
   - "Reliability":
       - administrative-effort-ceilings.md
       - agent-circuit-breaker.md

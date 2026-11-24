@@ -186,6 +186,7 @@ nav:
       - recall-before-send-memory-poisoning-detection.md
       - flattened-tool-specs-safety-judgment.md
       - hybrid-deterministic-semantic-tool-authorization.md
+      - judge-gated-tool-calls-gateway-intent-check.md
       - mcp-execution-security-invariants.md
       - mcp-metadata-approval-view-gap.md
       - log-to-leak-post-hoc-mcp-exfiltration.md

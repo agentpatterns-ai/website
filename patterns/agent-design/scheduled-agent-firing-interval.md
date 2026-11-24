@@ -90,3 +90,4 @@ In this static schedule, the cron is the entire cadence decision and the prompt 
 - [Cloud-Scheduled Routines vs Local Session Scheduling](../../tools/claude/cloud-scheduled-routines.md) — the surface trade a sub-hour cadence forces, with the 1-hour cloud floor in full
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — why a shorter interval raises the cost of a fire that duplicates the last one's output
 - [Whose Permissions a Self-Scheduled Agent Run Carries](../../security/self-scheduled-run-authority.md) — the authority a fire spends, decided when the schedule is written rather than when it runs
+- [Designing Proactive Agent Check-Ins: Signal, Review, and Memory](proactive-agent-check-in-design.md) — what the check-in costs the human once a fire produces one, and how review feeds memory

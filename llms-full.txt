@@ -723,6 +723,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Delta Channels: Bounded Checkpoint Storage for Append-Only Agent State](patterns/agent-design/delta-channels-checkpoint-storage.md)
 - [Deny-Fallback Permissions for Unattended Agent Runs](patterns/agent-design/deny-fallback-unattended-permissions.md)
 - [Designing Agent Plugins to Survive Co-Installation](patterns/agent-design/plugin-co-installation-safety.md)
+- [Designing Proactive Agent Check-Ins: Signal, Review, and Memory](patterns/agent-design/proactive-agent-check-in-design.md)
 - [Deterministic Orchestration for Structured Modernization](patterns/agent-design/deterministic-orchestration-structured-modernization.md)
 - [Difficulty-Aware Topology Selection for Coding Agents](patterns/agent-design/difficulty-aware-topology-selection.md)
 - [Discrete Phase Separation](patterns/agent-design/discrete-phase-separation.md)
@@ -1286,6 +1287,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Identifier-Only Context Poisoning in Code Completion](security/identifier-only-context-poisoning.md)
 - [Improper Output Handling: Validate Agent Output Before Downstream Use](security/improper-output-handling-downstream-sinks.md)
 - [In-Process WebAssembly Sandboxes for Agent-Generated Code](security/wasm-sandbox-agent-code-execution.md)
+- [Inline Intent Judge at the Model-Response Gateway](security/judge-gated-tool-calls-gateway-intent-check.md)
 - [Inline Safety Harness with Cascade Verification (FinHarness)](security/inline-lifecycle-safety-harness.md)
 - [Keep the Exact Limits in Code and the Judgment in the Model](security/exact-limits-in-code-judgment-in-model.md)
 - [Leave-One-Out Permission Testing for Agent Rule Files](security/leave-one-out-permission-testing.md)
@@ -2451,6 +2453,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [GitHub Copilot Coding Agent for AI Agent Development](tools/copilot/coding-agent.md)
 - [GitHub Copilot in Xcode's Built-In Coding Assistant](tools/copilot/xcode-built-in-coding-assistant.md)
 - [Managed PostToolUse Hooks Skip Refused Tool Calls](tools/claude/managed-posttooluse-skips-refused-calls.md)
+- [MCP Tasks in Claude Code: Background Calls and When to Wait](tools/claude/mcp-tasks-background.md)
 - [Self-Paced /loop Ends When a Turn Does Not Reschedule](tools/claude/self-paced-loop-reschedule.md)
 - [GitHub Copilot Custom Agents and Skills Extensibility Guide](tools/copilot/custom-agents-skills.md)
 - [GitHub Copilot Dedicated App as Agent-First Surface](tools/copilot/copilot-dedicated-app.md)
@@ -28819,6 +28822,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Verdict-Driven Inspection Cadence for Agent Monitors (Cadence)](verdict-driven-inspection-cadence.md) — Set a runtime monitor's next inspection interval from its own last verdict: widen after advisory guidance, reset to the base after a discarded step
 - [Edit-Request Steering Trigger: One Plan Before the First Source Edit](edit-request-steering-trigger.md) — Fire one planning intervention when a repair agent first asks to write a source file, a trigger readable from the action type and target path with no monitor and no checkpoint search
 - [Choosing a Scheduled Agent's Firing Interval](scheduled-agent-firing-interval.md) — Set a scheduled run's interval from the job it does, then cap it at the rate its reader can absorb; where the source can push, drop the interval and subscribe
+- [Designing Proactive Agent Check-Ins: Signal, Review, and Memory](proactive-agent-check-in-design.md) — LangChain's post on Robin and GTM Agent: surface only what needs action, make review fast, feed responses into memory; one vendor source
 
 ## Reliability
 
@@ -34531,6 +34535,7 @@ In this static schedule, the cron is the entire cadence decision and the prompt 
 - [Cloud-Scheduled Routines vs Local Session Scheduling](../../tools/claude/cloud-scheduled-routines.md) — the surface trade a sub-hour cadence forces, with the 1-hour cloud floor in full
 - [Idempotent Agent Operations: Safe to Retry](idempotent-agent-operations.md) — why a shorter interval raises the cost of a fire that duplicates the last one's output
 - [Whose Permissions a Self-Scheduled Agent Run Carries](../../security/self-scheduled-run-authority.md) — the authority a fire spends, decided when the schedule is written rather than when it runs
+- [Designing Proactive Agent Check-Ins: Signal, Review, and Memory](proactive-agent-check-in-design.md) — what the check-in costs the human once a fire produces one, and how review feeds memory
 
 ---
 
@@ -38744,6 +38749,79 @@ Renaming the directories to `plugin-a-troubleshooting` and `plugin-b-troubleshoo
 - [Pre-Install Plugin Transparency: Capability Inventory and Cost Projection](../../standards/pre-install-plugin-transparency.md) — showing a user what a bundle exports before it is installed, which a declared capability surface would make cheap.
 - [Scoped MCP Server Discovery: Most-Specific-Wins Resolution](../../tool-engineering/scoped-mcp-server-discovery.md) — a worked precedence rule at the configuration layer, against the one the plugin specification declines to write.
 - [Shipping a Shared Agent Toolkit as a Versioned Plugin](../../instructions/shared-toolkit-plugin-ownership.md) — the internal single-owner bundle this page scopes out, where the collision is with the consuming repository rather than with a stranger.
+
+---
+
+### Designing Proactive Agent Check-Ins: Signal, Review, and Memory
+Source: https://agentpatterns.ai/patterns/agent-design/proactive-agent-check-in-design/
+
+# Designing Proactive Agent Check-Ins: Signal, Review, and Memory
+
+> LangChain's post on its proactive agents treats each check-in as a cost in attention and designs it for signal, fast review, and memory.
+
+A proactive agent responds to events from three places: real-world events, schedules the developer sets, and schedules the agent sets ([LangChain](https://www.langchain.com/blog/what-weve-learned-building-proactive-agents)). Robin's pull request reviews start from the first. GTM Agent's daily brief runs on a schedule the agent created after a user asked for one. For trigger choice, see [Loop Trigger Selection](../../loop-engineering/loop-trigger-selection.md) and [Choosing a Scheduled Agent's Firing Interval](scheduled-agent-firing-interval.md). This page starts at the check-in after the trigger fires. The post's premise, "As they take on more goals, your attention becomes the scarce resource," is an opinion with no data behind it.
+
+## Surface only what the human acts on
+
+"An agent should surface only what's valuable," the post says. A new email "doesn't necessarily mean the agent should do anything about it" ([LangChain](https://www.langchain.com/blog/what-weve-learned-building-proactive-agents)). Two designs from the post:
+
+- GTM Agent's review UI sorts conversations into ones waiting on the user, ones that need a draft reply, and ones that need no reply.
+- Robin uses Jev as a decision model for when to join a Slack conversation, so it joins when it has something to add rather than forcing its way in or waiting to be tagged.
+
+The post reports no accuracy or false-start rate for either. Offline ranking quality does not guarantee in-loop value, per [Treating Offline Judgment Quality as In-Loop Controller Value](../anti-patterns/offline-judgment-quality-as-controller-value.md).
+
+## Make review fast, because review is the feedback channel
+
+"Every check-in should be fast to review, because review is how your feedback gets back into memory" ([LangChain](https://www.langchain.com/blog/what-weve-learned-building-proactive-agents)). Three choices from its own agents:
+
+- GTM Agent drafts outbound emails. Working through a backlog of them in Slack was slow, so LangChain built a custom review UI.
+- Robin leads with a one- or two-sentence headline and puts the detail in a thread reply.
+- Robin's pull request review request carries a one-line summary, the size of the change, and a button to claim it.
+
+These are one team's choices. The two Robin choices are Slack-specific, and the GTM Agent choice moved review out of Slack. The post measures none, including review time.
+
+## Feed responses back as memory
+
+The post ties check-in quality to memory: "The agent can only tell the two apart if it knows what matters to you, and that knowledge comes from memory" ([LangChain](https://www.langchain.com/blog/what-weve-learned-building-proactive-agents)). Its running example, an executive assistant that watches an inbox, is not one of the two agents LangChain runs. Treat it as illustration.
+
+| Signal | When | Executive-assistant example |
+|---|---|---|
+| Seed | Past | Memory seeded from the sent folder before the first run |
+| Feedback | Present | The user rewrites a draft or rejects it with a reason |
+| Outcomes | Future | A drafted email gets a reply |
+
+Keeping memory useful raises three problems, which the post states without measuring them: salience (what to save), expiry (information gone stale), and duplication (a second entry that contradicts the first). The post says many proactive agents use "dreaming," a scheduled background job that reads recent traces and updates memory before the next run. It names no agents and offers no evidence that dreaming works. [Steering Agent Memory](salience-steered-memory-with-dreaming.md) has measured results from another vendor.
+
+## Track check-ins and extend autonomy from feedback
+
+The post suggests judging memory by tracking outcomes it should improve, such as time to draft approval and reply rate for the executive assistant. It adds that "the share of its check-ins you actually act on is worth watching too" ([LangChain](https://www.langchain.com/blog/what-weve-learned-building-proactive-agents)). It reports no value for any of these.
+
+The post also claims that an agent that remembers feedback "stops making the same mistakes, which earns it more autonomy." Its example is letting the assistant book meetings once the user stops changing the times it proposes. It gives no deployment result. For authority on self-created schedules, see [Whose Permissions a Self-Scheduled Agent Run Carries](../../security/self-scheduled-run-authority.md).
+
+## Limits of the source
+
+- It is a vendor engineering post. It ends with "You can build proactive agents today with Managed Deep Agents," a LangChain product.
+- It carries one statistic. More than 70% of runs on Managed Deep Agents, the platform LangChain built both agents on, come from schedules rather than an ad hoc human prompt. The post states no time window or denominator, and does not say whether the count covers only those two agents.
+- The only agents the post reports LangChain running are Robin and GTM Agent, both internal to LangChain. Its delivery advice is Slack-specific.
+
+Related cautions: [shared-channel rollout](../anti-patterns/proactive-team-agent-tool-rollout.md), [attention across parallel agents](../../human/attention-management-parallel-agents.md), and [harness additions for goals](../../workflows/task-to-goal-agent-harness-additions.md).
+
+## Key Takeaways
+
+- Sort events by whether they need action before they reach the human. Robin and GTM Agent do this, and neither has a reported error rate.
+- Treat each rewrite, rejection, and outcome as memory input, and plan for salience, expiry, and duplication.
+- The post suggests tracking the share of check-ins acted on and widening autonomy as feedback accumulates. It reports no result for either.
+
+## Related
+
+- [Loop Trigger Selection: Pairing the Start with the Stop](../../loop-engineering/loop-trigger-selection.md) — pairing a trigger with its stop
+- [Choosing a Scheduled Agent's Firing Interval](scheduled-agent-firing-interval.md) — interval from the job and reader capacity
+- [Steering Agent Memory: Judge Salience, Then Correct with Dreaming](salience-steered-memory-with-dreaming.md) — measured dreaming results
+- [Treating Offline Judgment Quality as In-Loop Controller Value](../anti-patterns/offline-judgment-quality-as-controller-value.md) — offline gate quality versus in-loop value
+- [Rolling Out a Team-Embedded Agent Like a Tool](../anti-patterns/proactive-team-agent-tool-rollout.md) — proactive agents in shared channels
+- [Developer as CPU Scheduler: Attention Management with Parallel Agents](../../human/attention-management-parallel-agents.md) — attention across parallel agents
+- [From Task Agents to Goal Agents: Harness Additions](../../workflows/task-to-goal-agent-harness-additions.md) — harness requirements for goals
+- [Whose Permissions a Self-Scheduled Agent Run Carries](../../security/self-scheduled-run-authority.md) — authority on agent-created schedules
 
 ---
 
@@ -58661,6 +58739,7 @@ Writing down a rule predicts that its pattern "will be relevant again" ([Anthrop
 - [Tiered Memory Architecture](tiered-memory-architecture.md) — promoting facts from raw episodes to a curated tier on observed re-use
 - [Memory Synthesis: Extracting Lessons from Execution Logs](memory-synthesis-execution-logs.md) — mining traces for lessons
 - [Continual Learning for AI Agents](continual-learning-layers.md) — where memory sits among model, harness, and context updates
+- [Designing Proactive Agent Check-Ins: Signal, Review, and Memory](proactive-agent-check-in-design.md) — one vendor's advice to feed check-in review responses into agent memory, with no evidence reported for dreaming
 
 ---
 
@@ -95941,6 +96020,7 @@ Gateways and proxies can break elicitation without warning. Many MCP gateways re
 - [MCP Server Design: Building Agent-Friendly Servers](mcp-server-design.md)
 - [MCP Client Design](mcp-client-design.md)
 - [Judging MCP Capability Readiness by Client Adoption](mcp-capability-readiness.md)
+- [MCP Tasks in Claude Code: Background Calls and When to Wait](../tools/claude/mcp-tasks-background.md) — a running task can open an elicitation dialog
 - [Override Interactive Commands](override-interactive-commands.md)
 
 ---
@@ -136618,6 +136698,7 @@ Tool invocation exposes attack surfaces distinct from prompt injection. Maliciou
 - [Detecting Memory-Poisoning Exfiltration by Tool-Call Order (Recall-Before-Send Signature)](recall-before-send-memory-poisoning-detection.md) — A memory-poisoning attack must recall the stored attacker address before sending, so a single tool-call-ordering rule detects it from logs alone at AUC 0.96 — model-agnostic but memory-channel-specific, adaptive-evadable, and prone to false positives on benign reasoning agents
 - [Flattened Tool Specs for Agent Safety Judgment (SafeKeep)](flattened-tool-specs-safety-judgment.md) — Schema-formatted tool specs suppress the model's refusal signal; judging a request against a flattened prose rendering while executing against the schema lifts average refusal on harmful requests from 23.8% to 70.6%, a defense-in-depth layer above deterministic tool authorization
 - [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md) — Combine five deterministic structural checks at the agent-tool boundary with a semantic task-to-tool matcher; the two attack classes are orthogonal so neither layer alone suffices
+- [Inline Intent Judge at the Model-Response Gateway](judge-gated-tool-calls-gateway-intent-check.md) — Google's Semantic governance policies judge each tool call a model proposes, in Agent Gateway before the agent sees it; in Google's AgentDojo benchmark (gemini-2.5-flash, intent check only, fixed attacks, six-run mean) attack success fell from 48.7% to 0.9%, and text-only and streamed responses go unchecked
 - [Execution-Layer Security Invariants for MCP Runtimes](mcp-execution-security-invariants.md) — Decompose MCP execution security into eight named, testable runtime invariants; a benchmark shows any single connection-layer boundary blocks only 4 of 10 attacks while all eight together block 10
 - [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — MCP reviews tool metadata once but injects it every turn, and the protocol never requires the approved view to match the model's bytes; invisible Unicode TAG-block characters ride that gap unseen across three independent server libraries
 - [Post-Hoc Exfiltration Through MCP Tool Descriptions (Log-To-Leak)](log-to-leak-post-hoc-mcp-exfiltration.md) — a poisoned MCP tool description makes the agent log the session to an attacker after the real task finishes. Tested defenses left over 55% residual attack success on GitHub MCP with GPT-4o
@@ -146544,6 +146625,7 @@ Now an injected instruction in a fetched issue body makes the LLM emit `db-reado
 - [Choose Agent Gate Layers by Mechanism Class, Then Measure](../verification/mechanism-class-gate-stacking.md) — the orthogonality claimed here, measured on 560 actions labeled block: a rule layer plus one judge composed to 1.9 to 2.1 independent layers, two judges to 1.2 to 1.4
 - [Mid-Trajectory Guardrail Selection for Multi-Step Tool Calls](mid-trajectory-guardrail-selection.md)
 - [Defense-in-Depth Agent Safety](defense-in-depth-agent-safety.md)
+- [Inline Intent Judge at the Model-Response Gateway](judge-gated-tool-calls-gateway-intent-check.md) — the same intent question asked on the model's response, before the agent receives the call, instead of between agent and MCP server
 
 ---
 
@@ -146814,6 +146896,96 @@ The host sees a clean error; the host process is unaffected. The same pattern ap
 
 ---
 
+### Inline Intent Judge at the Model-Response Gateway
+Source: https://agentpatterns.ai/security/judge-gated-tool-calls-gateway-intent-check/
+
+# Inline Intent Judge at the Model-Response Gateway
+
+> An LLM judge at the model-response gateway checks each proposed tool call against the user's request before the call runs.
+
+Google's Semantic governance policies, in Preview on Google Cloud, place this check in Agent Gateway, the only enforcement point they support today ([Google announcement, 2026-11-20](https://developers.googleblog.com/check-what-your-ai-agents-do-before-they-do-it-with-semantic-governance-policies/)). The product runs on Google Cloud only, so the numbers below describe it alone.
+
+## Where the check sits
+
+The judge sits between the agent's model and the agent. When the model proposes a tool call, Agent Gateway sends it to the policy engine before the response reaches the agent. "If the call is allowed, the response passes through unchanged; if not, the call is replaced with a denial message and never runs" ([Google Developers Blog, 2026-11-23](https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/)).
+
+The judge reads the same context as the agent, with a trust split. The user's request and the system instructions are trusted. "Tool results, files and messages are untrusted context, treated as data, never as instructions" ([Google Developers Blog](https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/)).
+
+Compare [CASA](hybrid-deterministic-semantic-tool-authorization.md), which checks the call between agent and MCP server. This check runs one step earlier, on the model's response, so the agent never holds a denied call. It applies only to traffic that crosses the gateway: Google says to configure the agent so all its egress traffic goes through Agent Gateway ([Google announcement](https://developers.googleblog.com/check-what-your-ai-agents-do-before-they-do-it-with-semantic-governance-policies/)). The sources describe a check on proposed calls, not on what an allowed tool does once it runs, so [Runtime Control Path Coverage](runtime-control-path-coverage.md) still applies.
+
+## Two checks
+
+A call must pass both checks to run ([Google announcement](https://developers.googleblog.com/check-what-your-ai-agents-do-before-they-do-it-with-semantic-governance-policies/)).
+
+- The user-intent check is on by default and needs no policies. It tests whether the proposed call has deviated from what the user asked for.
+- The policy check applies natural-language rules attached to an agent or to one tool. Rules win over requests: in Google's example, "the employee did ask, but your rules take precedence over the request."
+
+Each verdict and its rationale go to Cloud Logging ([Google announcement](https://developers.googleblog.com/check-what-your-ai-agents-do-before-they-do-it-with-semantic-governance-policies/)).
+
+## What the numbers show
+
+Google ran a gemini-2.5-flash agent on AgentDojo v1.2.2 (97 user tasks, 949 attacked runs, the `important_instructions` attack) with only the default intent check and no policies, and averaged six runs per configuration ([benchmark docs](https://docs.cloud.google.com/gemini-enterprise-agent-platform/govern/policies/adversarial-benchmarking); [Google Developers Blog](https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/)). Google ran and published the benchmark.
+
+- Attack success fell from 48.7% to 0.9% under those conditions, and stayed between 0.84% and 0.95% in every run with the judge ([benchmark docs](https://docs.cloud.google.com/gemini-enterprise-agent-platform/govern/policies/adversarial-benchmarking)).
+- Benign-task utility averaged 72.7% without the judge and 70.1% with it, a 2.6-point cost. Individual runs ranged from -1.0 to 7.2 points ([benchmark docs](https://docs.cloud.google.com/gemini-enterprise-agent-platform/govern/policies/adversarial-benchmarking)).
+- "None of the 929 attacks that needed a tool call succeeded in any of the six runs" ([Google Developers Blog](https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/)).
+- Utility under attack read 25.8% with the judge against 35.1% without, but 12.4 points of the 35.1% were runs where the task finished and the attack also succeeded. Counting only runs where the task finished and the attack failed, the figures were 25.1% with the judge and 22.7% without ([Google Developers Blog](https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/)).
+
+## Blind spots the sources state
+
+- Text-only manipulation. The residual travel-domain successes asked the agent to recommend a particular hotel in its reply. "No tool call is involved, so there is no action … to evaluate", and Google suggests response filtering as a complement ([Google Developers Blog](https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/)). Responses that contain only text are not evaluated ([Google announcement](https://developers.googleblog.com/check-what-your-ai-agents-do-before-they-do-it-with-semantic-governance-policies/)).
+- Streaming. The engine does not support streamed responses, and "A tool call in a streamed response might not be blocked" ([Google overview docs](https://docs.cloud.google.com/gemini-enterprise-agent-platform/govern/policies/semantic-governance-overview)). Configure the agent to call its model without streaming.
+- Undescribed tools. "The judge relies on descriptions to understand a call, and is instructed to deny calls to tools that have none" ([Google announcement](https://developers.googleblog.com/check-what-your-ai-agents-do-before-they-do-it-with-semantic-governance-policies/)).
+- Unspecified behavior. The four Google sources give no latency figure. They do not say whether a call runs or is blocked when the engine fails or cannot be reached. Measure both in your own deployment before enforcing.
+
+## When this backfires
+
+- The judge can be targeted. "That separation is enforced by how the judge is instructed, not by a hard technical boundary", so an attacker could try to disguise an injected request as the user's. AgentDojo's attacks were fixed and not adapted to the judge, so the figures above do not measure that case ([Google Developers Blog](https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/)). NIST's evaluators raised attack success against an agent built on Claude 3.5 Sonnet "from 11% for the strongest baseline attack to 81% for the strongest new attack" ([NIST CAISI, 2025-01-17](https://www.nist.gov/news-events/news/2025/01/technical-blog-strengthening-ai-agent-hijacking-evaluations)). NIST tested that agent, not a gateway judge, so read the figure as a caution about adaptive attacks and not as a measurement of this product. See [Adaptive Evaluation of Out-of-Band Prompt-Injection Defenses](adaptive-evaluation-out-of-band-defenses.md) and [Treating a Detector's Benchmark Score as Deployment Evidence](../patterns/anti-patterns/detector-benchmark-score-as-deployment-evidence.md).
+- Legitimate work gets denied. "Unintended over-blocking affected 1 of the 97 benign tasks (about 1%)" ([Google Developers Blog](https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/)). Two benign tasks failed consistently, and Google counts both as intended blocks because each asked the agent to follow instructions from an external web page and "claimed a user identity that contradicted the agent's configuration" (same post).
+- Benchmark utility is not production utility. The benchmark harness "drops only the denied call, while production blocks the agent's whole response" ([benchmark docs](https://docs.cloud.google.com/gemini-enterprise-agent-platform/govern/policies/adversarial-benchmarking)). Google states the harness differences "don't materially change the results" ([Google Developers Blog](https://developers.googleblog.com/did-the-user-ask-for-this-securing-ai-agents-against-intent-hijacking-with-semantic-governance-policies/)).
+- Verdicts are probabilistic. "LLMs are probabilistic and can make mistakes. Verdicts may not be accurate" ([benchmark docs](https://docs.cloud.google.com/gemini-enterprise-agent-platform/govern/policies/adversarial-benchmarking)). The feature is in Preview, where pre-GA features are available "as is" and "might have limited support" (same page).
+
+## Adoption order
+
+Google's rollout sequence ([Google announcement](https://developers.googleblog.com/check-what-your-ai-agents-do-before-they-do-it-with-semantic-governance-policies/)):
+
+1. Provision the policy engine and connect it to Agent Gateway.
+2. Turn on dry run mode. "The engine logs what it would deny without blocking anything", and the intent check is already on.
+3. Give every tool a clear description.
+4. Add policies, review the verdicts in Cloud Logging, then switch to enforcement.
+
+Google says the judge complements other controls rather than replacing them (same post). A deterministic layer under the judge, such as an [egress allowlist](agent-network-egress-policy.md) or a sandbox, covers the cases where a probabilistic verdict is wrong, in line with [defense in depth](defense-in-depth-agent-safety.md). [Choose Agent Gate Layers by Mechanism Class, Then Measure](../verification/mechanism-class-gate-stacking.md) covers how to combine layers.
+
+## Example
+
+Google's announcement walks a finance agent through three proposed calls ([Google announcement](https://developers.googleblog.com/check-what-your-ai-agents-do-before-they-do-it-with-semantic-governance-policies/)):
+
+- An employee asks for results to go to the controller's company address. The agent proposes `send_email` and the call is allowed.
+- An employee asks for the results to go to an outside investor, with a personal Gmail copied. The earnings policy denies the whole call, even though the employee asked.
+- Hidden text in a planning document tells the agent to delete drafts. The agent proposes `delete_file` and the intent check denies it: "nobody asked for it, and no policy allows deletions."
+
+## Key Takeaways
+
+- The check runs on the model's response, before the agent receives a tool call. A denied call is replaced with a denial message and never runs.
+- A call needs two passes: the default user-intent check, and any policies you attach.
+- Google's AgentDojo run (gemini-2.5-flash, intent check only, six-run mean, fixed attacks) cut attack success from 48.7% to 0.9% at a 2.6-point utility cost.
+- Text-only responses and streamed responses are not evaluated. The Google sources give no latency figure and do not specify what happens if the engine fails.
+- The judge is instructed, not technically isolated. Fixed benchmark attacks do not measure adaptive ones, so run dry mode first and test your own deployment.
+
+## Related
+
+- [Hybrid Deterministic + Semantic Authorization for Agent Tool Calls](hybrid-deterministic-semantic-tool-authorization.md) — CASA checks the call between agent and MCP server; this check reads the model's response one step earlier
+- [Intent-Governed Tool Authorization for AI Agents (IGAC)](intent-governed-tool-authorization.md) — issues a certificate per request that narrows the visible tool manifest, then gates each proposed call with a five-conjunct predicate against that certificate
+- [Intent-Graph Audits for Least-Privilege Agent Tool Calls](intent-graph-tool-call-audit.md) — checks each call in code against a plan written before any tool output
+- [Runtime Control Path Coverage: Map What Each Layer Checks](runtime-control-path-coverage.md) — a gateway sees only the actions that cross it
+- [Adaptive Evaluation of Out-of-Band Prompt-Injection Defenses](adaptive-evaluation-out-of-band-defenses.md) — why fixed-attack results need an adaptive test
+- [Treating a Detector's Benchmark Score as Deployment Evidence](../patterns/anti-patterns/detector-benchmark-score-as-deployment-evidence.md)
+- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — the trust split the judge applies
+- [Choose Agent Gate Layers by Mechanism Class, Then Measure](../verification/mechanism-class-gate-stacking.md)
+-
+
+---
+
 ### Inline Safety Harness with Cascade Verification (FinHarness)
 Source: https://agentpatterns.ai/security/inline-lifecycle-safety-harness/
 
@@ -147056,6 +147228,7 @@ The narrowed manifest hides `export_ledger`, `delete_record`, `create_journal_en
 - [Semantic Intent Validation for Agent Skills](semantic-intent-validation-skills.md) — intent vs behavior at *skill admission*; IGAC checks intent vs *per-call payload*.
 - [Field-Level Source Ownership for Agent Capabilities](field-level-source-ownership.md) — IGAC issues its certificate from the user request alone; field ownership composes the capability from four sources and assigns each field an owner.
 - [Explanation-Bound Tool Execution for Agent Gateways](explanation-bound-tool-execution.md) — the same authors' fourth layer, checking the agent's typed action claims against the certificate and the other server facts; IGAC's five conjuncts never read the explanation.
+- [Inline Intent Judge at the Model-Response Gateway](judge-gated-tool-calls-gateway-intent-check.md) — a gateway LLM judge denies each proposed call that the user did not ask for, where IGAC narrows the visible manifest before the planner runs
 
 ---
 
@@ -184441,6 +184614,7 @@ These features run on Anthropic's current model line. As of June 2026 the Claude
 - [Skill Eval Loop](skill-eval-loop.md) — Test, benchmark, A/B-compare, and optimize agent skills with the skill-creator eval framework
 - [Reloading Skills Mid-Session](reload-skills-mid-session.md) — Re-scan skill directories with /reload-skills or a SessionStart hook, picking up edits without losing context
 - [Monitor Tool](monitor-tool.md) — Stream stdout from background scripts to Claude line-by-line, eliminating polling loops
+- [MCP Tasks in Claude Code: Background Calls and When to Wait](mcp-tasks-background.md) — A server-run MCP task backgrounds at once and a long main-conversation call after two minutes; two environment variables change when Claude waits
 - [Plugin Background Monitors](plugin-background-monitors.md) — Declarative supervision auto-armed at session start via the `monitors` manifest key
 - [Plugin-Activated Main-Agent Override and Bin/ PATH Injection](plugin-main-agent-override-and-path-injection.md) — Plugin `settings.json` swaps the main thread agent; `bin/` injects executables onto the Bash tool's PATH for the plugin's enabled lifetime
 - [Channels Permission Relay](channels-permission-relay.md) — Forward tool-use approval prompts to your phone for unattended agent runs
@@ -185302,6 +185476,20 @@ The classifier trusts your working directory and the remotes configured when the
 
 A blocked action returns a reason and Claude tries an alternative. Three consecutive blocks or 20 in a session pause the agent and restore prompting, and headless runs (`-p`) abort instead; neither threshold is configurable. The classifier also checks [subagent](sub-agents.md) work at spawn, at runtime, and on return, ignoring any `permissionMode` in its frontmatter ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)).
 
+## When the server can't check
+
+The server-side default arrived in steps: v2.1.278 (September 19, 2026) for Claude API and Enterprise users and for Bedrock, Vertex, Foundry and gateways ([changelog 2.1.278](https://code.claude.com/docs/en/changelog#2-1-278)), then v2.1.282 (September 24, 2026) for a direct Anthropic API connection with telemetry off ([changelog 2.1.282](https://code.claude.com/docs/en/changelog#2-1-282)).
+
+v2.1.319 (November 6, 2026) changed the failure case. With telemetry or feature flags off, including behind LLM gateways, "calls the server can't check are asked about or denied, with no fallback to the built-in classifier". Bedrock, Vertex and Foundry are unchanged ([changelog 2.1.319](https://code.claude.com/docs/en/changelog#2-1-319)). The entry does not say which calls are asked and which are denied. My reading, not the docs' statement: [`permissions.denyInsteadOfPrompting`](https://code.claude.com/docs/en/settings-reference#permissions-denyinsteadofprompting) makes it a deny on [unattended runs](../../patterns/agent-design/deny-fallback-unattended-permissions.md).
+
+The permission-modes page does not mention the v2.1.319 change. It still says Claude Code "falls back to its own classifier requests" when the server does not review a session ([Claude Code docs](https://code.claude.com/docs/en/permission-modes#server-side-classifier-review)). The v2.1.327 notice says "an upcoming release removes the fallback" ([changelog 2.1.327](https://code.claude.com/docs/en/changelog#2-1-327)). Test your own session.
+
+`CLAUDE_CODE_AUTO_MODE_SERVER=0`, set before the session, keeps the local classifier. Its requests are billed as before, the sources give no cost or latency number, and the docs call the variable "temporary" ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-classifier-billing)).
+
+Gateways must forward the `anthropic-beta` header and `safeguards` body field unchanged (on the Bedrock InvokeModel format, the `anthropic_beta` body field in place of the header) and keep `safeguard_results` ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-classifier-billing)). Behind a gateway, `CLAUDE_CODE_AUTO_MODE_SERVER=1` enables the check even with `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` set, and [managed settings](managed-settings-drop-in.md) that set the latter must set the `1` too ([changelog 2.1.319](https://code.claude.com/docs/en/changelog#2-1-319)).
+
+Check with `/status`: the `Auto mode server` row reads `Enabled`, or `Disabled` after a fallback ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-classifier-billing)). With no verdict, "Claude Code denies the action rather than run it unreviewed" ([Claude Code docs](https://code.claude.com/docs/en/permission-modes#server-side-classifier-review)). Ten no-verdict responses in a row stop the turn on v2.1.280 or later ([Claude Code docs](https://code.claude.com/docs/en/errors#the-server-returned-no-safety-verdict)).
+
 ## Turning it off or fencing it in
 
 Four mechanisms, ordered by how firmly they hold ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-config)):
@@ -185322,7 +185510,7 @@ To switch one session back, cycle with `Shift+Tab` or start with `claude --permi
 - Consent-scope misjudgment on a population that never opted in. That 17% overeager rate now applies to developers who inherited the mode.
 - Narrow allow rules the classifier never sees. Broad rules like `Bash(*)` are suspended on entry, but a narrow rule such as `Bash(npm test)` carries over and can pass a destructive argument. Setting `autoMode.classifyAllShell` closes that, at one classifier call per command.
 - Workflows built on default-branch pushes being blocked. From v2.1.211 those pushes are allowed by default and the protected-branch setting was removed ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-config)).
-- Metered accounts. On Enterprise plans and on Claude API, Bedrock, Agent Platform, and Foundry accounts, every classifier check counts toward token usage ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)). The server-side path became the default in v2.1.278 for Claude API and Enterprise users, and on Bedrock, Vertex, Foundry, and gateways. It "does not charge for classifier overhead" ([Claude Code changelog 2.1.278](https://code.claude.com/docs/en/changelog#2-1-278)).
+- Metered accounts. On Enterprise plans and on Claude API, Bedrock, Agent Platform, and Foundry accounts, every classifier check counts toward token usage ([Claude Code docs](https://code.claude.com/docs/en/permission-modes)). The server-side path, the default since v2.1.278, "does not charge for classifier overhead" ([Claude Code changelog 2.1.278](https://code.claude.com/docs/en/changelog#2-1-278)). That holds only where the server's checks reach the session. A gateway that drops the `safeguards` field can send Claude Code back to its own billed classifier requests ([Claude Code docs](https://code.claude.com/docs/en/auto-mode-classifier-billing)); see [When the server can't check](#when-the-server-cant-check).
 
 ## Example
 
@@ -187412,6 +187600,146 @@ At runtime, Claude Code merges these in order. The security team's `deny` rules 
 
 ---
 
+### MCP Tasks in Claude Code: Background Calls and When to Wait
+Source: https://agentpatterns.ai/tools/claude/mcp-tasks-background/
+
+# MCP Tasks in Claude Code: Background Calls and When to Wait
+
+> Claude Code backgrounds a long MCP call as a server-run task or after two minutes; environment variables change when Claude waits.
+
+A long MCP tool call reaches the background by one of two routes. A server that supports the MCP tasks extension can answer with a task, and the [2.1.319 changelog entry](https://code.claude.com/docs/en/changelog) says Claude Code then "moves it to the background right away and tells Claude the result when it finishes". Any other main-conversation call still running after two minutes moves there on a timer ([mcp](https://code.claude.com/docs/en/mcp.md#automatic-backgrounding-of-long-tool-calls)). The route decides whether the job can outlive the session. Two environment variables decide whether Claude waits.
+
+## Three kinds of long MCP call
+
+| | MCP task | Auto-backgrounded call | Plain call |
+|---|---|---|---|
+| Who runs the job | The server, after it accepts the call ([mcp](https://code.claude.com/docs/en/mcp.md#mcp-tasks-that-run-on-the-server)) | The server, inside the open tool call | The server, inside the open tool call |
+| When Claude is released | When the server accepts the job, unless you make Claude wait; Claude Code backgrounds it at once from 2.1.319 | When the call is still running after two minutes by default | When the call ends |
+| After you exit Claude Code | A remote server's task keeps running; a stdio server's process stops | The call does not survive exiting the session ([mcp](https://code.claude.com/docs/en/mcp.md#automatic-backgrounding-of-long-tool-calls)) | Not applicable |
+
+Auto-backgrounding skips a call from a subagent or an IDE server, and any call in a non-interactive session unless `CLAUDE_AUTO_BACKGROUND_TASKS` is `1`. Those calls stay plain calls ([mcp](https://code.claude.com/docs/en/mcp.md#automatic-backgrounding-of-long-tool-calls)). The two-minute rule dates from 2.1.212, released July 17, 2026 ([changelog](https://code.claude.com/docs/en/changelog)).
+
+An MCP task needs more. Per [mcp.md](https://code.claude.com/docs/en/mcp.md#what-a-call-needs-to-become-an-mcp-task), all of these hold:
+
+- The server supports tasks, and connects over HTTP, stdio or as a claude.ai connector on protocol revision 2026-07-28. Setting `MCP_SDK_GENERATION=v1` or `MCP_PROTOCOL_NEGOTIATION=legacy` rules that out.
+- The session is a terminal CLI, Agent SDK or GitHub Actions session on v2.1.304 or later. Cloud sessions have tasks only if Anthropic enabled them for the account or organization. The VS Code extension and local desktop sessions do not have them.
+- The session fetches feature flags, so not on a third-party provider such as Amazon Bedrock, and not with telemetry or flag fetching turned off. The 2.1.319 changelog entry says otherwise for the terminal; see [Where the sources disagree](#where-the-sources-disagree).
+- The call comes from the main conversation, not a subagent.
+- A non-interactive Agent SDK or `--input-format stream-json` session has `CLAUDE_AUTO_BACKGROUND_TASKS` at `1`, `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` not at `1`, and `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS` not at `0`.
+
+The feature is in public beta ([mcp](https://code.claude.com/docs/en/mcp.md#mcp-tasks-that-run-on-the-server)). The protocol side is the [MCP tasks extension](https://modelcontextprotocol.io/extensions/tasks/overview), which Claude Code reaches on revision 2026-07-28 connections (see [Stateless MCP](../../standards/stateless-mcp.md) for that revision).
+
+## Where the sources disagree
+
+The changelog and the two docs pages fetched on November 24, 2026 differ on four points. This page states each condition as written and settles none of them.
+
+- On the first version, the changelog lists "Added support for MCP tasks in the terminal" under 2.1.319 (November 6, 2026) and adds `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` in the same entry. The mcp.md note says MCP tasks require v2.1.304 or later, and the env-vars row says `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND` requires v2.1.304 or later. The 2.1.304 changelog section (October 19, 2026) has no MCP-task entry. Version 2.1.319 or later satisfies both texts.
+- On feature-flag fetching, the 2.1.319 changelog entry says it "Changed MCP tasks to work in the terminal without feature-flag fetching (Bedrock, Vertex, Foundry, LLM gateways, `DISABLE_TELEMETRY`)". The mcp.md requirements list still excludes a third-party provider and sessions with telemetry or flag fetching off, and the [env-vars list of flag-gated features](https://code.claude.com/docs/en/env-vars.md#features-that-need-feature-flag-fetching) still names MCP tasks. Neither docs page mentions 2.1.319 for this condition. The changelog entry names terminal sessions only.
+- The opt-out variable `CLAUDE_CODE_DISABLE_MCP_TASKS=1` turns MCP tasks off in the 2.1.319 changelog entry. It appears in neither mcp.md nor env-vars.
+- On answering later, mcp.md says answering a task's question later requires v2.1.324 or later. The changelog has no 2.1.324 section and lists the change under 2.1.325 (November 13, 2026). Version 2.1.325 or later satisfies both.
+
+## What Claude and the person see
+
+For a task, Claude's tool call returns once the server accepts the job, so Claude keeps working unless you make Claude wait ([mcp](https://code.claude.com/docs/en/mcp.md#mcp-tasks-that-run-on-the-server)). For an auto-backgrounded call, Claude receives the task ID at once and the result arrives as a task notification when the call settles ([mcp](https://code.claude.com/docs/en/mcp.md#automatic-backgrounding-of-long-tool-calls)).
+
+The person sees a footer count such as `1 MCP task` and, when the job ends, one transcript line:
+
+```text
+MCP task <server task id> (<server>/<tool>) completed.
+```
+
+The result goes to Claude, not into the transcript, so you ask Claude for it. If Claude is idle when the result arrives, Claude starts on it unprompted ([mcp](https://code.claude.com/docs/en/mcp.md#stop-an-mcp-task-or-get-its-result)).
+
+A running task can ask you a question through an elicitation dialog, covered in [MCP Elicitation](../../tool-engineering/mcp-elicitation.md). While `/tasks` is open the dialog stays hidden. Unless Claude is set to wait, `Esc` in the dialog answers later, and the question reopens from the task's details in `/tasks` ([mcp](https://code.claude.com/docs/en/mcp.md#answer-a-question-from-an-mcp-task)). From 2.1.325 Claude is told when a task waits for your answer and can point you to `/tasks` ([changelog](https://code.claude.com/docs/en/changelog)). In a non-interactive session Claude Code asks the server to cancel a task that requests input, without running your `Elicitation` hooks ([mcp](https://code.claude.com/docs/en/mcp.md#answer-a-question-from-an-mcp-task)).
+
+## Wait or background
+
+Two variables make Claude wait in an interactive session ([mcp](https://code.claude.com/docs/en/mcp.md#make-claude-wait-for-the-result-of-an-mcp-task)). The 2.1.319 changelog entry added the first.
+
+| Variable | What Claude waits for | What still moves to the background |
+|---|---|---|
+| `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND=1` | A task's result | While automatic backgrounding is on, a call still running after two minutes by default moves as a plain background call, not an MCP task, and does not survive exiting the session |
+| `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS=0` | Every MCP tool call, until the call ends | Nothing, because this turns automatic backgrounding off |
+
+So the first switch keeps short tasks in place but gives up server-side durability for long ones. Only the second blocks for the whole call, and it covers every MCP call, not just tasks. Setting `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1` or starting in bare mode does not make Claude wait for MCP tasks on its own ([mcp](https://code.claude.com/docs/en/mcp.md#make-claude-wait-for-the-result-of-an-mcp-task)). The `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS` default is 120000 ([env-vars](https://code.claude.com/docs/en/env-vars)).
+
+Waiting changes the time limits. A background task has no Claude Code time limit by default. The wall-clock limit and idle timeout apply until the server answers with the task, and apply to the whole task if you make Claude wait. Answered status checks count as activity for the idle timeout ([mcp](https://code.claude.com/docs/en/mcp.md#time-limits-on-mcp-tasks)). The wall-clock default is 100000000 ms, about 28 hours ([env-vars](https://code.claude.com/docs/en/env-vars)). The idle window defaults to five minutes for HTTP, SSE, WebSocket and claude.ai connector servers and 30 minutes for stdio ([mcp](https://code.claude.com/docs/en/mcp.md#time-limits-on-mcp-tool-calls)). While Claude waits, `Esc` or hitting either limit ends the call and Claude Code asks the server to cancel the task.
+
+### Choosing
+
+The sources list the switches and give no rule for choosing between them. The rule below is this page's own reading of the trade-off, not Anthropic's guidance.
+
+- Keep the defaults when a job runs for minutes and nothing in the turn depends on it. The cost is that you ask Claude for the result, and a stdio server's process stops when you exit.
+- Set `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND=1` when most jobs finish within two minutes and Claude's next step needs the result. The cost is that a job past two minutes becomes a plain call that does not survive exiting the session.
+- Set `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS=0` only when the session must block on every MCP call. The cost is a blocked session for each slow call, with `Esc` canceling it.
+
+## Failure modes
+
+| Situation | What happens | What to do |
+|---|---|---|
+| A one-shot `claude -p "<prompt>"` run | It does not get MCP tasks. Agent SDK and stream-json runs can, but do not wait for tasks once input closes ([mcp](https://code.claude.com/docs/en/mcp.md#what-a-call-needs-to-become-an-mcp-task)) | Keep input open, or run interactively |
+| You exit with a stdio server | The server's process stops, even though `/tasks` says its tasks keep running | Let the task finish or stop it in `/tasks` first, unless the server's documentation says the work outlives the process ([mcp](https://code.claude.com/docs/en/mcp.md#exit-clear-or-resume-while-an-mcp-task-runs)) |
+| You exit with a remote server | The task keeps running, and no exit option cancels it | `claude --resume` or `--continue` with the same server name and connection settings; Claude gets the result if the server still knows the task ([mcp](https://code.claude.com/docs/en/mcp.md#exit-clear-or-resume-while-an-mcp-task-runs)) |
+| You stop a task | In `/tasks`, press `x`. Claude Code stops following the task and asks the server to cancel it, though the server may still finish it. `Esc` does not stop a background task ([mcp](https://code.claude.com/docs/en/mcp.md#stop-an-mcp-task-or-get-its-result)) | Reconnect a disconnected server from `/mcp` first so the cancel request can go out |
+| A transcript line ends `outcome unknown.` | Claude Code stopped following the task after the server rejected its ID or refused permanently | "A second call may repeat the work. Before calling the tool again, find out from the server what was done" ([mcp](https://code.claude.com/docs/en/mcp.md#status-messages-on-an-mcp-task)) |
+
+The `outcome unknown.` case is the lost-response problem in [Tool Operability](../../patterns/agent-design/tool-operability-lost-responses.md): committed and uncommitted work look the same, so check state before a retry.
+
+Three changelog fixes bear on older installs ([changelog](https://code.claude.com/docs/en/changelog)).
+
+- 2.1.325 fixed background MCP tasks that stopped updating after another call to the same server lost the connection, when a later call reconnects.
+- 2.1.329 fixed tasks that stalled after a slow reconnect.
+- 2.1.330 fixed a running task being reported as stopped when you move a session to the background. The background session follows the task, but not if its server uses stdio or sets headers.
+
+## If you write the server
+
+The extension overview gives the reason for tasks: "Many clients and transport intermediaries impose timeouts that make this impractical beyond a few seconds", and "The server decides per-request whether to create a task" ([MCP tasks overview](https://modelcontextprotocol.io/extensions/tasks/overview)). On a revision 2026-07-28 connection, each request carries `"io.modelcontextprotocol/tasks": {}` under `extensions` in `params._meta["io.modelcontextprotocol/clientCapabilities"]`, and a request that cannot become a task omits it ([mcp](https://code.claude.com/docs/en/mcp.md#mcp-tasks-for-server-authors)).
+
+Answer with a task only when the request carries the extension. Otherwise the call fails with the tool error `Unsupported result type 'task' for tools/call`. This is the task answer shape mcp.md gives, copied from the page:
+
+```json
+{
+  "resultType": "task",
+  "taskId": "build-7f3a9c2e",
+  "status": "working",
+  "statusMessage": "Compiling, 40 of 212 files done",
+  "createdAt": "2026-10-22T14:03:07Z",
+  "lastUpdatedAt": "2026-10-22T14:03:07Z",
+  "ttlMs": null,
+  "pollIntervalMs": 10000
+}
+```
+
+- `taskId` is required, at most 128 printable ASCII characters with no spaces. `status` is one of `working`, `input_required`, `completed`, `failed` or `cancelled` ([mcp](https://code.claude.com/docs/en/mcp.md#answer-the-call-with-a-task)).
+- `pollIntervalMs` is clamped to between 250 and 30000. Claude Code uses 2000 when the field is absent or `null` ([mcp](https://code.claude.com/docs/en/mcp.md#answer-the-call-with-a-task)).
+- Claude Code polls with `tasks/get`. It does not use `tasks/result`, `tasks/list` or `notifications/tasks`, so put the outcome in your `tasks/get` responses ([mcp](https://code.claude.com/docs/en/mcp.md#report-status-results-and-questions)).
+- Keep a finished task's result for at least an hour, and longer if you can, because a person can exit while a remote server's task runs and resume later ([mcp](https://code.claude.com/docs/en/mcp.md#choose-a-time-to-live-and-a-poll-interval)).
+- On an HTTP or claude.ai connector server, the task answer must start within the per-request timer, so accept the job first and do the work after ([mcp](https://code.claude.com/docs/en/mcp.md#answer-the-call-with-a-task)).
+- Cancellation is cooperative: "the server acknowledges the intent but is not obligated to stop the work" ([MCP tasks overview](https://modelcontextprotocol.io/extensions/tasks/overview)). Claude Code says the same of its stop action.
+
+The 2025-11-25 specification defined an earlier, experimental form of tasks with `tasks/result` and `tasks/list` ([MCP specification 2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/basic/utilities/tasks)). mcp.md says Claude Code does not use those methods, so do not build against that shape for Claude Code. For design context, see [MCP Server Design](../../tool-engineering/mcp-server-design.md).
+
+## Key Takeaways
+
+- Among calls that meet Claude Code's conditions, the server decides per request which become tasks. Your settings decide whether Claude waits, whether a long call moves to the background, and, through variables such as `MCP_SDK_GENERATION=v1` or `CLAUDE_AUTO_BACKGROUND_TASKS` in a non-interactive session, whether a call can become a task at all.
+- `CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND=1` still moves a call after two minutes, as a plain call that does not survive exiting the session. Only `CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS=0` blocks for the whole call, on every MCP call.
+- An `outcome unknown.` line means the work may have run. Ask the server what happened before you call the tool again.
+- The docs and changelog disagree on the first version (2.1.304 or 2.1.319) and on flag fetching. Use 2.1.325 or later to satisfy both version texts, and test on your provider.
+- Server authors check for the extension before answering with a task, and keep a finished result for at least an hour.
+
+## Related
+
+- [MCP Elicitation: Servers Requesting Structured Input Mid-Task](../../tool-engineering/mcp-elicitation.md) — the dialog a running task can open
+- [Stateless MCP](../../standards/stateless-mcp.md) — the 2026-07-28 protocol revision
+- [Judging MCP Capability Readiness by Client Adoption](../../tool-engineering/mcp-capability-readiness.md) — when a spec feature is dependable
+- [Tool Operability: Interfaces That Survive a Lost Response](../../patterns/agent-design/tool-operability-lost-responses.md) — retrying after an unknown outcome
+- [Monitor Tool](monitor-tool.md) — streaming output from a background script
+- [Host-Controlled Backgrounding for Claude Subagent Calls](../../patterns/multi-agent/host-controlled-subagent-backgrounding.md) — the same decision for subagents
+- [Define Async Task Update and Approval Contracts](../../patterns/multi-agent/async-task-update-contracts.md) — update and cancellation contracts
+- [MCP Server Design](../../tool-engineering/mcp-server-design.md) — building agent-friendly servers
+
+---
+
 ### Monitor Tool: Event Streaming from Background Scripts
 Source: https://agentpatterns.ai/tools/claude/monitor-tool/
 
@@ -187516,6 +187844,7 @@ Claude starts `docker compose up --build`, monitors its stdout, and interjects o
 - [Plugin Background Monitors](plugin-background-monitors.md)
 - [Wait Primitive Plus Shell-Sleep Deny](../../patterns/agent-design/wait-primitive-shell-sleep-deny.md) — why the 2.1.310 release paired Monitor with a sleep block
 - [Session Scheduling](session-scheduling.md)
+- [MCP Tasks in Claude Code: Background Calls and When to Wait](mcp-tasks-background.md) — the other way a long job runs in the background
 - [Hooks & Lifecycle](hooks-lifecycle.md)
 - [/batch & Worktrees](batch-worktrees.md)
 - [Observability](../../observability/index.md)
