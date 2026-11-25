@@ -69,4 +69,5 @@ Replanning is the competitor to beat. Discard the endorsement, re-decide from cu
 - [Capability Declarations for Agents That Act on Data](capability-declarations-for-agent-actions.md) — the per-action metadata this obligation gets compared against
 - [Approval Gate Granularity in Agent Pipelines](approval-gate-granularity.md) — where the pause that opens the stale-endorsement window comes from, and what re-prompting costs
 - [Trusting Claimed Prior Approval in Agent Review Gates](../anti-patterns/trusting-claimed-prior-approval.md) — the fabricated-approval failure, which a non-delegated endorsement channel also closes
+- [Consequence-Oriented Approval for Multi-Step Agent Workflows](consequence-oriented-approval.md) — what the reviewer should see before endorsing, when the violation sits in an artifact built several steps earlier
 - [The Post-Authorization Execution Trust Gap in Remote MCP](../../security/post-authorization-execution-trust-gap.md) — the same interval measured against the workload that executes rather than the human who approved

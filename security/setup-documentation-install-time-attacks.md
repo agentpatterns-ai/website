@@ -103,3 +103,4 @@ The counter-argument is that an attacker who can edit your setup docs usually ha
 - [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — floating ranges as a third leg of the agent-authored-manifest surface, closed by the same lockfile control
 - [Improper Output Handling: Validate Agent Output Before Downstream Use](improper-output-handling-downstream-sinks.md) — the install sink is one of the downstream sinks that must be gated per-action
 - [Pre-Trust Execution Surface in Coding Agent Harnesses](pre-trust-execution-surface.md) — the adjacent gap where project-local config executes before the trust prompt fires
+- [Responding to a Compromised Agent Extension Release](../workflows/compromised-agent-extension-response.md) — the response side once a tampered editor extension has already installed and left persistence behind

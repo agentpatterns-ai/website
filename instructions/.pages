@@ -112,6 +112,7 @@ nav:
       - encoded-rule-failure-diagnosis.md
       - agent-context-file-evolution.md
       - correct-stale-instruction-lines.md
+      - check-context-file-dependency-rules.md
       - prompt-governance-via-pr.md
       - agent-config-as-managed-supply-chain.md
       - frontmatter-body-rule-drift.md

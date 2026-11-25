@@ -508,6 +508,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Code Precedence Over Stale Instruction Files](instructions/code-precedence-over-instruction-files.md)
 - [Policy Wording Tests for Coding-Agent Instruction Files](instructions/policy-wording-compliance-tests.md)
 - [Behavioral Obligations in Specs for LLM-Generated Code](instructions/behavioral-obligations-in-specs.md)
+- [Check Context-File Dependency Rules Against the Code](instructions/check-context-file-dependency-rules.md)
 - [Configuration File Structure Does Not Drive Compliance](instructions/configuration-file-structure-compliance-gap.md)
 - [Constraint Degradation in AI Code Generation](instructions/constraint-degradation-code-generation.md)
 - [Constraint Encoding Does Not Fix Constraint Compliance](instructions/constraint-encoding-compliance-gap.md)
@@ -703,6 +704,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Compose vs Fork vs Build: Adopting an Agent Harness](patterns/agent-design/open-framework-compose-or-fork.md)
 - [Computer Use as the Last Integration Tier](patterns/agent-design/computer-use-last-integration-tier.md)
 - [Confirming Before an Agent Removes a Worktree With Unsaved Work](patterns/agent-design/exitworktree-removal-confirmation.md)
+- [Consequence-Oriented Approval for Multi-Step Agent Workflows](patterns/agent-design/consequence-oriented-approval.md)
 - [Contextual Capability Calibration for Multi-Agent Delegation](patterns/multi-agent/contextual-capability-calibration.md)
 - [Continual Learning for AI Agents: Three Layers of Knowledge Accumulation](patterns/agent-design/continual-learning-layers.md)
 - [Continuation Authority in Agent Migration](patterns/agent-design/continuation-authority-agent-migration.md)
@@ -763,6 +765,8 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Hook Block Decisions Hold in More Cases Since Claude Code 2.1.326](patterns/agent-design/unconditional-hook-block-decisions.md)
 - [Interface Realization Repair: Evidence and Limits](patterns/agent-design/interface-realization-repair.md)
 - [Metadata Index for Agent File Search: Where It Cuts Cost](patterns/agent-design/metadata-index-for-agent-file-search.md)
+- [Non-REST APIs and Coding Agents: Discovery Decides Success](patterns/agent-design/non-rest-apis-for-coding-agents.md)
+- [Plugin optionalDependencies: Companions Users Can Disable](patterns/agent-design/plugin-optional-dependencies.md)
 - [Steering Agent Memory: Judge Salience, Then Correct with Dreaming](patterns/agent-design/salience-steered-memory-with-dreaming.md)
 - [Worktree-Isolated Subagents and the Shared-Branch Guard](patterns/agent-design/worktree-subagent-shared-branch-guard.md)
 - [PostToolUse Hooks After an Interrupted Turn in Claude Code](patterns/agent-design/posttooluse-hooks-after-interrupt.md)
@@ -1311,6 +1315,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [A PermissionRequest Rewrite Can Move a Command Outside the Sandbox](security/permissionrequest-rewrite-sandbox-exit.md)
 - [Credential-Free Subprocesses: Strip Tokens From Agent Tools](security/credential-free-agent-subprocesses.md)
 - [Fall Back to the No-Hook Decision When a Permission Check Errors](security/hook-allow-failed-permission-check.md)
+- [Hidden AI-Directed Text in GitHub Issues and Pull Requests](security/hidden-ai-directed-text-github.md)
 - [Host-Environment Agent Sandboxes: What the Codex Defaults Leave Open](security/host-environment-sandbox-residual-risks.md)
 - [Intent-Graph Audits for Least-Privilege Agent Tool Calls](security/intent-graph-tool-call-audit.md)
 - [Keep MCP Server Tokens Off the Command Line With Stdin JSON](security/mcp-add-json-stdin-token-handling.md)
@@ -1950,6 +1955,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [QA Session to Issues Pipeline for AI Agent Development](workflows/qa-session-to-issues-pipeline.md)
 - [Re-Run an Agent's Speed-Up Claim Before Merging](workflows/rerun-agent-speedup-claims.md)
 - [Reducing Fixed CI Overhead Before Adding Shards](workflows/ci-setup-overhead-before-sharding.md)
+- [Responding to a Compromised Agent Extension Release](workflows/compromised-agent-extension-response.md)
 - [Review Expectations for an AI Pull-Request Approval Bot](workflows/ai-pr-approval-bot-review-expectations.md)
 - [Routing Dependency Updates to Repair Agents by Budget](workflows/dependency-update-repair-routing.md)
 - [Runbooks as Agent Instructions: Agent-Followable Ops](workflows/runbooks-as-agent-instructions.md)
@@ -15770,6 +15776,7 @@ Reviewing, versioning, and repairing instruction files over time so they remain 
 - [Why an Encoded Rule Still Fails After a Passing Eval](encoded-rule-failure-diagnosis.md) — A rule that passes the eval and keeps failing in production is unclear, not loading, inexpressible in the available primitives, or in the wrong medium; only the first is wording
 - [Agent Context File Evolution: Treating ACFs as Configuration Code](agent-context-file-evolution.md) — ACFs are actively-maintained artifacts that drift with code and grow monotonically; the maintenance discipline is two loops — add-on-drift and compact-on-add — that keep the file under the compliance ceiling
 - [Correct Stale Instruction Lines Instead of Deleting Them](correct-stale-instruction-lines.md) — A stale test command sent agents to a dead path in 78 of 80 runs while agents still fixed the bug in nearly every run; correcting the line removed every detour and deleting it left some
+- [Check Context-File Dependency Rules Against the Code](check-context-file-dependency-rules.md) — 18% of dependency rules in one 3,346-project study were broken the day they were written, usually by older code; check each rule then and mark target rules with their exceptions
 - [Prompt Governance via PR](prompt-governance-via-pr.md) — Store agent instructions as plain markdown files in git and use pull requests to propose, review, and merge behavior changes
 - [Agent Config as a Managed Supply Chain](agent-config-as-managed-supply-chain.md) — Treat CLAUDE.md and AGENTS.md as a content-addressed, version-pinned, permission-declaring artifact; the benefit is provenance and rollback at multi-repo scale, not model compliance
 - [Frontmatter and Body Rule Drift in Agentic Workflows](frontmatter-body-rule-drift.md) — A workflow file's configuration region is enforced and its prose region is not, and most maintenance edits touch only one of the two
@@ -17077,6 +17084,89 @@ Capture reads the assembled artifact instead of reconstructing it from the parts
 - [Agent Context File Evolution](agent-context-file-evolution.md) — the same maintenance question on the part of the stack you do own
 - [Rule Lifecycle Metadata for Prunable Instruction Surfaces](rule-lifecycle-metadata.md) — recording why a rule exists, which you can do for your own rules and not for a vendor's
 - [Model-Set Parity: Reading Harness Efficiency Claims](../patterns/agent-design/model-set-parity-harness-claims.md) — the matching problem one layer up, where an unspecified configuration prices the wrong thing
+
+---
+
+### Check Context-File Dependency Rules Against the Code
+Source: https://agentpatterns.ai/instructions/check-context-file-dependency-rules/
+
+# Check Context-File Dependency Rules Against the Code
+
+> Existing code often breaks context-file dependency rules on the day they are written, so check each rule then and mark target rules.
+
+An aspirational dependency rule is a context-file rule about what may import what that the code already breaks when the rule is written. In a study of 184 checkable rules from 3,346 open-source projects, "33 of 184 (18%) were confirmed broken on the day they were written, usually by older code, and nearly all stayed broken" ([Ghimire and Damian, 2026](https://arxiv.org/abs/2611.29916v1)). Run each rule against the code when you write it. If it fails, fix the code or rewrite the rule as a target with its exceptions.
+
+## When this applies
+
+The advice holds under two conditions.
+
+- The rule can be checked. It names folders, packages, or libraries an import checker can resolve. About half the rule sentences in the study could not be checked, "for example because they name parts that cannot be mapped to folders" ([§6](https://arxiv.org/abs/2611.29916v1)).
+- No linter already carries the rule with its own exception list. If `no-restricted-imports` or an import linter enforces it in CI, the linter is the source of truth and the prose is a pointer to it.
+
+The evidence for the problem is strong. The evidence for the remedy is weaker: marking target rules and checking at write time are the authors' recommendations, and the paper leaves testing what agents do when a rule is already broken to future work ([§7](https://arxiv.org/abs/2611.29916v1)).
+
+## Path claims and dependency rules fail differently
+
+The study also checked path claims, which name folders and files ([Ghimire and Damian, 2026](https://arxiv.org/abs/2611.29916v1)).
+
+| Claim type | Count | Error finding |
+|---|---|---|
+| Path claims | 41,090 | About 5% point to missing paths; an estimated 2.2% are real errors, against 3.5% for READMEs |
+| Dependency rules | 184 | 18% confirmed broken on the day written; of the 51 rules the checker flagged as broken when written, 50 were still broken at the snapshot |
+
+Path claims mostly keep up with the code. "In 61% of fixes, the claim changed at the same time as the code, which in practice means in the same commit" ([§4.2](https://arxiv.org/abs/2611.29916v1)). Dependency rules rarely decay. Only 4 rules held when written and broke later ([§4.3](https://arxiv.org/abs/2611.29916v1)). The problem is the rule's starting state.
+
+The breaking code was usually there first: "In 26 of the 33 confirmed cases, every rule-breaking import was already in the code before the project’s first context file existed" ([§4.3](https://arxiv.org/abs/2611.29916v1)). Library rules broke from the start more often than rules between internal modules: 14 of 58 (24%) against 19 of 126 (15%), counting confirmed cases ([§4.3](https://arxiv.org/abs/2611.29916v1)).
+
+The 18% figure is a floor. The authors call it "likely a lower bound", because in a sample of 40 rules their checker passed, 5 had a break it missed ([§4.3](https://arxiv.org/abs/2611.29916v1)).
+
+## What to do
+
+1. Run each new dependency rule against the code before you commit the context file. An import grep works for one rule. For many, use an import linter, or a tool like [ContextCov](https://arxiv.org/abs/2603.00822v2), which the authors name as one that fits this need ([§5.6](https://arxiv.org/abs/2611.29916v1)).
+2. If the rule holds, keep it as a fact. If it matters, enforce it with a linter. The study found projects that already write "enforced by ESLint no-restricted-imports" beside the rule ([§5.6](https://arxiv.org/abs/2611.29916v1)).
+3. If the rule fails, decide which side is wrong. Fix the code, or rewrite the rule as a target. The authors suggest a target rule should "state the target, the current exceptions, and the direction of change" ([§5.2](https://arxiv.org/abs/2611.29916v1)).
+4. Name exceptions by scope, not by import. One Go rule in the study had 107 breaking imports ([Table 8](https://arxiv.org/abs/2611.29916v1)). A folder scope costs one line. One file in the study marks `pkg/og/` as "legacy code being phased out" ([§4.3](https://arxiv.org/abs/2611.29916v1)).
+5. Re-run the check whenever the context file changes. The authors say a rule checker "should also run whenever a context file changes" and "must support known exceptions and migration states" ([§5.6](https://arxiv.org/abs/2611.29916v1)).
+
+## Example
+
+The study reports a rule from a TypeScript project, shortened in its Table 8: "Do not import MUI; we are actively removing it". The code had 132 MUI imports when the rule was written and 74 at the snapshot ([Ghimire and Damian, 2026](https://arxiv.org/abs/2611.29916v1)). A version of the rule that applies step 3 reads:
+
+```markdown
+## Dependency rules
+- Target: no new imports of MUI (`@mui/*`). New UI code uses the in-house components in `src/ui/`.
+- Current exceptions: existing screens under `src/legacy/` still import MUI.
+- Direction: we remove MUI screen by screen. Do not copy MUI imports from legacy screens.
+```
+
+The folder names in this version are placeholders for your own layout, not the study project's.
+
+## Why it works
+
+The agent re-reads the context file every session and is built to treat it as true ([§1](https://arxiv.org/abs/2611.29916v1)). It also learns from the code it reads. For a rule the code breaks, the authors put it this way: "An agent sees two conflicting signals: the rule in its instructions, and many counter-examples in the code it reads" ([§5.1](https://arxiv.org/abs/2611.29916v1)). They suggest one reason the rules stay broken: rules are rarely checked, "so nothing flags a rule that is broken on the day it is written" ([§5.1](https://arxiv.org/abs/2611.29916v1)). The paper frames this with the architecture distinction between what should be (prescriptive) and what is (descriptive), and notes that "Context files mix both in one list" ([§5.2](https://arxiv.org/abs/2611.29916v1)). A write-time check exposes the gap while the author still knows the intent. A marked target rule tells the agent which signal describes new code.
+
+## When this backfires
+
+- New breaks were already rare. Agent-assisted commits broke rules at 0.29% against 0.16% for other commits, from 14 confirmed breaks, which the authors call "an early signal, not evidence of a difference or of its absence" ([Ghimire and Damian, 2026](https://arxiv.org/abs/2611.29916v1)). An unmarked target rule may already steer new code well enough.
+- A linter already encodes the exceptions. Copying them into prose duplicates config, and the two copies can drift.
+- Exception lists bloat always-loaded context. Enumerating 107 imports costs tokens every session. Keep exceptions at folder scope, or leave them in the linter config.
+- A blanket instruction to follow existing code undoes the target. [Code precedence over stale instruction files](code-precedence-over-instruction-files.md) tells the agent to copy the code when docs and code disagree, which for a target rule means copying the breaking imports. Scope that instruction, or use a [written priority rule](written-priority-rules-for-migrations.md) for the migration.
+- The sample is open source over a short window, a median of 67 days per file ([§6](https://arxiv.org/abs/2611.29916v1)). The authors say results may differ for industrial code, and more claims may go stale over longer periods.
+
+## Key Takeaways
+
+- Spend checking effort on dependency rules first. About 98% of path claims pointed to real code; 18% of rules were broken on day one.
+- The breaking code usually predates the rule, so a write-time check finds it.
+- A failed check means fix the code or mark the rule as a target with scoped exceptions and a direction.
+- The harm to agents and the benefit of marking are untested. Weigh the cost of the exception text.
+
+## Related
+
+- [Stale AI Configuration Artifacts (Context Rot)](../patterns/anti-patterns/stale-ai-configuration-artifacts.md) — path and code-element drift, the failure that path claims show
+- [Corroborated Compliance Checks for Agent Context Files](corroborated-compliance-checks-from-context-files.md) — generating one executable check per context-file rule
+- [Written Priority Rules for Coding-Agent Migrations](written-priority-rules-for-migrations.md) — telling the agent a target convention overrides existing code
+- [Code Precedence Over Stale Instruction Files](code-precedence-over-instruction-files.md) — the opposite instruction, and the case where it conflicts with a target rule
+- [Enforce the Rules Your Code Cannot Show](per-rule-enforcement-budget.md) — budgeting enforcement by whether the diff shows compliance
 
 ---
 
@@ -28814,6 +28904,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Write Boundaries Ship as a Setting, Read Boundaries as a Prompt](write-boundary-as-setting.md) — Claude Code 2.1.314 fences Write, Edit and NotebookEdit outside the working directories through a settings key with no prompt, and the key covers three tools rather than the filesystem
 - [Worktree-Isolated Subagents and the Shared-Branch Guard](worktree-subagent-shared-branch-guard.md) — Claude Code 2.1.326 makes worktree-isolated subagents refuse some Bash git commands that can rewrite branches shared with the checkout; branch refs are shared across all worktrees
 - [Binding an Agent's Effect to the Approval It Claims](interaction-effect-obligations.md) — Attach the task, revision, and reviewed object set to each agent-initiated effect, because a per-call permission check passes on the send to a recipient the user just removed
+- [Consequence-Oriented Approval for Multi-Step Agent Workflows](consequence-oriented-approval.md) — Show the reviewer the user's restriction, the exact action, and the consequence composed from trusted artifact lineage, because a per-action prompt cannot show a violation built in earlier steps
 - [Fleet-Level Irreversibility Budgets for Agent Effects](fleet-irreversibility-budget.md) — One shared account of residual risk, charged before each effect commits, catches the overdraw that individually compliant agents create together — and the fleet size below which it buys nothing
 - [Agent-Native Filesystems: Gating Effects, Not Commands](agent-native-filesystem-mediation.md) — Attach permission rules to filesystem paths instead of command strings, stage every mutation until the user commits, and keep the undo inside the filesystem
 - [Approve Shell Commands on Observed Effects, Not Predicted](consequence-aware-approval.md) — Pre-execute each shell command in a snapshotted sandbox and judge its observed effects before the commit; predicting those effects from the command and its files cuts harm but still blocks 61.8% of safe twins
@@ -28960,7 +29051,9 @@ The runtime infrastructure that hosts and constrains agent execution.
 - [Most-Restrictive-Wins Fusion for Parallel Agent Control Returns](most-restrictive-wins-fusion.md) — The `deny > defer > ask > allow` merge function that fuses parallel hook decisions, classifier verdicts, and permission rules into a single agent-control answer
 - [Layered Policy Resolution for Multi-Group Agent Users](layered-policy-resolution.md) — Matching-role composition, field precedence, and broader combined permissions
 - [Designing Agent Plugins to Survive Co-Installation](plugin-co-installation-safety.md) — Ship the root manifest, keep client data in `extensions`, and prefix exported capability names, because conformance is checked on one plugin and the failure needs two
+- [Plugin optionalDependencies: Companions Users Can Disable](plugin-optional-dependencies.md) — Since Claude Code 2.1.331 a plugin can list companions that install with it and that users can disable alone; use it only when the core works with the companion off
 - [Product-Operation Tool Surfaces for In-Product Agents](product-operation-tool-surface.md) — An agent living inside a product enumerates each action as its own shallow tool and withholds the SDK, then scopes the live catalog per thread so tool selection holds up
+- [Non-REST APIs and Coding Agents: Discovery Decides Success](non-rest-apis-for-coding-agents.md) — With an API description in reach, agents score the same on REST, POST-only, and RPC APIs; without one, RPC success drops to zero, so fix the docs path before restyling
 - [Typed Tool Surfaces and Out-of-Loop Correctness Gates](typed-tool-surface-out-of-loop-gate.md) — Name the domain's operations as tools, cap the loop in code, and check the answer downstream — a trade that won multi-hop questions by 9 points and lost single-hop ones by 25
 - [Tool Confirmation Carousel: Batched UI for Per-Call Approvals](tool-confirmation-carousel.md) — A carousel control reviews multiple pending tool calls in one navigable surface instead of scattered modals — useful only for residual approvals that allowlists and sandboxes cannot absorb
 - [Six-Shape Approval Response Taxonomy](approval-response-taxonomy.md) — The Claude Agent SDK exposes six distinct responses to a tool-approval prompt (approve, approve with changes, approve and remember, reject, suggest alternative, redirect entirely) composed from three callback knobs over a binary protocol
@@ -32451,6 +32544,7 @@ A user asks for a database migration and the agent proposes `make migrate`. The 
 - [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — read-only predicates that check state before a write, with no execution at all
 - [Agent Approval Laundering: Effects Beyond the Named Command](../../security/approval-laundering-transitive-effects.md) — the cheaper remedy when the missing information is readable statically
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md) — the reversibility assumption condition 1 depends on
+- [Consequence-Oriented Approval for Multi-Step Agent Workflows](consequence-oriented-approval.md) — the human-reviewer counterpart, where the consequence comes from artifact lineage across earlier steps rather than from running the command
 
 ---
 
@@ -33716,6 +33810,7 @@ Replanning is the competitor to beat. Discard the endorsement, re-decide from cu
 - [Capability Declarations for Agents That Act on Data](capability-declarations-for-agent-actions.md) — the per-action metadata this obligation gets compared against
 - [Approval Gate Granularity in Agent Pipelines](approval-gate-granularity.md) — where the pause that opens the stale-endorsement window comes from, and what re-prompting costs
 - [Trusting Claimed Prior Approval in Agent Review Gates](../anti-patterns/trusting-claimed-prior-approval.md) — the fabricated-approval failure, which a non-delegated endorsement channel also closes
+- [Consequence-Oriented Approval for Multi-Step Agent Workflows](consequence-oriented-approval.md) — what the reviewer should see before endorsing, when the violation sits in an artifact built several steps earlier
 - [The Post-Authorization Execution Trust Gap in Remote MCP](../../security/post-authorization-execution-trust-gap.md) — the same interval measured against the workload that executes rather than the human who approved
 
 ---
@@ -36803,6 +36898,92 @@ Since 2.1.323, the macOS and Linux sandbox makes "`git worktree add`, `move` and
 - [Worktree-Isolated Subagents and the Shared-Branch Guard](worktree-subagent-shared-branch-guard.md) — the 2.1.326 git refusal in isolated worktrees
 - [Worktree Isolation](../../workflows/worktree-isolation.md) — creating and removing worktrees for parallel agents
 - [Claude Code /batch and Worktrees](../../tools/claude/batch-worktrees.md) — the `EnterWorktree` and `ExitWorktree` tools
+
+---
+
+### Consequence-Oriented Approval for Multi-Step Agent Workflows
+Source: https://agentpatterns.ai/patterns/agent-design/consequence-oriented-approval/
+
+# Consequence-Oriented Approval for Multi-Step Agent Workflows
+
+> A per-action approval prompt cannot reveal a violation built in earlier steps. Trusted artifact lineage can expose it to a gate or a reviewer.
+
+Consequence-oriented approval puts the combined effect of a pending agent action in front of the reviewer, instead of the action alone. It targets one failure. Hossain et al. call it a cumulative authorization failure, "in which a locally permitted action completes a globally forbidden workflow" ([arXiv:2611.28454v1](https://arxiv.org/abs/2611.28454v1)).
+
+Their running example: a user tells an agent to send the auditor summary totals only. An injected vendor note leads the agent to copy raw invoice rows into `report.csv`. The agent then asks to send `report.csv` to the auditor. "Every element of the request checks out. The tool is permitted, the recipient is approved, and the file name is unremarkable" ([arXiv:2611.28454v1](https://arxiv.org/abs/2611.28454v1)).
+
+## When it applies
+
+The pattern needs three conditions. Without them, the consequence statement has nothing reliable to compose.
+
+- The violation is cumulative. The paper separates local from cumulative violations: "Highlighting the destination suffices for local violations but not for cumulative ones" ([§3](https://arxiv.org/abs/2611.28454v1)).
+- A trusted recorder captures the calls the agent actually makes, with arguments and effects, "instead of the agent's description of them" ([§4.3](https://arxiv.org/abs/2611.28454v1)). Without one, the consequence statement is the agent's own claim.
+- The user's restriction is written down. With the policy check removed, the monitor's recall on cumulative violations fell to 37.5% and false alerts rose to 12.5% ([§7](https://arxiv.org/abs/2611.28454v1)).
+
+## The four design principles
+
+The paper's interface, the Cumulative Consent Ledger (CCL), follows four principles ([§4.1](https://arxiv.org/abs/2611.28454v1)):
+
+| Principle | What the reviewer sees |
+|---|---|
+| D1 Restate the user's intent | The original restriction, verbatim |
+| D2 Bind to the exact action | The tool, artifact, and recipient from the recorder, re-checked if arguments change after review |
+| D3 Compose the consequence | One statement of "the combined effect of the pending action and its relevant history" |
+| D4 Keep every claim checkable | Links from each consequence to its supporting events, with evidence gaps shown as gaps |
+
+D2 is the existing advice for [confirmation gates](../../security/human-in-the-loop-confirmation-gates.md): show the exact action, not a summary. It is necessary, and it does not catch the invoice case, because the exact action looks harmless. D3 adds the part D2 cannot show. In the invoice case the statement reads "The attachment was built from raw invoice rows. The proposed send would transfer that artifact to the approved auditor". It does not say "violation". The interface "describes the effect without labeling it a violation, so judging it against the restriction is left to the reviewer" ([§4.2](https://arxiv.org/abs/2611.28454v1)).
+
+## What the evidence shows
+
+The user study had 80 unpaid volunteers, 20 per interface, 12 decisions each, half of them malicious ([§5](https://arxiv.org/abs/2611.28454v1)). The four interfaces form a ladder. The chronological log (C2) and CCL (C3) hold identical facts, so the C2 to C3 step measures organization alone.
+
+| Interface | Unsafe approved | Benign approved | Median decision time |
+|---|---|---|---|
+| C0 conventional prompt | 66/120 (55.0%) | 110/120 | 16.3 s |
+| C1 adds exact arguments | 52/120 (43.3%) | 108/120 | 23.4 s |
+| C2 adds policy and chronological log | 39/120 (32.5%) | 105/120 | 38.6 s |
+| C3 CCL | 29/120 (24.2%) | 103/120 | 33.2 s |
+
+Source: Table 2 of [arXiv:2611.28454v1](https://arxiv.org/abs/2611.28454v1).
+
+Read the table from the top. "Most of the drop came from adding information (C0 to C2)" ([§6.1](https://arxiv.org/abs/2611.28454v1)). The organization step is smaller and uncertain. After adjustment, CCL's advantage was 7.9 points, with a 95% credible interval from 19.7 points better to 3.8 points worse. The authors write "The estimate favors CCL, but the interval includes no effect", and they label the analyses exploratory. Benign approvals also slipped, and the authors "cannot claim that CCL preserves legitimate approval within a five-point margin" ([§6.1](https://arxiv.org/abs/2611.28454v1)).
+
+The gate result is firmer. The same monitor also ran as an execution gate that blocks both violations and unknowns. Executed unsafe effects fell from 52 to 6 of 120 malicious runs for Llama-3.1-8B-Instruct, and from 58 to 7 for Qwen3-8B. Benign completion fell by 4 runs out of 120 for each agent ([§7](https://arxiv.org/abs/2611.28454v1)). With complete telemetry the monitor added a median of 24 ms per check and made no extra LLM calls.
+
+## Divide the work between gate and reviewer
+
+The numbers suggest a split. The gate blocks what lineage can decide. The reviewer gets the cases the monitor marks unknown, with the missing evidence named. The paper proposes this: "Rather than silently blocking unknown outcomes, a design could route them to the reviewer with the missing evidence stated explicitly" ([§8](https://arxiv.org/abs/2611.28454v1)). The study did not test that routing, so treat it as a design to try.
+
+The monitor keeps ancestry conservatively. When an artifact is written from several inputs, it inherits all their lineage. "This does not assume that every input was semantically copied. It ensures that sensitive ancestry is not silently dropped" ([§3](https://arxiv.org/abs/2611.28454v1)). Expect over-attribution: the consequence statement can name inputs whose content never reached the artifact.
+
+## Why it works
+
+A cumulative violation lives in a relation between the pending action, an earlier artifact, and the stated restriction. A per-action prompt shows none of that relation. A chronological log shows every piece and leaves the reviewer to connect them. Composing the consequence moves that work to the lineage tracker. The authors tie this to the comprehension and projection levels of situation awareness ([§4.1](https://arxiv.org/abs/2611.28454v1)). On the monitor side the ablations back this mechanism. Removing lineage edges dropped cumulative recall from 86.2% to 60.0%, and removing cumulative state dropped it to 20.0% ([§7](https://arxiv.org/abs/2611.28454v1)).
+
+## When this backfires
+
+- Multi-hop dependencies. For violations that run through several intermediate artifacts, CCL and the log each produced 7 unsafe approvals out of 30. "A single consequence statement may not convey dependencies that pass through several intermediate artifacts" ([§6.3](https://arxiv.org/abs/2611.28454v1)).
+- Partial telemetry. Cumulative recall fell to 51 of 80, and blocking unknowns cut benign completion to 76.7% ([§7](https://arxiv.org/abs/2611.28454v1)). The statement can only report what the recorder saw.
+- A wrong summary, stated with confidence. The authors warn that such a summary "could produce exactly the automation bias it is meant to counter", and they did not test one ([§8](https://arxiv.org/abs/2611.28454v1)). A separate trace-interface study saw the same shape. Participants found errors faster and reported more confidence, but "their final accuracy was not meaningfully improved" ([Grunde-McLaughlin et al., arXiv:2602.16844v1](https://arxiv.org/abs/2602.16844v1)).
+- Rare violations. Half the study's requests were malicious. "When violations are rare, habituation becomes the dominant risk" ([§8](https://arxiv.org/abs/2611.28454v1)).
+
+The opposite case is strong. If the monitor can compute the consequence, it can block on it, and a team could skip the summary and show raw arguments for the residue.
+
+## Key Takeaways
+
+- A tool allowlist, an approved recipient, and an exact-argument prompt all pass the invoice case. The violation sits in the artifact's history.
+- If you have only a per-action prompt today, adding the restriction and the history is the larger step. Composing them comes second.
+- Build the trusted recorder first. It feeds both the gate, which carries most of the measured safety, and any consequence view.
+- Link every consequence to inspectable events, or the summary becomes one more thing to trust blindly.
+- Plan a separate view for chains that pass through several artifacts. One sentence did not help there.
+
+## Related
+
+- [Human-in-the-Loop Confirmation Gates for Consequential Agent Actions](../../security/human-in-the-loop-confirmation-gates.md) — the per-action gate this extends with history and a composed consequence
+- [Binding an Agent's Effect to the Approval It Claims](interaction-effect-obligations.md) — the D2 half: keep the executed effect bound to what the reviewer approved
+- [Approve Shell Commands on Observed Effects, Not Predicted](consequence-aware-approval.md) — a different consequence check: an automated approver reads the observed effects of one sandboxed shell command, with no trajectory history
+- [Context-Fractured Decomposition Attacks on Tool-Using Agents](../../security/context-fractured-decomposition-attacks.md) — the attack side: benign-looking steps recomposed through artifact provenance gaps
+- [Control/Data-Flow Separation for Prompt Injection Defense (CaMeL)](../../security/camel-control-data-flow-injection.md) — provenance tracking enforced in the agent runtime, the same lineage idea applied as a policy check
 
 ---
 
@@ -49375,6 +49556,110 @@ The model replies in prose (`Website information – YES`) and the harness extra
 
 ---
 
+### Non-REST APIs and Coding Agents: Discovery Decides Success
+Source: https://agentpatterns.ai/patterns/agent-design/non-rest-apis-for-coding-agents/
+
+# Non-REST APIs and Coding Agents: Discovery Decides Success
+
+> In Microsoft's tests, agents struggled with non-REST APIs only without the docs; given an API description, REST and RPC scored the same.
+
+The condition comes first. In one 1,356-run study, agents given an OpenAPI description, or a README link to a reference page, used POST-only and RPC-style APIs as reliably and as cheaply as REST. Agents given only a base URL could not guess verb-named endpoints, and completed none of the RPC tasks. So the work for a non-REST API is getting its description to the agent. Restyling the API, or wrapping it in a REST-shaped tool, is the fallback.
+
+## The evidence
+
+Waldek Mastykarz at Microsoft built a fictional inventory API, Binstock, so no model could have memorized it. They served it in three styles with identical data and behavior: REST (`PATCH /bins/B-103`), POST-only (`POST /bins/B-103/update`), and RPC (`POST /updateBin?code=B-103`). POST-only separates the HTTP methods from the naming. Prompts described outcomes ("Bin B-103 has been taken out of service") rather than operations, and a grader compared the final API state with the seed data plus the intended change ([Microsoft for Developers](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)).
+
+The result splits on one variable, whether the agent could read the API description:
+
+| Condition | REST | POST-only | RPC |
+|---|---:|---:|---:|
+| OpenAPI description in the prompt, 4 models, 900 runs | 100% | 100% | 99.7% |
+| Base URL only, Claude Sonnet 5.5 | 93% | 40% | 0% |
+| Base URL only, GPT-6.1 Terra | 97% | 60% | 0% |
+
+With the description, token use was about 70k per run in every style, and the single RPC failure was a 10-minute timeout. RPC had about 5 points fewer runs without a failed call, a gap the authors call not significant. Two smaller models, Claude Haiku 5.5 and MAI Code 2 Flash, "completed every task in every style, with token use within about 3% across styles" ([Microsoft](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)).
+
+Without the description, "No model ever guessed an endpoint like `/updateBin`. On the RPC API, agents averaged about 28 failed calls and then gave up." POST-only landed in between because its reads use the same paths as REST, while writes that needed `/update` or `/delete` endpoints failed. Per correct result, REST cost about 80k tokens and POST-only about 230k. RPC never produced one ([Microsoft](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)).
+
+A third run, the handover run, embedded the API calls in a larger task: fix a failing unit test, apply inventory events, write a report. The README linked to a prose reference page. Across 96 runs, "Every run succeeded, and every run found the reference page through the README link and used it correctly" ([Microsoft](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)).
+
+## What to do with a non-REST API
+
+Start with the smallest change.
+
+1. Put the description where the agent will find it. "Link an OpenAPI description from your docs and your README" ([Microsoft](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)). The handover run shows a README link is enough for an agent to find a prose reference. See [OpenAPI documentation smells](../../tool-engineering/openapi-documentation-smells.md) for what makes a description usable once found.
+2. Make the API describe itself. List operations at the root URL or in the body of a 404. The authors propose this and say plainly "We haven't tested that yet" ([Microsoft](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)). [RFC 9457 error responses](../../tool-engineering/rfc9457-machine-readable-errors.md) apply the same idea to errors: the response tells a failed caller what to do next.
+3. Wrap the API in typed tools only when the agent cannot be given the description, or when the surface is too large to read. Generating those tools from the spec keeps them in sync ([OpenAPI as the source of truth for tool definitions](../../standards/openapi-agent-tool-spec.md)).
+
+The authors' advice on the API itself is short: "If you maintain a non-REST API, you can leave its style as it is" ([Microsoft](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)).
+
+## Test usage and discovery separately
+
+An eval that gives the agent the docs measures usage. An eval that leaves them out measures discovery, and discovery favors REST by design. The authors frame it as a choice to make on purpose: "decide whether you're testing how well they use it or how well they find their way around it" ([Microsoft](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)). A no-docs eval that shows RPC at 0% is a finding about your docs path, not about RPC.
+
+Two design choices from the study carry over to any API eval:
+
+- Phrase tasks as outcomes. A prompt that names the operation, like "update" or "delete", "hands the agent the name of the matching RPC endpoint" ([Microsoft](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)).
+- Grade the final state, not the call sequence, so any valid route to the right result passes. The study served each style from a Dev Proxy mock that returned 404 for any undefined path or method, so every wrong guess showed up in the proxy log ([Microsoft](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)). [AX evals](../../verification/ax-evals-agent-facing-surface.md) covers the harness side.
+
+## Why it works
+
+REST endpoints are guessable. The URL follows from the resource and the HTTP method follows from the intent, so an agent with no docs gets close and lets 404s steer it the rest of the way. Microsoft states the mechanism directly: "agents can guess REST URLs from convention and have no way to guess what a non-REST API calls its endpoints" ([Microsoft](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)). Once a description is in context, the agent reads endpoint names instead of guessing them, and the style advantage disappears.
+
+Earlier work on API calling points at the same lever. The Gorilla authors trace API-call failures partly to models' "tendency to hallucinate the wrong usage of an API call," and report that pairing their model with a document retriever lets it "adapt to test-time document changes" ([Patil et al., arXiv 2305.15334v1](https://arxiv.org/abs/2305.15334v1)).
+
+## When this backfires
+
+The "leave the style alone" advice rests on one small API, one harness, and short tasks. It is weaker in these cases:
+
+- The agent cannot reach the docs. It starts with only a base URL, or never sees a link to the description. This is the condition that took RPC to 0%. A REST API degrades better here, because convention still got agents to 93% and 97% on REST.
+- The RPC surface is large. The authors kept Binstock "deliberately small and simple" and list a hundred-endpoint API with near-identical names such as `updateBin` and `updateBinItems` as untested, along with auth, pagination, and workflows of dozens of dependent calls.
+- The API is GraphQL. The Microsoft study did not test it, and the task differs: the agent builds a query against a schema rather than picking an endpoint. In a GraphQL generator by Ganesan et al., accuracy on IBM Granite20B-Code rose from 62.79% with a fixed one-shot prompt to 88.00% with five relevant examples and a commented schema. The authors note that models "often hallucinate on the column and tables names" ([IJCAI 2024](https://ijcai.org/proceedings/2024/1002)). The authors observe that "adding comments to server generated schema improves accuracy." The same authors also warn against dumping a very large schema into the prompt, and their pipeline's Schema Simplification module uses string parsing to remove unnecessary information from the schema.
+- The evidence is one self-run study in one harness, the GitHub Copilot SDK in Vally. The authors suggest repeating it in other harnesses. This page found no independent replication.
+
+## Example
+
+The partial update from the study, in each style, and what an agent without docs can do with it:
+
+```http
+# REST: guessable from convention
+PATCH /bins/B-103
+
+# POST-only: reads guessable, this write is not
+POST /bins/B-103/update
+
+# RPC: not guessable at all
+POST /updateBin?code=B-103
+```
+
+The fix the authors recommend is a README line that points at the description:
+
+```markdown
+## API
+
+OpenAPI description: openapi.yaml (also served at /openapi.yaml)
+```
+
+In the handover run, a README link to the reference page was enough for all 96 runs to find and use it ([Microsoft](https://developer.microsoft.com/blog/do-ai-coding-agents-struggle-with-non-rest-apis)).
+
+## Key Takeaways
+
+- With an OpenAPI description in reach, REST, POST-only, and RPC scored 100%, 100%, and 99.7% across 900 runs at about the same token cost.
+- With only a base URL, RPC fell to 0% for both models tested, and agents averaged about 28 failed calls before giving up.
+- The fix for a non-REST API is a discovery path: a README link to the description first, a self-describing API second, typed tool wrappers last.
+- Evals that leave docs out measure discovery, which favors REST by design. Say which one you are testing.
+- GraphQL, large RPC surfaces, and long workflows are untested here, and in one GraphQL generator, five relevant examples plus schema comments raised accuracy from 62.79% to 88.00% over a fixed one-shot prompt.
+
+## Related
+
+- [OpenAPI Documentation Smells for Agent-Ready APIs](../../tool-engineering/openapi-documentation-smells.md) — what makes an API description usable once the agent finds it.
+- [OpenAPI as the Source of Truth for Agent Tool Definitions](../../standards/openapi-agent-tool-spec.md) — generating typed tool wrappers from the spec, the fallback for agents that cannot read docs.
+- [Machine-Readable Error Responses for AI Agents (RFC 9457)](../../tool-engineering/rfc9457-machine-readable-errors.md) — errors that tell a failed caller what to do, the same idea as a self-describing 404.
+- [AX Evals: Measure the Agent-Facing Surface, Not the Model](../../verification/ax-evals-agent-facing-surface.md) — evaluating the API, docs, and tools an agent touches, which is what this study varied.
+- [Rewriting a CLI Into a JSON Payload for Agents](../anti-patterns/cli-json-payload-rewrite.md) — a sibling Microsoft measurement where the plausible interface change also did not survive testing.
+
+---
+
 ### Observability-Driven Harness Evolution
 Source: https://agentpatterns.ai/patterns/agent-design/observability-driven-harness-evolution/
 
@@ -51941,6 +52226,67 @@ Check the evidence grade before quoting the headline. At the 24,000-token ceilin
 - [The Plan-First Loop: Always Design Before Writing Code](../../workflows/plan-first-loop.md) — the human-reviewed version of the same contract, bounded by an approval gate rather than a token ceiling.
 - [The Research-Plan-Implement Pattern](../../workflows/research-plan-implement.md) — the three-phase structure whose middle phase these preconditions govern.
 - [Context Budget Allocation: Spending Every Token Wisely](../../context-engineering/context-budget-allocation.md) — the same displacement logic applied to what gets preloaded into the context window.
+
+---
+
+### Plugin optionalDependencies: Companions Users Can Disable
+Source: https://agentpatterns.ai/patterns/agent-design/plugin-optional-dependencies/
+
+# Plugin optionalDependencies: Companions Users Can Disable
+
+> Put a companion plugin in `optionalDependencies` only when your plugin still works with it turned off. Anything the core calls belongs in `dependencies`.
+
+A plugin optional dependency is a companion plugin that installs with the plugin listing it and that a user can disable or uninstall on its own. Claude Code 2.1.331 added the `optionalDependencies` manifest field for this ([Claude Code changelog](https://code.claude.com/docs/en/changelog)). It sits beside `dependencies`, which the manifest reference defines as "Plugins that must be enabled for this one to work" ([Manifest reference](https://code.claude.com/docs/en/plugins/manifest-reference)).
+
+## When to split a plugin
+
+Split when one piece is useful to most users and another only to some. A deploy plugin with an optional runbook companion fits. The docs describe a hard dependency as a plugin "such as one whose MCP server or skill it calls" ([Plugin dependencies](https://code.claude.com/docs/en/plugins/dependencies)). If your skill calls the companion's MCP tool, that skill breaks the moment a user disables the companion, so the companion stays a hard dependency.
+
+Run one test per companion: disable it and use the core. If the core still does its job, the companion can be optional. If anything errors, the companion is a hard dependency.
+
+## How it differs from a hard dependency
+
+The two fields differ on the disable path. For a hard dependency, Claude Code refuses to disable a plugin "when another enabled plugin still needs the one you named", and prints a chained command that disables both ([Install plugins](https://code.claude.com/docs/en/plugins/install)). A user who wants to drop one extra from a bundle has to drop the bundle. An optional dependency installs the same way but can be disabled or uninstalled without touching the parent ([Claude Code changelog](https://code.claude.com/docs/en/changelog)).
+
+| | `dependencies` | `optionalDependencies` |
+|---|---|---|
+| Installs with the parent | Yes, enabled at the same scope | Yes |
+| User disables it alone | Refused while a dependent is enabled | Allowed |
+| User uninstalls it alone | Not documented | Allowed |
+| Version range syntax | Object with `name`, `marketplace`, `version` | Not documented |
+
+## What the docs do not say yet
+
+On 2026-11-24 the changelog line is the only documentation. The manifest reference field table lists `dependencies` and no `optionalDependencies`, and the dependencies page never mentions it ([Manifest reference](https://code.claude.com/docs/en/plugins/manifest-reference), [Plugin dependencies](https://code.claude.com/docs/en/plugins/dependencies)). The value syntax, version constraints, prune behavior, and the result of a failed optional install are all unstated. Do not borrow npm's meaning. In npm the field tells the installer to "proceed if it cannot be found or fails to install" ([npm package.json docs](https://docs.npmjs.com/cli/v11/configuring-npm/package-json)), which is a different promise.
+
+## Why it works
+
+A hard dependency couples install to requirement. That is correct for a plugin the core calls and wrong for an extra, because the disable refusal makes the user choose all or nothing. `optionalDependencies` keeps the install and drops the requirement. Debian draws the same line. Its policy says to use `Depends` when a package is "required for the depending package to provide a significant amount of functionality", and calls `Recommends` "a strong, but not absolute, dependency" ([Debian Policy, chapter 7](https://www.debian.org/doc/debian-policy/ch-relationships.html)).
+
+## When this backfires
+
+- The core calls the companion. npm's warning holds here too: "It is still your program's responsibility to handle the lack of the dependency" ([npm package.json docs](https://docs.npmjs.com/cli/v11/configuring-npm/package-json)).
+- Most users never want the extra. It installs by default, and the install docs tell users to find plugins "that still add startup and context cost, then disable or uninstall them" ([Install plugins](https://code.claude.com/docs/en/plugins/install)). An opt-in plugin costs those users nothing.
+- Your users run Claude Code older than 2.1.331. The current reference strips an unrecognized top-level key and loads the plugin, while v2.0.15 through v2.1.75 reject a manifest with an unrecognized `engines` key ([Manifest reference](https://code.claude.com/docs/en/plugins/manifest-reference)). Test on the oldest version your users run.
+- The companion must stay in a version range. Only `dependencies` documents range syntax, so keep it there.
+
+## Example
+
+The dependencies docs show a team bundle, `backend-standard`, whose manifest lists `secrets-vault`, `deploy-kit`, `db-migrate`, and `oncall-runbook` as `dependencies` ([Plugin dependencies](https://code.claude.com/docs/en/plugins/dependencies)). Each one is a hard dependency, so an engineer who never works on-call cannot disable `oncall-runbook` while `backend-standard` is enabled. If no other plugin in the set calls `oncall-runbook`, it passes the disable test. Moving it to `optionalDependencies` then lets that engineer turn it off and keep the rest.
+
+## Key Takeaways
+
+- The deciding question is whether the core works with the companion disabled.
+- A hard dependency blocks a lone disable; an optional one allows it.
+- One changelog line is the whole spec today, so check the manifest reference before relying on syntax or edge behavior.
+- npm's field of the same name means install-failure tolerance. Do not assume Claude Code tolerates a failed optional install.
+
+## Related
+
+- [Plugin Dependency Declaration and Disable-Chain Hints](../../standards/plugin-dependency-declaration.md)
+- [Designing Agent Plugins to Survive Co-Installation](plugin-co-installation-safety.md)
+- [Plugin and Extension Packaging](../../standards/plugin-packaging.md)
+- [Per-Plugin Token-Cost Attribution](../../observability/plugin-token-cost-attribution.md)
 
 ---
 
@@ -136531,6 +136877,7 @@ Threat models identify the structural conditions that make agent systems exploit
 - [Root Causes of Vibe-Coded Application Vulnerabilities](vibe-coded-vulnerability-root-causes.md) — An audit of 200 deployed vibe-coded applications found 91.00% carried at least one vulnerability, traced to three agent limits (memory, objective, knowledge); production-ready framing and a hardened harness each roughly halve reintroduction, detailed technical instructions make it 20.0 points worse, and nothing tested reaches zero
 - [The Post-Authorization Execution Trust Gap in Remote MCP](post-authorization-execution-trust-gap.md) — An OAuth grant names a client and an audience, never the workload that runs a later call; six named failure modes say what the grant leaves open, and the invocation-time fix that closes them is provider-side only
 - [Next Edit Suggestions Carry Context You Never Curated](next-edit-suggestion-uncurated-context.md) — Six channels feed an NES prompt, including an edit buffer that retains content you erased with undo; the diff at the caret is narrower than the transaction you accept, and the rates behind it are conditional, Java-only failure rates
+- [Hidden AI-Directed Text in GitHub Issues and Pull Requests](hidden-ai-directed-text-github.md) — A census of 142.7 million GitHub items found hidden AI-directed text at about 16 per million, 2% of it attacks, most aimed at maintainers' own agents; filter hidden text by author, and never let a hidden marker grant permission
 
 ## Prompt Injection
 
@@ -140865,6 +141212,7 @@ The May 13 announcement landed two days after the May 11 compromise — the dete
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md) — credential-isolation pattern that shrinks step 2's rotation surface
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — adjacent supply-chain vector targeting agent skill registries
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — publisher-side counterpart for tool distribution integrity
+- [Responding to a Compromised Agent Extension Release](../workflows/compromised-agent-extension-response.md) — the same isolate-and-rotate sequence for a tampered editor extension whose payload outlives the uninstall
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — agent-specific failure mode that increases exposure to the same install-time threat surface
 
 ---
@@ -146030,6 +146378,68 @@ The pattern moves the freshness check from a network round-trip to local cryptog
 
 ---
 
+### Hidden AI-Directed Text in GitHub Issues and Pull Requests
+Source: https://agentpatterns.ai/security/hidden-ai-directed-text-github/
+
+# Hidden AI-Directed Text in GitHub Issues and Pull Requests
+
+> Hidden AI-directed text in GitHub issues is real but mostly not an attack; filter it by author, and grant permission through labels or checks.
+
+Hidden AI-directed text is text in an issue, pull request, or comment that GitHub does not render for people but that an agent reading the raw Markdown receives in full. A scan of 142.7 million issues, pull requests and comments found 2,281 validated items in 435 repositories, about 16 per million ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)). Only 43 of them, 2%, were attacks.
+
+The risk applies under three conditions. An outsider can trigger the agent by opening an issue or posting a comment. The agent holds secrets, a shell, or write scopes. Or your own automation acts on hidden markers without checking who wrote them. If none of these hold, the measured attack rate of one in 3.3 million items gives little reason to build more.
+
+## What the census found
+
+All 2,281 findings in issues, pull requests and comments sat in HTML comments, because the detector extracted only that construct there ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)). The authors sorted them by victim:
+
+| Category | Findings | What it does |
+|---|---|---|
+| First-party orchestration | 1,519 (67%) | A project coordinates its own agents through hidden markers: claims, hand-offs, state, instructions |
+| Content override | 374 (16%) | Steers what an agent writes; about 40% configure a team's AI reviewer |
+| Defensive | 345 (15%) | Mostly keeps agents off human-only sections or makes them identify themselves |
+| Attack | 43 (2%) | Tries to make another party's agent act against that party's interests |
+
+The attacks were rare and aimed ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)). 24 of 43 addressed a specific agent the project runs, 17 of them an issue triage agent. Nine named the victim agent's real tools or output fields, which appear only in the project's workflow definitions. The most common goal was stealing secrets (19 attacks), then hijacking the agent for a side job (16) and forging its verdict (8). One gemini-cli issue read as an ordinary bug report, while a hidden comment told the deduplication agent to copy the workflow token into the workflow's environment.
+
+Hidden text also stays put. On re-fetch, 34 of the 43 attacks were intact, "including issues that maintainers had closed: closing an issue does not remove its text" ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)).
+
+## Why it works
+
+GitHub renders Markdown for people, and agents read the source. The paper states the asymmetry: "the maintainer who reads an issue on github.com sees one document, and the maintainer's agent sees another" ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)). Anyone can write an issue, and the maintainers' own agents read it. Those agents frequently hold elevated privileges, so the triage bot becomes a confused deputy.
+
+First-party markers carry the same flaw from the other side. They are plain text in a public thread, and anyone who can comment can post the same marker ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)). The paper found 47 markers in 10 projects that record an approval, a merge-ready state or a bypassed check. It did not audit whether the code reading them checks the author, and it saw no attack that copied a real project marker. The orchestration rate grew fivefold in four months, from 1.9 to 10.1 per million new issues and pull requests.
+
+## What to do
+
+- Filter hidden text by author. The paper's advice: "Filtering should be by author, not by format: strip what outsiders write, keep what the project's own members and bots write" ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)). Check the author association or an allowlist of your own bots.
+- Never let model output open a gate alone. "A model's verdict, such as allow_triage=true, is text an attacker can influence and should never open a security gate alone" ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)). Route the verdict through [safe outputs](safe-outputs-pattern.md) that a deterministic job applies.
+- Grant permission through maintainer-only signals. For anything that grants permission, the paper prefers a label or check status that only maintainers can set over a hidden comment ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)).
+- Strip secrets and write scopes from issue-triggered jobs. An agent that labels or deduplicates issues needs to read issues and add labels ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)). That removes legs of the [lethal trifecta](lethal-trifecta-threat-model.md) on the path an outsider controls.
+
+## When this backfires
+
+- Blanket stripping breaks your own automation. Removing HTML comments ended compliance in the paper's offline replay, and "it also removes every legitimate hidden instruction" ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)). The authors list projects' own workflows, defensive notices and reviewer settings among what breaks.
+- Format filters miss other constructs. GitHub states that "text entered as an HTML comment in an issue or pull request comment is not passed to Copilot cloud agent" ([GitHub Docs](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/risks-and-mitigations)). Trail of Bits wrote "Some of these, such as HTML comments, are stripped before the issue text is passed to Copilot." and hid its payload in a `<picture>` tag instead ([Trail of Bits, 2025](https://blog.trailofbits.com/2025/08/06/prompt-injection-engineering-for-attackers-exploiting-github-copilot/)). The census left visible-text injection and other surfaces out, and its authors call every count a lower bound.
+- Model resistance varies. Replayed against five models with mock tools, four never complied, and the smallest, fastest one complied with 8 of 43 attacks (19%). Two models often returned no answer at all (16 and 22 of 43 raw runs), which blocks the legitimate task too. The authors say the results show the attacks "are not merely theoretical, rather than predict how often they succeed in practice" ([Nakibly and Babo, 2026](https://arxiv.org/abs/2611.28763v1)).
+
+## Key Takeaways
+
+- Hidden AI-directed text appears at about 16 per million GitHub items. Attacks are 2% of it. Most aim at maintainers' own agents, and 44% hit repositories of major AI and cloud vendors.
+- Two thirds of it is projects coordinating their own agents, a channel anyone who can comment can imitate.
+- Filter by author, not format. Blanket stripping kills legitimate markers and still misses constructs other than comments.
+- Keep secrets and write scopes out of any job an outsider's issue can trigger, and use labels or check status for permission.
+
+## Related
+
+- [Comment-Triggered Agent Dispatch on Issues and PRs](../workflows/comment-triggered-agent-dispatch.md) — The comment box as a dispatch surface, and the demonstrated attacks on it
+- [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — The general threat model this census measures in the wild
+- [Non-Human Event Provenance Markers to Block Fabricated Approvals](non-human-event-provenance-markers.md) — Marking injected events so a forged approval carries no authority
+- [Safe Outputs Pattern for Trustworthy Agent Responses](safe-outputs-pattern.md) — Turning an agent's verdict into a request a deterministic job applies
+- [Lethal Trifecta Threat Model for AI Agent Development](lethal-trifecta-threat-model.md) — Removing a leg from the outsider-triggered path
+
+---
+
 ### History Anchors: Consistency-Cued Continuation of Unsafe Prior Actions
 Source: https://agentpatterns.ai/security/history-anchor-consistency-injection/
 
@@ -149309,6 +149719,7 @@ The agent reads the same completion text, but the stamped provenance means the "
 - [Forged Reasoning Trace Attacks on Agent Memory (FARMA)](forged-reasoning-trace-memory-attack.md) — the same provenance-blindness root cause in persistent memory rather than the live run.
 - [Provenance-Aware Decision Auditing for LLM Agents](provenance-aware-decision-auditing.md) — traces each action to its source span; the runtime record that a provenance marker makes checkable.
 - [Prompt Injection: A First-Class Threat to Agentic Systems](prompt-injection-threat-model.md) — the broader threat this vector is one instance of.
+- [Hidden AI-Directed Text in GitHub Issues and Pull Requests](hidden-ai-directed-text-github.md) — hidden approval markers on GitHub that anyone who can comment can post, the same forgery risk on a public thread.
 - [Authority Disclaimers Read as Permission to Skip a Step](../patterns/anti-patterns/authority-disclaimers-read-as-skip-permission.md) — a marker that withholds authority without naming a capability makes the agent decline the work, not the action.
 
 ---
@@ -155385,6 +155796,7 @@ The counter-argument is that an attacker who can edit your setup docs usually ha
 - [Agent-Emitted Dependency Version Ranges Widen the Supply-Chain Attack Surface](agent-emitted-dependency-ranges.md) — floating ranges as a third leg of the agent-authored-manifest surface, closed by the same lockfile control
 - [Improper Output Handling: Validate Agent Output Before Downstream Use](improper-output-handling-downstream-sinks.md) — the install sink is one of the downstream sinks that must be gated per-action
 - [Pre-Trust Execution Surface in Coding Agent Harnesses](pre-trust-execution-surface.md) — the adjacent gap where project-local config executes before the trust prompt fires
+- [Responding to a Compromised Agent Extension Release](../workflows/compromised-agent-extension-response.md) — the response side once a tampered editor extension has already installed and left persistence behind
 
 ---
 
@@ -194496,6 +194908,7 @@ Learn it hands-on: [Capstone — The Workflow Decision Table](https://learn.agen
 - [Downstream Disclosure Coordination for Agent-Found Defects](downstream-disclosure-coordination.md) — Map every hop between a vendored library and your deploy, mitigate centrally where a chokepoint exists, and track the fixed version into your lockfile rather than waiting on the advisory
 - [Build-Surface Inventory for an Interpreter-Level CVE](build-surface-inventory-runtime-cve.md) — When the vulnerable code sits in an interpreter rather than a manifest, point the agent at Dockerfiles, charts, and CI configs and require an inventory whose every row cites the file its version pin came from
 - [Ecosystem-Scale Pre-Disclosure Coordination for Agent-Found Vulnerabilities](ecosystem-predisclosure-coordination.md) — Stage distributors, providers and agencies by protective role before publication, and keep the window short enough to survive independent LLM-assisted rediscovery
+- [Responding to a Compromised Agent Extension Release](compromised-agent-extension-response.md) — Scope a tampered marketplace release by version, window and package hash, hunt the payload's persistence on each host, and rotate credentials from a clean machine
 - [Running an Agent Experience Evaluation From Gates to Fixes](ax-evaluation-end-to-end.md) — Stack gates, read trajectories, attribute each failure, and fix the source before writing a skill, with the playbook's five-run limit and Microsoft's self-reported results stated up front
 - [Flag Cleanup Grounded in Deployed State](deployed-state-flag-cleanup.md) — Remove a stale feature flag by reading the surviving value from the flag platform's deployed state, confirming intent with the owner, then gating the diff on CI
 - [Per-Job Runner Placement in Agentic Workflows](per-job-runner-placement.md) — A compiled agentic workflow emits several job classes, and `runs-on` moves only the agent job; framework, safe-output, detection, and maintenance jobs read separate fields
@@ -198741,7 +199154,7 @@ The ergonomics are not novel to Copilot. Prow provides GitHub automation as "cha
 - Automation-authored comments. A second automation matching text the first one wrote has no documented suppression ([Risks and mitigations](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/risks-and-mitigations)).
 - Trigger phrases drawn from natural review language. A comment explaining why not to run the automation can fire it.
 - Compliance obligations to enumerate automated actors. Administrators cannot see automations they did not create ([About Copilot automations](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-automations)).
-- Treating hidden-character filtering as injection defense. GitHub strips one payload shape, where "text entered as an HTML comment in an issue or pull request comment is not passed to Copilot cloud agent" ([Risks and mitigations](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/risks-and-mitigations)), and the demonstrated attacks used that shape among others ([CSA Labs](https://labs.cloudsecurityalliance.org/research/csa-research-note-comment-control-github-prompt-injection-20/)).
+- Treating hidden-character filtering as injection defense. GitHub strips one payload shape, where "text entered as an HTML comment in an issue or pull request comment is not passed to Copilot cloud agent" ([Risks and mitigations](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/risks-and-mitigations)), and the demonstrated attacks used that shape among others ([CSA Labs](https://labs.cloudsecurityalliance.org/research/csa-research-note-comment-control-github-prompt-injection-20/)). Blanket stripping also removes a project's own hidden markers; see [hidden AI-directed text on GitHub](../security/hidden-ai-directed-text-github.md) for filtering by author instead.
 
 ## Example
 
@@ -209522,6 +209935,107 @@ This is the minimum viable agent infrastructure described above. Add agent defin
 - [Lay the Architectural Foundation by Hand Before Delegating to Agents](architectural-foundation-first.md)
 - [Skeleton Projects as Agent Scaffolding](skeleton-projects-as-scaffolding.md)
 - [Team Onboarding for AI Agent Workflows](team-onboarding.md)
+
+---
+
+### Responding to a Compromised Agent Extension Release
+Source: https://agentpatterns.ai/workflows/compromised-agent-extension-response/
+
+# Responding to a Compromised Agent Extension Release
+
+> A tampered agent extension release runs a payload as the developer. Respond to what it left on the host, because uninstalling may leave it running.
+
+Responding to a compromised agent extension release means scoping the fleet by version and install window, then checking each host for the payload's own artifacts. Credentials are rotated from a machine the payload never touched. The October 2026 Claude Code extension incident in Cursor shows each step. Cursor warned that uninstalling the extension may not be enough, because the payload drops persistence scripts that keep running on their own ([Cursor](https://cursor.com/blog/claude-code-extension-security-notice)).
+
+## When this workflow applies
+
+Run the full sequence only when these conditions hold:
+
+- The extension runs with the user's privileges and can reach files, shell, SSH keys, and credentials.
+- The vendor or a researcher has published the affected versions, the exposure window, and indicators of compromise.
+- You have install records or endpoint telemetry that can name the machines that pulled the bad build.
+
+The weight of the response should follow the evidence on each host. In the Cursor case the SSH-service step failed without admin rights, so on most hosts the attacker could not log in through the tunnel. Cursor noted that the key, the persistence, and the host beacon still landed, and told everyone to follow the remediation steps regardless ([Cursor](https://cursor.com/blog/claude-code-extension-security-notice)).
+
+## The uninstall problem
+
+Cursor reported two tampered builds, "Anthropic.claude-code version 2.1.312 and 2.1.313 for Windows and MacOS", served from its marketplace between about 2:27am and 1:35pm PT on 2026-10-29 ([Cursor](https://cursor.com/blog/claude-code-extension-security-notice)). Anthropic did not build them. Cursor's follow-up traced the tampering to its own serving layer. The attacker used a stolen credential to place copies "directly on the cache used to serve the Cursor VS Code extension marketplace". Cursor adds: "The marketplace source, Open VSX, never had the malware" ([Cursor update](https://cursor.com/blog/security-incident-update)). By Cursor's count, at most 5,000 users who requested the affected cached versions "potentially received the malicious build" ([Cursor update](https://cursor.com/blog/security-incident-update)).
+
+The payload collected host details, including environment variable names and Git email. It appended an attacker key to `authorized_keys`, tried to open a reverse SSH tunnel, and installed a LaunchAgent on macOS or a scheduled task on Windows. Background scripts retried the tunnel about every 60 seconds ([Cursor](https://cursor.com/blog/claude-code-extension-security-notice)).
+
+The key, the LaunchAgent or scheduled task, and the retry scripts all sit in the home directory, the temp folder, or the OS task scheduler, outside the extension folder ([Cursor](https://cursor.com/blog/claude-code-extension-security-notice)). Cursor's notice states the consequence: "Uninstalling the extension may not be sufficient — the payload drops standalone persistence scripts that keep running." A team that treats removal as remediation can leave the attacker key and the retry loop in place.
+
+Two facts shape the response. Cursor published a SHA-256 hash for each modified VSIX, so a package hash separates the tampered build from a clean copy of the same version. The payload also lives outside the extension, so the check has to look at the host.
+
+## Five response layers
+
+```mermaid
+flowchart TD
+    A[Scope by version and window] --> B[Check host for artifacts]
+    B -->|None found| G[Close the gap]
+    B -->|Found| C[Isolate host]
+    C --> D{Admin rights or tunnel?}
+    D -->|No| E[Remove persistence and key]
+    D -->|Yes| F[Rebuild host]
+    E --> H[Rotate from clean machine]
+    F --> H
+    H --> G
+```
+
+### Layer 1: Scope the fleet by version and window
+
+List every machine that installed or updated to an affected version inside the window. Cursor's scoping instruction is to "Search across endpoint, network, and extension-installation telemetry for the indicators below" ([Cursor](https://cursor.com/blog/claude-code-extension-security-notice)). On VS Code, `code --list-extensions --show-versions` prints installed IDs and versions per account ([VS Code](https://code.visualstudio.com/docs/enterprise/extensions)). Match the published VSIX SHA-256 hashes where your telemetry records package hashes. A version string alone can match a clean build: Open VSX, the upstream source, "never had the malware" ([Cursor update](https://cursor.com/blog/security-incident-update)).
+
+### Layer 2: Check each host for the payload's artifacts
+
+Look for what the payload wrote, not for the extension. In this incident the marker is a public key labeled `svc-telemetry` in `~/.ssh/authorized_keys`. The named persistence is `~/Library/LaunchAgents/com.apple.sysmond.plist` on macOS, and the `SysMon` scheduled task with a Startup `sysmon.cmd` fallback on Windows ([Cursor](https://cursor.com/blog/claude-code-extension-security-notice)). Search network logs for the published attacker address and the beacon on port 8099. A machine that no longer has the extension installed can still carry all of these.
+
+### Layer 3: Isolate, then choose clean or rebuild
+
+Cursor's step is to "Isolate hosts showing evidence of payload execution or backdoor installation". It then says to remove the key, the persistence, and the tunnel processes, "and assess whether the host should be rebuilt" ([Cursor](https://cursor.com/blog/claude-code-extension-security-notice)). Cursor shipped per-platform scripts that do the removal and "exit with a non-zero status if anything remains". Rebuild when the editor ran with admin rights or when logs show a working tunnel. Cursor's notice ties the login risk to admin rights: without them "the step fails and the attacker could not have logged in through the tunnel". Where that step may have worked, the attacker may have had an SSH session, and the host cannot vouch for what that session did.
+
+### Layer 4: Rotate credentials from a trusted system
+
+Rotate every credential and session the host could reach, and do it from a different machine. Cursor gives the reason: "The limited env-var collection does not rule out later credential access over the backdoor" ([Cursor](https://cursor.com/blog/claude-code-extension-security-notice)). Rotating from the infected host can hand the new secrets to the same payload.
+
+### Layer 5: Close the gap before the next release
+
+VS Code can pin extensions to approved versions through `extensions.allowed`. Its docs state: "If you block an extension or version that is already installed, VS Code disables it" ([VS Code](https://code.visualstudio.com/docs/enterprise/extensions)). That makes a pin a way to switch off a named bad version across the fleet. A pin is not a content check. The same docs say that for locally supplied VSIX packages the rules "do not verify the package's origin", and a tampered build can carry a real version number. The default auto-update delay is 12 hours ([VS Code](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace)), longer than the 11-hour window here. I found no source that says Cursor honors either setting, so confirm it in your editor before you count on it.
+
+## Triggers and constraints
+
+The trigger is a vendor notice or a researcher report that names versions and indicators. Layers 1 to 4 run under incident authority: an operator can isolate and wipe machines. Layer 5 is a change to fleet policy and goes through the normal review for editor configuration. Each layer has an exit check. Every in-window host is listed, every listed host is checked, every positive host is cleaned or rebuilt, and every reachable credential is rotated.
+
+## Tool coverage
+
+The incident and its indicators are specific to Cursor's marketplace. The response layers are tool-agnostic, because any editor extension runs with the user's privileges. The prevention controls differ: `extensions.allowed` ([VS Code](https://code.visualstudio.com/docs/enterprise/extensions)), `extensions.autoUpdate`, and `extensions.autoUpdateDelay` ([VS Code](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace)) are documented VS Code settings. For a fork such as Cursor, check the vendor's documentation for the equivalent before relying on it.
+
+## Why it works
+
+An extension update runs code on the developer's machine. OX Security's analysis of this incident: "an extension update can write to a developer's SSH keys, register startup tasks and open network tunnels" ([OX Security](https://www.ox.security/blog/malicious-claude-code-extension-cursor-ssh-backdoor/)). This payload put its persistence in places the extension manager does not own: the SSH key file, a LaunchAgent or scheduled task, and standalone retry scripts. The same analysis says "The payload was built to outlive the extension". Removing the extension leaves those files behind, so detection that keys on the payload's artifacts finds the compromise whether or not the extension is still present.
+
+## When this backfires
+
+- No install telemetry. Without records of who pulled which version, scoping means checking every developer machine by hand. That costs more than the targeted response assumes.
+- Indicators taken as complete. The artifacts list covers one payload. A different tampered build writes different files, so a clean grep for `svc-telemetry` proves nothing about the next incident.
+- Over-response on low-risk hosts. A host can show no key and have never run the editor with admin rights. Rebuilding it and rotating everything costs engineer time on a payload that could not log in.
+- Pins without enforcement. An allowlist the editor does not enforce is advice. Publish-path compromise recurs: in 2025 leaked publisher tokens could be abused "to publish or modify extensions" on Open VSX ([Eclipse Foundation](https://blogs.eclipse.org/post/mika%C3%ABl-barbero/open-vsx-security-update-october-2025)).
+
+## Key Takeaways
+
+- Confirm scope with the published package hash, since a version string can match a clean build from another source.
+- The extension may already be gone when you look, so check the host for the payload's files and keys.
+- Rebuild a host that ran the editor with admin rights or whose logs show a working tunnel, and clean the rest with the vendor's script.
+- Rotate from a machine the payload never ran on.
+- A version pin switches off a known bad version but does not check package content. An update delay longer than the exposure window helps only if your editor enforces it.
+
+## Related
+
+- [Containment Playbook: npm-to-Signing-Channel Compromise](../security/npm-signing-channel-containment-playbook.md)
+- [Enterprise-Managed Plugin Governance for Agent CLIs](../security/enterprise-managed-plugin-governance.md)
+- [Blast Radius Containment: Least Privilege for AI Agents](../security/blast-radius-containment.md)
+- [Setup Documentation as an Install-Time Attack Vector](../security/setup-documentation-install-time-attacks.md)
+- [Incident-Time Code Grounding for Drifted Runbooks](incident-time-code-grounding.md)
 
 ---
 

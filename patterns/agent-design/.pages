@@ -158,6 +158,7 @@ nav:
       - write-boundary-as-setting.md
       - worktree-subagent-shared-branch-guard.md
       - interaction-effect-obligations.md
+      - consequence-oriented-approval.md
       - fleet-irreversibility-budget.md
       - agent-native-filesystem-mediation.md
       - model-directed-subagent-tiering.md
@@ -294,9 +295,11 @@ nav:
       - most-restrictive-wins-fusion.md
       - layered-policy-resolution.md
       - plugin-co-installation-safety.md
+      - plugin-optional-dependencies.md
       - tool-discovery-architecture-by-query-shape.md
       - natural-language-tool-selection.md
       - product-operation-tool-surface.md
+      - non-rest-apis-for-coding-agents.md
       - typed-tool-surface-out-of-loop-gate.md
       - programmatic-tool-calling.md
       - tool-confirmation-carousel.md

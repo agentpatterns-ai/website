@@ -48,6 +48,7 @@ Threat models identify the structural conditions that make agent systems exploit
 - [Root Causes of Vibe-Coded Application Vulnerabilities](vibe-coded-vulnerability-root-causes.md) — An audit of 200 deployed vibe-coded applications found 91.00% carried at least one vulnerability, traced to three agent limits (memory, objective, knowledge); production-ready framing and a hardened harness each roughly halve reintroduction, detailed technical instructions make it 20.0 points worse, and nothing tested reaches zero
 - [The Post-Authorization Execution Trust Gap in Remote MCP](post-authorization-execution-trust-gap.md) — An OAuth grant names a client and an audience, never the workload that runs a later call; six named failure modes say what the grant leaves open, and the invocation-time fix that closes them is provider-side only
 - [Next Edit Suggestions Carry Context You Never Curated](next-edit-suggestion-uncurated-context.md) — Six channels feed an NES prompt, including an edit buffer that retains content you erased with undo; the diff at the caret is narrower than the transaction you accept, and the rates behind it are conditional, Java-only failure rates
+- [Hidden AI-Directed Text in GitHub Issues and Pull Requests](hidden-ai-directed-text-github.md) — A census of 142.7 million GitHub items found hidden AI-directed text at about 16 per million, 2% of it attacks, most aimed at maintainers' own agents; filter hidden text by author, and never let a hidden marker grant permission
 
 ## Prompt Injection
 

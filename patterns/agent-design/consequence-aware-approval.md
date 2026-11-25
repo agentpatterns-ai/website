@@ -75,3 +75,4 @@ A user asks for a database migration and the agent proposes `make migrate`. The 
 - [Deterministic Precondition Gates for Tool-Using Agents](deterministic-precondition-gates.md) — read-only predicates that check state before a write, with no execution at all
 - [Agent Approval Laundering: Effects Beyond the Named Command](../../security/approval-laundering-transitive-effects.md) — the cheaper remedy when the missing information is readable statically
 - [Rollback-First Design: Every Agent Action Should Be Reversible](rollback-first-design.md) — the reversibility assumption condition 1 depends on
+- [Consequence-Oriented Approval for Multi-Step Agent Workflows](consequence-oriented-approval.md) — the human-reviewer counterpart, where the consequence comes from artifact lineage across earlier steps rather than from running the command

@@ -129,4 +129,5 @@ The May 13 announcement landed two days after the May 11 compromise — the dete
 - [Scoped Credentials via Proxy Outside the Agent Sandbox](scoped-credentials-proxy.md) — credential-isolation pattern that shrinks step 2's rotation surface
 - [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — adjacent supply-chain vector targeting agent skill registries
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — publisher-side counterpart for tool distribution integrity
+- [Responding to a Compromised Agent Extension Release](../workflows/compromised-agent-extension-response.md) — the same isolate-and-rotate sequence for a tampered editor extension whose payload outlives the uninstall
 - [LLM-Pinned Library Versions Carry Systemic CVE Exposure](llm-pinned-vulnerable-versions.md) — agent-specific failure mode that increases exposure to the same install-time threat surface

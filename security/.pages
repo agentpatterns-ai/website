@@ -36,6 +36,7 @@ nav:
       - post-authorization-execution-trust-gap.md
       - next-edit-suggestion-uncurated-context.md
       - temporal-spatial-semantic-evasion-taxonomy.md
+      - hidden-ai-directed-text-github.md
   - "Prompt Injection":
       - action-selector-pattern.md
       - adaptive-evaluation-out-of-band-defenses.md
