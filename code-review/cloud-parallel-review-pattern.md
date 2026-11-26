@@ -40,7 +40,7 @@ graph TD
 
 ## Canonical implementation
 
-Claude Code's `/ultrareview` launches "a fleet of reviewer agents in a remote sandbox" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)), added in v2.1.111 (2026-04-16) per the [changelog](https://code.claude.com/docs/en/changelog). Anthropic's managed GitHub Code Review runs the same shape as a webhook service: "multiple agents analyze the diff and surrounding code in parallel on Anthropic infrastructure. Each agent looks for a different class of issue, then a verification step checks candidates against actual code behavior to filter out false positives. The results are deduplicated, ranked by severity, and posted as inline comments" ([Code Review docs](https://code.claude.com/docs/en/code-review)).
+Claude Code's `/code-review ultra` "launches a fleet of reviewer agents in a cloud sandbox to find bugs in your branch or pull request" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). The docs call `/ultrareview` an alias when ultrareview is available to your account, and the [changelog](https://code.claude.com/docs/en/changelog) lists it as added in v2.1.111 (2026-04-16). Anthropic's managed GitHub Code Review runs the same four stages ([Code Review docs](https://code.claude.com/docs/en/code-review#how-reviews-work)): "several agents examine the diff and the surrounding code in parallel", "a verification step checks the candidate findings against the code and filters out false positives", "the findings that remain are deduplicated and ranked by severity", and "the review posts its results on the pull request".
 
 ## Why verification is load-bearing
 
@@ -50,17 +50,17 @@ Per the [EMNLP 2024 peer-review simulation study](https://aclanthology.org/2024.
 
 ## Cloud execution trade-offs
 
-- Latency is asynchronous. `/ultrareview` takes 5 to 10 minutes, and managed Code Review averages 20 minutes ([Code Review docs](https://code.claude.com/docs/en/code-review)). The developer's session is not blocked.
-- Cost is per-review. `/ultrareview` "typically costs \$5 to \$20" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Managed Code Review averages "\$15-25 in cost, scaling with PR size, codebase complexity, and how many issues require verification" ([Code Review docs](https://code.claude.com/docs/en/code-review)).
-- The trust boundary expands. Cloud execution is unavailable for "Amazon Bedrock, Google Cloud Vertex AI, or Microsoft Foundry" and for Zero Data Retention organizations ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
+- Latency is asynchronous. For `/code-review ultra`, "a review typically takes 5 to 15 minutes" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)), and managed Code Review [runs on Anthropic infrastructure](https://code.claude.com/docs/en/code-review). The developer's session is not blocked.
+- Cost is per-review. After the free runs, ultrareview costs "typically \$5 to \$25 in usage credits depending on the size of the change" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Managed Code Review has [no flat per-review price](https://code.claude.com/docs/en/code-review-costs).
+- The trust boundary expands. Ultrareview "is not available when using Claude Code with Amazon Bedrock, Google Cloud's Agent Platform, or Microsoft Foundry, and it is not available to organizations that have enabled Zero Data Retention or have the HIPAA configuration applied" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Organizations that use customer-managed encryption keys cannot run it either.
 
 ## When to trigger
 
-Three trigger modes: once per PR (fixed cost), every push (cost multiplied by push count), and manual (`/ultrareview` or `@claude review`). Push-triggered review "runs the most reviews and costs the most" ([Code Review docs](https://code.claude.com/docs/en/code-review)). For high-iteration PRs, `@claude review once` runs a single non-subscribing review to bound cost.
+Three trigger modes: once per PR (fixed cost), every push (cost multiplied by push count), and manual (`/ultrareview` or `@claude review`). Review after every push "runs on each push, multiplying cost by the number of pushes" ([Code Review costs](https://code.claude.com/docs/en/code-review-costs#how-often-reviews-run)). For high-iteration PRs, `@claude review once` runs a single non-subscribing review to bound cost.
 
 ## Relationship to CI gates
 
-The check run "always completes with a neutral conclusion so it never blocks merging through branch protection rules" ([Code Review docs](https://code.claude.com/docs/en/code-review)). Cloud parallel review is a signal layer. Teams that want merges gated on findings parse the machine-readable severity breakdown from the check run in their own CI.
+By itself, a managed Code Review [does not approve or block](https://code.claude.com/docs/en/code-review), but its result counts toward approvals where a Claude Approvals policy file uses it. Its check run [never concludes as a failure](https://code.claude.com/docs/en/code-review-pull-requests#check-run-output). To gate merges on findings, parse the severity breakdown from the check run in your own CI.
 
 ## Comparison to related patterns
 
@@ -75,14 +75,14 @@ Load-bearing differentiators: the verification step, cloud execution, and a sing
 
 ## When this backfires
 
-- Small diffs. A 5-to-10-minute, \$5-to-\$20 review is wasted on typo fixes. A local `/review` is cheaper for sub-hundred-line diffs with clear scope.
+- Small diffs. A paid ultrareview, typically 5 to 15 minutes and \$5 to \$25, is wasted on typo fixes. A local `/review` is cheaper for sub-hundred-line diffs with clear scope.
 - Low-diversity reviewer axes. If "correctness" and "bugs" surface the same findings, aggregation dedupes most of the parallel work and the pattern buys nothing.
-- High-iteration PRs with push triggers. A 30-push PR at \$15-\$25 per review exceeds most review budgets. Use manual or once-per-PR triggers for long-running branches.
-- Air-gapped or ZDR environments. Cloud execution is not optional. The pattern is unavailable for Zero Data Retention organizations and non-Anthropic hosting providers ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
+- High-iteration PRs with push triggers. Review after every push multiplies cost by the number of pushes ([Code Review costs](https://code.claude.com/docs/en/code-review-costs#how-often-reviews-run)). Use manual or once-per-PR triggers for long-running branches.
+- Air-gapped or ZDR environments. Cloud execution is not optional. On Bedrock, Agent Platform, Foundry, Zero Data Retention, or HIPAA setups, ultrareview is unavailable and `/code-review ultra` "runs a local review in your session instead" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Managed Code Review is also unavailable to Zero Data Retention organizations ([Code Review docs](https://code.claude.com/docs/en/code-review#availability)).
 
 ## Tuning
 
-Anthropic's managed Code Review reads two files. `CLAUDE.md` contributes project context; new violations surface as nit-level findings. `REVIEW.md` is "injected directly into every agent in the review pipeline as highest priority" ([Code Review docs](https://code.claude.com/docs/en/code-review)). It is the surface for severity recalibration, skip rules, per-repo checks, and nit caps.
+Anthropic's managed Code Review reads two kinds of file ([customize docs](https://code.claude.com/docs/en/code-review-customize)). It reads `CLAUDE.md` files as project context, and "a change that violates one of their rules becomes a finding at whichever severity level fits the issue". `REVIEW.md` holds review-only rules: "the agents that find issues and the agents that verify them receive its contents as your repository's review instructions, alongside Code Review's default review guidance". It is the surface for severity recalibration, skip rules, per-repo checks, and nit caps. Lowering severity, excluding findings, and capping nits [need the root file on a protected default branch](https://code.claude.com/docs/en/code-review-customize#which-branch-review-md-is-read-from).
 
 ## Example
 
@@ -116,16 +116,16 @@ similar items" in the summary instead of posting them inline.
 - Database queries are scoped to the caller's tenant
 ```
 
-A 400-line PR that adds a new API route triggers review on push. The agents fan out. A correctness agent flags a missing tenant scope on one query. A regression agent flags a changed response shape for an existing endpoint. A security agent flags a new log line that includes the user ID. Each finding is verified against code before posting. The aggregated review posts three inline comments with severity markers and a summary: "2 Important, 1 Nit." The check run completes with a neutral conclusion. Branch protection is not triggered, but the team's own CI parses the machine-readable severity counts and blocks merge while `normal > 0`.
+A 400-line PR that adds a new API route triggers review on push. Several agents search in parallel. The review flags a missing tenant scope on one query, a changed response shape for an existing endpoint, and a new log line that includes the user ID. Each finding is verified against code before posting. The aggregated review posts three inline comments with severity markers and a summary: "2 Important, 1 Nit." The check run completes with a neutral conclusion, so it does not fail a required check. The team's own CI parses the machine-readable severity counts and blocks merge while `normal > 0`.
 
 ## Key Takeaways
 
 - Cloud parallel review is parallel-decompose + verify + aggregate, distinct from committee voting and tiered escalation
 - The verification step is load-bearing: without it the pattern amplifies false positives rather than reducing them
-- Cloud execution runs the 5-to-20-minute review in the background, so the developer's session stays unblocked
+- Cloud execution runs the review in the background, so the developer's session stays unblocked
 - Cost scales with PR size and trigger mode; push-triggered review on long PRs is the primary budget risk
 - The default check run is neutral: gate on findings in your own CI by parsing the severity breakdown
-- `REVIEW.md` is the intended tuning surface for severity, skip rules, and nit caps; `CLAUDE.md` contributes general project context
+- `REVIEW.md` is the intended tuning surface for severity, skip rules, and nit caps; `CLAUDE.md` contributes project context, and breaking one of its rules produces a finding
 
 ## Related
 

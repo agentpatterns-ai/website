@@ -72,3 +72,4 @@ Three more conditions carry over unchanged from [LLM-as-Code](llm-as-code-agenti
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md) — The empirical case for constraining agents, and where constraint stops paying
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md) — The layer split that a fenced stage boundary enforces in practice
 - [Artifact-Driven Workflow Compilation for Agent Execution](artifact-driven-workflow-compilation.md) — Applies the same typed-boundary idea to the whole procedure, with every step declaring the artifacts it reads and writes
+- [Internal Remote-Agent Platform: Coding Agents Behind One API](internal-remote-agent-platform.md) — A shared service whose runner fences one agent session between deterministic clone and publish steps

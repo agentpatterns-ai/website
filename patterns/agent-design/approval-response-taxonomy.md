@@ -170,3 +170,4 @@ The same five branches map onto Claude Code hooks via `permissionDecision` and `
 - [Permission Framework Choice Outweighs Model Choice](../../security/permission-framework-over-model.md) — the framework (ask-to-continue vs permissive) dominates the model choice; the six shapes only matter inside the ask-to-continue arm
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — the `AskUserQuestion` path, which uses the same `canUseTool` callback but for clarifying questions rather than tool approval
 - [One-Shot Permission Answers for Out-of-Directory Reads](one-shot-permission-answers.md) — shape 1 against shape 3 on one Claude Code prompt, where the remembered answer covers a whole boundary rather than the call you reviewed
+- [Permission Replies That Rewrite Coding-Agent Policy](../../security/permission-reply-policy-updates.md) — what `updatedPermissions` can do when the answering party is not the operator

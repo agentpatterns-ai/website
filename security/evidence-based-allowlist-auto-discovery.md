@@ -24,7 +24,7 @@ Evidence-based allowlist auto-discovery builds the allow list incrementally from
 
 ## How it works
 
-Claude Code's `PermissionRequest` hook fires before Claude Code shows the permission dialog. When it approves a call (`hookSpecificOutput.decision.behavior: "allow"`), the sibling `updatedPermissions` array can carry an `addRules` entry whose `destination` writes the allow rule to a settings file ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)).
+Claude Code's `PermissionRequest` hook fires before Claude Code shows the permission dialog. When it approves a call (`hookSpecificOutput.decision.behavior: "allow"`), the `updatedPermissions` array inside the same `decision` object can carry an `addRules` entry whose `destination` writes the allow rule to a settings file ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks#permissionrequest-decision-control)).
 
 ```mermaid
 sequenceDiagram
@@ -76,19 +76,22 @@ COUNT=$(jq -r --arg k "$KEY" '.[$k] // 0' "$LOG_FILE" 2>/dev/null || echo 0)
 
 if [ "$COUNT" -ge "$THRESHOLD" ]; then
   # Approve the call and add a persistent allow rule to .claude/settings.local.json.
-  # updatedPermissions is a sibling of decision under hookSpecificOutput; an
-  # addRules entry carries a rules[] array and a destination.
+  # updatedPermissions is a field of decision; an addRules entry carries
+  # rules[], behavior, and destination.
   jq -n \
     --arg rule "$KEY *" \
     '{
       hookSpecificOutput: {
         hookEventName: "PermissionRequest",
-        decision: { behavior: "allow" },
-        updatedPermissions: [{
-          type: "addRules",
-          destination: "localSettings",
-          rules: [{ toolName: "Bash", rule: $rule, behavior: "allow" }]
-        }]
+        decision: {
+          behavior: "allow",
+          updatedPermissions: [{
+            type: "addRules",
+            rules: [{ toolName: "Bash", ruleContent: $rule }],
+            behavior: "allow",
+            destination: "localSettings"
+          }]
+        }
       }
     }'
 fi
@@ -155,7 +158,7 @@ Claude Code's default auto-approval list has itself grown over releases to inclu
 ## Key Takeaways
 
 - Auto-discovery builds the allowlist from real usage, so teams skip predicting the safe-command list before they have data.
-- The `PermissionRequest` hook is the only one that can persist an allow rule, via `hookSpecificOutput.decision` plus an `updatedPermissions` `addRules` entry; `PostToolUse` can only write to a sidecar counter log.
+- The `PermissionRequest` hook is the only one that can persist an allow rule, via an `updatedPermissions` `addRules` entry inside `hookSpecificOutput.decision`; `PostToolUse` can only write to a sidecar counter log.
 - Promote to the allowlist only after N flagged-side-effect-free approvals, and always keep a never-auto-allow deny list (`rm`, `curl`, `git push`, …) that falls through to the dialog.
 - Count full command fingerprints, not just first tokens, so a safe read can't promote a destructive variant under the same key.
 
@@ -168,3 +171,4 @@ Claude Code's default auto-approval list has itself grown over releases to inclu
 - [PostToolUse Hook for BSD/GNU Tool Miss Detection](../tool-engineering/posttooluse-bsd-gnu-detection.md)
 - [Empirical Baseline: How Developers Configure Agentic AI Coding Tools](../instructions/empirical-baseline-agentic-config.md)
 - [Progressive Autonomy with Model Evolution](../human/progressive-autonomy-model-evolution.md)
+- [Permission Replies That Rewrite Coding-Agent Policy](permission-reply-policy-updates.md) — the same field used to delete deny rules or widen the sandbox

@@ -107,6 +107,7 @@ nav:
       - deterministic-orchestration-structured-modernization.md
       - llm-as-code-agentic-programming.md
       - bounded-agent-step.md
+      - internal-remote-agent-platform.md
       - canvas-as-control-surface.md
       - artifact-driven-workflow-compilation.md
       - ast-grounded-doc-critic-loop.md

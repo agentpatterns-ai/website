@@ -88,3 +88,4 @@ The counter-case is in the same appendix. A methotrexate question kept a score o
 - [Assumption Propagation](../anti-patterns/assumption-propagation.md) — what happens downstream when the substituted assumption lands in code
 - [Request Shaping to Cut Wasted Agent Turns](../../token-engineering/request-shaping-wasted-turns.md) — the cost side of specificity, and why selection beats volume
 - [Grill Me: Developer-Initiated Plan Interrogation](grill-me-technique.md) — forcing the interrogation yourself when the agent will not ask
+- [In-Agent Task Prioritization: Ranking the Next Action](in-agent-task-prioritization.md) — a related gap in ranking requests, where the agent picks what "impact" means

@@ -32,9 +32,24 @@ Nothing else may ride on the mode field. `deepagents` bundles two things into it
 
 ## Why it works
 
-Inherited production context makes a reviewer rationalize rather than scrutinize, and the leak shows up at the size of a single prompt. Song ran 30 artifacts carrying 150 injected errors through 360 reviews under four conditions. Cross-Context Review, which sees the artifact alone in a fresh session, scored an F1 of 28.6%. Same-session self-review scored 24.6% (p=0.008, d=0.52). Subagent Review scored 23.8% (p=0.004, d=0.57), and that condition already ran in a fresh session whose only extra context was the generation prompt ([Song, Cross-Context Review, arXiv 2603.12123v1](https://arxiv.org/abs/2603.12123v1)). Passing down the prompt alone cost 4.8 F1 points. Reviewing twice in the same session did not beat reviewing once (p=0.11), which rules out repetition. The paper states the mechanism plainly: "When the model reviews its output in the same session, the entire conversation history sits in the context window ... All of this anchors the model's judgment. It does not scrutinize; it rationalizes."
+A declared mode is fixed when you write the role, before the supervisor has produced anything to defend. Whether isolation then improves the review is a separate question, and the measured answer is narrow.
 
-Read that as a bound on the effect rather than a license. The experiment used one model (Claude Opus 4.6) and errors it injected rather than found, and 28.6% is a low absolute score. What it establishes is granularity: what a subagent inherits matters at a resolution finer than the whole conversation.
+Song ran 30 artifacts carrying 150 injected errors through 360 reviews under four conditions. Version 2 of the paper excludes one same-session run (30 reviews) whose records could not be verified ([Song, Cross-Context Review, arXiv 2603.12123v2](https://arxiv.org/abs/2603.12123v2)). Cross-Context Review (CCR) sees the artifact alone in a fresh session. The tests compare CCR with each other condition on per-artifact F1, averaged over the available runs:
+
+| Condition | What the reviewer had | F1 | Holm-adjusted p against CCR |
+|---|---|---|---|
+| CCR | Fresh session, artifact only | 28.6% | baseline |
+| Single self-review | Same session, full history | 27.1% (two runs) | 0.26 |
+| Subagent review | Fresh session, artifact and generation prompt | 23.8% | 0.057 |
+| Second self-review | Same session, full history and first review | 21.7% | 0.004 |
+
+Only the last gap is significant. CCR is not significantly ahead of the reviewer that also got the generation prompt, and "Whether a fresh-session review outperforms a single self-review is not established by these data". Version 1 reported all three advantages as significant. Version 2 says the advantages over single self-review and subagent review came from run 1, and that CCR ranks first in run 1 only. The exclusion matters: with the dropped run counted, all three would be significant (p=0.004, 0.043, 0.043). The paper adds: "The other runs are unverified rather than known to be clean."
+
+The surviving result has limits too. In run 3 alone, CCR and the second self-review are level. CCR also reviewed in English and the second self-review in Korean, so the paper calls it "not a clean isolation of context". A second same-session pass showed no evidence of improving on one (run 1, p=0.11). The paper says these results suggest a second look helps when taken in a fresh session.
+
+Its mechanism is a stated hypothesis about same-session review: "We hypothesize that these failures share a root cause that is easy to overlook: the production context itself. When the model reviews its output in the same session, the entire conversation history sits in the context window ... All of this anchors the model's judgment. It does not scrutinize; it rationalizes."
+
+Read all of this as a bound on the effect rather than a license. The experiment used one model (Claude Opus 4.6), errors it injected rather than found, and Korean artifacts, and 28.6% is a low absolute score. It does not establish that withholding the generation prompt helps a fresh reviewer.
 
 ## When this backfires
 
@@ -60,7 +75,7 @@ In Claude Code the fixer half works the same way through a fork request, but the
 
 - Declaring the mode on the role takes the producer out of the decision about how much of its reasoning the verifier sees.
 - The precondition is invariance. A role whose right mode changes by task belongs in two roster entries, or at a call site.
-- Audit what a verifier receives at the granularity of individual messages. The generation prompt on its own is enough to move the result.
+- Do not promise a measured gain from isolation. With one unverifiable run excluded, a fresh reviewer was not significantly ahead of one that also got the generation prompt, or of a single self-review.
 - Read the mode field's other effects before you set it. A harness that ties delegation or skills to the mode has made two decisions look like one.
 - Fan-out width is the argument against a declared fork: N parallel dispatches copy the supervisor's history N times.
 

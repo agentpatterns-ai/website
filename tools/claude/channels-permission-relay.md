@@ -117,3 +117,4 @@ You reply `no abcde`. Claude Code receives the denial, the tool call is rejected
 - [Hooks & Lifecycle](hooks-lifecycle.md) — Deterministic automation at lifecycle events; complementary to permission relay for pre-approved actions
 - [Deferred Permission Pattern](../../patterns/agent-design/deferred-permission-pattern.md) — Alternative approach: pause headless sessions via `PreToolUse` hook `defer` verdict and resume after out-of-band approval
 - [Feature Flags & Environment Variables](feature-flags.md) — Configuration knobs including permission-related flags
+- [Permission Replies That Rewrite Coding-Agent Policy](../../security/permission-reply-policy-updates.md) — why a verdict limited to allow or deny matters for a remote approver

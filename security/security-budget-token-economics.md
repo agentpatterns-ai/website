@@ -43,7 +43,7 @@ graph TD
 ```
 
 1. Development — human intuition and feedback bound the rate.
-2. Review — per-PR automated checks; Anthropic's code-review product lists at $15–20 per review ([Anthropic docs](https://code.claude.com/docs/en/code-review)).
+2. Review — per-PR automated checks; Anthropic's Code Review has no flat per-review price and bills token usage ([Code Review costs](https://code.claude.com/docs/en/code-review-costs)).
 3. Hardening — autonomous exploit discovery until budget exhausts.
 
 Review runs constantly on cheap gardening work. Hardening concentrates spend on a stable artifact before release.

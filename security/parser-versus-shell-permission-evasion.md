@@ -10,7 +10,7 @@ aliases:
   - command-text permission bypass
   - permission check parser evasion
   - shell spelling evasion
-last_reviewed: 2026-08-18
+last_reviewed: 2026-11-25
 maturity: emerging
 ---
 
@@ -45,7 +45,7 @@ Every entry below was fixed. The point is the shape they share: in each one the 
 
 Two of those rows target different readers. The self-concealing command hid from the permission check; the invisible padding hid from the approval dialog a human was reading. One crafted string can defeat the automated gate and the person reviewing its output, and those are distinct defects with distinct fixes.
 
-The classes are not one vendor's. Cursor patched an allowlist bypass reached "with backtick(`` ` ``) character or `$(cmd)`" in 1.3 and described the fix as "a more robust parser" ([GHSA-534m-3w6r-8pqr](https://github.com/cursor/cursor/security/advisories/GHSA-534m-3w6r-8pqr)), then patched a second in 2.3, where "certain shell built-ins can still be executed without appearing in the allowlist" by poisoning the environment that trusted commands read ([CVE-2026-22708](https://github.com/cursor/cursor/security/advisories/GHSA-82wg-qcm4-fp2w)). VS Code states the limit in its own documentation: "The rule-based auto-approval system uses best-effort command parsing that has known limitations. For example, quote concatenation or shell aliases might bypass the rules" ([VS Code security](https://code.visualstudio.com/docs/copilot/security)). Anything computed from that parse inherits the same limits, including the [risk badge](pre-execution-command-risk-classification.md) shown to a human before the command runs.
+The classes are not one vendor's. Cursor patched an allowlist bypass reached "with backtick(`` ` ``) character or `$(cmd)`" in 1.3 and described the fix as "a more robust parser" ([GHSA-534m-3w6r-8pqr](https://github.com/cursor/cursor/security/advisories/GHSA-534m-3w6r-8pqr)), then patched a second in 2.3, where "certain shell built-ins can still be executed without appearing in the allowlist" by poisoning the environment that trusted commands read ([CVE-2026-22708](https://github.com/cursor/cursor/security/advisories/GHSA-82wg-qcm4-fp2w)). A differential test of eight production coding agents catalogs 17 deduplicated root causes and three boundaries where command authorization and shell execution diverge ([ParseGap, arXiv 2611.29546v1](https://arxiv.org/abs/2611.29546v1)). VS Code states the limit in its own documentation: "The rule-based auto-approval system uses best-effort command parsing that has known limitations. For example, quote concatenation or shell aliases might bypass the rules" ([VS Code security](https://code.visualstudio.com/docs/copilot/security)). Anything computed from that parse inherits the same limits, including the [risk badge](pre-execution-command-risk-classification.md) shown to a human before the command runs.
 
 ## Why it works
 

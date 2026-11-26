@@ -5,7 +5,7 @@ description: "An agent subscribes to the pull request it created and wakes on CI
 tags:
   - agent-design
   - workflows
-  - cursor
+  - tool-agnostic
 aliases:
   - "event-subscribed agents"
   - "agent PR subscription"
@@ -46,6 +46,25 @@ flowchart TD
 
 Steering survives the subscription: follow-up messages "wait for the next tool call instead of cutting the agent off mid-action" ([Cursor Changelog, 2026-08-19](https://cursor.com/changelog/08-19-26)). That is [mid-run redirection](steering-running-agents.md) applied to a long-lived agent.
 
+## A local watch under your own credentials
+
+In Claude Code 2.1.330 or later, `/ship` opens a GitHub pull request if needed, reviews your change with [`/code-review`](../../tools/claude/code-review-local-scope.md), then watches the pull request from your session. `/steward` only watches. The watch works on failing checks, conflicts, and comments with your `gh` and `git` sign-ins ([command docs](https://code.claude.com/docs/en/ship-command)).
+
+The fourth condition above does not hold here, because "Claude edits files in the same checkout as you" ([while a watch runs](https://code.claude.com/docs/en/ship-command#keep-working-while-a-watch-runs)). Start your next change in another folder, such as a second clone.
+
+Run it only where you trust everyone who can merge to the base branch or push to your branch. "Any of them can run programs on your computer with your credentials" ([command docs](https://code.claude.com/docs/en/ship-command)). The limits are partial, and the watch could merge a pull request that branch rules let you merge without another person's approval:
+
+- On turns without a message from you, Claude Code blocks `gh` and `git` commands that merge, approve, enable auto-merge, or force-push. The limits are off while Claude answers a message you type, and a permission rule or hook can let commands past them ([blocked commands](https://code.claude.com/docs/en/ship-command#what-claude-code-blocks-during-a-watch)).
+- Your tests can merge or force-push with your credentials, because Claude Code checks only the command that starts them ([code a watch runs](https://code.claude.com/docs/en/ship-command#code-that-a-watch-runs-on-your-computer)).
+- With auto-merge on, a pushed fix can bring about the merge ([merge cases](https://code.claude.com/docs/en/ship-command#when-a-watch-can-lead-to-a-merge)).
+- Repository git hooks don't run for Claude's unattended fetches, merges, commits, and pushes ([rules and hooks](https://code.claude.com/docs/en/ship-command#permission-rules-and-hooks-that-apply-to-%2Fship-and-%2Fsteward)). Put required checks in [CI and branch rules](https://claude.dev/blog/the-work-after-you-open-a-pr/).
+- Claude reads comments from you, from people with write access, and, on github.com, from Claude's bot. `+botname` adds another.
+- Claude follows your checkout's `.claude/skills/steward/SKILL.md` as instructions, and anyone who can merge can write it.
+
+It ends on merge, close, a PR Steward label, or seven days, and [sooner in some cases](https://code.claude.com/docs/en/ship-command#what-ends-a-watch). It waits at prompts in Manual and `acceptEdits` modes, does not start in `bypassPermissions` mode or on native Windows, and counts against your usage. The [vendor post](https://claude.dev/blog/the-work-after-you-open-a-pr/) puts a three-push limit per issue in a passage about what Claude is told. The command docs state no such limit, so do not count it as your configured retry budget.
+
+The hosted [PR Steward](https://code.claude.com/docs/en/pr-steward-security) ([public beta](https://code.claude.com/docs/en/claude-ship), Team and Enterprise) is designed not to approve or merge. In an Anthropic-hosted environment, two checks cover merge, auto-merge, and force-push commands, but "a command that's written another way can pass both", so require approvals with branch rules. These are vendor sources, and none reports outcome data.
+
 ## Why it works
 
 The saving is context re-establishment, not patch authorship. Under a per-round human trigger every CI failure starts a cold agent: GitHub's variant "opens a new pull request on top of your existing pull request, analyzes the failing check, and attempts to implement a fix," then tags a human for review ([GitHub Changelog, 2026-07-23](https://github.blog/changelog/2026-07-23-github-mobile-fix-failing-actions-checks-with-copilot-cloud-agent/)). Round N pays to rediscover everything earlier rounds established, plus the operator's context switch. A subscribed agent holds that state across wakes, so a round costs the patch alone and it knows which fixes it already tried.
@@ -72,6 +91,7 @@ Shared checkouts collide. Agents woken by concurrent events against one working 
 - Assertion weakening and test deletion are documented outcomes of unsupervised repair loops, so a green check is evidence only when the check itself sits outside the agent's write scope.
 - Green CI is a weak merge proxy. Of 717 manually inspected rejections, 31.2% turned on workflow constraints and 33.1% left no recoverable rationale.
 - Per-agent workspace isolation is a precondition for event-driven concurrency, not a later optimization.
+- A local `/ship` or `/steward` watch runs in your own checkout, where anyone who can merge to the base branch or push to your branch can run programs with your credentials.
 
 ## Related
 
@@ -81,3 +101,5 @@ Shared checkouts collide. Agents woken by concurrent events against one working 
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — the retry-budget and stop-condition mechanism this pattern needs to replace the removed trigger
 - [Self-Healing Production Agent](self-healing-production-agent.md) — the same closed-loop shape applied to post-deploy regressions rather than pre-merge CI
 - [Project-Scoped Agent Workspace](project-scoped-agent-workspace.md) — where the woken agents write what they learn, and why the subscription's trust boundary reaches that store
+- [Closed-Loop CI Failure Remediation](../../workflows/closed-loop-ci-failure-remediation.md) — the CI-failure loop run with cloud coding agents
+- [Claude Code Review](../../tools/claude/code-review.md) — the managed review service, separate from the review `/ship` runs in your session

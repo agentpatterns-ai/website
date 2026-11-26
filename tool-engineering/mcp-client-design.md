@@ -96,6 +96,8 @@ A server can change descriptions after approval without re-consent — a "rug pu
 - Version-pin descriptions. Hash the manifest at approval, then flag any post-approval change.
 - Treat descriptions as untrusted. Poisoned descriptions can steer the model to exfiltrate data or trigger unintended actions.
 
+The input schema can change after approval too. [Re-Approve a Tool When Its Input Schema Widens](../security/schema-widening-tool-reapproval.md) gives a rule for which schema changes need new consent.
+
 ### Authorization
 
 OAuth 2.1 for remote servers: PKCE with S256, [Dynamic Client Registration (RFC 7591)](https://datatracker.ietf.org/doc/html/rfc7591), and [Resource Indicators (RFC 8707)](https://datatracker.ietf.org/doc/html/rfc8707) against confused-deputy attacks.

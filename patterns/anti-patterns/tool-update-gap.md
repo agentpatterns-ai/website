@@ -100,6 +100,7 @@ The evidence has limits too. The paper uses researcher-authored tools rather tha
 ## Related
 
 - [Tool Signing and Signature Verification for Agents](../../security/tool-signing-verification.md)
+- [Re-Approve a Tool When Its Input Schema Widens](../../security/schema-widening-tool-reapproval.md)
 - [Skill Supply-Chain Poisoning](../../security/skill-supply-chain-poisoning.md)
 - [MCP Allowlist by Label, Not by Identity (serverName Trap)](mcp-allowlist-label-vs-identity.md)
 - [Multi-Tool Threshold Poisoning Against MCP (ShareLock)](multi-tool-threshold-poisoning-mcp.md)

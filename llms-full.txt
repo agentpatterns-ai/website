@@ -561,6 +561,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [RAMP: Committed AI Configuration and the Quality Cost](instructions/committed-ai-configuration-quality-cost.md)
 - [Repairing Agent Prompts from Trace Contrast, Not Search](instructions/trace-contrast-prompt-repair.md)
 - [Requirement Smells: No Category Signal, Density Unconfirmed](instructions/requirement-smell-density.md)
+- [Skills Served from MCP Servers in Claude Code: When to Use](instructions/skills-served-from-mcp-servers.md)
 - [Writing Retained Instructions for Later Tasks](instructions/retained-experience-scope.md)
 - [Written Priority Rules for Coding-Agent Migrations](instructions/written-priority-rules-for-migrations.md)
 - [Zero-Decision Plans and Rejected Alternatives in Agent-Readable Specs](instructions/zero-decision-plans-alternatives-rule.md)
@@ -764,6 +765,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Gate a Default Harness Switch With Online and Offline Evals](patterns/agent-design/shared-runtime-default-harness-eval-gates.md)
 - [Hook Block Decisions Hold in More Cases Since Claude Code 2.1.326](patterns/agent-design/unconditional-hook-block-decisions.md)
 - [Interface Realization Repair: Evidence and Limits](patterns/agent-design/interface-realization-repair.md)
+- [Internal Remote-Agent Platform: Coding Agents Behind One API](patterns/agent-design/internal-remote-agent-platform.md)
 - [Metadata Index for Agent File Search: Where It Cuts Cost](patterns/agent-design/metadata-index-for-agent-file-search.md)
 - [Non-REST APIs and Coding Agents: Discovery Decides Success](patterns/agent-design/non-rest-apis-for-coding-agents.md)
 - [Plugin optionalDependencies: Companions Users Can Disable](patterns/agent-design/plugin-optional-dependencies.md)
@@ -1332,6 +1334,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Per-Language Merge Gate Coverage for Code Scanning](security/per-language-merge-gate-coverage.md)
 - [Per-Server MCP Environment Scoping for Credential Isolation](security/mcp-server-credential-isolation.md)
 - [Permission Framework Choice Outweighs Model Choice for Limiting Overeager Actions](security/permission-framework-over-model.md)
+- [Permission Replies That Rewrite Coding-Agent Policy](security/permission-reply-policy-updates.md)
 - [Plan-Scoped Credentials for Agent Production Access](security/plan-scoped-production-access.md)
 - [Plan-Then-Execute as the Default for Web Agents](security/plan-then-execute-web-agents.md)
 - [Plugin-Only Customization Sources for GitHub Copilot](security/plugin-only-customization-sources.md)
@@ -1344,8 +1347,10 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Public Placeholder Credentials with a Fail-Closed Injecting Proxy](security/public-placeholder-credentials-injecting-proxy.md)
 - [RAG Architecture as a Poisoning Robustness Decision](security/rag-architecture-poisoning-robustness.md)
 - [Ranking Skill Sources for Review by Copy Out-Degree](security/skill-source-audit-ranking.md)
+- [Re-Approve a Tool When Its Input Schema Widens](security/schema-widening-tool-reapproval.md)
 - [Reading an Exploit Roundup Against a Defense Catalog](security/reading-exploit-roundups-against-defense-catalog.md)
 - [Reframed Exfiltration Defeats Wording-Based Defenses (Framing Gap)](security/framing-gap-exfiltration-defenses.md)
+- [Refuse a Skill's Inline Shell Commands by Source with PreSkillShellCommand](security/preskillshellcommand-hook.md)
 - [Registry-Boundary Install Gates for Agent-Chosen Dependencies](security/registry-boundary-install-gate.md)
 - [Restricted-Access Defensive AI: Project Glasswing as a Deployment Model](security/restricted-access-defensive-ai.md)
 - [Reviewer Suspicion Ranking as an Attack Map](security/reviewer-suspicion-ranking-as-attack-map.md)
@@ -1665,6 +1670,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Tool-Use Sim-to-Real Perturbation Taxonomy](verification/tool-use-sim-to-real-perturbation-taxonomy.md)
 - [Trajectory Decomposition: Diagnose Where Coding Agents Fail](verification/trajectory-decomposition-diagnosis.md)
 - [Trajectory-Aware Benchmark Subset Selection for Agents](verification/trajectory-aware-benchmark-subset-selection.md)
+- [Trajectory-Informed Code Review From the Author Agent's Run](code-review/trajectory-informed-code-review.md)
 - [Transcript-Measured Review Coverage](verification/transcript-measured-review-coverage.md)
 - [Tunable Effort Levels for Code Review Agents](code-review/tunable-review-effort.md)
 - [Typed Judge Scorers and the Cost of Each Extra Label](verification/typed-judge-scorers.md)
@@ -15785,6 +15791,7 @@ Reviewing, versioning, and repairing instruction files over time so they remain 
 - [Skill Packs: Registry Distribution Needs Pinning Discipline](skill-pack-registry-distribution.md) — A registry pack gives a team one addressable, updatable skill bundle; the version pin, the review gate, and the size limit stay the team's job
 - [Shipping a Shared Agent Toolkit as a Versioned Plugin](shared-toolkit-plugin-ownership.md) — Shared constraints, instructions, and tool connections belong in the package while application evidence and decisions stay in the repo; in Copilot CLI a packaged agent or skill loses to a local definition of the same identifier, and a packaged MCP server overrides the consumer's
 - [Workspace-Hosted Skills: Authorship Outside the Repo](workspace-hosted-skills.md) — A skill whose source of truth is a document workspace makes page edit permission the mutation gate and page view permission the install gate; mirror the workspace into git to keep a revision you can roll back to
+- [Skills Served from MCP Servers in Claude Code: When to Use](skills-served-from-mcp-servers.md) — A Claude Code skill served from an MCP server runs as `server:skill`, changes when the server owner changes it, and does not load in `claude -p` or GitHub Actions
 - [Dependabot Version Updates for Agent Package Dependencies](apm-dependency-version-updates.md)
 - [Skill File Linting: Which Three Checks to Run First](skill-file-linting.md) — Description shape, no name-as-H1, and externalized code cover most SKILL.md defects; the gate buys routing and review hygiene, never a safety verdict
 - [Plugin Component Co-Change: Scripts and Their Instructions Move Together](plugin-component-co-change.md) — Inside one plugin a bundled script and the markdown describing it are one interface; pair the edits where the prose carries operational detail, and `claude plugin validate` will not catch the gap
@@ -26312,6 +26319,78 @@ The counter-case is the same study's overhead tally. For one rule-model pair in 
 
 ---
 
+### Skills Served from MCP Servers in Claude Code: When to Use
+Source: https://agentpatterns.ai/instructions/skills-served-from-mcp-servers/
+
+# Skills Served from MCP Servers in Claude Code: When to Use
+
+> Skills served from an MCP server change when the server owner changes them, and headless Claude Code runs such as `claude -p` cannot load them.
+
+A skill served from an MCP server is a `SKILL.md` folder that Claude Code fetches from a connected server instead of reading it from disk. The 2.1.332 changelog added the route as a beta, and says skills from MCP servers "show as `server:skill` in the `/` menu; other skills keep their names" ([changelog](https://code.claude.com/docs/en/changelog#2-1-332)). The MCP reference gives the floor as "Claude Code v2.1.331 or later" ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp#use-skills-from-mcp-servers)). Take the route when you already own the server and the skill teaches its tools. Keep a procedure you need to pin, review, or run headless somewhere else.
+
+## When this applies
+
+All three conditions hold, or a repo folder or a plugin is the better home:
+
+- You own the server, and the skill describes its tools. The MCP Skills extension says serving skills this way "keeps those instructions with the service they describe" ([MCP Skills extension](https://modelcontextprotocol.io/extensions/skills/overview)).
+- People run the skill interactively on a supported setup. Claude Code does not load MCP skills in "cloud sessions, `claude -p`, `claude remote-control` server mode, GitHub Actions, and the Agent SDK", nor over "cloud providers, a custom `ANTHROPIC_BASE_URL`, `apiKeyHelper`, and `ANTHROPIC_AUTH_TOKEN`" ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp#where-mcp-skills-are-supported)).
+- The skill needs no local frontmatter features. On an MCP skill, Claude Code ignores `allowed-tools`, `hooks`, `model`, `paths` and seven other frontmatter fields, and its `!` commands do not run ([skills docs](https://code.claude.com/docs/en/skills#skills-from-mcp-servers)).
+
+## How it differs from a repo or plugin skill
+
+| Property | Repo folder | Plugin | MCP server |
+|---|---|---|---|
+| Command name | `/name` | `/plugin-name:skill-name` | `/server:skill`, with a `claude_ai_` or `plugin_` prefix for connector and plugin servers |
+| Same name elsewhere | Enterprise beats personal, personal beats project | Both load, because of the namespace | Other skills keep their names |
+
+Names and resolution come from the [skills docs](https://code.claude.com/docs/en/skills#resolve-skills-that-share-a-name), the [MCP docs](https://code.claude.com/docs/en/mcp#run-an-mcp-skill), and the [changelog](https://code.claude.com/docs/en/changelog#2-1-332). The namespace settles the collision question. A local `pdf` skill keeps running as `/pdf`, and a server's `pdf` skill runs as `/docs:pdf`, so a server cannot take over the name of a skill you wrote. What the server does control is the text behind that name.
+
+## The trust cost
+
+A remote server now supplies text the agent follows. The Claude Code docs warn that "Skills can direct Claude to run code. Servers can change skills at any time. Add only servers you trust" ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp#safety-of-mcp-skills)). Anthropic scans skills from some claude.ai connectors, and "doesn't scan skills from other connectors or servers, including Directory servers added with `claude mcp add`."
+
+Your permission mode decides who approves a load. "When Claude loads an MCP skill in auto mode, the default, you don't see a prompt. The classifier decides whether the skill loads, without reading it" ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp#approvals-for-mcp-skills)). Manual and `acceptEdits` mode show a prompt. Selecting **Allow this version** skips the prompt and the classifier until the server changes the skill's files.
+
+## Why it works
+
+The MCP Skills extension makes server-delivered text checkable, though not trusted. Each listing carries either a manifest with "each file's URI, SHA-256 digest, and byte size" or, for generated content, the value `"dynamic"`, which hosts may decline. For a manifest, "Persisted approval MUST bind to the complete set of file URIs and digests. A changed, added, or removed file revokes that approval" ([MCP Skills extension](https://modelcontextprotocol.io/extensions/skills/overview)). This page reads Claude Code's rule, an approval that holds "until the server changes the skill's files", as this binding at work. The extension states its own limit: "Digests establish consistency with the server's manifest, not trust in its content."
+
+## When this backfires
+
+- Unattended pipelines. A skill that a `claude -p` job or a GitHub Action depends on does not load there.
+- Auto mode on a server you do not control. Noma Security's analysis notes that skills "resist rug-pull attacks because they are usually static files requiring manual updates" ([Help Net Security](https://www.helpnetsecurity.com/2026/05/05/ai-agent-security-skills-blind-spots/)). An MCP skill gives that up, and auto mode shows no prompt when it loads.
+- Team and Enterprise rollouts. With `/login` on those plans, MCP skills are "off until your organization turns them on" ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp#requirements-for-skills-from-mcp-servers)).
+- Version checks. The feature is a public beta, and its two official sources already disagree by one release. The changelog files it under 2.1.332, and the MCP reference names 2.1.331 as the minimum.
+
+## Example
+
+The Claude Code docs use a server named `docs` with a `pdf` skill. Its name is `docs:pdf`, and `/docs:pdf report.pdf` runs it on a file ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp#run-an-mcp-skill)). Permission rules then set how much the server can change without you seeing it ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp#block-a-servers-skills-or-ask-first)):
+
+| Goal | List | Rule |
+|---|---|---|
+| Prompt each time Claude loads one, even in auto mode (a typed command needs no approval) | `ask` | `Skill(mcp__docs__*)` |
+| Block only the `pdf` skill | `deny` | `Skill(docs:pdf)` |
+| Block every skill from the server | `deny` | `Skill(mcp__docs__*)` |
+
+An `allow` rule for the same pattern skips the prompt, but only for servers added at user or local scope and for managed servers. It does not work for connectors, `.mcp.json` servers, or plugin servers.
+
+## Key Takeaways
+
+- Serve a skill from an MCP server when you own that server and the skill teaches its tools.
+- Keep a repo copy of any skill that `claude -p`, GitHub Actions, or the Agent SDK must run.
+- Expect `allowed-tools`, hooks, and `!` commands to be ignored on an MCP skill.
+- Add an `ask` rule for any server you do not run, because in auto mode a classifier, not you, decides whether a changed version loads, and you see no prompt.
+
+## Related
+
+- [Skill Packs: Registry Distribution Needs Pinning Discipline](skill-pack-registry-distribution.md)
+- [Workspace-Hosted Skills: Authorship Outside the Repo](workspace-hosted-skills.md)
+- [Shipping a Shared Agent Toolkit as a Versioned Plugin](shared-toolkit-plugin-ownership.md)
+- [Agent Config as a Managed Supply Chain](agent-config-as-managed-supply-chain.md)
+- [MCP Metadata Approval View Gap](../security/mcp-metadata-approval-view-gap.md)
+
+---
+
 ### Specification Portability Across Coding Agents
 Source: https://agentpatterns.ai/instructions/specification-portability-across-agents/
 
@@ -28854,6 +28933,7 @@ Patterns for steering agent behavior, detecting convergence, and managing execut
 - [Decision Unbundling: What Moves Into the Orchestrator](decision-unbundling-orchestrator-load.md) — Moving a routing or classification call onto a decision model shrinks the model call and grows the harness, which now owns the candidate list, the threshold, the escalation route, and the durability
 - [LLM-as-Code Agentic Programming for Agent Harnesses](llm-as-code-agentic-programming.md) — When the workflow shape is enumerable, the program holds control flow and the LLM is a callable component; context scales with call-tree depth instead of accumulated steps
 - [Bounded Agent Steps Inside a Deterministic Workflow](bounded-agent-step.md) — Keep the agentic loop but run it as one fenced workflow stage — pre-set goal, tool allowlist, turn cap, typed output — and only where the stage boundary is a durable domain seam
+- [Internal Remote-Agent Platform: Coding Agents Behind One API](internal-remote-agent-platform.md) — One internal API runs sandboxed coding-agent tasks for internal teams, with deterministic clone and publish steps around the agent and an outcome contract on every run
 - [Canvas as Control Surface: Steering a Long-Running Agent Mid-Run](canvas-as-control-surface.md) — A canvas the agent writes to while it works re-encodes the run as inspectable state, but only pays off on recurring workflows with few, well-placed approval points
 - [Artifact-Driven Workflow Compilation for Agent Execution](artifact-driven-workflow-compilation.md) — Make every workflow step declare the artifacts it reads and writes, so the executor looks up its inputs instead of inferring them — worth it for fixed procedures you run many times
 - [AST-Grounded Critic Loop for Documentation Maintenance](ast-grounded-doc-critic-loop.md) — Combine AST-anchored retrieval with a critic-guided Reflexion loop, treating doc-vs-code consistency as a structural verification problem rather than a text-generation problem
@@ -33944,6 +34024,7 @@ Three more conditions carry over unchanged from [LLM-as-Code](llm-as-code-agenti
 - [Agentless vs Autonomous: When Simple Beats Complex](agentless-vs-autonomous.md) — The empirical case for constraining agents, and where constraint stops paying
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent](cognitive-reasoning-execution-separation.md) — The layer split that a fenced stage boundary enforces in practice
 - [Artifact-Driven Workflow Compilation for Agent Execution](artifact-driven-workflow-compilation.md) — Applies the same typed-boundary idea to the whole procedure, with every step declaring the artifacts it reads and writes
+- [Internal Remote-Agent Platform: Coding Agents Behind One API](internal-remote-agent-platform.md) — A shared service whose runner fences one agent session between deterministic clone and publish steps
 
 ---
 
@@ -45939,6 +46020,39 @@ A composite score combines several dimensions so no one signal dominates:
 - Blast radius — irreversibility or scope; some teams invert this signal and rank irreversible work last to keep options open.
 - Staleness — items whose ground truth is decaying.
 
+## Define the word you rank by
+
+A scoring function makes you write down what "value" means. A request to "sort these by impact" leaves that choice to the agent. This section rests on one source, a [Microsoft for Developers post by Waldek Mastykarz](https://developer.microsoft.com/blog/is-sort-by-impact-just-vibes/) (2026-11-24).
+
+It tested three domains, each with one fixed list of eight items, with and without data per item. Claude Sonnet 5.5 and GPT-6.1 Sol ranked all three. Claude Haiku 5.5 and GPT-6 Luna ranked only a developer-tool backlog. Each prompt ran 15 times, in Vally (Microsoft's agent evaluation tool) with the GitHub Copilot SDK.
+
+Across 1,500 runs, agents ranked the same list in nearly the same order every time. Two runs of one prompt agreed on the order of 86% to 100% of item pairs, depending on model and list. Different models largely agreed too. The prompt never defined impact, so the agents picked a definition, and it changed with the domain. With titles only:
+
+| List | Closest of the tested definitions | What agents said they ranked by |
+|------|-----------------------------------|---------------------------------|
+| Developer-tool backlog | Users reached | Reach, or a mix that included it |
+| Online shop | Revenue | Money (GPT-6.1 Sol) or a mix (Claude Sonnet 5.5) |
+| Security improvements | Losses avoided | Severity, which no tested definition covered |
+
+Data in the list steers the choice too. The data versions of the shop and security lists gave every item reach, money and days of effort. On both, Claude Sonnet 5.5 and GPT-6.1 Sol matched the money order exactly in every run.
+
+The post suggests three responses:
+
+- Name the metric, such as expected revenue or value per day of effort.
+- If you are unsure which definition fits, ask for one ranking per definition and compare them. Items that move between rankings are where the decision is.
+- In a skill, prompt or agent that ranks for people, such as issue triage, put the definition in its instructions.
+
+Asking the agent to define impact first still leaves the choice with the agent. In the post's runs it did not make rankings more consistent, and for three of the four models made them less so. The post gives no figures for this and does not say which lists it covers.
+
+Read the result narrowly:
+
+- The source is one vendor blog, with small constructed lists of business decisions and no human baseline.
+- Consistency is not correctness. Repeated runs can agree on an order built on a definition you would reject.
+- Naming the metric changes who picks the definition. The post found unnamed rankings about as consistent as named ones, and reports no figure for how closely agents follow a named metric.
+- With titles only, 64% to 100% of runs picked the same first item.
+- Reversing the input order changed full rankings only slightly. The backlog was the only list where it changed the top pick.
+- The runs tested only "impact". The post extends its advice to "priority" and "importance".
+
 ## Why it works
 
 Per-turn attention is the scarce resource, and arrival order has no relationship to marginal value. Pure FIFO produces head-of-line blocking — a high-value program waits behind low-value calls. [Autellix](https://arxiv.org/abs/2502.13965v1) identifies this as the dominant inefficiency in LLM-agent workloads and reports 4–15× program-throughput gains at equivalent latency from program-aware priority scheduling. A composite score reorders the queue so each turn pays back more of the goal; the mechanism is attention-budget allocation under head-of-line blocking, not "agents need lists".
@@ -45974,6 +46088,7 @@ The `waiting_turns` term is the aging mitigation; without it, an issue with low 
 - Prioritization is a different decision from routing (who) and scheduling (when) — name it as its own concern so teams can encode urgency, value, and dependency signals into the loop.
 - The pattern earns its complexity when attention is scarce, the backlog is long, value spread is wide, and ranking signals are estimable. Otherwise FIFO plus lane isolation is correct — Block's agent-task-queue is the worked example of that choice.
 - Composite scores beat single signals; aging beats pure priority; re-rank on state change, not per turn.
+- Name the metric when you ask for a ranking. In one vendor study of eight-item lists, agents told to sort by "impact" chose the definition themselves and ranked in nearly the same order each run.
 - Head-of-line blocking on the attention budget is the mechanism the pattern attacks; [Autellix](https://arxiv.org/abs/2502.13965v1) reports 4–15× program-throughput gains from program-aware priority over FIFO.
 
 ## Related
@@ -45983,6 +46098,9 @@ The `waiting_turns` term is the aging mitigation; without it, an issue with low 
 - [Lane-Based Execution Queueing](lane-based-execution-queueing.md)
 - [Labels as Locks: Pipelined Backlog Processing](../../workflows/labels-as-locks-pipeline.md)
 - [Background Todo Agent](background-todo-agent.md)
+- [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — the agent asks about a gap instead of filling it
+- [Grill Me: Developer-Initiated Plan Interrogation](grill-me-technique.md) — have the agent question you before the work starts
+- [Assumption Propagation](../anti-patterns/assumption-propagation.md) — how an early unchecked assumption compounds through later work
 
 ---
 
@@ -46544,6 +46662,74 @@ The available evidence leaves three practical questions open for a proposed repa
 - [Suspect the Harness Before the Model on a Regression](suspect-the-harness-not-the-model.md) — investigating regressions at a fixed model
 - [Situated Harness Layers: Fix at the Layer That Owns It](situated-harness-layers.md) — routing a fix to the responsible layer
 - [Isometric Harness Ablation](isometric-harness-ablation.md) — isolating one subsystem in a comparison
+
+---
+
+### Internal Remote-Agent Platform: Coding Agents Behind One API
+Source: https://agentpatterns.ai/patterns/agent-design/internal-remote-agent-platform/
+
+# Internal Remote-Agent Platform: Coding Agents Behind One API
+
+> An internal remote-agent platform runs sandboxed coding-agent tasks for internal teams through one API call, and returns the result as a merge request.
+
+An internal remote-agent platform is a shared service that accepts a prompt and environment requirements over an API, runs a coding agent in an isolated sandbox against a target repository, and hands back a merge request plus a machine-readable outcome. This page draws three conditions from the sources below: many repositories, tasks that recur across them, and a team that can own the runtime after launch. iFood, with more than 15,000 repositories, built one and reports more than 25,000 runs at an average inference cost of US$0.04 per run ([OpenAI customer story](https://openai.com/business/customer-stories/ifood)). The figures come from a customer story that OpenAI published.
+
+## The problem it removes
+
+The story's lessons for leaders name the gap: "Several teams already knew what they wanted to automate; they lacked an environment in which to run it" ([OpenAI customer story](https://openai.com/business/customer-stories/ifood)). Before the platform, iFood says, each team tackled the problem in its own way and hit the same obstacle. The platform turns that into a call. iFood's security team "didn't need to build its own agentic runtime or become experts in agent orchestration. It needed to call an API."
+
+## How the runner is built
+
+iFood's lifecycle has three steps. A caller "submits a prompt and environment requirements through a REST call", the platform runs the task "on a dedicated remote runner inside an isolated sandbox", and "the result is retrieved later" ([OpenAI customer story](https://openai.com/business/customer-stories/ifood)).
+
+Inside the runner, fixed code wraps one agentic step:
+
+```mermaid
+flowchart LR
+    A[Clone repo] --> B[Import skills] --> C[Create branch]
+    C --> D(("Agent session<br>in sandbox"))
+    D --> E[Parse result into<br>outcome contract]
+    D --> F[Publish merge request<br>and artifacts]
+```
+
+- Deterministic bookends: cloning, importing skills, and setting up the branch run before the agent. Publishing the merge request and the artifacts runs after it. The story's lessons for leaders note that cloning, publishing, and making artifacts available "don't require a model".
+- One agentic step: the agentic execution sits between the bookends and runs GPT-5.6 Luna inside the sandbox.
+- An outcome contract: iFood passes the session result through Structured Outputs, which "ensures we can always get a response from the agent's session, whether positive or negative."
+- A prepared sandbox: the Ubuntu sandbox carries the toolchains iFood's repositories need, including Python, Java, Kotlin, and Go.
+
+## Cost per run is a design input
+
+A per-run cost that looks trivial for one task sets the budget at platform scale. The story's lessons for leaders state that "the cost per task determines what is feasible to automate" ([OpenAI customer story](https://openai.com/business/customer-stories/ifood)). iFood picked its model on intelligence, efficiency, and speed considered together, rather than on just one of them. Its more than 25,000 runs used more than 27 billion tokens.
+
+## Why it works
+
+A shared runtime pays for fixed work once and passes every improvement to every caller. Spotify reports this effect from running its background agent on its fleet infrastructure: "improvements to the agent configuration and tools now apply to any PRs generated, no matter the source of the task" ([Spotify Engineering](https://engineering.atspotify.com/2025/11/spotifys-background-coding-agent-part-1)). Spotify also names shared commit tagging, LLM quotas, and traces. The deterministic bookends take model decisions away from steps that have one right answer. Stripe found that coding such steps "saves tokens (and CI costs) at scale and gives the agent a little less opportunity to get things wrong" ([Stripe Minions, part 2](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2)). The outcome contract gives each run a readable result. The story's lessons for leaders give the reason: "Without a structured response, there's no way to know at scale whether the agent achieved its objective" ([OpenAI customer story](https://openai.com/business/customer-stories/ifood)).
+
+## When this backfires
+
+- A small engineering team or a simple dev setup. Warp, which sells a competing product, says owning the entire stack makes sense for companies with "large engineering teams and very complex dev setups", and adds: "the MVP is pretty easy, but the remaining pieces to manage agents at scale is actually where the bulk of the work is" ([Warp](https://www.warp.dev/blog/build-vs-buy-coding-agents-at-scale)). For most companies, Warp's advice is to "figure out the essential parts that make sense for you to own, which are typically related to the idiosyncrasies of your dev setup, and find ways to buy the rest."
+- No owner after launch. Warp lists features teams start to want once an MVP exists, including handoff, audit logs, evals, and integrations into other apps. Warp says these start "to become a pretty big effort" ([Warp](https://www.warp.dev/blog/build-vs-buy-coding-agents-at-scale)).
+- Reading a schema-valid result as success. OpenAI's guide says an application using Structured Outputs "still needs to handle refusals, incomplete responses, and API errors, and validate any business rules that the schema does not express" ([OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs)). This page's advice goes further: check a positive outcome in the contract with tests, CI, and review before merge.
+- Tasks that need judgment mid-run. The API returns a merge request later. Spotify notes that agents "can take a long time to produce a result, and their output can be unpredictable" ([Spotify Engineering](https://engineering.atspotify.com/2025/11/spotifys-background-coding-agent-part-1)). iFood frames its platform around routine tasks a developer can "delegate without having to monitor".
+
+## Example
+
+iFood's first large caller is an internal security product that scans the 15,000 repositories for vulnerable dependencies and tries to fix them ([OpenAI customer story](https://openai.com/business/customer-stories/ifood)). After it moved onto the platform, the story reports that the security product "more than doubled both the accuracy of its fixes and the number of vulnerabilities resolved." The story does not say how accuracy was measured.
+
+## Key Takeaways
+
+- Warp, a vendor, says owning the whole stack makes sense for large engineering teams with very complex dev setups, and advises most companies to own the parts tied to their dev setup and buy the rest.
+- Keep clone, branch, and publish as plain code so the model decides only inside the task.
+- Treat the outcome contract as routing data. It makes results readable at scale, and tests and review still decide correctness.
+- Set a cost-per-run budget before scaling. At thousands of runs it limits which tasks are worth automating.
+
+## Related
+
+- [Bounded Agent Steps Inside a Deterministic Workflow](bounded-agent-step.md) — The fenced agent stage that the runner's bookend design is one case of
+- [Cloud-Agent Session Bootstrap](cloud-agent-session-bootstrap.md) — How to prepare the sandbox environment each remote run starts from
+- [Issue-to-PR Delegation Pipeline for AI Agent Development](../../workflows/issue-to-pr-delegation-pipeline.md) — Staged handoffs from issue to merged change, including Stripe's mixed deterministic and agent steps
+- [Swarm Migration Pattern](../multi-agent/swarm-migration-pattern.md) — Parallel agents applying one change across a codebase, a common caller of such a platform
+- [Sizing an Agent Migration Fan-Out by Diff Uniformity](../../workflows/agent-fanout-migration-diff-uniformity.md) — When a cross-repo change suits fan-out at all
 
 ---
 
@@ -52493,6 +52679,25 @@ flowchart TD
 
 Steering survives the subscription: follow-up messages "wait for the next tool call instead of cutting the agent off mid-action" ([Cursor Changelog, 2026-08-19](https://cursor.com/changelog/08-19-26)). That is [mid-run redirection](steering-running-agents.md) applied to a long-lived agent.
 
+## A local watch under your own credentials
+
+In Claude Code 2.1.330 or later, `/ship` opens a GitHub pull request if needed, reviews your change with [`/code-review`](../../tools/claude/code-review-local-scope.md), then watches the pull request from your session. `/steward` only watches. The watch works on failing checks, conflicts, and comments with your `gh` and `git` sign-ins ([command docs](https://code.claude.com/docs/en/ship-command)).
+
+The fourth condition above does not hold here, because "Claude edits files in the same checkout as you" ([while a watch runs](https://code.claude.com/docs/en/ship-command#keep-working-while-a-watch-runs)). Start your next change in another folder, such as a second clone.
+
+Run it only where you trust everyone who can merge to the base branch or push to your branch. "Any of them can run programs on your computer with your credentials" ([command docs](https://code.claude.com/docs/en/ship-command)). The limits are partial, and the watch could merge a pull request that branch rules let you merge without another person's approval:
+
+- On turns without a message from you, Claude Code blocks `gh` and `git` commands that merge, approve, enable auto-merge, or force-push. The limits are off while Claude answers a message you type, and a permission rule or hook can let commands past them ([blocked commands](https://code.claude.com/docs/en/ship-command#what-claude-code-blocks-during-a-watch)).
+- Your tests can merge or force-push with your credentials, because Claude Code checks only the command that starts them ([code a watch runs](https://code.claude.com/docs/en/ship-command#code-that-a-watch-runs-on-your-computer)).
+- With auto-merge on, a pushed fix can bring about the merge ([merge cases](https://code.claude.com/docs/en/ship-command#when-a-watch-can-lead-to-a-merge)).
+- Repository git hooks don't run for Claude's unattended fetches, merges, commits, and pushes ([rules and hooks](https://code.claude.com/docs/en/ship-command#permission-rules-and-hooks-that-apply-to-%2Fship-and-%2Fsteward)). Put required checks in [CI and branch rules](https://claude.dev/blog/the-work-after-you-open-a-pr/).
+- Claude reads comments from you, from people with write access, and, on github.com, from Claude's bot. `+botname` adds another.
+- Claude follows your checkout's `.claude/skills/steward/SKILL.md` as instructions, and anyone who can merge can write it.
+
+It ends on merge, close, a PR Steward label, or seven days, and [sooner in some cases](https://code.claude.com/docs/en/ship-command#what-ends-a-watch). It waits at prompts in Manual and `acceptEdits` modes, does not start in `bypassPermissions` mode or on native Windows, and counts against your usage. The [vendor post](https://claude.dev/blog/the-work-after-you-open-a-pr/) puts a three-push limit per issue in a passage about what Claude is told. The command docs state no such limit, so do not count it as your configured retry budget.
+
+The hosted [PR Steward](https://code.claude.com/docs/en/pr-steward-security) ([public beta](https://code.claude.com/docs/en/claude-ship), Team and Enterprise) is designed not to approve or merge. In an Anthropic-hosted environment, two checks cover merge, auto-merge, and force-push commands, but "a command that's written another way can pass both", so require approvals with branch rules. These are vendor sources, and none reports outcome data.
+
 ## Why it works
 
 The saving is context re-establishment, not patch authorship. Under a per-round human trigger every CI failure starts a cold agent: GitHub's variant "opens a new pull request on top of your existing pull request, analyzes the failing check, and attempts to implement a fix," then tags a human for review ([GitHub Changelog, 2026-07-23](https://github.blog/changelog/2026-07-23-github-mobile-fix-failing-actions-checks-with-copilot-cloud-agent/)). Round N pays to rediscover everything earlier rounds established, plus the operator's context switch. A subscribed agent holds that state across wakes, so a round costs the patch alone and it knows which fixes it already tried.
@@ -52519,6 +52724,7 @@ Shared checkouts collide. Agents woken by concurrent events against one working 
 - Assertion weakening and test deletion are documented outcomes of unsupervised repair loops, so a green check is evidence only when the check itself sits outside the agent's write scope.
 - Green CI is a weak merge proxy. Of 717 manually inspected rejections, 31.2% turned on workflow constraints and 33.1% left no recoverable rationale.
 - Per-agent workspace isolation is a precondition for event-driven concurrency, not a later optimization.
+- A local `/ship` or `/steward` watch runs in your own checkout, where anyone who can merge to the base branch or push to your branch can run programs with your credentials.
 
 ## Related
 
@@ -52528,6 +52734,8 @@ Shared checkouts collide. Agents woken by concurrent events against one working 
 - [Agent Circuit Breaker](agent-circuit-breaker.md) — the retry-budget and stop-condition mechanism this pattern needs to replace the removed trigger
 - [Self-Healing Production Agent](self-healing-production-agent.md) — the same closed-loop shape applied to post-deploy regressions rather than pre-merge CI
 - [Project-Scoped Agent Workspace](project-scoped-agent-workspace.md) — where the woken agents write what they learn, and why the subscription's trust boundary reaches that store
+- [Closed-Loop CI Failure Remediation](../../workflows/closed-loop-ci-failure-remediation.md) — the CI-failure loop run with cloud coding agents
+- [Claude Code Review](../../tools/claude/code-review.md) — the managed review service, separate from the review `/ship` runs in your session
 
 ---
 
@@ -58089,6 +58297,7 @@ The same five branches map onto Claude Code hooks via `permissionDecision` and `
 - [Permission Framework Choice Outweighs Model Choice](../../security/permission-framework-over-model.md) — the framework (ask-to-continue vs permissive) dominates the model choice; the six shapes only matter inside the ask-to-continue arm
 - [Interactive Clarification for Underspecified Tasks](interactive-clarification-underspecified-tasks.md) — the `AskUserQuestion` path, which uses the same `canUseTool` callback but for clarifying questions rather than tool approval
 - [One-Shot Permission Answers for Out-of-Directory Reads](one-shot-permission-answers.md) — shape 1 against shape 3 on one Claude Code prompt, where the remembered answer covers a whole boundary rather than the call you reviewed
+- [Permission Replies That Rewrite Coding-Agent Policy](../../security/permission-reply-policy-updates.md) — what `updatedPermissions` can do when the answering party is not the operator
 
 ---
 
@@ -62821,6 +63030,7 @@ The counter-case is in the same appendix. A methotrexate question kept a score o
 - [Assumption Propagation](../anti-patterns/assumption-propagation.md) — what happens downstream when the substituted assumption lands in code
 - [Request Shaping to Cut Wasted Agent Turns](../../token-engineering/request-shaping-wasted-turns.md) — the cost side of specificity, and why selection beats volume
 - [Grill Me: Developer-Initiated Plan Interrogation](grill-me-technique.md) — forcing the interrogation yourself when the agent will not ask
+- [In-Agent Task Prioritization: Ranking the Next Action](in-agent-task-prioritization.md) — a related gap in ranking requests, where the agent picks what "impact" means
 
 ---
 
@@ -64138,6 +64348,7 @@ The evidence has limits too. The paper uses researcher-authored tools rather tha
 ## Related
 
 - [Tool Signing and Signature Verification for Agents](../../security/tool-signing-verification.md)
+- [Re-Approve a Tool When Its Input Schema Widens](../../security/schema-widening-tool-reapproval.md)
 - [Skill Supply-Chain Poisoning](../../security/skill-supply-chain-poisoning.md)
 - [MCP Allowlist by Label, Not by Identity (serverName Trap)](mcp-allowlist-label-vs-identity.md)
 - [Multi-Tool Threshold Poisoning Against MCP (ShareLock)](multi-tool-threshold-poisoning-mcp.md)
@@ -89205,9 +89416,24 @@ Nothing else may ride on the mode field. `deepagents` bundles two things into it
 
 ## Why it works
 
-Inherited production context makes a reviewer rationalize rather than scrutinize, and the leak shows up at the size of a single prompt. Song ran 30 artifacts carrying 150 injected errors through 360 reviews under four conditions. Cross-Context Review, which sees the artifact alone in a fresh session, scored an F1 of 28.6%. Same-session self-review scored 24.6% (p=0.008, d=0.52). Subagent Review scored 23.8% (p=0.004, d=0.57), and that condition already ran in a fresh session whose only extra context was the generation prompt ([Song, Cross-Context Review, arXiv 2603.12123v1](https://arxiv.org/abs/2603.12123v1)). Passing down the prompt alone cost 4.8 F1 points. Reviewing twice in the same session did not beat reviewing once (p=0.11), which rules out repetition. The paper states the mechanism plainly: "When the model reviews its output in the same session, the entire conversation history sits in the context window ... All of this anchors the model's judgment. It does not scrutinize; it rationalizes."
+A declared mode is fixed when you write the role, before the supervisor has produced anything to defend. Whether isolation then improves the review is a separate question, and the measured answer is narrow.
 
-Read that as a bound on the effect rather than a license. The experiment used one model (Claude Opus 4.6) and errors it injected rather than found, and 28.6% is a low absolute score. What it establishes is granularity: what a subagent inherits matters at a resolution finer than the whole conversation.
+Song ran 30 artifacts carrying 150 injected errors through 360 reviews under four conditions. Version 2 of the paper excludes one same-session run (30 reviews) whose records could not be verified ([Song, Cross-Context Review, arXiv 2603.12123v2](https://arxiv.org/abs/2603.12123v2)). Cross-Context Review (CCR) sees the artifact alone in a fresh session. The tests compare CCR with each other condition on per-artifact F1, averaged over the available runs:
+
+| Condition | What the reviewer had | F1 | Holm-adjusted p against CCR |
+|---|---|---|---|
+| CCR | Fresh session, artifact only | 28.6% | baseline |
+| Single self-review | Same session, full history | 27.1% (two runs) | 0.26 |
+| Subagent review | Fresh session, artifact and generation prompt | 23.8% | 0.057 |
+| Second self-review | Same session, full history and first review | 21.7% | 0.004 |
+
+Only the last gap is significant. CCR is not significantly ahead of the reviewer that also got the generation prompt, and "Whether a fresh-session review outperforms a single self-review is not established by these data". Version 1 reported all three advantages as significant. Version 2 says the advantages over single self-review and subagent review came from run 1, and that CCR ranks first in run 1 only. The exclusion matters: with the dropped run counted, all three would be significant (p=0.004, 0.043, 0.043). The paper adds: "The other runs are unverified rather than known to be clean."
+
+The surviving result has limits too. In run 3 alone, CCR and the second self-review are level. CCR also reviewed in English and the second self-review in Korean, so the paper calls it "not a clean isolation of context". A second same-session pass showed no evidence of improving on one (run 1, p=0.11). The paper says these results suggest a second look helps when taken in a fresh session.
+
+Its mechanism is a stated hypothesis about same-session review: "We hypothesize that these failures share a root cause that is easy to overlook: the production context itself. When the model reviews its output in the same session, the entire conversation history sits in the context window ... All of this anchors the model's judgment. It does not scrutinize; it rationalizes."
+
+Read all of this as a bound on the effect rather than a license. The experiment used one model (Claude Opus 4.6), errors it injected rather than found, and Korean artifacts, and 28.6% is a low absolute score. It does not establish that withholding the generation prompt helps a fresh reviewer.
 
 ## When this backfires
 
@@ -89233,7 +89459,7 @@ In Claude Code the fixer half works the same way through a fork request, but the
 
 - Declaring the mode on the role takes the producer out of the decision about how much of its reasoning the verifier sees.
 - The precondition is invariance. A role whose right mode changes by task belongs in two roster entries, or at a call site.
-- Audit what a verifier receives at the granularity of individual messages. The generation prompt on its own is enough to move the result.
+- Do not promise a measured gain from isolation. With one unverifiable run excluded, a fresh reviewer was not significantly ahead of one that also got the generation prompt, or of a single self-review.
 - Read the mode field's other effects before you set it. A harness that ties delegation or skills to the mode has made two decisions look like one.
 - Fan-out width is the argument against a declared fork: N parallel dispatches copy the supervisor's history N times.
 
@@ -96120,6 +96346,8 @@ A server can change descriptions after approval without re-consent — a "rug pu
 
 - Version-pin descriptions. Hash the manifest at approval, then flag any post-approval change.
 - Treat descriptions as untrusted. Poisoned descriptions can steer the model to exfiltrate data or trigger unintended actions.
+
+The input schema can change after approval too. [Re-Approve a Tool When Its Input Schema Widens](../security/schema-widening-tool-reapproval.md) gives a rule for which schema changes need new consent.
 
 ### Authorization
 
@@ -108601,6 +108829,7 @@ As agents author more pull requests, review tooling is moving toward the surface
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md) — Empirical data from 3,109 PRs shows CRA-only review achieves a 45% merge rate versus 68% for human-only review — reviewer composition determines merge outcomes
 - [Preempting Agentic PR Rejection by Failure-Mode Category](preempting-agentic-pr-rejection.md) — A 14-reason rejection taxonomy explains why 46% of agentic fix PRs fail, and only implementation and CI categories respond to preemption prompts
 - [Diff-Based Review](diff-based-review.md) — Review what changed, not the full output — mistakes live in the delta, and diffs compress review effort to the right scope
+- [Trajectory-Informed Code Review From the Author Agent's Run](trajectory-informed-code-review.md) — A reviewer takes leads from the coding agent's run and checks them against code; one study saw higher mean recall on synthetic labels and did not measure precision
 - [Human-AI Review Synergy](human-ai-review-synergy.md) — Empirical evidence from 278,790 code reviews shows AI and human reviewers have complementary but unequal strengths — structuring collaboration around these differences improves outcomes
 - [Learned Review Rules](learned-review-rules.md) — Code review agents that extract rules from accepted and rejected PR feedback, applying them to future reviews automatically — demonstrated by Cursor's Bugbot
 - [Reviewing What a Memory-Fed Autofix Taught](memory-fed-autofix-review.md) — Agentic autofix stores its fix pattern into Copilot Memory when it creates the fix, so the merge decision is also a teaching decision — the two conditions that make the write worth reviewing
@@ -109219,7 +109448,7 @@ False positives run 5–15% for well-configured tools and higher when poorly tun
 ## Key Takeaways
 
 - Split the queue by what each reviewer is good at, then hold the line: the moment humans stop owning design, the agent's clean pass starts reading as approval it was never scoped to give
-- Advisory by construction is no longer automatic. [Claude Code Review](../tools/claude/code-review.md) subagents still only comment, but Copilot code review can now hold [approval authority](agent-approval-authority.md) where an admin enables it — check which of your reviewers can satisfy the required-approvals rule
+- Do not assume an agent reviewer is advisory. A [Claude Code Review](../tools/claude/code-review.md) does not approve or block by itself, but [its result counts toward approvals](https://code.claude.com/docs/en/code-review) where a Claude Approvals policy file uses it. Copilot code review can hold [approval authority](agent-approval-authority.md) where an admin enables it — check which of your reviewers can satisfy the required-approvals rule
 - Withholding `Edit` and `Write` from a reviewer is what keeps its findings falsifiable — an agent that can apply its own fix has no incentive to be right about it
 - Calibrate before you trust, not after. At a 16.6% adoption rate the failure is invisible: correct findings and false positives are both simply ignored
 - Independence has to be structural. An agent asked to review itself will agree, because it is re-deriving the same assumptions rather than testing them
@@ -110434,7 +110663,7 @@ graph TD
 
 ## Canonical implementation
 
-Claude Code's `/ultrareview` launches "a fleet of reviewer agents in a remote sandbox" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)), added in v2.1.111 (2026-04-16) per the [changelog](https://code.claude.com/docs/en/changelog). Anthropic's managed GitHub Code Review runs the same shape as a webhook service: "multiple agents analyze the diff and surrounding code in parallel on Anthropic infrastructure. Each agent looks for a different class of issue, then a verification step checks candidates against actual code behavior to filter out false positives. The results are deduplicated, ranked by severity, and posted as inline comments" ([Code Review docs](https://code.claude.com/docs/en/code-review)).
+Claude Code's `/code-review ultra` "launches a fleet of reviewer agents in a cloud sandbox to find bugs in your branch or pull request" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). The docs call `/ultrareview` an alias when ultrareview is available to your account, and the [changelog](https://code.claude.com/docs/en/changelog) lists it as added in v2.1.111 (2026-04-16). Anthropic's managed GitHub Code Review runs the same four stages ([Code Review docs](https://code.claude.com/docs/en/code-review#how-reviews-work)): "several agents examine the diff and the surrounding code in parallel", "a verification step checks the candidate findings against the code and filters out false positives", "the findings that remain are deduplicated and ranked by severity", and "the review posts its results on the pull request".
 
 ## Why verification is load-bearing
 
@@ -110444,17 +110673,17 @@ Per the [EMNLP 2024 peer-review simulation study](https://aclanthology.org/2024.
 
 ## Cloud execution trade-offs
 
-- Latency is asynchronous. `/ultrareview` takes 5 to 10 minutes, and managed Code Review averages 20 minutes ([Code Review docs](https://code.claude.com/docs/en/code-review)). The developer's session is not blocked.
-- Cost is per-review. `/ultrareview` "typically costs \$5 to \$20" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Managed Code Review averages "\$15-25 in cost, scaling with PR size, codebase complexity, and how many issues require verification" ([Code Review docs](https://code.claude.com/docs/en/code-review)).
-- The trust boundary expands. Cloud execution is unavailable for "Amazon Bedrock, Google Cloud Vertex AI, or Microsoft Foundry" and for Zero Data Retention organizations ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
+- Latency is asynchronous. For `/code-review ultra`, "a review typically takes 5 to 15 minutes" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)), and managed Code Review [runs on Anthropic infrastructure](https://code.claude.com/docs/en/code-review). The developer's session is not blocked.
+- Cost is per-review. After the free runs, ultrareview costs "typically \$5 to \$25 in usage credits depending on the size of the change" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Managed Code Review has [no flat per-review price](https://code.claude.com/docs/en/code-review-costs).
+- The trust boundary expands. Ultrareview "is not available when using Claude Code with Amazon Bedrock, Google Cloud's Agent Platform, or Microsoft Foundry, and it is not available to organizations that have enabled Zero Data Retention or have the HIPAA configuration applied" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Organizations that use customer-managed encryption keys cannot run it either.
 
 ## When to trigger
 
-Three trigger modes: once per PR (fixed cost), every push (cost multiplied by push count), and manual (`/ultrareview` or `@claude review`). Push-triggered review "runs the most reviews and costs the most" ([Code Review docs](https://code.claude.com/docs/en/code-review)). For high-iteration PRs, `@claude review once` runs a single non-subscribing review to bound cost.
+Three trigger modes: once per PR (fixed cost), every push (cost multiplied by push count), and manual (`/ultrareview` or `@claude review`). Review after every push "runs on each push, multiplying cost by the number of pushes" ([Code Review costs](https://code.claude.com/docs/en/code-review-costs#how-often-reviews-run)). For high-iteration PRs, `@claude review once` runs a single non-subscribing review to bound cost.
 
 ## Relationship to CI gates
 
-The check run "always completes with a neutral conclusion so it never blocks merging through branch protection rules" ([Code Review docs](https://code.claude.com/docs/en/code-review)). Cloud parallel review is a signal layer. Teams that want merges gated on findings parse the machine-readable severity breakdown from the check run in their own CI.
+By itself, a managed Code Review [does not approve or block](https://code.claude.com/docs/en/code-review), but its result counts toward approvals where a Claude Approvals policy file uses it. Its check run [never concludes as a failure](https://code.claude.com/docs/en/code-review-pull-requests#check-run-output). To gate merges on findings, parse the severity breakdown from the check run in your own CI.
 
 ## Comparison to related patterns
 
@@ -110469,14 +110698,14 @@ Load-bearing differentiators: the verification step, cloud execution, and a sing
 
 ## When this backfires
 
-- Small diffs. A 5-to-10-minute, \$5-to-\$20 review is wasted on typo fixes. A local `/review` is cheaper for sub-hundred-line diffs with clear scope.
+- Small diffs. A paid ultrareview, typically 5 to 15 minutes and \$5 to \$25, is wasted on typo fixes. A local `/review` is cheaper for sub-hundred-line diffs with clear scope.
 - Low-diversity reviewer axes. If "correctness" and "bugs" surface the same findings, aggregation dedupes most of the parallel work and the pattern buys nothing.
-- High-iteration PRs with push triggers. A 30-push PR at \$15-\$25 per review exceeds most review budgets. Use manual or once-per-PR triggers for long-running branches.
-- Air-gapped or ZDR environments. Cloud execution is not optional. The pattern is unavailable for Zero Data Retention organizations and non-Anthropic hosting providers ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
+- High-iteration PRs with push triggers. Review after every push multiplies cost by the number of pushes ([Code Review costs](https://code.claude.com/docs/en/code-review-costs#how-often-reviews-run)). Use manual or once-per-PR triggers for long-running branches.
+- Air-gapped or ZDR environments. Cloud execution is not optional. On Bedrock, Agent Platform, Foundry, Zero Data Retention, or HIPAA setups, ultrareview is unavailable and `/code-review ultra` "runs a local review in your session instead" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Managed Code Review is also unavailable to Zero Data Retention organizations ([Code Review docs](https://code.claude.com/docs/en/code-review#availability)).
 
 ## Tuning
 
-Anthropic's managed Code Review reads two files. `CLAUDE.md` contributes project context; new violations surface as nit-level findings. `REVIEW.md` is "injected directly into every agent in the review pipeline as highest priority" ([Code Review docs](https://code.claude.com/docs/en/code-review)). It is the surface for severity recalibration, skip rules, per-repo checks, and nit caps.
+Anthropic's managed Code Review reads two kinds of file ([customize docs](https://code.claude.com/docs/en/code-review-customize)). It reads `CLAUDE.md` files as project context, and "a change that violates one of their rules becomes a finding at whichever severity level fits the issue". `REVIEW.md` holds review-only rules: "the agents that find issues and the agents that verify them receive its contents as your repository's review instructions, alongside Code Review's default review guidance". It is the surface for severity recalibration, skip rules, per-repo checks, and nit caps. Lowering severity, excluding findings, and capping nits [need the root file on a protected default branch](https://code.claude.com/docs/en/code-review-customize#which-branch-review-md-is-read-from).
 
 ## Example
 
@@ -110510,16 +110739,16 @@ similar items" in the summary instead of posting them inline.
 - Database queries are scoped to the caller's tenant
 ```
 
-A 400-line PR that adds a new API route triggers review on push. The agents fan out. A correctness agent flags a missing tenant scope on one query. A regression agent flags a changed response shape for an existing endpoint. A security agent flags a new log line that includes the user ID. Each finding is verified against code before posting. The aggregated review posts three inline comments with severity markers and a summary: "2 Important, 1 Nit." The check run completes with a neutral conclusion. Branch protection is not triggered, but the team's own CI parses the machine-readable severity counts and blocks merge while `normal > 0`.
+A 400-line PR that adds a new API route triggers review on push. Several agents search in parallel. The review flags a missing tenant scope on one query, a changed response shape for an existing endpoint, and a new log line that includes the user ID. Each finding is verified against code before posting. The aggregated review posts three inline comments with severity markers and a summary: "2 Important, 1 Nit." The check run completes with a neutral conclusion, so it does not fail a required check. The team's own CI parses the machine-readable severity counts and blocks merge while `normal > 0`.
 
 ## Key Takeaways
 
 - Cloud parallel review is parallel-decompose + verify + aggregate, distinct from committee voting and tiered escalation
 - The verification step is load-bearing: without it the pattern amplifies false positives rather than reducing them
-- Cloud execution runs the 5-to-20-minute review in the background, so the developer's session stays unblocked
+- Cloud execution runs the review in the background, so the developer's session stays unblocked
 - Cost scales with PR size and trigger mode; push-triggered review on long PRs is the primary budget risk
 - The default check run is neutral: gate on findings in your own CI by parsing the severity breakdown
-- `REVIEW.md` is the intended tuning surface for severity, skip rules, and nit caps; `CLAUDE.md` contributes general project context
+- `REVIEW.md` is the intended tuning surface for severity, skip rules, and nit caps; `CLAUDE.md` contributes project context, and breaking one of its rules produces a finding
 
 ## Related
 
@@ -111573,7 +111802,7 @@ Source: https://agentpatterns.ai/code-review/instruction-aware-automated-review/
 
 > Feed the team's instruction file into the review agent so its findings enforce documented conventions the reviewer can mechanically verify.
 
-Instruction-aware automated review wires a repository's instruction file — `AGENTS.md`, `CLAUDE.md`/`REVIEW.md`, or the equivalent — into the system prompt of the automated reviewer at PR time. The reviewer flags violations of documented conventions instead of a generic rubric. The pattern pays off only when conventions are mechanically checkable from a diff and the instruction file is short enough to stay attention-budget-positive.
+Instruction-aware automated review wires a repository's instruction file — `AGENTS.md`, `CLAUDE.md`/`REVIEW.md`, or the equivalent — into the context of the automated reviewer at PR time. The reviewer flags violations of documented conventions instead of a generic rubric. The pattern pays off only when conventions are mechanically checkable from a diff and the instruction file is short enough to stay attention-budget-positive.
 
 ## When to apply
 
@@ -111581,29 +111810,29 @@ The pattern is qualified: it works under specific conditions and backfires outsi
 
 - The convention is reviewable from a diff. The rule can be checked by reading changed lines plus a small amount of surrounding context: "new API routes have an integration test", "log calls must use structured logging, not f-string interpolation", "database queries are scoped to the caller's tenant". Vague directives ("be careful", "be thoughtful about naming") cannot be enforced and dilute the rules that can ([GitHub Blog: Mastering Instructions Files](https://github.blog/ai-and-ml/github-copilot/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)).
 - A deterministic linter cannot already cover it. Naming, formatting, and import order belong in `eslint`, `ruff`, `gofmt`, or a custom AST rule. Those give the same verdict every run for zero per-PR tokens. Reserve the reviewer for rules a linter cannot express: cross-file invariants, architectural patterns, severity recalibration.
-- The instruction file stays short. GitHub documents that files "over ~1,000 lines can lead to inconsistent behavior" and that "very long instruction files may result in some instructions being overlooked" ([GitHub Blog: Mastering Instructions Files](https://github.blog/ai-and-ml/github-copilot/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)). Anthropic warns "length has a cost: a long `REVIEW.md` dilutes the rules that matter most" ([Claude Code Review docs](https://code.claude.com/docs/en/code-review)).
+- The instruction file stays short. GitHub documents that files "over ~1,000 lines can lead to inconsistent behavior" and that "very long instruction files may result in some instructions being overlooked" ([GitHub Blog: Mastering Instructions Files](https://github.blog/ai-and-ml/github-copilot/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)). Anthropic's advice for `REVIEW.md` is about scope: "keep `REVIEW.md` to instructions that change review behavior, and leave general project context in `CLAUDE.md`" ([Claude Code Review docs](https://code.claude.com/docs/en/code-review-customize#choose-what-to-write-in-review-md)).
 
 ## How tools wire it up
 
-The mechanism is the same across tools: the reviewer's system prompt is constructed at PR time, and the instruction file is injected into it. Only the file path differs.
+Across tools, the reviewer reads the instruction file at PR time. The files it reads, and how it uses them, differ.
 
 | Tool | Files read at review time | Behavior |
 |------|---------------------------|----------|
 | GitHub Copilot code review | `AGENTS.md` at repo root; `.github/copilot-instructions.md`; `.github/instructions/*.instructions.md` | Reads `AGENTS.md` automatically; previously truncated instructions over 4000 characters, limit removed 2026-06-12 ([GitHub Changelog 2026-06-12](https://github.blog/changelog/2026-06-12-copilot-code-review-new-configurations-and-controls/)) |
-| Claude Code Review (managed) | `CLAUDE.md` (all directory levels); `REVIEW.md` at repo root | `CLAUDE.md` violations surface as *nit*; `REVIEW.md` is "injected into the system prompt of every agent in the review pipeline as the highest-priority instruction block" ([Claude Code Review docs](https://code.claude.com/docs/en/code-review)) |
+| Claude Code Review (managed) | `CLAUDE.md` at the root and in parent directories of changed files; `REVIEW.md` at the root, plus most subdirectories on a protected branch | A `CLAUDE.md` violation becomes "a finding at whichever severity level fits the issue"; agents that find and verify issues receive `REVIEW.md` "alongside Code Review's default review guidance" ([Claude Code Review docs](https://code.claude.com/docs/en/code-review-customize)) |
 | Cursor Bugbot | Accumulated learned rules from accept/reject feedback | Reviewer-specific rules are stored per repo and prepended to context — see [learned review rules](learned-review-rules.md) |
 
 GitHub's launch of `AGENTS.md` support for Copilot code review on 2026-06-18 is the trigger that made this pattern visible across tools: the reviewer "will read `AGENTS.md` from the root of your repository and use relevant instructions from that file when generating review feedback" ([GitHub Changelog 2026-06-18](https://github.blog/changelog/2026-06-18-copilot-code-review-agents-md-support-and-ui-improvements/)). OpenAI ships custom code review rules for Codex, the same wiring under another vendor ([OpenAI: Custom code review rules for Codex](https://developers.openai.com/blog/custom-code-review-rules-for-codex)).
 
 ## Why it works
 
-The mechanism is project-specific rubric injection: the review agent's system prompt is assembled before the diff arrives, and the instruction file becomes part of it. Anthropic documents this directly: `REVIEW.md` "is injected into the system prompt of every agent in the review pipeline as the highest-priority instruction block, taking precedence over the default review guidance" ([Claude Code Review docs](https://code.claude.com/docs/en/code-review)). The reviewer judges the diff against the team's documented rubric instead of a generic correctness baseline, which catches repo-specific rules the default reviewer would miss and suppresses false positives on intentional patterns the team has codified. The same injection mechanism applies to Copilot reading `AGENTS.md`.
+The mechanism is project-specific rubric injection: the review agent receives the instruction file as part of its instructions. Anthropic documents this for `REVIEW.md`: "the agents that find issues and the agents that verify them receive its contents as your repository's review instructions, alongside Code Review's default review guidance" ([Claude Code Review docs](https://code.claude.com/docs/en/code-review-customize#use-review-md-for-review-only-rules)). The reviewer judges the diff against the team's documented rubric as well as a generic correctness baseline, which catches repo-specific rules the default reviewer would miss and suppresses false positives on intentional patterns the team has codified. The same injection mechanism applies to Copilot reading `AGENTS.md`.
 
 The pattern composes with deterministic linters rather than replacing them: linters catch what they can deterministically, the instruction-aware reviewer handles the rest. It also composes with [learned review rules](learned-review-rules.md): Cursor's Bugbot accumulates accept/reject signals into a per-repo rule set that is similarly prepended to context, an empirically-grown variant of the same mechanism ([Cursor: Bugbot learned rules](https://cursor.com/blog/bugbot-learning)).
 
 ## Example
 
-A backend service uses `REVIEW.md` to recalibrate severity for its risk profile, cap nit volume, skip generated files, and add three repo-specific checks. The reviewer applies these as the highest-priority instructions; the default rubric falls underneath ([Claude Code Review docs](https://code.claude.com/docs/en/code-review)).
+A backend service uses `REVIEW.md` to recalibrate severity for its risk profile, cap nit volume, skip generated files, and add three repo-specific checks. The review agents receive these alongside the default guidance. Instructions that lower severity, exclude findings, or cap nits [need the root file on a protected default branch](https://code.claude.com/docs/en/code-review-customize#which-branch-review-md-is-read-from), and this file does all three.
 
 ```markdown
 # Review instructions
@@ -111640,13 +111869,13 @@ The "Do not report" block points to CI as the enforcement surface for lint and f
 
 - Conventions a deterministic linter already enforces. Routing naming, formatting, or import-order rules through the reviewer trades a free, deterministic gate for a per-PR token cost and a probabilistic verdict: the reviewer "may not follow every instruction perfectly every time" ([GitHub Blog: Mastering Instructions Files](https://github.blog/ai-and-ml/github-copilot/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)). The reviewer-as-enforcement-surface case only pays off for rules a linter cannot mechanically express.
 - Vague directives. "Be thoughtful about naming", "be careful with errors", and similar additions add "noise that confuses the LLM" without giving the reviewer anything to check ([GitHub Blog: Mastering Instructions Files](https://github.blog/ai-and-ml/github-copilot/unlocking-the-full-power-of-copilot-code-review-master-your-instructions-files/)). Each one consumes attention budget for zero enforcement.
-- Instruction file bloat past the dilution threshold. Files over ~1,000 lines produce "inconsistent behavior" per GitHub; a long instruction file "dilutes the rules that matter most" per Anthropic. Teams that drop their full style guide into `AGENTS.md` to "feed the reviewer" predictably make the reviewer worse. The top-priority rules now compete for attention with hundreds of mechanically-checkable ones that belong elsewhere.
+- Instruction file bloat past the dilution threshold. Files over ~1,000 lines produce "inconsistent behavior" per GitHub. Teams that drop their full style guide into `AGENTS.md` to "feed the reviewer" predictably make the reviewer worse. The rules that matter now compete for attention with hundreds of mechanically-checkable ones that belong elsewhere.
 - Single-file conflation of authoring and review surfaces. Anthropic ships two files (`CLAUDE.md` and `REVIEW.md`) precisely because authoring instructions and review instructions have different priorities. When a team treats `AGENTS.md` as the source of truth for both, an authoring rule change implicitly changes review behavior without explicit review-of-the-review. For tools that read only one file, partition the file into clearly-labeled authoring and review sections, or accept the drift risk.
 - No PR gate or no automated reviewer enabled. The pattern requires an automated review step. In direct-commit workflows or repositories where the automated reviewer is disabled, the instruction file has no enforcement surface: the documented rules stay documented and unenforced. See [Deferred Standards Enforcement](deferred-standards-enforcement.md) for the related risk when the review step is missing.
 
 ## Key Takeaways
 
-- The instruction file becomes the highest-priority block in the reviewer's system prompt, so an outdated or wrong rule in it produces confidently wrong verdicts. Keep `AGENTS.md`/`REVIEW.md` as accurate as any other reviewed artifact ([Claude Code Review docs](https://code.claude.com/docs/en/code-review)).
+- `REVIEW.md` "changes what a review finds and reports", so an outdated or wrong rule in your instruction file produces confidently wrong verdicts. Keep `AGENTS.md`/`REVIEW.md` as accurate as any other reviewed artifact ([Claude Code Review docs](https://code.claude.com/docs/en/code-review-customize#choose-what-to-write-in-review-md)).
 - Check which file your tool reads before adding rules. Copilot wants `AGENTS.md` at the repo root, Claude Code Review wants its own `REVIEW.md`, and Cursor Bugbot wants neither. It learns from accept/reject feedback instead.
 - Apply only when the rule is reviewable from a diff, is not better served by a deterministic linter, and the instruction file fits inside the documented dilution thresholds (~1,000 lines per GitHub).
 - Vague directives, mechanically-checkable rules, and bloated instruction files all degrade reviewer signal. Strip them out before adding more.
@@ -111800,6 +112029,7 @@ The orchestrator aggregated the four outputs into a single report. The authors c
 ## Related
 
 - [Committee Review Pattern](committee-review-pattern.md) — the reviewer-specialization layer this context arrangement sits under
+- [Trajectory-Informed Code Review From the Author Agent's Run](trajectory-informed-code-review.md) — a reviewer input drawn from how the patch was written rather than from repository structure
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md) — the pull-based alternative, where the reviewer fetches its own context instead of receiving a composed view
 - [Bounded Tool Surfaces for Code Review Agents](bounded-tool-surface-review-agents.md) — capping what each review tool returns, the precision-for-recall trade on the same axis
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — what to do with the minor findings the importance axis exposes
@@ -112165,7 +112395,7 @@ The reproduce-before-report gate is a structural step in a multi-agent code revi
 
 ## What "reproduce" means at the gate
 
-The verifier takes the diff plus the reviewer's claim ("function `X` will crash on empty input on line 42") and tries to build evidence: an input that triggers the failure, a code path that shows the contradiction, or a citation to the specific behavior in the source. Anthropic's managed Code Review exposes this artifact — each finding "includes a collapsible extended reasoning section you can expand to understand why Claude flagged the issue and how it verified the problem" ([Code Review docs](https://code.claude.com/docs/en/code-review)). `REVIEW.md` makes the reproduction bar a per-repo dial; the canonical example is "behavior claims need a `file:line` citation in the source, not an inference from naming" ([Code Review docs](https://code.claude.com/docs/en/code-review)).
+The verifier takes the diff plus the reviewer's claim ("function `X` will crash on empty input on line 42") and tries to build evidence: an input that triggers the failure, a code path that shows the contradiction, or a citation to the specific behavior in the source. Anthropic's managed Code Review can show part of this evidence: "when the review recorded its reasoning, a finding has a collapsed Why this was flagged section. Expand it to read why Claude flagged the issue and how it verified the problem" ([Code Review docs](https://code.claude.com/docs/en/code-review-pull-requests#severity-levels)). `REVIEW.md` makes the reproduction bar a per-repo dial; the docs' example is "behavior claims need a `file:line` citation in the source, not an inference from naming" ([customize docs](https://code.claude.com/docs/en/code-review-customize#choose-what-to-write-in-review-md)).
 
 ## Why the verifier must be independent
 
@@ -112174,7 +112404,7 @@ Independence is the property that does the work. A verifier that shares context 
 - Context freshness: the verifier starts with the diff and the claim, not the reviewer's chain of thought.
 - Model diversity: LLM judges show documented same-family bias, scoring outputs from related model families higher ([Zheng et al. 2023](https://arxiv.org/abs/2306.05685)). Same-family verifiers reproduce same-family confabulations.
 
-Claude Code's `/code-review ultra` (aliased from `/ultrareview`) names this in its comparison against single-pass `/review`: ultrareview is "multi-agent fleet with independent verification" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
+The ultrareview docs name this where they compare `/code-review ultra` (alias `/ultrareview`) with a local `/code-review`: the depth of the cloud review is "multi-agent fleet with independent verification" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
 
 ## Why it works
 
@@ -112188,20 +112418,20 @@ Non-reproducing findings are dropped, not appended with a low-confidence flag. T
 
 | Part | Job | Anthropic implementation |
 |------|-----|--------------------------|
-| Reviewer | High-recall candidate generation | Per-class agents (correctness, security, regressions, edge cases) in parallel |
-| Verifier | Reproduction against actual code | Fresh-context agent given diff + claim; reproduced or dropped |
+| Reviewer | High-recall candidate generation | Code Review: "several agents examine the diff and the surrounding code in parallel" ([Code Review docs](https://code.claude.com/docs/en/code-review#how-reviews-work)) |
+| Verifier | Reproduction against actual code | Code Review "checks the candidate findings against the code and filters out false positives" ([Code Review docs](https://code.claude.com/docs/en/code-review#how-reviews-work)). For ultrareview, "every reported finding is independently reproduced and verified" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)) |
 | Drop policy | Discard non-reproducing findings | Silent — not surfaced to user |
-| Reasoning artifact | Expose verification evidence | "How it verified the problem" collapsible ([Code Review docs](https://code.claude.com/docs/en/code-review)) |
+| Reasoning artifact | Expose verification evidence | Collapsed "Why this was flagged" section, when the review recorded its reasoning ([Code Review docs](https://code.claude.com/docs/en/code-review-pull-requests#severity-levels)) |
 
 A pipeline that fans out reviewers but reports every candidate is fan-out: it amplifies false positives instead of filtering them.
 
 ## When this backfires
 
-- Small or trivial diffs. `/code-review ultra` runs "typically cost $5 to $20" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)); managed Code Review averages "$15-25 in cost, scaling with PR size, codebase complexity, and how many issues require verification" ([Code Review docs](https://code.claude.com/docs/en/code-review)). On a typo fix, gate cost dominates false-positive cost, so use a single-pass [diff-based review](diff-based-review.md).
+- Small or trivial diffs. After the free runs, a `/code-review ultra` run costs "typically \$5 to \$25 in usage credits depending on the size of the change" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)); managed Code Review has "no flat per-review price", and its cost rises with change size and the number of candidate issues to verify ([Code Review costs](https://code.claude.com/docs/en/code-review-costs)). On a typo fix, gate cost dominates false-positive cost, so use a single-pass [diff-based review](diff-based-review.md).
 - Same-family verifier with no context reset. Without independence, the verifier reproduces reviewer confabulations, the same [overcorrection bias](../patterns/anti-patterns/llm-review-overcorrection.md) the gate exists to filter. Same model plus same session is a verification gate in name only.
 - Reproduction-incapable defect classes. Race conditions, distributed-system failures, and intermittent flakes cannot be reproduced on demand against a static diff. Silent-drop then becomes silent-drop of the highest-stakes findings. Route those classes to a separate "suspected-but-not-reproduced" channel, or accept the recall loss.
-- Air-gapped or ZDR environments. Cloud fleet implementations are "not available when using Claude Code with Amazon Bedrock, Google Cloud Vertex AI, or Microsoft Foundry, and it is not available to organizations that have enabled Zero Data Retention" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)).
-- High-iteration PRs with push triggers. 30 pushes at $15-25 compounds linearly. Use `@claude review once` to suppress push-triggered re-verification ([Code Review docs](https://code.claude.com/docs/en/code-review)).
+- Air-gapped or ZDR environments. Ultrareview is "not available when using Claude Code with Amazon Bedrock, Google Cloud's Agent Platform, or Microsoft Foundry, and it is not available to organizations that have enabled Zero Data Retention or have the HIPAA configuration applied" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Organizations that use customer-managed encryption keys cannot run it either.
+- High-iteration PRs with push triggers. Review after every push multiplies cost by the number of pushes. Set the repository to once after PR creation or manual instead ([Code Review costs](https://code.claude.com/docs/en/code-review-costs#how-often-reviews-run)).
 
 ## Example
 
@@ -112233,8 +112463,8 @@ This configuration makes the verifier's reproduction artifact explicit per defec
 - Reset context and pick a different model family for the verifier. Reusing the reviewer's session or model lets it confirm the reviewer's own errors instead of catching them
 - Route reproduction-incapable classes like races to a separate suspected-but-not-reproduced channel. The default silent drop otherwise discards exactly the highest-stakes findings it cannot reproduce
 - Track the verifier's independence directly. CodeX-Verify's reviewer-pair correlation (0.05 to 0.25) is more diagnostic than the headline 32.8% to 72.4% accuracy jump alone
-- Push count, more than diff size, drives cost on iterative pipelines. Suppress re-verification per push with `@claude review once` instead of paying full gate cost on every commit
-- Confirm hosting and data-retention status before adopting the gate: cloud fleet verification is unavailable on Bedrock, Vertex AI, and Foundry, and to organizations running Zero Data Retention. Check once during setup rather than per review
+- Push count multiplies cost on iterative pipelines. Change the trigger setting rather than paying full gate cost on every push
+- Confirm hosting and data-retention status before adopting the gate: ultrareview is unavailable on Amazon Bedrock, Google Cloud's Agent Platform, and Microsoft Foundry, and to organizations with Zero Data Retention, the HIPAA configuration, or customer-managed encryption keys. Check once during setup rather than per review
 
 ## Related
 
@@ -113624,6 +113854,130 @@ See [Layered Code Review with a Human-Approval Budget](../workflows/layered-revi
 - [Risk-Based Shipping](../verification/risk-based-shipping.md)
 - [CRA-Only Review and the Merge Rate Gap](cra-merge-rate-gap.md)
 - [Diff-Based Review Over Output Review](diff-based-review.md)
+
+---
+
+### Trajectory-Informed Code Review From the Author Agent's Run
+Source: https://agentpatterns.ai/code-review/trajectory-informed-code-review/
+
+# Trajectory-Informed Code Review From the Author Agent's Run
+
+> Trajectory-informed code review lets an independent reviewer take leads from the author agent's run, then test them against the code.
+
+Trajectory-informed code review gives an independent review agent the coding agent's development trajectory beside the final diff and repository. A trajectory records the run that wrote the code: the user request, the agent's messages, its tool calls and their output, and its completion message ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+
+## Why the run can help
+
+The final patch does not preserve the full process that produced it. In the authors' words, "A discarded approach may expose a compatibility constraint, while a failed test and its subsequent repair may suggest related scenarios that remain unchecked". The record also carries assumptions that may be wrong ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+
+## What the study measured
+
+The study used 113 DeepSWE tasks from 91 repositories: 339 implementations from three coding configurations, with 882 synthetic reference comments. Codex CLI and GitHub Copilot CLI reviewed them in `/review` mode, both with GPT-5.6 Sol, for six coding-review configurations. The table gives mean recall, the share of reference comments matched ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+
+| What the reviewer gets, beyond patch and repository | Mean recall |
+|---|---|
+| Nothing (diff-only) | 23.03% |
+| Full raw trajectory | 25.87% |
+| Code first, then the trajectory to challenge that assessment | 27.08% |
+| Full trajectory, with the reviewer selecting its own signals before reading code | 27.83% |
+| Messages only | 29.03% |
+| Evidence-linked map | 30.35% |
+
+The raw trajectory raised recall in only four of six configurations, falling on GPT-5.6 Sol-authored code under both harnesses. In that condition, reviewers' trajectory-reading calls returned only about 10% of its text. The four alternative methods (the last four rows) each gained 4.05 to 7.32 points over diff-only on average ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+
+## What limits the result
+
+- The comparison is confounded. "Diff-only review receives neither a development trajectory nor a separate task description", while trajectory conditions carry the original user request ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)). Part of the gain may come from knowing the task (inference).
+- Precision was not measured, so extra comments may be wrong ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+- GPT-5.6 Sol wrote the synthetic reference comments, comparing each implementation with a held-out reference patch, and also did the matching. "Synthetic labels may be incorrect, duplicated, or incomplete", and a reference patch can embody one valid design ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+- Recall stays low: about 30% for the best mean and 38.31% for the best single configuration ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+- Repeat runs cover one configuration, GPT-5.5 code under Copilot CLI. There the map and Messages tied at 36.71% against 27.14% for diff-only ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+- Gains are uneven. On GPT-5.6 Sol-authored code the map added 2.70 and 1.62 points, and under Copilot CLI Messages beat it, 21.62% to 18.38% ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+
+## Build an evidence-linked map
+
+The map had the highest mean recall. Its procedure ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)):
+
+1. Before inspecting code, extract the requirements from the user request and build one map from the full trajectory.
+2. Make each fact and question cite its source events, and keep observations apart from interpretations.
+3. For each prioritized question, connect the evidence to a code location, a plausible counterexample, and a focused check.
+4. Fix the map before investigating. Delegated workers return code evidence without changing it.
+5. Check the leads against the patch, callers, consumers, and tests, with a limit of ten focused probes. Discourage broad suites and repeated checks.
+6. Supplement the map's leads with an independent code-driven pass.
+
+## Or pass only the messages
+
+Messages keeps all user and agent text in chronological, role-labeled order, and omits tool calls and their output. The reviewer checks that account against the patch and repository ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)). With tool output gone, the reviewer cannot compare the author's claims with what its commands returned (inference). Those claims can be wrong, which is why [work reports get checked against the record](../verification/check-agent-work-reports-against-records.md).
+
+## What it costs
+
+Time and cost are ranges of per-configuration medians for the whole review session, without the coding run. Cost is estimated at API prices archived on 2026-09-26. Recall is the six-configuration mean ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+
+| Measure | Diff-only | Messages | Evidence-linked map |
+|---|---|---|---|
+| Review time, minutes | 1.85 to 2.42 | 1.88 to 2.90 | 3.22 to 7.12 |
+| Estimated API cost per review, USD | 0.36 to 0.56 | 0.45 to 0.60 | 1.13 to 2.06 |
+| Recall, critical failure-linked comments | 22.90% | 30.81% | 40.40% |
+| Recall, other comments | 22.79% | 28.59% | 29.73% |
+
+The map's median input tokens were 2.81 to 6.18 times diff-only's, and its output tokens 2.39 to 3.45 times. Critical failure-linked means GPT-6 Astra judged that the comment directly explains a DeepSWE verifier failure. Only 51 comments qualify, against 829 others ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+
+## When this backfires
+
+- You replace diff-only review. In every configuration it matched comments the map missed ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+- You treat the trajectory as proof. "The trajectory guides what to investigate, while the review probe and final code establish whether the suspected problem remains" ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+- You share trajectories freely. The authors say production deployments should keep repository permissions and least privilege on trajectories and derived artifacts such as maps, and filter restricted content before a reviewer sees it. For sensitive repositories, "secret scanning and sanitization should precede analysis, dataset construction, or sharing", covering both ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)).
+- The author read untrusted text. Tool output can carry it to the reviewer, so limit the reviewer's write and network access (inference).
+
+## How it differs from nearby patterns
+
+- [Diff-based review](diff-based-review.md) sets the review boundary at the delta. The delta stays under review here, and the run adds leads.
+- [Per-reviewer context views](per-reviewer-context-views.md) build input from the diff and repository structure, not the history of the run.
+- In an [agent self-review loop](agent-self-review-loop.md) the author checks its own work. Here an independent reviewer reads the author's record.
+- A [committee review](committee-review-pattern.md) splits reviewers by lens. This study compared no panels.
+- [Context reset or model diversity](../patterns/multi-agent/context-reset-vs-model-diversity.md) asks how a reviewer differs from the author. The trajectory is material the author already saw, so new evidence has to come from the reviewer's checks (inference).
+- [Role-declared context mode](../patterns/multi-agent/role-declared-context-mode.md) keeps a verifier from inheriting the supervisor's reasoning. Here the reviewer gets the author's reasoning on purpose, as claims to test. The net recall gain does not show how often it steered a reviewer off a defect (inference).
+
+A [separate-critic comparison](../verification/separate-critic-over-self-recheck.md) gave critics the task and changes, with or without the trajectory, and scored outcomes after the author revised. Across three benchmarks the full trajectory did not consistently improve outcomes, although trajectory designs scored higher on Terminal-Bench ([Zhang et al., arXiv:2610.34577v1](https://arxiv.org/abs/2610.34577v1)).
+
+## Example
+
+The study's FastAPI task adds settings for automatic HEAD and OPTIONS responses. While building them, the coding agent hit a test failure about which setting takes precedence, repaired it, and then passed all 11 tests in its targeted suite. The map turned that history into a question ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)):
+
+```text
+Evidence        inclusion copies routes and resolves route/include/router/self,
+                with a later correction to precedence logic.
+Question        Does repeated/nested inclusion preserve nearest non-omitted
+                precedence after routes have already been materialized?
+Surface         include_router.
+Counterexample  same child router included through two parents with opposite
+                include-level settings.
+Probe           nested two-parent inclusion matrix for both HEAD and OPTIONS.
+```
+
+The reviewer tested the same rule in a simpler nested setup, with OPTIONS unset at the two inner levels and enabled only at the outer inclusion. The app returned HTTP 405 where the outer setting should have enabled the response ([Luo et al., arXiv:2611.31316v1](https://arxiv.org/abs/2611.31316v1)):
+
+```text
+PROBE2 nested omitted then outer include override
+405 {"detail":"Method Not Allowed"} materialized flags [False]
+```
+
+At the first inclusion, `default=False` had turned "unspecified" into an explicit disable. That stored value then took priority over the outer `True`.
+
+## Key Takeaways
+
+- Do not stop at attaching the raw log. Its gain was inconsistent in this study, and all four alternative methods averaged higher.
+- If you add a trajectory-informed pass, keep your diff-only one. In every configuration, diff-only and the map each matched reference comments the other missed. The study ran no combined condition.
+- Try Messages when review minutes or spend are tight, and the evidence-linked map when higher recall is worth more of both.
+- Before you adopt it, give your diff-only baseline the task description and count wrong comments in both arms. The study did neither.
+
+## Related
+
+- [Diff-Based Review Over Output Review](diff-based-review.md)
+- [Per-Reviewer Context Views for Code Review Agents](per-reviewer-context-views.md)
+- [Reproduce-Before-Report Verification Gate](reproduce-before-report-verification-gate.md) — a verifier that reports only findings it can reproduce
+- [Check Coding Agent Work Reports Against the Work Record](../verification/check-agent-work-reports-against-records.md) — why the author's account needs checking
+- [A Separate Critic Over Completion-Time Self-Checking](../verification/separate-critic-over-self-recheck.md) — critics compared with and without the execution trajectory
 
 ---
 
@@ -136991,6 +137345,7 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Parser-Versus-Shell Evasion in Command Permission Checks](parser-versus-shell-permission-evasion.md) — A permission rule matches command text while the shell computes a richer function of it; the documented bypass record makes text matching a pre-flight and puts enforcement below the parser
 - [Per-Caller Identity: Who an Agent's Tool Call Acts As](per-caller-identity-for-agent-tool-calls.md) — A tool call reaches the external system as the deployment or as the person who asked; that one token decides visible data, the logged actor, and whose rate limit drains
 - [Permission-Gated Custom Commands](permission-gated-commands.md) — Pre-approve the tools a Claude Code slash command may use via frontmatter, narrowing the expected surface for shared commands
+- [Permission Replies That Rewrite Coding-Agent Policy](permission-reply-policy-updates.md) — An allow reply in Claude Code can carry updates that delete a deny rule or add allow rules that widen the sandbox; a managed-tier deny rule held in the authors' runs
 - [Plan-Scoped Credentials for Agent Production Access](plan-scoped-production-access.md) — An approved plan is the unit a credential is issued against and the runtime checks the plan is active before selecting it, so a stopped plan fails while its token is still valid; the plan's prose is not the token's bound, because naming one deployment does not restrict the grant to it
 - [Write Policy Gate Rules as Examples and Counterexamples](policy-gate-rule-examples-counterexamples.md) — State each runtime policy rule as a definition plus inclusions and exclusions; in one 23-model study this raised recall on every model and cut one gate's interruptions from 30.6% to 4.8% of clean actions, though three strong models did as well with prose
 - [Pre-Execution Risk Classification for Terminal Commands](pre-execution-command-risk-classification.md) — Display a tiered Safe/Caution/Review-carefully badge with command-specific text before the agent runs a terminal command; an attention-allocation lever paired with deterministic allowlists that carry the policy load
@@ -137009,6 +137364,7 @@ Excess permissions expand the blast radius of any failure or attack.
 - [A Skill's Tool Grant Travels With Its Hooks](skill-tool-grant-travels-with-hooks.md) — Main-conversation pre-approval withdrawal under the plugins-only hooks policy, its exceptions, and separate permission controls
 - [Fall Back to the No-Hook Decision When a Permission Check Errors](hook-allow-failed-permission-check.md) — Since Claude Code 2.1.323 a call whose permission check errors after a hook allow is decided as if no hook had answered; find the affected calls by running once with hooks off, and expect prompts or headless refusals in their place
 - [A PermissionRequest Rewrite Can Move a Command Outside the Sandbox](permissionrequest-rewrite-sandbox-exit.md) — In Claude Code 2.1.328, a shell command that a PermissionRequest hook rewrites to a sandbox-excluded command runs outside the sandbox; review rewrite outputs against the exclusion list.
+- [Refuse a Skill's Inline Shell Commands by Source with PreSkillShellCommand](preskillshellcommand-hook.md) — Since Claude Code 2.1.332 a hook can block a skill's injected shell commands one at a time by the skill's source; it holds only with `onFailure: "block"`, a settings-file or plugin location, and a 2.1.332 version floor
 
 ## Code Injection
 
@@ -137076,6 +137432,7 @@ Agents dynamically load tools from MCP servers, plugins, and registries at runti
 - [Benign Skill Wording That Steers Package Hallucination (Neutral Prompting Attack)](neutral-prompting-hallucination-steering.md) — A skill naming no package and giving no malicious instruction raised hallucination attack success from 4.54% to 78.99%; a strict allowlist measured 0.00% while a registry existence check measured no reduction at all
 - [Rule-File Package Substitution Attacks (PackHallu)](rule-file-package-substitution.md) — A shared rule file can make an agent import an attacker's package; success reached 79.29% on file-level tasks with confirmations off, 18.60% on refactoring, and prompt-injection detectors missed 20% to 100% of poisoned files
 - [Tool Signing and Signature Verification](tool-signing-verification.md) — Require cryptographic signature verification (Sigstore/Cosign) before an agent loads or invokes a tool
+- [Re-Approve a Tool When Its Input Schema Widens](schema-widening-tool-reapproval.md) — Ask again when an updated input schema admits new values on arguments not labeled harmless; in 39 MCP server packages, at least 76 of 580 backward-compatible changes added or widened an authority-bearing one
 - [Registry-Boundary Install Gates for Agent-Chosen Dependencies](registry-boundary-install-gate.md) — A registry gate evaluates requests routed through it; GitHub's firewall combines five controls with a 1-day default cooldown, configurable routing, and removable exceptions
 - [Plugin-Only Customization Sources for GitHub Copilot](plugin-only-customization-sources.md) — `strictPluginOnlyCustomization` blocks standalone customizations in the categories an administrator selects (skills, agents, hooks, MCP servers, extensions); it names no instruction-file category, and GitHub says to pair it with `strictKnownMarketplaces` to restrict eligible marketplaces
 
@@ -142528,6 +142885,7 @@ Delete `check-command.js` and an `ls` call is refused rather than run. The docum
 - [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — what happens to a control when it ships to a fleet in one install.
 - [A Skill's Tool Grant Travels With Its Hooks](skill-tool-grant-travels-with-hooks.md) — what a policy should do to a tool grant when it stops that component's hooks from running at all.
 - [Fall Back to the No-Hook Decision When a Permission Check Errors](hook-allow-failed-permission-check.md) — the opposite case, where the hook allows and the permission check breaks.
+- [Refuse a Skill's Inline Shell Commands by Source with PreSkillShellCommand](preskillshellcommand-hook.md) — a new hook event whose blocking depends on `onFailure: "block"`.
 
 ---
 
@@ -144601,7 +144959,7 @@ Evidence-based allowlist auto-discovery builds the allow list incrementally from
 
 ## How it works
 
-Claude Code's `PermissionRequest` hook fires before Claude Code shows the permission dialog. When it approves a call (`hookSpecificOutput.decision.behavior: "allow"`), the sibling `updatedPermissions` array can carry an `addRules` entry whose `destination` writes the allow rule to a settings file ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)).
+Claude Code's `PermissionRequest` hook fires before Claude Code shows the permission dialog. When it approves a call (`hookSpecificOutput.decision.behavior: "allow"`), the `updatedPermissions` array inside the same `decision` object can carry an `addRules` entry whose `destination` writes the allow rule to a settings file ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks#permissionrequest-decision-control)).
 
 ```mermaid
 sequenceDiagram
@@ -144653,19 +145011,22 @@ COUNT=$(jq -r --arg k "$KEY" '.[$k] // 0' "$LOG_FILE" 2>/dev/null || echo 0)
 
 if [ "$COUNT" -ge "$THRESHOLD" ]; then
   # Approve the call and add a persistent allow rule to .claude/settings.local.json.
-  # updatedPermissions is a sibling of decision under hookSpecificOutput; an
-  # addRules entry carries a rules[] array and a destination.
+  # updatedPermissions is a field of decision; an addRules entry carries
+  # rules[], behavior, and destination.
   jq -n \
     --arg rule "$KEY *" \
     '{
       hookSpecificOutput: {
         hookEventName: "PermissionRequest",
-        decision: { behavior: "allow" },
-        updatedPermissions: [{
-          type: "addRules",
-          destination: "localSettings",
-          rules: [{ toolName: "Bash", rule: $rule, behavior: "allow" }]
-        }]
+        decision: {
+          behavior: "allow",
+          updatedPermissions: [{
+            type: "addRules",
+            rules: [{ toolName: "Bash", ruleContent: $rule }],
+            behavior: "allow",
+            destination: "localSettings"
+          }]
+        }
       }
     }'
 fi
@@ -144732,7 +145093,7 @@ Claude Code's default auto-approval list has itself grown over releases to inclu
 ## Key Takeaways
 
 - Auto-discovery builds the allowlist from real usage, so teams skip predicting the safe-command list before they have data.
-- The `PermissionRequest` hook is the only one that can persist an allow rule, via `hookSpecificOutput.decision` plus an `updatedPermissions` `addRules` entry; `PostToolUse` can only write to a sidecar counter log.
+- The `PermissionRequest` hook is the only one that can persist an allow rule, via an `updatedPermissions` `addRules` entry inside `hookSpecificOutput.decision`; `PostToolUse` can only write to a sidecar counter log.
 - Promote to the allowlist only after N flagged-side-effect-free approvals, and always keep a never-auto-allow deny list (`rm`, `curl`, `git push`, …) that falls through to the dialog.
 - Count full command fingerprints, not just first tokens, so a safe read can't promote a destructive variant under the same key.
 
@@ -144745,6 +145106,7 @@ Claude Code's default auto-approval list has itself grown over releases to inclu
 - [PostToolUse Hook for BSD/GNU Tool Miss Detection](../tool-engineering/posttooluse-bsd-gnu-detection.md)
 - [Empirical Baseline: How Developers Configure Agentic AI Coding Tools](../instructions/empirical-baseline-agentic-config.md)
 - [Progressive Autonomy with Model Evolution](../human/progressive-autonomy-model-evolution.md)
+- [Permission Replies That Rewrite Coding-Agent Policy](permission-reply-policy-updates.md) — the same field used to delete deny rules or widen the sandbox
 
 ---
 
@@ -150319,7 +150681,7 @@ Every entry below was fixed. The point is the shape they share: in each one the 
 
 Two of those rows target different readers. The self-concealing command hid from the permission check; the invisible padding hid from the approval dialog a human was reading. One crafted string can defeat the automated gate and the person reviewing its output, and those are distinct defects with distinct fixes.
 
-The classes are not one vendor's. Cursor patched an allowlist bypass reached "with backtick(`` ` ``) character or `$(cmd)`" in 1.3 and described the fix as "a more robust parser" ([GHSA-534m-3w6r-8pqr](https://github.com/cursor/cursor/security/advisories/GHSA-534m-3w6r-8pqr)), then patched a second in 2.3, where "certain shell built-ins can still be executed without appearing in the allowlist" by poisoning the environment that trusted commands read ([CVE-2026-22708](https://github.com/cursor/cursor/security/advisories/GHSA-82wg-qcm4-fp2w)). VS Code states the limit in its own documentation: "The rule-based auto-approval system uses best-effort command parsing that has known limitations. For example, quote concatenation or shell aliases might bypass the rules" ([VS Code security](https://code.visualstudio.com/docs/copilot/security)). Anything computed from that parse inherits the same limits, including the [risk badge](pre-execution-command-risk-classification.md) shown to a human before the command runs.
+The classes are not one vendor's. Cursor patched an allowlist bypass reached "with backtick(`` ` ``) character or `$(cmd)`" in 1.3 and described the fix as "a more robust parser" ([GHSA-534m-3w6r-8pqr](https://github.com/cursor/cursor/security/advisories/GHSA-534m-3w6r-8pqr)), then patched a second in 2.3, where "certain shell built-ins can still be executed without appearing in the allowlist" by poisoning the environment that trusted commands read ([CVE-2026-22708](https://github.com/cursor/cursor/security/advisories/GHSA-82wg-qcm4-fp2w)). A differential test of eight production coding agents catalogs 17 deduplicated root causes and three boundaries where command authorization and shell execution diverge ([ParseGap, arXiv 2611.29546v1](https://arxiv.org/abs/2611.29546v1)). VS Code states the limit in its own documentation: "The rule-based auto-approval system uses best-effort command parsing that has known limitations. For example, quote concatenation or shell aliases might bypass the rules" ([VS Code security](https://code.visualstudio.com/docs/copilot/security)). Anything computed from that parse inherits the same limits, including the [risk badge](pre-execution-command-risk-classification.md) shown to a human before the command runs.
 
 ## Why it works
 
@@ -150847,6 +151209,143 @@ The deletion of `auth-credentials.bak` now requires a separate consent event the
 - [Blast Radius Containment: Least Privilege for AI Agents](blast-radius-containment.md) — deterministic narrow allowlist alternative referenced in failure conditions
 - [Treat Task Scope as a Security Boundary](task-scope-security-boundary.md) — limits the action surface upstream of permission mode
 - [Pre-Execution Risk Classification for Terminal Commands](pre-execution-command-risk-classification.md) — attention-allocation layer that pairs with ask-to-continue without adding fatigue
+
+---
+
+### Permission Replies That Rewrite Coding-Agent Policy
+Source: https://agentpatterns.ai/security/permission-reply-policy-updates/
+
+# Permission Replies That Rewrite Coding-Agent Policy
+
+> In Claude Code, a permission reply that allows one call can also delete a deny rule from user, project, or local settings.
+
+A policy-rewriting permission reply answers one prompt and also changes the rules that later calls are checked against. Claude Code lets an `allow` answer carry policy updates, which the runtime applies and can save to settings files. In an example from a preprint by Fei and colleagues, a remote approval service with no access to the operator's files approves an unrelated command and removes the deny rule on `.env`. The agent can then read the file in that session and later ones, even under the strict sandbox ([arXiv:2611.32195v1](https://arxiv.org/abs/2611.32195v1), §I).
+
+The authors report that the deletion still succeeds on Claude Code 2.1.327, the latest release when they wrote. We have not reproduced the attack, and we have not verified later releases. Section numbers below refer to the preprint.
+
+## What an answer can carry
+
+Besides the operator's terminal dialog, four routes deliver answers: a plugin's hook, a prompt handler for unattended sessions, an application that embeds the agent through the SDK, and a remote front end on a bridge. All four may carry updates (§II). A `PermissionRequest` hook returns them as [`updatedPermissions`](https://code.claude.com/docs/en/hooks#permissionrequest-decision-control).
+
+The [hooks reference](https://code.claude.com/docs/en/hooks#permission-update-entries) lists the update types, including `removeRules`, which "Removes matching rules of the given `behavior`". An update targets the session or the local, project, or user settings. The same page says a hook ["can't approve what a deny rule refuses, unless a mod overrides the rule"](https://code.claude.com/docs/en/hooks#permissionrequest-decision-control). That sentence covers the decision. The preprint tests whether the rule survives the update sent with the decision.
+
+## Why the filter misses a deletion
+
+The authors read the shipped filter from the binary. It checks only updates that add or replace allow rules, so a deletion of deny rules passes unchecked. They read build 2.1.312 and found the same filter loop in all 10 builds they installed from 2.1.301 to 2.1.325 (§IV-A, Appendix A).
+
+In the releases they examined, three of the four routes skip even this filter. The prompt-handler path applies it. Hook and SDK paths in the default mode do not, unless a suppression condition holds (§IV-A, Appendix A).
+
+The runtime stores each rule as a bare string with no author field. A deletion by an answer leaves the same record as the operator's own edit. When the plugin is uninstalled, the runtime can neither find the change nor undo it (§IV-D).
+
+## Which updates lift a restriction
+
+| Update in the answer | Reported effect |
+|---|---|
+| Remove or replace deny rules | The permission check stops refusing calls that only the lost rules denied (§VII-D). Deleting a file rule also lifts the sandbox's block (§IV-C) |
+| Add a `WebFetch` or `Edit` allow rule | The sandbox widens with no deletion. A `WebFetch` rule let a rewritten command send a project file out, and an `Edit` rule let one write outside the project. A host rule saved for the session only did not reach the sandbox (§VII-C) |
+| `setMode` to `acceptEdits` in user settings | The next headless session wrote a file unprompted (§VII-D, builds 2.1.319 and 2.1.314) |
+| `addDirectories` in user settings | The next session read an outside directory unprompted (same runs) |
+
+The hooks reference adds one limit: `bypassPermissions` is [never saved as the default mode](https://code.claude.com/docs/en/hooks#permission-update-entries).
+
+An answer can also [rewrite the input](permissionrequest-rewrite-sandbox-exit.md) of the call it approves. Under the strict sandbox, none of the three rewrites the authors tried exposed the protected file, while the policy update did. Without the sandbox, two of the rewrites exposed it too (§VII-C). Sending the file to the answering party took the deletion, an allow for the receiving host, and a rewritten command.
+
+## Which relays forward updates
+
+On 2026-10-29 the authors searched for relays. They read 70: Claude Code's Remote Control, plus open-source tools with at least 100 stars or 1,000 weekly npm downloads (§II, Appendix B).
+
+| What the remote side can send | Tools |
+|---|---|
+| Rule updates it writes, deny removals included | 5 |
+| A choice among updates the runtime or relay proposes | 25 |
+| A decision only | 37 |
+| Not determinable from the code | 3 |
+
+The first row is about 7%, and Remote Control is in it. The claude.ai web and mobile apps answer through it, so the answering party is whoever controls that account, and its answer schema accepts every update type. For Remote Control the evidence is a reading of two releases. The authors' run through deployed software used an open-source relay (§II, §VII-B).
+
+The [channels permission relay](../tools/claude/channels-permission-relay.md) is decision-only. Its verdict carries `allow` or `deny`, and "Neither verdict affects future calls" ([channels reference](https://code.claude.com/docs/en/channels-reference#relay-permission-prompts)).
+
+## Saved answers in other agents
+
+Some agents turn an "always" answer into a rule broader than the call asked about (§VII-E):
+
+- opencode 1.19: "always" for `rm ./build.log` saves an allow for `rm *` that overrides an operator deny of `rm -rf *`. The authors note that its development branch has since adopted a safe way of saving answers (Appendix D).
+- Gemini CLI 0.65.0 and 0.66.0, with saving across sessions enabled: "always" for `git tag` saves an allow for all of `git`, which outranks a lower-priority user-tier deny of `git push`.
+- Codex 0.164.0 and 0.165.0: the forbidden rule held, but after a saved allow for `python3`, the next `python3` command ran outside the sandbox.
+- VS Code's Copilot agent: a deny still wins. The authors checked this in source and did not run it.
+
+## What to do now
+
+The authors' interim advice is to keep deny rules where no update reaches: the managed tier, or a settings file passed on the command line. Also restrict the sandbox network to the hosts that managed settings allow (§VI). A managed-tier rule held in their runs (§VII-B). The command-line case rests on their reading of the binary (§IV-A).
+
+Know the gaps:
+
+- The network lock, `allowManagedDomainsOnly`, [applies only to commands inside the sandbox](https://code.claude.com/docs/en/sandboxing#disable-filesystem-isolation).
+- The lock does not limit write paths. Even under an admin-required sandbox, `Edit` allow rules in `~/.claude/settings.json` [still apply unless a managed-only lock covers them](https://code.claude.com/docs/en/sandboxing#repository-settings-under-an-admin-required-sandbox), and an answer can write that file.
+- [`allowManagedPermissionRulesOnly`](https://code.claude.com/docs/en/settings-reference#allowmanagedpermissionrulesonly) ignores `--settings` deny rules too, so use the managed tier if you set it. The preprint does not test this key.
+
+List every party that can answer a prompt, including URL hooks and skills that declare hooks. A search for `updatedPermissions` can miss a hook that passes a remote answer through (§III, §VII-G).
+
+## Design rules for runtimes and relays
+
+The authors give three (§VIII):
+
+1. Classify an update by its effect on what each reader of the policy refuses, sandbox included, whatever its syntax says.
+2. Record who wrote each rule, out of the answering parties' reach.
+3. When an update is refused, refuse the whole answer and show the operator the change. Applying the `allow` alone acts on an answer nobody gave.
+
+Without authorship records, a safe runtime accepts only updates that keep every denied action denied (§V-B). For Claude Code that means refusing deny deletions and replacements. It also means refusing added allow rules that the sandbox reads, or keeping them for the session, so a relay's "always allow" for those rules lasts one session (§VI).
+
+No authorship record makes an added network host safe, because it lifts the limit for every author. Refuse the addition, or read that list from a source no answer reaches. With records, a check that judges each step alone is still unsafe, because a party can copy a deny rule, delete the original, then delete its copy (§V-C).
+
+The authors tested their repair by patching Claude Code binaries, and it held on the routes they tested. It is not a vendor feature. Their basic check still saved mode and directory changes, and keeping the operator's later prompts needs a stricter one (§VI, §VII-F).
+
+## When the added risk is small
+
+- Plugin and skill hooks already run with the operator's privileges. The new power matters most for answerers with no code on the host: relay services, SDK approvers, and services a plugin names as a URL hook (§III).
+- Few plugins send updates. Of 2,227 fetched from the vendor's marketplace, two did, and both let a remote side choose among the runtime's suggestions (§VII-G, Appendix B).
+- The evidence is one preprint at version 1. Its runs used Linux, and macOS was not run (§VIII).
+
+## Example
+
+This managed settings file applies the interim advice. The two deny rules come from the operator settings in the authors' runs (Appendix B). The sandbox keys follow the [managed sandbox](https://code.claude.com/docs/en/sandboxing#enforce-sandboxing-with-managed-settings) and [network lock](https://code.claude.com/docs/en/settings-reference#sandbox-network-allowmanageddomainsonly) docs, and the hosts are the vendor's sample. We assembled the file and have not run it. A `./` path [resolves against the current directory](https://code.claude.com/docs/en/permissions#read-and-edit).
+
+```json
+{
+  "permissions": {
+    "deny": ["Read(./.env)", "Bash(curl *)"]
+  },
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "allowUnsandboxedCommands": false,
+    "network": {
+      "allowManagedDomainsOnly": true,
+      "allowedDomains": ["github.com", "*.npmjs.org"]
+    }
+  }
+}
+```
+
+After you deploy it, run `/status` and check that `Setting sources` includes `Enterprise managed settings`. No answer can write this tier. An answer can still write allow rules, modes, and directories to other settings files.
+
+## Key Takeaways
+
+- Where a route forwards policy updates, whoever answers through it can do more than decide one call: they can delete deny rules in user, project, or local settings.
+- Put deny rules in the managed tier and lock sandbox domains there. The domain lock does not limit write paths, and answers can still save modes and directories.
+- Judge an update by what it makes the permission check or sandbox stop refusing. By that test, an added `Edit` or `WebFetch` allow rule is a grant.
+- A channels verdict carries only allow or deny, so it cannot attach a rule change.
+- Treat the attack evidence as one preprint: tested on Linux, reported still working on 2.1.327 and not reproduced here, with a repair that is the authors' binary patch.
+
+## Related
+
+- [Six-Shape Approval Response Taxonomy](../patterns/agent-design/approval-response-taxonomy.md) — `updatedPermissions` used as a legitimate "approve and remember"
+- [Evidence-Based Allowlist Auto-Discovery](evidence-based-allowlist-auto-discovery.md) — a hook that writes allow rules through the same field
+- [A PermissionRequest Rewrite Can Move a Command Outside the Sandbox](permissionrequest-rewrite-sandbox-exit.md) — what the rewritten-input half of an answer can do
+- [A Containment Floor for Agent Self-Configuration](agent-self-config-field-classes.md) — refusing config writes by field class at the write site
+- [An Explicit Update Boundary for Agent Self-State](self-state-update-boundary.md) — why the write alone cannot show who is authorized to make it
+- [One-Way Settings](one-way-settings.md) — keys that accept writes in one direction only
+- [Channels Permission Relay](../tools/claude/channels-permission-relay.md) — a remote approval path whose verdict is allow or deny
 
 ---
 
@@ -152316,6 +152815,119 @@ Reviewers "have weeks rather than hours, because a new skill reaches few of its 
 
 ---
 
+### Re-Approve a Tool When Its Input Schema Widens
+Source: https://agentpatterns.ai/security/schema-widening-tool-reapproval/
+
+# Re-Approve a Tool When Its Input Schema Widens
+
+> Re-approve a tool when its updated input schema admits new values that can change the target, destination, identity, or execution mode of a call.
+
+Schema-widening re-approval is a client-side rule for tool updates, which the paper calls SchemaCaps. "A delegation should survive a schema change only if the change admits no new value on any authority-bearing coordinate visible in the schema" ([Ameur et al., 2026](https://arxiv.org/abs/2611.30750v1), §1). A coordinate is a declared argument, or the undeclared fields an object accepts. Unlabeled arguments count as authority-bearing, and an undecided check asks the user (§2, §4).
+
+## Compatible updates can widen authority
+
+Backward compatibility asks whether every old call stays valid. A saved approval raises the reverse question: can the new schema express something the old one could not ([Ameur et al., 2026](https://arxiv.org/abs/2611.30750v1), §3)?
+
+Across 604 releases of 39 stdio MCP server packages, published January 2025 to September 2026 (official reference servers and popular third-party npm servers), 412 of 580 backward-compatible schema changes widened some coordinate. Hand labeling by the authors found that at least 76 of those changes added or widened an authority-bearing argument ([Ameur et al., 2026](https://arxiv.org/abs/2611.30750v1), §7). This shows such changes exist, not how common they are across MCP.
+
+## Which arguments carry authority
+
+"An argument is authority-bearing when its value can redefine the target of the action, send data to a destination, change the principal or tenant, or change the mode of execution" ([Ameur et al., 2026](https://arxiv.org/abs/2611.30750v1), §2). `shell` and `webhookUrl` qualify. Filters, pagination, free content, concurrency tokens, and metadata do not.
+
+Keep labels in a versioned manifest that the client owns, never one the server supplies. A path the manifest omits counts as authority-bearing. With no manifest, every argument does, which is the paper's default (§2). Do not guess from field names: against the authors' labels, a name-based labeler scored 0.75 precision and at most 0.60 recall (§7).
+
+## When to ask again
+
+Compare each new version with the schema currently bound to the approval ([Ameur et al., 2026](https://arxiv.org/abs/2611.30750v1), Algorithm 1). Suspend the tool if the server's identity changed, your manifest relabels a covered argument as harmless, or a tool hint got riskier (read-only dropped, destructive or open-world raised). Otherwise an identical input schema keeps the approval, even if the title or description changed.
+
+A changed schema also suspends the tool if:
+
+- the old schema links sibling arguments above a protected one (`anyOf`, `if`, `not`, `patternProperties`, and similar), or has an unresolved `$ref`
+- a protected argument, or an object's undeclared fields, shows a widening change
+- the subschema checker cannot confirm that the new values sit inside the old ones
+
+Widening changes include these, and a backward-compatibility check passes all but the last:
+
+- a field added to a closed object, or a declaration dropped from an open one
+- a wider value domain, or `null` newly admitted
+- an object opened, or an open sub-object added
+- a required field made optional (widening if your policy rejects omission, though the algorithm always asks)
+- a changed default
+- a required or defaulted field removed
+
+The algorithm also asks about a field declared outside a typed `additionalProperties`. Compare effective values: an omitted argument takes its declared default or whatever the server decides, which differs from `null` and from an empty string (§2, §3).
+
+If every check passes, bind the approval to the new schema and log it. Otherwise hide the tool and refuse its calls until the user approves the version, tightens the policy, or refuses. A later release that does not widen the bound schema lifts the suspension (§4, §5).
+
+## A subset check alone misses cases
+
+A simpler shortcut asks only when the new schema accepts something the old one did not. On the pilot corpus it asked 693 times, yet silently accepted 22 changes SchemaCaps asks about (7 judged widening, 15 undecided). It ignores effective values ([Ameur et al., 2026](https://arxiv.org/abs/2611.30750v1), §7).
+
+The `jsonsubschema` checker is unsound on some inputs. For example, it can accept a boolean that loses its `enum` or `const` restriction. The authors patch that case, which does not remove every false "yes", and then search each "yes" for counterexamples as defense in depth rather than proof (§4). The version of their rule reviewed for ICAART also silently accepted 27 widening benchmark changes: removed required or defaulted fields, and fields outside a typed `additionalProperties`. Both gaps are fixed. Put both cases in your own tests.
+
+## What it costs against pinning
+
+On tools present in both releases of a pair, the rules asked this often. Every rule also asks about the 907 added tools ([Ameur et al., 2026](https://arxiv.org/abs/2611.30750v1), §7).
+
+| Rule | Re-approvals asked |
+|---|---|
+| Backward compatibility | 617 |
+| SchemaCaps with no labels | 645 |
+| Pin the input schema | 1,197 |
+| Pin the whole definition | 2,004 (807 for description or title only) |
+
+Compatibility accepts all 412 compatible widenings. Name-based labels cut SchemaCaps to 413 questions, at the price of their misses. Pinning is simpler. A server can pair a behavior change with a narrowing or a description-only edit, and SchemaCaps accepts both silently. A full pin asks about both, and a schema pin about the narrowing (§7).
+
+## What surveyed clients did
+
+On 30 September 2026, none of eight MCP clients and scanners was observed or documented to re-approve a widened schema. Two could not be determined ([Ameur et al., 2026](https://arxiv.org/abs/2611.30750v1), Table 5).
+
+| Product and version | Evidence | Behavior on widening |
+|---|---|---|
+| MCP TypeScript SDK 1.31.0, Python SDK 2.2.0 and 1.27.0 | Run and source | Send the widened call |
+| Vercel AI SDK `ai` 7.0.123 | Run and source | Silent by default; opt-in detection flags any change |
+| VS Code agent mode 1.139.1 | Source | Approval survives under the same tool ID |
+| Claude Code 2.1.285 | Documentation only | Refreshes the list; rules match tool names |
+| Claude Desktop, Cursor | Documentation only | Not determinable |
+| mcp-scan 0.4.2 | Run and source | Hashes the description only; no warning on a schema-only widening |
+
+## Limits
+
+- A behavior change behind an identical schema defeats every rule, pinning included. This rule also misses one shipped with a non-widening change. Confine the tool too, as the [update gap](../patterns/anti-patterns/tool-update-gap.md) page describes.
+- It does not see configured or computed server defaults, output schemas, or injection through descriptions, and a manifest that wrongly marks an argument harmless defeats it ([Ameur et al., 2026](https://arxiv.org/abs/2611.30750v1), §2, §9).
+- The authors warn that 645 questions in 21 months, across the whole corpus, still invite rubber-stamping. They did not measure how many a user would find unnecessary (§7, §10).
+- The corpus is not random, takes at most 20 releases per package, and omits HTTP, authenticated-only, and third-party PyPI servers. Widenings concentrate: two packages hold 62 of the 84 changes the name-based labeler flagged (§7, §9).
+- The authors did their own labeling and finalized the classifier after seeing data. The attack demonstration used a scripted planner with no LLM (§6, §7, §9).
+- The enforcing proxy is a prototype for one stdio server at a time. With the reviewed rule, a decision took up to 10.5 s on the authors' machine (§5).
+- The arXiv text is the authors' accepted version for ICAART 2027. They disclose that Claude drafted the abstract and Sections 1 to 10, which they revised, and assisted with the code ([Ameur et al., 2026](https://arxiv.org/abs/2611.30750v1)).
+
+## Example
+
+Desktop Commander's `execute_command` tool changed between two releases ([Ameur et al., 2026](https://arxiv.org/abs/2611.30750v1), §1).
+
+**Before** — version 0.1.34: the tool takes `command` and `timeout_ms` on an object that rejects any other field. A policy on `command` can assume one interpreter.
+
+**After** — version 0.1.35: the tool also takes `shell`, any string. Every old call stays valid, so a compatibility rule keeps the approval. The agent can now pick the interpreter, and the policy on `command` no longer says what may run. The widening rule sees a field added to a closed object and asks.
+
+The authors replayed this change and five other real widenings on their exact release pairs, without executing any server. Compatibility kept all six approvals. Pinning and SchemaCaps suspended all six (§6).
+
+## Key Takeaways
+
+- Keep the approved input schema itself. A hash tells you that something changed and nothing about whether it widened.
+- Test your own client with a server that adds an argument mid-session. The survey covers only the listed versions on one date.
+- If you can absorb the extra prompts, pin the whole definition. It is simpler and also asks about the description-only edits this rule lets through.
+- Whichever rule you pick, limit what the tool can reach, because neither one observes behavior.
+
+## Related
+
+- [A Tool Update Ships Code the Model Never Sees (Update Gap)](../patterns/anti-patterns/tool-update-gap.md) — the code-level change behind an unchanged schema that this rule cannot see
+- [MCP Client Design: Building Robust Host-Side Logic](../tool-engineering/mcp-client-design.md) — where the host handles list changes and pins tool definitions
+- [MCP Approval-View Fidelity Gap and Unicode Concealment](mcp-metadata-approval-view-gap.md) — the approved view and the delivered bytes can differ even without an update
+- [Tool Signing and Signature Verification](tool-signing-verification.md) — verifies who published a tool version, a separate question from what it now accepts
+- [Monotonic Capability Attenuation](monotonic-capability-attenuation.md) — the same never-widen property applied along a chain of tool calls
+
+---
+
 ### Reading a Coding-Agent Vendor's Security Certificate
 Source: https://agentpatterns.ai/security/vendor-security-certification-scope/
 
@@ -152628,6 +153240,147 @@ The first leaves reframing at 31.9% on gpt-4o. The second drops it to 0% (0/120)
 - [Lethal Trifecta Threat Model](lethal-trifecta-threat-model.md) — the three ingredients this lab assembles on purpose: a secret in context, untrusted content, and a tool that acts.
 - [Adaptive Evaluation of Out-of-Band Prompt-Injection Defenses](adaptive-evaluation-out-of-band-defenses.md) — why the held-out ROT13 result generalizes: a defense measured only on the attacks its author chose has not been measured.
 - [Per-Call Egress Confirmation for User-Identifying Values](per-call-egress-confirmation.md) — a shipped payload-reading check and the conditions under which it is still worth running next to a destination rule.
+
+---
+
+### Refuse a Skill's Inline Shell Commands by Source with PreSkillShellCommand
+Source: https://agentpatterns.ai/security/preskillshellcommand-hook/
+
+# Refuse a Skill's Inline Shell Commands by Source with PreSkillShellCommand
+
+> Since 2.1.332, a Claude Code `PreSkillShellCommand` hook can block a skill's injected shell commands one by one, if it fails closed and clients are current.
+
+A skill can embed shell commands that run as it loads, and `PreToolUse` hooks don't fire for them. Claude Code 2.1.332 (November 25, 2026) added "a `PreSkillShellCommand` hook event that can refuse a skill or command's inline shell commands as it loads" ([changelog 2.1.332](https://code.claude.com/docs/en/changelog#2-1-332)). The hook gives per-command control only when four conditions hold:
+
+1. Every client runs 2.1.332 or later. Earlier versions "run injected commands without calling it" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#preskillshellcommand)).
+2. The hook sets `onFailure: "block"`. Without it, a hook that crashes or times out lets the command run ([Claude Code hooks](https://code.claude.com/docs/en/hooks#preskillshellcommand-decision-control)).
+3. The hook lives in a settings file or a plugin, not in the skill's own frontmatter.
+4. The same check also runs on `PreToolUse`, because auto mode turns some injected commands into ordinary tool calls.
+
+## What the hook sees
+
+An injected command is a line written as `` !`<command>` `` or a ```` ```! ```` block in a skill or command file. The hook runs before each one, and "PreToolUse hooks don't fire for injected commands" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#preskillshellcommand)). Its input adds these fields to the common ones ([Claude Code hooks](https://code.claude.com/docs/en/hooks#preskillshellcommand-input)):
+
+| Field | Value |
+|---|---|
+| `tool_name` | `Bash` or `PowerShell`, the tool that runs the command |
+| `tool_input.command` | The shell command as it would run |
+| `command_name` | The loading skill, such as `pr-summary` or `my-plugin:deploy` |
+| `command_source` | Where the skill comes from, such as `userSettings`, `projectSettings`, `policySettings`, `plugin`, or `builtin` |
+| `invoked_by` | `user`, `claude`, or `other` |
+
+`command_source` and `command_name` are what the hook adds. A permission rule is a tool-and-pattern string such as `"Bash(git *)"` ([Claude Code hooks](https://code.claude.com/docs/en/hooks)), and that syntax has no field for the skill that wrote the command.
+
+## What a refusal does
+
+The hook can say no and nothing else. "You can block a command from this hook, but you can't approve or change one" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#preskillshellcommand-decision-control)).
+
+| Hook output | Result |
+|---|---|
+| Exit 0 with no decision, or `permissionDecision: "allow"` | The command runs unless another hook blocks it |
+| Exit 2, `permissionDecision: "deny"`, or `decision: "block"` | The command does not run. The skill loads, and Claude reads `[not run: blocked by hook: <reason>]` in place of the output |
+| `"ask"`, `"defer"`, or any `updatedInput` | Blocked the same way as `"deny"` |
+| `continue: false` | The whole invocation fails, and none of its injected commands runs |
+| The hook fails or times out | The command runs, unless the hook sets `onFailure: "block"` |
+
+The last row is the trap. A policy hook with a mistyped path lets every command through. When you type the skill's name, a `Ran anyway in /<name>` line "reports a command that ran after its hook failed or timed out" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#preskillshellcommand-decision-control)).
+
+## Where it sits among the other controls
+
+Claude Code checks injected commands against your permission rules first. A command a deny rule matches "aborts the invocation" ([Claude Code skills](https://code.claude.com/docs/en/skills#permission-checks-on-injected-commands)). The hook "runs after the permission check on injected commands, so it gets the commands that passed", and it still runs in `bypassPermissions` mode ([Claude Code hooks](https://code.claude.com/docs/en/hooks#commands-that-reach-a-preskillshellcommand-hook)).
+
+| Control | Scope | What it decides on |
+|---|---|---|
+| Permission rules | Every injected command | Command text. A deny aborts the whole skill |
+| `PreSkillShellCommand` | Commands that passed the rules | Command text plus skill name, source, and invoker. A block drops one command |
+| [`disableSkillShellExecution`](skill-shell-execution-gate.md) | User, project, plugin, and additional-directory skills | Nothing. Every command in scope becomes `[shell command execution disabled by policy]` ([Claude Code skills](https://code.claude.com/docs/en/skills#inject-dynamic-context)) |
+| `PreToolUse` | Claude's own tool calls | Command text. Never sees injected commands |
+
+Auto mode opens a gap between the hook and `PreToolUse`. There, a command that needs approval does not run as the skill loads. "Claude can run it afterward as a tool call, which fires `PreToolUse` and not this event, so keep your script on both events" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#commands-that-reach-a-preskillshellcommand-hook)). The hooks reference lists `command_source` as an input for `PreSkillShellCommand` and `UserPromptExpansion`, not for `PreToolUse`. A source-keyed policy therefore cannot follow a deferred command, and the `PreToolUse` copy has to judge the command text alone.
+
+## Why it works
+
+Without the hook, the documented controls on injected commands are permission rules, which match tool-and-command patterns, and `disableSkillShellExecution`, which turns off every command in scope. The hook moves the decision to the one point where Claude Code knows both what will run and which skill asked for it. A policy can then trust skills from managed settings and refuse the same command from a project or plugin skill. Blocking costs little, because the skill still loads with a marker in place of the output ([Claude Code hooks](https://code.claude.com/docs/en/hooks#preskillshellcommand-decision-control)). Claude sees that the command was refused, and the rest of the skill still loads.
+
+Keying on the source also avoids the weakness of text matching. A blocklist on command text misses any spelling its author did not foresee, which [parser-versus-shell evasion](parser-versus-shell-permission-evasion.md) documents for permission rules. A source check asks a question the command text cannot answer.
+
+## Roll it out across a fleet
+
+Order matters, because the hook and an old client do not mix. If a settings file names the event first, "an earlier version such as v2.1.331 opens each interactive terminal session with a warning dialog" that reads `Unknown hook event "PreSkillShellCommand" was ignored` ([Claude Code hooks](https://code.claude.com/docs/en/hooks#preskillshellcommand)). That client then runs every injected command without calling the hook.
+
+1. Upgrade every client to 2.1.332 or later.
+2. Set `requiredMinimumVersion` to `2.1.332` in managed settings. Below that floor, "Claude Code exits at startup and tells the user to update" ([settings reference](https://code.claude.com/docs/en/settings-reference#requiredminimumversion)). The key works only in managed settings, and Claude Code "gives no warning when it ignores the key elsewhere". The key itself requires Claude Code 2.1.163 or later, so it cannot stop a client older than 2.1.163.
+3. Add the hook in managed settings or a plugin. A skill's injected commands run without the hooks in its own frontmatter "on its first load in a session and on loads inside a subagent" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#preskillshellcommand)).
+4. Test it with a one-line skill. The hooks reference suggests `.claude/skills/hook-test/SKILL.md` containing `` !`echo 'rm -rf'` ``, which deletes nothing. Typing `/hook-test` should print a `Not run in /hook-test` line.
+
+The version check "runs at startup only, so a session that's already running continues" ([settings reference](https://code.claude.com/docs/en/settings-reference#requiredminimumversion)). A session already running on an old client keeps running injected commands without the hook until it restarts.
+
+## Example
+
+This policy refuses injected commands from project and plugin skills and lets managed, built-in, and personal skills run theirs. It is a sample built on the documented input fields and exit codes, not a vetted policy, so adjust the trusted list to your own sources. Save it at an absolute path that neither users nor the repository under work can write, such as `/etc/claude-code/hooks/skill-shell-policy.sh`. A copy under `${CLAUDE_PROJECT_DIR}`, "the project root where the session started" ([Claude Code hooks](https://code.claude.com/docs/en/hooks#reference-scripts-by-path)), comes from the repository the policy distrusts, which can replace it with a script that exits 0:
+
+```bash
+#!/usr/bin/env bash
+# PreSkillShellCommand: refuse injected commands from untrusted skill sources.
+input=$(cat)
+src=$(jq -r '.command_source // empty' <<<"$input")
+name=$(jq -r '.command_name // empty' <<<"$input")
+
+case "$src" in
+  policySettings|builtin|userSettings) exit 0 ;;
+esac
+
+echo "Injected command from $src skill '$name' refused by policy" >&2
+exit 2
+```
+
+An empty or unknown source falls through to the refusal, so a missing field blocks instead of allowing. Make the script executable, for example with `sudo chmod 755 /etc/claude-code/hooks/skill-shell-policy.sh`. With `args` set, Claude Code spawns `command` directly as an executable ([Claude Code hooks](https://code.claude.com/docs/en/hooks#exec-form-and-shell-form)), so a script without the execute bit cannot start. With `onFailure: "block"`, that failure blocks every injected command, trusted sources included ([Claude Code hooks](https://code.claude.com/docs/en/hooks#block-the-action-when-a-hook-fails)). Register the script in managed settings with the matcher, type, and failure setting the hooks reference prescribes ([Claude Code hooks](https://code.claude.com/docs/en/hooks#preskillshellcommand)):
+
+```json
+{
+  "hooks": {
+    "PreSkillShellCommand": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/etc/claude-code/hooks/skill-shell-policy.sh",
+            "args": [],
+            "onFailure": "block"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+`Bash|PowerShell` covers both tools that can run injected commands. The hook must not be `async`, because an async hook cannot block. Claude Code cannot run a `prompt` or `agent` hook on this event, and it blocks every command such a hook matches. To allow one vetted plugin skill, add a line above the `case` that checks the source and the `command_name` together, such as `[ "$src" = plugin ] && [ "$name" = my-plugin:deploy ] && exit 0`. A branch inside the existing `case` cannot match, because that `case` tests the source, not the name.
+
+## When this backfires
+
+- A mixed fleet with no version floor. Clients on 2.1.331 or older run every injected command without calling the hook, and their interactive terminal sessions open with a warning dialog, so the policy holds on some machines and not others.
+- A hook without `onFailure: "block"`. A wrong script path, a crash, or a timeout lets the command run. A missing `jq` has the opposite effect. The sample reads an empty source, falls through to exit 2, and blocks every command, trusted sources included.
+- Auto mode sessions. Deferred commands come back as Claude's tool calls, which `PreToolUse` sees without a `command_source`, so the source policy does not apply to them.
+- Teams with no third-party skills. If every skill is written in-house, the hook adds a script to maintain and changes nothing. Where no skill needs live context, [`disableSkillShellExecution`](skill-shell-execution-gate.md) in managed settings is simpler. It has no script to crash, and Claude Code has shipped it since 2.1.91 ([changelog 2.1.91](https://code.claude.com/docs/en/changelog#2-1-91)).
+- Trusting `userSettings` by default. The sample trusts every skill that reports that source. Drop that branch where users install skills they have not read.
+
+## Key Takeaways
+
+- `PreSkillShellCommand`, added in 2.1.332, runs before each of a skill's injected commands. `PreToolUse` hooks don't fire for them.
+- It can only block. A block drops one command and the skill still loads; `continue: false` stops the whole invocation.
+- Decide on `command_source` and `command_name`, which a permission rule on the command text cannot see, and refuse when the source is missing.
+- Set `onFailure: "block"`, define the hook in managed settings or a plugin, and keep a text-based check on `PreToolUse` for auto mode.
+- Upgrade first, then set `requiredMinimumVersion` to 2.1.332, then ship the hook.
+
+## Related
+
+- [Skill Shell Execution Gate: Disabling Inline Shell from Skills](skill-shell-execution-gate.md) — the all-or-nothing switch this hook refines.
+- [Declaring a Per-Hook Failure Mode for Agent Policy Gates](per-hook-failure-mode.md) — why a policy hook should fail closed.
+- [Parser-Versus-Shell Evasion in Command Permission Checks](parser-versus-shell-permission-evasion.md) — the text-matching weakness a source check avoids.
+- [Skill Supply-Chain Poisoning](skill-supply-chain-poisoning.md) — the threat that makes a skill's source worth checking.
+- [Hooks for Enforcement vs Prompts for Guidance](../instructions/hooks-vs-prompts.md) — deterministic gates against model guidance.
 
 ---
 
@@ -154928,7 +155681,7 @@ graph TD
 ```
 
 1. Development — human intuition and feedback bound the rate.
-2. Review — per-PR automated checks; Anthropic's code-review product lists at $15–20 per review ([Anthropic docs](https://code.claude.com/docs/en/code-review)).
+2. Review — per-PR automated checks; Anthropic's Code Review has no flat per-review price and bills token usage ([Code Review costs](https://code.claude.com/docs/en/code-review-costs)).
 3. Hardening — autonomous exploit discovery until budget exhausts.
 
 Review runs constantly on cheap gardening work. Hardening concentrates spend on a stable artifact before release.
@@ -156260,7 +157013,7 @@ The gate gives up the convenience of live-context skills. Patterns like `` !`git
 
 Bundled and managed skills keep their interpolation, which preserves Anthropic's first-party patterns and lets administrators ship trusted skills that need live state. The asymmetry is the design. The gate hardens the untrusted surface (user, project, plugin, add-dir) while keeping the controlled surface convenient.
 
-The gate is most justified where untrusted skill sources can plausibly reach the agent — plugin marketplaces, shared developer tooling, third-party skill registries — and where [skill supply-chain poisoning](skill-supply-chain-poisoning.md) is a credible threat. For solo-developer or fully-internal-skill contexts with no plugin surface, the gate adds friction without matching threat reduction.
+The gate is most justified where untrusted skill sources can plausibly reach the agent — plugin marketplaces, shared developer tooling, third-party skill registries — and where [skill supply-chain poisoning](skill-supply-chain-poisoning.md) is a credible threat. For solo-developer or fully-internal-skill contexts with no plugin surface, the gate adds friction without matching threat reduction. Where some skills need live context and others are untrusted, a [`PreSkillShellCommand` hook](preskillshellcommand-hook.md) refuses injected commands by skill source instead of turning them all off.
 
 ## Example
 
@@ -185250,6 +186003,7 @@ You reply `no abcde`. Claude Code receives the denial, the tool call is rejected
 - [Hooks & Lifecycle](hooks-lifecycle.md) — Deterministic automation at lifecycle events; complementary to permission relay for pre-approved actions
 - [Deferred Permission Pattern](../../patterns/agent-design/deferred-permission-pattern.md) — Alternative approach: pause headless sessions via `PreToolUse` hook `defer` verdict and resume after out-of-band approval
 - [Feature Flags & Environment Variables](feature-flags.md) — Configuration knobs including permission-related flags
+- [Permission Replies That Rewrite Coding-Agent Policy](../../security/permission-reply-policy-updates.md) — why a verdict limited to allow or deny matters for a remote approver
 
 ---
 
@@ -186728,121 +187482,123 @@ Source: https://agentpatterns.ai/tools/claude/code-review/
 
 # Claude Code Review
 
-> A managed multi-agent review service that posts inline findings on every GitHub PR — no subagent configuration required.
+> Claude Code Review is a managed service that reviews GitHub pull requests with several agents and posts findings as inline comments.
 
 ## What it is
 
-[Code Review](https://code.claude.com/docs/en/code-review) is a first-party feature, available as a research preview on Team and Enterprise plans (not on organizations with Zero Data Retention enabled). Once an admin enables it, reviews run automatically whenever a pull request opens or updates. You write no orchestration code; Anthropic's infrastructure handles it.
+[Code Review](https://code.claude.com/docs/en/code-review) is a first-party service for GitHub repositories. It is [generally available](https://code.claude.com/docs/en/claude-ship#who-can-use-claude-ship) on [Team and Enterprise plans](https://code.claude.com/docs/en/code-review#availability). It is not available to organizations with Zero Data Retention or the HIPAA configuration, and not yet to those using customer-managed encryption keys.
 
-Contrast this with [DIY subagent review](../../code-review/agent-assisted-code-review.md): hand-rolling a review subagent means you define the agent, configure tool access, wire up CI, and maintain it. Code Review is a managed service, so installing the GitHub App is the only setup step.
+An Owner of your Claude organization [turns it on](https://code.claude.com/docs/en/code-review-setup). Reviews run on Anthropic infrastructure, so you add no workflow files. [DIY subagent review](../../code-review/agent-assisted-code-review.md) leaves that wiring to you.
 
 ## How the review runs
 
-Per the [Code Review documentation](https://code.claude.com/docs/en/code-review), multiple specialized agents analyze the diff and surrounding codebase in parallel. Each agent focuses on a different issue class. A verification step then checks flagged candidates against actual code behavior to filter false positives. Claude deduplicates the results, ranks them by severity, and posts them as inline comments. If it finds no issues, it posts a confirmation comment.
+Several agents [examine the diff and the surrounding code](https://code.claude.com/docs/en/code-review#how-reviews-work) in parallel. A verification step checks the candidate findings against the code and filters out false positives. The remaining findings are deduplicated and ranked by severity. The review posts inline comments, a summary, and a check run named Claude Code Review. It reads code without building or running it.
 
-Default focus is correctness: bugs that would break production, not formatting or missing test coverage (unless you add instructions for those).
+By default the focus is correctness: bugs that would break production, not formatting preferences or missing test coverage.
 
-Severity tags on findings:
+Findings carry [one of three severity levels](https://code.claude.com/docs/en/code-review-pull-requests#severity-levels):
 
 | Marker | Level | Meaning |
 |--------|-------|---------|
 | 🔴 | Important | A bug that should be fixed before merging |
-| 🟡 | Nit | A minor issue, not blocking |
-| 🟣 | Pre-existing | A bug present in the codebase but not introduced by this PR |
+| 🟡 | Nit | A minor issue, worth fixing but not blocking |
+| 🟣 | Pre-existing | A bug in the codebase that this PR did not introduce |
 
-Reviews [average 20 minutes and cost $15–25](https://code.claude.com/docs/en/code-review#pricing), and scale with PR size and codebase complexity.
+Code Review has [no flat per-review price](https://code.claude.com/docs/en/code-review-costs). It bills token usage through usage credits, separately from your plan's included usage. Cost scales with the review level, the size of the change, the complexity of the surrounding code, and the number of candidate issues to verify. The levels are Quick, Standard (the default), and Deep.
 
 ## Setup
 
-An admin installs the Claude GitHub App to the organization and selects which repositories to enable. Per repository, you choose a trigger:
+A Claude organization Owner turns on Code Review in the Claude Ship settings and [chooses repositories](https://code.claude.com/docs/en/code-review-setup#turn-on-code-review). Installing the Claude GitHub App takes an owner of the GitHub organization. Each repository has a [Review runs setting](https://code.claude.com/docs/en/code-review-setup#set-when-reviews-run):
 
-- Once after PR creation: one review per PR open or ready-for-review event
-- After every push: a review on each commit, which auto-resolves threads when the flagged code is fixed
-- Manual: no automatic reviews; a review starts only when someone comments `@claude review` or `@claude review once` on the PR
+- Once after PR creation: a review when a pull request is opened, reopened, or marked ready for review
+- After every push: reviews on pushes to the pull request branch. A repository added through the Add a repository dialog starts here, unless its GitHub organization is covered as a whole
+- Manual: no review on open or push, so someone requests one with a comment
 
-The on-push trigger multiplies cost by push count. To make the trade-off visible, `claude.ai/admin-settings/claude-code` shows average cost per review per repository.
+Automatic reviews skip drafts and pull requests from forks. After some pushes, Code Review [keeps the earlier result](https://code.claude.com/docs/en/code-review-pull-requests#when-a-push-keeps-the-earlier-result) instead of reviewing again. A later review resolves its own earlier thread when it [judges the issue fixed](https://code.claude.com/docs/en/code-review-pull-requests#respond-to-findings). A [Claude Approvals](https://code.claude.com/docs/en/approvals) policy file can start reviews that this setting would not, and stop automatic ones. The admin settings show each repository's [average cost per review](https://code.claude.com/docs/en/code-review-costs#estimate-your-spend).
 
 ## Customizing what gets flagged
 
-Code Review reads two files from your repository root:
+Code Review reads [two kinds of file](https://code.claude.com/docs/en/code-review-customize):
 
-- `CLAUDE.md`: shared project instructions. Claude flags newly-introduced violations as nits. If a PR makes a `CLAUDE.md` statement outdated, Claude flags that too.
-- `REVIEW.md`: review-only guidance for rules that would clutter `CLAUDE.md`.
+- `CLAUDE.md`: project context, read from the repository root and the parent directories of each changed file. A violation becomes a finding at whichever severity level fits the issue.
+- `REVIEW.md`: review-only instructions at the repository root. On a protected branch, you can also add one in most subdirectories.
 
-Code Review auto-discovers `REVIEW.md` at the repository root. Both files add to the default correctness checks.
+Code Review reads `REVIEW.md` [from the base or default branch](https://code.claude.com/docs/en/code-review-customize#which-branch-review-md-is-read-from), never from the pull request's own changes. When it reads the root file from a protected default branch, it honors instructions there that lower severity, exclude findings, or cap nits.
 
-Example `REVIEW.md` content from the docs:
-
-```markdown
-## Always check
-- New API endpoints have corresponding integration tests
-- Database migrations are backward-compatible
-
-## Skip
-- Generated files under `src/gen/`
-```
+The local [`/code-review`](https://code.claude.com/docs/en/code-review-local#what-the-review-reads-and-edits) command follows your `CLAUDE.md` but does not read `REVIEW.md`. Put guidance meant for both in `CLAUDE.md`.
 
 ## The @claude PR tagging pattern
 
-Comment `@claude review` on any open PR to trigger a review on demand. Use `@claude review once` for a single review without subscribing the PR to future pushes.
+With write access to the repository, you can steer reviews on an open pull request with [comment commands](https://code.claude.com/docs/en/code-review-pull-requests#comment-commands):
 
-Recurring findings are a prompt to update `CLAUDE.md` or `REVIEW.md`. Encoding the fix stops the same issue class from appearing on future PRs.
+| Comment | Effect |
+|---------|--------|
+| `@claude review` or `@claude review once` | One review, with no subscription |
+| `@claude review always` | A review, plus reviews on later pushes |
+| `@claude review stop` | Ends that subscription |
+
+Put the command at the start of a new top-level comment. In an After every push repository, a comment cannot stop reviews. On a pull request from a fork, `always` does not subscribe.
+
+When you disagree with a kind of finding that keeps coming back, ask a maintainer to add a [`REVIEW.md` rule](https://code.claude.com/docs/en/code-review-pull-requests#respond-to-findings).
 
 ## What human review still handles
 
-Findings are non-binding: they never approve or block a PR, and they do not count toward required approvals. The agents focus on correctness: logic errors, security patterns, edge cases, and regressions. Design decisions and architectural fit stay with human reviewers.
+By itself, a review [doesn't approve or block the pull request](https://code.claude.com/docs/en/code-review), and its check run does not conclude as a failure. Its result counts toward approvals in a repository whose Claude Approvals policy file uses it. If branch protection requires conversation resolution, [resolve each finding's thread](https://code.claude.com/docs/en/code-review-pull-requests#respond-to-findings) before you merge.
+
+To gate on findings yourself, [parse the severity counts](https://code.claude.com/docs/en/code-review-pull-requests#read-the-result-from-a-script) from the check run in your own CI.
+
+The default focus is correctness, so give design decisions and architectural fit to a human reviewer. The service [can miss bugs and vulnerabilities](https://code.claude.com/docs/en/code-review), so keep your tests and scanners.
 
 ## Why it works
 
-Parallel specialization reduces the work each agent does. A single reviewer scanning a diff for security issues, logic correctness, edge cases, and regressions at once must context-switch between incompatible mental models. Code Review automates the per-domain split that [DIY subagent review](../../code-review/agent-assisted-code-review.md) builds by hand: it assigns each issue class to a dedicated agent that builds context only for that domain. A verification step then cross-checks flagged candidates against actual code behavior before posting, which filters false positives without sacrificing recall.
+Finding and checking are separate steps, so a false positive has to get past [verification](https://code.claude.com/docs/en/code-review#how-reviews-work) to reach you. A [reproduce-before-report gate](../../code-review/reproduce-before-report-verification-gate.md) is the same split in a pipeline you build.
 
 ## When this backfires
 
-- Cost multiplies on push-heavy branches: the on-push trigger runs a full review per commit. A 15-push PR costs $225–375. Use `@claude review once` or "Once after PR creation" for high-churn branches.
-- False positives create noise: verification filters many false positives but not all. Rate findings (👍/👎) to give Anthropic a tuning signal; skipping ratings compounds noise over time.
-- Teams and Enterprise only: the feature is unavailable on free and Pro plans, so use the [DIY subagent approach](../../code-review/agent-assisted-code-review.md) instead.
-- Advisory findings get dismissed: findings are non-binding and never block merges, so teams under deadline pressure routinely ignore them.
-
-## Key Takeaways
-
-- Parallel specialized agents review every PR with no per-repository configuration beyond enabling it
-- Default focus is correctness (bugs), not style — extend scope via `CLAUDE.md` or `REVIEW.md`
-- Findings are advisory; they never block merges or substitute for required approvals
-- On-push trigger auto-resolves threads when flagged code is fixed, at higher cost per PR
-- `@claude review` triggers on-demand; `@claude review once` runs once without subscribing to future pushes
+- Push-heavy branches: After every push [multiplies cost by the number of pushes](https://code.claude.com/docs/en/code-review-costs#how-often-reviews-run). Use Once after PR creation or Manual for high-churn branches.
+- Exhausted budget: Code Review [skips reviews](https://code.claude.com/docs/en/code-review-costs#limit-your-spend) when a spend limit or the usage credit balance runs out, and comments on the pull request.
+- Ignored findings: you can [merge without responding](https://code.claude.com/docs/en/code-review-pull-requests#respond-to-findings) unless your repository rules require it.
+- Other plans: without Team or Enterprise, run `/code-review` locally or build [DIY subagent review](../../code-review/agent-assisted-code-review.md).
 
 ## Example
 
-A team enables Code Review on a Python backend repository. The admin selects "After every push to PR branch" as the trigger. The repository contains:
-
-`CLAUDE.md` (project-wide):
+The customization docs give [this `REVIEW.md`](https://code.claude.com/docs/en/code-review-customize#example-review-md) for a backend service. It redefines Important, caps nits, skips generated files, and adds repository checks. The severity, skip, and cap instructions depend on the protected default branch described above.
 
 ```markdown
-- All public functions must have type annotations
-- Use `logging` module, never `print()` for diagnostics
-- SQL queries must use parameterized statements
-```
+# Review instructions
 
-`REVIEW.md` (review-specific):
+## What Important means here
 
-```markdown
+Reserve Important for findings that would break behavior, leak data,
+or block a rollback: incorrect logic, unscoped database queries, PII
+in logs or error messages, and migrations that aren't backward
+compatible. Style, naming, and refactoring suggestions are Nit at
+most.
+
+## Cap the nits
+
+Report at most five Nits per review.
+
+## Do not report
+
+- Anything CI already enforces: lint, formatting, type errors
+- Generated files under `src/gen/` and any `*.lock` file
+- Test-only code that intentionally violates production rules
+
 ## Always check
-- New API endpoints have corresponding integration tests
-- Database migrations are backward-compatible
-- No raw SQL — use the ORM query builder
 
-## Skip
-- Generated files under `src/gen/`
-- Vendored dependencies under `third_party/`
+- New API routes have an integration test
+- Log lines don't include email addresses, user IDs, or request bodies
+- Database queries are scoped to the caller's tenant
 ```
 
-A developer opens a PR adding a new `/users/export` endpoint. Code Review posts three inline findings:
+## Key Takeaways
 
-1. A parameterized SQL query that concatenates user input into the `ORDER BY` clause — flagged as a bug
-2. The new endpoint has no integration test — flagged as a nit (per `REVIEW.md`)
-3. A `print("debug")` statement left in the handler — flagged as a nit (per `CLAUDE.md`)
-
-The developer fixes all three and pushes. Code Review re-runs and auto-resolves the three threads. A human reviewer then focuses on whether the export format and pagination strategy fit the product requirements.
+- Check the repository's Review runs setting before assuming a pull request was reviewed; drafts and forks need a comment command
+- Budget by repository average, because there is no flat price and review after every push multiplies it
+- A rule written only in `REVIEW.md` is missing from your local `/code-review` runs; move it to `CLAUDE.md` if both need it
+- A review alone neither approves nor blocks, so read your Claude Approvals policy and branch rules to know what its result changes
+- With write access, use `@claude review` for one review and `@claude review always` to subscribe the pull request
 
 ## Related
 

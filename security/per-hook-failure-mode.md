@@ -121,3 +121,4 @@ Delete `check-command.js` and an `ls` call is refused rather than run. The docum
 - [Distributing Security Controls Through the Agent Harness](harness-distributed-security-controls.md) — what happens to a control when it ships to a fleet in one install.
 - [A Skill's Tool Grant Travels With Its Hooks](skill-tool-grant-travels-with-hooks.md) — what a policy should do to a tool grant when it stops that component's hooks from running at all.
 - [Fall Back to the No-Hook Decision When a Permission Check Errors](hook-allow-failed-permission-check.md) — the opposite case, where the hook allows and the permission check breaks.
+- [Refuse a Skill's Inline Shell Commands by Source with PreSkillShellCommand](preskillshellcommand-hook.md) — a new hook event whose blocking depends on `onFailure: "block"`.

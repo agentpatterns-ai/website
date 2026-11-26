@@ -78,6 +78,7 @@ The orchestrator aggregated the four outputs into a single report. The authors c
 ## Related
 
 - [Committee Review Pattern](committee-review-pattern.md) — the reviewer-specialization layer this context arrangement sits under
+- [Trajectory-Informed Code Review From the Author Agent's Run](trajectory-informed-code-review.md) — a reviewer input drawn from how the patch was written rather than from repository structure
 - [Agentic Code Review Architecture](agentic-code-review-architecture.md) — the pull-based alternative, where the reviewer fetches its own context instead of receiving a composed view
 - [Bounded Tool Surfaces for Code Review Agents](bounded-tool-surface-review-agents.md) — capping what each review tool returns, the precision-for-recall trade on the same axis
 - [Signal Over Volume in AI Review](signal-over-volume-in-ai-review.md) — what to do with the minor findings the importance axis exposes

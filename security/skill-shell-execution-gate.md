@@ -76,7 +76,7 @@ The gate gives up the convenience of live-context skills. Patterns like `` !`git
 
 Bundled and managed skills keep their interpolation, which preserves Anthropic's first-party patterns and lets administrators ship trusted skills that need live state. The asymmetry is the design. The gate hardens the untrusted surface (user, project, plugin, add-dir) while keeping the controlled surface convenient.
 
-The gate is most justified where untrusted skill sources can plausibly reach the agent — plugin marketplaces, shared developer tooling, third-party skill registries — and where [skill supply-chain poisoning](skill-supply-chain-poisoning.md) is a credible threat. For solo-developer or fully-internal-skill contexts with no plugin surface, the gate adds friction without matching threat reduction.
+The gate is most justified where untrusted skill sources can plausibly reach the agent — plugin marketplaces, shared developer tooling, third-party skill registries — and where [skill supply-chain poisoning](skill-supply-chain-poisoning.md) is a credible threat. For solo-developer or fully-internal-skill contexts with no plugin surface, the gate adds friction without matching threat reduction. Where some skills need live context and others are untrusted, a [`PreSkillShellCommand` hook](preskillshellcommand-hook.md) refuses injected commands by skill source instead of turning them all off.
 
 ## Example
 

@@ -121,6 +121,7 @@ nav:
       - skill-pack-registry-distribution.md
       - shared-toolkit-plugin-ownership.md
       - workspace-hosted-skills.md
+      - skills-served-from-mcp-servers.md
       - apm-dependency-version-updates.md
       - skill-file-linting.md
       - plugin-component-co-change.md
