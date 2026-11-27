@@ -145,6 +145,7 @@ nav:
       - policy-gate-rule-examples-counterexamples.md
       - pre-execution-command-risk-classification.md
       - proof-of-presence-step-up-authentication.md
+      - request-integrity-across-compaction.md
       - revocable-resource-effect-capabilities.md
       - enrolled-identity-peer-routing.md
       - safe-outputs-pattern.md

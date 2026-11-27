@@ -59,7 +59,7 @@ repos:
 
 ## Mitigation
 
-In prompts: "raise ValueError for invalid input, never use bare except" is actionable; "handle errors" is not. Naming anti-patterns by CWE or rule ID reduces vulnerability density by 59 to 64% ([Endor Labs](https://www.endorlabs.com/learn/anti-pattern-avoidance-a-simple-prompt-pattern-for-safer-ai-generated-code)).
+In prompts: "raise ValueError for invalid input, never use bare except" is actionable; "handle errors" is not. In one study of generated Python code, a prompt that listed the security measures for the weakness a task targeted cut weakness density by 64% for GPT-3 and 59% for GPT-4, against a prompt with no security wording. Only the GPT-4 result was statistically significant, and on GPT-3.5 the same prompt did worse than adding the word "secure" ([Tony et al.](https://arxiv.org/abs/2407.07064v2)).
 
 In CI: lint, type check, then test every agent-generated change. This catches roughly 60% of AI code failures ([Augment Code](https://www.augmentcode.com/guides/debugging-ai-generated-code-8-failure-patterns-and-fixes)).
 
@@ -109,7 +109,7 @@ The first version works when the file exists and contains valid JSON. The second
 
 - Agents optimize for the surface goal — compiles, tests pass, feature exists — and skip the implicit error paths, edge cases, and type boundaries.
 - Catch the common forms deterministically: `E722`, `BLE001`, `TRY003`, `TRY301`, `TRY400`, and `@typescript-eslint/no-explicit-any` at a pre-commit and CI gate.
-- Name anti-patterns by rule ID in prompts; enforce at the CI boundary, not by padding every prompt with error-handling instructions.
+- Name the specific weakness and its mitigation in prompts; enforce at the CI boundary, not by padding every prompt with error-handling instructions.
 - The bias is a production concern — prototypes, framework-managed boundaries, and controlled-input tooling can reasonably defer exhaustive handling.
 
 ## Sources

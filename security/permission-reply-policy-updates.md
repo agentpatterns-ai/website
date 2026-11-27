@@ -44,7 +44,7 @@ The runtime stores each rule as a bare string with no author field. A deletion b
 |---|---|
 | Remove or replace deny rules | The permission check stops refusing calls that only the lost rules denied (§VII-D). Deleting a file rule also lifts the sandbox's block (§IV-C) |
 | Add a `WebFetch` or `Edit` allow rule | The sandbox widens with no deletion. A `WebFetch` rule let a rewritten command send a project file out, and an `Edit` rule let one write outside the project. A host rule saved for the session only did not reach the sandbox (§VII-C) |
-| `setMode` to `acceptEdits` in user settings | The next headless session wrote a file unprompted (§VII-D, builds 2.1.319 and 2.1.314) |
+| `setMode` to `acceptEdits` in user settings | The next headless session wrote a file unprompted on builds 2.1.319 and 2.1.314 (§VII-D, Appendix B) |
 | `addDirectories` in user settings | The next session read an outside directory unprompted (same runs) |
 
 The hooks reference adds one limit: `bypassPermissions` is [never saved as the default mode](https://code.claude.com/docs/en/hooks#permission-update-entries).

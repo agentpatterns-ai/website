@@ -45,7 +45,7 @@ The original heuristic — complete tasks within 50% of the context window — a
 The [Chroma context rot study](https://research.trychroma.com/context-rot) confirmed all 18 frontier models tested (including Claude Opus 4, GPT-4.1, Gemini 2.5 Pro) degrade with input length. Degradation is non-uniform: it varies by task type, similarity, and position, with no fixed threshold.
 
 !!! warning "NIAH benchmarks are misleadingly optimistic"
-    Standard needle-in-a-haystack tests use high lexical overlap between needle and question. [NoLiMa](https://arxiv.org/abs/2502.05167v3) removes this cue and finds 11 of 13 models drop below 50% accuracy at 32K tokens. Do not use NIAH results to justify large context loads.
+    Standard needle-in-a-haystack tests use high lexical overlap between needle and question. [NoLiMa](https://arxiv.org/abs/2502.05167v3) removes this cue and finds that at 32K tokens, 11 of 13 models score half or less of their own short-context base score. Do not use NIAH results to justify large context loads.
 
 ## Practical guidance
 

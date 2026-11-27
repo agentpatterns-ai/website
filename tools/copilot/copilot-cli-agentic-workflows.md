@@ -86,7 +86,7 @@ This triggers the [agentic code review architecture](../../code-review/agentic-c
 
 ## Session management
 
-Auto-compaction compresses conversation history at 95% context window capacity, which keeps long sessions going ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)). Repository memory persists conventions across sessions.
+Auto-compaction starts compressing conversation history in the background at about 80% of the context window. If the context reaches about 95% before compaction finishes, the CLI pauses briefly until it completes ([GitHub Docs](https://docs.github.com/en/copilot/concepts/prompting-and-context/context-management#when-compaction-happens)). The [GA changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/) gave 95%. Repository memory persists conventions across sessions.
 
 ## Example
 
@@ -107,7 +107,7 @@ Push stays blocked even if a broader allow rule would otherwise permit it. For e
 - `--allow-all-tools` outside containers grants full shell access. A prompt injection or hallucinated command can modify files, install packages, or push commits without review. Restrict it to containerized CI environments where blast radius is bounded.
 - Validator bypass via shell indirection: `env curl ... | env sh` evades the auto-approve allowlist, and GitHub has declined to patch it. Pair `--deny-tool` with sandboxing and egress controls (see Authorization model above).
 - Headless mode with underspecified prompts: programmatic mode exits after the first attempt and cannot ask clarifying questions. Ambiguous prompts produce partial or incorrect results, with no chance to course-correct.
-- Context window exhaustion on large codebases: auto-compaction at 95% capacity can lose earlier context that constrains later decisions. Long refactoring sessions may contradict earlier choices made before compaction.
+- Context window exhaustion on large codebases: auto-compaction, which starts at about 80% capacity, can lose earlier context that constrains later decisions. Long refactoring sessions may contradict earlier choices made before compaction.
 - `/delegate` latency mismatch: cloud agent execution via GitHub Actions takes minutes to hours. Delegating time-sensitive tasks introduces a latency gap that breaks flow if you expect synchronous completion.
 - Usage caps on parallel workflows: in April 2026, GitHub tightened session and weekly token limits on Pro plans, and warned that parallelized commands like `/fleet` consume tokens heavily enough to exhaust weekly quotas. Agentic CLI workflows that fan out across monorepos can stall when limits hit, and GitHub removed Opus models from Pro entirely ([GitHub Blog](https://github.blog/news-insights/company-news/changes-to-github-copilot-individual-plans/)).
 

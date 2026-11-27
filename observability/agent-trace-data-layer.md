@@ -9,7 +9,7 @@ tags:
 aliases:
   - agent observability storage layer
   - agent trace store
-last_reviewed: 2026-06-13
+last_reviewed: 2026-11-26
 maturity: established
 ---
 
@@ -27,7 +27,7 @@ The pattern pays off when all of these hold:
 
 - Trace shape exceeds general-store assumptions. A single run has hundreds of nested spans, multi-modal payloads (images, audio, large JSON), and spans that stay open for hours while sub-agents and tools complete asynchronously ([LangChain — Introducing SmithDB, May 13 2026](https://www.langchain.com/blog/introducing-smithdb)).
 - The query mix is wider than "fetch one trace by ID." Debugging UIs need interactive filtering, full-text search over inputs and outputs, JSON-path filters, tree-aware queries, thread reconstruction across traces, and aggregations over cost, latency, tokens, and evaluator scores ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)).
-- Scale crosses the general-store break point. Langfuse's Postgres architecture broke at billions of rows by mid-2024 and was rebuilt on ClickHouse plus Redis plus S3 plus an async event processor ([Langfuse v3 infrastructure post](https://langfuse.com/blog/2024-12-langfuse-v3-infrastructure-evolution)). Respan ran on Postgres until 50–100 RPS forced migration ([ClickHouse — Respan](https://clickhouse.com/blog/respan-ai-llm-observability)).
+- Scale crosses the general-store break point. Langfuse's Postgres architecture broke at billions of rows by mid-2024 and was rebuilt on ClickHouse plus Redis plus S3 plus an async event processor ([Langfuse v3 infrastructure post](https://langfuse.com/blog/2024-12-langfuse-v3-infrastructure-evolution)). Respan ran on Postgres until 50–100 RPS forced migration ([ClickHouse — Respan](https://clickhouse.com/blog/respan-ai-llm-observability)). In its case for a "Trace Lake", Braintrust says production systems can generate on the order of "100,000 spans per second" ([Braintrust — Trace Lake](https://www.braintrust.dev/blog/trace-lake)).
 - Multi-cloud or self-hosting is a hard requirement. Object-storage-backed designs scale by adding stateless compute rather than managing local-disk sharding ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)).
 
 If a managed vendor (LangSmith, Langfuse, Phoenix, Helicone, Datadog LLM Observability, Honeycomb GenAI) already covers the workload and the team has no portability constraint, this page is a vendor-evaluation lens, not a build prompt.

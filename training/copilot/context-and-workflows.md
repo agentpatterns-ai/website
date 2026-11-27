@@ -153,9 +153,11 @@ Not all tasks degrade equally:
 | Task type | Effective context | Notes |
 |-----------|------------------|-------|
 | Simple retrieval ("find the function that handles auth") | Large — works well even in long contexts | Lexical matching remains robust |
-| Semantic retrieval ("explain the auth flow") | Moderate — degrades past ~32K tokens | Requires connecting concepts across the context |
-| Reasoning ("refactor auth to use the new middleware pattern") | Small — 10–20% of window is effective | Multi-step reasoning degrades steeply with context size |
+| Semantic retrieval ("explain the auth flow") | Moderate | In [NoLiMa](https://arxiv.org/abs/2502.05167v3), questions share little wording with the target fact hidden in book snippets. The paper reports "considerable drops even at 2K–8K tokens", and at 32K, 11 of 13 models scored half their short-context score or less |
+| Reasoning ("refactor auth to use the new middleware pattern") | Small | The [BABILong paper](https://arxiv.org/abs/2406.10149v2) found that popular LLMs "effectively utilize only 10-20% of the context" when reasoning over facts scattered through long documents |
 | Bug fixing across files | Very small — severe collapse in long contexts | Requires holding multiple file contents and reasoning about interactions |
+
+NoLiMa and BABILong use book text as background, so the code examples in those two rows are analogies.
 
 The practical implication: For complex reasoning tasks, a fresh context with precisely loaded files outperforms a long-running session with accumulated history.
 
@@ -164,7 +166,7 @@ The practical implication: For complex reasoning tasks, a fresh context with pre
 | Strategy | When to use | How |
 |----------|------------|-----|
 | Fresh sessions for complex tasks | Before starting a multi-file refactor or complex bug fix | Start a new chat. Load specific files with `#file` references. State the task clearly. |
-| [Manual compaction](../../context-engineering/manual-compaction-dumb-zone-mitigation.md) | Mid-session, when you notice quality dropping | Copilot CLI: `/compact`. VS Code: start a new session (no manual compact yet). |
+| [Manual compaction](../../context-engineering/manual-compaction-dumb-zone-mitigation.md) | Mid-session, when you notice quality dropping | Copilot CLI: `/compact` ([GitHub Docs](https://docs.github.com/en/copilot/concepts/prompting-and-context/context-management)). VS Code Local, Copilot, or Claude sessions: type `/compact`, or select Compact Conversation from the context window control ([VS Code docs](https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#_compact-conversation-context)). The [1.110 release notes](https://code.visualstudio.com/updates/v1_110) document both methods. |
 | Sub-agent isolation | Research phase separate from implementation | In Copilot CLI, use a separate session for research. Summarize findings, then start a new session for implementation. |
 | Smaller tasks | Prevent rot by finishing before it starts | Break large tasks into agent-sized chunks (see next section). |
 
@@ -410,7 +412,7 @@ What it is: Agent-generated code that works for the [common case but breaks on e
 
 Why it's dangerous: The happy path is what you test manually and demo to stakeholders. The edge cases are what breaks in production at 2 AM.
 
-Prevention: Name error scenarios explicitly in your delegation contract. "Handle the case where the user has no `avatar_url` (null). Handle the case where the upload exceeds the size limit. Handle the case where the rate limiter Redis connection is down." Naming specific failure modes reduces vulnerability density significantly compared to vague "handle errors" instructions.
+Prevention: Name error scenarios explicitly in your delegation contract. "Handle the case where the user has no `avatar_url` (null). Handle the case where the upload exceeds the size limit. Handle the case where the rate limiter Redis connection is down."
 
 ---
 
@@ -484,11 +486,11 @@ Total human time: ~5 minutes of review. The agent handled investigation, fix, te
 - Context engineering, not prompt engineering, determines consistent output quality. A well-configured `.github/` directory with instructions, agents, skills, and hooks outperforms clever prompts in an unconfigured repo.
 - Attention is not uniform. Critical rules belong at the top of Copilot instruction files. Restate important constraints in your message when working in long sessions.
 - Progressive disclosure is a budget pattern: preload only universal rules; load task-specific knowledge on demand via skills. Agent definitions should be under 50 lines. Instructions files under 100.
-- Context rot is real. Long sessions degrade output quality, especially for reasoning tasks. Start fresh sessions for complex work. Use `/compact` in the CLI. Break large tasks into agent-sized chunks.
+- Context rot is real. Long sessions degrade output quality, especially for reasoning tasks. Start fresh sessions for complex work. Use `/compact` in Copilot CLI or VS Code. Break large tasks into agent-sized chunks.
 - Frame tasks as contracts (goal, constraints, success condition, recovery), not step-by-step scripts. The agent decides how; you define what and how to verify.
 - [Steer early or restart](../../patterns/agent-design/steering-running-agents.md). Don't wait for the agent to finish a wrong approach. The earlier you intervene, the less context is polluted.
 - [Agent self-review](../../code-review/agent-self-review-loop.md) handles mechanical checks. Human review should focus on design, completeness, and implicit knowledge the agent can't access.
-- Name failure modes explicitly. "Handle the case where X is null" produces better error handling than "handle errors." Specificity in the delegation contract translates directly to code quality.
+- Name failure modes explicitly. Write "handle the case where X is null" in the delegation contract, not "handle errors."
 
 ## Related
 

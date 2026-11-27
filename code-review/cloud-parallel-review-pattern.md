@@ -75,7 +75,7 @@ Load-bearing differentiators: the verification step, cloud execution, and a sing
 
 ## When this backfires
 
-- Small diffs. A paid ultrareview, typically 5 to 15 minutes and \$5 to \$25, is wasted on typo fixes. A local `/review` is cheaper for sub-hundred-line diffs with clear scope.
+- Small diffs. A paid ultrareview, typically 5 to 15 minutes and \$5 to \$25, is wasted on typo fixes. A local [`/code-review`](https://code.claude.com/docs/en/code-review-local) runs in your own session and counts toward your plan's usage or API billing the same way the rest of the session does.
 - Low-diversity reviewer axes. If "correctness" and "bugs" surface the same findings, aggregation dedupes most of the parallel work and the pattern buys nothing.
 - High-iteration PRs with push triggers. Review after every push multiplies cost by the number of pushes ([Code Review costs](https://code.claude.com/docs/en/code-review-costs#how-often-reviews-run)). Use manual or once-per-PR triggers for long-running branches.
 - Air-gapped or ZDR environments. Cloud execution is not optional. On Bedrock, Agent Platform, Foundry, Zero Data Retention, or HIPAA setups, ultrareview is unavailable and `/code-review ultra` "runs a local review in your session instead" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Managed Code Review is also unavailable to Zero Data Retention organizations ([Code Review docs](https://code.claude.com/docs/en/code-review#availability)).

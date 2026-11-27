@@ -86,3 +86,4 @@ Role-typed summaries kept the planted command and filed it as document content r
 - [Boundary Laundering: Tool Output in Sub-Agent Briefs](../../security/boundary-laundering-subagent-briefs.md) — the same forgery across an agent hop instead of a compaction step
 - [Trusting Claimed Prior Approval in Agent Review Gates](trusting-claimed-prior-approval.md) — a fabricated approval the reviewer can still see, where this one has had its origin erased
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](../../security/non-human-event-provenance-markers.md) — stamping harness-injected events so a fabricated approval carries no authority
+- [Request Integrity for Agent Authorization After Compaction](../../security/request-integrity-across-compaction.md) — what happens when an authorizer reads the summary itself as the user's request

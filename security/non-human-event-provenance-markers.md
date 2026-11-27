@@ -22,7 +22,7 @@ maturity: emerging
 
 An autonomous, background, or scheduled run has no live human turn. The transcript still fills with system notifications, tool results, and background-task events, and these structurally resemble user messages. An indirect prompt injection, or a confused replay of the agent's own earlier text, can plant a line that reads like a human saying "approved" or "the user confirmed," which the agent then acts on.
 
-The failure is specific to no-human-in-the-loop execution. In an interactive session every approval is a genuine user turn; in a headless run there is no such turn, so a message shaped like one is indistinguishable from consent unless something marks it otherwise.
+The failure is sharpest in no-human-in-the-loop execution, where no genuine approval turn exists, so a message shaped like one is indistinguishable from consent unless something marks it otherwise. Interactive sessions are not immune: Claude Code also writes compaction summaries, scheduled-task prompts and background subagent reports into the conversation as user-position turns ([Fei et al., 2026](https://arxiv.org/abs/2611.32194v1); [hooks reference](https://code.claude.com/docs/en/hooks#userpromptsubmit)).
 
 ## The pattern
 
@@ -71,7 +71,7 @@ The agent reads the same completion text, but the stamped provenance means the "
 - Provenance-tag every non-human event as non-authoritative, and gate authority-bearing actions on consent that traces to genuine human input.
 - The marker must be emitted by trusted harness code and backed by a structural provenance field — an in-band prose tag is spoofable.
 - Provenance signals reduce injection but do not eliminate it; treat the marker as one layer, never the only defense.
-- The failure mode is specific to no-human-in-the-loop execution; fully autonomous actions must be pre-authorized out of band, not approved in-transcript.
+- The failure mode is sharpest in no-human-in-the-loop execution, but interactive sessions also carry user-position turns the user did not type; fully autonomous actions must be pre-authorized out of band, not approved in-transcript.
 
 ## Related
 

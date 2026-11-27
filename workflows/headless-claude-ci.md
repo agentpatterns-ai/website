@@ -75,7 +75,7 @@ Store the API key as a repository secret named `ANTHROPIC_API_KEY`. Install the 
 
 ## Permissions in non-interactive mode
 
-`PermissionRequest` hooks do not fire in non-interactive mode ([hooks docs](https://code.claude.com/docs/en/hooks-guide#limitations)). For automated permission decisions, use `PreToolUse` hooks or `--allowedTools` to enumerate permitted tools explicitly:
+In a `-p` run with no permission host, outside `dontAsk` mode, a call that would prompt is denied unless something approves it. A `PermissionRequest` hook can be that approver ([hooks guide](https://code.claude.com/docs/en/hooks-guide#limitations)). For a fixed policy, `PreToolUse` hooks or `--allowedTools` stay simpler:
 
 ```bash
 claude -p "run lint and fix errors" \
@@ -108,7 +108,7 @@ Headless Claude in CI is not a free improvement — it shifts work from humans t
 - Ambiguous or exploratory tasks — `--max-turns` cuts off mid-solution when the task underspecifies the goal; the run exits non-zero but the partial work still costs budget. Interactive sessions let a human redirect before the spend accumulates.
 - Auto-merged output — when the workflow commits or merges without review, low-quality patches ship silently. Every PR carries noise that downstream reviewers learn to ignore, eroding review discipline across the repo.
 - Rate-limit regressions on the underlying plan — token consumption on Claude Code plans has spiked in past updates ([The New Stack, March 2026](https://thenewstack.io/claude-code-usage-limits/)); `--max-budget-usd` caps API-billed spend but does not protect subscription-based runners from session exhaustion.
-- Tasks requiring `PermissionRequest` hooks — those hooks do not fire in `-p` mode. Enforcement shifts to `PreToolUse` or `--allowedTools`, and any policy that relied on dynamic approval must be rewritten or removed.
+- Policies with no approver — in a `-p` run outside `dontAsk` mode with neither a `--permission-prompt-tool` nor a `canUseTool` callback, a call that would prompt is denied unless something approves it, such as a `PermissionRequest` hook ([hooks reference](https://code.claude.com/docs/en/hooks#permissionrequest)). No human sees the prompt, so a policy that relied on interactive approval must name an approver or enumerate its tools up front.
 
 For sensitive operations in headless mode, combine the [deferred permission pattern](../patterns/agent-design/deferred-permission-pattern.md) with `PreToolUse` hooks so the pipeline can pause for out-of-band approval instead of denying or auto-allowing.
 
@@ -146,7 +146,7 @@ This workflow combines `--max-turns`, `--max-budget-usd`, and `timeout-minutes` 
 - `claude -p "<prompt>"` runs non-interactively; piped stdin is available as context before the prompt
 - `--max-turns <N>` sets a hard ceiling on agentic steps with no default limit in print mode
 - `--output-format json` makes responses machine-readable for downstream consumption
-- `PermissionRequest` hooks do not fire non-interactively; use `PreToolUse` hooks or `--allowedTools`
+- In a `-p` run with no permission host, outside `dontAsk` mode, a call that would prompt is denied unless something approves it, such as a `PermissionRequest` hook; `PreToolUse` hooks or `--allowedTools` suit a fixed policy
 - `--dangerously-skip-permissions` is appropriate only in isolated, ephemeral environments
 - `anthropics/claude-code-action@v1` wraps this for GitHub Actions with `claude_args` passthrough
 

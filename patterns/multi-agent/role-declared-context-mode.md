@@ -49,7 +49,7 @@ The surviving result has limits too. In run 3 alone, CCR and the second self-rev
 
 Its mechanism is a stated hypothesis about same-session review: "We hypothesize that these failures share a root cause that is easy to overlook: the production context itself. When the model reviews its output in the same session, the entire conversation history sits in the context window ... All of this anchors the model's judgment. It does not scrutinize; it rationalizes."
 
-Read all of this as a bound on the effect rather than a license. The experiment used one model (Claude Opus 4.6), errors it injected rather than found, and Korean artifacts, and 28.6% is a low absolute score. It does not establish that withholding the generation prompt helps a fresh reviewer.
+Read all of this as a bound on the effect rather than a license. The experiment used one model (Claude Opus 4.6), errors it injected rather than found, and Korean artifacts, and the paper itself calls the 28.6% score "moderate". It does not establish that withholding the generation prompt helps a fresh reviewer.
 
 ## When this backfires
 
@@ -75,7 +75,7 @@ In Claude Code the fixer half works the same way through a fork request, but the
 
 - Declaring the mode on the role takes the producer out of the decision about how much of its reasoning the verifier sees.
 - The precondition is invariance. A role whose right mode changes by task belongs in two roster entries, or at a call site.
-- Do not promise a measured gain from isolation. With one unverifiable run excluded, a fresh reviewer was not significantly ahead of one that also got the generation prompt, or of a single self-review.
+- Promise only a narrow gain from isolation. With one unverifiable run excluded, a fresh reviewer still beat a second same-session self-review, but that comparison is "not a clean isolation of context", and it was not significantly ahead of a single self-review or of a reviewer that also got the generation prompt.
 - Read the mode field's other effects before you set it. A harness that ties delegation or skills to the mode has made two decisions look like one.
 - Fan-out width is the argument against a declared fork: N parallel dispatches copy the supervisor's history N times.
 

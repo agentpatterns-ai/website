@@ -87,6 +87,6 @@ Both numbers come from one pipeline with a threshold tuned for its corpus. Carry
 - [Scout-Then-Route: Verify the Handoff Before Routing](scout-then-route.md) — routes between models after a cheap scout reads the repository, which still pays for a model call.
 - [Auto Model Selection: Harness-Driven Routing per Task](auto-model-selection.md) — vendor-side per-request routing that always ends in an inference call.
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — escalates mid-task on a running model's partial trajectory rather than deciding before the first call.
-- [Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines](parameter-keyed-caching-plan-execute.md) — hardens the cache rung by partitioning the key on parsed parameters.
+- [Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines](parameter-keyed-caching-plan-execute.md) — partitioning the cache key on parsed parameters, which the paper cited there proposes but does not test.
 - [Deterministic Precondition Gates](deterministic-precondition-gates.md) — the same instinct applied to entry conditions, refusing a run rather than answering it.
 - [Field-Change Intent Instead of Model-Written Diffs](field-change-intent-over-generated-diffs.md) — the same instinct applied to applying an edit, with the model keeping the semantic decision.

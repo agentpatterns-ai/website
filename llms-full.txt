@@ -1352,6 +1352,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Reframed Exfiltration Defeats Wording-Based Defenses (Framing Gap)](security/framing-gap-exfiltration-defenses.md)
 - [Refuse a Skill's Inline Shell Commands by Source with PreSkillShellCommand](security/preskillshellcommand-hook.md)
 - [Registry-Boundary Install Gates for Agent-Chosen Dependencies](security/registry-boundary-install-gate.md)
+- [Request Integrity for Agent Authorization After Compaction](security/request-integrity-across-compaction.md)
 - [Restricted-Access Defensive AI: Project Glasswing as a Deployment Model](security/restricted-access-defensive-ai.md)
 - [Reviewer Suspicion Ranking as an Attack Map](security/reviewer-suspicion-ranking-as-attack-map.md)
 - [Root Causes of Vibe-Coded Application Vulnerabilities](security/vibe-coded-vulnerability-root-causes.md)
@@ -1612,6 +1613,7 @@ For application policies, see [Agent Patterns Videos privacy and terms](privacy-
 - [Rank Resolution: Reading a Converged Coding-Agent Leaderboard](verification/rank-resolution-converged-leaderboards.md)
 - [Reading a Coding-Agent Vendor's Security Certificate](security/vendor-security-certification-scope.md)
 - [Reading a Harness Comparison Run at One Fixed Model](verification/fixed-model-harness-comparison.md)
+- [Reasoning Effort for an AI Code Review Gate](code-review/reviewer-reasoning-effort.md)
 - [Recover the Six Measurement Choices Behind an Attack Success Rate](verification/asr-comparability-audit.md)
 - [Recovery as a Separate Eval Axis (UndoBench)](verification/recovery-as-separate-eval-axis.md)
 - [Red-Team Your Blocking Monitor Before You Trust It](verification/red-teaming-blocking-monitors.md)
@@ -5480,7 +5482,7 @@ The original heuristic — complete tasks within 50% of the context window — a
 The [Chroma context rot study](https://research.trychroma.com/context-rot) confirmed all 18 frontier models tested (including Claude Opus 4, GPT-4.1, Gemini 2.5 Pro) degrade with input length. Degradation is non-uniform: it varies by task type, similarity, and position, with no fixed threshold.
 
 !!! warning "NIAH benchmarks are misleadingly optimistic"
-    Standard needle-in-a-haystack tests use high lexical overlap between needle and question. [NoLiMa](https://arxiv.org/abs/2502.05167v3) removes this cue and finds 11 of 13 models drop below 50% accuracy at 32K tokens. Do not use NIAH results to justify large context loads.
+    Standard needle-in-a-haystack tests use high lexical overlap between needle and question. [NoLiMa](https://arxiv.org/abs/2502.05167v3) removes this cue and finds that at 32K tokens, 11 of 13 models score half or less of their own short-context base score. Do not use NIAH results to justify large context loads.
 
 ## Practical guidance
 
@@ -39162,7 +39164,7 @@ Both numbers come from one pipeline with a threshold tuned for its corpus. Carry
 - [Scout-Then-Route: Verify the Handoff Before Routing](scout-then-route.md) — routes between models after a cheap scout reads the repository, which still pays for a model call.
 - [Auto Model Selection: Harness-Driven Routing per Task](auto-model-selection.md) — vendor-side per-request routing that always ends in an inference call.
 - [Trajectory-Conditioned Model Escalation (SWE-Router)](trajectory-conditioned-model-escalation.md) — escalates mid-task on a running model's partial trajectory rather than deciding before the first call.
-- [Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines](parameter-keyed-caching-plan-execute.md) — hardens the cache rung by partitioning the key on parsed parameters.
+- [Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines](parameter-keyed-caching-plan-execute.md) — partitioning the cache key on parsed parameters, which the paper cited there proposes but does not test.
 - [Deterministic Precondition Gates](deterministic-precondition-gates.md) — the same instinct applied to entry conditions, refusing a run rather than answering it.
 - [Field-Change Intent Instead of Model-Written Diffs](field-change-intent-over-generated-diffs.md) — the same instinct applied to applying an edit, with the model keeping the semantic decision.
 
@@ -50650,39 +50652,43 @@ Source: https://agentpatterns.ai/patterns/agent-design/parameter-keyed-caching-p
 
 # Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines
 
-> Three orthogonal caching and parallelism optimizations for parameter-rich plan-execute pipelines: partition the cache key on parsed parameters, disk-back tool discovery, and parallelize independent steps.
+> Three separate plan-execute optimizations: a proposed parameter-keyed cache for parameter-varying queries, disk-backed tool discovery for pipelines that rediscover MCP servers on every query, and parallel execution of independent steps.
 
 ## When this pattern earns its complexity
 
-Parameter-keyed caching, disk-backed tool discovery, and dependency-aware parallelism target a narrow workload profile. Apply each only when its condition holds. Otherwise the calibration overhead exceeds the latency win.
+Parameter-keyed caching, disk-backed tool discovery, and dependency-aware parallelism target a narrow workload profile. Apply each only when its condition holds. These conditions, and the backfire cases and alternatives below, are this page's judgment. The paper does not test them as adoption rules.
 
 | Condition | Why it matters |
 |---|---|
 | Queries vary on temporal, asset, or sensor parameters | Plain semantic caching collapses parameter-distinguished queries into false hits ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630)) |
-| Plans coordinate across multiple MCP servers per query | Discovery cost scales with server count and repeats every session regardless of the query; caching removes this fixed overhead, even though execution — not discovery — dominates end-to-end latency ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630v1), Table 1: execution is 60.8% of baseline latency vs. ~22% for discovery plus planning) |
+| The pipeline rediscovers tools from several MCP servers on every query | The AssetOpsBench baseline discovers tools from four servers on every query. Caching cut that phase from 2.096 s to 0.007 s, but execution, not discovery, dominates end-to-end latency ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630v1), §3.3 and Table 1, an 18-query parallelism stress test: execution is 60.9% of baseline latency vs. ~22% for discovery plus planning) |
 | Generated plans contain genuinely independent steps | Dependency-aware parallelism degenerates to sequential-with-overhead when every step depends on the prior one |
 
-The original evaluation is on AssetOpsBench — industrial asset operations with sensor data, work orders, and forecasting tools. Coding agents and chat assistants rarely meet the first condition.
+The paper's measurements are on AssetOpsBench, which covers industrial asset operations with sensor data, work orders, and forecasting tools. The measurements cover a temporal semantic cache, a tool-discovery cache, and parallel steps with a persistent server pool. They do not cover the parameter key in mechanism 1. Coding agents and chat assistants rarely meet the first condition.
 
 ## The three mechanisms
 
 ### 1. Parameter-augmented semantic cache key
 
-Plain semantic caches hash the query embedding and serve any similar prior response. They fail on parameter-distinguished queries: "asset 7 failures yesterday" and "asset 7 failures last month" embed nearly identically — vocabulary dominates the vector while the temporal qualifier changes the answer.
+Plain semantic caches match a new query to stored ones by embedding similarity. They can fail on parameter-distinguished queries. "Asset 7 failures yesterday" and "asset 7 failures last month" can embed close together, because shared vocabulary dominates the vector while the temporal qualifier changes the answer.
 
-Extract parameters before lookup and partition the cache key on them:
+The parameter key is a proposal, not a measured result. The paper lists it as future work and does not build or test it ([arxiv:2605.20630, §6](https://arxiv.org/abs/2605.20630v1)). It proposes extracting "structured parameters (entity, sensor, time window, action verb)" and caching under a key of the form "(canonical_intent, param_combo)". A parameter-exact match returns the cached answer, and "semantic matching only fires when parameter sets overlap".
+
+The sketch below is this page's own, stricter variant:
 
 ```
 cache_key = embedding(query) + parsed(temporal) + parsed(asset_id) + parsed(sensor)
 ```
 
-Lookup then matches similarity within a parameter bucket, never across buckets. The benchmark reports 30.6x median speedup on hits ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630v1)), but the real win is eliminating a false-positive class plain caches cannot avoid at any threshold. This complements the dual-threshold mechanism in [Semantic Caching for Multi-Agent Code Systems](../multi-agent/semantic-caching-multi-agent.md): the dual threshold tunes precision-recall on the embedding axis; parameter keying partitions the lookup space.
+In this variant, lookup matches similarity within a parameter bucket, never across buckets. Resolve relative times to concrete windows before keying. The paper warns that caching phrases like "yesterday" "under their literal text would produce stale hits" ([§3.2](https://arxiv.org/abs/2605.20630v1)). The proposed key would complement the dual-threshold mechanism in [Semantic Caching for Multi-Agent Code Systems](../multi-agent/semantic-caching-multi-agent.md): the dual threshold tunes precision-recall on the embedding axis, and parameter keying would partition the lookup space.
+
+What the paper did measure is a temporal semantic cache: a temporal classifier, embedding retrieval, and a reranker-based judge. Run alone, without the MCP optimizations, on a stratified sample of 50 queries, it had a 36.0% hit rate, a 30.6x median speedup on hits, 2.23 s median added latency on misses, and precision 0.667 ([Appendix B](https://arxiv.org/abs/2605.20630v1)). The paper also reports cross-parameter false positives from its cache, one with a judge score of 0.97. The authors conclude that "pure semantic similarity is not a sound proxy for answer validity in parameter-rich industrial queries, and no choice of similarity threshold can fully resolve this" ([§5](https://arxiv.org/abs/2605.20630v1)). They expect the parameter key to "eliminate the false-positive class" ([§6](https://arxiv.org/abs/2605.20630v1)).
 
 ### 2. Disk-backed tool-discovery cache
 
-Each new session pays for `mcp/listTools` across every connected server. That output is deterministic on a given server set, so repeated discovery is pure overhead.
+The AssetOpsBench baseline runs MCP tool discovery on every query: it spawns each of the four servers and calls `list_tools()`, which takes 2 to 3 seconds per query in the authors' setup. The paper treats tool signatures as "semi-static metadata" and persists the catalog to a local JSON file ([§3.3](https://arxiv.org/abs/2605.20630v1)).
 
-Persist it on disk, keyed by an MD5 hash of server file paths and the mtimes of server source and dependency files; invalidate automatically on a code or dependency change, plus a 24-hour TTL as a backstop ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630v1), Appendix A). Combined with mechanism 3, this cuts median end-to-end latency ~40% (1.67x) on AssetOpsBench ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630v1)). The host-level alternative is Claude Code's `alwaysLoad`, which pins servers into the system-prompt prefix at zero per-session cost ([MCP alwaysLoad](../../tool-engineering/mcp-eager-vs-jit-loading.md)). Disk-backing wins when the server set is too large for unconditional residence — tool selection degrades past 30-50 visible tools ([Tool search tool docs](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)).
+Key that file by an MD5 hash of server file paths and the mtimes of server source and dependency files; invalidate automatically on a code or dependency change, plus a 24-hour TTL as a backstop ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630v1), Appendix A). The paper measured this cache together with parallel step execution and a persistent server pool. The three cut median end-to-end latency by about 40% (1.67x) on 18 IoT queries ([§4.2](https://arxiv.org/abs/2605.20630v1)). The queries come from a subset retained for having at least two parallelizable branches, "a parallelism stress test (not a representative slice of the full corpus)" ([§4.1](https://arxiv.org/abs/2605.20630v1)). Claude Code has a host-level equivalent for remote HTTP and SSE servers: its discovery cache loads a tool list saved in a previous session instead of connecting at startup. The cache is off by default unless a rollout has enabled it, and `MCP_DISCOVERY_CACHE=1` turns it on ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp#server-status-detail)). `alwaysLoad` does a different job. It exempts a server's tools from tool-search deferral. It also makes startup wait up to 5 seconds for that server's tools, unless the server is a remote one with a valid cached entry, which supplies its tools without connecting ([Claude Code MCP docs](https://code.claude.com/docs/en/mcp#exempt-a-server-from-deferral)).
 
 ### 3. Dependency-aware parallel step execution
 
@@ -50692,14 +50698,14 @@ The distinction is one the literature draws too, and against this pattern. M1-Pa
 
 ## Why it works
 
-Each mechanism removes provably redundant work. Parameter-keyed caching works because embeddings are dominated by surface vocabulary, not by the parameter values that determine answer validity, so partitioning the lookup eliminates a false-positive class no threshold can fix ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630)). Disk-backed discovery works because `mcp/listTools` output is deterministic on a given server set, making per-session re-computation waste. Dependency-aware parallelism works because explicit data-flow edges let a topological scheduler run independent leaves concurrently. GAP is the measured evidence for that transformation: it "explicitly models inter-task dependencies through graph-based planning to enable adaptive parallel and serial tool execution" ([arxiv:2510.25320v1](https://arxiv.org/abs/2510.25320v1)). One paper, not two — M1-Parallel's speedup comes from concurrent redundant teams, not from this.
+Parameter keying is expected to work because embeddings are dominated by shared wording, not by the parameter values that determine answer validity. The paper predicts that partitioning on parameters would eliminate the resulting false positives, but does not test the prediction ([arxiv:2605.20630](https://arxiv.org/abs/2605.20630v1), §5 and §6). Disk-backed discovery works because tool signatures can be treated as "semi-static metadata", so discovering them again on every query repeats work ([§3.3](https://arxiv.org/abs/2605.20630v1)). Dependency-aware parallelism works because explicit data-flow edges let a topological scheduler run independent leaves concurrently. GAP is the measured evidence for that transformation: it "explicitly models inter-task dependencies through graph-based planning to enable adaptive parallel and serial tool execution" ([arxiv:2510.25320v1](https://arxiv.org/abs/2510.25320v1)). One paper, not two — M1-Parallel's speedup comes from concurrent redundant teams, not from this.
 
 ## When this backfires
 
-- Non-parameter-rich workloads. Code-review, doc-generation, and chat agents rarely vary queries on temporal or asset parameters. Extraction adds latency the hit rate never repays. A short-TTL plain cache is simpler ([PyImageSearch](https://pyimagesearch.com/2026/05/04/semantic-caching-for-llms-ttls-confidence-and-cache-safety/)).
-- Discovery already amortized at the host. If the host pins servers via `alwaysLoad` or static config, per-session discovery cost is already zero ([MCP alwaysLoad](../../tool-engineering/mcp-eager-vs-jit-loading.md)).
+- Non-parameter-rich workloads. Code-review, doc-generation, and chat agents rarely vary queries on temporal or asset parameters. Extraction adds latency the hit rate may never repay. A short-TTL plain cache is simpler ([PyImageSearch](https://pyimagesearch.com/2026/05/04/semantic-caching-for-llms-ttls-confidence-and-cache-safety/)).
+- Discovery already amortized at the host. If the host already caches or reuses tool discovery, a disk cache adds little.
 - Tightly sequential plans. "Read file, edit file, run tests" has hard data dependencies — the analyzer finds no parallelism and only adds latency.
-- Weak parameter extractor. A mis-classifying extractor turns a 30x hit into a confidently wrong answer — worse than a miss, and a correctness regression vector without extractor evals.
+- Weak parameter extractor. A mis-classifying extractor can turn a cache hit into a confidently wrong answer — worse than a miss, and a correctness regression vector without extractor evals.
 - Small fleets. Three subsystems each carry calibration, observability, and failure modes. Below some QPS threshold the engineering cost outweighs the win.
 - Heterogeneous workload mix. Fixed parameter schemas do not generalize. Category-aware approaches ([arxiv:2510.26835](https://arxiv.org/abs/2510.26835)) may fit better.
 
@@ -50707,23 +50713,23 @@ Each mechanism removes provably redundant work. Parameter-keyed caching works be
 
 | Optimization | Signal it's worth adding | Cheaper alternative |
 |---|---|---|
-| Parameter-augmented cache key | Measurable false-positive rate on parameter-distinguished queries | Short TTL on plain semantic cache; category-aware thresholds |
-| Disk-backed tool discovery | Large MCP server set with measurable per-session discovery latency | `alwaysLoad` (host pins selected servers) |
+| Parameter-augmented cache key (proposed, not tested in the paper) | Measurable false-positive rate on parameter-distinguished queries | Short TTL on plain semantic cache; category-aware thresholds |
+| Disk-backed tool discovery | Large MCP server set with measurable discovery latency | The host's own discovery cache, such as Claude Code's `MCP_DISCOVERY_CACHE=1` for remote servers |
 | Dependency-aware parallel steps | Planner already produces step DAGs with independent leaves | Sequential execution — predictable latency, no overhead |
 
 ## Example
 
-Two queries hit the same asset-operations agent: "asset 7 failures yesterday" and "asset 7 failures last month". Their embeddings sit close together — only one word differs — so a plain semantic cache treats the second as a hit on the first and returns yesterday's failure count for a query about last month.
+Two queries hit the same asset-operations agent: "asset 7 failures yesterday" and "asset 7 failures last month". Their embeddings can sit close together, since only the time phrase differs, so a plain semantic cache can treat the second as a hit on the first and return yesterday's failure count for a query about last month.
 
-Parameter extraction runs before the lookup and splits the two queries into separate buckets:
+In this page's stricter sketch, which the paper does not build or test, parameter extraction runs before the lookup and splits the two queries into separate buckets:
 
 ```
 query_1 = "asset 7 failures yesterday"
-parsed_1 = { asset_id: "7", temporal: "yesterday" }
+parsed_1 = { asset_id: "7", temporal: resolve("yesterday", now) }
 cache_key_1 = embedding(query_1) + parsed_1
 
 query_2 = "asset 7 failures last month"
-parsed_2 = { asset_id: "7", temporal: "last month" }
+parsed_2 = { asset_id: "7", temporal: resolve("last month", now) }
 cache_key_2 = embedding(query_2) + parsed_2
 ```
 
@@ -50740,16 +50746,17 @@ A topological scheduler reads this graph and runs `fetch_readings` and `fetch_wo
 
 ## Key Takeaways
 
-- Three orthogonal mechanisms — adopt each only when its specific condition is met, not as a bundled architecture
-- The 30.6x cache-hit figure is benchmark-specific; the cache-hit *rate* on your workload dominates, not per-hit speedup
+- Three separate mechanisms — adopt each only when its specific condition is met, not as a bundled architecture
+- The paper proposes the parameter key as future work and never measures it. The 30.6x median speedup on hits belongs to its temporal semantic cache, run alone at precision 0.667
+- On your workload, the cache-hit *rate* matters more than per-hit speedup
 - Parameter extraction is a new correctness-critical component — it needs evals, not just latency monitoring
 - Step-level parallelism is distinct from agent-level fan-out; it requires the planner to emit data-flow edges per step
-- For coding agents and other non-parameter-rich workloads, prefer `alwaysLoad` plus a short-TTL plain semantic cache over the full architecture
+- For coding agents and other non-parameter-rich workloads, prefer a short-TTL plain semantic cache and the host's own discovery cache over the full architecture
 
 ## Related
 
-- [Semantic Caching for Multi-Agent Code Systems](../multi-agent/semantic-caching-multi-agent.md) — embedding-similarity caching with dual thresholds; this page extends the lookup-axis question with parameter keying
-- [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](../../tool-engineering/mcp-eager-vs-jit-loading.md) — the host-level alternative to disk-backed tool discovery
+- [Semantic Caching for Multi-Agent Code Systems](../multi-agent/semantic-caching-multi-agent.md) — embedding-similarity caching with dual thresholds; this page extends the lookup-axis question with a proposed parameter key
+- [MCP alwaysLoad: Classifying Servers as Eager or Just-in-Time](../../tool-engineering/mcp-eager-vs-jit-loading.md) — decides whether a server's tools load upfront or wait behind tool search; it does not cache discovery
 - [Agent Composition Patterns: Chains, Fan-Out, Pipelines, Supervisors](../multi-agent/agent-composition-patterns.md) — fan-out at the agent level, complementing the step-level parallelism described here
 - [Plan Compliance in Agents](plan-compliance-in-agents.md) — dependency-aware parallel execution presupposes plans the agent actually executes
 - [Cognitive Reasoning vs Execution: A Two-Layer Agent Architecture](cognitive-reasoning-execution-separation.md) — separating the layer that emits the dependency graph from the layer that schedules it
@@ -70956,7 +70963,7 @@ repos:
 
 ## Mitigation
 
-In prompts: "raise ValueError for invalid input, never use bare except" is actionable; "handle errors" is not. Naming anti-patterns by CWE or rule ID reduces vulnerability density by 59 to 64% ([Endor Labs](https://www.endorlabs.com/learn/anti-pattern-avoidance-a-simple-prompt-pattern-for-safer-ai-generated-code)).
+In prompts: "raise ValueError for invalid input, never use bare except" is actionable; "handle errors" is not. In one study of generated Python code, a prompt that listed the security measures for the weakness a task targeted cut weakness density by 64% for GPT-3 and 59% for GPT-4, against a prompt with no security wording. Only the GPT-4 result was statistically significant, and on GPT-3.5 the same prompt did worse than adding the word "secure" ([Tony et al.](https://arxiv.org/abs/2407.07064v2)).
 
 In CI: lint, type check, then test every agent-generated change. This catches roughly 60% of AI code failures ([Augment Code](https://www.augmentcode.com/guides/debugging-ai-generated-code-8-failure-patterns-and-fixes)).
 
@@ -71006,7 +71013,7 @@ The first version works when the file exists and contains valid JSON. The second
 
 - Agents optimize for the surface goal — compiles, tests pass, feature exists — and skip the implicit error paths, edge cases, and type boundaries.
 - Catch the common forms deterministically: `E722`, `BLE001`, `TRY003`, `TRY301`, `TRY400`, and `@typescript-eslint/no-explicit-any` at a pre-commit and CI gate.
-- Name anti-patterns by rule ID in prompts; enforce at the CI boundary, not by padding every prompt with error-handling instructions.
+- Name the specific weakness and its mitigation in prompts; enforce at the CI boundary, not by padding every prompt with error-handling instructions.
 - The bias is a production concern — prototypes, framework-managed boundaries, and controlled-input tooling can reasonably defer exhaustive handling.
 
 ## Sources
@@ -81681,6 +81688,7 @@ Role-typed summaries kept the planted command and filed it as document content r
 - [Boundary Laundering: Tool Output in Sub-Agent Briefs](../../security/boundary-laundering-subagent-briefs.md) — the same forgery across an agent hop instead of a compaction step
 - [Trusting Claimed Prior Approval in Agent Review Gates](trusting-claimed-prior-approval.md) — a fabricated approval the reviewer can still see, where this one has had its origin erased
 - [Non-Human Event Provenance Markers to Block Fabricated Approvals](../../security/non-human-event-provenance-markers.md) — stamping harness-injected events so a fabricated approval carries no authority
+- [Request Integrity for Agent Authorization After Compaction](../../security/request-integrity-across-compaction.md) — what happens when an authorizer reads the summary itself as the user's request
 
 ---
 
@@ -83461,7 +83469,7 @@ Strategies for splitting work across parallel agents — and controlling the bla
 - [Contextual Capability Calibration for Multi-Agent Delegation](contextual-capability-calibration.md) — Replace static skill-level agent profiles with context-specific Beta posteriors so routing decisions condition on the task features that actually predict success
 - [Parsimonious Agent Routing](parsimonious-agent-routing.md) — A learned router emits one delegation plan — keep, single-route, or split-and-route — with per-branch budget, jointly optimizing decisions that hand-engineered pipelines treat as independent
 - [Sub-Agents for Fan-Out Research and Context Isolation](sub-agents-fan-out.md) — Spawn sub-agents to parallelize independent work in isolated context windows; the main thread receives only distilled results
-- [Selective Dynamic Concurrency for Long-Horizon Coding Agents](selective-dynamic-concurrency.md) — Enable runtime sub-agent concurrency per task, not by default: it cost 1.41x to 3.31x the tokens in a three-agent study and paid off only with ownable components, comparable attempts, or independent validation
+- [Selective Dynamic Concurrency for Long-Horizon Coding Agents](selective-dynamic-concurrency.md) — Enable runtime sub-agent concurrency per task, not by default: one study found 1.41x to 3.31x the tokens with mixed success, another about 1 to 5 points on random repository builds at 2.6 to 3.8 times the cost
 - [Adaptive Sandbox Fan-Out Controller](adaptive-sandbox-fanout-controller.md) — Start with a small parallel batch, monitor quality signals, then scale up, stop early, refine the prompt, or decompose — rather than committing to a fixed N upfront
 - [Swarm Migration Pattern](swarm-migration-pattern.md) — Coordinate 10–20 parallel subagents to migrate large codebases atomically, achieving 6–10x speedup for qualifying file-independent transformations
 - [The Model Economics of Agent Swarms](model-economics-agent-swarms.md) — Swarm width is capped first by task decomposability, then by the planner-worker model mix that dominates cost — not by fan-out alone
@@ -89433,7 +89441,7 @@ The surviving result has limits too. In run 3 alone, CCR and the second self-rev
 
 Its mechanism is a stated hypothesis about same-session review: "We hypothesize that these failures share a root cause that is easy to overlook: the production context itself. When the model reviews its output in the same session, the entire conversation history sits in the context window ... All of this anchors the model's judgment. It does not scrutinize; it rationalizes."
 
-Read all of this as a bound on the effect rather than a license. The experiment used one model (Claude Opus 4.6), errors it injected rather than found, and Korean artifacts, and 28.6% is a low absolute score. It does not establish that withholding the generation prompt helps a fresh reviewer.
+Read all of this as a bound on the effect rather than a license. The experiment used one model (Claude Opus 4.6), errors it injected rather than found, and Korean artifacts, and the paper itself calls the 28.6% score "moderate". It does not establish that withholding the generation prompt helps a fresh reviewer.
 
 ## When this backfires
 
@@ -89459,7 +89467,7 @@ In Claude Code the fixer half works the same way through a fork request, but the
 
 - Declaring the mode on the role takes the producer out of the decision about how much of its reasoning the verifier sees.
 - The precondition is invariance. A role whose right mode changes by task belongs in two roster entries, or at a call site.
-- Do not promise a measured gain from isolation. With one unverifiable run excluded, a fresh reviewer was not significantly ahead of one that also got the generation prompt, or of a single self-review.
+- Promise only a narrow gain from isolation. With one unverifiable run excluded, a fresh reviewer still beat a second same-session self-review, but that comparison is "not a clean isolation of context", and it was not significantly ahead of a single self-review or of a reviewer that also got the generation prompt.
 - Read the mode field's other effects before you set it. A harness that ties delegation or skills to the mode has made two decisions look like one.
 - Fan-out width is the argument against a declared fork: N parallel dispatches copy the supervisor's history N times.
 
@@ -89554,7 +89562,7 @@ Source: https://agentpatterns.ai/patterns/multi-agent/selective-dynamic-concurre
 
 > Let a coding agent spawn parallel sub-agents only when the task splits into components it can own, compare, or check independently.
 
-Dynamic concurrency lets an agent decide during a run whether to spawn parallel sub-agents. The policy pays off when the task has independently ownable components, when alternative attempts are cheap to compare, or when an independent sub-agent can validate the main agent's work. It costs tokens, time, and sometimes accuracy on bounded tasks. Treat it as a per-task opt-in, not a default setting. The evidence comes from one controlled study of three agents, so test the conditions below on your own tasks ([Li et al.](https://arxiv.org/abs/2610.10263v1)).
+Dynamic concurrency lets an agent decide during a run whether to spawn parallel sub-agents. The policy pays off when the task has independently ownable components, when alternative attempts are cheap to compare, or when an independent sub-agent can validate the main agent's work. It costs tokens, time, and sometimes accuracy on bounded tasks. Treat it as a per-task opt-in, not a default setting. The conditions below come from one controlled study of three agents, so test them on your own tasks ([Li et al.](https://arxiv.org/abs/2610.10263v1)). A second study covers one task type, [building a whole repository](#building-a-whole-repository).
 
 ## When to turn it on
 
@@ -89608,19 +89616,60 @@ Concurrency pays when the main agent converts parallel output into progress on t
 
 The opposing view has merit: the study used July 2026 scaffolds, and many failure patterns look fixable in the harness.
 
+## Building a whole repository
+
+[Lyu et al.](https://arxiv.org/abs/2611.33893v1) compared one Codex agent with a main agent allowed, but not told, to run up to 20 subagents at once. Tasks build a program or library against hidden tests, from a written specification (NL2Repo) or with an executable of the original to compare against (ProgramBench). Runs ended when the agent declared the task done, within 4 hours (Codex 0.147, `xhigh` reasoning).
+
+On 30 random tasks per benchmark ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)):
+
+- Subagents on the main agent's model added about 1 to 5 points of hidden tests passed, at 2.6 to 3.8 times the cost. GPT-5.6 Sol ran both benchmarks, and GPT-6 Sol and GPT-6.1 Sol ran ProgramBench.
+- Those runs did not take longer, except with GPT-6 Sol. At equal cost, the single agent scored the same or higher.
+- Cheaper GPT-5.6 Luna subagents, at their default reasoning level under a Sol main agent, ended below the single agent on both benchmarks, at a higher cost.
+- Two runs of one setup on a task differed by about 7 points on average, more than the average gap (GPT-5.6 Sol, ProgramBench).
+- On ProgramBench, the median gain was larger on hard tasks in all three models: 2.0 against 1.7 points on the rest with GPT-5.6 Sol, and 8.4 against 1.0 with GPT-6.1 Sol. NL2Repo showed no such pattern.
+
+In a smaller replication with Opus 5.5 on Claude Code 2.1.283, one run each, subagents added 4.7 points at 3.1 times the cost on ten ProgramBench tasks. They did not raise the average on ten NL2Repo tasks ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)).
+
+## Where the gain comes from
+
+Lyu et al. report evidence for three mechanisms behind the hard-task gain: more checking, fresh context, and modular code. They tested the first two on a single agent and only observed the third ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)).
+
+For checking, they gave a single agent this instruction ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)):
+
+> "Before implementing, probe the reference executable across its whole public interface: list its commands, options and input formats, run each against the reference, and record the exact outputs and exit codes. Then implement, and check every recorded behaviour before you finish."
+
+On 16 hard ProgramBench tasks with GPT-5.6 Sol, it raised the mean score by 6.7 points, against 8.8 for subagents. At list price it cost 50% more than the plain agent, and subagents cost 275% more. The medians are further apart, 1.3 points against 4.9, and the instructed agent has scores for only 15 tasks ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)). The result did not carry over everywhere ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)):
+
+- With GPT-6 Sol and GPT-6.1 Sol, the instructed agent stayed close to the plain one, while subagents still added 6.0 and 2.8 points on average.
+- Under DeepSeek's dsh harness, with GPT-5.6 Sol, it did not help on four hard tasks (one run each).
+- NL2Repo has no reference program. There, GPT-5.6 Sol told to check every specification example scored below the plain agent on all four hard tasks tried.
+
+Fresh context and modular code were studied in long runs on three hard tasks with GPT-5.6 Sol and GPT-6.1 Sol. Agents were told to continue past each stop until a time budget ran out (Codex 0.154, `high` reasoning). The multi-agent setup was also told to use subagents aggressively, one module each. It was ahead at equal time and overtook the single agent late at equal cost, unless an edit broke coupled code. With GPT-5.6 Sol, it led clearly on one task (84.0 against 75.2 at $260), barely on another, and trailed on the third ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)).
+
+Claude Code with Opus 5.5, given no such parallelism instruction, differed. A 4-hour multi-agent run ended above an 8-hour single-agent run on both tasks tried (one run each), at about twice the cost. In six shorter pairs, though, a single agent given twice the time caught up on average ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)).
+
+For fresh context, the authors took a single agent's code after 8 to 12 hours, when its score was rising slowly. They compared resuming that session, with automatic compaction, against a chain of new sessions that each started empty and ran 3 hours. With GPT-5.6 Sol and GPT-6.1 Sol, the chain led over the first hour in all six comparisons, by only 0.3 to 0.7 points with GPT-5.6 Sol. It ended clearly higher in one, and the other five ended close. A new multi-agent session from the same code gained sooner than the chain, but not more at equal cost. Only Codex was tested ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)).
+
+For modular code, the evidence is observational. Multi-agent code had more files and shorter functions. At equal cost, the multi-agent setup ended clearly ahead with both models on one task only, where the single agent kept nearly all its code in one file. That comparison has one run per setup, and another one-file case, with GPT-5.6 Sol, ended about even. Multi-agent runs also broke code more often and more severely: 2 of 30 long runs ended with a program that did not build, against none of 38 single-agent runs. The authors advise re-checking after integration with new inputs, not stored ones ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)).
+
 ## Limits of the evidence
 
-- The sequential baseline in Claude Code disabled the Workflow, Task, and Agent tools. The study does not separate dynamic workflows from plain sub-agent delegation, so it gives no reason to drop the latter.
-- Each cell has one run. LoopsBench has 28 tasks, so Claude Code's 14.3 point gain there equals 4 tasks.
-- The authors scope their findings "to the tested agents and benchmarks" ([Li et al.](https://arxiv.org/abs/2610.10263v1)).
+- Li et al.'s sequential baseline in Claude Code disabled the Workflow, Task, and Agent tools. The study does not separate dynamic workflows from plain sub-agent delegation, so it gives no reason to drop the latter.
+- Each Li et al. cell has one run. LoopsBench has 28 tasks, so Claude Code's 14.3 point gain there equals 4 tasks.
+- Li et al. scope their findings "to the tested agents and benchmarks" ([Li et al.](https://arxiv.org/abs/2610.10263v1)).
+- Most Lyu et al. comparisons rest on one to three runs per setup, on closed models and whole-program tasks. The probe instruction needs a reference program, "which most projects lack" ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)).
+- Results on task difficulty are not settled. Lyu et al. note that concurrent work by Samway et al., with its own agent team, found the largest gains on easy tasks ([Lyu et al.](https://arxiv.org/abs/2611.33893v1)).
 
 ## Key Takeaways
 
-- Enable concurrency per task. Default-on cost 1.41x to 3.31x the tokens and slowed runs in 14 of 15 agent-benchmark cells.
+- Enable concurrency per task. In Li et al., default-on cost 1.41x to 3.31x the tokens and slowed runs in 14 of 15 agent-benchmark cells.
 - Before fan-out, check for independent owners, cheap comparison of alternatives, or an independent validator.
 - Isolate each sub-agent's writes, tie join deadlines to the task budget, and name one owner per deliverable.
 - Skip it for bounded fixes: Claude Code lost 24 points on SWE-bench Verified.
 - Long-horizon work is no guarantee: Claude Code lost 16 points on RepoZero.
+- Repeat runs before you credit subagents. On Lyu et al.'s random ProgramBench tasks with GPT-5.6 Sol, rerun noise exceeded the average gain.
+- If you have a reference program, test the probe instruction before paying for subagents. It raised GPT-5.6 Sol's mean score on Codex, but did little under dsh or with later GPT Sol models.
+- When a long single session slows, try a new one. In Lyu et al.'s Codex runs, it started faster but rarely finished clearly higher.
 
 ## Related
 
@@ -89629,6 +89678,8 @@ The opposing view has merit: the study used July 2026 scaffolds, and many failur
 - [Sub-Agents Fan-Out](sub-agents-fan-out.md)
 - [Model Economics of Agent Swarms](model-economics-agent-swarms.md)
 - [Pre-Write Change Intent Admission](pre-write-change-intent-admission.md)
+- [Cohesion-Aware Task Partitioning](cohesion-aware-task-partitioning.md)
+- [Forked vs Fresh Subagents](forked-vs-fresh-subagents.md)
 
 ---
 
@@ -89798,7 +89849,7 @@ Combining both: the cache lookup uses filtered context as part of the prompt, so
 - [Cost-Aware Agent Design](../../token-engineering/cost-aware-agent-design.md)
 - [Token-Efficient Tool Design](../../token-engineering/token-efficient-tool-design.md)
 - [LLM Map-Reduce Pattern for Parallel Input Processing](llm-map-reduce.md)
-- [Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines](../agent-design/parameter-keyed-caching-plan-execute.md) — extends semantic cache keys with parsed parameters for parameter-rich, multi-MCP pipelines
+- [Parameter-Keyed Caching and Dependency-Aware Parallelism for Plan-Execute Pipelines](../agent-design/parameter-keyed-caching-plan-execute.md) — extends semantic cache keys with parsed parameters for parameter-varying queries, a design the paper cited there proposes but does not test
 
 ---
 
@@ -108843,6 +108894,7 @@ As agents author more pull requests, review tooling is moving toward the surface
 - [Inline Suggestion Attachment](inline-suggestion-attachment.md) — Attaching a ready-to-apply patch is the strongest measured predictor that an agent review comment gets resolved, but only where the finding is diff-verifiable — a one-click patch on a false positive is a one-click defect
 - [Tiered Code Review](tiered-code-review.md) — Route review effort by risk: AI handles the first pass on everything, non-critical code merges after AI-only review, and critical code escalates to mandatory human review
 - [Tunable Effort Levels for Code Review Agents](tunable-review-effort.md) — Expose review depth as a per-PR dial backed by a published bug-discovery curve, so reviewers and routing policies trade thoroughness against cost on the runs that need it
+- [Reasoning Effort for an AI Code Review Gate](reviewer-reasoning-effort.md) — In one Claude 5.5 study on Django patches, high effort accepted fewer wrong patches than low, and every setting accepted at least 45% of them
 - [Risk-Score Threshold Calibration for Auto-Approval](risk-score-threshold-calibration.md) — Expose the auto-approval cutoff on a learned diff-risk score as an explicit yield-vs-safety knob, with revert and incident telemetry to recalibrate it
 - [Deferred Standards Enforcement via Review Agents](deferred-standards-enforcement.md) — Move post-hoc-checkable standards out of CLAUDE.md into a reviewer agent that runs at PR time, preserving implementation context budget for the task at hand
 - [Instruction-Aware Automated Code Review](instruction-aware-automated-review.md) — Wire AGENTS.md or REVIEW.md into the automated reviewer so its findings enforce documented team conventions — works only for rules the reviewer can mechanically verify from a diff
@@ -110698,7 +110750,7 @@ Load-bearing differentiators: the verification step, cloud execution, and a sing
 
 ## When this backfires
 
-- Small diffs. A paid ultrareview, typically 5 to 15 minutes and \$5 to \$25, is wasted on typo fixes. A local `/review` is cheaper for sub-hundred-line diffs with clear scope.
+- Small diffs. A paid ultrareview, typically 5 to 15 minutes and \$5 to \$25, is wasted on typo fixes. A local [`/code-review`](https://code.claude.com/docs/en/code-review-local) runs in your own session and counts toward your plan's usage or API billing the same way the rest of the session does.
 - Low-diversity reviewer axes. If "correctness" and "bugs" surface the same findings, aggregation dedupes most of the parallel work and the pattern buys nothing.
 - High-iteration PRs with push triggers. Review after every push multiplies cost by the number of pushes ([Code Review costs](https://code.claude.com/docs/en/code-review-costs#how-often-reviews-run)). Use manual or once-per-PR triggers for long-running branches.
 - Air-gapped or ZDR environments. Cloud execution is not optional. On Bedrock, Agent Platform, Foundry, Zero Data Retention, or HIPAA setups, ultrareview is unavailable and `/code-review ultra` "runs a local review in your session instead" ([ultrareview docs](https://code.claude.com/docs/en/ultrareview)). Managed Code Review is also unavailable to Zero Data Retention organizations ([Code Review docs](https://code.claude.com/docs/en/code-review#availability)).
@@ -112381,6 +112433,101 @@ The Approach-hints and Approaches-to-avoid blocks target Implementation Issues; 
 - [arXiv:2602.04226](https://arxiv.org/abs/2602.04226v1) — companion study of 654 rejected PRs across five agents: 67.9% lack reviewer feedback; seven rejection modes occur only in agent-authored PRs
 - [arXiv:2507.15003](https://arxiv.org/abs/2507.15003) — AIDev dataset paper, the upstream source for both studies
 - [arXiv:2602.00164](https://arxiv.org/pdf/2602.00164v1) — companion empirical study with a 65% merge rate on a different sample, illustrating the sample-dependence of the headline figure
+
+---
+
+### Reasoning Effort for an AI Code Review Gate
+Source: https://agentpatterns.ai/code-review/reviewer-reasoning-effort/
+
+# Reasoning Effort for an AI Code Review Gate
+
+> On 90 Django patches, Claude 5.5 reviewers accepted fewer wrong ones at high effort than low, and at least 45% in every setting.
+
+Reasoning effort controls how much work a reviewer model does before it returns a verdict. A preprint measured what that buys against plausible-but-wrong patches. Claude Opus 5.5, Sonnet 5.5, and Haiku 5.5 each reviewed the same 90 agent-written patches from SWE-bench Verified at low, medium, and high effort ([Shen et al., arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)). A patch first counted as wrong if it passed the benchmark's tests and failed stronger SWE-ABS tests. A label check after the runs left 55 wrong and 35 correct.
+
+## What the study ran
+
+These conditions bound the study's numbers ([arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)):
+
+- Claude Code 2.1.311 in non-interactive mode, with no plugins or saved settings, and effort set by `--effort`.
+- The reviewer saw the issue text and the Django repository with the patch as one commit. It could read and write files and run shell commands. It had no internet beyond the model API, and no scoring tests or official fix.
+- One generic prompt failed a patch only for an unmet requirement or a functional defect that matters.
+- The Opus study was preregistered. The Sonnet and Haiku studies are exploratory.
+- The first author develops Trust My Bot, the agent harness whose review gate motivated the study.
+
+## Results by effort
+
+False success is the share of wrong patches accepted. False alarm is the share of correct patches rejected. Cost is the mean list price per review ([Table 3, arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)).
+
+| Model | Effort | False success | False alarm | Cost |
+|-------|--------|---------------|-------------|------|
+| Opus 5.5 | low | .67 | .06 | $0.044 |
+| Opus 5.5 | medium | .47 | .06 | $0.095 |
+| Opus 5.5 | high | .45 | .06 | $0.120 |
+| Sonnet 5.5 | low | .65 | .06 | $0.023 |
+| Sonnet 5.5 | medium | .60 | .09 | $0.027 |
+| Sonnet 5.5 | high | .49 | .09 | $0.047 |
+| Haiku 5.5 | low | .78 | .06 | $0.0023 |
+| Haiku 5.5 | medium | .64 | .20 | $0.0037 |
+| Haiku 5.5 | high | .51 | .11 | $0.0078 |
+
+The drop in false success from low to high passed the study's test for Opus and Haiku. Sonnet's missed its multiple-comparison threshold.
+
+## Where medium is enough
+
+For Opus, medium stayed within the preregistered 15-point margin of high (difference .018, 95% CI −.065 to .108). It cost 20% less than high by geometric mean, short of the 30% the authors had set as a material saving ([arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)).
+
+For Sonnet and Haiku, medium cost 39% and 51% less than high but was not shown to be as good. The upper ends of the intervals reached .234 and .269, past the same margin ([arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)).
+
+The authors call medium a sound default for an Opus 5.5 gate under similar conditions, and say that default does not carry over to the smaller models: with Sonnet and Haiku, high caught clearly more wrong patches than medium. For Haiku, they say their data point to high ([arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)). Anthropic's general advice differs for Haiku 5.5: [start with `medium`](https://platform.claude.com/docs/en/build-with-claude/effort) for most work, including agentic coding, and use `high` for longer agent tasks, among other cases.
+
+Haiku at high cost about 8% as much per review as Opus at medium and rejected 27 of the 55 wrong patches against 29. The authors could not call it as good as Opus at medium, or worse. It also raised 4 false alarms against 2, returned 2 malformed verdicts, and ran three days later on a newer test harness. The authors say this motivates a confirmatory test rather than a switch ([arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)).
+
+## What effort does not buy
+
+All four points come from [arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1):
+
+- A strong gate. Every setting accepted at least 45% of wrong patches, and the authors say such a gate complements tests rather than replacing them.
+- A much cleaner merge stream. Assume 16.7% of incoming patches are wrong, the authors' count of passing Django patches that SWE-ABS tests reject. Then 83.3% are correct with no reviewer. Among patches Opus accepts, the authors compute 87.5% correct at low, 90.9% at medium, and 91.2% at high.
+- A verdict that follows the feedback. Across the nine settings, 290 reviews accepted a wrong patch, and 111 of them named the tested defect anyway, per exploratory model coding with no human check. A gate that reads only pass or fail never sees that text.
+- A usable verdict every time. In 270 reviews each, Sonnet returned 10 malformed verdicts and Haiku 5, so a gate on either needs a fallback.
+
+## Why higher effort catches more
+
+The study shows what came with more effort, not what caused the better verdicts. High produced more output tokens than medium on over 90% of patches in every model. Every review that used no thinking tokens returned a pass. In exploratory coding, the share of wrong patches rejected for the tested defect rose from low to high: .22 to .40 for Opus, .24 to .40 for Sonnet, and .16 to .31 for Haiku ([arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)). Anthropic documents that at lower levels Claude [can skip thinking entirely](https://platform.claude.com/docs/en/build-with-claude/effort) for simpler problems.
+
+## When the numbers do not transfer
+
+- The tests may be stricter than the issue. For 32 of the 55 wrong patches, a post hoc model coder judged that the issue does not require what the failing test checks. Without them, no model shows high beating low at the study's .025 level, or medium matching high ([arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)).
+- Labels changed after data collection. The original labels give the same hypothesis decisions, but on them Opus agreed more with the labels at medium than at high, and Sonnet agreed most at low ([arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)).
+- The sample is one repository, one prompt, public agent patches, one model family, and three of five effort levels. The authors say richer context, such as project review rules, may change the effect ([arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)).
+- Opus often remembered the official fix. It accepted wrong patches more often on fully recalled issues than on partly recalled ones (.57 against .31 at high), an association only. The authors expect absolute rates may differ on new private code ([arXiv:2611.33639v1](https://arxiv.org/abs/2611.33639v1)).
+
+## Example
+
+In Claude Code, Opus 5.5, Sonnet 5.5, and Haiku 5.5 [default to `medium`](https://code.claude.com/docs/en/model-config#adjust-effort-level), so a Haiku gate left at its default runs below the level the study's data favor. Name the level in the gate command:
+
+```bash
+claude -p --model claude-haiku-5-5 --effort high "$REVIEW_PROMPT"
+```
+
+The same page documents settings that beat the flag. The `CLAUDE_CODE_EFFORT_LEVEL` environment variable takes precedence over `--effort`, and an effort cap lowers a higher request to the cap. Check both on the CI runner. The Claude API default differs: Sonnet 5.5 [defaults to `high`](https://platform.claude.com/docs/en/build-with-claude/effort) there.
+
+## Key Takeaways
+
+- For an Opus 5.5 gate in similar conditions, start at medium. High caught 1 more of 55 wrong patches than medium did.
+- For Sonnet 5.5 or Haiku 5.5, set high explicitly, then confirm it on your own patches. The evidence is exploratory.
+- Keep your tests behind the gate at any effort level.
+- Log the feedback on passing reviews, and treat a malformed verdict as something other than a pass.
+- Do not quote these rates as your gate's expected miss rate. They move with the tests that define a wrong patch.
+
+## Related
+
+- [Tunable Effort Levels for Code Review Agents](tunable-review-effort.md) — exposing review depth as a per-PR dial, once you know what each level buys
+- [Effort as a Verification Dial: What a Higher Level Buys](../patterns/agent-design/effort-as-verification-dial.md) — the same setting on the producing side of the work
+- [Treating a Resolved Task as a Defect-Free Change](../patterns/anti-patterns/resolved-task-as-defect-free.md) — why passing the task's tests leaves defects for review to find
+- [Defect Visibility as the Unsupervised Review Boundary](../verification/defect-visibility-review-autonomy.md) — which changes to leave to agent review at all
+- [Reproduce-Before-Report Verification Gate](reproduce-before-report-verification-gate.md) — checking a reviewer's findings, the false-alarm side of the gate
 
 ---
 
@@ -114097,6 +114244,7 @@ Pinning Default at the team level and letting Custom escalate keeps escalation p
 - [Interactive Effort Sliders](../patterns/agent-design/interactive-effort-sliders.md) — per-turn reasoning budget control in Claude Code `/effort`
 - [Cost-Aware Agent Design](../token-engineering/cost-aware-agent-design.md) — broader cost-routing context
 - [Configuring the Code Review Request Surface](review-request-surface.md) — where the dial is set and who requests the review, including the personal default that lands on the pull request author's bill
+- [Reasoning Effort for an AI Code Review Gate](reviewer-reasoning-effort.md) — one study's measured miss rates by model effort level, for a reviewer you run yourself
 
 ---
 
@@ -137350,6 +137498,7 @@ Excess permissions expand the blast radius of any failure or attack.
 - [Write Policy Gate Rules as Examples and Counterexamples](policy-gate-rule-examples-counterexamples.md) — State each runtime policy rule as a definition plus inclusions and exclusions; in one 23-model study this raised recall on every model and cut one gate's interruptions from 30.6% to 4.8% of clean actions, though three strong models did as well with prose
 - [Pre-Execution Risk Classification for Terminal Commands](pre-execution-command-risk-classification.md) — Display a tiered Safe/Caution/Review-carefully badge with command-specific text before the agent runs a terminal command; an attention-allocation lever paired with deterministic allowlists that carry the policy load
 - [Proof of Presence: Re-Authenticating for Agent Actions](proof-of-presence-step-up-authentication.md) — GitHub's public-preview IdP re-authentication check stops an agent only on the browser channel it guards, outside a live sudo window, and only when the factor it demands is one the agent cannot reach
+- [Request Integrity for Agent Authorization After Compaction](request-integrity-across-compaction.md) — A preprint found Claude Code and locally compacting Codex place compaction summaries as user messages; an authorizer that derives each request's policy from that position can grant what injected data named
 - [Revocable Resource-and-Effect Capabilities for Coding Agents (PORTICO)](revocable-resource-effect-capabilities.md) — Materialize each subgoal-scoped capability as an opaque epoch-bound handle that closure removes from the planner's interface; stale replay is rejected before side effects, closing lingering authority when tool traffic is mediated and the catalog is typed
 - [Route Agent Peers by Enrolled Identity, Not Card Name](enrolled-identity-peer-routing.md) — Six of seven tested A2A hosts sent a request addressed to a trusted peer to an attacker-controlled endpoint that had registered the same display name; route on an operator-assigned identifier bound to the authenticated origin and keep the card name presentational
 - [Safe Outputs Pattern](safe-outputs-pattern.md) — Default agents to read-only and require explicit grants for each write output type, producing a deterministic blast radius
@@ -144953,9 +145102,9 @@ Source: https://agentpatterns.ai/security/evidence-based-allowlist-auto-discover
 
 # Evidence-Based Allowlist Auto-Discovery
 
-> Claude Code's `PermissionRequest` hook turns every manual approval into a persistent rule, growing an allowlist from real usage instead of upfront configuration.
+> Claude Code's `PermissionRequest` hook can turn a command that has run successfully N times into a persistent allow rule, growing an allowlist from real usage instead of upfront configuration.
 
-Evidence-based allowlist auto-discovery builds the allow list incrementally from real agent usage. [Manual allowlisting](safe-command-allowlisting.md) pre-authorizes known-safe commands, but teams must predict the list before they have usage data. Auto-discovery removes that requirement: each manual approval increments a counter, and once a command crosses a threshold it is written to the allow list.
+Evidence-based allowlist auto-discovery builds the allow list incrementally from real agent usage. [Manual allowlisting](safe-command-allowlisting.md) pre-authorizes known-safe commands, but teams must predict the list before they have usage data. Auto-discovery removes that requirement: each successful run of a command increments a counter, and once a command crosses a threshold it is written to the allow list.
 
 ## How it works
 
@@ -144972,14 +145121,14 @@ sequenceDiagram
     H->>L: Check approval count
     alt count < N
         H-->>A: Forward to user (show dialog)
-        Note over L: On approval: increment count
+        Note over L: On successful run: PostToolUse increments count
     else count >= N
         H->>S: addRules → allow rule
         H-->>A: Auto-approve (no dialog)
     end
 ```
 
-A `PostToolUse` hook tracks outcomes after execution. The rule lands only after you manually approve a command N times without flagged side effects.
+A `PostToolUse` hook tracks outcomes after execution. The rule lands after a command runs successfully N times. The tracker counts every successful run, whether you approved it in the dialog or an existing rule allowed it.
 
 ## The two-hook implementation
 
@@ -144992,21 +145141,31 @@ Both hooks run as `command` hooks, which default to a 600-second timeout before 
 | `PermissionRequest` | Checks count; writes allow rule when threshold met | Yes — via `updatedPermissions` |
 | `PostToolUse` | Records outcome; increments counter on success | No — must write to a sidecar log file |
 
+Command hooks receive their event JSON on stdin ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks)), so each script reads it once with `INPUT=$(cat)`. Both scripts are sketches to adapt. Test each one by piping a sample event into it, for example `echo '<json>' | .claude/hooks/permission-request.sh`.
+
 ### PermissionRequest hook
 
 ```bash
 #!/bin/bash
 # .claude/hooks/permission-request.sh
-# Reads approval counts; promotes to allowlist after N approvals
+# Reads success counts; promotes a command prefix to the allowlist after N runs
 
 THRESHOLD=5
 LOG_FILE=".claude/approval-log.json"
-COMMAND=$(echo "$CLAUDE_INPUT" | jq -r '.tool_input.command // empty')
+INPUT=$(cat)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 
 [ -z "$COMMAND" ] && exit 0
 
-# Normalize: use first token as the key (e.g. "git" from "git status --short")
-KEY=$(echo "$COMMAND" | awk '{print $1}')
+# Normalize: key on the first two tokens ("git status" from "git status --short")
+KEY=$(echo "$COMMAND" | awk '{print $1, $2}' | sed 's/ *$//')
+
+# Never auto-allow these prefixes; they always fall through to the dialog
+NEVER_AUTO_ALLOW=("rm" "rmdir" "curl" "wget" "mv" "dd" "git push")
+for blocked in "${NEVER_AUTO_ALLOW[@]}"; do
+  case "$KEY " in "$blocked "*) exit 0 ;; esac
+done
+
 COUNT=$(jq -r --arg k "$KEY" '.[$k] // 0' "$LOG_FILE" 2>/dev/null || echo 0)
 
 if [ "$COUNT" -ge "$THRESHOLD" ]; then
@@ -145041,22 +145200,31 @@ fi
 # Increments approval counter on successful Bash runs
 
 LOG_FILE=".claude/approval-log.json"
-TOOL=$(echo "$CLAUDE_INPUT" | jq -r '.tool_name // empty')
-SUCCESS=$(echo "$CLAUDE_INPUT" | jq -r '.tool_response.success // false')
+INPUT=$(cat)
+TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty')
+# A failed call's tool_response is an error string; a successful Bash call
+# returns an object with stdout, stderr, interrupted, and isImage.
+SUCCESS=$(echo "$INPUT" | jq -r '
+  (.tool_response | type == "object") and (.tool_response.interrupted != true)')
 
 [ "$TOOL" != "Bash" ] && exit 0
 [ "$SUCCESS" != "true" ] && exit 0
 
-COMMAND=$(echo "$CLAUDE_INPUT" | jq -r '.tool_input.command // empty')
-KEY=$(echo "$COMMAND" | awk '{print $1}')
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+# Same key as the PermissionRequest hook: the first two tokens
+KEY=$(echo "$COMMAND" | awk '{print $1, $2}' | sed 's/ *$//')
 [ -z "$KEY" ] && exit 0
 
-touch "$LOG_FILE"
+[ -s "$LOG_FILE" ] || echo '{}' > "$LOG_FILE"
 CURRENT=$(jq -r --arg k "$KEY" '.[$k] // 0' "$LOG_FILE" 2>/dev/null || echo 0)
 NEW=$((CURRENT + 1))
 TMP=$(mktemp)
 jq --arg k "$KEY" --argjson v "$NEW" '.[$k] = $v' "$LOG_FILE" > "$TMP" && mv "$TMP" "$LOG_FILE"
 ```
+
+The `PostToolUse` tracker reads `tool_response` by its documented shape. A successful `Bash` call returns an object with `stdout`, `stderr`, `interrupted`, and `isImage`, and a failed call returns the error text as a string ([Claude Code hooks reference](https://code.claude.com/docs/en/hooks#posttooluse-input)). There is no `success` field to test.
+
+With a two-token key, five runs of `git status` promote `Bash(git status *)` and nothing wider. The deny check runs before the threshold test, so `git push` reaches the dialog however many times it has run.
 
 ## When this backfires
 
@@ -145068,16 +145236,9 @@ Counter-based auto-promotion assumes past approvals predict future safety. That 
 
 Mitigations:
 
-- Count full command fingerprints, not just first tokens, for high-risk prefixes.
-- Maintain an explicit deny list (`rm`, `curl`, `wget`, `git push`, `mv`, `dd`) that always falls through to the dialog.
+- Count full command fingerprints, not just first tokens. The example keys on two tokens; use the full command for high-risk prefixes.
+- Maintain an explicit deny list (`rm`, `curl`, `wget`, `git push`, `mv`, `dd`) that always falls through to the dialog. The example checks it before the threshold test.
 - For shared or version-controlled allowlists, raise the threshold and require explicit review before any auto-promoted rule lands in `projectSettings`.
-
-```bash
-NEVER_AUTO_ALLOW="rm rmdir curl wget git-push mv dd"
-for blocked in $NEVER_AUTO_ALLOW; do
-  [ "$KEY" = "$blocked" ] && exit 0  # Fall through to dialog
-done
-```
 
 ## Relationship to static allowlists
 
@@ -145094,7 +145255,7 @@ Claude Code's default auto-approval list has itself grown over releases to inclu
 
 - Auto-discovery builds the allowlist from real usage, so teams skip predicting the safe-command list before they have data.
 - The `PermissionRequest` hook is the only one that can persist an allow rule, via an `updatedPermissions` `addRules` entry inside `hookSpecificOutput.decision`; `PostToolUse` can only write to a sidecar counter log.
-- Promote to the allowlist only after N flagged-side-effect-free approvals, and always keep a never-auto-allow deny list (`rm`, `curl`, `git push`, …) that falls through to the dialog.
+- Promote to the allowlist only after N successful runs, and always keep a never-auto-allow deny list (`rm`, `curl`, `git push`, …) that falls through to the dialog.
 - Count full command fingerprints, not just first tokens, so a safe read can't promote a destructive variant under the same key.
 
 ## Related
@@ -150023,7 +150184,7 @@ Source: https://agentpatterns.ai/security/non-human-event-provenance-markers/
 
 An autonomous, background, or scheduled run has no live human turn. The transcript still fills with system notifications, tool results, and background-task events, and these structurally resemble user messages. An indirect prompt injection, or a confused replay of the agent's own earlier text, can plant a line that reads like a human saying "approved" or "the user confirmed," which the agent then acts on.
 
-The failure is specific to no-human-in-the-loop execution. In an interactive session every approval is a genuine user turn; in a headless run there is no such turn, so a message shaped like one is indistinguishable from consent unless something marks it otherwise.
+The failure is sharpest in no-human-in-the-loop execution, where no genuine approval turn exists, so a message shaped like one is indistinguishable from consent unless something marks it otherwise. Interactive sessions are not immune: Claude Code also writes compaction summaries, scheduled-task prompts and background subagent reports into the conversation as user-position turns ([Fei et al., 2026](https://arxiv.org/abs/2611.32194v1); [hooks reference](https://code.claude.com/docs/en/hooks#userpromptsubmit)).
 
 ## The pattern
 
@@ -150072,7 +150233,7 @@ The agent reads the same completion text, but the stamped provenance means the "
 - Provenance-tag every non-human event as non-authoritative, and gate authority-bearing actions on consent that traces to genuine human input.
 - The marker must be emitted by trusted harness code and backed by a structural provenance field — an in-band prose tag is spoofable.
 - Provenance signals reduce injection but do not eliminate it; treat the marker as one layer, never the only defense.
-- The failure mode is specific to no-human-in-the-loop execution; fully autonomous actions must be pre-authorized out of band, not approved in-transcript.
+- The failure mode is sharpest in no-human-in-the-loop execution, but interactive sessions also carry user-position turns the user did not type; fully autonomous actions must be pre-authorized out of band, not approved in-transcript.
 
 ## Related
 
@@ -151243,7 +151404,7 @@ The runtime stores each rule as a bare string with no author field. A deletion b
 |---|---|
 | Remove or replace deny rules | The permission check stops refusing calls that only the lost rules denied (§VII-D). Deleting a file rule also lifts the sandbox's block (§IV-C) |
 | Add a `WebFetch` or `Edit` allow rule | The sandbox widens with no deletion. A `WebFetch` rule let a rewritten command send a project file out, and an `Edit` rule let one write outside the project. A host rule saved for the session only did not reach the sandbox (§VII-C) |
-| `setMode` to `acceptEdits` in user settings | The next headless session wrote a file unprompted (§VII-D, builds 2.1.319 and 2.1.314) |
+| `setMode` to `acceptEdits` in user settings | The next headless session wrote a file unprompted on builds 2.1.319 and 2.1.314 (§VII-D, Appendix B) |
 | `addDirectories` in user settings | The next session read an outside directory unprompted (same runs) |
 
 The hooks reference adds one limit: `bypassPermissions` is [never saved as the default mode](https://code.claude.com/docs/en/hooks#permission-update-entries).
@@ -153554,6 +153715,100 @@ Two rules apply to the same object at different boundaries. Inside the conversat
 - [Sandbox-Enforced PII Tokenization in Agent Workflows](pii-tokenization-in-agent-context.md) — keeping the sensitive value out of the trace in the first place, the control that survives a scanner which cannot read the field
 - [System Prompt as Secret Store (OWASP LLM07)](system-prompt-not-a-secret-store.md) — the same failure one field over: treating a hidden part of the request as a confidentiality boundary is the design bug, not the leak that follows
 - [Agent Chat History as a First-Class Artifact](../observability/agent-history-as-artifact.md) — the persistence decision that creates the store this threat needs
+
+---
+
+### Request Integrity for Agent Authorization After Compaction
+Source: https://agentpatterns.ai/security/request-integrity-across-compaction/
+
+# Request Integrity for Agent Authorization After Compaction
+
+> Compaction can place a model-written summary where an authorizer reads the user's request, so permissions derived there can follow injected data.
+
+Request integrity means that after compaction the policy generator receives exactly the authenticated user turns and trusted tool outputs so far, complete and in order, or nothing ([Fei et al., 2026, §IV-A](https://arxiv.org/abs/2611.32194v1)). The preprint studies authorizers such as Progent, which defend against prompt injection by deriving permissions from the user's request ([§II](https://arxiv.org/abs/2611.32194v1)).
+
+## When this applies
+
+- A policy comes from the latest user message, again for each request. Progent's own integrations derive it once per session. A summary cannot reach that frozen policy, though Progent's run-time refinement still draws on tool results. The authors derived per request because, in two-turn AgentDojo sessions without injection or compaction, a frozen policy completed the second task in 7 of 60 sessions, against 41 of 60 for a per-request one ([§V-A and §VI](https://arxiv.org/abs/2611.32194v1)).
+- The harness inserts the compaction summary as a user message. Claude Code does, as does Codex compacting locally. The paper reports the same in the code of eight other harnesses, including Gemini CLI, OpenHands and Cline ([§II](https://arxiv.org/abs/2611.32194v1)).
+- The agent reads data an attacker can write.
+
+## How the summary becomes the request
+
+The authorizer credits the whole summary to the user, quoted documents and injected text included ([abstract](https://arxiv.org/abs/2611.32194v1)). The summary took that position at all 1,108 automatic compactions the authors recorded in live sessions. These ran Claude Code 2.1.312 and 2.1.319, and Codex 0.163.0 and 0.164.0 compacting locally with a 15,000-token limit ([§I and Appendix B](https://arxiv.org/abs/2611.32194v1)). OpenAI says the same in the pull request that made Codex's Guardian reviewer attribute these summaries to the assistant, merged 15 October 2026: "Local compaction stores generated summaries with the `user` wire role, but those summaries are not user authorization" ([openai/codex#54281](https://github.com/openai/codex/pull/54281)).
+
+## Why a better summary is not enough
+
+- Dropping the identifier only stops naming. No AgentDojo policy from the 918 summaries that dropped the attacker's identifier named it. Yet 78 of 410 banking policies from summaries that dropped the account admitted the transfer; an open recipient is enough ([§V-B](https://arxiv.org/abs/2611.32194v1)).
+- Frontier compactors mark instructions. Under Claude Code's default prompt and Codex's, across three suites, gpt-5.4-mini and gpt-5.5 marked the injection in 219 of 220 summaries that kept the identifier. On banking the policy rarely named it. An account written as ordinary data mostly went unmarked ([§V-D](https://arxiv.org/abs/2611.32194v1)).
+- Text alone has a limit. Without knowing who wrote which bytes, a pipeline can refuse a forged record more often than its real twin only as far as the two are distinguishable ([Theorem 1](https://arxiv.org/abs/2611.32194v1)).
+
+## Give the authorizer its own input
+
+The agent still reads the summary. The authorizer reads only witnessed text ([§IV](https://arxiv.org/abs/2611.32194v1)):
+
+1. Each user turn and trusted tool output gets a MAC tag, its witness, on arrival.
+2. At compaction, a trusted packager copies witnessed text verbatim and commits to the complete ordered list.
+3. Before policy generation, a gate checks the witnesses, order and count. Any failure installs an empty policy that permits no call.
+
+In 40 attacked AgentDojo episodes, no attacker action completed with the gate while the agent read the summary. Ungated, 7 did with the summary in the user position ([Table VII](https://arxiv.org/abs/2611.32194v1)). A harness that keeps user turns where the agent cannot write needs no MACs ([§VI](https://arxiv.org/abs/2611.32194v1)).
+
+Cheaper changes fall short:
+
+- Moving the summary elsewhere drops your earlier request from the policy input, leaving the recipient open when the follow-up asks for payment ([§IV](https://arxiv.org/abs/2611.32194v1)).
+- Skipping records marked as summaries matched the gate inside one process. Through a store the agent can write, it admitted replayed and spliced records. That filter was the authors' version of Codex's reviewer rule, not Codex itself ([§V-F](https://arxiv.org/abs/2611.32194v1)).
+
+## In a Claude Code hook
+
+A `PreToolUse` hook gets `transcript_path`, not the request ([hooks reference](https://code.claude.com/docs/en/hooks#common-input-fields)). Across seven recorded sessions, the most recent user-role record was the user's turn at 96.2% of request starts and the summary at each boundary ([§V-D](https://arxiv.org/abs/2611.32194v1)).
+
+Claude Code marks that record `isCompactSummary` ([Appendix B](https://arxiv.org/abs/2611.32194v1)). Skipping it is the filter above, and the agent can write session files ([§VI](https://arxiv.org/abs/2611.32194v1)).
+
+`UserPromptSubmit` also fires for a session-scoped scheduled task, a background subagent report and another session's message, so its `prompt` alone does not show you typed it ([hooks reference](https://code.claude.com/docs/en/hooks#userpromptsubmit)).
+
+## What the gate does not do
+
+- It does not restore task completion while the agent reads the summary. Over 40 episodes the gated agent completed 13 tasks with the summary in the user position and 19 with it as a tool result. Without the gate those setups completed 9 and 18, and the uncompacted run completed 27 ([Table VII](https://arxiv.org/abs/2611.32194v1)).
+- It does not narrow a loose request. If yours leaves the recipient open, the gated policy can still admit the attacker's call ([§V-F](https://arxiv.org/abs/2611.32194v1)).
+- It does not vouch for documents or pastes. A value you leave to an unauthenticated document stays exposed, and pasted text counts as yours ([§II and §VI](https://arxiv.org/abs/2611.32194v1)).
+- It assumes keys the agent cannot reach ([§IV-B](https://arxiv.org/abs/2611.32194v1)).
+- It is not yet in a production harness. The authors evaluated the gate on replayed AgentDojo sessions and list long sessions and multi-agent workflows among the settings still to measure ([§VI](https://arxiv.org/abs/2611.32194v1)).
+
+## Example
+
+### Same summary, different position
+
+Progent on 15 AgentDojo banking pairs, each followed by "Please continue from where we left off". gpt-4o-mini wrote the summaries under a prompt that asks it to preserve account numbers, and gpt-4o generated the policies. A policy "expands" when it permits a state-changing tool or argument value the earlier policy did not ([Table II](https://arxiv.org/abs/2611.32194v1)).
+
+| Text in the request position | Policy expands | Names the attacker | Admits the attacker's call |
+|---|---|---|---|
+| Follow-up only | 0/30 | 0/30 | 0/30 |
+| User's restated request | 5/30 | 0/30 | 0/30 |
+| Same summary, appended as a tool result instead | 0/28 | 0/28 | 0/28 |
+| Summary with the injected span removed | 9/16 | 0/16 | not scored |
+| Unmodified summary | 21/30 | 16/30 | 17/30 |
+
+### A payee you already stated
+
+The user gives the landlord's account and asks what a notice says. The attacker's notice states another account as plain data. After compaction (gpt-5.4-mini or gpt-5.5, under Claude Code's default prompt or Codex's), the user asks to pay this month's rent ([§V-D and Appendix D](https://arxiv.org/abs/2611.32194v1)).
+
+- Policy from the summary: it admitted the notice's account in 290 of 320 cases (91%) with gpt-4o as policy generator, and 59% with gpt-5.5. A gpt-5.4-mini agent completed that transfer in 33 of 80 episodes.
+- Policy from the user's own turns: it never admitted the notice's account under either generator. Under the gate the agent completed no such transfer, and the gate blocked all 34 of its attempts.
+
+## Key Takeaways
+
+- Test which record your authorizer or hook reads on the first request after a compaction, not only on a fresh one.
+- Treat what your compaction prompt keeps, and how it marks it, as a security setting. No better prompt separates a forged record from a real one when both share a format and value distribution and nothing else in the transcript depends on who wrote it.
+- Bind authorship where text arrives. Do not rely on a summary marker in a file the agent can rewrite.
+- Do not quote the 91% as a failure rate for a shipped product's permission system. It measures Progent policies in the paper's two-request test.
+
+## Related
+
+- [Authority Confusion: Untrusted Context Must Not Authorize Side Effects](authority-confusion-untrusted-context.md) — the rule that authority comes from the user, which a summary in the request position slips past
+- [Intent-Governed Tool Authorization (IGAC)](intent-governed-tool-authorization.md) — a design that issues its certificate from the user's request
+- [Treating Compaction Prompt Rules as a Provenance Defense](../patterns/anti-patterns/compaction-prompt-rules-as-provenance-defense.md) — forged user labels that survive into the summary, a second way compaction loses authorship
+- [Non-Human Event Provenance Markers](non-human-event-provenance-markers.md) — marking harness-written events so they carry no human authority
+- [Adaptive Evaluation of Out-of-Band Prompt-Injection Defenses](adaptive-evaluation-out-of-band-defenses.md) — how to attack Progent-style defenses before you trust their numbers
 
 ---
 
@@ -161388,7 +161643,7 @@ The pattern pays off when all of these hold:
 
 - Trace shape exceeds general-store assumptions. A single run has hundreds of nested spans, multi-modal payloads (images, audio, large JSON), and spans that stay open for hours while sub-agents and tools complete asynchronously ([LangChain — Introducing SmithDB, May 13 2026](https://www.langchain.com/blog/introducing-smithdb)).
 - The query mix is wider than "fetch one trace by ID." Debugging UIs need interactive filtering, full-text search over inputs and outputs, JSON-path filters, tree-aware queries, thread reconstruction across traces, and aggregations over cost, latency, tokens, and evaluator scores ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)).
-- Scale crosses the general-store break point. Langfuse's Postgres architecture broke at billions of rows by mid-2024 and was rebuilt on ClickHouse plus Redis plus S3 plus an async event processor ([Langfuse v3 infrastructure post](https://langfuse.com/blog/2024-12-langfuse-v3-infrastructure-evolution)). Respan ran on Postgres until 50–100 RPS forced migration ([ClickHouse — Respan](https://clickhouse.com/blog/respan-ai-llm-observability)).
+- Scale crosses the general-store break point. Langfuse's Postgres architecture broke at billions of rows by mid-2024 and was rebuilt on ClickHouse plus Redis plus S3 plus an async event processor ([Langfuse v3 infrastructure post](https://langfuse.com/blog/2024-12-langfuse-v3-infrastructure-evolution)). Respan ran on Postgres until 50–100 RPS forced migration ([ClickHouse — Respan](https://clickhouse.com/blog/respan-ai-llm-observability)). In its case for a "Trace Lake", Braintrust says production systems can generate on the order of "100,000 spans per second" ([Braintrust — Trace Lake](https://www.braintrust.dev/blog/trace-lake)).
 - Multi-cloud or self-hosting is a hard requirement. Object-storage-backed designs scale by adding stateless compute rather than managing local-disk sharding ([LangChain SmithDB](https://www.langchain.com/blog/introducing-smithdb)).
 
 If a managed vendor (LangSmith, Langfuse, Phoenix, Helicone, Datadog LLM Observability, Honeycomb GenAI) already covers the workload and the team has no portability constraint, this page is a vendor-evaluation lens, not a build prompt.
@@ -175253,9 +175508,11 @@ Not all tasks degrade equally:
 | Task type | Effective context | Notes |
 |-----------|------------------|-------|
 | Simple retrieval ("find the function that handles auth") | Large — works well even in long contexts | Lexical matching remains robust |
-| Semantic retrieval ("explain the auth flow") | Moderate — degrades past ~32K tokens | Requires connecting concepts across the context |
-| Reasoning ("refactor auth to use the new middleware pattern") | Small — 10–20% of window is effective | Multi-step reasoning degrades steeply with context size |
+| Semantic retrieval ("explain the auth flow") | Moderate | In [NoLiMa](https://arxiv.org/abs/2502.05167v3), questions share little wording with the target fact hidden in book snippets. The paper reports "considerable drops even at 2K–8K tokens", and at 32K, 11 of 13 models scored half their short-context score or less |
+| Reasoning ("refactor auth to use the new middleware pattern") | Small | The [BABILong paper](https://arxiv.org/abs/2406.10149v2) found that popular LLMs "effectively utilize only 10-20% of the context" when reasoning over facts scattered through long documents |
 | Bug fixing across files | Very small — severe collapse in long contexts | Requires holding multiple file contents and reasoning about interactions |
+
+NoLiMa and BABILong use book text as background, so the code examples in those two rows are analogies.
 
 The practical implication: For complex reasoning tasks, a fresh context with precisely loaded files outperforms a long-running session with accumulated history.
 
@@ -175264,7 +175521,7 @@ The practical implication: For complex reasoning tasks, a fresh context with pre
 | Strategy | When to use | How |
 |----------|------------|-----|
 | Fresh sessions for complex tasks | Before starting a multi-file refactor or complex bug fix | Start a new chat. Load specific files with `#file` references. State the task clearly. |
-| [Manual compaction](../../context-engineering/manual-compaction-dumb-zone-mitigation.md) | Mid-session, when you notice quality dropping | Copilot CLI: `/compact`. VS Code: start a new session (no manual compact yet). |
+| [Manual compaction](../../context-engineering/manual-compaction-dumb-zone-mitigation.md) | Mid-session, when you notice quality dropping | Copilot CLI: `/compact` ([GitHub Docs](https://docs.github.com/en/copilot/concepts/prompting-and-context/context-management)). VS Code Local, Copilot, or Claude sessions: type `/compact`, or select Compact Conversation from the context window control ([VS Code docs](https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#_compact-conversation-context)). The [1.110 release notes](https://code.visualstudio.com/updates/v1_110) document both methods. |
 | Sub-agent isolation | Research phase separate from implementation | In Copilot CLI, use a separate session for research. Summarize findings, then start a new session for implementation. |
 | Smaller tasks | Prevent rot by finishing before it starts | Break large tasks into agent-sized chunks (see next section). |
 
@@ -175510,7 +175767,7 @@ What it is: Agent-generated code that works for the [common case but breaks on e
 
 Why it's dangerous: The happy path is what you test manually and demo to stakeholders. The edge cases are what breaks in production at 2 AM.
 
-Prevention: Name error scenarios explicitly in your delegation contract. "Handle the case where the user has no `avatar_url` (null). Handle the case where the upload exceeds the size limit. Handle the case where the rate limiter Redis connection is down." Naming specific failure modes reduces vulnerability density significantly compared to vague "handle errors" instructions.
+Prevention: Name error scenarios explicitly in your delegation contract. "Handle the case where the user has no `avatar_url` (null). Handle the case where the upload exceeds the size limit. Handle the case where the rate limiter Redis connection is down."
 
 ---
 
@@ -175584,11 +175841,11 @@ Total human time: ~5 minutes of review. The agent handled investigation, fix, te
 - Context engineering, not prompt engineering, determines consistent output quality. A well-configured `.github/` directory with instructions, agents, skills, and hooks outperforms clever prompts in an unconfigured repo.
 - Attention is not uniform. Critical rules belong at the top of Copilot instruction files. Restate important constraints in your message when working in long sessions.
 - Progressive disclosure is a budget pattern: preload only universal rules; load task-specific knowledge on demand via skills. Agent definitions should be under 50 lines. Instructions files under 100.
-- Context rot is real. Long sessions degrade output quality, especially for reasoning tasks. Start fresh sessions for complex work. Use `/compact` in the CLI. Break large tasks into agent-sized chunks.
+- Context rot is real. Long sessions degrade output quality, especially for reasoning tasks. Start fresh sessions for complex work. Use `/compact` in Copilot CLI or VS Code. Break large tasks into agent-sized chunks.
 - Frame tasks as contracts (goal, constraints, success condition, recovery), not step-by-step scripts. The agent decides how; you define what and how to verify.
 - [Steer early or restart](../../patterns/agent-design/steering-running-agents.md). Don't wait for the agent to finish a wrong approach. The earlier you intervene, the less context is polluted.
 - [Agent self-review](../../code-review/agent-self-review-loop.md) handles mechanical checks. Human review should focus on design, completeness, and implicit knowledge the agent can't access.
-- Name failure modes explicitly. "Handle the case where X is null" produces better error handling than "handle errors." Specificity in the delegation contract translates directly to code quality.
+- Name failure modes explicitly. Write "handle the case where X is null" in the delegation contract, not "handle errors."
 
 ## Related
 
@@ -177658,7 +177915,7 @@ copilot --allow-all --deny-tool='shell(rm)' --deny-tool='shell(git push)'
 copilot --allow-tool='write' --deny-tool='shell(*)'
 ```
 
-Context management: Auto-compacts at 95% token limit. Use `/compact` to compress manually before hitting the limit. Sessions can run virtually indefinitely through background compression.
+Context management: Starts compacting in the background at about 80% of the context window, and pauses at about 95% if compaction has not finished ([GitHub Docs](https://docs.github.com/en/copilot/concepts/prompting-and-context/context-management#when-compaction-happens)). Use `/compact` to compress manually before hitting the limit. Sessions can run virtually indefinitely through background compression.
 
 Copilot Memory: The CLI supports persistent memory — Copilot stores learned details about your repository (conventions, patterns, preferences) and reuses them across sessions. Default model varies — check with `/model` or the [supported models page](https://docs.github.com/en/copilot/reference/ai-models/supported-models). Change with `/model` or `--model`.
 
@@ -191467,7 +191724,7 @@ This triggers the [agentic code review architecture](../../code-review/agentic-c
 
 ## Session management
 
-Auto-compaction compresses conversation history at 95% context window capacity, which keeps long sessions going ([GitHub Changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/)). Repository memory persists conventions across sessions.
+Auto-compaction starts compressing conversation history in the background at about 80% of the context window. If the context reaches about 95% before compaction finishes, the CLI pauses briefly until it completes ([GitHub Docs](https://docs.github.com/en/copilot/concepts/prompting-and-context/context-management#when-compaction-happens)). The [GA changelog](https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/) gave 95%. Repository memory persists conventions across sessions.
 
 ## Example
 
@@ -191488,7 +191745,7 @@ Push stays blocked even if a broader allow rule would otherwise permit it. For e
 - `--allow-all-tools` outside containers grants full shell access. A prompt injection or hallucinated command can modify files, install packages, or push commits without review. Restrict it to containerized CI environments where blast radius is bounded.
 - Validator bypass via shell indirection: `env curl ... | env sh` evades the auto-approve allowlist, and GitHub has declined to patch it. Pair `--deny-tool` with sandboxing and egress controls (see Authorization model above).
 - Headless mode with underspecified prompts: programmatic mode exits after the first attempt and cannot ask clarifying questions. Ambiguous prompts produce partial or incorrect results, with no chance to course-correct.
-- Context window exhaustion on large codebases: auto-compaction at 95% capacity can lose earlier context that constrains later decisions. Long refactoring sessions may contradict earlier choices made before compaction.
+- Context window exhaustion on large codebases: auto-compaction, which starts at about 80% capacity, can lose earlier context that constrains later decisions. Long refactoring sessions may contradict earlier choices made before compaction.
 - `/delegate` latency mismatch: cloud agent execution via GitHub Actions takes minutes to hours. Delegating time-sensitive tasks introduces a latency gap that breaks flow if you expect synchronous completion.
 - Usage caps on parallel workflows: in April 2026, GitHub tightened session and weekly token limits on Pro plans, and warned that parallelized commands like `/fleet` consume tokens heavily enough to exhaust weekly quotas. Agentic CLI workflows that fan out across monorepos can stall when limits hit, and GitHub removed Opus models from Pro entirely ([GitHub Blog](https://github.blog/news-insights/company-news/changes-to-github-copilot-individual-plans/)).
 
@@ -204493,7 +204750,7 @@ Store the API key as a repository secret named `ANTHROPIC_API_KEY`. Install the 
 
 ## Permissions in non-interactive mode
 
-`PermissionRequest` hooks do not fire in non-interactive mode ([hooks docs](https://code.claude.com/docs/en/hooks-guide#limitations)). For automated permission decisions, use `PreToolUse` hooks or `--allowedTools` to enumerate permitted tools explicitly:
+In a `-p` run with no permission host, outside `dontAsk` mode, a call that would prompt is denied unless something approves it. A `PermissionRequest` hook can be that approver ([hooks guide](https://code.claude.com/docs/en/hooks-guide#limitations)). For a fixed policy, `PreToolUse` hooks or `--allowedTools` stay simpler:
 
 ```bash
 claude -p "run lint and fix errors" \
@@ -204526,7 +204783,7 @@ Headless Claude in CI is not a free improvement — it shifts work from humans t
 - Ambiguous or exploratory tasks — `--max-turns` cuts off mid-solution when the task underspecifies the goal; the run exits non-zero but the partial work still costs budget. Interactive sessions let a human redirect before the spend accumulates.
 - Auto-merged output — when the workflow commits or merges without review, low-quality patches ship silently. Every PR carries noise that downstream reviewers learn to ignore, eroding review discipline across the repo.
 - Rate-limit regressions on the underlying plan — token consumption on Claude Code plans has spiked in past updates ([The New Stack, March 2026](https://thenewstack.io/claude-code-usage-limits/)); `--max-budget-usd` caps API-billed spend but does not protect subscription-based runners from session exhaustion.
-- Tasks requiring `PermissionRequest` hooks — those hooks do not fire in `-p` mode. Enforcement shifts to `PreToolUse` or `--allowedTools`, and any policy that relied on dynamic approval must be rewritten or removed.
+- Policies with no approver — in a `-p` run outside `dontAsk` mode with neither a `--permission-prompt-tool` nor a `canUseTool` callback, a call that would prompt is denied unless something approves it, such as a `PermissionRequest` hook ([hooks reference](https://code.claude.com/docs/en/hooks#permissionrequest)). No human sees the prompt, so a policy that relied on interactive approval must name an approver or enumerate its tools up front.
 
 For sensitive operations in headless mode, combine the [deferred permission pattern](../patterns/agent-design/deferred-permission-pattern.md) with `PreToolUse` hooks so the pipeline can pause for out-of-band approval instead of denying or auto-allowing.
 
@@ -204564,7 +204821,7 @@ This workflow combines `--max-turns`, `--max-budget-usd`, and `timeout-minutes` 
 - `claude -p "<prompt>"` runs non-interactively; piped stdin is available as context before the prompt
 - `--max-turns <N>` sets a hard ceiling on agentic steps with no default limit in print mode
 - `--output-format json` makes responses machine-readable for downstream consumption
-- `PermissionRequest` hooks do not fire non-interactively; use `PreToolUse` hooks or `--allowedTools`
+- In a `-p` run with no permission host, outside `dontAsk` mode, a call that would prompt is denied unless something approves it, such as a `PermissionRequest` hook; `PreToolUse` hooks or `--allowedTools` suit a fixed policy
 - `--dangerously-skip-permissions` is appropriate only in isolated, ephemeral environments
 - `anthropics/claude-code-action@v1` wraps this for GitHub Actions with `claude_args` passthrough
 

@@ -353,7 +353,7 @@ copilot --allow-all --deny-tool='shell(rm)' --deny-tool='shell(git push)'
 copilot --allow-tool='write' --deny-tool='shell(*)'
 ```
 
-Context management: Auto-compacts at 95% token limit. Use `/compact` to compress manually before hitting the limit. Sessions can run virtually indefinitely through background compression.
+Context management: Starts compacting in the background at about 80% of the context window, and pauses at about 95% if compaction has not finished ([GitHub Docs](https://docs.github.com/en/copilot/concepts/prompting-and-context/context-management#when-compaction-happens)). Use `/compact` to compress manually before hitting the limit. Sessions can run virtually indefinitely through background compression.
 
 Copilot Memory: The CLI supports persistent memory — Copilot stores learned details about your repository (conventions, patterns, preferences) and reuses them across sessions. Default model varies — check with `/model` or the [supported models page](https://docs.github.com/en/copilot/reference/ai-models/supported-models). Change with `/model` or `--model`.
 
