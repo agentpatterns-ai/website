@@ -1,0 +1,35 @@
+nav:
+  - Home:
+    - index.md
+    - About: about.md
+    - Videos Privacy and Terms: privacy-videos.md
+    - Concept Map: concepts.md
+    - Ask the Docs: search.md
+  - Foundations:
+    - foundations.md
+    - Context Engineering: context-engineering
+    - Instructions: instructions
+  - Patterns: patterns
+  - Engineering:
+    - engineering.md
+    - Tool Engineering: tool-engineering
+    - Token Engineering: token-engineering
+    - Loop Engineering: loop-engineering
+    - Factory Engineering: factory-engineering
+    - Code Review: code-review
+    - Verification: verification
+    - Security: security
+    - Observability: observability
+  - Reference:
+    - reference.md
+    - Standards: standards
+    - Human Factors: human
+    - Emerging: emerging
+    - Fallacies: fallacies
+    - Training: training
+    - Frameworks: frameworks
+    - GEO: geo
+  - Tools: tools
+  - Workflows: workflows
+  - Learn ↗: https://learn.agentpatterns.ai/
+  - Tags: tags.md
